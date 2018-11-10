@@ -1,0 +1,48 @@
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            git branch: 'master',
+            credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+            url: 'https://github.com/mobiledgex/edge-cloud.git'
+        }
+        
+    }
+    stage('dep ensure') {
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -v'
+        }
+    }
+    stage('make tools') {
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make tools'
+        }
+    }
+    stage('regular make') {
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make'
+        }
+    }
+    stage('make build-docker') {
+        date = new Date()
+        year = date[Calendar.YEAR]
+        month = date[Calendar.MONTH]
+        date = date.getAt(Calendar.DATE)
+        tag = 'automation' + year + month + date
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;echo $HOME;cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make build-docker TAG=' + tag + ';export AUTOMATION_DOCKERTAG=' + tag
+        }
+    }
+    try {
+        stage('make test') {
+            dir('go/src/github.com/mobiledgex/edge-cloud') {
+                sh 'export ANSIBLE_DIR=$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make test'
+            }
+        }
+    } catch (e) {
+            currentBuild.result = 'UNSTABLE'
+            result = "FAIL" // make sure other exceptions are recorded as failure too
+    }
+    stage('deploy processes in k8s') {
+        sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' $HOME/edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
+    }
+}
