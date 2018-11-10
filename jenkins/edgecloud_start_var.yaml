@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mexprocesses
+  labels:
+    app: mexprocesses
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mexprocesses
+  template:
+    metadata:
+      labels:
+        app: mexprocesses
+    spec:
+      containers:
+      - name: controller
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        command:
+         - controller
+        args:
+         - "--etcdUrls"
+         - "mex-etcd-cluster:2379"
+         - "--notifyAddr"
+         - "127.0.0.1:37001"
+         - "--apiAddr"
+         - "0.0.0.0:55001"
+         - "--httpAddr"
+         - "0.0.0.0:36001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "-d"
+         - "etcd,api,notify"
+         - "-shortTimeouts"
+      imagePullSecrets:
+       - name: mexreg-secret
+
+
