@@ -27,7 +27,7 @@ node('jenkinsSlave1'){
         year = date[Calendar.YEAR]
         month = date[Calendar.MONTH]
         date = date.getAt(Calendar.DATE)
-        tag = 'automation' + year + month + date
+        tag = $Version + 'automation' + year + month + date
         dir('go/src/github.com/mobiledgex/edge-cloud') {
             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;echo $HOME;cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make build-docker TAG=' + tag + ';export AUTOMATION_DOCKERTAG=' + tag
         }
