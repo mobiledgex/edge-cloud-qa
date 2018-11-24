@@ -1,4 +1,11 @@
 node('jenkinsSlave1'){
+    date = new Date()
+    year = date[Calendar.YEAR]
+    month = date[Calendar.MONTH]
+    date = date.getAt(Calendar.DATE)
+    tag = ${Version} + '_automation' + year + month + date
+
+    currentBuild.displayName = tag
     stage('Checkout') {
         dir('go/src/github.com/mobiledgex/edge-cloud') {
             git branch: 'master',
@@ -23,11 +30,11 @@ node('jenkinsSlave1'){
         }
     }
     stage('make build-docker') {
-        date = new Date()
-        year = date[Calendar.YEAR]
-        month = date[Calendar.MONTH]
-        date = date.getAt(Calendar.DATE)
-        tag = $Version + 'automation' + year + month + date
+        //date = new Date()
+        //year = date[Calendar.YEAR]
+        //month = date[Calendar.MONTH]
+        //date = date.getAt(Calendar.DATE)
+        //tag = ${Version} + '_automation' + year + month + date
         dir('go/src/github.com/mobiledgex/edge-cloud') {
             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;echo $HOME;cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make build-docker TAG=' + tag + ';export AUTOMATION_DOCKERTAG=' + tag
         }
