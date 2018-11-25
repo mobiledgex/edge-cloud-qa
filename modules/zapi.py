@@ -110,12 +110,12 @@ class Zapi(WebService):
         #print('cycle content')
         #pprint(content)
         #print('keys=%s' % content.keys())
-        pid = -1
+        pid = None
         for i in content:
             logging.debug('checking ' + i['name'] + ' against ' + name)
             if i['name'] == name:
                 logging.debug('found:' + i['name'])
-                pid = content['id']
+                pid = i['id']
                 break
 
         return pid

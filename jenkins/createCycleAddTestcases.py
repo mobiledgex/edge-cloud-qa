@@ -54,7 +54,7 @@ def main():
     new_cycle_exists_id = z.get_cycle_id(name=new_cycle, project_id=project_id, version_id=version_id)
 
     #create the new cycle
-    if(int(new_cycle_exists_id) < 0): # cycle does not exist
+    if(not new_cycle_exists_id): # cycle does not exist
         logging.info("cycle=%s does NOT exist. creating the cycle" % new_cycle)
         new_cycle_resp = z.create_cycle(project_id=project_id, version_id=version_id, cycle_name=new_cycle, build=new_cycle)
         new_cycle_id = json.loads(new_cycle_resp)['id']
