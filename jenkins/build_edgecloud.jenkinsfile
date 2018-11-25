@@ -3,7 +3,7 @@ node('jenkinsSlave1'){
     year = date[Calendar.YEAR]
     month = date[Calendar.MONTH]
     date = date.getAt(Calendar.DATE)
-    tag = ${Version} + '_automation' + year + month + date
+    tag = Version + '_automation_' + year + month + date
 
     currentBuild.displayName = tag
     stage('Checkout') {
@@ -12,7 +12,16 @@ node('jenkinsSlave1'){
             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
             url: 'https://github.com/mobiledgex/edge-cloud.git'
         }
-        
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*']]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])        
     }
     stage('dep ensure') {
         dir('go/src/github.com/mobiledgex/edge-cloud') {
@@ -52,4 +61,17 @@ node('jenkinsSlave1'){
     stage('deploy processes in k8s') {
         sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' $HOME/edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
     }
+
+    stage("create cycle and add testcases") {
+        dir('go/src/github.com/mobiledgex/jenkins') {
+            def status = -1
+            def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + tag
+            status = sh(script: s, returnStatus: true);
+            if(status != 0) {
+                println "${s} failed"
+                currentBuild.result = 'FAILURE'
+            }
+	}
+    }
+	
 }
