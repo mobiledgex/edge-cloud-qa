@@ -10,6 +10,8 @@ import jwt
 import hashlib
 import time
 import urllib
+import os
+import sys
 
 class Zapi(WebService):
     #base_url = 'https://issues.prodea.com:8443/rest/zapi/latest/'
@@ -110,13 +112,11 @@ class Zapi(WebService):
         #print('keys=%s' % content.keys())
         pid = -1
         for i in content:
-            if i != 'recordsCount':
-                print('key=' + i)
-                logging.debug('checking ' + content[i]['name'] + ' against ' + name)
-                if content[i]['name'] == name:
-                    logging.debug('found:' + content[i]['name'])
-                    pid = i
-                    break
+            logging.debug('checking ' + i['name'] + ' against ' + name)
+            if i['name'] == name:
+                logging.debug('found:' + i['name'])
+                pid = content['id']
+                break
 
         return pid
 
@@ -151,16 +151,32 @@ class Zapi(WebService):
 
         return vid
 
-    def get_execution_list(self, project_id=None, version_id=None, cycle_id=None, issue_id=None, limit=None):
-        logging.debug('issue id=' + str(issue_id))
-        
-#        url = self.base_url + 'execution?issueId=' + issue_id + '&projectId=' + project_id + '&versionId=' + version_id + 'cycleId=' + cycle_id
-        url = self.base_url + 'execution?issueId=' + str(issue_id)
-        if limit is not None:
-            url = url + '&limit=' + str(limit)
-        logging.debug('url=' + url)
+    #def get_execution_list(self, project_id=None, version_id=None, cycle_id=None, issue_id=None, limit=None):
+    def get_execution_list(self, execution_id=None, maxRecords=None):
+        logging.debug('issue id=' + str(execution_id))
 
-        self.get(url,headers = self.headers)
+        relative_path = '/public/rest/api/1.0/executions/search'
+        query = 'executionId=' + str(execution_id)
+        data = '{"maxRecords":20,"offset":0}'
+        path = 'POST&' + relative_path + '&' + query
+
+        jwt = self._generate_jwt(path)
+
+
+#        url = self.base_url + 'execution?issueId=' + issue_id + '&projectId=' + project_id + '&versionId=' + version_id + 'cycleId=' + cycle_id
+        #url = self.base_url + 'execution?issueId=' + str(issue_id)
+        url = self.zephyr_base_url + relative_path + '?' + query
+
+        logging.debug('url=' + url + ' data=' + data)
+
+        #if limit is not None:
+        #    url = url + '&limit=' + str(limit)
+        #logging.debug('url=' + url)
+
+        #self.get(url,headers = self.headers)
+        self.headers['Content-Type'] = 'application/json'
+        self.post(url, headers = self.headers, data=data)
+
         content = self.resp.content.decode('utf-8')
 
         if "errorDesc" in content:
@@ -269,15 +285,23 @@ class Zapi(WebService):
             return content
 
 
-    def update_status(self, id=None, status=None):
+    def update_status(self, execution_id=None, issue_id=None, project_id=None, status=None):
         logging.info('status=' + str(status))
-        url = self.base_url + 'execution/updateBulkStatus'
-        data = '{"executions":["' + str(id) + '"], "status": "' + str(status) + '"}'
+        relative_path = '/public/rest/api/1.0/execution/' + str(execution_id)
+        data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '"}'
+        path = 'PUT&' + relative_path + '&'
+
+        jwt = self._generate_jwt(path)
+
+        #url = self.base_url + 'execution/updateBulkStatus'
+        url = self.zephyr_base_url + relative_path
+        #data = '{"executions":["' + str(id) + '"], "status": "' + str(status) + '"}'
         #data_json = json.dumps(data)
         logging.debug('url=' + url + ' data=' + data)
 
         #h = self.headers
         #h['content-type'] = 'application/json'
+        self.headers['Content-Type'] = 'application/json'
         print(self.headers)
         self.put(url,headers = self.headers, data=data)
         content = self.resp.content.decode('utf-8')
@@ -352,11 +376,19 @@ class Zapi(WebService):
         build_to_set = ''
         if build:
             build_to_set = build
-            
-        url = self.base_url + 'cycle'
+
+        relative_path = '/public/rest/api/1.0/cycle'
+        query = ''
+        data = '{"name":' + cycle_name + ',"build":' + build_to_set + ',"projectId":' + str(project_id) + ',"versionId":' + version_id + '}'
+        path = 'POST&' + relative_path + '&' + query
+
+        jwt = self._generate_jwt(path)
+
+        url = self.zephyr_base_url + relative_path
         data = '{"name":"' + cycle_name + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "build":"' + build_to_set +'"}'
         logging.debug('url=' + url + ' data=' + data)
 
+        self.headers['Content-Type'] = 'application/json'
         self.post(url, headers = self.headers, data=data)
 
         content = self.resp.content.decode('utf-8')
@@ -441,12 +473,39 @@ class Zapi(WebService):
             return content
 
         
-    def add_attachment(self, id=None,  file=None, type='execution'):
+    def add_attachment(self, id=None, issue_id=None, version_id=None, cycle_id=None, project_id=None, file=None, type='execution'):
         logging.info('id=' + str(id) + " type=" + type + " file=" + file)
 
-        url = self.base_url + 'attachment?entityId=' + str(id) + '&entityType=' + type
+        relative_path = '/public/rest/api/1.0/attachment'
+        parms = 'comment=comment&cycleId={}&entityId={}&entityName=execution&issueId={}&projectId={}&versionId={}'.format(cycle_id, id, issue_id, project_id, version_id)
+#POST&/public/rest/api/1.0/attachment&comment=comment&cycleId=1430855a-0cf7-4355-b70a-c48c78b30491&issueId=10314&versionId=10007&entityName=stepResult&entityId=1fd0a00f-ba18-4b08-9e02-33d6dc9e9cc0&projectId=10006
+#POST&/public/rest/api/1.0/attachment&comment=comment&cycleId=1430855a-0cf7-4355-b70a-c48c78b30491&issueId=10314&entityId=1fd0a00f-ba18-4b08-9e02-33d6dc9e9cc0&entityName=execution&projectId=10006&versionId=10007
+#POST&/public/rest/api/1.0/attachment&comment=comment&cycleId=0001494-242ac112-0001&entityId=0001494828799998-242ac112-0001&entityName=stepResult&issueId=10024&projectId=10000&versionId=-1
+        #data = {
+        #    'issueId': issue_id,
+        #    'versionId': version_id,
+        #    'entityName': 'execution',
+        #    'cycleId': cycle_id,
+        #    'entitiyId': id,
+        #    'projectId': project_id,
+        #    'comment': 'comment'
+        #    }
+        path = 'POST&' + relative_path + '&' + parms
+        print('path',path)
+        jwt = self._generate_jwt(path)
+
+        #url = self.base_url + 'attachment?entityId=' + str(id) + '&entityType=' + type
+        url = self.zephyr_base_url + relative_path + '?' + parms
+
         logging.debug('url=' + url)
 
+        #self.headers['Content-Type'] = 'multipart/form-data'
+        del self.headers['Content-Type'] 
+        f = open(file, 'rb')
+        files = {'attachment':(os.path.basename(file), f, "multipart/form-data")}
+        #self.post(url,headers = self.headers, files={'attachment': (file, open(file, 'rb'))})
+        self.post(url,headers = self.headers, files=files)
+        
         #h = self.headers
         #h['X-Atlassian-Token'] = 'nocheck'
         #h['Content-Type'] = 'multipart/form-data'
@@ -460,13 +519,16 @@ class Zapi(WebService):
         #print(f)
         #self.post(url,headers = h, files=f)
         #content = self.resp.content.decode('utf-8')
-        exec_cmd = 'curl -k -X POST -H "Authorization: Basic ' + self.auth64_string + '" "' + url + '" -H "X-Atlassian-Token: nocheck" -F "file=@' + file + '"'
-        try:
-            logging.info("curlcmd=" + exec_cmd)
-            r = subprocess.run(exec_cmd, shell=True, check=True)
-        except subprocess.CalledProcessError as err:
-            #print(err)
-            print("curl failed. return code=: " + str(err.returncode))
+        #exec_cmd = 'curl -k -X POST -H "Authorization: Basic ' + self.auth64_string + '" "' + url + '" -H "X-Atlassian-Token: nocheck" -F "file=@' + file + '"'
+
+        #'Authorization': 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmR5LmFuZGVyc29uIiwicXNoIjoiMTI2YjkzMjM1YmEwNzRhM2M5ZjIxOWZlMzQzMjAzNTFiMGMzM2M2YzZmMzc5YmYyZGQ2NzY4N2Y1NmNkYzBkMCIsImlzcyI6Ik1EQXpaVGN5TVRNdE5HWTNaUzB6TW1Nd0xXSXhaREF0WWpabE0yWTFNVGxqTm1ObElHRnVaSGt1WVc1a1pYSnpiMjRnVlZORlVsOUVSVVpCVlV4VVgwNUJUVVUiLCJleHAiOjE1NDI4NDA1OTUuMTA3MTA5OCwiaWF0IjoxNTQyODM2OTk1LjEwNzExMX0.IqCVODTMLxQpM-5RYObTt1mCDbKHs5kHsv_AKuIZhVQ', 'zapiAccessKey': '***REMOVED***'
+        #exec_cmd = 'curl -k -X POST -H "Authorization: ' + self.headers['Authorization'] + '" "' + url + '" -H "zapiAccessKey: "' + self.headers['zapiAccessKey'] + ' -F "file=@' + file + '"'
+        #try:
+        #    logging.info("curlcmd=" + exec_cmd)
+        #    r = subprocess.run(exec_cmd, shell=True, check=True)
+        #except subprocess.CalledProcessError as err:
+        #    #print(err)
+        #    print("curl failed. return code=: " + str(err.returncode))
 
 
         #if "errorDesc" in content:
