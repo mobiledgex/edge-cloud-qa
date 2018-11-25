@@ -100,3 +100,25 @@ class Jiraapi(WebService):
         resp = super().post(url, data = data_fields_json, headers = self.headers)
 
         
+    def get_project(self, name=None):
+        url = self.base_url + '/project/' + name
+        logging.debug('url=' + url)
+
+        resp = super().get(url, headers = self.headers)
+
+        content = self.resp.content.decode('utf-8')
+
+        #print('content',content)
+
+        return content
+
+    def get_project_id(self, name):
+        info = self.get_project(name)
+
+        content = json.loads(info)
+
+        pid = content['id']
+
+        return pid
+                
+        
