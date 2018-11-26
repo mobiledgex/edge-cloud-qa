@@ -50,11 +50,11 @@ def main():
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
 
-    print(httpTrace)
-    if httpTrace == 'true':
-        httpTrace = 1
-    else:
-        httpTrace = 0
+    #print(httpTrace)
+    #if httpTrace == 'true':
+    #    httpTrace = 1
+    #else:
+    #    httpTrace = 0
  
     zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 
