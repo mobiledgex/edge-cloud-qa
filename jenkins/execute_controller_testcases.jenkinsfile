@@ -40,13 +40,13 @@ node('jenkinsSlave1'){
                   currentBuild.result = 'FAILURE'
               }
 
-              //def s2 = p + "/tools/updateCycleJira.py ${newCycle} ${project} ${version} --version_from_load --start_date"
-              //status2 = sh(script: s2, returnStatus: true);
-              //println status2
-              //if(status2 != 0) {
-                // println "updateCycleJira.py failed"
-                 //currentBuild.result = 'FAILURE'
-              //}
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ${project} --version ${version} --cycle ${newCycle} --startdate'
+              status2 = sh(script: s2, returnStatus: true);
+              println status2
+              if(status2 != 0) {
+                 println "updateCycleJira.py failed"
+                 currentBuild.result = 'FAILURE'
+              }
           }
       }
    } else {
