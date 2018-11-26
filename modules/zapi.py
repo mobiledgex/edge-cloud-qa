@@ -379,7 +379,7 @@ class Zapi(WebService):
 
         relative_path = '/public/rest/api/1.0/cycle'
         query = ''
-        data = '{"name":' + cycle_name + ',"build":' + build_to_set + ',"projectId":' + str(project_id) + ',"versionId":' + version_id + '}'
+        #data = '{"name":' + cycle_name + ',"build":' + build_to_set + ',"projectId":' + str(project_id) + ',"versionId":' + version_id + '}'
         path = 'POST&' + relative_path + '&' + query
 
         jwt = self._generate_jwt(path)
@@ -425,11 +425,16 @@ class Zapi(WebService):
         build_to_set = ''
         if build:
             build_to_set = build
-            
-        url = self.base_url + 'cycle'
-        data = '{"id":"' + cycle_id + '"'
-        if name:
-            data = data + ', "name": "' + name + '"'
+
+        relative_path = '/public/rest/api/1.0/cycle/' + str(cycle_id)
+        query = ''
+        path = 'POST&' + relative_path + '&' + query
+
+        jwt = self._generate_jwt(path)
+
+        url = self.zephyr_base_url + relative_path
+
+        data = '{"name":"' + cycle_name + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '"'
         if start_date:
             data = data + ', "startDate": "' + start_date + '"'
         if end_date:
@@ -437,6 +442,7 @@ class Zapi(WebService):
         data = data + '}'
         logging.debug('url=' + url + ' data=' + data)
 
+        self.headers['Content-Type'] = 'application/json'
         self.put(url, headers = self.headers, data=data)
 
         content = self.resp.content.decode('utf-8')
