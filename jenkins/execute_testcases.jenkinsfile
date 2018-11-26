@@ -1,0 +1,44 @@
+dName = "${cycle}"
+jobName = "${components}"
+
+currentBuild.displayName = dName
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'testcases/controller/operators/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        [$class:'SparseCheckoutPath', path:'modules/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+    //stage('start environment') {
+    //    dir('go/src/github.com/mobiledgex/edge-cloud/tls/out/') {
+    //        sh 'cp $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/tls/out/* .'
+    //    }
+    //    dir('go/src/github.com/mobiledgex/edge-cloud/setup-env/e2e-tests/') {
+    //        sh 'export ANSIBLE_DIR=$HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$HOME/workspace/buildEdgecloud/go/bin/;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;e2e-tests -testfile testfiles/deploy_start_create_automation.yml -setupfile setups/local_multi_automation.yml -stop'
+    //    }
+    //}
+    
+    stage("execute tests") {
+      dir('go/src/github.com/mobiledgex/jenkins') {
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./execJira.py', returnStatus: true);
+         println status
+         if(status != 0) {
+            echo "execJira.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+    }
+}
