@@ -1,0 +1,57 @@
+project = "${project}"
+version = "${version}"
+cycle = "${cycle}"
+//jobName = "${components}"
+
+currentBuild.displayName = cycle
+
+def jobList1Parallel = ["runOperatorTests"]
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+    
+   if(currentBuild.result != 'FAILURE') {
+      stage("copy tests from to ${cycle}") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              //String j = jobListAll.join(" ")
+              //def p = pwd()
+              def status = -1
+              //def s = p + '@script/copyTestsToRelease.py ' + j
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+              status = sh(script: s, returnStatus: true);
+              println status
+              if(status != 0) {
+                  println "copyTestsToRelease.py failed"
+                  currentBuild.result = 'FAILURE'
+              }
+
+              //def s2 = p + "/tools/updateCycleJira.py ${newCycle} ${project} ${version} --version_from_load --start_date"
+              //status2 = sh(script: s2, returnStatus: true);
+              //println status2
+              //if(status2 != 0) {
+                // println "updateCycleJira.py failed"
+                 //currentBuild.result = 'FAILURE'
+              //}
+          }
+      }
+   } else {
+      echo "error: not copying tests since currentBuild=Failure. checkout failed."
+   }
+}
+
+    
