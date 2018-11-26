@@ -78,7 +78,8 @@ def main():
     #if verbose:
     #    logging.getLogger().setLevel(logging.DEBUG)
 
-    logging.info("cycle=%s version=%s project=%s summary=%s rhc=%s workspace=%s httpTrace=%s" % (cycle, version, project, summary, rhc, workspace, httpTrace))
+    #logging.info("cycle=%s version=%s project=%s summary=%s rhc=%s workspace=%s httpTrace=%s" % (cycle, version, project, summary, rhc, workspace, httpTrace))
+    logging.info("cycle=%s version=%s project=%s component=%s workspace=%s" % (cycle, version, project, component, workspace))
         
     #z = zapi.Zapi(username = username, password = password)
     z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
@@ -89,12 +90,12 @@ def main():
     #sys.exit(1)
     
     # if version_from_load flag is set, copy from "Automation" to "Automation xx.yy"
-    if cycle != 'Supported' and args.version_from_load:
-        logging.info("version_from_load flag is set. find new version")
-        hardware,vendor,release = cycle.split('_')
-        major_release,minor_release,sub_release = release.split('.')
-        version = 'Automation {}.{}'.format(major_release, minor_release)
-        logging.error("using version=%s" % version)
+    #if cycle != 'Supported' and args.version_from_load:
+    #    logging.info("version_from_load flag is set. find new version")
+    #    hardware,vendor,release = cycle.split('_')
+    #    major_release,minor_release,sub_release = release.split('.')
+    #    version = 'Automation {}.{}'.format(major_release, minor_release)
+    #    logging.error("using version=%s" % version)
 
     #zephyrQueryUrl = zephyrBaseUrl + "zql/executeSearch?zqlQuery=" + urllib.parse.quote_plus("project=$project AND fixVersion=\"$version\" AND cycleName in (\"$cycle\") AND summary ~ \"$summary\" ORDER BY Issue ASC") + "&maxRecords=2000"
     #zephyrQueryUrl = "project=" + project + " AND fixVersion=\"" + version + "\" AND cycleName in (\"" + cycle + "\") AND summary ~ \"" + summary + "\" ORDER BY Issue ASC"
@@ -120,7 +121,8 @@ def main():
     update_defects(z, tc_list)
     #sys.exit(1)
     
-    exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
+    #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
+    exec_status = exec_testcases(z, tc_list)
     print("exec_status=" + str(exec_status))
           
     sys.exit(exec_status)
@@ -187,7 +189,8 @@ def update_defects(z, l):
         else:
             logging.info('no defects found')
                          
-def exec_testcases(z, l, rhc, httpTrace, summary):
+#def exec_testcases(z, l, rhc, httpTrace, summary):
+def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
     for t in l:
