@@ -54,10 +54,13 @@ def main():
     print('andy')
     logging.info("project_id=%s version_id=%s cycle_id=%s" % (project_id, version_id, cycle_id))
 
-    #add tests to cycle
-    jql = 'project={} and type=Test and component=Automated'.format(project)
-    print('jql', jql)
-    z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, jql=jql)
-
+    if cycle_id: 
+        #add tests to cycle
+        jql = 'project={} and type=Test and component=Automated'.format(project)
+        print('jql', jql)
+        z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, jql=jql)
+    else:
+        logging.error('cycle_id NOT found')
+        
 if __name__ == '__main__':
     main()
