@@ -60,7 +60,9 @@ node('jenkinsSlave1'){
             result = "FAIL" // make sure other exceptions are recorded as failure too
     }
     stage('deploy processes in k8s') {
-        sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' $HOME/edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
+        dir('go/src/github.com/mobiledgex/jenkins') {
+            sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
+	}
     }
 
     stage("create cycle") {
