@@ -400,7 +400,7 @@ class Zapi(WebService):
             print(content)
             return content
 
-    def update_cycle(self, cycle_id=None, name=None, build=None, start_date=None, end_date=None):
+    def update_cycle(self, project_id=None, version_id=None, cycle_id=None, name=None, build=None, start_date=None, end_date=None):
         """Update a cycle with the given data
 
         Example:
@@ -420,7 +420,7 @@ class Zapi(WebService):
            
         """
 
-        logging.info("cycle_id=%s, name=%s, build=%s, start_date=%s, end_data=%s" % (cycle_id, name, build, start_date, end_date))
+        logging.info("project_id=%s, version_id=%s, cycle_id=%s, name=%s, build=%s, start_date=%s, end_data=%s" % (project_id, version_id, cycle_id, name, build, start_date, end_date))
 
         build_to_set = ''
         if build:
@@ -428,17 +428,20 @@ class Zapi(WebService):
 
         relative_path = '/public/rest/api/1.0/cycle/' + str(cycle_id)
         query = ''
-        path = 'POST&' + relative_path + '&' + query
+        path = 'PUT&' + relative_path + '&' + query
 
         jwt = self._generate_jwt(path)
 
         url = self.zephyr_base_url + relative_path
 
-        data = '{"name":"' + cycle_name + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '"'
+        data = '{"name":"' + name + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '"'
         if start_date:
-            data = data + ', "startDate": "' + start_date + '"'
+            data = data + ', "startDate": "' + str(start_date) + '"'
         if end_date:
-            data = data + ', "endDate": "' + end_date + '"'
+            data = data + ', "endDate": "' + str(end_date) + '"'
+        if build:
+            data = data + ', "build": "' + build + '"'
+
         data = data + '}'
         logging.debug('url=' + url + ' data=' + data)
 
