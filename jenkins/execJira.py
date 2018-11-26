@@ -209,8 +209,10 @@ def exec_testcases(z, l):
 
 
         #os.environ['AUTOMATION_IP'] = rhc
-        file_delete = os.environ['TMPDIR'] + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "*"
-        file_output = os.environ['TMPDIR'] + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "_" + str(int(time.time()))
+        #tmpdir = os.environ['TMPDIR']
+        tmpdir = '/tmp/'
+        file_delete = tmpdir + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "*"
+        file_output = tmpdir + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
