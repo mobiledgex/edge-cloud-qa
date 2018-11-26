@@ -60,9 +60,8 @@ def main():
         jql = 'project={} and type=Test and component=Automated'.format(project)
         print('jql', jql)
         z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, jql=jql)
-        start_date = time.strftime('%Y-%m-%d', time.gmtime())
-        #start_date = "2016-01-21"
-        z.update_cycle(name=new_cycle, project_id=project_id, version_id=version_id, cycle_id=cycle_id, build=new_cycle, start_date=start_date)
+        #start_date = time.strftime('%Y-%m-%d', time.gmtime())
+        #z.update_cycle(name=new_cycle, project_id=project_id, version_id=version_id, cycle_id=cycle_id, build=new_cycle, start_date=start_date)
     else:
         logging.error('cycle_id NOT found')
         
