@@ -448,20 +448,33 @@ class Zapi(WebService):
             print(content)
             return content
 
-    def add_tests_to_cycle(self, project_id=None, version_id=None, cycle_id=None, issues=None):
+    def add_tests_to_cycle(self, project_id=None, version_id=None, cycle_id=None, issues=None, jql=None):
         logging.info("cycle_id=%s, project_id=%s, version_id=%s" % (cycle_id, project_id, version_id))
 
-        url = self.base_url + 'execution/addTestsToCycle'
+        relative_path = '/public/rest/api/1.0/executions/add/cycle/' + cycle_id
+        query = ''
+        url = self.zephyr_base_url + relative_path
         logging.debug('url=' + url)
 
-        i = str(issues).replace('\'', '"')
-        #data = '{"cycleId":"' + cycle_id + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "method": "1", "issues":' + i + '}'
-        data = '{"assigneetype":0, "cycleId":"' + cycle_id + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "method": "1", "issues":' + i + '}'
+        jwt = self._generate_jwt('POST&' + relative_path + '&' + query)
 
-        print(data)
+        if jql:
+            data = '{"jql":"' + jql + '","versionId":"' + str(version_id) + '","projectId":"' + str(project_id) + '","method":"2"}'
+            
+        self.headers['Content-Type'] = 'application/json'
+        self.post(url,headers = self.headers, data=data)
+
+        #url = self.base_url + 'execution/addTestsToCycle'
+        #logging.debug('url=' + url)
+
+        #i = str(issues).replace('\'', '"')
+        #data = '{"cycleId":"' + cycle_id + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "method": "1", "issues":' + i + '}'
+        #data = '{"assigneetype":0, "cycleId":"' + cycle_id + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "method": "1", "issues":' + i + '}'
+
+        #print(data)
         #print(str(issues))
 
-        self.post(url, headers = self.headers, data=data)
+        #self.post(url, headers = self.headers, data=data)
 
         content = self.resp.content.decode('utf-8')
 
