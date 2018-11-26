@@ -450,12 +450,13 @@ class Zapi(WebService):
 
         content = self.resp.content.decode('utf-8')
         print(content)
-        if "updated successfully" not in content:
-            logging.error('ERROR:' + content)
-            return None
-        else:
-            print(content)
-            return content
+        return content
+        #if "updated successfully" not in content:
+        #    logging.error('ERROR:' + content)
+        #    return None
+        #else:
+        #    print(content)
+        #    return content
 
     def add_tests_to_cycle(self, project_id=None, version_id=None, cycle_id=None, issues=None, jql=None):
         logging.info("cycle_id=%s, project_id=%s, version_id=%s" % (cycle_id, project_id, version_id))
