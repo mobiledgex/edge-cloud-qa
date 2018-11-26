@@ -52,6 +52,25 @@ node('jenkinsSlave1'){
    } else {
       echo "error: not copying tests since currentBuild=Failure. checkout failed."
    }
+
+   if(currentBuild.result != 'FAILURE') {
+      stage('run WS tests parallel batch 1') {
+         for(int i=0; i < jobList1Parallel.size(); ++i) {
+            def jobName = jobList1Parallel[i];
+            echo "i1=" + jobName
+            builds1[jobName] = {
+               build job: jobName, parameters: [string(name: 'project', value: project), string(name: 'version', value: version), string(name: 'cycle', value: newCycle), string(name: 'components', value: 'Automated, Controller, Operator')]
+            }
+         }
+
+         try {
+            parallel builds1
+         } catch(err) {
+            echo "Caught in run parallel batch 1: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+   }
 }
 
     
