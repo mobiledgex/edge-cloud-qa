@@ -32,7 +32,7 @@ jira_token = '***REMOVED***'
 access_key = '***REMOVED***'
 secret_key = '***REMOVED***'
 
-python_path = '$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/protos:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/modules:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/certs:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
+python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases'
 
 def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
