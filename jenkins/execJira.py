@@ -145,7 +145,11 @@ def get_testcases(z, result):
         if sresult_content: # list is not empty;therefore, has a teststep
             logging.info("found a teststep")
             #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
-            tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defect_count': s['execution']['totalDefectCount'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
+            tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
+            if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
+                tmp_list['defect_count'] = s['execution']['totalDefectCount']
+            else:
+                tmp_list['defect_count'] = 0
             logging.info("script is " + sresult_content[0]['step'])
         else:
             logging.info("did NOT find a teststep")
@@ -194,7 +198,7 @@ def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
     for t in l:
-        logging.info("executing " + t['issue_key'] + " on " + rhc)
+        logging.info("executing " + t['issue_key'])
         print('xxxxxx',t['project_id'])
         status = z.update_status(t['id'], t['issue_id'], t['project_id'], 3)
         status_s = json.dumps(status)
@@ -205,8 +209,8 @@ def exec_testcases(z, l):
 
 
         #os.environ['AUTOMATION_IP'] = rhc
-        file_delete = os.environ['TMPDIR'] + summary + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "*"
-        file_output = os.environ['TMPDIR'] + summary + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "_" + rhc.split('.')[0] + "_" + str(int(time.time()))
+        file_delete = os.environ['TMPDIR'] + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "*"
+        file_output = os.environ['TMPDIR'] + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
