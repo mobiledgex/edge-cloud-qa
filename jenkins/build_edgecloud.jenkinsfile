@@ -63,7 +63,7 @@ node('jenkinsSlave1'){
         sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' $HOME/edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
     }
 
-    stage("create cycle and add testcases") {
+    stage("create cycle") {
         dir('go/src/github.com/mobiledgex/jenkins') {
             def status = -1
             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + tag
