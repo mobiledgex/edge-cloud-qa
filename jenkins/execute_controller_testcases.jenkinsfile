@@ -7,6 +7,7 @@ currentBuild.displayName = cycle
 
 def jobList1Parallel = ["runOperatorTests"]
 
+
 node('jenkinsSlave1'){
     stage('Checkout') {
         dir('go/src/github.com/mobiledgex') {
@@ -59,7 +60,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'project', value: project), string(name: 'version', value: version), string(name: 'cycle', value: newCycle), string(name: 'components', value: 'Automated, Controller, Operator')]
+               build job: jobName, parameters: [string(name: 'project', value: project), string(name: 'version', value: version), string(name: 'cycle', value: cycle), string(name: 'components', value: 'Automated, Controller, Operator')]
             }
          }
 
