@@ -40,12 +40,12 @@ def main():
     args = parser.parse_args()
 
     print(os.environ)
-    cycle = os.environ['cycle']
-    version = os.environ['version']
+    cycle = os.environ['Cycle']
+    version = os.environ['Version']
     #project = os.environ['project']
     project = 'ECQ'
     #summary = os.environ['testsetname']
-    component = os.environ['component']
+    component = os.environ['Components']
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
