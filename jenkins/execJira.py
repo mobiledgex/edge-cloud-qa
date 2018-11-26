@@ -2,8 +2,8 @@
 
 import sys
 import os
-sys.path.append(os.getcwd() + "/modules")
-sys.path.append("/home/tester/gitPythonModules/pythonModules")
+#sys.path.append(os.getcwd() + "/modules")
+#sys.path.append("/home/tester/gitPythonModules/pythonModules")
 
 print(sys.path)
 
@@ -32,7 +32,7 @@ jira_token = 'cop6UQnmK4mwodXzijsY407F'
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gVVNFUl9ERUZBVUxUX05BTUU'
 secret_key = 'S_KlvniknmZ1EPVVJij70fIsm8V7UqrAgxC3MGQqCqA'
 
-python_path = '$HOME/go/src/github.com/mobiledgex/edge-cloud-qa/protos:$HOME/go/src/github.com/mobiledgex/edge-cloud-qa/modules:$HOME/go/src/github.com/mobiledgex/edge-cloud-qa/certs:$HOME/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
+python_path = '$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/protos:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/modules:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/certs:$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
 
 def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
