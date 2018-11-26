@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--version_from_load', action='store_true')
     args = parser.parse_args()
 
+    print(os.environ)
     cycle = os.environ['cycle']
     version = os.environ['version']
     #project = os.environ['project']
