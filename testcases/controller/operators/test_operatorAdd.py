@@ -1,5 +1,8 @@
 #!/usr/local/bin/python3
 
+# Operator - User shall be able to create an operator
+# Operator - User shall be able to create an operator with a space
+# Operator - User shall be able to create an operator with an underscore
 #
 # create operator
 # verify it is created
@@ -13,7 +16,7 @@ import os
 from delayedassert import expect, expect_equal, assert_expectations
 import logging
 
-import mex_controller
+from MexController import mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
