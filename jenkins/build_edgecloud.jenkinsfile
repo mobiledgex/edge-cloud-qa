@@ -81,7 +81,7 @@ node('jenkinsSlave1'){
        stage('run tests') {
           echo "running tests"
           try {
-              build job: 'runControllerTests', parameters: [string(name: 'project', value: rhc), string(name: 'version', value: version), string(name: 'Cycle', value: tag)]
+              build job: 'runControllerTests', parameters: [string(name: 'Project', value: Project), string(name: 'Version', value: Version), string(name: 'Cycle', value: tag)]
           } catch(err) {
               echo "caugh exec running tests error: ${err}"
               currentBuild.result = 'FAILURE'
