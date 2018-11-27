@@ -205,35 +205,18 @@ class Zapi(WebService):
         relative_path = '/public/rest/api/1.0/zql/search'
         #url = self.base_url + 'zql/executeSearch?zqlQuery=' + query + '&maxRecords=2000'
         url = self.zephyr_base_url + relative_path  + '?isAdvanced=true'# + '?zqlQuery=' + query # + '&maxRecords=2000'
-        logging.debug('url=' + url)
 
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Version","fields":{"fixVersion":[{"id":10002,"name":"Version 3.0","projectId":10000,"released":false,"archived":false}]}}'
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Nimbus"}' #project = "edge-cloud QA" AND fixVersion = "Nimbus"'# AND cycleName = "Supported"'
-        data = '{"maxRecords":20,"offset":0, "zqlQuery":' + '"' + query + '"}'
-        #data = query
-        #post_data = '{"zqlQuery":"project=edge-cloud"}'
-        #path = 'POST&/public/rest/api/1.0/zql/search&zqlQuery=' + query
-        #path = 'POST&/public/rest/api/1.0/zql/search&' + urllib.parse.quote(data)
+        data = '{"maxRecords":2000,"offset":0, "zqlQuery":' + '"' + query + '"}'
         path = 'POST&/public/rest/api/1.0/zql/search&isAdvanced=true'
-        #path = 'POST&' + relative_path + '&%7B%22zqlQuery%22%3A%22project%3Dandy%22%7D'
-        #path = 'POST&' + relative_path + '&' + 'zqlQuery=fixVersio%3DNimbus'
-        #path = 'POST&' + relative_path + '&' + urllib.parse.quote('zqlQuery=' + query)
-        #path = 'GET&/public/rest/api/1.0/zql/fields/values&'
-        #POST&/public/rest/api/1.0/zql/search&%7B%22zqlQuery%22%3A%22project%3Dandy%22%7D
-        print('path',path)
 
         jwt = self._generate_jwt(path)
 
-
         logging.debug('url=' + url + ' data=' + data)
 
-        #self.headers['Content-Type'] = 'text/plain'
         self.headers['Content-Type'] = 'application/json'
         self.post(url, headers = self.headers, data=data)
-        #self.post(url, headers = self.headers)
-
-        
-        #self.get(url,headers = self.headers)
 
         content = self.resp.content.decode('utf-8')
 
