@@ -10,3 +10,5 @@
 * update operator - test_operatorUpdate.py
 * update operator fails with unknown name - test_operatorUpdate_unknown.py
 * show operator single - test_operatorShow_single.py
+* delete operator - test_operatorDelete.py
+* add operator fails with name='developer' - test_operatorAdd_nameDeveloper.py

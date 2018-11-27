@@ -13,7 +13,7 @@ import os
 from delayedassert import expect, expect_equal, assert_expectations
 import logging
 
-import mex_controller
+from MexController import mex_controller
 
 number_of_operators = 100
 
