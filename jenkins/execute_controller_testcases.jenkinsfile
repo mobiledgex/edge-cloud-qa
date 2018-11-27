@@ -48,7 +48,7 @@ node('jenkinsSlave1'){
               status2 = sh(script: s2, returnStatus: true);
               println status2
               if(status2 != 0) {
-                 println "updateCycleJira.py failed"
+                 println "updateCycleJira.py startdate failed"
                  currentBuild.result = 'FAILURE'
               }
           }
@@ -74,7 +74,18 @@ node('jenkinsSlave1'){
             currentBuild.result = 'FAILURE'
          }
       }
+
+      def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./tools/updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+      status3 = sh(script: s3, returnStatus: true);
+      println status3
+      if(status3 != 0) {
+         println "updateCycleJira.py endate failed"
+         currentBuild.result = 'FAILURE'
+      }
+   } else {
+      echo "error: not running ws tests since currentBuild=Failure. copy tests to release failed"
    }
+
 }
 
     
