@@ -285,10 +285,10 @@ class Zapi(WebService):
             return content
 
 
-    def update_status(self, execution_id=None, issue_id=None, project_id=None, status=None):
+    def update_status(self, execution_id=None, issue_id=None, project_id=None, cycle_id=None, version_id=None, status=None):
         logging.info('status=' + str(status))
         relative_path = '/public/rest/api/1.0/execution/' + str(execution_id)
-        data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '"}'
+        data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
         path = 'PUT&' + relative_path + '&'
 
         jwt = self._generate_jwt(path)
@@ -312,6 +312,28 @@ class Zapi(WebService):
         else:
             print(content)
             return content
+
+    def create_execution(self, execution_id=None, issue_id=None, project_id=None, cycle_id=None, version_id=None, status=None):
+        logging.info('status=' + str(status))
+        relative_path = '/public/rest/api/1.0/execution'
+        #data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
+        data = '{"status":{"id":' + str(status) + '},"issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
+        path = 'POST&' + relative_path + '&'
+
+        jwt = self._generate_jwt(path)
+
+        url = self.zephyr_base_url + relative_path
+        logging.debug('url=' + url + ' data=' + data)
+
+        self.headers['Content-Type'] = 'application/json'
+        self.post(url,headers = self.headers, data=data)
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            print(content)
 
     def update_execution_details(self, execution_id=None, defect_list=None):
         """Update the execution details for a given execution id

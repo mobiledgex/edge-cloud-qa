@@ -115,7 +115,7 @@ def main():
     #j.search(
     print(result)
 
-    tc_list = get_testcases(z, result)
+    tc_list = get_testcases(z, result, cycle)
     print(tc_list)
 
     update_defects(z, tc_list)
@@ -127,35 +127,36 @@ def main():
           
     sys.exit(exec_status)
     
-def get_testcases(z, result):
+def get_testcases(z, result, cycle):
 
     query_content = json.loads(result)
     tc_list = []
     
     #for s in query_content['executions']:
     for s in query_content['searchObjectList']:
-        logging.info("getting script for:" + s['issueSummary'])
-        #sresult = z.get_teststeps(s['issueId'])
-        sresult = z.get_teststeps(s['execution']['issueId'],s['execution']['projectId'])
-        sresult_content = json.loads(sresult)
-        #logging.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-        #logging.info("sresult=" + sresult_content)
-        #logging.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-        #logging.info("stepLength=%d" % int(len(sresult_content)))
-        if sresult_content: # list is not empty;therefore, has a teststep
-            logging.info("found a teststep")
-            #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
-            tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
-                tmp_list['defect_count'] = s['execution']['totalDefectCount']
+        if s['execution']['cycleName'] == cycle:
+            logging.info("getting script for:" + s['issueSummary'])
+            #sresult = z.get_teststeps(s['issueId'])
+            sresult = z.get_teststeps(s['execution']['issueId'],s['execution']['projectId'])
+            sresult_content = json.loads(sresult)
+            #logging.info("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+            #logging.info("sresult=" + sresult_content)
+            #logging.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+            #logging.info("stepLength=%d" % int(len(sresult_content)))
+            if sresult_content: # list is not empty;therefore, has a teststep
+                logging.info("found a teststep")
+                #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
+                tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
+                if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
+                    tmp_list['defect_count'] = s['execution']['totalDefectCount']
+                else:
+                    tmp_list['defect_count'] = 0
+                    logging.info("script is " + sresult_content[0]['step'])
             else:
-                tmp_list['defect_count'] = 0
-            logging.info("script is " + sresult_content[0]['step'])
-        else:
-            logging.info("did NOT find a teststep")
-            tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['issueKey']}
+                logging.info("did NOT find a teststep")
+                tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['issueKey']}
             
-        tc_list.append(tmp_list)
+            tc_list.append(tmp_list)
 
     return tc_list
 
@@ -200,7 +201,8 @@ def exec_testcases(z, l):
     for t in l:
         logging.info("executing " + t['issue_key'])
         print('xxxxxx',t['project_id'])
-        status = z.update_status(t['id'], t['issue_id'], t['project_id'], 3)
+        status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
+        #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         status_s = json.dumps(status)
         if 'll execution(s) were successfully updated' in status_s:
             logging.info("tc status WIP updated successful")
@@ -235,7 +237,8 @@ def exec_testcases(z, l):
         logging.info("executing " + exec_cmd)
         try:
             r = subprocess.run(exec_cmd, shell=True, check=True)
-            status = z.update_status(t['id'], t['issue_id'], t['project_id'], 1)
+            status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+            #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             last_status = 'pass'
             if found_failure == -1:
                 found_failure = 0 
@@ -245,7 +248,8 @@ def exec_testcases(z, l):
             logging.info("exec cmd failed. return code=: " + str(err.returncode))
             logging.info("exec cmd failed. stdout=: " + str(err.stdout))
             logging.info("exec cmd failed. stderr=: " + str(err.stderr))
-            status = z.update_status(t['id'], t['issue_id'], t['project_id'], 2)
+            status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
+            #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
             last_status = 'fail'
 
         try:
@@ -293,6 +297,7 @@ def exec_testcases(z, l):
             
         #print(r)
 
+        #sys.exit(1)
     return found_failure
     
 if __name__ == '__main__':
