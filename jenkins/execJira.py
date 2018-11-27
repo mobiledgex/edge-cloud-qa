@@ -2,10 +2,7 @@
 
 import sys
 import os
-#sys.path.append(os.getcwd() + "/modules")
-#sys.path.append("/home/tester/gitPythonModules/pythonModules")
-
-print(sys.path)
+#print(sys.path)
 
 import zapi
 import jiraapi
@@ -18,16 +15,6 @@ import argparse
 
 username = 'andy.anderson'
 jira_token = 'cop6UQnmK4mwodXzijsY407F'
-#access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gVVNFUl9ERUZBVUxUX05BTUU'
-#secret_key = 'Y8h-wAdZlO_B1u5Hela2h3ajgS5nTa0CxwSjsfriYwA'
-#access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg'
-#access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gVVNFUl9ERUZBVUxUX05BTUU'
-# system key
-#MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg
-#PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU
-#secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
-#secret_key = 'S_KlvniknmZ1EPVVJij70fIsm8V7UqrAgxC3MGQqCqA'
-
 #userkey
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gVVNFUl9ERUZBVUxUX05BTUU'
 secret_key = 'S_KlvniknmZ1EPVVJij70fIsm8V7UqrAgxC3MGQqCqA'
@@ -112,11 +99,9 @@ def main():
     logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
 
     result = z.execute_query(zephyrQueryUrl)
-    #j.search(
-    print(result)
 
     tc_list = get_testcases(z, result, cycle)
-    print(tc_list)
+    print('tc_list',tc_list)
 
     update_defects(z, tc_list)
     #sys.exit(1)
@@ -128,12 +113,12 @@ def main():
     sys.exit(exec_status)
     
 def get_testcases(z, result, cycle):
-
     query_content = json.loads(result)
     tc_list = []
     
     #for s in query_content['executions']:
     for s in query_content['searchObjectList']:
+        print('cycleName', s['execution']['cycleName'], cycle)
         if s['execution']['cycleName'] == cycle:
             logging.info("getting script for:" + s['issueSummary'])
             #sresult = z.get_teststeps(s['issueId'])
