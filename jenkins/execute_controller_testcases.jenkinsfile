@@ -3,6 +3,8 @@ version = "${version}"
 cycle = "${cycle}"
 controller = "${controller}"
 
+echo project version cycle controller
+
 //jobName = "${components}"
 
 currentBuild.displayName = cycle
