@@ -208,7 +208,7 @@ class Zapi(WebService):
 
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Version","fields":{"fixVersion":[{"id":10002,"name":"Version 3.0","projectId":10000,"released":false,"archived":false}]}}'
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Nimbus"}' #project = "edge-cloud QA" AND fixVersion = "Nimbus"'# AND cycleName = "Supported"'
-        data = '{"maxRecords":2000,"offset":0, "zqlQuery":' + '"' + query + '"}'
+        data = '{"maxRecords":50,"offset":0, "zqlQuery":' + '"' + query + '"}'
         path = 'POST&/public/rest/api/1.0/zql/search&isAdvanced=true'
 
         jwt = self._generate_jwt(path)
