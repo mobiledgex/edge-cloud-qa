@@ -12,3 +12,4 @@
 * update developer add values - test_developerUpdate_add.py
 * update developer fails with unknown name - test_developerUpdate_unknown.py
 * show developer single - test_developerShow_single.py
+* delete developer - test_developerDelete.py
