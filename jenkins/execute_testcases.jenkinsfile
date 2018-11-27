@@ -2,7 +2,8 @@ cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
 
-echo cycle components controller
+echo cycle
+echo controller
 
 currentBuild.displayName = cycle
 
