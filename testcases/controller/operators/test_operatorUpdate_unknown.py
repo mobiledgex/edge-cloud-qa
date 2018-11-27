@@ -13,7 +13,7 @@ import os
 from delayedassert import expect, expect_equal, assert_expectations
 import logging
 
-import mex_controller
+from MexController import mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
@@ -33,7 +33,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-    def test_createOperatorEmptyName(self):
+    def test_updateOperatorUnknown(self):
         # print operators before add
         operator_pre = self.controller.show_operators()
 
