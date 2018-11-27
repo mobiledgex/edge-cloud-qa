@@ -425,7 +425,7 @@ class Zapi(WebService):
            
         """
 
-        logging.info("project_id=%s, version_id=%s, cycle_id=%s, name=%s, build=%s, start_date=%s, end_data=%s" % (project_id, version_id, cycle_id, name, build, start_date, end_date))
+        logging.info("project_id=%s, version_id=%s, cycle_id=%s, name=%s, build=%s, start_date=%s, end_date=%s" % (project_id, version_id, cycle_id, name, build, start_date, end_date))
 
         build_to_set = ''
         if build:
