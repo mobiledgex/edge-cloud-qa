@@ -7,6 +7,7 @@ currentBuild.displayName = cycle
 
 def jobList1Parallel = ["runOperatorTests"]
 
+builds1 = [:]
 
 node('jenkinsSlave1'){
     stage('Checkout') {
