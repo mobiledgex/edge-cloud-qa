@@ -1,7 +1,7 @@
 node('jenkinsSlave1'){
     date = new Date()
     year = date[Calendar.YEAR]
-    month = date[Calendar.MONTH]
+    month = date[Calendar.MONTH] + 1
     date = date.getAt(Calendar.DATE)
     tag = Version + '_automation_' + year + month + date
 
@@ -76,5 +76,23 @@ node('jenkinsSlave1'){
             }
 	}
     }
-	
+
+    if(currentBuild.result != 'FAILURE') {
+       stage('run tests') {
+          echo "running tests"
+          try {
+              build job: 'runControllerTests', parameters: [string(name: 'project', value: rhc), string(name: 'version', value: version), string(name: 'Cycle', value: tag)]
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+       }
+       //stage('email report') {
+       //   echo "email report"
+       //   build job: 'createReport', parameters: [string(name: 'project', value: project), string(name: 'version', value: version), string(name: 'cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
+       //}
+   } else {
+       echo "build was failure so not running any tests"
+   }
+
 }
