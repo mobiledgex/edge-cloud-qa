@@ -35,7 +35,7 @@ class Jiraapi(WebService):
         logging.debug("username=" + username + "token=" + token)
 
     def search(self, query = None):
-        url = self.base_url + '/search' + '?jql=' + query 
+        url = self.base_url + '/search' + '?jql=' + query + '&maxResults=100'
         logging.debug('url=' + url)
 
         self.get(url,headers = self.headers)
