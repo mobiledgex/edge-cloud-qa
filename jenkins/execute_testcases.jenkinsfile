@@ -15,7 +15,7 @@ node('jenkinsSlave1'){
                 doGenerateSubmoduleConfigurations: false,
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-                        [$class:'SparseCheckoutPath', path:'testcases/controller/operators/*'],
+                        [$class:'SparseCheckoutPath', path:'testcases/*'],
                         [$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
