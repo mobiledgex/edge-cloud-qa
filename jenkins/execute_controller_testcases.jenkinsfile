@@ -8,7 +8,7 @@ controller = "${controller}"
 currentBuild.displayName = cycle
 
 def jobList1Parallel = ["runOperatorTests", "runDeveloperTests"]
-
+ 
 builds1 = [:]
 
 node('jenkinsSlave1'){
