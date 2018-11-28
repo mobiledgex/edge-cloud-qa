@@ -318,6 +318,8 @@ class Zapi(WebService):
         else:
             print(content)
 
+        return content
+    
     def update_execution_details(self, execution_id=None, defect_list=None):
         """Update the execution details for a given execution id
 
