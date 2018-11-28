@@ -33,11 +33,11 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-    def test_createDeveloperUnknown(self):
+    def test_updateDeveloperUnknown(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
-        # create developer
+        # update developer
         error = None
         self.developer = mex_controller.Developer(developer_name = 'unknown developer')
         try:
