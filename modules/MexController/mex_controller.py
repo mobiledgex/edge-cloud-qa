@@ -28,19 +28,25 @@ import app_inst_pb2_grpc
 import loc_pb2
 import loc_pb2_grpc
 
+import shared_variables
+
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_controller')
 
-default_time_stamp = str(int(time.time()))
-cloudlet_name_default = 'cloudlet' + default_time_stamp
-operator_name_default = 'operator' + default_time_stamp
-cluster_name_default = 'cluster' + default_time_stamp
-app_name_default = 'app' + default_time_stamp
-app_version_default = '1.0'
-developer_name_default = 'developer' + default_time_stamp
+#default_time_stamp = str(int(time.time()))
+#cloudlet_name_default = 'cloudlet' + default_time_stamp
+#operator_name_default = 'operator' + default_time_stamp
+#cluster_name_default = 'cluster' + default_time_stamp
+#app_name_default = 'app' + default_time_stamp
+#app_version_default = '1.0'
+#developer_name_default = 'developer' + default_time_stamp
+#flavor_name_default = 'flavor' + default_time_stamp
+#cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 
 class Developer():
-    def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=False):
+    def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
+        #global developer_name_default
+        
         dev_dict = {}
         _fields_list = []
 
@@ -66,8 +72,10 @@ class Developer():
         #sys.exit(1)
 
         if use_defaults:
-            self.developer_name = developer_name_default
-            
+            if not developer_name: self.developer_name = shared_variables.developer_name_default
+
+        shared_variables.developer_name_default = self.developer_name
+        
         if self.developer_name is not None:
             dev_dict['key'] = developer_pb2.DeveloperKey(name=self.developer_name)
             _fields_list.append(self._developer_name_field)
@@ -152,31 +160,35 @@ class Operator():
         return found
 
 class Flavor():
-    def __init__(self, flavor_name=None, ram=None, vcpus=None, disk=None):
-        passed_args = locals()
-        del passed_args['self']
+    def __init__(self, flavor_name=None, ram=None, vcpus=None, disk=None, use_defaults=True):
+        flavor_dict = {}
 
+        #global flavor_name_default
+        
         self.flavor_name = flavor_name
         self.ram = ram
         self.vcpus = vcpus
         self.disk = disk
+
+        if use_defaults:
+            if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
+            if ram is None: self.ram = 1024 
+            if vcpus is None: self.vcpus = 1 
+            if disk is None: self.disk = 1
+
+        shared_variables.flavor_name_default = self.flavor_name
+
+        if self.flavor_name:
+            flavor_dict['key'] = key = flavor_pb2.FlavorKey(name = self.flavor_name)
+        if self.ram is not None:
+            flavor_dict['ram'] = int(self.ram)
+        if self.vcpus:
+            flavor_dict['vcpus'] = int(self.vcpus)
+        if self.disk:
+            flavor_dict['disk'] = int(self.disk)
+
+        self.flavor = flavor_pb2.Flavor(**flavor_dict)
         
-        flavor_dict = {}
-        for a in passed_args:
-            if passed_args[a] is not None:
-                if a == 'flavor_name':
-                    flavor_dict['key'] = key = flavor_pb2.FlavorKey(name = flavor_name)
-                elif a == 'ram':
-                    flavor_dict['ram'] = ram
-                elif a == 'vcpus':
-                    flavor_dict['vcpus'] = vcpus
-                elif a == 'disk':
-                    flavor_dict['disk'] = disk
-
-        self.flavor = flavor_pb2.Flavor(**flavor_dict
-                                     )
-        #print(self.flavor)
-
     def __eq__(self, c):
         if c.key.name == self.flavor_name and c.ram == self.ram and c.vcpus == self.vcpus and c.disk == self.disk:
             return True
@@ -195,36 +207,48 @@ class Flavor():
         return found
 
 class ClusterFlavor():
-    def __init__(self, cluster_flavor_name=None, node_flavor_name=None, master_flavor_name=None, number_nodes=None,max_nodes=None, number_masters=None, use_defaults=False):
+    def __init__(self, cluster_flavor_name=None, node_flavor_name=None, master_flavor_name=None, number_nodes=None,max_nodes=None, number_masters=None, use_defaults=True):
+        #global cluster_flavor_name_default
+        
         self.cluster_flavor_name = cluster_flavor_name
         self.node_flavor_name = node_flavor_name
         self.master_flavor_name = master_flavor_name
-        self.number_nodes = int(number_nodes)
-        self.max_nodes = int(max_nodes)
-        self.number_masters = int(number_masters)
+        self.number_nodes = number_nodes
+        self.max_nodes = max_nodes
+        self.number_masters = number_masters
 
+        if use_defaults:
+            if not cluster_flavor_name: self.cluster_flavor_name = shared_variables.cluster_flavor_name_default
+            if not node_flavor_name: self.node_flavor_name = shared_variables.flavor_name_default
+            if not master_flavor_name: self.master_flavor_name = shared_variables.flavor_name_default 
+            if not number_nodes: self.number_nodes = 1
+            if not max_nodes: self.max_nodes = 1
+            if not number_masters: self.number_masters = 1
+
+        shared_variables.cluster_flavor_name_default = self.cluster_flavor_name
+        
         self.cluster_flavor = clusterflavor_pb2.ClusterFlavor(
                                                               key=clusterflavor_pb2.ClusterFlavorKey(name=self.cluster_flavor_name),
                                                               node_flavor=flavor_pb2.FlavorKey(name=self.node_flavor_name),
                                                               master_flavor=flavor_pb2.FlavorKey(name=self.master_flavor_name),
-                                                              num_nodes=self.number_nodes,
-                                                              max_nodes=self.max_nodes,
-                                                              num_masters=self.number_masters
+                                                              num_nodes=int(self.number_nodes),
+                                                              max_nodes=int(self.max_nodes),
+                                                              num_masters=int(self.number_masters)
                                                              )
 
 
 
 class Cluster():
-    def __init__(self, cluster_name=None, default_flavor_name=None, use_defaults=False):
+    def __init__(self, cluster_name=None, default_flavor_name=None, use_defaults=True):
         self.cluster_name = cluster_name
         self.flavor_name = default_flavor_name
-        print('xx',cluster_name)
+
         if cluster_name == 'default':
-            self.cluster_name = cluster_name_default
+            self.cluster_name = shared_variables.cluster_name_default
             
         if use_defaults:
-            self.cluster_name = cluster_name_default
-            self.flavor_name = 'x1.medium'
+            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
+            if not default_flavor_name: self.flavor_name = shared_variables.cluster_flavor_name_default
 
         self.cluster = cluster_pb2.Cluster(
                                       key = cluster_pb2.ClusterKey(name = self.cluster_name),
@@ -254,9 +278,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, use_defaults=False):
-#        passed_args = locals()
-#        del passed_args['self']
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -271,34 +293,13 @@ class ClusterInstance():
         self.state = 5    # Ready
 
         if cluster_name == 'default':
-            self.cluster_name = cluster_name_default
+            self.cluster_name = shared_variables.cluster_name_default
             
         if use_defaults:
-            self.cluster_name = cluster_name_default
-            self.cloudlet_name = cloudlet_name_default
-            self.operator_name = operator_name_default
-            self.flavor_name = 'x1.medium'
-
-#        clusterinst_dict = {}
-#        for a in passed_args:
-#            print(a)
-#            if passed_args[a] is not None:
-#                if a == 'flavor_name':
-#                    clusterinst_dict['flavor'] = clusterflavor_pb2.ClusterFlavorKey(name = flavor_name)
-#                else if a == 'cluster_name':
-#                    clusterinstkey_dict['cluster_key'] = cluster_pb2.ClusterKey(name = cluster_name)
-#                else if a == 'operator_name':
-#                    cloudkeyinst_dict['operator_key'] = operator_pb2.OperatorKey(name = operator_name)
-#                else if a == 'cloud_name':
-#                    cloudkeyinst_dict['name'] = cloud_name
-#        print(clusterinst_dict)
-#        sys.exit(1)  
-    
-#        flavor = None
-#        operator_key = None
-#        cluster_key = None
-#        cloudlet_key = None
-#        clusterinst_key = None
+            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if not operator_name: self.operator_name = shared_variables.operator_name_default
+            if not flavor_name: self.flavor_name = shared_variables.cluster_flavor_name_default
 
         clusterinst_dict = {}
         clusterinst_key_dict = {}
@@ -386,7 +387,10 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, use_defaults=False):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, use_defaults=True):
+        #global cloudlet_name_default
+        #global operator_name_default
+
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
         self.number_of_dynamic_ips = number_of_dynamic_ips
@@ -394,17 +398,22 @@ class Cloudlet():
         self.longitude = longitude
 
         if use_defaults:
-            self.cloudlet_name = cloudlet_name_default
-            self.operator_name = operator_name_default
-            self.number_of_dynamic_ips = 254
-
+            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if not operator_name: self.operator_name = shared_variables.operator_name_default
+            if not number_of_dynamic_ips: self.number_of_dynamic_ips = 254
+            if not latitude: self.latitude = 10
+            if not longitude: self.longitude = 10
+            
         if cloudlet_name == 'default':
-            self.cloudlet_name = cloudlet_name_default
+            self.cloudlet_name = shared_variables.cloudlet_name_default
         if operator_name == 'default':
-            self.operator_name = operator_name_default
+            self.operator_name = shared_variables.operator_name_default
         if number_of_dynamic_ips == 'default':
             self.number_of_dynamic_ips = 254
 
+        shared_variables.cloudlet_name_default = self.cloudlet_name
+        shared_variables.operator_name_default = self.operator_name
+        
         cloudlet_key_dict = {}
         if self.cloudlet_name:
             cloudlet_key_dict['name'] = self.cloudlet_name
@@ -413,9 +422,9 @@ class Cloudlet():
 
         loc_dict = {}
         if self.latitude:
-            loc_dict['lat'] = int(self.latitude)
+            loc_dict['lat'] = float(self.latitude)
         if self.longitude:
-            loc_dict['long'] = int(self.longitude)
+            loc_dict['long'] = float(self.longitude)
 
         cloudlet_dict = {}
         if loc_dict:
@@ -427,14 +436,25 @@ class Cloudlet():
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, app_template=None, use_defaults=False):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, use_defaults=True):
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
         self.image_type = image_type
         self.image_path = image_path
         self.config = config
+        self.command = command
+        self.default_flavor_name = default_flavor_name
+        self.cluster_name = cluster_name
 
+        if use_defaults:
+            if not app_name: self.app_name = shared_variables.app_name_default
+            if not developer_name: self.developer_name = shared_variables.developer_name_default
+            if not app_version: self.app_version = shared_variables.app_version_default
+            if not image_type: self.image_type = 'ImageTypeDocker'
+            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
+            if not default_flavor_name: self.default_flavor_name = shared_variables.flavor_name_default
+            
         if self.image_type == 'ImageTypeDocker':
             if not self.image_path:
                 try:
@@ -456,9 +476,6 @@ class App():
         elif ip_access == 'IpAccessShared':
             self.ip_access = 3
             
-        self.default_flavor_name = default_flavor_name
-        self.cluster_name = cluster_name
-
         if access_ports is None:
             self.access_ports = ''
         else:
@@ -476,30 +493,32 @@ class App():
 
         if self.app_name is not None:
             app_key_dict['name'] = self.app_name
-        if app_version:
-            app_key_dict['version'] = app_version
+        if self.app_version:
+            app_key_dict['version'] = self.app_version
         if self.developer_name is not None:
             app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
 
-        if 'name' in app_key_dict or app_version or 'developer_key' in app_key_dict:
+        if 'name' in app_key_dict or self.app_version or 'developer_key' in app_key_dict:
             app_dict['key'] = app_pb2.AppKey(**app_key_dict)
-        if image_type is not None:
-            app_dict['image_type'] = image_type
-        if image_path is not None:
-            app_dict['image_path'] = image_path
-        if ip_access:
-            app_dict['ip_access'] = ip_access
+        if self.image_type is not None:
+            app_dict['image_type'] = self.image_type
+        if self.image_path is not None:
+            app_dict['image_path'] = self.image_path
+        if self.ip_access:
+            app_dict['ip_access'] = self.ip_access
         if self.cluster_name is not None:
             app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
-        if default_flavor_name is not None:
-            app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = default_flavor_name)
-        if access_ports:
-            app_dict['access_ports'] = access_ports
-        if config:
-            app_dict['config'] = config
+        if self.default_flavor_name is not None:
+            app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = self.default_flavor_name)
+        if self.access_ports:
+            app_dict['access_ports'] = self.access_ports
+        if self.config:
+            app_dict['config'] = self.config
         else:
             self.config = ''
-        
+        if self.command is not None:
+            app_dict['command'] = self.command
+            
         self.app = app_pb2.App(**app_dict)
         
         #self.app_complete = copy.copy(self.app)
@@ -545,7 +564,7 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, developer_name=None, cloudlet_name=None, operator_name=None, image_type=None, image_path=None, cluster_name=None, default_flavor_name=None, config=None, use_defaults=False):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, developer_name=None, cloudlet_name=None, operator_name=None, image_type=None, image_path=None, cluster_name=None, default_flavor_name=None, config=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
@@ -554,15 +573,22 @@ class AppInstance():
         self.cloudlet_name = cloudlet_name
 
         if self.app_name == 'default':
-            self.app_name = app_name_default
+            self.app_name = shared_variables.app_name_default
         if self.developer_name == 'default':
-            self.developer_name = developer_name_default
+            self.developer_name = shared_variables.developer_name_default
         if self.app_version == 'default':
-            self.app_version = app_version_default
+            self.app_version = shared_variables.app_version_default
         if self.operator_name == 'default':
-            self.operator_name = operator_name_default
+            self.operator_name = shared_variables.operator_name_default
         if self.cloudlet_name == 'default':
-            self.cloudlet_name = cloudlet_name_default
+            self.cloudlet_name = shared_variables.cloudlet_name_default
+            
+        if use_defaults:
+            if not app_name: self.app_name = shared_variables.app_name_default
+            if not developer_name: self.developer_name = shared_variables.developer_name_default
+            if not app_version: self.app_version = shared_variables.app_version_default
+            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if not operator_name: self.operator_name = shared_variables.operator_name_default
 
         appinst_dict = {}
         appinst_key_dict = {}
@@ -661,8 +687,6 @@ class Controller():
         resp = None
 
         if not cluster_flavor:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
             cluster_flavor = ClusterFlavor(**kwargs).cluster_flavor
 
         logger.info('create cluster flavor on {}. \n\t{}'.format(self.address, str(cluster_flavor).replace('\n','\n\t')))
@@ -695,8 +719,6 @@ class Controller():
         resp = None
 
         if not cluster:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
             cluster = Cluster(**kwargs).cluster
 
         logger.info('create cluster on {}. \n\t{}'.format(self.address, str(cluster).replace('\n','\n\t')))
@@ -740,8 +762,6 @@ class Controller():
         resp = None
 
         if not cluster_instance:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
             cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('create cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
@@ -791,8 +811,6 @@ class Controller():
         resp = None
 
         if not cloudlet_instance:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
             cloudlet_instance = Cloudlet(**kwargs).cloudlet
 
         logger.info('create cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
@@ -820,10 +838,16 @@ class Controller():
 
         return resp
 
-    def create_flavor(self, flavor_instance):
+    def create_flavor(self, flavor_instance=None, **kwargs):
+        resp = None
+
+        if not flavor_instance:
+            flavor_instance = Flavor(**kwargs).flavor
+        
         logger.info('create flavor on {}. \n\t{}'.format(self.address, str(flavor_instance).replace('\n','\n\t')))
 
         resp = self.flavor_stub.CreateFlavor(flavor_instance)
+        self.prov_stack.append(lambda:self.delete_flavor(flavor_instance))
 
         return resp
 
@@ -875,8 +899,6 @@ class Controller():
         resp = None
         
         if not app_instance:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
             app_instance = App(**kwargs).app
 
         logger.info('create app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -912,10 +934,6 @@ class Controller():
         resp = None
 
         if not app_instance:
-            print('no appinstance')
-            if len(kwargs) == 0:
-                kwargs = {'default_stamp': True}
-                print('no kwargs')
             app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('create app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -999,11 +1017,8 @@ class Controller():
 
     def create_developer(self, op_instance=None, **kwargs):
         resp = None
-        print('SSSSS')
+
         if not op_instance:
-            if len(kwargs) == 0:
-                print('DDDDDD')
-                kwargs = {'use_defaults': True}
             op_instance = Developer(**kwargs).developer
 
         logger.info('create developer on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
