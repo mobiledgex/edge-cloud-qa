@@ -43,7 +43,7 @@ class tc(unittest.TestCase):
 
         # create flavor 
         error = None
-        self.flavor = mex_controller.Flavor(flavor_name = '')
+        self.flavor = mex_controller.Flavor(flavor_name = '', use_defaults=False)
         try:
             self.controller.create_flavor(self.flavor.flavor)
         except grpc.RpcError as e:
@@ -69,7 +69,7 @@ class tc(unittest.TestCase):
 
         # create flavor
         error = None
-        self.flavor = mex_controller.Flavor()
+        self.flavor = mex_controller.Flavor(use_defaults=False)
         try:
             self.controller.create_flavor(self.flavor.flavor)
         except grpc.RpcError as e:
@@ -93,7 +93,7 @@ class tc(unittest.TestCase):
 
         # create flavor
         error = None
-        self.flavor = mex_controller.Flavor(ram=1, vcpus=1, disk=1)
+        self.flavor = mex_controller.Flavor(ram=1, vcpus=1, disk=1, use_defaults=False)
         try:
             self.controller.create_flavor(self.flavor.flavor)
         except grpc.RpcError as e:

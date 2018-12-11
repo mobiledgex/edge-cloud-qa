@@ -178,13 +178,13 @@ class Flavor():
 
         shared_variables.flavor_name_default = self.flavor_name
 
-        if self.flavor_name:
+        if self.flavor_name is not None:
             flavor_dict['key'] = key = flavor_pb2.FlavorKey(name = self.flavor_name)
         if self.ram is not None:
             flavor_dict['ram'] = int(self.ram)
-        if self.vcpus:
+        if self.vcpus is not None:
             flavor_dict['vcpus'] = int(self.vcpus)
-        if self.disk:
+        if self.disk is not None:
             flavor_dict['disk'] = int(self.disk)
 
         self.flavor = flavor_pb2.Flavor(**flavor_dict)
