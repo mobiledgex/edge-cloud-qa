@@ -31,7 +31,11 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-    def test_showControllersAll(self):
+    def test_showControllersWrongAddr(self):
+        # [Documentation] Controller - User shall be not be able to show contoller with wrong address
+        # ... show controller with wrong address
+        # ... verify no controllers are shown
+
         # show controllers
         resp = self.controller.show_controllers(address='0.0.0.0:999999')
 
