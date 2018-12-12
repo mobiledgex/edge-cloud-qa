@@ -36,6 +36,11 @@ class tc(unittest.TestCase):
                                                    )
 
     def test_ShowOperatorSingle(self):
+        self.operator2 = mex_controller.Operator(operator_name = operator_name + '_2')
+        self.operator3 = mex_controller.Operator(operator_name = operator_name + '_3')
+        self.controller.create_operator(self.operator2.operator)
+        self.controller.create_operator(self.operator3.operator)
+
         # print operators before add
         operator_pre = self.controller.show_operators()
 
@@ -50,6 +55,8 @@ class tc(unittest.TestCase):
         found_operator = self.operator.exists(operator_post)
 
         self.controller.delete_operator(self.operator.operator)
+        self.controller.delete_operator(self.operator2.operator)
+        self.controller.delete_operator(self.operator3.operator)
 
         expect_equal(found_operator, True, 'find operator')
         expect(len(operator_pre) > 1, 'find operator count pre')
