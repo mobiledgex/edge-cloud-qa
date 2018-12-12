@@ -130,6 +130,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_flavor(self.flavor_2.flavor)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
