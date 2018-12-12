@@ -53,9 +53,20 @@ class tc(unittest.TestCase):
                                             disk=disk,
                                             vcpus=vcpus
         )
+        self.flavor2 = mex_controller.Flavor(flavor_name = flavor_name + '_2',
+                                            ram=ram,
+                                            disk=disk,
+                                            vcpus=vcpus
+        )
+        self.flavor3 = mex_controller.Flavor(flavor_name = flavor_name + '_3',
+                                            ram=ram,
+                                            disk=disk,
+                                            vcpus=vcpus
+        )
 
         self.controller.create_flavor(self.flavor.flavor)
-
+        self.controller.create_flavor(self.flavor2.flavor)
+        self.controller.create_flavor(self.flavor3.flavor)
         # print flavors after add
         flavor_post = self.controller.show_flavors(mex_controller.Flavor(flavor_name = flavor_name).flavor)
         
@@ -70,6 +81,8 @@ class tc(unittest.TestCase):
 
     def tearDown(self):
         self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_flavor(self.flavor2.flavor)
+        self.controller.delete_flavor(self.flavor3.flavor)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
