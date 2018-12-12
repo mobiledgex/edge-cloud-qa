@@ -15,7 +15,7 @@ from MexController import mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
-controller1_address = '0.0.0.0:55001'
+controller1_address = '0.0.0.0:55001' # will only be 1 controller shown since k8s runs it on the same port with replicas
 #controller2_address = '0.0.0.0:55002'
 
 mex_root_cert = 'mex-ca.crt'
@@ -35,6 +35,10 @@ class tc(unittest.TestCase):
                                                    )
 
     def test_showControllersAll(self):
+        # [Documentation] Controller - User shall be able to show all contollers
+        # ... show all controller
+        # ... verify all controllers are shown
+
         # show controllers
         resp = self.controller.show_controllers()
 
