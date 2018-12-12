@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
 
         # create developer
         error = None
-        self.developer = mex_controller.Developer(developer_name = '')
+        self.developer = mex_controller.Developer(developer_name = '', use_defaults=False)
         try:
             self.controller.create_developer(self.developer.developer)
         except grpc.RpcError as e:
@@ -61,7 +61,7 @@ class tc(unittest.TestCase):
 
         # create developer
         error = None
-        self.developer = mex_controller.Developer()
+        self.developer = mex_controller.Developer(use_defaults=False)
         try:
             self.controller.create_developer(self.developer.developer)
         except grpc.RpcError as e:
