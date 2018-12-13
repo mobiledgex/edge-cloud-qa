@@ -48,11 +48,11 @@ spec:
          - name: MEX_DOCKER_REG_PASS
            value: sandhill
          - name: MEX_DIR
-           value: /root/.mobiledgex
+           value: /home/jenkins/.mobiledgex
          - name: OS_AUTH_URL
            value: https://bonnedgecloud.telekom.de:5000/v2.0
          - name: OS_CACERT
-           value: /root/.mobiledgex/bonnedgecloudtelekomde.crt
+           value: /home/jenkins/.mobiledgex/bonnedgecloudtelekomde.crt
          - name: OS_USERNAME
            value: mexadmin
          - name: OS_PASSWORD
