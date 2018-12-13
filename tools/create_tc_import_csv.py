@@ -8,16 +8,32 @@ import glob
 import pathlib
 import re
 import sys
+import argparse
 
-outfile = 'tc_import.csv'
+parser = argparse.ArgumentParser(description='create jira import file')
+#parser.add_argument('--version_from_load', action='store_true')
+parser.add_argument('--result', default='Automated test passes', help='what to put in result field of test step. default is \'Automated test passes\'')
+parser.add_argument('--components',required=True, help='comma seperated list of components. example: Automated,Controller,Operator')
+parser.add_argument('--versions',required=True, help='comma seperated list of versions. example: Nimbus')
+parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
+parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
 
-result = 'Automated test passes'
-components = 'Automated,Controller,Flavor'
-versions = 'Nimbus'
+args = parser.parse_args()
 
-tcfile = 'test_*.py'
-if len(sys.argv) == 2:
-    tcfile = sys.argv[1]
+#outfile = 'tc_import.csv'
+#result = 'Automated test passes'
+#components = 'Automated,Controller,Flavor'
+#versions = 'Nimbus'
+
+outfile = args.outfile
+result = args.result
+components = args.components
+versions = args.versions
+tcfile = args.filepattern
+
+#tcfile = 'test_*.py'
+#if len(sys.argv) == 2:
+#    tcfile = sys.argv[1]
 
 def get_file_list():
     file_list = []
@@ -26,6 +42,8 @@ def get_file_list():
     for f in l:
         ff = pathlib.Path(f).resolve()
         file_list.append(str(ff))
+
+    file_list.sort()
     return file_list
 
 def get_tc_name(l):
