@@ -1,0 +1,12 @@
+cluster:
+    mexmanifest: "{{datadir}}//cluster-azure-aks.yaml"
+
+#we don't actually know the ip until after it is created, so this is updated
+#after and deploy is run a second time.  A better solution TBD
+cloudflare:
+  zone: mobiledgex.net
+  records: 
+  - name: automationbuckhorn.dme.mobiledgex.net
+    type: A
+    content: 35.230.31.161
+
