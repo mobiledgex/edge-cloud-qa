@@ -367,7 +367,7 @@ class ClusterInstance():
         #print(self.cluster_instance)
 
     def __eq__(self, c):
-        if c.key.cluster_key.name == self.cluster_name and c.key.cloudlet_key.operator_key.name == self.operator_name and c.key.cloudlet_key.name == self.cloud_name and c.flavor.name == self.flavor_name and c.state == self.state and c.liveness == self.liveness:
+        if c.key.cluster_key.name == self.cluster_name and c.key.cloudlet_key.operator_key.name == self.operator_name and c.key.cloudlet_key.name == self.cloudlet_name and c.flavor.name == self.flavor_name and c.state == self.state and c.liveness == self.liveness:
             #print('contains')
 
             return True
@@ -446,29 +446,38 @@ class App():
         self.command = command
         self.default_flavor_name = default_flavor_name
         self.cluster_name = cluster_name
-
+        self.ip_access = ip_access
+        
         if use_defaults:
-            if not app_name: self.app_name = shared_variables.app_name_default
-            if not developer_name: self.developer_name = shared_variables.developer_name_default
-            if not app_version: self.app_version = shared_variables.app_version_default
-            if not image_type: self.image_type = 'ImageTypeDocker'
-            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
-            if not default_flavor_name: self.default_flavor_name = shared_variables.flavor_name_default
+            if app_name is None: self.app_name = shared_variables.app_name_default
+            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if app_version is None: self.app_version = shared_variables.app_version_default
+            if image_type is None: self.image_type = 'ImageTypeDocker'
+            if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
+            if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
+            if ip_access is None: self.ip_access = 3 # default to shared
             
+            if self.image_type == 'ImageTypeDocker':
+                print('ssssssssssssssssss')
+                if self.image_path is None:
+                    try:
+                        new_app_name = self._docker_sanitize(app_name)
+                        self.image_path = 'mobiledgex_' + developer_name + '/' + new_app_name + ':' + app_version
+                    except:
+                        self.image_path = 'failed_to_set'
+                #self.image_type = 1
+            elif self.image_type == 'ImageTypeQCOW':
+                if self.image_path is None:
+                    self.image_path = 'qcow path not determined yet'
+                #self.image_type = 2
+
+
         if self.image_type == 'ImageTypeDocker':
-            if not self.image_path:
-                try:
-                    new_app_name = self._docker_sanitize(app_name)
-                    self.image_path = 'mobiledgex_' + developer_name + '/' + new_app_name + ':' + app_version
-                except:
-                    self.image_path = 'failed_to_set'
-            self.image_type = 1
+                self.image_type = 1
         elif self.image_type == 'ImageTypeQCOW':
-            if not self.image_path:
-                self.image_path = 'qcow path not determined yet'
-            self.image_type = 2
-            
-        self.ip_access = 3 # default to shared
+                self.image_type = 2
+
+        #self.ip_access = 3 # default to shared
         if ip_access == 'IpAccessDedicated':
             self.ip_access = 1
         elif ip_access == 'IpAccessDedicatedOrShared':
@@ -524,7 +533,6 @@ class App():
         #self.app_complete = copy.copy(self.app)
         #self.app_complete.image_path = self.image_path
         
-        #print(app_dict)
         #print('s',self.app)
         #print('sc', self.app_complete)
         #print('sd',self.app.__dict__,'esd')
@@ -532,6 +540,7 @@ class App():
         #sys.exit(1) 
 
     def __eq__(self, a):
+        print('aaaaaaa',a.image_path,'bbbbbb',self.image_path)
         if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
             #print('contains')
             return True
@@ -881,7 +890,7 @@ class Controller():
         return resp
 
     def show_apps(self, app_instance=None):
-        logger.info('show apps on {}'.format(self.address))
+        logger.info('show apps on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = None
         if app_instance:
