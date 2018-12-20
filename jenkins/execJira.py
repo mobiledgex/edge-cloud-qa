@@ -30,8 +30,8 @@ def main():
     print(os.environ)
     cycle = os.environ['Cycle']
     version = os.environ['Version']
-    #project = os.environ['project']
-    project = 'ECQ'
+    project = os.environ['project']
+    #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
     #rhc = os.environ['rhc']
@@ -104,17 +104,33 @@ def main():
     for component in component_list:
         component_query += ' AND component = ' + component
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
-    jiraQueryUrl = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query + ' ORDER BY Issue ASC'
+    jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
+    jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
         
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version +  "\\\" ORDER BY Issue ASC"
     logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
 
     #result = z.execute_query(zephyrQueryUrl)
-    result = j.search(jiraQueryUrl)
-    #sys.exit(1)
-    tc_list = get_testcases(z, result, cycle_id, project_id, version_id)
+    startat = 0
+    maxresults = 0
+    total = 1
+    tc_list = []
+    while (startat + maxresults) < total:
+        #jiraQueryUrl = jiraQueryUrlPre + ' startAt=' + str(startat + maxresults) + ' ORDER By Issue ASC'
+        result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
+        query_content = json.loads(result)
+        startat = query_content['startAt']
+        maxresults = query_content['maxResults']
+        total = query_content['total']
+        print(startat,maxresults,total)
+        #sys.exit(1)
+        tc_list += get_testcases(z, result, cycle_id, project_id, version_id)
+
+        
     print('tc_list',tc_list)
+    print('lentclist', len(tc_list))
+    #sys.exit(1)
 
     update_defects(z, tc_list)
     #sys.exit(1)
@@ -231,6 +247,7 @@ def exec_testcases(z, l):
     for t in l:
         if t['tc'] == 'noTestcaseInStep':
             logging.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
+            found_failure = 1  # consider it a failure if the teststep is missing 
             continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         
         logging.info("executing " + t['issue_key'])
