@@ -148,7 +148,7 @@ def get_testcases(z, result, cycle_id, project_id, version_id):
             logging.info("script is " + sresult_content[0]['step'])
         else:
             logging.info("did NOT find a teststep")
-            tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['issueKey']}
+            tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
 
         tc_list.append(tmp_list)
     print(tc_list)
