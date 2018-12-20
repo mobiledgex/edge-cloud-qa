@@ -229,6 +229,10 @@ def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
     for t in l:
+        if t['tc'] == 'noTestcaseInStep':
+            logging.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
+            continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
+        
         logging.info("executing " + t['issue_key'])
         print('xxxxxx',t['project_id'])
         status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
