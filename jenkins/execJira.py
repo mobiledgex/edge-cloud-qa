@@ -264,12 +264,26 @@ def exec_testcases(z, l):
         else:
             logging.info("tc status WIP update FAIL")
 
+        tc_type = ''
+        tc = 'tcnotset'
+        robot_tcname = None
+        if '.robot' in os.path.basename(t['tc']):
+            tc_type = 'robot'
+            tclines = t['tc'].splitlines()
+            tc = tclines[0]
+            if len(tclines) > 1:
+                robot_tcname = tclines[1]
+        elif '.tc.' in  os.path.basename(t['tc']):
+            tc_type = 'python'
+            tc = os.path.basename(t['tc'])
+        else:
+            tc = os.path.basename(t['tc'])
         
         #os.environ['AUTOMATION_IP'] = rhc
         #tmpdir = os.environ['TMPDIR']
         tmpdir = '/tmp/'
-        file_delete = tmpdir + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "*"
-        file_output = tmpdir + os.environ['Cycle'] + "_" + os.path.basename(t['tc']) + "_" + t['issue_key'] + "_" + str(int(time.time()))
+        file_delete = tmpdir + os.environ['Cycle'] + "_" + tc + "_" + t['issue_key'] + "*"
+        file_output = tmpdir + os.environ['Cycle'] + "_" + tc + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
@@ -278,16 +292,19 @@ def exec_testcases(z, l):
         subprocess.run(delete_cmd, shell=True, check=True)
 
         #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
-        if '.robot' in os.path.basename(t['tc']):
+        if tc_type == 'robot':
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
-            exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + os.path.basename(t['tc'])
+            if robot_tcname:
+                exec_cmd = "robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" ./" + tc
+            else:
+                exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
             file_extension = '.html'
-        elif '.tc.' in  os.path.basename(t['tc']):
-            exec_cmd = 'export PYTHONPATH=' + python_path + ';python3 -m unittest ' + os.path.basename(t['tc']) + ' > ' + file_output + ' 2>&1'
+        elif tc_type == 'python':
+            exec_cmd = 'export PYTHONPATH=' + python_path + ';python3 -m unittest ' + tc + ' > ' + file_output + ' 2>&1'
         else:
-            exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + os.path.basename(t['tc']) + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
+            exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
         logging.info("executing " + exec_cmd)
         try:
