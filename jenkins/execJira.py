@@ -200,6 +200,8 @@ def update_defects(z, l):
         #execList = elist_string['executions']
         #if len(execList) > 1 and execList[1]['totalDefectCount'] > 0:
         print('t', t)
+        if 'defect_count' not in t:
+            t['defect_count'] = 0
         if t['defect_count'] > 0:
             #logging.info('defects found = ' + str(execList[1]['totalDefectCount']))
             logging.info('defects found = ' + str(t['defect_count']))
