@@ -30,7 +30,7 @@ def main():
     print(os.environ)
     cycle = os.environ['Cycle']
     version = os.environ['Version']
-    project = os.environ['project']
+    project = os.environ['Project']
     #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
