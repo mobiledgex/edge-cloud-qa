@@ -73,6 +73,8 @@ node('jenkinsSlave1'){
 	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
 	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbuckhorn_start.yaml > $HOME/edgecloud_crmbuckhorn_start.yaml'
 	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebuckhorn_start.yaml > $HOME/edgecloud_dmebuckhorn_start.yaml'
+    	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmgcpcloud1_start.yaml > $HOME/edgecloud_crmgcpcloud1_start.yaml'
+    	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud2_start.yaml > $HOME/edgecloud_crmdmuustmocloud2_start.yaml'
 	    
 	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml'
 	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_start.yaml'
