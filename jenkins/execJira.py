@@ -239,7 +239,15 @@ def update_defects(z, l):
             #sys.exit(1)
         else:
             logging.info('no defects found')
-                         
+
+def find(name, path):
+    logging.debug('finding file {} in {}'.format(name, path))
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            logging.debug('found {} {}'.format(root, name))
+            return os.path.join(root, name)
+    return 'fileNotFound'
+        
 #def exec_testcases(z, l, rhc, httpTrace, summary):
 def exec_testcases(z, l):
     found_failure = -1
@@ -293,10 +301,11 @@ def exec_testcases(z, l):
 
         #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         if tc_type == 'robot':
+            robot_file = find(tc, os.environ['WORKSPACE'])
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
             if robot_tcname:
-                exec_cmd = "robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" ./" + tc
+                exec_cmd = "robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" " + robot_file
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
@@ -347,8 +356,11 @@ def exec_testcases(z, l):
         
         # add output file to jira
         #z.add_attachment(id=t['id'], file=file_output_done)
-        z.add_attachment(id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], version_id=t['version_id'], cycle_id=t['cycle_id'], file=file_output_done)
-
+        if os.path.isfile(file_output_done):
+            z.add_attachment(id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], version_id=t['version_id'], cycle_id=t['cycle_id'], file=file_output_done)
+        else:
+            logging.error('ERROR adding attachment. file {} does not exist'.format(file_output_done))
+            
         #rename trace file to pass or fail for easier debugging
         try:
             mv_cmd = 'mv {} {}.{}'.format(file_output_done, file_output_done, last_status)
