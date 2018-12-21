@@ -70,7 +70,25 @@ node('jenkinsSlave1'){
     stage('deploy processes in k8s') {
         dir('go/src/github.com/mobiledgex/jenkins') {
             //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
-	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml;sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml;sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebonn_start.yaml > $HOME/edgecloud_dmebonn_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml;kubectl create -f $HOME/edgecloud_controller_start.yaml;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'
+	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
+	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml'
+	    sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebonn_start.yaml > $HOME/edgecloud_dmebonn_start.yaml'
+	    
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml'
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_start.yaml'
+	    
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
+	    
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'
+
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
+
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud2_start.yaml'
+	    sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud2_start.yaml'
+
 	}
     }
 
