@@ -1,0 +1,93 @@
+project = "${project}"
+version = "${version}"
+cycle = "${cycle}"
+controller = "${controller}"
+dme = "${dme}"
+
+//jobName = "${components}"
+
+currentBuild.displayName = cycle
+
+def jobList1Parallel = ["runFindCloudletTests"]
+ 
+builds1 = [:]
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+    
+   if(currentBuild.result != 'FAILURE') {
+      stage("copy tests to ${cycle}") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              //String j = jobListAll.join(" ")
+              //def p = pwd()
+              def status = -1
+              //def s = p + '@script/copyTestsToRelease.py ' + j
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+              status = sh(script: s, returnStatus: true);
+              println status
+              if(status != 0) {
+                  println "copyTestsToRelease.py failed"
+                  currentBuild.result = 'FAILURE'
+              }
+
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
+              status2 = sh(script: s2, returnStatus: true);
+              println status2
+              if(status2 != 0) {
+                 println "updateCycleJira.py startdate failed"
+                 currentBuild.result = 'FAILURE'
+              }
+          }
+      }
+   } else {
+      echo "error: not copying tests since currentBuild=Failure. checkout failed."
+   }
+
+   if(currentBuild.result != 'FAILURE') {
+      stage('run WS tests parallel batch 1') {
+         for(int i=0; i < jobList1Parallel.size(); ++i) {
+            def jobName = jobList1Parallel[i];
+            echo "i1=" + jobName
+            builds1[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller)]
+            }
+         }
+
+         try {
+            parallel builds1
+         } catch(err) {
+            echo "Caught in run parallel batch 1: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+      dir('go/src/github.com/mobiledgex/jenkins') {
+          def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+          status3 = sh(script: s3, returnStatus: true);
+          println status3
+          if(status3 != 0) {
+              println "updateCycleJira.py endate failed"
+              currentBuild.result = 'FAILURE'
+          }
+      }
+   } else {
+      echo "error: not running ws tests since currentBuild=Failure. copy tests to release failed"
+   }
+
+}
+
+    
