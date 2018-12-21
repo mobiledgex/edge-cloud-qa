@@ -1,6 +1,7 @@
 cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
+dme = "${dme}"
 
 echo cycle
 echo controller
