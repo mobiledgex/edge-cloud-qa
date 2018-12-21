@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmtmocloud2
+  labels:
+    app: crmtmocloud2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmtmocloud2
+  template:
+    metadata:
+      labels:
+        app: crmtmocloud2
+    spec:
+      containers:
+      - name: crmtmocloud2
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:Nimbus_automation_20181221
+        imagePullPolicy: Always
+        command:
+         - crmserver
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:50092"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"dmuus\"},\"name\":\"tmocloud-2\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
