@@ -1,7 +1,10 @@
 cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
-dme = "${dme}"
+dme = "dmeunset"
+if (env.dme) {
+    dme = "${dme}"
+}
 
 echo cycle
 echo controller
