@@ -1,10 +1,11 @@
 import java.text.SimpleDateFormat
 
 def jobList1Parallel = ["runControllerTests", "runDMETests"]
+builds1 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
-    sdate = new SimpleDateFormat("yyyddMM")
+    sdate = new SimpleDateFormat("yyyMMdd")
     //year = date[Calendar.YEAR]
     //month = date[Calendar.MONTH] + 1
     //date = date.getAt(Calendar.DATE)
