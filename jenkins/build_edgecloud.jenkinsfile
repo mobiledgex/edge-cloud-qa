@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 def jobList1Parallel = ["runControllerTests", "runDMETests"]
 
 node('jenkinsSlave1'){
