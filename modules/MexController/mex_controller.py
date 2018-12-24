@@ -218,12 +218,12 @@ class ClusterFlavor():
         self.number_masters = number_masters
 
         if use_defaults:
-            if not cluster_flavor_name: self.cluster_flavor_name = shared_variables.cluster_flavor_name_default
-            if not node_flavor_name: self.node_flavor_name = shared_variables.flavor_name_default
-            if not master_flavor_name: self.master_flavor_name = shared_variables.flavor_name_default 
-            if not number_nodes: self.number_nodes = 1
-            if not max_nodes: self.max_nodes = 1
-            if not number_masters: self.number_masters = 1
+            if cluster_flavor_name is None: self.cluster_flavor_name = shared_variables.cluster_flavor_name_default
+            if node_flavor_name is None: self.node_flavor_name = shared_variables.flavor_name_default
+            if master_flavor_name is None: self.master_flavor_name = shared_variables.flavor_name_default 
+            if number_nodes is None: self.number_nodes = 1
+            if max_nodes is None: self.max_nodes = 1
+            if number_masters is None: self.number_masters = 1
 
         shared_variables.cluster_flavor_name_default = self.cluster_flavor_name
         
@@ -247,8 +247,8 @@ class Cluster():
             self.cluster_name = shared_variables.cluster_name_default
             
         if use_defaults:
-            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
-            if not default_flavor_name: self.flavor_name = shared_variables.cluster_flavor_name_default
+            if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
+            if default_flavor_name is None: self.flavor_name = shared_variables.cluster_flavor_name_default
 
         self.cluster = cluster_pb2.Cluster(
                                       key = cluster_pb2.ClusterKey(name = self.cluster_name),
@@ -296,10 +296,10 @@ class ClusterInstance():
             self.cluster_name = shared_variables.cluster_name_default
             
         if use_defaults:
-            if not cluster_name: self.cluster_name = shared_variables.cluster_name_default
-            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if not operator_name: self.operator_name = shared_variables.operator_name_default
-            if not flavor_name: self.flavor_name = shared_variables.cluster_flavor_name_default
+            if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
+            if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if operator_name is None: self.operator_name = shared_variables.operator_name_default
+            if flavor_name is None: self.flavor_name = shared_variables.cluster_flavor_name_default
 
         clusterinst_dict = {}
         clusterinst_key_dict = {}
@@ -436,7 +436,7 @@ class Cloudlet():
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, use_defaults=True):
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -447,7 +447,9 @@ class App():
         self.default_flavor_name = default_flavor_name
         self.cluster_name = cluster_name
         self.ip_access = ip_access
-        
+        self.access_ports = access_ports
+        self.auth_public_key = auth_public_key
+
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
@@ -456,13 +458,13 @@ class App():
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             if ip_access is None: self.ip_access = 3 # default to shared
+            if access_ports is None: self.access_ports = 'tcp:1234'
             
             if self.image_type == 'ImageTypeDocker':
-                print('ssssssssssssssssss')
                 if self.image_path is None:
                     try:
-                        new_app_name = self._docker_sanitize(app_name)
-                        self.image_path = 'mobiledgex_' + developer_name + '/' + new_app_name + ':' + app_version
+                        new_app_name = self._docker_sanitize(self.app_name)
+                        self.image_path = 'mobiledgex_' + self.developer_name + '/' + new_app_name + ':' + self.app_version
                     except:
                         self.image_path = 'failed_to_set'
                 #self.image_type = 1
@@ -485,10 +487,10 @@ class App():
         elif ip_access == 'IpAccessShared':
             self.ip_access = 3
             
-        if access_ports is None:
-            self.access_ports = ''
-        else:
-            self.access_ports = access_ports
+        #if access_ports is None:
+        #    self.access_ports = ''
+        #else:
+        #    self.access_ports = access_ports
 
         if self.app_name == 'default':
             self.app_name = app_name_default
@@ -527,7 +529,10 @@ class App():
             self.config = ''
         if self.command is not None:
             app_dict['command'] = self.command
+        if self.auth_public_key is not None:
+            app_dict['auth_public_key'] = self.auth_public_key
             
+        print(app_dict)
         self.app = app_pb2.App(**app_dict)
         
         #self.app_complete = copy.copy(self.app)
@@ -565,6 +570,7 @@ class App():
 
     def _docker_sanitize(self, name):
         str = name
+
         str = str.replace(' ', '')
         str = str.replace('&', '-')
         str = str.replace(',', '')
@@ -803,6 +809,8 @@ class Controller():
     def delete_cluster_instance(self, cluster_instance):
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
         resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
+
+        success = False
         
         self.response = resp
         for s in resp:
@@ -844,6 +852,21 @@ class Controller():
         resp = self.cloudlet_stub.DeleteCloudlet(cloudlet_instance)
         for s in resp:
             print(s)
+
+        return resp
+
+    def show_cloudlets(self, cloudlet_instance=None):
+        logger.info('show cloudlets on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
+
+        resp = None
+        if cloudlet_instance:
+            resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_instance))
+        else:
+            resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_pb2.Cloudlet()))
+        if logging.getLogger().getEffectiveLevel() == 10: # debug level
+            logger.debug('cloudlet list:')
+            for c in resp:
+                print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
 
