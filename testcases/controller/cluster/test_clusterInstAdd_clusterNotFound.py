@@ -21,6 +21,8 @@ mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
 
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 class tc(unittest.TestCase):
     @classmethod
@@ -36,10 +38,17 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
+        self.operator = mex_controller.Operator(operator_name = operator_name)        
+        self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
+                                                operator_name = operator_name,
+                                                number_of_dynamic_ips = 254)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
                                                              operator_name=operator_name,
                                                              flavor_name=flavor_name)
+
+        self.controller.create_operator(self.operator.operator)
+        self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_CreateClusterInstNoCluster(self):
         # [Documentation] ClusterInst - User shall not be able to create a cluster instance for cluster that does not exist
@@ -62,6 +71,11 @@ class tc(unittest.TestCase):
         expect_equal(self.controller.response.details(), 'Specified Cluster not found', 'error details')
         expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
+
+    @classmethod
+    def tearDownClass(self):
+        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
