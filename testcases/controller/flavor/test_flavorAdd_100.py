@@ -68,7 +68,8 @@ class tc(unittest.TestCase):
             found_op = a.exists(flavor_post)
             expect_equal(found_op, True, 'find op' + a.flavor_name)
 
-        expect_equal(len(flavor_post), len(flavor_pre) + number_of_flavors, 'number of flavors')
+        # remove since causes problems with parallel execution. checking for all 100 above anyway
+        #expect_equal(len(flavor_post), len(flavor_pre) + number_of_flavors, 'number of flavors')
 
         assert_expectations()
 
