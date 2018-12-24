@@ -38,10 +38,16 @@ class tc(unittest.TestCase):
                                                     key = mex_key,
                                                     client_cert = mex_cert
                                                    ) 
+
+        self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
                                          default_flavor_name=flavor_name)
+        self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
+                                                operator_name = operator_name,
+                                                number_of_dynamic_ips = 254)
+
         # flavor_name  does not exist
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
@@ -56,9 +62,11 @@ class tc(unittest.TestCase):
                                                                           )
 
         # create a new cluster for adding the instance
+        self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_NoFlavor(self):
         # [Documentation] ClusterInst - User shall be able to create a cluster instance with no flavor name
@@ -118,6 +126,8 @@ class tc(unittest.TestCase):
         self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
