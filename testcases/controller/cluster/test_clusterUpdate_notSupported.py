@@ -20,8 +20,6 @@ import cluster_pb2
 import cluster_pb2_grpc
 import clusterflavor_pb2
 
-controller_address = '127.0.0.1:55001'
-
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
