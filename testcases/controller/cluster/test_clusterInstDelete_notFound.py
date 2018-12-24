@@ -41,7 +41,7 @@ class tc(unittest.TestCase):
                                                    ) 
 
         self.cluster_instance_clusterNameOnly = mex_controller.ClusterInstance(cluster_name=self.cluster_name, use_defaults=False)
-                                                                      
+
         self.cluster_instance_noflavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
