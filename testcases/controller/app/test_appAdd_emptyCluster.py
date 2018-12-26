@@ -22,7 +22,7 @@ stamp = str(time.time())
 developer_name = 'developer' + stamp
 developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
-flavor_name = 'x1.tiny'
+flavor_name = 'x1.tiny' + stamp
 cluster_name = 'AutoCluster'
 app_name = 'app' + stamp
 app_version = '1.0'
@@ -50,7 +50,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-        #self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
+        self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
