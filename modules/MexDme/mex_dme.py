@@ -7,6 +7,8 @@ import logging
 import jwt
 from mex_grpc import MexGrpc
 
+import shared_variables
+
 import app_client_pb2
 import app_client_pb2_grpc
 import loc_pb2
@@ -14,14 +16,25 @@ import loc_pb2
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_dme')
 
+auth_token_global = None
+session_cookie_global = None
+
 class Client():
-    def __init__(self, developer_name=None, app_name=None, app_version=None, auth_token=None):
+    def __init__(self, developer_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_name
         self.app_name = app_name
         self.app_vers = app_version
         self.auth_token = auth_token
 
+        global auth_token_global
+        
+        if use_defaults:
+            if not app_name: self.app_name = shared_variables.app_name_default
+            if not app_version: self.app_vers = shared_variables.app_version_default
+            if not developer_name: self.dev_name = shared_variables.developer_name_default
+            if not auth_token: self.auth_token = auth_token_global
+            
         #if auth_token == 'default':
         #    self.auth_token = 
         if self.dev_name is not None:
@@ -36,18 +49,22 @@ class Client():
         self.client = app_client_pb2.RegisterClientRequest(**client_dict)
 
 class FindCloudletRequest():
-    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None):
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.carrier_name = carrier_name
         self.latitude = latitude
         self.longitude = longitude
 
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+            if not carrier_name: self.carrier_name = shared_variables.operator_name_default
+
         loc_dict = {}
         if self.latitude:
-            loc_dict['lat'] = int(self.latitude)
+            loc_dict['lat'] = float(self.latitude)
         if self.longitude:
-            loc_dict['long'] = int(self.longitude)
+            loc_dict['long'] = float(self.longitude)
 
         if self.session_cookie is not None:
             request_dict['SessionCookie'] = self.session_cookie
@@ -67,7 +84,7 @@ class Dme(MexGrpc):
         self.session_cookie = None
         self._decoded_session_cookie = None
         self._token_server_uri = None
-        self._auth_token = None
+        #self._auth_token = None
         
         super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
@@ -85,13 +102,15 @@ class Dme(MexGrpc):
     #    self.__decoded_session_cookie = value
         
     def register_client(self, register_client_obj=None, **kwargs):
+        global session_cookie_global
+        
         resp = None
 
         if not register_client_obj:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
-                if 'auth_token' not in kwargs:
-                    kwargs['auth_token'] = self._auth_token
+            #if len(kwargs) == 0:
+            #    kwargs = {'use_defaults': True}
+            #    if 'auth_token' not in kwargs:
+            #        kwargs['auth_token'] = self._auth_token
 
             request = Client(**kwargs).client
 
@@ -99,6 +118,7 @@ class Dme(MexGrpc):
                     
         resp = self.match_engine_stub.RegisterClient(request)
         self.session_cookie = resp.SessionCookie
+        session_cookie_global = resp.SessionCookie
         self._token_server_uri = resp.TokenServerURI
         logger.debug('session_cookie=' + self.session_cookie)
         logger.debug('token server uri=' + self._token_server_uri)
@@ -111,10 +131,10 @@ class Dme(MexGrpc):
         resp = None
 
         if not find_cloudlet_obj:
-            if len(kwargs) == 0:
-                kwargs = {'use_defaults': True}
-            if 'session_cookie' not in kwargs:
-                kwargs['session_cookie'] = self.session_cookie
+            #if len(kwargs) == 0:
+            #    kwargs = {'use_defaults': True}
+            #if 'session_cookie' not in kwargs:
+            #    kwargs['session_cookie'] = self.session_cookie
             request = FindCloudletRequest(**kwargs).request
 
         logger.info('find cloudlet on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
@@ -130,6 +150,8 @@ class Dme(MexGrpc):
         logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(match_engine_request_obj).replace('\n','\n\t')))
 
     def generate_auth_token(self, app_name, app_version, developer_name):
+        global auth_token_global
+        
         logger.info('generating token for {} {} {}'.format(app_name, app_version, developer_name))
                     
         cmd = 'genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ~/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem'
@@ -147,7 +169,8 @@ class Dme(MexGrpc):
         #token = token.lstrip().rstrip()
         logger.debug('generated token: ' + token)
 
-        self._auth_token = token
+        #self._auth_token = token
+        auth_token_global = token
         
         return token
         

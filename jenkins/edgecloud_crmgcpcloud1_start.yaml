@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmgcpcloud1
+  labels:
+    app: crmgcpcloud1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmgcpcloud1
+  template:
+    metadata:
+      labels:
+        app: crmgcpcloud1
+    spec:
+      containers:
+      - name: crmgcpcloud1
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        command:
+         - crmserver
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:50052"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"gcp\"},\"name\":\"gcpcloud-1\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
+
