@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mexprocesses
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mexprocesses
@@ -33,7 +33,45 @@ spec:
          - "/root/tls/mex-server.crt"
          - "-d"
          - "etcd,api,notify"
-         - "-shortTimeouts"
+      - name: crmbonn
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        command:
+         - crmserver
+        env:
+         - name: MEX_CF_USER
+           value: mobiledgex.ops@mobiledgex.com
+         - name: MEX_CF_KEY
+           value: 60632181cb3b7419304ffa820b2d99e292092
+         - name: MEX_SSH_KEY
+           value: id_rsa_mobiledgex
+         - name: MEX_DOCKER_REG_PASS
+           value: sandhill
+         - name: MEX_DIR
+           value: /home/jenkins/.mobiledgex
+         - name: OS_AUTH_URL
+           value: https://bonnedgecloud.telekom.de:5000/v2.0
+         - name: OS_CACERT
+           value: /home/jenkins/.mobiledgex/bonnedgecloudtelekomde.crt
+         - name: OS_USERNAME
+           value: mexadmin
+         - name: OS_PASSWORD
+           value: kj&shy2%Jt5F4$Wz
+         - name: OS_REGION_NAME
+           value: RegionOne
+         - name: OS_TENANT_NAME
+           value: mex
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:50051"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"BONN1\"},\"name\":\"automationcloudlet\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--d"
+         - "mexos"
       imagePullSecrets:
        - name: mexreg-secret
 

@@ -34,8 +34,8 @@ class Jiraapi(WebService):
         #logging.debug("username=" + username + " password=" + password + " auth=" + auth64_string)
         logging.debug("username=" + username + "token=" + token)
 
-    def search(self, query = None):
-        url = self.base_url + '/search' + '?jql=' + query 
+    def search(self, query = None, start_at=0):
+        url = self.base_url + '/search' + '?startAt=' + str(start_at) + '&jql=' + query + '&maxResults=100'
         logging.debug('url=' + url)
 
         self.get(url,headers = self.headers)
@@ -99,4 +99,26 @@ class Jiraapi(WebService):
 
         resp = super().post(url, data = data_fields_json, headers = self.headers)
 
+        
+    def get_project(self, name=None):
+        url = self.base_url + '/project/' + name
+        logging.debug('url=' + url)
+
+        resp = super().get(url, headers = self.headers)
+
+        content = self.resp.content.decode('utf-8')
+
+        #print('content',content)
+
+        return content
+
+    def get_project_id(self, name):
+        info = self.get_project(name)
+
+        content = json.loads(info)
+
+        pid = content['id']
+
+        return pid
+                
         
