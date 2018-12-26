@@ -56,6 +56,9 @@ class FindCloudletRequest():
         self.latitude = latitude
         self.longitude = longitude
 
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+            
         if use_defaults:
             if not session_cookie: self.session_cookie = session_cookie_global
             if not carrier_name: self.carrier_name = shared_variables.operator_name_default
