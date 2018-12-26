@@ -82,6 +82,7 @@ FindCloudlet - findCloudlet shall return gcp with with gcp closer by more than 1
     ...                 lat: 37
     ...                 long: -95
 
+      Show Apps
       Show App Instances
       Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
       ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=37  longitude=-96
