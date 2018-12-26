@@ -9,6 +9,7 @@ import pathlib
 import re
 import sys
 import argparse
+from robot.api import TestData
 
 parser = argparse.ArgumentParser(description='create jira import file')
 #parser.add_argument('--version_from_load', action='store_true')
@@ -62,37 +63,73 @@ def get_tc_name(l):
         #dl = str(ff).split('/testcases/')[1].split('/')
         dl = f.split('/testcases/')[1].split('/')
         #print(dl)
-        tc = ''
-        for d in dl:
-            if '.py' in d:
-                d = d.split('.py')[0] + '.tc'
-            tc += d + '.'
+        #tc = ''
+        #for d in dl:
+        #    if '.py' in d:
+        #        d = d.split('.py')[0] + '.tc'
+        #    tc += d + '.'
         #print(tc)
-        match1 = 'def test_.+'
-        match2 = '#\s+\[Documentation].*'
-        match3 = '#\s+\.\.\..+'
+        #match1 = 'def test_.+'
+        #match2 = '#\s+\[Documentation].*'
+        #match3 = '#\s+\.\.\..+'
         with open(f, 'r') as tcf:
             print('fffff',f)
-            t = tcf.read()
-            d = re.compile('({}|{}|{})'.format(match1, match2, match3)).findall(t)
-            #print(d)
-            description = ''
-            title = ''
-            current_tc = ''
-            for line in d:
-                #print('l',line)
-                if 'def test' in line:
-                    test = line[4:].split('(')[0]
-                    tc_hash[tc+test] = {'title':'', 'desc':''}
-                    description = ''
-                    current_tc = tc+test
-                    #print(current_tc)
-                elif '[Documentation]' in line:
-                    tc_hash[current_tc]['title'] = line.split('[Documentation]')[1].strip()
-                    #print('title',title)
-                else:
-                    description += line.split('...')[1].strip() + '\n'
-                    tc_hash[current_tc]['desc'] = description
+            if f.endswith('.robot'):
+                suite = TestData(source=f)
+                for test in suite.testcase_table:
+                    print('-', test.name)
+                    print(test.doc)
+                    s = str(test.doc)
+                    print('sss',s)
+                    comments = s.split('\\n')
+                    print(comments[0])
+                    desc = ''
+                    #for line in comments[1:]:
+                    for line in comments:
+                        desc += line + '\n'
+                    desc = desc.rstrip()
+
+                    #tc_hash['"' + dl[-1] + '\n' + test.name + '"'] = {'title': '"' + comments[0] + '"', 'desc': desc}
+                    tc_hash['"' + dl[-1] + '\n' + test.name + '"'] = {'title': '"' + test.name + '"', 'desc': desc}
+                    print(tc_hash)
+                print(suite)
+                #sys.exit(1)
+            elif f.endswith('.py'):
+                dl = f.split('/testcases/')[1].split('/')
+                print(dl)
+                tc = ''
+                for d in dl:
+                    if '.py' in d:
+                        d = d.split('.py')[0] + '.tc'
+                    tc += d + '.'
+                #print(tc)
+                match1 = 'def test_.+'
+                match2 = '#\s+\[Documentation].*'
+                match3 = '#\s+\.\.\..+'
+
+                t = tcf.read()
+                d = re.compile('({}|{}|{})'.format(match1, match2, match3)).findall(t)
+                print('d',d)
+                sys.exit(1)
+                description = ''
+                title = ''
+                current_tc = ''
+                for line in d:
+                    print('l',line)
+                    if 'def test' in line:
+                        test = line[4:].split('(')[0]
+                        tc_hash[tc+test] = {'title':'', 'desc':''}
+                        description = ''
+                        current_tc = tc+test
+                        #print(current_tc)
+                    elif '[Documentation]' in line:
+                        tc_hash[current_tc]['title'] = '"' + line.split('[Documentation]')[1].strip() + '"'
+                        print('title',tc_hash[current_tc]['title'])
+                    else:
+                        description += line.split('...')[1].strip() + '\n'
+                        tc_hash[current_tc]['desc'] = description
+            else:
+                print('only support python(unittest format) and robot')
                 #print(d)
                 #print('title',title,'desc',description)
                 #tc_hash[tc + test] = {'title': title, 'desc': description}
