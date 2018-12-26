@@ -32,7 +32,7 @@ Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
 	
 Test Setup	Setup
-Test Teardown	Cleanup provisioning
+#Test Teardown	Cleanup provisioning
 
 *** Variables ***
 #${dme_api_address}  127.0.0.1:50051
