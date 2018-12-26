@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crmbuckhorn
+  name: crmbuckhorn
+  namespace: default
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+   - port: 55051
+     protocol: TCP
+     targetPort: 55051
+  selector:
+    app: crmbuckhorn
+  sessionAffinity: None
+  type: LoadBalancer
+

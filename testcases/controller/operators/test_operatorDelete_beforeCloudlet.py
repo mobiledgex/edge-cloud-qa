@@ -13,7 +13,7 @@ import os
 from delayedassert import expect, expect_equal, assert_expectations
 import logging
 
-import mex_controller
+from MexController import mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
@@ -40,6 +40,8 @@ class tc(unittest.TestCase):
         self.operator = mex_controller.Operator(operator_name = operator_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloudlet_name,
                                                 operator_name = operator_name,
+                                                latitude = 10,
+                                                longitude = 10,
                                                 number_of_dynamic_ips = 254)
 
         self.controller.create_operator(self.operator.operator)
