@@ -1,0 +1,112 @@
+import subprocess
+import shlex
+import sys
+import logging
+import time
+import os
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger()
+
+class Mexprocess(object):
+    etcd_clients = ''
+
+    etcd_name = 'etcd'
+    etcd_name_num = 1
+    etcd_listen_peer_port = 30011
+    etcd_listen_client_port = 30001
+    etcd_advertising_client_port = 30001
+    etcd_initial_advertise_peer_port = 30011
+
+    def __init__(self):
+        print('calling mexprocess')
+        self.pid = None
+        self.cmd = None
+
+    def _start(self, cmd, log_file):
+        logger.debug('starting {}'.format(cmd))
+                     
+        process = None
+        try:
+            process = subprocess.Popen(shlex.split(cmd),
+                                       #stdout=subprocess.DEVNULL,
+                                       #stderr=subprocess.DEVNULL,
+                                       stdout=open(log_file, 'w'),
+                                       shell=False,
+                                       preexec_fn=os.setpgrp)
+            print(process.pid)
+            time.sleep(1)
+            if process.poll() is not None:
+                raise ProcessFailed('process is not alive')
+
+            self.pid = process.pid
+            
+        except subprocess.CalledProcessError as e:
+            raise ProcessFailed(e.stderr.decode('utf-8'))
+    
+    def start_etcd(self, *args):
+        print('create etcd', *args)
+        
+        url_ip = 'http://127.0.0.1'
+
+        initial_cluster = ''
+        for index,name in enumerate(args):
+            initial_cluster = initial_cluster + self.etcd_name + '=' + url_ip + ':' + str(self.etcd_listen_peer_port+index) + ','
+        initial_cluster = initial_cluster[:-1]
+            
+        #name = self.name + str(self.name_num)
+        listen_client_list = []
+        for name in args:
+            data_dir = '/var/tmp/edge-cloud-local-etcd/' + self.etcd_name
+            listen_peer_urls = url_ip + ':' + str(self.etcd_listen_peer_port)
+            listen_client_urls = url_ip + ':' + str(self.etcd_listen_client_port) 
+            advertise_client_urls = url_ip + ':' + str(self.etcd_advertising_client_port)
+            initial_advertise_peer_urls = url_ip + ':' + str(self.etcd_initial_advertise_peer_port)
+            #initial_cluster = name + '=' + listen_peer_urls
+            listen_client_list.append(listen_client_urls)
+            
+            self.etcd_cmd = 'nohup {}/etcd --name {} --data-dir {} --listen-peer-urls {} --listen-client-urls {} --advertise-client-urls {} --initial-advertise-peer-urls {} --initial-cluster {}'.format(self.etcd_path, name, data_dir, listen_peer_urls, listen_client_urls, advertise_client_urls, initial_advertise_peer_urls, initial_cluster)
+
+            self._start(cmd=self.etcd_cmd, log_file=self.log_file)
+            self.etcd_clients=listen_client_list
+
+            #self.name_num += 1
+            self.listen_peer_port += 1
+            self.listen_client_port += 1
+            self.advertising_client_port += 1
+            self.initial_advertise_peer_port += 1
+
+    def start_controller(self):
+        print('start controller', self.etcd_clients)
+        
+#class CRM(Mexprocess):
+#    def __init__(self, notify_address=None, api_address=None, cloudlet_key=None, certificate=None, name='crm', debug_options=None, crm_path='~/go/bin', log_dir='/tmp'):
+#        logger.debug('starting crm process')
+#
+#        self.log_file = log_dir + '/crm_' + name + '_' + api_address + '_' + str(int(time.time())) + '.log'
+#        
+#        self.controller_cmd = 'nohup {}/crmserver --notifyAddrs {} --apiAddr {} --cloudletKey {} --tls {} --hostname {}'.format(crm_path, notify_address, api_address, cloudlet_key, certificate, name)
+#        if debug_options:
+#            self.controller_cmd += ' -d ' + debug_options
+#
+#        super(CRM, self).__init__(cmd=self.controller_cmd, log_file=self.log_file)
+#        
+#        self.start()
+
+#class DME(Mexprocess):
+#    def __init__(self, notify_address=None, api_address=None, location_server_url=None, token_server_url=None, carrier=None, cloudlet_key=None, certificate=None, debug_options=None, dme_path='~/go/bin', log_dir='/tmp'):
+#        logger.debug('starting dme process')
+#
+#        self.log_file = log_dir + '/dme_' + carrier + '_' + api_address + '_' + str(int(time.time())) + '.log'
+#        
+#        self.dme_cmd = 'nohup {}/dme-server --notifyAddrs {} --apiAddr {} --locverurl {} --toksrvurl {} --carrier {} --cloudletKey {} --tls {}'.format(dme_path, notify_address, api_address, location_server_url, token_server_url, carrier, cloudlet_key, certificate)
+#        if debug_options:
+#            self.dme_cmd += ' -d ' + debug_options
+#
+#        super(DME, self).__init__(cmd=self.dme_cmd, log_file=self.log_file)
+#        
+#        self.start()
+
+class ProcessFailed(Exception):
+    def __init__(self, message):
+        self.message = message
