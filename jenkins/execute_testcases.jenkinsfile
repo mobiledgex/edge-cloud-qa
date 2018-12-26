@@ -3,9 +3,9 @@ cycle = "${cycle}"
 controller = "${controller}"
 dme = "dmeunset"
 if (env.dme) {
-    dme = "${dme}"
+    dme = "${DME}"
 }
-
+echo dme
 echo cycle
 echo controller
 
