@@ -46,13 +46,17 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
+        self.operator = mex_controller.Operator(operator_name = operator_name)        
+        self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
+                                                operator_name = operator_name,
+                                                number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
         self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor)
+                                              default_flavor_name=flavor_name)
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
@@ -60,11 +64,13 @@ class tc(unittest.TestCase):
                                       access_ports=access_ports,
                                       cluster_name=cluster_name,
                                       developer_name=developer_name,
-                                      default_flavor_name=flavor)
+                                      default_flavor_name=flavor_name)
 
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
+        self.controller.create_operator(self.operator.operator)
+        self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
         # create the cluster
         self.controller.create_cluster(self.cluster.cluster)
@@ -125,6 +131,8 @@ class tc(unittest.TestCase):
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)

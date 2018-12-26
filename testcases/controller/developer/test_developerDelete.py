@@ -59,7 +59,7 @@ class tc(unittest.TestCase):
 
         expect_equal(found_developer, True, 'find developer')
         expect_equal(found_developer_delete, False, 'find developer delete')
-        expect_equal(len(developer_delete), len(developer_post) - 1, 'num developer')
+        #expect_equal(len(developer_delete), len(developer_post) - 1, 'num developer')  # remove since causes problem with parallel execution. cheching it is gone anyway above
 
 
         assert_expectations()
