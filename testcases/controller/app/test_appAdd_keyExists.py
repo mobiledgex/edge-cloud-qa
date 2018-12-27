@@ -22,6 +22,7 @@ developer_name = 'developer' + stamp
 developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
+flavor_name_2 = 'x1.small' + stamp + '_2'
 cluster_name = 'cluster' + stamp
 app_name = 'app' + stamp
 app_version = '1.0'
@@ -44,6 +45,7 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
+        self.flavor_2 = mex_controller.Flavor(flavor_name=flavor_name_2, ram=1024, vcpus=1, disk=1)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
@@ -52,6 +54,7 @@ class tc(unittest.TestCase):
                                               default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
+        self.controller.create_flavor(self.flavor_2.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_cluster(self.cluster.cluster)
@@ -74,6 +77,7 @@ class tc(unittest.TestCase):
                                       default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
+        print('XXXXXXXXXXXXXXXXXXXXX')
         # try to add the app again
         err = None
         try:
@@ -122,7 +126,7 @@ class tc(unittest.TestCase):
                                       access_ports='tcp:1',
                                       #cluster_name=cluster_name,
                                       developer_name=developer_name,
-                                      default_flavor_name='x1.tiny')
+                                      default_flavor_name=flavor_name_2)
 
         # try to add the app again
         err = None
@@ -152,6 +156,7 @@ class tc(unittest.TestCase):
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_flavor(self.flavor_2.flavor)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)

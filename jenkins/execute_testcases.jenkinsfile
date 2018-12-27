@@ -3,9 +3,9 @@ cycle = "${cycle}"
 controller = "${controller}"
 dme = "dmeunset"
 if (env.dme) {
-    dme = "${dme}"
+    dme = "${DME}"
 }
-
+echo dme
 echo cycle
 echo controller
 
@@ -39,7 +39,19 @@ node('jenkinsSlave1'){
     //        sh 'export ANSIBLE_DIR=$HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$HOME/workspace/buildEdgecloud/go/bin/;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;e2e-tests -testfile testfiles/deploy_start_create_automation.yml -setupfile setups/local_multi_automation.yml -stop'
     //    }
     //}
-    
+
+    stage("build protos") {
+      dir('go/src/github.com/mobiledgex/jenkins') {
+         status = sh(script:'./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+         println status
+         if(status != 0) {
+            echo "build_protos.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+    }
+
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
          status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';./execJira.py', returnStatus: true);

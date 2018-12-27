@@ -57,7 +57,7 @@ class tc(unittest.TestCase):
         found_flavor = self.flavor.exists(flavor_post)
 
         expect_equal(found_flavor, True, 'find flavor')
-        expect_equal(len(flavor_post), len(flavor_pre)+1, 'num flavor')
+        #expect_equal(len(flavor_post), len(flavor_pre)+1, 'num flavor') # remove since has problem with parallel execution
 
         assert_expectations()
 
