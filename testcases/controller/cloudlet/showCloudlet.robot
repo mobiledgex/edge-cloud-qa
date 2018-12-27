@@ -18,7 +18,6 @@ ShowCloudlets all
 	...  Expect the show cloudlets to be sucessfully
 		
 	${list}=  Show Cloudlets
-	${length}=  Get Length  ${list}
 	Cloudlet Should Exist   operator_name=${oper}   cloudlet_name=${cldlet}  
 
 ShowCloudlets selected
