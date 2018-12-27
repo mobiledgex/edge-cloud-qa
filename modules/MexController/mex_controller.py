@@ -387,22 +387,46 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
+        _fields_list = []
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
-        self.number_of_dynamic_ips = number_of_dynamic_ips
+        self.accessuri = accessuri
         self.latitude = latitude
         self.longitude = longitude
+        self.ipsupport = ipsupport
+        self.staticips = staticips
+        self.number_of_dynamic_ips = number_of_dynamic_ips
 
-        if use_defaults:
-            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if not operator_name: self.operator_name = shared_variables.operator_name_default
-            if not number_of_dynamic_ips: self.number_of_dynamic_ips = 254
-            if not latitude: self.latitude = 10
-            if not longitude: self.longitude = 10
+        # used for UpdateCloudelet - hardcoded from proto
+        self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
+        self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
+        self._cloudlet_accessuri_field = str(cloudlet_pb2.Cloudlet.ACCESS_URI_FIELD_NUMBER)
+        self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LAT_FIELD_NUMBER)
+        self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONG_FIELD_NUMBER)
+        self._cloudlet_ipsupport_field = str(cloudlet_pb2.Cloudlet.IP_SUPPORT_FIELD_NUMBER)
+        self._cloudlet_staticips_field = str(cloudlet_pb2.Cloudlet.STATIC_IPS_FIELD_NUMBER)
+        self._cloudlet_numdynamicips_field = str(cloudlet_pb2.Cloudlet.NUM_DYNAMIC_IPS_FIELD_NUMBER)
+
+        if cloudlet_name is None and use_defaults == True:
+            self.cloudlet_name = cloudlet_name_default
+        if operator_name is None and use_defaults == True:
+            self.operator_name = operator_name_default
+        if latitude is None and use_defaults == True:
+            self.latitude = 10
+        if longitude is None and use_defaults == True:
+            self.longitude = 10
+        if number_of_dynamic_ips is None and use_defaults == True:
+            self.number_of_dynamic_ips = 254
+        if ipsupport is None and use_defaults == True:
+            self.ipsupport=2
+        if accessuri is None and use_defaults == True:
+            self.accessuri='https://www.edgesupport.com/test'
+        if staticips is None and use_defaults == True:
+            self.staticips = '10.10.10.10'
             
         if cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -413,27 +437,110 @@ class Cloudlet():
 
         shared_variables.cloudlet_name_default = self.cloudlet_name
         shared_variables.operator_name_default = self.operator_name
-        
+
+        if self.ipsupport == "IpSupportUnknown":
+            self.ipsupport = 0
+        if self.ipsupport == "IpSupportStatic":
+            print("In the right spot")
+            self.ipsupport = 1
+        if self.ipsupport == "IpSupportDynamic":
+            self.ipsupport = 2
+
         cloudlet_key_dict = {}
-        if self.cloudlet_name:
-            cloudlet_key_dict['name'] = self.cloudlet_name
-        if self.operator_name:
+        if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
+            _fields_list.append(self._cloudlet_operator_field)
+        if self.cloudlet_name is not None:
+            cloudlet_key_dict['name'] = self.cloudlet_name
+            _fields_list.append(self._cloudlet_name_field)
 
         loc_dict = {}
-        if self.latitude:
-            loc_dict['lat'] = float(self.latitude)
-        if self.longitude:
-            loc_dict['long'] = float(self.longitude)
+        if self.latitude is not None:
+            self.latitude = float(self.latitude)
+            loc_dict['lat'] = self.latitude
+            _fields_list.append(self._cloudlet_latitude_field)
+        if self.longitude is not None:
+            self.longitude = float(self.longitude)
+            loc_dict['long'] = self.longitude
+            _fields_list.append(self._cloudlet_longitude_field)
 
         cloudlet_dict = {}
-        if loc_dict:
+        if loc_dict is not None:
             cloudlet_dict['location'] = loc_pb2.Loc(**loc_dict)
-        if cloudlet_key_dict:
+        if cloudlet_key_dict is not None:
             cloudlet_dict['key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
-        if self.number_of_dynamic_ips:
+        if self.number_of_dynamic_ips is not None:
             cloudlet_dict['num_dynamic_ips'] = self.number_of_dynamic_ips
+            _fields_list.append(self._cloudlet_numdynamicips_field)
+        if self.ipsupport is not None:
+            cloudlet_dict['ip_support'] = self.ipsupport
+            _fields_list.append(self._cloudlet_ipsupport_field)
+        if self.accessuri is not None:
+            cloudlet_dict['access_uri'] = self.accessuri
+            _fields_list.append(self._cloudlet_accessuri_field)
+        if self.staticips is not None:
+            cloudlet_dict['static_ips'] = self.staticips
+            _fields_list.append(self._cloudlet_staticips_field)
+        print("In the class", cloudlet_dict)
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
+
+        if include_fields == True:
+            for field in _fields_list:
+                self.cloudlet.fields.append(field)
+
+
+    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
+        print ("In Update", staticips)
+        
+        if latitude is not None:
+            print("Lat Changed")
+            self.latitude = float(latitude)
+        if longitude is not None:
+            print("Long Changed")
+            self.longitude = float(longitude)
+        if accessuri is not None:
+            print("Acc Changed")
+            self.accessuri = accessuri
+        if ipsupport is not None:
+            print("Sup Changed")
+            self.ipsupport = ipsupport
+        if staticips is not None:
+            print("Stat Changed")
+            self.staticips = staticips
+        if number_of_dynamic_ips is not None:
+            print("Dyn Changed")
+            self.number_of_dynamic_ips = number_of_dynamic_ips
+        
+
+                
+    def __eq__(self, c):
+        if self.ipsupport is None:
+            self.ipsupport = 2
+        if self.accessuri is None:
+            self.accessuri=""
+        if self.staticips is None:
+            self.staticips=""
+        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.lat, self.latitude, c.location.long, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
+
+        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.lat == self.latitude and c.location.long == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+
+            return True
+        
+        
+    def exists(self, cloudlet_list):
+        logger.info('checking cloudlet exists')
+        
+        found_cloudlet = False
+        for c in cloudlet_list:
+            if self.__eq__(c):
+                found_cloudlet = True
+                logging.info('found cloudlet')
+                break
+        if not found_cloudlet:
+            logger.info('INFO: cloudlet NOT found')
+        return found_cloudlet
+
+        
 
 class App():
     def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, use_defaults=True):
@@ -827,8 +934,9 @@ class Controller():
     def create_cloudlet(self, cloudlet_instance=None, **kwargs):
         resp = None
 
-        if not cloudlet_instance:
-            cloudlet_instance = Cloudlet(**kwargs).cloudlet
+        if cloudlet_instance is None:
+            self.ctlcloudlet = Cloudlet(**kwargs)    
+            cloudlet_instance = self.ctlcloudlet.cloudlet
 
         logger.info('create cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
         resp = self.cloudlet_stub.CreateCloudlet(cloudlet_instance)
@@ -839,27 +947,15 @@ class Controller():
         
         return resp
 
-    def delete_cloudlet(self, cloudlet_instance=None, **kwargs):
-        resp = None
-
-        if not cloudlet_instance:
-            if len(kwargs) == 0:
-                kwargs = {'default_stamp': True}
-            cloudlet_instance = Cloudlet(**kwargs).cloudlet
-
-        logger.info('delete cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
-
-        resp = self.cloudlet_stub.DeleteCloudlet(cloudlet_instance)
-        for s in resp:
-            print(s)
-
-        return resp
-
-    def show_cloudlets(self, cloudlet_instance=None):
+    def show_cloudlets(self, cloudlet_instance=None, **kwargs):
         logger.info('show cloudlets on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
 
+        if cloudlet_instance is None:
+            if len(kwargs) != 0:
+                cloudlet_instance = Cloudlet(**kwargs).cloudlet
+
         resp = None
-        if cloudlet_instance:
+        if cloudlet_instance is not None:
             resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_instance))
         else:
             resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_pb2.Cloudlet()))
@@ -867,6 +963,82 @@ class Controller():
             logger.debug('cloudlet list:')
             for c in resp:
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
+
+        return resp
+
+    def cloudlet_should_exist(self, cloudlet_instance=None, **kwargs):
+
+        if cloudlet_instance is None:
+            if len(kwargs) != 0:
+                cloudlet_instance = Cloudlet(**kwargs).cloudlet
+                 
+        resp = None
+
+        logger.info('should contain cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
+        if cloudlet_instance is None and len(kwargs) == 0:
+            resp = self.show_cloudlets()
+        else:
+            resp = self.show_cloudlets(cloudlet_instance)
+            
+        if not self.ctlcloudlet.exists(resp):
+            raise AssertionError('Cloudlet not in the list'.format(str(resp)))
+
+        return resp    
+
+    def cloudlet_should_not_exist(self, cloudlet_instance=None, **kwargs):
+
+        if cloudlet_instance is None:
+            if len(kwargs) != 0:
+                cloudlet_instance = Cloudlet(use_defaults=False, **kwargs).cloudlet
+
+        resp = None
+
+        logger.info('should contain cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
+        if cloudlet_instance is None and len(kwargs) == 0:
+            resp = self.show_cloudlets()
+        else:
+            resp = self.show_cloudlets(cloudlet_instance)
+
+        if self.ctlcloudlet.exists(resp):
+            raise AssertionError('Cloudlet in the list'.format(str(resp)))
+
+        return resp    
+    
+    def update_cloudlet(self, cloudlet_instance=None, **kwargs):
+        resp = None
+
+#        print("INCOMING - ", kwargs)
+        if cloudlet_instance is None:
+            if len(kwargs) != 0:
+                cloudlet_instance = Cloudlet(include_fields=True, **kwargs).cloudlet
+
+        
+        logger.info('update cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
+
+        resp = self.cloudlet_stub.UpdateCloudlet(cloudlet_instance)
+
+        self.ctlcloudlet.update(**kwargs)
+
+        if logging.getLogger().getEffectiveLevel() == 10: # debug level
+            logger.debug('cloudlet list:')
+            for c in resp:
+                print('\t{}'.format(str(c).replace('\n','\n\t')))
+
+        return resp
+
+
+    def delete_cloudlet(self, cloudlet_instance=None, **kwargs):
+        resp = None
+
+        if cloudlet_instance is None:
+            if len(kwargs) != 0:
+                cloudlet_instance = Cloudlet(**kwargs).cloudlet
+
+        logger.info('delete cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
+
+        resp = self.cloudlet_stub.DeleteCloudlet(cloudlet_instance)
+        for s in resp:
+            print(s)
 
         return resp
 
