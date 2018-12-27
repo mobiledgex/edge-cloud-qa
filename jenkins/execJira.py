@@ -305,7 +305,7 @@ def exec_testcases(z, l):
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
             if robot_tcname:
-                exec_cmd = "robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" " + robot_file
+                exec_cmd = 'export PYTHONPATH=' + python_path + ";robot --loglevel TRACE --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" " + robot_file
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
