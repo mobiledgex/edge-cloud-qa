@@ -8,11 +8,20 @@ import shutil
 import glob
 import subprocess
 import os
+import argparse
 
-home_dir = os.environ['HOME']
+parser = argparse.ArgumentParser(description='create proto files for testcases')
+parser.add_argument('--sourcedir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud/', help='dir where go source dir exists')
+parser.add_argument('--qadir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-qa/', help='dir where qa is')
 
-edgecloud_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud/'
-edgecloud_qa_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud-qa/'
+args = parser.parse_args()
+
+#home_dir = os.environ['HOME']
+edgecloud_dir = args.sourcedir
+edgecloud_qa_dir = args.qadir
+
+#edgecloud_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud/'
+#edgecloud_qa_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud-qa/'
 
 protos_src_list = (edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/api/',
                    edgecloud_dir + 'vendor/github.com/gogo/protobuf/gogoproto/',

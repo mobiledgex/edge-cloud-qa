@@ -18,7 +18,6 @@ from MexController import mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 stamp = str(int(time.time()))
-controller_address = '127.0.0.1:55001'
 app_name = 'appname' + stamp
 app_version = '1.0'
 developer_name = 'developer' + stamp
