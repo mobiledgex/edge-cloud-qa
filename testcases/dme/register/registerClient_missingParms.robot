@@ -4,6 +4,7 @@ Documentation  RegisterClient with missing parameters
 
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Variables  shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -83,7 +84,7 @@ RegisterClient - request without authtoken for app with token shall return 'No a
    ...  Send RegisterClient without authtoken for app that does not have a public key
    ...  Verify 'No authtoken received' is returned
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version} 
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version_default}  developer_name=${developer_name_default}  use_defaults=${False} 
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   details = "No authtoken received"
