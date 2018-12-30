@@ -43,7 +43,7 @@ node('jenkinsSlave1'){
 
     stage("build protos") {
       dir('go/src/github.com/mobiledgex/tools') {
-         status = sh(script:'./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+         status = sh(script:'python3 ./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
          println status
          if(status != 0) {
             echo "build_protos.py failed with statuscode=" + status
