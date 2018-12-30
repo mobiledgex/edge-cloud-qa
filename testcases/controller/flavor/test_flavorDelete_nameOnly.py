@@ -70,7 +70,7 @@ class tc(unittest.TestCase):
         expect_equal(len(flavor_post), len(flavor_pre)+1, 'num flavor')
 
         expect_equal(found_flavor_delete, False, 'find flavor after delete')
-        expect_equal(len(flavor_delete_post), len(flavor_pre), 'num flavor after delete')
+        #expect_equal(len(flavor_delete_post), len(flavor_pre), 'num flavor after delete')
 
         assert_expectations()
 
