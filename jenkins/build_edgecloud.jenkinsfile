@@ -126,9 +126,10 @@ node('jenkinsSlave1'){
               currentBuild.result = 'FAILURE'
           }
        }
-       //stage('email report') {
-       //   echo "email report"
-       //   build job: 'createReport', parameters: [string(name: 'project', value: project), string(name: 'version', value: version), string(name: 'cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
+       stage('slack report') {
+          echo "slack report"
+          //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
+	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname)]
        //}
    } else {
        echo "build was failure so not running any tests"
