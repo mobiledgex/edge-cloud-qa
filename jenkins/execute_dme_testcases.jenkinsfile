@@ -65,6 +65,7 @@ node('jenkinsSlave1'){
             echo "i1=" + jobName
             builds1[jobName] = {
                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
+	    }
          }
 
          try {
