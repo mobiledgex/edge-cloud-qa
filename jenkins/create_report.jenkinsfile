@@ -1,0 +1,31 @@
+currentBuild.displayName = cycle
+
+node('jenkinsSlave1') {
+   stage("Checkout") {
+           dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+   }
+
+   stage("create report") {
+      dir('go/src/github.com/mobiledgex/jenkins') {
+         def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackJiraReport.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+         status = sh(script:s, returnStatus: true);
+         println status
+         if(status != 0) {
+            echo "slackJiraReport.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+         }
+   }
+}
