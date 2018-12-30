@@ -23,6 +23,7 @@ node('jenkinsSlave1'){
                         [$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
+                        [$class:'SparseCheckoutPath', path:'tools/*'],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
@@ -41,7 +42,7 @@ node('jenkinsSlave1'){
     //}
 
     stage("build protos") {
-      dir('go/src/github.com/mobiledgex/jenkins') {
+      dir('go/src/github.com/mobiledgex/tools') {
          status = sh(script:'./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
          println status
          if(status != 0) {
