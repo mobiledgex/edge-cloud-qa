@@ -55,13 +55,13 @@ class tc(unittest.TestCase):
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=cluster_flavor_name,
-                                                           node_flavor_name=node_flavor_name,
-                                                           master_flavor_name=master_flavor_name,
+                                                           node_flavor_name=flavor_name,
+                                                           master_flavor_name=flavor_name,
                                                            number_nodes=number_nodes,
                                                            max_nodes=max_nodes,
                                                            number_masters=number_masters)
 
-        #self.controller.create_flavor(self.flavor.flavor)
+        self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.create_developer(self.developer.developer) 
         self.controller.show_cluster_flavors()
@@ -170,7 +170,7 @@ class tc(unittest.TestCase):
     def tearDownClass(self):
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
-        #self.controller.delete_flavor(self.flavor.flavor)
+        self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
