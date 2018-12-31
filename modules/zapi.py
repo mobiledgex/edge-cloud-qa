@@ -102,6 +102,27 @@ class Zapi(WebService):
             logging.debug('respxx=' + content)
             return content
 
+    def get_cycle(self, cycle_id=None, project_id=None, version_id=None):
+        relative_path = '/public/rest/api/1.0/cycle/' + str(cycle_id)
+        query = 'projectId=' + str(project_id) + '&versionId=' + str(version_id)# + '&expand=executionSummaries'
+
+        url = self.zephyr_base_url + relative_path + '?' + query
+        logging.debug('url=' + url)
+
+        jwt = self._generate_jwt('GET&' + relative_path + '&' + query)
+
+        self.headers['Content-Type'] = 'text/plain'
+        self.get(url,headers = self.headers)
+        
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            logging.debug('respxx=' + content)
+            return content
+
     def get_cycle_id(self, name=None, project_id=None, version_id=None):
         logging.debug('name=' + name)
 
@@ -116,6 +137,7 @@ class Zapi(WebService):
             if i['name'] == name:
                 logging.debug('found:' + i['name'])
                 pid = i['id']
+                logging.debug('cycle id is:' + pid)
                 break
 
         return pid
@@ -176,6 +198,40 @@ class Zapi(WebService):
         #self.get(url,headers = self.headers)
         self.headers['Content-Type'] = 'application/json'
         self.post(url, headers = self.headers, data=data)
+
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            logging.debug('resp=' + content)
+            return content
+
+    def get_execution_list_by_cycleid(self, cycle_id=None, version_id=None, project_id=None, offset=0):
+        logging.debug('cycle_id={} version_id={} project_id={} offset={}'.format(str(cycle_id), str(version_id), str(project_id), str(offset)))
+
+        relative_path = '/public/rest/api/1.0/executions/search/cycle/' + str(cycle_id)
+        parms = f'offset={offset}&projectId={project_id}&versionId={version_id}'
+        
+        path = 'GET&' + relative_path + '&' + parms
+        print('*********', path)
+        self._generate_jwt(path)
+
+
+#        url = self.base_url + 'execution?issueId=' + issue_id + '&projectId=' + project_id + '&versionId=' + version_id + 'cycleId=' + cycle_id
+        #url = self.base_url + 'execution?issueId=' + str(issue_id)
+        url = self.zephyr_base_url + relative_path + '?' + parms
+
+        logging.debug('url=' + url)
+
+        #if limit is not None:
+        #    url = url + '&limit=' + str(limit)
+        #logging.debug('url=' + url)
+
+        #self.get(url,headers = self.headers)
+        self.headers['Content-Type'] = 'text/plain'
+        self.get(url, headers = self.headers)
 
         content = self.resp.content.decode('utf-8')
 
@@ -254,6 +310,7 @@ class Zapi(WebService):
         logging.debug('url=' + url)
 
         path = 'GET&' + relative_path + '&' + parms
+
         self._generate_jwt(path)
 
         self.headers['Content-Type'] = 'application/json'
