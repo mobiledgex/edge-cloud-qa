@@ -130,7 +130,7 @@ node('jenkinsSlave1'){
           echo "slack report"
           //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
 	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname)]
-       //}
+       }
    } else {
        echo "build was failure so not running any tests"
    }
