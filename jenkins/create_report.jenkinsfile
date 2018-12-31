@@ -27,5 +27,6 @@ node('jenkinsSlave1') {
             echo "slackJiraReport.py failed with statuscode=" + status
             currentBuild.result = 'FAILURE'
          }
+      }
    }
 }
