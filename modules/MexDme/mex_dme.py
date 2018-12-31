@@ -65,9 +65,9 @@ class FindCloudletRequest():
 
         loc_dict = {}
         if self.latitude:
-            loc_dict['lat'] = float(self.latitude)
+            loc_dict['latitude'] = float(self.latitude)
         if self.longitude:
-            loc_dict['long'] = float(self.longitude)
+            loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
             request_dict['SessionCookie'] = self.session_cookie
