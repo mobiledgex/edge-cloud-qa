@@ -175,6 +175,8 @@ class Dme(MexGrpc):
                                  text=True,
                                    capture_output=True
         )
+        
+        logger.debug('stdout=' + process.stdout)
         token = process.stdout.lstrip('Token:').lstrip().rstrip()
         #token = token.lstrip().rstrip()
         logger.debug('generated token: ' + token)
