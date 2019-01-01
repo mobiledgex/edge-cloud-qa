@@ -38,7 +38,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-        self.operator = mex_controller.Operator(operator_name = operator_name)        
+        #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -47,7 +47,7 @@ class tc(unittest.TestCase):
                                                              operator_name=operator_name,
                                                              flavor_name=flavor_name)
 
-        self.controller.create_operator(self.operator.operator)
+        #self.controller.create_operator(self.operator.operator)
         self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_CreateClusterInstNoCluster(self):
@@ -75,7 +75,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.controller.delete_cloudlet(self.cloudlet.cloudlet)
-        self.controller.delete_operator(self.operator.operator)
+        #self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
