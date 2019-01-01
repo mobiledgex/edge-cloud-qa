@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmazurecentral
+  labels:
+    app: crmazurecentral
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmazurecentral
+  template:
+    metadata:
+      labels:
+        app: crmazurecentral
+    spec:
+      containers:
+      - name: crmazurecentral
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        command:
+         - crmserver
+        env:
+	 - name: PATH
+           value: /tmp/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
+         - name: MEX_CF_USER
+           value: mobiledgex.ops@mobiledgex.com
+         - name: MEX_CF_KEY
+           value: ***REMOVED***
+         - name: MEX_SSH_KEY
+           value: id_rsa_mex
+         - name: MEX_DOCKER_REG_PASS
+           value: sandhill
+         - name: MEX_DIR
+           value: /root/.mobiledgex
+         - name: OS_AUTH_URL
+           value: dummy
+         - name: OS_CACERT
+           value: dummy
+         - name: OS_USERNAME
+           value: dummy
+         - name: OS_PASSWORD
+           value: dummy
+         - name: OS_REGION_NAME
+           value: dummy
+         - name: OS_TENANT_NAME
+           value: dummy
+         - name: MEX_OS_IMAGE
+           value: mobiledgex
+         - name: MEX_K8S_USER
+           value: root
+         - name: MEX_REGISTRY_USER
+           value: mobiledgex
+         - name: CLOUDLET_REGION
+           value: centralus
+         - name: CLOUDLET_ZONE
+           value: centralus
+         - name: CLOUDLET_LOCATION
+           value: centralus
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:65100"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"azure\"},\"name\":\"automationAzureCentralCloudlet\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
