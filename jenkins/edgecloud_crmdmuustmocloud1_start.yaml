@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crmtmocloud2
+  name: crmtmocloud1
   labels:
-    app: crmtmocloud2
+    app: crmtmocloud1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: crmtmocloud2
+      app: crmtmocloud1
   template:
     metadata:
       labels:
-        app: crmtmocloud2
+        app: crmtmocloud1
     spec:
       containers:
-      - name: crmtmocloud2
+      - name: crmtmocloud1
         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
         imagePullPolicy: Always
         command:
          - crmserver
         args:
          - "--apiAddr"
-         - "0.0.0.0:50092"
+         - "0.0.0.0:50091"
          - "--cloudletKey"
-         - "{\"operator_key\":{\"name\":\"dmuus\"},\"name\":\"tmocloud-2\"}"
+         - "{\"operator_key\":{\"name\":\"dmuus\"},\"name\":\"tmocloud-1\"}"
          - "--notifyAddrs"
          - "controller:37001"
          - "--tls"
