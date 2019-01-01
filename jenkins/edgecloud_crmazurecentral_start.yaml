@@ -21,7 +21,7 @@ spec:
         command:
          - crmserver
         env:
-	 - name: PATH
+         - name: PATH
            value: /tmp/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
          - name: MEX_CF_USER
            value: mobiledgex.ops@mobiledgex.com
