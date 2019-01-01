@@ -198,3 +198,10 @@ class Dme(MexGrpc):
         d = radius * c
         
         return d
+
+    def _findFile(self, path):
+        for dirname in sys.path:
+            candidate = os.path.join(dirname, path)
+            if os.path.isfile(candidate):
+                return candidate
+        raise Error('cant find file {}'.format(path))
