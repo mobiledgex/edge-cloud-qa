@@ -155,7 +155,7 @@ class Dme(MexGrpc):
     def generate_auth_token(self, app_name, app_version, developer_name, key_file='authtoken_private.pem'):
         global auth_token_global
         
-        logger.info('generating token for {} {} {}'.format(app_name, app_version, developer_name))
+        logger.info('generating token for {} {} {} {}'.format(app_name, app_version, developer_name, key_file))
 
         key_file = self._findFile(key_file)
 
@@ -164,7 +164,8 @@ class Dme(MexGrpc):
             return None
         
         cmd = 'genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ' + key_file
-
+        logger.debug('cmd=' + cmd)
+        
         #process = subprocess.Popen(shlex.split(cmd),
         process = subprocess.run(cmd,
                                    #stdout=subprocess.DEVNULL,
