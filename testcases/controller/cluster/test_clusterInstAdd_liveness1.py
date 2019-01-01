@@ -40,7 +40,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    ) 
 
-        self.operator = mex_controller.Operator(operator_name = operator_name)        
+        #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -55,7 +55,7 @@ class tc(unittest.TestCase):
                                                              liveness=1)
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
-        self.controller.create_operator(self.operator.operator)
+        #self.controller.create_operator(self.operator.operator)
         self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_AddClusterInstance(self):
@@ -88,7 +88,7 @@ class tc(unittest.TestCase):
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         self.controller.delete_cloudlet(self.cloudlet.cloudlet)
-        self.controller.delete_operator(self.operator.operator)
+        #self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
