@@ -163,7 +163,7 @@ class Dme(MexGrpc):
             logger.error(f'key_file={key_file} does not exist')
             return None
         
-        cmd = 'genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ' + key_file
+        cmd = 'type genauthtoken;genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ' + key_file
         logger.debug('cmd=' + cmd)
         
         #process = subprocess.Popen(shlex.split(cmd),
