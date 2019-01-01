@@ -152,10 +152,12 @@ class Dme(MexGrpc):
     def get_app_instance_list(self, match_engine_request_obj=None, **kwargs):
         logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(match_engine_request_obj).replace('\n','\n\t')))
 
-    def generate_auth_token(self, app_name, app_version, developer_name, key_file='~/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem'):
+    def generate_auth_token(self, app_name, app_version, developer_name, key_file='authtoken_private.pem'):
         global auth_token_global
         
         logger.info('generating token for {} {} {}'.format(app_name, app_version, developer_name))
+
+        key_file = self._findFile(key_file)
 
         if not os.path.isfile(key_file):
             logger.error(f'key_file={key_file} does not exist')
