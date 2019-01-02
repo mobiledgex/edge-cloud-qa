@@ -18,6 +18,9 @@ spec:
       - name: crmtmocloud1
         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
         command:
          - crmserver
         args:
