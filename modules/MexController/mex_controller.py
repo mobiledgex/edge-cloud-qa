@@ -520,9 +520,9 @@ class Cloudlet():
             self.accessuri=""
         if self.staticips is None:
             self.staticips=""
-        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.lat, self.latitude, c.location.long, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
+        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.lat == self.latitude and c.location.long == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
 
             return True
         
