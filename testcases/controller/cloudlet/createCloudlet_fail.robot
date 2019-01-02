@@ -1,5 +1,5 @@
 *** Settings ***
-Library		MexController  controller_address=${controller_api_address}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 
 Test Teardown	Cleanup provisioning
@@ -21,7 +21,7 @@ CreateCloudlet without an operator
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Specified cloudlet operator not found"
 	
-CreateCloudlet without an invalid operator
+CreateCloudlet with an invalid operator
 	[Documentation]   CreateCloudlet - Trys to create a cloudlet with an invalid operator
 	...  Trys to create a cloudlet with an invalid operator
 	...  Expect the create to fail with the operator not found drror
