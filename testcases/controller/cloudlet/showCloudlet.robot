@@ -1,4 +1,4 @@
-git *** Settings ***
+*** Settings ***
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         Collections	
 
