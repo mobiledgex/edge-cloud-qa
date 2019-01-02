@@ -22,6 +22,9 @@ spec:
       - name: crmbonn
         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
         imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
         command:
          - crmserver
         env:
