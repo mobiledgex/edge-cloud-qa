@@ -55,7 +55,7 @@ class tc(unittest.TestCase):
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
-        self.operator = mex_controller.Operator(operator_name = operator_name)        
+        #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -64,7 +64,7 @@ class tc(unittest.TestCase):
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
-        self.controller.create_operator(self.operator.operator)
+        #self.controller.create_operator(self.operator.operator)
         self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_NoFlavor(self):
@@ -136,7 +136,7 @@ class tc(unittest.TestCase):
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         self.controller.delete_cloudlet(self.cloudlet.cloudlet)
-        self.controller.delete_operator(self.operator.operator)
+        #self.controller.delete_operator(self.operator.operator)
 
         #time.sleep(1)
 

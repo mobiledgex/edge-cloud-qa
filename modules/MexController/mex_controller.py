@@ -405,8 +405,8 @@ class Cloudlet():
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
         self._cloudlet_accessuri_field = str(cloudlet_pb2.Cloudlet.ACCESS_URI_FIELD_NUMBER)
-        self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LAT_FIELD_NUMBER)
-        self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONG_FIELD_NUMBER)
+        self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
+        self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONGITUDE_FIELD_NUMBER)
         self._cloudlet_ipsupport_field = str(cloudlet_pb2.Cloudlet.IP_SUPPORT_FIELD_NUMBER)
         self._cloudlet_staticips_field = str(cloudlet_pb2.Cloudlet.STATIC_IPS_FIELD_NUMBER)
         self._cloudlet_numdynamicips_field = str(cloudlet_pb2.Cloudlet.NUM_DYNAMIC_IPS_FIELD_NUMBER)
@@ -457,11 +457,11 @@ class Cloudlet():
         loc_dict = {}
         if self.latitude is not None:
             self.latitude = float(self.latitude)
-            loc_dict['lat'] = self.latitude
+            loc_dict['latitude'] = self.latitude
             _fields_list.append(self._cloudlet_latitude_field)
         if self.longitude is not None:
             self.longitude = float(self.longitude)
-            loc_dict['long'] = self.longitude
+            loc_dict['longitude'] = self.longitude
             _fields_list.append(self._cloudlet_longitude_field)
 
         cloudlet_dict = {}
@@ -704,7 +704,7 @@ class AppInstance():
             self.operator_name = shared_variables.operator_name_default
         if self.cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
-            
+
         if use_defaults:
             if not app_name: self.app_name = shared_variables.app_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
@@ -1120,9 +1120,10 @@ class Controller():
         return resp
 
     def show_app_instances(self, app_instance=None):
-        logger.info('show app instance on {}'.format(self.address))
+        logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = None
+
         if app_instance:
             resp = list(self.appinst_stub.ShowAppInst(app_instance))
         else:
@@ -1155,7 +1156,10 @@ class Controller():
             raise Exception('Error creating app instance:{}'.format(str(resp)))
 
         self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
-        return resp
+
+        resp =  self.show_app_instances(app_instance)
+
+        return resp[0]
 
     def delete_app_instance(self, app_instance):
         logger.info('delete app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
