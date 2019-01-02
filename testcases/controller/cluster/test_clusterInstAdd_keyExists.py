@@ -54,7 +54,7 @@ class tc(unittest.TestCase):
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
-        self.controller.create_operator(self.operator.operator)
+        #self.controller.create_operator(self.operator.operator)
         self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_CreateClusterTwice(self):
@@ -89,7 +89,7 @@ class tc(unittest.TestCase):
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         self.controller.delete_cloudlet(self.cloudlet.cloudlet)
-        self.controller.delete_operator(self.operator.operator)
+        #self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
