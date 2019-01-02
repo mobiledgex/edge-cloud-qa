@@ -51,7 +51,17 @@ class tc(unittest.TestCase):
                                                   developer_username = developer_email,
                                                   developer_passhash = developer_passhash,
         )
+        self.developer_2 = mex_controller.Developer(developer_name = developer_name + '_2',
+                                                  developer_email = developer_email,
+                                                  developer_address = developer_address,
+                                                  developer_username = developer_email,
+                                                  developer_passhash = developer_passhash,
+        )
+
         self.controller.create_developer(self.developer.developer)
+        self.controller.create_developer(self.developer_2.developer)
+
+        developer_pre = self.controller.show_developers()
 
         # print developers after add
         developer_post = self.controller.show_developers(mex_controller.Developer(developer_name = developer_name).developer)
@@ -67,6 +77,7 @@ class tc(unittest.TestCase):
 
     def tearDown(self):
         self.controller.delete_developer(self.developer.developer)
+        self.controller.delete_developer(self.developer_2.developer)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)

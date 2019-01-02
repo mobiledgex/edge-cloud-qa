@@ -23,6 +23,7 @@ node('jenkinsSlave1'){
                         [$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
+                        [$class:'SparseCheckoutPath', path:'tools/*'],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
@@ -41,8 +42,8 @@ node('jenkinsSlave1'){
     //}
 
     stage("build protos") {
-      dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+      dir('go/src/github.com/mobiledgex/tools') {
+         status = sh(script:'python3 ./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
          println status
          if(status != 0) {
             echo "build_protos.py failed with statuscode=" + status
@@ -54,7 +55,7 @@ node('jenkinsSlave1'){
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';./execJira.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';./execJira.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
