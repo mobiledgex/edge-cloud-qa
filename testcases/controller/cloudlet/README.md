@@ -5,7 +5,7 @@
 * CreateCloudlet with required parameters and ipsupport - createCloudlet.robot
 * CreateCloudlet with required parameters and staticips - createCloudlet.robot
 * CreateCloudlet without an operator - createCloudlet_fail.robot
-* CreateCloudlet without an invalid operator - createCloudlet_fail.robot
+* CreateCloudlet with an invalid operator - createCloudlet_fail.robot
 * CreateCloudlet without a name - createCloudlet_fail.robot
 * CreateCloudlet with a location of 0 0 - createCloudlet_fail.robot
 * CreateCloudlet with a location of 100 200 - createCloudlet_fail.robot
