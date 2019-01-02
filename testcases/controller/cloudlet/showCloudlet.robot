@@ -1,5 +1,5 @@
-*** Settings ***
-Library		MexController  controller_address=${controller_api_address}
+git *** Settings ***
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         Collections	
 
 Test Setup      Setup
