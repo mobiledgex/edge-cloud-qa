@@ -1,5 +1,5 @@
 *** Settings ***
-Library		MexController  controller_address=${controller_api_address}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
