@@ -1,11 +1,11 @@
 *** Settings ***
-Library		MexController  controller_address=${controller_api_address}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 Test Teardown	Cleanup provisioning	
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
-${oper}   tmus
+${oper}   azure
 ${cldlet}   TestUpdate
 
 *** Test Cases ***
