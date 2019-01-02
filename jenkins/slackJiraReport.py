@@ -9,6 +9,8 @@ import sys
 import zapi
 import jiraapi
 
+channel_number = 'CF67W3QH5'
+
 zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 username = 'andy.anderson@mobiledgex.com'
 access_key = '***REMOVED***'
@@ -117,46 +119,86 @@ while offset < total_count:
             total_fail += 1
             if len(tc['execution']['defects']) == 0:
                 total_fail_nobugs += 1
-                failed_nobugs_string += tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                failed_nobugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
             else:
-                failed_bugs_string += tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                failed_bugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
             failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
         if tc['execution']['status']['name'] == 'UNEXECUTED':
             total_unexecuted += 1
-            unexecuted_string += tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+            unexecuted_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
             
         total_counted += 1
     
 print('totalcount', total_count, 'totalcounted', total_counted, 'pass', total_pass, 'fail', total_fail, 'unexec', total_unexecuted)
 
-
-report_string = f'Cycle:\t{cycle_name}\n\n'
-report_string += f'Total TCs:\t\t{total_counted}\n'
-report_string += f'Total Passed:\t\t{total_pass}\t{(total_pass/total_counted)*100:.2f}%\n'
-report_string += f'Total Failed:\t\t{total_fail}\t{(total_fail/total_counted)*100:.2f}%\n'
-report_string += f'Total Failed w/bugs:\t{total_fail_bugs}\t{(total_fail_bugs/total_counted)*100:.2f}%\n'
-report_string += f'Total Failed wo/bugs:\t{total_fail_nobugs}\t{(total_fail_nobugs/total_counted)*100:.2f}%\n'
-report_string += f'Total Unexec:\t\t{total_unexecuted}\t{(total_unexecuted/total_counted)*100:.2f}%\n'
-report_string += f'Total WIP:\t\t{total_wip}\t{(total_wip/total_counted)*100:.2f}%\n'
-report_string += f'Total Blocked:\t\t{total_blocked}\t{(total_blocked/total_counted)*100:.2f}%\n'
-report_string += f'Total NA:\t\t{total_na}\t{(total_na/total_counted)*100:.2f}%\n'
-report_string += f'Total WontExec:\t\t{total_wontexec}\t{(total_wontexec/total_counted)*100:.2f}%\n'
+#total_counted = 1
+report_string = ''
+#report_string = f'*Cycle:*\t{cycle_name}\n\n'
+report_string += f'*Automation Report for {cycle_name}*\n\n'
+report_string += f'>*Total TCs:* {total_counted}\n'
+report_string += f'>*Total Passed:* {total_pass}\t{(total_pass/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed:* {total_fail}\t{(total_fail/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}\t{(total_fail_bugs/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}\t{(total_fail_nobugs/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Unexec:* {total_unexecuted}\t{(total_unexecuted/total_counted)*100:.2f}%\n'
+report_string += f'>*Total WIP:* {total_wip}\t{(total_wip/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Blocked:* {total_blocked}\t{(total_blocked/total_counted)*100:.2f}%\n'
+report_string += f'>*Total NA:* {total_na}\t{(total_na/total_counted)*100:.2f}%\n'
+report_string += f'>*Total WontExec:* {total_wontexec}\t{(total_wontexec/total_counted)*100:.2f}%\n'
 
 if total_count != total_counted:
-    report_string += f'WARNING - total count did not add up. counted={total_counted} expected={total_count}\n'
+    report_string += f'*WARNING - total count did not add up. counted={total_counted} expected={total_count}*\n'
 if (total_pass + total_fail + total_unexecuted + total_wip + total_blocked + total_na + total_wontexec) != total_counted:
-    report_string += f'WARNING - sum of exectution types did not add up. counted={total_pass + total_fail + total_unexecuted + total_wip + total_blocked + total_na + total_wontexec} expected={total_counted}\n'
+    report_string += f'*WARNING - sum of exectution types did not add up. counted={total_pass + total_fail + total_unexecuted + total_wip + total_blocked + total_na + total_wontexec} expected={total_counted}*\n'
+summary_string = report_string
 
-report_string += '\n\n\nFailed testcases without bugs:\n' + failed_nobugs_string
-report_string += '\n\n\nFailed testcases with bugs:\n' + failed_bugs_string
-report_string += '\n\n\nUnexecuted testcases:\n' + unexecuted_string
+if len(failed_nobugs_string) == 0:
+    failed_nobugs_string = '>None\n'
+if len(failed_bugs_string) == 0:
+    failed_bugs_string = '>None\n'
+if len(unexecuted_string) == 0:
+    unexecuted_string = '>None\n'
+
+    
+report_string += '>\n*Failed testcases without bugs:*\n' + failed_nobugs_string
+report_string += '>\n*Failed testcases with bugs:*\n' + failed_bugs_string
+report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
 
 print(report_string)
 #sys.exit(1)
 
+report_attachment = json.dumps(
+    [
+        {
+            #'pretext':'Automation Report For ' + cycle_name,
+            'text': '',
+            'title':'Automation Report For ' + cycle_name,
+            'fields': [
+                {
+                    'title':'Summary',
+                    'value': summary_string
+                },
+                {
+                    'title':'Failed testcases without bugs:',
+                    'value': failed_nobugs_string
+                },
+                {
+                    'title':'Failed testcases with bugs:',
+                    'value': failed_bugs_string
+                },
+                {
+                    'title':'Unexecuted testcases:',
+                    'value': unexecuted_string
+                }
+
+            ]
+        }
+    ])    
+
 sc.api_call(
     "chat.postMessage",
-    channel="DF3JVL43W",
+    channel=channel_number,
     #text="Hello from Python! :tada:"
-    text=report_string
+    text=report_string,
+    #attachments=report_attachment 
 )
