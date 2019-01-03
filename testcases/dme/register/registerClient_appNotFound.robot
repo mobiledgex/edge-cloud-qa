@@ -77,7 +77,7 @@ RegisterClient - request shall succeed after adding app
    Should Contain  ${error_msg}   details = "app not found"
 
    # create app and register again
-   Create Operator             operator_name=${operator_name}
+   #Create Operator             operator_name=${operator_name}
    Create Developer
    Create Flavor
    Create Cloudlet             cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
@@ -98,12 +98,11 @@ RegisterClient - request shall succeed after adding app
    Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version_default}	
    Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
 
-
    [Teardown]  Cleanup provisioning
 
 *** Keywords ***
 Setup
-    Create Operator             operator_name=${operator_name} 
+    #Create Operator             operator_name=${operator_name} 
     Create Developer            
     Create Flavor
     Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
