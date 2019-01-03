@@ -32,6 +32,7 @@ spec:
          - "controller:37001"
          - "--tls"
          - "/root/tls/mex-server.crt"
+         - "--fakecloudlet"
          - "--d"
          - "api,notify,mexos"
       imagePullSecrets:
