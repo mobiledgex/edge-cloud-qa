@@ -5,8 +5,8 @@ Documentation  RegisterClient - various auth fail erors
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
-Test Setup	Setup
-Test Teardown	Cleanup provisioning
+Suite Setup	Setup
+Suite Teardown	Cleanup provisioning
 
 *** Variables ***
 #${dme_api_address}  127.0.0.1:50051
@@ -103,7 +103,7 @@ RegisterClient - request with expired token shall return 'failed to verify token
 
 *** Keywords ***
 Setup
-    Create Operator             operator_name=${operator_name} 
+    #Create Operator             operator_name=${operator_name} 
     Create Developer            developer_name=${developer_name}
     Create Flavor
     Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
