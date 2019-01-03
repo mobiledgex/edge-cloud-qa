@@ -114,6 +114,7 @@ class tc(unittest.TestCase):
                 else:
                     found_cluster = False
             if not found_cluster:
+                print('ERROR: did not find:' + i.key.name)
                 break
 
         expect_equal(found_cluster, True, 'found new cluster')
