@@ -6,8 +6,8 @@ Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Variables  shared_variables.py
 
-Test Setup	Setup
-Test Teardown	Cleanup provisioning
+Suite Setup	Setup
+Suite Teardown	Cleanup provisioning
 
 *** Variables ***
 ${operator_name}  tmus
@@ -91,7 +91,7 @@ RegisterClient - request without authtoken for app with token shall return 'No a
 
 *** Keywords ***
 Setup
-    Create Operator             operator_name=${operator_name} 
+    #Create Operator             operator_name=${operator_name} 
     Create Developer            
     Create Flavor
     Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
