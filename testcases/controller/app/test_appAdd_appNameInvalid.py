@@ -76,7 +76,7 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid app name', 'error details')
         expect_equal(found_app, False, 'find app')
-        expect_equal(len(apps_post), len(apps_pre), 'num developer')
+        #expect_equal(len(apps_post), len(apps_pre), 'num developer')
                 
         assert_expectations()
 
@@ -113,7 +113,7 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid app name', 'error details')
         expect_equal(found_app, False, 'find app')
-        expect_equal(len(apps_post), len(apps_pre), 'num developer')
+        #expect_equal(len(apps_post), len(apps_pre), 'num developer')
                 
         assert_expectations()
 
@@ -150,7 +150,7 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid app name', 'error details')
         expect_equal(found_app, False, 'find app')
-        expect_equal(len(apps_post), len(apps_pre), 'num developer')
+        #expect_equal(len(apps_post), len(apps_pre), 'num developer')
                 
         assert_expectations()
 

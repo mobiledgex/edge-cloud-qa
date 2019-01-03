@@ -90,9 +90,9 @@ class tc(unittest.TestCase):
         # ... create 100 clusters
         # ... verify all are created
  
-        show_cluster_resp = self.cluster_stub.ShowCluster(cluster_pb2.Cluster())
+        show_cluster_resp_pre = self.cluster_stub.ShowCluster(cluster_pb2.Cluster())
         number_of_clusters_before = 0
-        for c in show_cluster_resp:
+        for c in show_cluster_resp_pre:
             print('clusterBeforeAdd=', c)
             number_of_clusters_before += 1
 
@@ -100,13 +100,29 @@ class tc(unittest.TestCase):
             print('adding cluster', i.key.name)
             create_cluster_resp = self.cluster_stub.CreateCluster(i)
 
-        show_cluster_resp = self.cluster_stub.ShowCluster(cluster_pb2.Cluster())
+        show_cluster_resp = list(self.cluster_stub.ShowCluster(cluster_pb2.Cluster()))
+        #print('sc1', len(show_cluster_resp))
+        #for c in show_cluster_resp:
+        #    print('s', c.key.name)
+        #    pass
+        #print('sc2', show_cluster_resp)
+#
+#        for c in show_cluster_resp:
+#            print('s2', c.key.name)
+#            pass
+#        print('sc3', show_cluster_resp)
+
+
         found_cluster = False
         number_of_clusters_after = 0
-        for c in show_cluster_resp:
-            print('clusterAfterAdd=', c)
+        #for c in show_cluster_resp:
+        for i in self.cluster_list:
+            print('checking for cluster=' + i.key.name)
+            #print('clusterAfterAdd=', c)
             number_of_clusters_after += 1
-            for i in self.cluster_list:
+            #for i in self.cluster_list:
+            for c in show_cluster_resp:
+                #print('checking against:' + c.key.name, i.key.name)
                 if c.key.name == i.key.name and c.default_flavor.name == i.default_flavor.name:
                     found_cluster = True
                     print('foundkey') 
