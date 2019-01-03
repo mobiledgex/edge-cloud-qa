@@ -39,7 +39,7 @@ RegisterClient - request without auth shall return proper JWT
 
 *** Keywords ***
 Setup
-    Create Operator             operator_name=${operator_name} 
+    #Create Operator             operator_name=${operator_name} 
     Create Developer            
     Create Flavor
     Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
