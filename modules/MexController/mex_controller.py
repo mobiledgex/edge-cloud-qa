@@ -959,9 +959,11 @@ class Controller():
             resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_instance))
         else:
             resp = list(self.cloudlet_stub.ShowCloudlet(cloudlet_pb2.Cloudlet()))
-        if logging.getLogger().getEffectiveLevel() == 10: # debug level
-            logger.debug('cloudlet list:')
-            for c in resp:
+
+        print("LOG LEVEL = ", logging.getLogger().getEffectiveLevel())
+        for c in resp:
+            if logging.getLogger().getEffectiveLevel() == 10 or logging.getLogger().getEffectiveLevel() == 0:  # debug level
+                logger.debug('cloudlet list:')
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
@@ -1019,9 +1021,9 @@ class Controller():
 
         self.ctlcloudlet.update(**kwargs)
 
-        if logging.getLogger().getEffectiveLevel() == 10: # debug level
-            logger.debug('cloudlet list:')
-            for c in resp:
+        for c in resp:
+            if logging.getLogger().getEffectiveLevel() == 10 or logging.getLogger().getEffectiveLevel() == 0:  # debug level
+                logger.debug('cloudlet list:')
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
