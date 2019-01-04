@@ -119,6 +119,8 @@ def main():
     while (startat + maxresults) < total:
         #jiraQueryUrl = jiraQueryUrlPre + ' startAt=' + str(startat + maxresults) + ' ORDER By Issue ASC'
         result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
+        #print(result)
+        #sys.exit(1)
         query_content = json.loads(result)
         startat = query_content['startAt']
         maxresults = query_content['maxResults']
@@ -132,7 +134,7 @@ def main():
     print('lentclist', len(tc_list))
     #sys.exit(1)
 
-    update_defects(z, tc_list)
+    #update_defects(z, tc_list)
     #sys.exit(1)
     
     #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
@@ -151,12 +153,14 @@ def get_testcases(z, result, cycle_id, project_id, version_id):
         logging.info("getting script for:" + s['key'])
         sresult = z.get_teststeps(s['id'],s['fields']['project']['id'])
         sresult_content = json.loads(sresult)
+
         if sresult_content: # list is not empty;therefore, has a teststep
             logging.info("found a teststep")
             #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
             #tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id}
-            tmp_list['defect_count'] = 0 # need to check for issueslink section
+            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'defects': s['fields']['issuelinks']}
+            print(s)
+            tmp_list['defect_count'] = len(s['fields']['issuelinks']) # need to check for issueslink section
             #if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
             #    tmp_list['defect_count'] = s['execution']['totalDefectCount']
             #else:
@@ -209,7 +213,8 @@ def update_defects(z, l):
     #logging.info('execution_id=' + str(exec_id))
     for t in l:
         logging.info("checking defects for " + t['issue_key'])
-        #elist = z.get_execution_list(issue_id = t['issue_id'])
+        #print(t)
+        #elist = z.get_execution_list(execution_id = t['issue_id'])
         #elist = z.get_execution_list(execution_id = t['id'])
         #elist_string = json.loads(elist)
         #print(elist_string)
@@ -221,22 +226,29 @@ def update_defects(z, l):
         if t['defect_count'] > 0:
             #logging.info('defects found = ' + str(execList[1]['totalDefectCount']))
             logging.info('defects found = ' + str(t['defect_count']))
+            #sys.exit(1)
             #previous_exec_defects = execList[1]['defects']
             previous_exec_defects = t['defects']
-
+            print(previous_exec_defects)
             d_list = []
             for ped in previous_exec_defects:
                 #print(ped['key'], ped['status'])
-                if ped['status'] != 'Closed':
-                    print(ped['key'])
-                    d_list.append(ped['key'])
+                print('status',ped['inwardIssue']['fields']['status']['name'])
+                if ped['inwardIssue']['fields']['status']['name'] != 'Closed':
+                    print(ped['inwardIssue']['key'])
+                    d_list.append(ped['inwardIssue']['key'])
 
                     print(d_list)
                     
             logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
+            elist = z.get_execution_list(execution_id = t['issue_id'])
+            elist_string = json.loads(elist)
+            print(elist_string)
+            execList = elist_string['executions']
+
             z.update_execution_details(execution_id=execList[0]['id'], defect_list = d_list)
             #time.sleep(5)
-            #sys.exit(1)
+            sys.exit(1)
         else:
             logging.info('no defects found')
 
@@ -247,12 +259,47 @@ def find(name, path):
             logging.debug('found {} {}'.format(root, name))
             return os.path.join(root, name)
     return 'fileNotFound'
+
+def update_single_defect(z, t):
+    print(t)
+    if 'defect_count' not in t:
+        t['defect_count'] = 0
+    if t['defect_count'] > 0:
+        #logging.info('defects found = ' + str(execList[1]['totalDefectCount']))
+        logging.info('defects found = ' + str(t['defect_count']))
+        #sys.exit(1)
+        #previous_exec_defects = execList[1]['defects']
+        previous_exec_defects = t['defects']
+        print(previous_exec_defects)
+        d_list = []
+        for ped in previous_exec_defects:
+            #print(ped['key'], ped['status'])
+            print('status',ped['inwardIssue']['fields']['status']['name'])
+            if ped['inwardIssue']['fields']['status']['name'] != 'Closed':
+                print(ped['inwardIssue']['key'])
+                d_list.append(ped['inwardIssue']['id'])
+                
+                print(d_list)
+                    
+        logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
+        #elist = z.get_execution_list(execution_id = t['issue_id'])
+        #elist_string = json.loads(elist)
+        #print(elist_string)
+        #execList = elist_string['executions']
         
+        z.update_execution_details(execution_id=t['execution_id'], project_id=t['project_id'], issue_id=t['issue_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], defect_list = d_list)
+        #time.sleep(5)
+        #sys.exit(1)
+    else:
+        logging.info('no defects found')
+
 #def exec_testcases(z, l, rhc, httpTrace, summary):
 def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
     for t in l:
+        #print('t',t)
+        #sys.exit(1)
         if t['tc'] == 'noTestcaseInStep':
             logging.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
             found_failure = 1  # consider it a failure if the teststep is missing 
@@ -263,10 +310,14 @@ def exec_testcases(z, l):
         status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         query_content = json.loads(status)
         status_s = json.dumps(status)
+      
+        t['execution_id'] = query_content['execution']['id']
+        print('execid', t['execution_id'])
         
-        t['id'] = query_content['execution']['id']
-        print('execid', t['id'])
-        status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
+        if t['defect_count'] > 0:
+            update_single_defect(z, t)
+
+        status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         if 'll execution(s) were successfully updated' in status_s:
             logging.info("tc status WIP updated successful")
         else:
@@ -329,7 +380,7 @@ def exec_testcases(z, l):
             logging.info("exec cmd failed. return code=: " + str(err.returncode))
             logging.info("exec cmd failed. stdout=: " + str(err.stdout))
             logging.info("exec cmd failed. stderr=: " + str(err.stderr))
-            status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
+            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
             last_status = 'fail'
 
@@ -357,7 +408,7 @@ def exec_testcases(z, l):
         # add output file to jira
         #z.add_attachment(id=t['id'], file=file_output_done)
         if os.path.isfile(file_output_done):
-            z.add_attachment(id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], version_id=t['version_id'], cycle_id=t['cycle_id'], file=file_output_done)
+            z.add_attachment(id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], version_id=t['version_id'], cycle_id=t['cycle_id'], file=file_output_done)
         else:
             logging.error('ERROR adding attachment. file {} does not exist'.format(file_output_done))
             
