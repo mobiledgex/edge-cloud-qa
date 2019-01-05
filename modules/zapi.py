@@ -377,7 +377,7 @@ class Zapi(WebService):
 
         return content
     
-    def update_execution_details(self, execution_id=None, defect_list=None):
+    def update_execution_details(self, execution_id=None, project_id=None, issue_id=None, cycle_id=None, version_id=None, defect_list=None):
         """Update the execution details for a given execution id
 
         Example:
@@ -400,12 +400,20 @@ class Zapi(WebService):
         """
 
         logging.info('id=' + str(execution_id) + ' defect_list=' + str(defect_list))
-        url = self.base_url + 'execution/' + str(execution_id) + '/execute'
+
+        relative_path = '/public/rest/api/1.0/execution/' + str(execution_id)
+
+        url = self.zephyr_base_url + relative_path
 
         defect_list_string = str(defect_list).replace("\'", "\"")
-        data = '{"defectList":' + defect_list_string + ', "updateDefectList": "true"}'
+        #data = '{"defectList":' + defect_list_string + ', "updateDefectList": "true"}'
+        version_id = '-1'
+        data = '{"status":{"id":2}, "id":"' + str(execution_id) + '","projectId":' + project_id + ', "issueId":' + issue_id + ', "cycleId":"' + cycle_id + '", "versionId":' + version_id + ', "defects":' + defect_list_string + '}'
         logging.debug('url=' + url + ' data=' + data)
 
+        jwt = self._generate_jwt('PUT&' + relative_path + '&')
+
+        self.headers['Content-Type'] = 'application/json'
         self.put(url,headers = self.headers, data=data)
         content = self.resp.content.decode('utf-8')
 
