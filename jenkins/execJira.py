@@ -369,7 +369,7 @@ def exec_testcases(z, l):
         logging.info("executing " + exec_cmd)
         try:
             r = subprocess.run(exec_cmd, shell=True, check=True)
-            status = z.update_status(execution_id=t['id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             last_status = 'pass'
             if found_failure == -1:
