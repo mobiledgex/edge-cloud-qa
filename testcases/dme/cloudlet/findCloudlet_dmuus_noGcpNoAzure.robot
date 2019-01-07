@@ -1,134 +1,202 @@
 *** Settings ***
 Documentation   FindCloudlet - request shall return dmuus with no gcp/azure cloudlet provisioned
 
-Library         MexDme  dme_address=${dme_api_address}
-
-#Test Teardown	Cleanup provisioning
+Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Variables      shared_variables.py
+	
+Suite Setup      Setup
+Suite Teardown	Cleanup provisioning
 
 *** Variables ***
 ${dme_api_address}  127.0.0.1:50051
 ${app_name}  someapplication   #has to match crm process startup parms
 ${developer_name}  AcmeAppCo
 ${app_version}  1.0
-${carrier_name}  dmuus
+${access_ports}    tcp:80,http:443,udp:10002
+${operator_name}   dmuus
+${cloudlet_name1}  tmocloud-1
+${cloudlet_lat1}   31
+${cloudlet_long1}  -91
+${cloudlet_name2}  tmocloud-2
+${cloudlet_lat2}   35
+${cloudlet_long2}  -95
 
 *** Test Cases ***
-findCloudlet with same coord as tmocloud-1
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=31  longitude=-91
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same coord as tmocloud-1
+    [Documentation]
+    ...  send findCloudlet with same coord as tmocloud-1 and no gcp/azure provisioned. return tmocloud-1
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-1.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  31.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -91.0
+      Register Client
+      ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name}  latitude=31  longitude=-91
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+      ${fqdn_prefix_tcp}=             Catenate  SEPARATOR=  ${app_name_default}  -  tcp  .	
+      ${fqdn_prefix_udp}=             Catenate  SEPARATOR=  ${app_name_default}  -  udp  .	
+      ${fqdn_prefix_http}=            Catenate  SEPARATOR=  ${app_name_default}  -  http  .	
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
 
-findCloudlet with same coord as tmocloud-2
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=35  longitude=-95
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-2.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  35.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -95.0
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same coord as tmocloud-2
+    [Documentation]
+    ...  send findCloudlet with same coord as tmocloud-2 and no gcp/azure provisioned. return tmocloud-2
+      
+      Register Client
+      ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name}  latitude=35  longitude=-95
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_2.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_2.mapped_ports[0].FQDN_prefix}
 
-findCloudlet with coord closer to tmocloud-1
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_2.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_2.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_2.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_2.mapped_ports[1].FQDN_prefix}
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-1.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  31.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -91.0
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_2.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_2.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord closer to tmocloud-1
+    [Documentation]
+    ...  send findCloudlet with coord closer to tmocloud-1 and no gcp/azure provisioned. return tmocloud-1
+      
+      Register Client	
+      ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=23  longitude=-4
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
 
-findCloudlet with coord closer to tmocloud-2
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=35  longitude=-96
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-2.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  35.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -95.0
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord closer to tmocloud-2
+    [Documentation]
+    ...  send findCloudlet with coord closer to tmocloud-2 and no gcp/azure provisioned. return tmocloud-2
+      
+      Register Client	
+      ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35  longitude=-96
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_2.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_2.mapped_ports[0].FQDN_prefix}
 
-findCloudlet with coord max distance
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=35000000000  longitude=-96000000000
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_2.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_2.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_2.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_2.mapped_ports[1].FQDN_prefix}
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-2.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  35.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -95.0
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_2.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_2.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord of max distance 
+    [Documentation]
+    ...  send findCloudlet with coord of max distance and no gcp/azure provisioned. return tmocloud-2
+      
+      Register Client	
+      ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35000000000  longitude=-96000000000
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_2.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_2.mapped_ports[0].FQDN_prefix}
 
-findCloudlet with coord 0
-      Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${carrier_name}  latitude=0  longitude=0
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_2.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_2.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_2.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_2.mapped_ports[1].FQDN_prefix}
 
-      Should Be Equal             ${cloudlet.FQDN}  tmocloud-1.dmuus.mobiledgex.net
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  31.0
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  -91.0
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_2.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_2.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  80
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  10000
+FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord of min distance
+    [Documentation]
+    ...  send findCloudlet with coord of min distance and no gcp/azure provisioned. return tmocloud-1
+      
+      Register Client	
+      ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=0.0000001  longitude=0.0000001
 
-      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}  3  #LProtoHTTP
-      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  443
-      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}  443
+      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}  2  #LProtoUDP
-      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  10002
-      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}  10002
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
+
+      Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
+      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
+
+      Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
+      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
+
+*** Keywords ***
+Setup
+    #Create Operator        operator_name=${operator_name} 
+    Create Developer
+    Create Flavor
+    Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
+    Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
+    Create Cluster Flavor
+    Create Cluster
+    Create App             access_ports=${access_ports} 
+    ${appinst_1}=          Create App Instance    cloudlet_name=${cloudlet_name1}
+    ${appinst_2}=          Create App Instance    cloudlet_name=${cloudlet_name2}
+
+    Set Suite Variable  ${appinst_1} 
+    Set Suite Variable  ${appinst_2}
+
+
