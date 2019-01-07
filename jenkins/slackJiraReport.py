@@ -122,6 +122,7 @@ while offset < total_count:
                 failed_nobugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
             else:
                 failed_bugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                total_fail_bugs += 1
             failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
         if tc['execution']['status']['name'] == 'UNEXECUTED':
             total_unexecuted += 1
