@@ -1,43 +1,96 @@
 *** Settings ***
-Documentation  RegisterClient with missing parameters
+Documentation  FindCloudlet with missing parameters
 ...   attempt to register a client with various combinations of missing parameters
 
-Library  MexDme  dme_address=${dme_api_address}
+Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+
+Suite Setup	Setup
+Suite Teardown	Cleanup provisioning
 
 *** Variables ***
-${dme_api_address}  127.0.0.1:50051
-${app_name}  someapplication
-${app_name_auth}  someapplicationAuth
-${developer_name}  AcmeAppCo
-${app_version}  1.0
+#${dme_api_address}  127.0.0.1:50051
+#${app_name}  someapplication
+#${app_name_auth}  someapplicationAuth
+#${developer_name}  AcmeAppCo
+#${app_version}  1.0
+${cloudlet_name}  tmocloud-2
 ${carrier_name}  dmuus
 
 *** Test Cases ***
 #EDGECLOUD-141
-FindCloudlet - request should return '' with carrier_name only
-   ${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
+FindCloudlet - request without lat/long should return 'Missing GpsLocation'
+   [Documentation]  
+   ...  send FindCloudlet with no latitude or longitude
+   ...  verify 'Missing GpsLocation' is received
 
-   Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
+   #${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
+
+   Register Client	#app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "DevName cannot be empty"
+   Should Contain  ${error_msg}   details = "Missing GpsLocation"
 
-FindCloudlet - request should return '' with latitude and longitude only
+FindCloudlet - request without carrier name should return 'missing carrierName'
+   [Documentation]
+   ...  send FindCloudlet with no carrier name
+   ...  verify 'missing carrierName' is received
+
 #EDGECLOUD-285
-   ${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
+   #${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
 
-   Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	latitude=35  longitude=-90
+   Register Client
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "DevName cannot be empty"
+   Should Contain  ${error_msg}   details = "missing carrierName"
 
-FindCloudlet - request should return '' with latitude only
+FindCloudlet - request with latitude only should return 'missing carrierName'
+   [Documentation]
+   ...  send FindCloudlet with latitude only
+   ...  verify 'missing carrierName' is received
 
-FindCloudlet - request should return '' with longitude only
+   Register Client
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
 
-FindCloudlet - request should return '' with carrier_name and latitude only
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   details = "missing carrierName"
 
-FindCloudlet - request should return '' with carrier_name and longitude only
+FindCloudlet - request with longitude only should return 'missing carrierName'
+   [Documentation]
+   ...  send FindCloudlet with longitude only
+   ...  verify 'missing carrierName' is received
 
+   Register Client
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  longitude=35  use_defaults=${False}
+
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   details = "missing carrierName"
+
+FindCloudlet - request with carrier_name and latitude only should succeed
+   [Documentation]
+   ...  send FindCloudlet with carrier name and latitude only
+   ...  verify no error is received
+
+   Register Client
+   Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  latitude=35  use_defaults=${False}  # no error should be received
+
+FindCloudlet - request with carrier_name and longitude only should succeed
+   [Documentation]
+   ...  send FindCloudlet with carrier name and longitude only
+   ...  verify no error is received
+
+   Register Client
+   Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${False}  # no error should be received
+
+*** Keywords ***
+Setup
+    #Create Operator             operator_name=${carrier_name} 
+    Create Developer
+    Create Flavor
+    Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}
+    Create Cluster Flavor
+    Create Cluster
+    Create App
+    Create App Instance
