@@ -64,9 +64,9 @@ class FindCloudletRequest():
             if not carrier_name: self.carrier_name = shared_variables.operator_name_default
 
         loc_dict = {}
-        if self.latitude:
+        if self.latitude is not None:
             loc_dict['latitude'] = float(self.latitude)
-        if self.longitude:
+        if self.longitude is not None:
             loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
@@ -76,6 +76,7 @@ class FindCloudletRequest():
         if loc_dict:
             request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
 
+        #print(loc_dict)
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
 
 class Dme(MexGrpc):
