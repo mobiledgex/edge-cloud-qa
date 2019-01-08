@@ -543,7 +543,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, use_defaults=True):
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -556,7 +556,8 @@ class App():
         self.ip_access = ip_access
         self.access_ports = access_ports
         self.auth_public_key = auth_public_key
-
+        self.permits_platform_apps = permits_platform_apps
+        
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
@@ -638,6 +639,8 @@ class App():
             app_dict['command'] = self.command
         if self.auth_public_key is not None:
             app_dict['auth_public_key'] = self.auth_public_key
+        if self.permits_platform_apps is not None:
+            app_dict['permits_platform_apps'] = self.permits_platform_apps
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
@@ -686,14 +689,15 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, developer_name=None, cloudlet_name=None, operator_name=None, image_type=None, image_path=None, cluster_name=None, default_flavor_name=None, config=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, developer_name=None, cloudlet_name=None, operator_name=None, image_type=None, image_path=None, cluster_name=None, default_flavor_name=None, config=None, uri=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
         self.operator_name = operator_name
         self.cloudlet_name = cloudlet_name
-
+        self.uri = uri
+        
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
         if self.developer_name == 'default':
@@ -702,7 +706,7 @@ class AppInstance():
             self.app_version = shared_variables.app_version_default
         if self.operator_name == 'default':
             self.operator_name = shared_variables.operator_name_default
-        if self.cloudlet_name == 'default':
+        if self.cloudlet_name == 'default' and self.operator_name != 'developer':  # special case for samsung where they use operator=developer and cloudlet=default
             self.cloudlet_name = shared_variables.cloudlet_name_default
 
         if use_defaults:
@@ -723,7 +727,7 @@ class AppInstance():
             app_key_dict['version'] = self.app_version
         if self.developer_name is not None:
             app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
-
+            
         if self.cloudlet_name is not None:
             cloudlet_key_dict['name'] = self.cloudlet_name
         if self.operator_name is not None:
@@ -739,7 +743,10 @@ class AppInstance():
 
         if appinst_key_dict:
             appinst_dict['key'] = app_inst_pb2.AppInstKey(**appinst_key_dict)
-           
+
+        if self.uri is not None:
+            appinst_dict['uri'] = self.uri
+
         self.app_instance = app_inst_pb2.AppInst(**appinst_dict)
 
         print(appinst_dict)
@@ -1150,12 +1157,17 @@ class Controller():
         resp = self.appinst_stub.CreateAppInst(app_instance)
 
         self.response = resp
+
         for s in resp:
             logger.debug(s)
             if "Created successfully" in str(s):
                 success = True
+
+        if 'StatusCode.OK' in str(resp):  #check for OK because samsung isnt currently printing Created successfull
+            success = True
+
         if not success:
-            raise Exception('Error creating app instance:{}'.format(str(resp)))
+            raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
 
         self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
