@@ -18,7 +18,7 @@ ${cloudlet_name}  tmocloud-2
 ${carrier_name}  dmuus
 
 *** Test Cases ***
-#EDGECLOUD-141
+#EDGECLOUD-284
 FindCloudlet - request without lat/long should return 'Missing GpsLocation'
    [Documentation]  
    ...  send FindCloudlet with no latitude or longitude

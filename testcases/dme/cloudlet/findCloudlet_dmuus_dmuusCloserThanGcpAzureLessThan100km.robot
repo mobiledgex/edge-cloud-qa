@@ -100,6 +100,8 @@ FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned an
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}                         ${dmuus_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${dmuus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${dmuus_cloudlet_longitude}

@@ -23,7 +23,7 @@ ${cloudlet_lat2}   35
 ${cloudlet_long2}  -95
 
 *** Test Cases ***
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same coord as tmocloud-1
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same coord as tmocloud-1
     [Documentation]
     ...  send findCloudlet with same coord as tmocloud-1 and no gcp/azure provisioned. return tmocloud-1
 
@@ -34,6 +34,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same 
       ${fqdn_prefix_udp}=             Catenate  SEPARATOR=  ${app_name_default}  -  udp  .	
       ${fqdn_prefix_http}=            Catenate  SEPARATOR=  ${app_name_default}  -  http  .	
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
@@ -53,13 +55,15 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same 
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
       Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
 
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same coord as tmocloud-2
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same coord as tmocloud-2
     [Documentation]
     ...  send findCloudlet with same coord as tmocloud-2 and no gcp/azure provisioned. return tmocloud-2
       
       Register Client
       ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name}  latitude=35  longitude=-95
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
@@ -79,12 +83,14 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond same 
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
       Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord closer to tmocloud-1
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-1
     [Documentation]
     ...  send findCloudlet with coord closer to tmocloud-1 and no gcp/azure provisioned. return tmocloud-1
       
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=23  longitude=-4
+
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
@@ -105,13 +111,15 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
       Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
 
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord closer to tmocloud-2
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-2
     [Documentation]
     ...  send findCloudlet with coord closer to tmocloud-2 and no gcp/azure provisioned. return tmocloud-2
       
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35  longitude=-96
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
@@ -131,13 +139,18 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
       Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord of max distance 
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of max distance 
     [Documentation]
     ...  send findCloudlet with coord of max distance and no gcp/azure provisioned. return tmocloud-2
-      
+     
+      # EDGECLOUD-348 - FindCloudlet - request should not allow invalid GPS coordinates
+ 
       Register Client	
-      ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35000000000  longitude=-96000000000
+      #${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35000000000  longitude=-96000000000
+      ${cloudlet}=  Find Cloudlet      carrier_name=operator_name  latitude=-75  longitude=180
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+  
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
@@ -157,12 +170,14 @@ FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
       Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
 
-FindCloudlet - request shall return dmuus with no gcp/azure proisioned ond coord of min distance
+FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of min distance
     [Documentation]
     ...  send findCloudlet with coord of min distance and no gcp/azure provisioned. return tmocloud-1
       
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=0.0000001  longitude=0.0000001
+
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
       Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
