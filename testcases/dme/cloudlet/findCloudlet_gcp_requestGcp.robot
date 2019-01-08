@@ -62,9 +62,45 @@ ${tmus_cloudlet_latitude}         35
 ${tmus_cloudlet longitude}        -95
 
 *** Test Cases ***
-findCloudlet with with tmus and gcp/azure
+FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and requesting gcp
+    [Documentation]
+    ...  findCloudlet with tmus/gcp/azure provisioned. request gcp. return gcp
+    ...             tmus tmocloud-2 cloudlet at: 35 -95
+    ...             gcp gcpcloud-1  cloudlet at: 36 -95
+    ...             azure azurecloud-1  cloudlet at: 37 -95
+    ...             find cloudlet closest to   : 36 -96
+    ...                143.38km from tmus
+    ...                89.96km  from gcp
+    ...                142.67km  from azure
+    ...             tmus farther than gcp/azure but less than 100km closer. return gcp cloudlet since requesting gcp
+    ...
+    ...             ShowCloudlet
+    ...             - key:
+    ...                 operatorkey:
+    ...                   name: tmus
+    ...                 name: tmocloud-2
+    ...               location:
+    ...                 lat: 35
+    ...                 long: -95
+    ...             - key:
+    ...                 operatorkey:
+    ...                   name: azure
+    ...                 name: azurecloud-1
+    ...               location:
+    ...                 lat: 37
+    ...                 long: -95
+    ...             - key:
+    ...                 operatorkey:
+    ...                   name: gcp
+    ...                 name: gcpcloud-1
+    ...               location:
+    ...                 lat: 36
+    ...                 long: -95
+
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${gcp_operator_name}  latitude=36  longitude=-96
+
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
       Should Be Equal             ${cloudlet.FQDN}                         ${gcp_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${gcp_cloudlet_latitude}

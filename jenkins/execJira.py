@@ -326,7 +326,10 @@ def exec_testcases(z, l):
         tc_type = ''
         tc = 'tcnotset'
         robot_tcname = None
-        if '.robot' in os.path.basename(t['tc']):
+        print(t)
+        print('xxxxxxxx', t['tc'], 'bbbbbb', os.path.basename(t['tc']))
+        #if '.robot' in os.path.basename(t['tc']):
+        if '.robot' in t['tc']:
             tc_type = 'robot'
             tclines = t['tc'].splitlines()
             tc = tclines[0]

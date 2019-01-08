@@ -80,6 +80,8 @@ FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus 
       Register Client  
       ${cloudlet}=  Find Cloudlet      latitude=35  longitude=-94
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}  ${tmus_appinst.uri}  #acmeappcosomeapplication210.tmocloud-2.tmus.mobiledgex.net
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}  ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${tmus_cloudlet_longitude}

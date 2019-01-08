@@ -78,6 +78,8 @@ FindCloudlet - request shall return tmus with azure cloudlet provisioned and tmu
       Register Client	
       ${cloudlet}=  Find Cloudlet	carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}                         ${tmus_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${tmus_cloudlet_longitude}
