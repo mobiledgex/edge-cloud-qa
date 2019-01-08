@@ -120,6 +120,8 @@ FindCloudlet - request shall return proper cloudlet when multiple cloudlets exis
 Find Cloudlet for dmuus closest to latitude ${lat} longitude ${long} should return ${expected_cloudlet} with latitude ${expected_lat} longitude ${expected_long}
       ${cloudlet}=  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=${lat}  longitude=${long}
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}  ${expected_cloudlet}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  ${expected_lat}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  ${expected_long}

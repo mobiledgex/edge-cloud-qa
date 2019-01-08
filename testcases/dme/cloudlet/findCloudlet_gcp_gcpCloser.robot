@@ -83,6 +83,8 @@ FindCloudlet - request shall return gcp with dmuus farther and > 100km farther t
       Register Client	
       ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=37  longitude=-96
 
+      Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+
       Should Be Equal             ${cloudlet.FQDN}                         ${gcp_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${gcp_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${gcp_cloudlet_longitude} 
