@@ -2,7 +2,7 @@
 
 #
 # create app with image_type=ImageTypeDocker and empty/no imagepath
-# verify image_path='mobiledgex_' 
+# verify image_path='registry.mobiledgex.net:5000/' 
 # 
 
 import unittest
@@ -57,9 +57,9 @@ class tc(unittest.TestCase):
         self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppDockerNoImagePath(self):
-        # [Documentation] App - Creating an app with no imagepath shall default to 'mobiledgex_'
+        # [Documentation] App - Creating an app with no imagepath shall default to 'registry.mobiledgex.net:5000/'
         # ... create app with image_type=ImageTypeDocker and no imagepath
-        # ... verify image_path='mobiledgex_'
+        # ... verify image_path='registry.mobiledgex.net:5000/'
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -82,7 +82,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/' + app_name + ':1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/' + app_name + ':1.0'
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
@@ -91,9 +91,9 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     def test_CreateAppDockerEmptyImagePath(self):
-        # [Documentation] App - Creating an app with empty imagepath shall default to 'mobiledgex_'
+        # [Documentation] App - Creating an app with empty imagepath shall default to 'registry.mobiledgex.net:5000/'
         # ... create app with image_type=ImageTypeDocker and empty imagepath
-        # ... verify image_path='mobiledgex_'
+        # ... verify image_path='registry.mobiledgex.net:5000/'
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -115,7 +115,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/' + app_name + ':1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/' + app_name + ':1.0'
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
