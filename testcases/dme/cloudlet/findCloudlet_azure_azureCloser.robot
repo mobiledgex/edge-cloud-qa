@@ -29,7 +29,6 @@ Documentation   findCloudlet with dmuus and gcp. dmuus farther but greater than 
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library         String
 	
 Suite Setup	Setup
 Suite Teardown	Cleanup provisioning
@@ -37,9 +36,9 @@ Suite Teardown	Cleanup provisioning
 *** Variables ***
 #${dme_api_address}  127.0.0.1:50051
 #${controller_api_address}  127.0.0.1:55001
-${gcp_operator_name}  gcp
+${azure_operator_name}  azure
 ${dmuus_operator_name}  dmuus
-${gcp_cloudlet_name}  gcpcloud-1  #has to match crm process startup parms
+${azure_cloudlet_name}  azurecloud-1  #has to match crm process startup parms
 ${dmuus_cloudlet_name}  tmocloud-2  #has to match crm process startup parms
 ${app_name}  someapplication2   
 ${developer_name}  AcmeAppCo
@@ -51,20 +50,20 @@ ${num_masters}	  1
 
 ${dmuus_cloudlet_latitude}	  35
 ${dmuus_cloudlet longitude}	  -95
-${gcp_cloudlet_latitude}	  37
-${gcp_cloudlet longitude}	  -95
+${azure_cloudlet_latitude}	  37
+${azure_cloudlet longitude}	  -95
 
 *** Test Cases ***
-FindCloudlet - findCloudlet shall return gcp with with gcp cloudlet provisioned and closer by more than 100km
+FindCloudlet - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
     [Documentation]   
-    ...  findCloudlet with dmuus and gcp. dmuus farther but greater than 100km from gcp - return gcp
+    ...  findCloudlet with dmuus and azure. dmuus farther but greater than 100km from azure - return azure
     ...		dmuus tmocloud-2 cloudlet at: 35 -95
-    ...         gcp gcpcloud-1  cloudlet at: 37 -95
+    ...         azure azurecloud-1  cloudlet at: 37 -95
     ...
     ...		find cloudlet closest to   : 37 -96
     ...                239.89km from dmuus
-    ...                88.80km  from gcp
-    ...             gcp is closer by 151.09km which is more than 100km closer. return gcp cloudlet
+    ...                88.80km  from azure
+    ...             azure is closer by 151.09km which is more than 100km closer. return azure cloudlet
     ...
     ...             ShowCloudlet
     ...             - key:
@@ -76,8 +75,8 @@ FindCloudlet - findCloudlet shall return gcp with with gcp cloudlet provisioned 
     ...                 long: -95
     ...             - key:
     ...                 operatorkey:
-    ...                   name: gcp
-    ...                 name: gcpcloud-1
+    ...                   name: azure
+    ...                 name: azurecloud-1
     ...               location:
     ...                 lat: 37
     ...                 long: -95
@@ -87,14 +86,14 @@ FindCloudlet - findCloudlet shall return gcp with with gcp cloudlet provisioned 
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${gcp_appinst.uri}
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${gcp_cloudlet_latitude}
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${gcp_cloudlet_longitude}
+      Should Be Equal             ${cloudlet.FQDN}  ${azure_appinst.uri}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${azure_cloudlet_latitude}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${azure_cloudlet_longitude}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  ${gcp_appinst.mapped_ports[0].proto}  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${gcp_appinst.mapped_ports[0].internal_port}
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  ${gcp_appinst.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}  ${gcp_appinst.mapped_ports[0].FQDN_prefix}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  ${azure_appinst.mapped_ports[0].proto}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${azure_appinst.mapped_ports[0].internal_port}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  ${azure_appinst.mapped_ports[0].public_port}
+      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}  ${azure_appinst.mapped_ports[0].FQDN_prefix}
 
 *** Keywords ***
 Setup
@@ -102,7 +101,7 @@ Setup
     #Create Operator             operator_name=${gcp_operator_name} 
     Create Developer            
     Create Flavor
-    Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
     Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     Create Cluster Flavor
     Create Cluster
@@ -113,6 +112,6 @@ Setup
     # create operator app instance
     ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}
     # create public app instance
-    ${gcp_appinst}=               Create App Instance   cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
+    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
 
-    Set Suite Variable  ${gcp_appinst} 
+    Set Suite Variable  ${azure_appinst} 
