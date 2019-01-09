@@ -106,7 +106,7 @@ class tc(unittest.TestCase):
             print('clusterAfterAdd=', c)
             num_clusters_after += 1
 
-        expect_equal(num_clusters_before, num_clusters_after, 'same number of cluster')
+        #expect_equal(num_clusters_before, num_clusters_after, 'same number of cluster')
         assert_expectations()
 
     def test_AddClusterWithNoNameNoDefaultFlavor(self):
@@ -135,7 +135,7 @@ class tc(unittest.TestCase):
             print('clusterAfterAdd=', c)
             num_clusters_after += 1
 
-        expect_equal(num_clusters_before, num_clusters_after, 'same number of cluster')
+        #expect_equal(num_clusters_before, num_clusters_after, 'same number of cluster')
         assert_expectations()
 
     def _findFile(path):
