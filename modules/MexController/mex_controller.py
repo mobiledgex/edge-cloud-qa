@@ -112,7 +112,9 @@ class Developer():
         if c.key.name == self.developer_name and c.address == self.developer_address and c.email == self.developer_email and c.username == self.developer_username and c.passhash == self.developer_passhash:
             #print('contains')
             return True
-
+        else:
+            return False
+        
     def exists(self, op_list):
         logger.info('checking developer exists')
         
@@ -145,7 +147,9 @@ class Operator():
         if c.key.name == self.operator_name:
             #print('contains')
             return True
-
+        else:
+            return False
+        
     def exists(self, op_list):
         logger.info('checking operator exists')
         
@@ -192,7 +196,9 @@ class Flavor():
     def __eq__(self, c):
         if c.key.name == self.flavor_name and c.ram == self.ram and c.vcpus == self.vcpus and c.disk == self.disk:
             return True
-
+        else:
+            return False
+        
     def exists(self, op_list):
         logger.info('checking flavor exists')
         
@@ -259,7 +265,9 @@ class Cluster():
         if c.key.name == self.cluster_name and c.default_flavor.name == self.flavor_name:
             #print('contains')
             return True
-
+        else:
+            return False
+        
     def exists(self, cluster_list):
         logger.info('checking cluster exists')
         
@@ -369,9 +377,10 @@ class ClusterInstance():
     def __eq__(self, c):
         if c.key.cluster_key.name == self.cluster_name and c.key.cloudlet_key.operator_key.name == self.operator_name and c.key.cloudlet_key.name == self.cloudlet_name and c.flavor.name == self.flavor_name and c.state == self.state and c.liveness == self.liveness:
             #print('contains')
-
             return True
-
+        else:
+            return False
+        
     def exists(self, cluster_instance_list):
         logger.info('checking cluster instance exists')
         found_cluster = False
@@ -400,7 +409,7 @@ class Cloudlet():
         self.ipsupport = ipsupport
         self.staticips = staticips
         self.number_of_dynamic_ips = number_of_dynamic_ips
-
+        print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
@@ -523,9 +532,9 @@ class Cloudlet():
         print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
         if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
-
             return True
-        
+        else:
+            return False
         
     def exists(self, cloudlet_list):
         logger.info('checking cloudlet exists')
@@ -567,12 +576,12 @@ class App():
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
-            
+
             if self.image_type == 'ImageTypeDocker':
                 if self.image_path is None:
                     try:
                         new_app_name = self._docker_sanitize(self.app_name)
-                        self.image_path = 'mobiledgex_' + self.developer_name + '/' + new_app_name + ':' + self.app_version
+                        self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
                     except:
                         self.image_path = 'failed_to_set'
                 #self.image_type = 1
@@ -659,8 +668,9 @@ class App():
         if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
             #print('contains')
             return True
+        else:
+            return False
         
-
     def exists(self, app_list):
         logger.info('checking app exists')
 
