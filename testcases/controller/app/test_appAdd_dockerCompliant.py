@@ -81,7 +81,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/andydandy:1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andydandy:1.0'
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -114,7 +114,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/andy-dandy:1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andy-dandy:1.0'
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -147,7 +147,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/andydandy:1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andydandy:1.0'
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -180,7 +180,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'mobiledgex_' + developer_name + '/andy.dandy:1.0'
+        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andy.dandy:1.0'
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
