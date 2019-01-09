@@ -1,0 +1,35 @@
+import java.text.SimpleDateFormat
+
+def jobList1Parallel = ["runControllerTests", "runDMETests"]
+builds1 = [:]
+date = new Date()
+sdate = new SimpleDateFormat("yyyMMdd")
+tag = Version + '_automation_' + sdate.format(date)
+project = "${project}"
+currentBuild.displayName = tag
+
+pipeline {
+   agent { label 'jenkinsSlave1' }
+   stages {
+      stage('Checkout') {
+         steps {
+            dir('go/src/github.com/mobiledgex/edge-cloud') {
+               git branch: 'master',
+               credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+               url: 'https://github.com/mobiledgex/edge-cloud.git'
+            }
+            dir('go/src/github.com/mobiledgex') {
+               checkout([$class: 'GitSCM', 
+                  branches: [[name: 'master']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [
+                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*']]]
+                  ],
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                  url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+            }
+	 }
+      }
+   }   
+}
