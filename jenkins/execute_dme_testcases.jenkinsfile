@@ -8,7 +8,7 @@ dme = "${dme}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runFindCloudletTests", "runRegisterClientTests"]
+def jobList1Parallel = ["runFindCloudletTests", "runRegisterClientTests", "runFindCloudletplatosTests"]
  
 builds1 = [:]
 
