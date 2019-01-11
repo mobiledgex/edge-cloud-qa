@@ -49,12 +49,15 @@ class Client():
         self.client = app_client_pb2.RegisterClientRequest(**client_dict)
 
 class FindCloudletRequest():
-    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_name=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.carrier_name = carrier_name
         self.latitude = latitude
         self.longitude = longitude
+        self.app_name = app_name
+        self.app_version = app_version
+        self.developer_name = developer_name
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -73,6 +76,13 @@ class FindCloudletRequest():
             request_dict['SessionCookie'] = self.session_cookie
         if self.carrier_name is not None:
             request_dict['CarrierName'] = self.carrier_name
+        if self.app_name is not None:
+            request_dict['AppName'] = self.app_name
+        if self.app_version is not None:
+            request_dict['AppVers'] = self.app_version
+        if self.developer_name is not None:
+            request_dict['DevName'] = self.developer_name
+
         if loc_dict:
             request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
 
