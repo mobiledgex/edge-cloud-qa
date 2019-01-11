@@ -54,25 +54,25 @@ UpdateCloudlet with an invalid cloudlet name
 UpdateCloudlet with a numdynamicips 0
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet number of dynamic ips value
 	...  The test case will try and update a Cloudlet with an invalid number of dynamic ips (0).
-	...  A 'Must specify at least one dynamic public IP available' error is expected
+	...  A 'Cannot specify less than one dynamic IP unless Ip Support Static is specified' error is expected
 
 	${dips}  Convert To Integer 	0
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Must specify at least one dynamic public IP available"
+	Should Contain  ${error_msg}   details = "Cannot specify less than one dynamic IP unless Ip Support Static is specified"
 	
 	
 UpdateCloudlet with a numdynamicips -1
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet number of dynamic ips value
 	...  The test case will try and update a Cloudlet with an invalid number of dynamic ips (-1).
-	...  A 'Must specify at least one dynamic public IP available' error is expected
+	...  A 'Cannot specify less than one dynamic IP unless Ip Support Static is specified' error is expected
 
 	${dips}    Convert To Integer 	-1
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}      use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Must specify at least one dynamic public IP available"
+	Should Contain  ${error_msg}   details = "Cannot specify less than one dynamic IP unless Ip Support Static is specified"
 
 
 UpdateCloudlet with a numdynamicips A
@@ -130,26 +130,50 @@ UpdateCloudlet with a location of 0 0
 UpdateCloudlet with a location of 100 200 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of 100 200.
-	...  A 'location is invalid; 100, 200 is not a valid location' error is expected
+	...  A 'Invalid latitude value' error is expected
 
 	${lat}    Convert To Integer 	100
 	${long}    Convert To Integer 	200
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Invalid latitude value"
+
+UpdateCloudlet with a location of 90 200 
+	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
+	...  The test case will try and update a Cloudlet with an invalid location lat and long of 90 200.
+	...  A 'Invalid longitude value' error is expected
+
+	${lat}    Convert To Integer 	90
+	${long}    Convert To Integer 	200
+
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 UpdateCloudlet with a location of -100 -200 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of -100 -200.
-	...  A 'location is invalid; -100, -200 is not a valid location' error is expected
+	...  A 'Invalid latitude value' error is expected
 
 	${lat}    Convert To Integer 	-100
 	${long}    Convert To Integer 	-200
 
 	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Invalid latitude value"
+
+UpdateCloudlet with a location of -90 -200 
+	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
+	...  The test case will try and update a Cloudlet with an invalid location lat and long of -90 -200.
+	...  A 'Invalid longitude value' error is expected
+
+	${lat}    Convert To Integer 	-90
+	${long}    Convert To Integer 	-200
+
+	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 UpdateCloudlet with a location of A A 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
