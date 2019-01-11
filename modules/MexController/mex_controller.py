@@ -296,8 +296,10 @@ class ClusterInstance():
         self.flavor_name = flavor_name
 
         self.liveness = 1
-        if liveness:
+        if liveness is not None:
             self.liveness = liveness # LivenessStatic
+
+        print("Liveness", self.liveness)    
         self.state = 5    # Ready
 
         if cluster_name == 'default':
@@ -333,6 +335,8 @@ class ClusterInstance():
 
         if self.liveness is not None:
             clusterinst_dict['liveness'] = self.liveness
+
+        print("ClusterInst Dict", clusterinst_dict)    
 
         self.cluster_instance = clusterinst_pb2.ClusterInst(**clusterinst_dict)
 
