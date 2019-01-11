@@ -50,21 +50,39 @@ CreateCloudlet with a location of 0 0
 
 CreateCloudlet with a location of 100 200
 	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of 100 200
-	...  This tests case will set the location to 0 0 which is concedered to be default and should be rejected.
-	...  Expect the test case to fail with loacation can not be 100 200 error
+	...  This tests case will set the location to 100 200 which is concedered to be default and should be rejected.
+	...  Expect the test case to fail with an Invalid latitude value error
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     latitude=100      longitude=200    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Invalid latitude value"
+
+CreateCloudlet with a location of 90 200
+	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of 90 200
+	...  This tests case will set the location to 90 200 which is concedered to be default and should be rejected.
+	...  Expect the test case to fail with an Invalid longitude value error
+	
+	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     latitude=90      longitude=200    use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 CreateCloudlet with a location of -100 -200
 	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of -100 -200
-	...  This tests case will set the location to 0 0 which is concedered to be default and should be rejected.
-	...  Expect the test case to fail with loacation can not be -100 -200 error
+	...  This tests case will set the location to -100 -200 which is concedered to be default and should be rejected.
+	...  Expect the test case to fail with an Invalid latitude value error
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     latitude=-100      longitude=-200    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Invalid latitude value"
+
+CreateCloudlet with a location of -90 -200
+	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of -90 -200
+	...  This tests case will set the location to -90 -200 which is concedered to be default and should be rejected.
+	...  Expect the test case to fail with an Invalid longitude value error
+	
+	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     latitude=90      longitude=200    use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 CreateCloudlet with numdynamic set to 0
 	[Documentation]   CreateCloudlet - Trys to create a cloudlet with numdynamicIPS of 0
