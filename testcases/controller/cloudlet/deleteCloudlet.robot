@@ -1,10 +1,12 @@
 *** Settings ***
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
+Variables  shared_variables.py
+
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
-${oper}  azure
-${cldlet}    DeleteTest
+${oper}   tmus
+${cldlet}    tmocloud-3
 
 *** Test Cases ***
 DeleteCloudlet without an operator
@@ -43,6 +45,35 @@ DeleteCloudlet with an invalid cloudlet name
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Key not found"
 
+DeleteCloudlet with a static app assigned
+	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with a static appinst assigned
+	...  This test case will try and delete a cloudlet with a static appinst assigned to it
+	...  Expect this test case to fail with a Cloudlet in use by static Application Instance error
+
+	[Setup]  Setup
+	Create App                  
+	Create App Instance         
+	
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Cloudlet in use by static Application Instance"
+
+	[Teardown]  Cleanup Provisioning
+
+DeleteCloudlet with a static cluster instance assigned
+	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with a static cluster instance assigned
+	...  This test case will try and delete a cloudlet with a static cluster instance assigned to it
+	...  Expect this test case to fail with a Cloudlet in use by static Cluster Instance error
+
+	[Setup]  Setup
+	Create Cluster Instance	
+
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "Cloudlet in use by static Cluster Instance"
+
+	[Teardown]  Cleanup Provisioning
+
 DeleteCloudlet with a valid operator and cloudlet name
 	[Documentation]   DeleteCloudlet -  Successfully deletes a cloudlet
 	...  This test case will create a cloudlet and then delete the cloudlet
@@ -51,4 +82,12 @@ DeleteCloudlet with a valid operator and cloudlet name
 	Create Cloudlet     operator_name=${oper}       cloudlet_name=${cldlet}      number_of_dynamic_ips=default    latitude=35.0     longitude=-96.0
 	Delete Cloudlet     operator_name=${oper}       cloudlet_name=${cldlet}
 	Cloudlet Should Not Exist
+
+*** Keywords ***
+Setup
+	Create Developer            
+	Create Flavor
+	Create Cloudlet		operator_name=${oper}       cloudlet_name=${cldlet}  
+	Create Cluster Flavor
+	Create Cluster
 
