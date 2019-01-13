@@ -89,6 +89,23 @@ class FindCloudletRequest():
         #print(loc_dict)
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
 
+class GetFqdnList():
+    def __init__(self, session_cookie=None, use_defaults=True):
+
+        request_dict = {}
+        self.session_cookie = session_cookie
+
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+            
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+
+        if self.session_cookie is not None:
+            request_dict['SessionCookie'] = self.session_cookie
+
+        self.request = app_client_pb2.FqdnListRequest(**request_dict)
+
 class Dme(MexGrpc):
     def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         #self.developer_list = []
@@ -159,7 +176,25 @@ class Dme(MexGrpc):
             raise Exception('find cloudlet not found:{}'.format(str(resp)))
 
         return resp
-        
+
+    def get_fqdn_list(self, get_fqdn_list_obj=None, **kwargs):
+        resp = None
+
+        if not get_fqdn_list_obj:
+            request = GetFqdnList(**kwargs).request
+
+        logger.info('get fqdn list on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+                    
+        resp = self.match_engine_stub.GetFqdnList(request)
+
+        if resp.Status != 1: # FL_SUCCESS
+            raise Exception('get fqdn list failed:{}'.format(str(resp)))
+
+        resp = sorted(resp.AppFqdns, key=lambda x: x.FQDN) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+        print(resp)
+
+        return resp
+
     def get_app_instance_list(self, match_engine_request_obj=None, **kwargs):
         logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(match_engine_request_obj).replace('\n','\n\t')))
 
