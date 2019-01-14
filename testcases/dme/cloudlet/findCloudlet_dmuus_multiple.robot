@@ -57,10 +57,10 @@ ${azure_cloudlet_latitude}	  35
 ${azure_cloudlet longitude}	  -93
 ${gcp_cloudlet_latitude}	  35
 ${gcp_cloudlet longitude}	  -105
-${dmuus_cloudlet_latitude1}	  35
-${dmuus_cloudlet longitude1}	  -95
-${dmuus_cloudlet_latitude2}	  31
-${dmuus_cloudlet longitude2}	  -91
+${dmuus_cloudlet_latitude1}	  31
+${dmuus_cloudlet longitude1}	  -91
+${dmuus_cloudlet_latitude2}	  35
+${dmuus_cloudlet longitude2}	  -95
 
 *** Test Cases ***
 FindCloudlet - request shall return proper cloudlet when multiple cloudlets exist
@@ -98,23 +98,23 @@ FindCloudlet - request shall return proper cloudlet when multiple cloudlets exis
     ...             find cloudlet closest to   : 35 -107
 
       [Template]  Find Cloudlet for dmuus closest to latitude ${lat} longitude ${long} should return ${expected_cloudlet} with latitude ${expected_lat} longitude ${expected_long}
-          31  -91  acmeappcosomeapplication210.tmocloud-1.dmuus.mobiledgex.net  31  -91
-          35  -92  acmeappcosomeapplication210.tmocloud-2.azure.mobiledgex.net  35  -93
-          35  -93  acmeappcosomeapplication210.tmocloud-2.azure.mobiledgex.net  35  -93
-          35  -94  acmeappcosomeapplication210.tmocloud-2.dmuus.mobiledgex.net  35  -95
-          35  -95  acmeappcosomeapplication210.tmocloud-2.dmuus.mobiledgex.net  35  -95
-          35  -96  acmeappcosomeapplication210.tmocloud-3.dmuus.mobiledgex.net  35  -96
-          35  -97  acmeappcosomeapplication210.tmocloud-4.dmuus.mobiledgex.net  35  -97
-          35  -98  acmeappcosomeapplication210.tmocloud-5.dmuus.mobiledgex.net  35  -98
-          35  -99  acmeappcosomeapplication210.tmocloud-6.dmuus.mobiledgex.net  35  -99
-          35  -100  acmeappcosomeapplication210.tmocloud-7.dmuus.mobiledgex.net  35  -100
-          35  -101  acmeappcosomeapplication210.tmocloud-8.dmuus.mobiledgex.net  35  -101
-          35  -102  acmeappcosomeapplication210.tmocloud-9.dmuus.mobiledgex.net  35  -102
-          35  -103  acmeappcosomeapplication210.tmocloud-10.dmuus.mobiledgex.net  35  -103
-          35  -104  acmeappcosomeapplication210.tmocloud-10.dmuus.mobiledgex.net  35  -103  #dmuus=91.09  gcp=91.09      diff=0 return dmuus
-          35  -105  acmeappcosomeapplication210.tmocloud-2.gcp.mobiledgex.net  35  -105  #dmuus=182.17 gcp=0  diff=182.17      return gcp
-          35  -106  acmeappcosomeapplication210.tmocloud-2.gcp.mobiledgex.net  35  -105   #dmuus=273.25 gcp=91.09 diff=182.16  return gcp
-          35  -107  acmeappcosomeapplication210.tmocloud-2.gcp.mobiledgex.net  35  -105   #dmuus=364.32 gcp=182.17 diff=182.15 return gcp
+          31  -91   ${appinst_1.uri}      31  -91
+          35  -92   ${appinst_azure.uri}  35  -93
+          35  -93   ${appinst_azure.uri}  35  -93
+          35  -94   ${appinst_2.uri}      35  -95
+          35  -95   ${appinst_2.uri}      35  -95
+          35  -96   ${appinst_3.uri}      35  -96
+          35  -97   ${appinst_4.uri}      35  -97
+          35  -98   ${appinst_5.uri}      35  -98
+          35  -99   ${appinst_6.uri}      35  -99
+          35  -100  ${appinst_7.uri}      35  -100
+          35  -101  ${appinst_8.uri}      35  -101
+          35  -102  ${appinst_9.uri}      35  -102
+          35  -103  ${appinst_10.uri}     35  -103
+          35  -104  ${appinst_10.uri}     35  -103  #dmuus=91.09  gcp=91.09      diff=0 return dmuus
+          35  -105  ${appinst_gcp.uri}    35  -105  #dmuus=182.17 gcp=0  diff=182.17      return gcp
+          35  -106  ${appinst_gcp.uri}    35  -105   #dmuus=273.25 gcp=91.09 diff=182.16  return gcp
+          35  -107  ${appinst_gcp.uri}    35  -105   #dmuus=364.32 gcp=182.17 diff=182.15 return gcp
 
 *** Keywords ***
 Find Cloudlet for dmuus closest to latitude ${lat} longitude ${long} should return ${expected_cloudlet} with latitude ${expected_lat} longitude ${expected_long}
@@ -123,8 +123,8 @@ Find Cloudlet for dmuus closest to latitude ${lat} longitude ${long} should retu
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
       Should Be Equal             ${cloudlet.FQDN}  ${expected_cloudlet}
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.lat}  ${expected_lat}
-      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.long}  ${expected_long}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}  ${expected_lat}
+      Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${expected_long}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  1
@@ -150,16 +150,29 @@ Setup
     Create Cluster Flavor
     Create Cluster		
     Create App			access_ports=tcp:1  
-    Create App Instance		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-3  operator_name=$dmuus_{operator_name}
-    Create App Instance		cloudlet_name=tmocloud-4  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-5  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-6  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-7  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-8  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-9  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=tmocloud-10  operator_name=${dmuus_operator_name}
-    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
-    Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
+    ${appinst_1}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}
+    ${appinst_2}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}
+    ${appinst_3}=               Create App Instance		cloudlet_name=tmocloud-3  operator_name=${dmuus_operator_name}
+    ${appinst_4}=               Create App Instance		cloudlet_name=tmocloud-4  operator_name=${dmuus_operator_name}
+    ${appinst_5}=               Create App Instance		cloudlet_name=tmocloud-5  operator_name=${dmuus_operator_name}
+    ${appinst_6}=               Create App Instance		cloudlet_name=tmocloud-6  operator_name=${dmuus_operator_name}
+    ${appinst_7}=               Create App Instance		cloudlet_name=tmocloud-7  operator_name=${dmuus_operator_name}
+    ${appinst_8}=               Create App Instance		cloudlet_name=tmocloud-8  operator_name=${dmuus_operator_name}
+    ${appinst_9}=               Create App Instance		cloudlet_name=tmocloud-9  operator_name=${dmuus_operator_name}
+    ${appinst_10}=              Create App Instance		cloudlet_name=tmocloud-10  operator_name=${dmuus_operator_name}
+    ${appinst_azure}=           Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
+    ${appinst_gcp}=             Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
     Register Client	
+
+    Set Suite Variable  ${appinst_azure} 
+    Set Suite Variable  ${appinst_gcp} 
+    Set Suite Variable  ${appinst_1} 
+    Set Suite Variable  ${appinst_2} 
+    Set Suite Variable  ${appinst_3} 
+    Set Suite Variable  ${appinst_4} 
+    Set Suite Variable  ${appinst_5} 
+    Set Suite Variable  ${appinst_6} 
+    Set Suite Variable  ${appinst_7} 
+    Set Suite Variable  ${appinst_8} 
+    Set Suite Variable  ${appinst_9} 
+    Set Suite Variable  ${appinst_10} 
