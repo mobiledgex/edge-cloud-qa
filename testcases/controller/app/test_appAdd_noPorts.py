@@ -17,10 +17,14 @@ from MexController import mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
-stamp = str(int(time.time()))
+stamp = str(time.time())
 app_name = 'appname' + stamp
 app_version = '1.0'
 developer_name = 'developer' + stamp
+developer_address = 'allen tx'
+developer_email = 'dev@dev.com'
+flavor_name = 'x1.small' + stamp
+cluster_name = 'cluster' + stamp
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -38,10 +42,24 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
+        self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
+        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
+
+        self.developer = mex_controller.Developer(developer_name=developer_name,
+                                                  developer_address=developer_address,
+                                                  developer_email=developer_email)
+        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+                                              default_flavor_name=flavor_name)
+
+        self.controller.create_flavor(self.flavor.flavor)
+        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
+        self.controller.create_developer(self.developer.developer)
+        self.controller.create_cluster(self.cluster.cluster)
+
     def test_CreateAppNoPortsDedicated(self):
-        # [Documentation] App - User shall not be able to create an app with no ports and ipaccess=IpAccessDedicated 
+        # [Documentation] App - User shall be able to create an app with no ports and ipaccess=IpAccessDedicated 
         # ... create app with no ports and IpAccessDedicated
-        # ... verify 'Please specify access ports' is received
+        # ... verify app is created
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -53,25 +71,40 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version=app_version,
                                  ip_access='IpAccessDedicated',
+                                 cluster_name=cluster_name,
+                                 default_flavor_name=flavor_name,
                                  use_defaults=False)
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+
+        resp = self.controller.create_app(app.app)
+            
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Please specify access ports', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Please specify access ports', 'error details')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #assert_expectations()
+
+        # look for app
+        app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/' + app_name + ':1.0'
+        app.access_ports = ''
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+        
+        expect_equal(found_app, True, 'find app')
         assert_expectations()
 
     def test_CreateAppNoPortsIpAccessDedicatedorShared(self):
-        # [Documentation] App - User shall not be able to create an app with no ports and ipaccess=IpAccessDedicatedOrShared
+        # [Documentation] App - User shall be able to create an app with no ports and ipaccess=IpAccessDedicatedOrShared
         # ... create app with no ports and IpAccessDedicatedOrShared
-        # ... verify 'Please specify access ports' is received
+        # ... verify app is created
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -83,25 +116,41 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version=app_version,
                                  ip_access='IpAccessDedicatedOrShared',
+                                 cluster_name=cluster_name,
+                                 default_flavor_name=flavor_name,
                                  use_defaults=False)
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+
+        resp = self.controller.create_app(app.app)
+                
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Please specify access ports', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Please specify access ports', 'error details')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #assert_expectations()
+
+
+        # look for app
+        app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/' + app_name + ':1.0'
+        app.access_ports = ''
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+        
+        expect_equal(found_app, True, 'find app')
         assert_expectations()
 
     def test_CreateAppNoPortsIpAccessShared(self):
-        # [Documentation] App - User shall not be able to create an app with no ports and ipaccess=IpAccessShared
+        # [Documentation] App - User shall be able to create an app with no ports and ipaccess=IpAccessShared
         # ... create app with no ports and IpAccessShared
-        # ... verify 'Please specify access ports' is received
+        # ... verify app is created
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -113,20 +162,43 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version=app_version,
                                  ip_access='IpAccessShared',
+                                 cluster_name=cluster_name,
+                                 default_flavor_name=flavor_name,
                                  use_defaults=False)
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+
+        resp = self.controller.create_app(app.app)
+
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Please specify access ports', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Please specify access ports', 'error details')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #assert_expectations()
+
+        # look for app
+        app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/' + app_name + ':1.0'
+        app.access_ports = ''
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+        
+        expect_equal(found_app, True, 'find app')
         assert_expectations()
+
+    @classmethod
+    def tearDownClass(self):
+        self.controller.delete_cluster(self.cluster.cluster)
+        self.controller.delete_developer(self.developer.developer)
+        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
+        self.controller.delete_flavor(self.flavor.flavor)
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
