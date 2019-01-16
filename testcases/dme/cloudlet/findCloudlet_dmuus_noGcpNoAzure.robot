@@ -208,8 +208,8 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App             access_ports=${access_ports} 
-    ${appinst_1}=          Create App Instance    cloudlet_name=${cloudlet_name1}
-    ${appinst_2}=          Create App Instance    cloudlet_name=${cloudlet_name2}
+    ${appinst_1}=          Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}
+    ${appinst_2}=          Create App Instance    cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}
 
     Set Suite Variable  ${appinst_1} 
     Set Suite Variable  ${appinst_2}
