@@ -46,5 +46,5 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App                  
-    Create App Instance         
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
 
