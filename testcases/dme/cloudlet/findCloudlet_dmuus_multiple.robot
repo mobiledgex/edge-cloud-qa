@@ -137,8 +137,8 @@ Setup
 
     Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
-    Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude1}  longitude=${dmuus_cloudlet_longitude1}
-    Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude2}  longitude=${dmuus_cloudlet_longitude2}
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude1}  longitude=${dmuus_cloudlet_longitude1}
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude2}  longitude=${dmuus_cloudlet_longitude2}
     Create Cloudlet		cloudlet_name=tmocloud-3  operator_name=dmuus  latitude=35  longitude=-96
     Create Cloudlet		cloudlet_name=tmocloud-4  operator_name=dmuus  latitude=35  longitude=-97
     Create Cloudlet		cloudlet_name=tmocloud-5  operator_name=dmuus  latitude=35  longitude=-98
