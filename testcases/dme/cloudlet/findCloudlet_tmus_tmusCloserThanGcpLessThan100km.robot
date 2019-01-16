@@ -78,7 +78,7 @@ FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus 
       #${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35  longitude=-94
 
       Register Client  
-      ${cloudlet}=  Find Cloudlet      latitude=35  longitude=-94
+      ${cloudlet}=  Find Cloudlet  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
