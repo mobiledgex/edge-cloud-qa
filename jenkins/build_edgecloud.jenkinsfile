@@ -94,6 +94,14 @@ node('jenkinsSlave1'){
       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud1_start.yaml > $HOME/edgecloud_crmtmustmocloud1_start.yaml'
     	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud2_start.yaml > $HOME/edgecloud_crmtmustmocloud2_start.yaml'
              sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud3_start.yaml > $HOME/edgecloud_crmtmustmocloud3_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud4_start.yaml > $HOME/edgecloud_crmtmustmocloud4_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud5_start.yaml > $HOME/edgecloud_crmtmustmocloud5_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud6_start.yaml > $HOME/edgecloud_crmtmustmocloud6_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud7_start.yaml > $HOME/edgecloud_crmtmustmocloud7_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud8_start.yaml > $HOME/edgecloud_crmtmustmocloud8_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud9_start.yaml > $HOME/edgecloud_crmtmustmocloud9_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud10_start.yaml > $HOME/edgecloud_crmtmustmocloud10_start.yaml'
+
        	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecloud1_start.yaml > $HOME/edgecloud_crmazurecloud1_start.yaml'
        	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecentral_start.yaml > $HOME/edgecloud_crmazurecentral_start.yaml'
 	     
