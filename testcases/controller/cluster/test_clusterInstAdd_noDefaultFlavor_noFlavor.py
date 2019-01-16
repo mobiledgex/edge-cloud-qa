@@ -65,7 +65,7 @@ class tc(unittest.TestCase):
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         #self.controller.create_operator(self.operator.operator)
-        self.controller.create_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_NoFlavor(self):
         # [Documentation] ClusterInst - User shall not be able to create a cluster instance with no flavor name and cluster with no default flavor name
@@ -135,7 +135,7 @@ class tc(unittest.TestCase):
         self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
-        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
         #time.sleep(1)

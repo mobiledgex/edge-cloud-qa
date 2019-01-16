@@ -70,7 +70,7 @@ class tc(unittest.TestCase):
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         #self.controller.create_operator(self.operator.operator)
-        self.controller.create_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
         # create the cluster
         self.controller.create_cluster(self.cluster.cluster)
@@ -131,7 +131,7 @@ class tc(unittest.TestCase):
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
-        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
