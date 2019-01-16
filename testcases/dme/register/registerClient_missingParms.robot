@@ -94,7 +94,7 @@ Setup
     #Create Operator             operator_name=${operator_name} 
     Create Developer            
     Create Flavor
-    Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     Create Cluster Flavor
     Create Cluster
     Create App                 app_name=${app_name} 
