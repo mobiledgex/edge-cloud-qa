@@ -48,7 +48,7 @@ class tc(unittest.TestCase):
                                                              flavor_name=flavor_name)
 
         #self.controller.create_operator(self.operator.operator)
-        self.controller.create_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_CreateClusterInstNoCluster(self):
         # [Documentation] ClusterInst - User shall not be able to create a cluster instance for cluster that does not exist
@@ -72,9 +72,9 @@ class tc(unittest.TestCase):
         expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
-    @classmethod
-    def tearDownClass(self):
-        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+    #@classmethod
+    #def tearDownClass(self):
+    #    self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
 if __name__ == '__main__':
