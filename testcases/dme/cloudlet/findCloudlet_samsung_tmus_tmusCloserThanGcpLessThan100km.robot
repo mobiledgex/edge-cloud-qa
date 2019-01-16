@@ -83,7 +83,7 @@ FindCloudlet Samsung - request shall return tmus with gcp cloudlet provisioned a
     ...                 long: -95
       
       Register Client  developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
-      ${cloudlet}=  Find Cloudlet   app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  latitude=35  longitude=-94
+      ${cloudlet}=  Find Cloudlet   carrier_name=${tmus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
