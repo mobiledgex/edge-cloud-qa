@@ -164,18 +164,28 @@ node('jenkinsSlave1'){
        }
        error('Aborting the build')
     }
-    
-    stage("create cycle") {
-        dir('go/src/github.com/mobiledgex/jenkins') {
-            def status = -1
-            def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + tag
-            status = sh(script: s, returnStatus: true);
-            if(status != 0) {
-                println "${s} failed"
-                currentBuild.result = 'FAILURE'
-            }
-	}
+
+    try {    
+       stage("create cycle") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+             def status = -1
+             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + tag
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "${s} failed"
+                 currentBuild.result = 'FAILURE'
+             }
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle creation in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
     }
+
 
     if(currentBuild.result != 'FAILURE') {
        stage('run tests') {
