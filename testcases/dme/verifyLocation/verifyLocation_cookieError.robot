@@ -1,8 +1,9 @@
 *** Settings ***
 Documentation  VerifyLocation - various cookie erors
 
-
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Variables       shared_variables.py
 
 *** Variables ***
 ${carrier_name}  tmus
@@ -15,11 +16,18 @@ VerifyLocation - request with bad session cookie shall return app not found
     [Documentation]
     ...  send VerifyLocatoin with session cookie with an app that does not exist
     ...  verify return LOC_VERIFIED of 2KM
-	
-    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  session_cookie=${missingapp_cookie}  carrier_name=andy  latitude=1  longitude=1
+
+    [Setup]  Setup
+
+    Register Client
+    Get Token
+
+    Cleanup provisioning   # delete provisioning so app no longer exists 	
+
+    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  carrier_name=andy  latitude=1  longitude=1
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "app not found: {{developer1547767769.8664808} app1547767769.8664808 1.0}"
+    Should Contain  ${error_msg}   details = "app not found: {{${developer_name_default}} ${app_name_default} 1.0}"
 
 
 VerifyLocation - request without cookie should return 'missing cookie'
@@ -73,4 +81,12 @@ VerifyLocation - request with expired cookie should return 'token is expired by'
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   details = "token is expired by
+
+*** Keywords ***
+Setup
+    Create Developer
+    Create Flavor
+    Create Cluster Flavor
+    Create Cluster
+    Create App              
 
