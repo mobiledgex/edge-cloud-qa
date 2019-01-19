@@ -17,13 +17,14 @@ ${beacon_long}     13.4050
 
 *** Test Cases ***
 VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
+#EDGECLOUD-369 - VerifyToken with token=xx does not return LOC_ERROR_UNAUTHORIZED
     [Documentation]
     ...  send VerifyLocatoin with token=xx
     ...  verify return LOC_ERROR_UNAUTHORIZED
 	
       Register Client
       ${verify_reply}=  Verify Location  token=xx  carrier_name=GDDT  latitude=${beacon_lat}  longitude=${beacon_long}
-
+      log to console  ${verify_reply}
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  6  #LOC_ERROR_UNAUTHORIZED
       Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
 
