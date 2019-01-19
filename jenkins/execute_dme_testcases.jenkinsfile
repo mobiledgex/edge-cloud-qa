@@ -8,9 +8,11 @@ dme = "${dme}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runFindCloudletTests", "runRegisterClientTests", "runGetFqdnListTests", "runVerifyLocationTests"]
+def jobList1Parallel = ["runFindCloudletTests", "runRegisterClientTests", "runVerifyLocationTests"]
+def jobList2Parallel = ["runGetFqdnListTests"]
  
 builds1 = [:]
+builds2 = [:]
 
 node('jenkinsSlave1'){
     stage('Checkout') {
@@ -75,6 +77,24 @@ node('jenkinsSlave1'){
             currentBuild.result = 'FAILURE'
          }
       }
+
+      stage('run WS tests parallel batch 2') {
+         for(int i=0; i < jobList2Parallel.size(); ++i) {
+            def jobName = jobList2Parallel[i];
+            echo "i1=" + jobName
+            builds2[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
+	    }
+         }
+
+         try {
+            parallel builds2
+         } catch(err) {
+            echo "Caught in run parallel batch 2: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
       dir('go/src/github.com/mobiledgex/jenkins') {
           def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
           status3 = sh(script: s3, returnStatus: true);
