@@ -64,7 +64,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Failed to convert port A80 to integer: strconv.ParseInt: parsing "A80": invalid syntax', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppPortInvalidDedicated(self):
@@ -94,7 +94,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Failed to convert port A80 to integer: strconv.ParseInt: parsing "A80": invalid syntax', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppPortInvalidDedicatedShared(self):
@@ -125,7 +125,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Failed to convert port xx to integer: strconv.ParseInt: parsing "xx": invalid syntax', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppPortInvalidShared(self):
@@ -156,7 +156,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Failed to convert port xx to integer: strconv.ParseInt: parsing "xx": invalid syntax', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
 if __name__ == '__main__':
