@@ -13,7 +13,7 @@ ${cldlet}  CreatTest
 
 *** Test Cases ***
 CreateCloudlet without an operator
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet without an operator
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet without an operator
 	...  Trys to create a cloudlet without an operator
 	...  Expect the create to fail with the operator not found error
 
@@ -22,7 +22,7 @@ CreateCloudlet without an operator
 	Should Contain  ${error_msg}   details = "Specified cloudlet operator not found"
 	
 CreateCloudlet with an invalid operator
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with an invalid operator
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with an invalid operator
 	...  Trys to create a cloudlet with an invalid operator
 	...  Expect the create to fail with the operator not found drror
 
@@ -31,7 +31,7 @@ CreateCloudlet with an invalid operator
 	Should Contain  ${error_msg}   details = "Specified cloudlet operator not found"
 	
 CreateCloudlet without a name
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet without a cloudlet name
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet without a cloudlet name
 	...  Trys to create a cloudlet without a cloudlet name
 	...  Expect the create to fail with the invalid name error
 
@@ -39,8 +39,17 @@ CreateCloudlet without a name
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid cloudlet name"
 	
+CreateCloudlet without a location
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet without a location 
+	...  This tests case will not set the location for the cloudlet and should be rejected.
+	...  Expect the test case to fail with loacation can not be 0 0 error
+	
+	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     use_defaults=False
+	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+
 CreateCloudlet with a location of 0 0
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of 0 0
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of 0 0
 	...  This tests case will set the location to 0 0 which is concedered to be default and should be rejected.
 	...  Expect the test case to fail with loacation can not be 0 0 error
 	
@@ -49,7 +58,7 @@ CreateCloudlet with a location of 0 0
 	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
 
 CreateCloudlet with a location of 100 200
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of 100 200
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of 100 200
 	...  This tests case will set the location to 100 200 which is concedered to be default and should be rejected.
 	...  Expect the test case to fail with an Invalid latitude value error
 	
@@ -58,7 +67,7 @@ CreateCloudlet with a location of 100 200
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
 CreateCloudlet with a location of 90 200
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of 90 200
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of 90 200
 	...  This tests case will set the location to 90 200 which is concedered to be default and should be rejected.
 	...  Expect the test case to fail with an Invalid longitude value error
 	
@@ -67,7 +76,7 @@ CreateCloudlet with a location of 90 200
 	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 CreateCloudlet with a location of -100 -200
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of -100 -200
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of -100 -200
 	...  This tests case will set the location to -100 -200 which is concedered to be default and should be rejected.
 	...  Expect the test case to fail with an Invalid latitude value error
 	
@@ -76,7 +85,7 @@ CreateCloudlet with a location of -100 -200
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
 CreateCloudlet with a location of -90 -200
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with location of -90 -200
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of -90 -200
 	...  This tests case will set the location to -90 -200 which is concedered to be default and should be rejected.
 	...  Expect the test case to fail with an Invalid longitude value error
 	
@@ -85,7 +94,7 @@ CreateCloudlet with a location of -90 -200
 	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
 CreateCloudlet with numdynamic set to 0
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with numdynamicIPS of 0
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with numdynamicIPS of 0
 	...  You must have at least 1 dynamic IPS, this test case will set the value to 0
 	...  Expect the create to fail with  
 	
@@ -96,21 +105,21 @@ CreateCloudlet with numdynamic set to 0
 	Should Contain  ${error_msg}   details = "Must specify at least one dynamic public IP available"
 
 CreateCloudlet with an invalid ipsupport enumeration -1
-    [Documentation]   CreateCloudlet - Trys to create a cloudlet with an invalid ipsupport enumeration -1
+    [Documentation]   CreateCloudlet - Tries to create a cloudlet with an invalid ipsupport enumeration -1
 	...             IPSupport enumerations are:
 	...                 IpSupportUnknown = 0
 	...                 IpSupportStatic = 1
 	...                 IpSupportDynamic = 2
 	...            Expect the test to fail as enumeration -1 is not used and will give an error.
 	
-	${supp}    Convert To Integer 	1
+	${supp}    Convert To Integer 	-1
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     number_of_dynamic_ips=default    latitude=35     longitude=-96   ipsupport=${supp}   use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Only dynamic IPs are supported currently"
 
 CreateCloudlet with an invalid ipsupport IPSupportStatic
-    [Documentation]   CreateCloudlet - Trys to create a cloudlet with an invalid ipsupport IPSupportStatic
+    [Documentation]   CreateCloudlet - Tries to create a cloudlet with an invalid ipsupport IPSupportStatic
 	...             IPSupport enumerations are:
 	...                 IpSupportUnknown = 0
 	...                 IpSupportStatic = 1
@@ -124,7 +133,7 @@ CreateCloudlet with an invalid ipsupport IPSupportStatic
 
 	
 CreateCloudlet with an invalid ipsupport enumeration 3
-	[Documentation]   CreateCloudlet - Trys to create a cloudlet with an invalid ipsupport enumeration 3 
+	[Documentation]   CreateCloudlet - Tries to create a cloudlet with an invalid ipsupport enumeration 3 
 	...             IPSupport enumerations are:
 	...                 IpSupportUnknown = 0
 	...                 IpSupportStatic = 1
