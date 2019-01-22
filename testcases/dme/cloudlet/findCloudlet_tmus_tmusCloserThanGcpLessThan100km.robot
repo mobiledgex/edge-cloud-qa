@@ -78,7 +78,7 @@ FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus 
       #${cloudlet}=  Find Cloudlet	carrier_name=${operator_name}  latitude=35  longitude=-94
 
       Register Client  
-      ${cloudlet}=  Find Cloudlet      latitude=35  longitude=-94
+      ${cloudlet}=  Find Cloudlet  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -98,7 +98,7 @@ Setup
     Create Developer
     Create Flavor
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
-    Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}
+    #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}
     Create Cluster Flavor
     Create Cluster
     Create App

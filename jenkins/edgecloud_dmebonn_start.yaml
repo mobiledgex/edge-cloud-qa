@@ -30,7 +30,7 @@ spec:
          - "--locverurl"
          - "http://mextest.locsim.mobiledgex.net:8888/verifyLocation"
          - "--carrier"
-         - "BONN1"
+         - "TDG"
          - "--d"
          - "locapi,dmedb,dmereq"
          - "--toksrvurl"

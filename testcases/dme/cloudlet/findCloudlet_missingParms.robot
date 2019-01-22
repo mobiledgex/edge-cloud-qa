@@ -89,8 +89,8 @@ Setup
     #Create Operator             operator_name=${carrier_name} 
     Create Developer
     Create Flavor
-    Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}
+    #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}
     Create Cluster Flavor
     Create Cluster
     Create App
-    Create App Instance
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}

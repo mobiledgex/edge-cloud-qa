@@ -53,7 +53,7 @@ class tc(unittest.TestCase):
         # create a new cluster for adding the instance
         create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         #self.controller.create_operator(self.operator.operator)
-        self.controller.create_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_NoFlavor(self):
         # [Documentation] ClusterInst - User shall not be able to create a cluster instance for flavor that does not exist
@@ -89,7 +89,7 @@ class tc(unittest.TestCase):
         # delete cluster instance
         self.controller.delete_cluster(self.cluster.cluster)
         #time.sleep(1)
-        self.controller.delete_cloudlet(self.cloudlet.cloudlet)
+        #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
 
