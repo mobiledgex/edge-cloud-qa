@@ -81,6 +81,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -112,7 +115,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 01\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -120,6 +126,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicated/ImageTypeDocker/http:1
         # ... create app with ip_access=IpAccessDedicated with http:1 and with Docker
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -143,6 +151,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -151,6 +162,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicated/ImageTypeDocker/http:01
         # ... create app with ip_access=IpAccessDedicated with http:01 and with Docker
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -174,6 +187,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 01\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -205,7 +221,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -236,7 +255,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-                
+               
+        port_match = 'ports:\n        - containerPort: 01\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
