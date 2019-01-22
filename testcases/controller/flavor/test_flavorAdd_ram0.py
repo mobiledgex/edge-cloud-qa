@@ -57,7 +57,7 @@ class tc(unittest.TestCase):
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Ram cannot be 0', 'error details')
-        expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
+        #expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
 
         assert_expectations()
 
@@ -83,7 +83,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Ram cannot be 0', 'error details')
-        expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
+        #expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
 
         assert_expectations()
 

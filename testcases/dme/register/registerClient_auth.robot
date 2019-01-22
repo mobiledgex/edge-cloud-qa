@@ -45,9 +45,9 @@ Setup
     #Create Operator             operator_name=${operator_name} 
     Create Developer            developer_name=${developer_name}
     Create Flavor
-    Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     Create Cluster Flavor
     Create Cluster
-    Create App                  app_name=${app_name_auth}  auth_public_key=${app_key}
-    Create App Instance         app_name=${app_name_auth}
+    Create App                  app_name=${app_name_auth}  auth_public_key=${app_key} 
+    Create App Instance         app_name=${app_name_auth}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
 
