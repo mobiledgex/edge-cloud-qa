@@ -83,7 +83,7 @@ FindCloudlet platos - request shall return dmuus with gcp cloudlet provisioned a
     ...                 long: -95
       
       Register Client  developer_name=${platos_developer_name}  app_name=${platos_app_name}
-      ${cloudlet}=  Find Cloudlet   app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  latitude=35  longitude=-94
+      ${cloudlet}=  Find Cloudlet   carrier_name=${dmuus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -103,7 +103,7 @@ Setup
     Create Developer
     Create Flavor
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
-    Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     Create Cluster Flavor
     Create Cluster
     Create App                  access_ports=tcp:1  permits_platform_apps=${True}
