@@ -10,7 +10,7 @@ ${cldlet}    tmocloud-3
 
 *** Test Cases ***
 DeleteCloudlet without an operator
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet without an operator
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet without an operator
 	...  This test case trys to delete a cloudlet without giving an operator name
 	...  Expect to fail witn invalid operator name
 	
@@ -19,7 +19,7 @@ DeleteCloudlet without an operator
 	Should Contain  ${error_msg}   details = "Invalid operator name"
 
 DeleteCloudlet with an invalid operator
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with an invalid operator
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid operator
 	...  This test case will try and delete a cloudlet with an invalid operator name 
 	...  Expect this test case to fail with an invalid Key (Needs a valid operator and a valid cloudlet name)
 	 
@@ -28,7 +28,7 @@ DeleteCloudlet with an invalid operator
 	Should Contain  ${error_msg}   details = "Key not found"
 
 DeleteCloudlet without a cloudlet name
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet without a cloudlet name
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet without a cloudlet name
 	...  This test case trys to delete a cloudlet without giving a cloudlet name
 	...  Expect to fail witn invalid cloudlet name
 	
@@ -37,7 +37,7 @@ DeleteCloudlet without a cloudlet name
 	Should Contain  ${error_msg}   details = "Invalid cloudlet name"
 
 DeleteCloudlet with an invalid cloudlet name
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with an invalid cloudlet name
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid cloudlet name
 	...  This test case will try and delete a cloudlet with an invalid cloudlet name 
 	...  Expect this test case to fail with an invalid Key (Needs a valid operator and a valid cloudlet name)
 
@@ -46,7 +46,7 @@ DeleteCloudlet with an invalid cloudlet name
 	Should Contain  ${error_msg}   details = "Key not found"
 
 DeleteCloudlet with a static app assigned
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with a static appinst assigned
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with a static appinst assigned
 	...  This test case will try and delete a cloudlet with a static appinst assigned to it
 	...  Expect this test case to fail with a Cloudlet in use by static Application Instance error
 
@@ -61,7 +61,7 @@ DeleteCloudlet with a static app assigned
 	[Teardown]  Cleanup Provisioning
 
 DeleteCloudlet with a static cluster instance assigned
-	[Documentation]   DeleteCloudlet -  Trys to delete a cloudlet with a static cluster instance assigned
+	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with a static cluster instance assigned
 	...  This test case will try and delete a cloudlet with a static cluster instance assigned to it
 	...  Expect this test case to fail with a Cloudlet in use by static Cluster Instance error
 
