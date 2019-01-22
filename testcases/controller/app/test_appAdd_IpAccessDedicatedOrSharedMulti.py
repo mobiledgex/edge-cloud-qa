@@ -82,6 +82,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 655\n          protocol: TCP\n        - containerPort: 2\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -113,6 +116,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: TCP\n        - containerPort: 2\n          protocol: TCP\n        - containerPort: 3\n          protocol: TCP\n        - containerPort: 4\n          protocol: TCP\n        - containerPort: 5\n          protocol: TCP\n        - containerPort: 6\n          protocol: TCP\n        - containerPort: 7\n          protocol: TCP\n        - containerPort: 8\n          protocol: TCP\n        - containerPort: 9\n          protocol: TCP\n        - containerPort: 10\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -147,7 +153,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: TCP\n        - containerPort: 2\n          protocol: TCP\n        - containerPort: 3\n          protocol: TCP\n        - containerPort: 4\n          protocol: TCP\n        - containerPort: 5\n          protocol: TCP\n        - containerPort: 6\n          protocol: TCP\n        - containerPort: 7\n          protocol: TCP\n        - containerPort: 8\n          protocol: TCP\n        - containerPort: 9\n          protocol: TCP\n        - containerPort: 10\n          protocol: TCP\n        - containerPort: 11\n          protocol: TCP\n        - containerPort: 12\n          protocol: TCP\n        - containerPort: 13\n          protocol: TCP\n        - containerPort: 14\n          protocol: TCP\n        - containerPort: 15\n          protocol: TCP\n        - containerPort: 16\n          protocol: TCP\n        - containerPort: 17\n          protocol: TCP\n        - containerPort: 18\n          protocol: TCP\n        - containerPort: 19\n          protocol: TCP\n        - containerPort: 20\n          protocol: TCP\n        - containerPort: 21\n          protocol: TCP\n        - containerPort: 22\n          protocol: TCP\n        - containerPort: 23\n          protocol: TCP\n        - containerPort: 24\n          protocol: TCP\n        - containerPort: 25\n          protocol: TCP\n        - containerPort: 26\n          protocol: TCP\n        - containerPort: 27\n          protocol: TCP\n        - containerPort: 28\n          protocol: TCP\n        - containerPort: 29\n          protocol: TCP\n        - containerPort: 30\n          protocol: TCP\n        - containerPort: 31\n          protocol: TCP\n        - containerPort: 32\n          protocol: TCP\n        - containerPort: 33\n          protocol: TCP\n        - containerPort: 34\n          protocol: TCP\n        - containerPort: 35\n          protocol: TCP\n        - containerPort: 36\n          protocol: TCP\n        - containerPort: 37\n          protocol: TCP\n        - containerPort: 38\n          protocol: TCP\n        - containerPort: 39\n          protocol: TCP\n        - containerPort: 40\n          protocol: TCP\n        - containerPort: 41\n          protocol: TCP\n        - containerPort: 42\n          protocol: TCP\n        - containerPort: 43\n          protocol: TCP\n        - containerPort: 44\n          protocol: TCP\n        - containerPort: 45\n          protocol: TCP\n        - containerPort: 46\n          protocol: TCP\n        - containerPort: 47\n          protocol: TCP\n        - containerPort: 48\n          protocol: TCP\n        - containerPort: 49\n          protocol: TCP\n        - containerPort: 50\n          protocol: TCP\n        - containerPort: 51\n          protocol: TCP\n        - containerPort: 52\n          protocol: TCP\n        - containerPort: 53\n          protocol: TCP\n        - containerPort: 54\n          protocol: TCP\n        - containerPort: 55\n          protocol: TCP\n        - containerPort: 56\n          protocol: TCP\n        - containerPort: 57\n          protocol: TCP\n        - containerPort: 58\n          protocol: TCP\n        - containerPort: 59\n          protocol: TCP\n        - containerPort: 60\n          protocol: TCP\n        - containerPort: 61\n          protocol: TCP\n        - containerPort: 62\n          protocol: TCP\n        - containerPort: 63\n          protocol: TCP\n        - containerPort: 64\n          protocol: TCP\n        - containerPort: 65\n          protocol: TCP\n        - containerPort: 66\n          protocol: TCP\n        - containerPort: 67\n          protocol: TCP\n        - containerPort: 68\n          protocol: TCP\n        - containerPort: 69\n          protocol: TCP\n        - containerPort: 70\n          protocol: TCP\n        - containerPort: 71\n          protocol: TCP\n        - containerPort: 72\n          protocol: TCP\n        - containerPort: 73\n          protocol: TCP\n        - containerPort: 74\n          protocol: TCP\n        - containerPort: 75\n          protocol: TCP\n        - containerPort: 76\n          protocol: TCP\n        - containerPort: 77\n          protocol: TCP\n        - containerPort: 78\n          protocol: TCP\n        - containerPort: 79\n          protocol: TCP\n        - containerPort: 80\n          protocol: TCP\n        - containerPort: 81\n          protocol: TCP\n        - containerPort: 82\n          protocol: TCP\n        - containerPort: 83\n          protocol: TCP\n        - containerPort: 84\n          protocol: TCP\n        - containerPort: 85\n          protocol: TCP\n        - containerPort: 86\n          protocol: TCP\n        - containerPort: 87\n          protocol: TCP\n        - containerPort: 88\n          protocol: TCP\n        - containerPort: 89\n          protocol: TCP\n        - containerPort: 90\n          protocol: TCP\n        - containerPort: 91\n          protocol: TCP\n        - containerPort: 92\n          protocol: TCP\n        - containerPort: 93\n          protocol: TCP\n        - containerPort: 94\n          protocol: TCP\n        - containerPort: 95\n          protocol: TCP\n        - containerPort: 96\n          protocol: TCP\n        - containerPort: 97\n          protocol: TCP\n        - containerPort: 98\n          protocol: TCP\n        - containerPort: 99\n          protocol: TCP\n        - containerPort: 100\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -178,6 +187,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: TCP\n        - containerPort: 1\n          protocol: UDP\n        - containerPort: 2\n          protocol: TCP\n        - containerPort: 2\n          protocol: UDP\n        - containerPort: 3\n          protocol: TCP\n        - containerPort: 3\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -186,6 +198,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeDocker and 2 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=Docker, and 2 http ports
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -209,6 +223,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        #update after bug fix
+        port_match = 'ports:\n        - containerPort: 655\n          protocol: HTTP\n        - containerPort: 2\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -217,6 +235,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeDocker and 10 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=Docker, and 10 http ports
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -240,6 +260,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        #update after bug fix
+        port_match = 'ports:\n        - containerPort: 655\n          protocol: HTTP\n        - containerPort: 2\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -248,6 +272,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeDocker and 100 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=Docker, and 100 http ports
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -274,6 +300,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        #update after bug fix
+        port_match = 'ports:\n        - containerPort: 655\n          protocol: HTTP\n        - containerPort: 2\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -282,6 +312,8 @@ class tc(unittest.TestCase):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeDocker and multiple tcp/udp/http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=Docker, and multiple tcp/udp/http ports
         # ... verify app is created
+
+        # EDGECLOUD-371 - CreateApp with accessports of http shows protocol as TCP on ShowApp
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -305,6 +337,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        #update after bug fix
+        port_match = 'ports:\n        - containerPort: 655\n          protocol: HTTP\n        - containerPort: 2\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -336,6 +372,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
+
+        port_match = 'ports:\n        - containerPort: 5535\n          protocol: UDP\n        - containerPort: 55\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -367,7 +406,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 10\n          protocol: UDP\n        - containerPort: 9\n          protocol: UDP\n        - containerPort: 8\n          protocol: UDP\n        - containerPort: 7\n          protocol: UDP\n        - containerPort: 6\n          protocol: UDP\n        - containerPort: 5\n          protocol: UDP\n        - containerPort: 4\n          protocol: UDP\n        - containerPort: 3\n          protocol: UDP\n        - containerPort: 2\n          protocol: UDP\n        - containerPort: 1\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -401,7 +443,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 1\n          protocol: UDP\n        - containerPort: 2\n          protocol: UDP\n        - containerPort: 3\n          protocol: UDP\n        - containerPort: 4\n          protocol: UDP\n        - containerPort: 5\n          protocol: UDP\n        - containerPort: 6\n          protocol: UDP\n        - containerPort: 7\n          protocol: UDP\n        - containerPort: 8\n          protocol: UDP\n        - containerPort: 9\n          protocol: UDP\n        - containerPort: 10\n          protocol: UDP\n        - containerPort: 11\n          protocol: UDP\n        - containerPort: 12\n          protocol: UDP\n        - containerPort: 13\n          protocol: UDP\n        - containerPort: 14\n          protocol: UDP\n        - containerPort: 15\n          protocol: UDP\n        - containerPort: 16\n          protocol: UDP\n        - containerPort: 17\n          protocol: UDP\n        - containerPort: 18\n          protocol: UDP\n        - containerPort: 19\n          protocol: UDP\n        - containerPort: 20\n          protocol: UDP\n        - containerPort: 21\n          protocol: UDP\n        - containerPort: 22\n          protocol: UDP\n        - containerPort: 23\n          protocol: UDP\n        - containerPort: 24\n          protocol: UDP\n        - containerPort: 25\n          protocol: UDP\n        - containerPort: 26\n          protocol: UDP\n        - containerPort: 27\n          protocol: UDP\n        - containerPort: 28\n          protocol: UDP\n        - containerPort: 29\n          protocol: UDP\n        - containerPort: 30\n          protocol: UDP\n        - containerPort: 31\n          protocol: UDP\n        - containerPort: 32\n          protocol: UDP\n        - containerPort: 33\n          protocol: UDP\n        - containerPort: 34\n          protocol: UDP\n        - containerPort: 35\n          protocol: UDP\n        - containerPort: 36\n          protocol: UDP\n        - containerPort: 37\n          protocol: UDP\n        - containerPort: 38\n          protocol: UDP\n        - containerPort: 39\n          protocol: UDP\n        - containerPort: 40\n          protocol: UDP\n        - containerPort: 41\n          protocol: UDP\n        - containerPort: 42\n          protocol: UDP\n        - containerPort: 43\n          protocol: UDP\n        - containerPort: 44\n          protocol: UDP\n        - containerPort: 45\n          protocol: UDP\n        - containerPort: 46\n          protocol: UDP\n        - containerPort: 47\n          protocol: UDP\n        - containerPort: 48\n          protocol: UDP\n        - containerPort: 49\n          protocol: UDP\n        - containerPort: 50\n          protocol: UDP\n        - containerPort: 51\n          protocol: UDP\n        - containerPort: 52\n          protocol: UDP\n        - containerPort: 53\n          protocol: UDP\n        - containerPort: 54\n          protocol: UDP\n        - containerPort: 55\n          protocol: UDP\n        - containerPort: 56\n          protocol: UDP\n        - containerPort: 57\n          protocol: UDP\n        - containerPort: 58\n          protocol: UDP\n        - containerPort: 59\n          protocol: UDP\n        - containerPort: 60\n          protocol: UDP\n        - containerPort: 61\n          protocol: UDP\n        - containerPort: 62\n          protocol: UDP\n        - containerPort: 63\n          protocol: UDP\n        - containerPort: 64\n          protocol: UDP\n        - containerPort: 65\n          protocol: UDP\n        - containerPort: 66\n          protocol: UDP\n        - containerPort: 67\n          protocol: UDP\n        - containerPort: 68\n          protocol: UDP\n        - containerPort: 69\n          protocol: UDP\n        - containerPort: 70\n          protocol: UDP\n        - containerPort: 71\n          protocol: UDP\n        - containerPort: 72\n          protocol: UDP\n        - containerPort: 73\n          protocol: UDP\n        - containerPort: 74\n          protocol: UDP\n        - containerPort: 75\n          protocol: UDP\n        - containerPort: 76\n          protocol: UDP\n        - containerPort: 77\n          protocol: UDP\n        - containerPort: 78\n          protocol: UDP\n        - containerPort: 79\n          protocol: UDP\n        - containerPort: 80\n          protocol: UDP\n        - containerPort: 81\n          protocol: UDP\n        - containerPort: 82\n          protocol: UDP\n        - containerPort: 83\n          protocol: UDP\n        - containerPort: 84\n          protocol: UDP\n        - containerPort: 85\n          protocol: UDP\n        - containerPort: 86\n          protocol: UDP\n        - containerPort: 87\n          protocol: UDP\n        - containerPort: 88\n          protocol: UDP\n        - containerPort: 89\n          protocol: UDP\n        - containerPort: 90\n          protocol: UDP\n        - containerPort: 91\n          protocol: UDP\n        - containerPort: 92\n          protocol: UDP\n        - containerPort: 93\n          protocol: UDP\n        - containerPort: 94\n          protocol: UDP\n        - containerPort: 95\n          protocol: UDP\n        - containerPort: 96\n          protocol: UDP\n        - containerPort: 97\n          protocol: UDP\n        - containerPort: 98\n          protocol: UDP\n        - containerPort: 99\n          protocol: UDP\n        - containerPort: 100\n          protocol: UDP' 
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
