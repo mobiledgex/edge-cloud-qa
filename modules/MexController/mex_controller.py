@@ -614,11 +614,15 @@ class App():
         #    self.access_ports = access_ports
 
         if self.app_name == 'default':
-            self.app_name = app_name_default
+            self.app_name = shared_variables.app_name_default
+        if self.app_version == 'default':
+            self.app_version = shared_variables.app_version_default
         if self.developer_name == 'default':
-            self.developer_name = developer_name_default
+            self.developer_name = shared_variables.developer_name_default
         if self.cluster_name == 'default':
-            self.cluster_name = cluster_name_default
+            self.cluster_name = shared_variables.cluster_name_default
+        if self.default_flavor_name == 'default':
+            self.default_flavor_name = shared_variables.flavor_name_default
             
         app_dict = {}
         app_key_dict = {}
@@ -867,7 +871,7 @@ class Controller():
         logger.info('create cluster on {}. \n\t{}'.format(self.address, str(cluster).replace('\n','\n\t')))
 
         resp = self.cluster_stub.CreateCluster(cluster)
-
+        print('AAAANDY')
         self.prov_stack.append(lambda:self.delete_cluster(cluster))
         
         return resp
@@ -1133,7 +1137,11 @@ class Controller():
         resp = self.app_stub.CreateApp(app_instance)
         self.prov_stack.append(lambda:self.delete_app(app_instance))
 
-        return resp
+        resp =  self.show_apps(app_instance)
+
+        return resp[0]
+
+        #return resp
 
     def delete_app(self, app_instance):
         logger.info('delete app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
