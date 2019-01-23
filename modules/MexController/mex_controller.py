@@ -1139,7 +1139,10 @@ class Controller():
 
         resp =  self.show_apps(app_instance)
 
-        return resp[0]
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
 
         #return resp
 
