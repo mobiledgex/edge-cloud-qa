@@ -3,7 +3,7 @@ Documentation   FindCloudlet - request shall return dmuus with gcp/azure cloudle
 ...		dmuus tmocloud-2 cloudlet at: 35 -95
 ...             gcp gcpcloud-1  cloudlet at: 37 -94
 ...             azure azurecloud-1  cloudlet at: 37 -95
-...		find cloudlet closest to   : -100 -100
+...		find cloudlet closest to   : -90 -180
 ...                15006.44km from dmuus
 ...                15226.61km  from gcp
 ...                15228.78km  from azure
@@ -68,7 +68,7 @@ FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned an
     ...             dmuus tmocloud-2 cloudlet at: 35 -95
     ...             gcp gcpcloud-1  cloudlet at: 37 -94
     ...             azure azurecloud-1  cloudlet at: 37 -95
-    ...             find cloudlet closest to   : -100 -100
+    ...             find cloudlet closest to   : -90 -180
     ...                15006.44km from dmuus
     ...                15226.61km  from gcp
     ...                15228.78km  from azure
@@ -98,7 +98,8 @@ FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned an
     ...                 long: -94
 
       Register Client	
-      ${cloudlet}=  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=-100  longitude=-100
+      #${cloudlet}=  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=-100  longitude=-100
+      ${cloudlet}=  Find Cloudlet      carrier_name=${dmuus_operator_name}  latitude=-90  longitude=-180     #maximum GPS coord
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
