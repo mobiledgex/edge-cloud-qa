@@ -9,7 +9,7 @@
 * request shall return gcp with tmus and gcp/azure cloudlet provisioned and tmus farther and > 100km than gcp and < 100km than azure and gcp closer than azure - findCloudlet_gcp_gcpCloserThanTmusAzure_gcpGreaterThan100km_azureLessThan100km.robot
 * request shall return gcp with tmus and gcp/azure cloudlet provisioned and requesting gcp - findCloudlet_gcp_requestGcp.robot
 * findCloudlet with various missing parms - findCloudlet_missingParms.robot
-*request shall return tmus with azure cloudlet closer but no appinst provisioned - findCloudlet_tmus_azureCloser_noAppinst.robot
+* request shall return tmus with azure cloudlet closer but no appinst provisioned - findCloudlet_tmus_azureCloser_noAppinst.robot
 * request shall return FIND_NOT_FOUND when requesting an operator that doesnt exist - findCloudlet_tmus_cloudletNotFound.robot
 * request shall return tmus with gcp cloudlet closer but no appinst provisioned - findCloudlet_tmus_gcpCloser_noAppinst.robot
 * request shall return proper cloudlet when multiple cloudlets exist - findCloudlet_tmus_multiple.robot
@@ -29,6 +29,7 @@
 * request shall return tmus with azure/gcp cloudlet provisioned and tmus/azure/gcp same coord - findCloudlet_tmus_tmusGcpAzureSameCoord.robot
 * request shall return tmus with gcp cloudlet provisioned and tmus and gcp same coord - findCloudlet_tmus_tmusGcpSameCoord.robot
 * request shall return tmus with gcp cloudlet provisioned and tmus and gcp same distance away - findCloudlet_tmus_tmusGcpSameDistance.robot
+* request shall return Invalide GPS with sending out-of-range GPS coord - findCloudlet_invalidParms.robot
 
 ### Samsung FindCloudlet Testcases
 * findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km - findCloudlet_samsung_azure_azureCloser.robot
