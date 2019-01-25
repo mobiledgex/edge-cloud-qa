@@ -10,6 +10,7 @@ import zapi
 import jiraapi
 
 channel_number = 'CF67W3QH5'
+#channel_number = 'DF3JVL43W'
 
 zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 username = 'andy.anderson@mobiledgex.com'
@@ -100,8 +101,10 @@ total_wontexec = 0
 offset = 0
 unexecuted_string = ''
 failed_string = ''
-failed_bugs_string = ''
+failed_bugs_string_bytestcase = ''
+failed_bugs_string_bybug = ''
 failed_nobugs_string = ''
+bug_dict = {}
 while offset < total_count:
     result = z.get_execution_list_by_cycleid(cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
     query_content = json.loads(result)
@@ -121,7 +124,14 @@ while offset < total_count:
                 total_fail_nobugs += 1
                 failed_nobugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
             else:
-                failed_bugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                failed_bugs_string_bytestcase += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                for defect in tc['execution']['defects']:
+                    failed_bugs_string_bytestcase += '>      ' + defect['key'] + ' - ' + defect['summary'] + '\n'
+                    if (defect['key'] + ' - ' + defect['summary']) in bug_dict:
+                        #print('bd', bug_dict[defect['key']])
+                        bug_dict[defect['key'] + ' - ' + defect['summary']].append(tc['issueKey'] + '\t' +  tc['issueSummary'])
+                    else:
+                        bug_dict[defect['key'] + ' - ' + defect['summary']] = [tc['issueKey'] + '\t' +  tc['issueSummary']]
                 total_fail_bugs += 1
             failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
         if tc['execution']['status']['name'] == 'UNEXECUTED':
@@ -137,15 +147,15 @@ report_string = ''
 #report_string = f'*Cycle:*\t{cycle_name}\n\n'
 report_string += f'*Automation Report for {cycle_name}*\n\n'
 report_string += f'>*Total TCs:* {total_counted}\n'
-report_string += f'>*Total Passed:* {total_pass}\t{(total_pass/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed:* {total_fail}\t{(total_fail/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}\t{(total_fail_bugs/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}\t{(total_fail_nobugs/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Unexec:* {total_unexecuted}\t{(total_unexecuted/total_counted)*100:.2f}%\n'
-report_string += f'>*Total WIP:* {total_wip}\t{(total_wip/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Blocked:* {total_blocked}\t{(total_blocked/total_counted)*100:.2f}%\n'
-report_string += f'>*Total NA:* {total_na}\t{(total_na/total_counted)*100:.2f}%\n'
-report_string += f'>*Total WontExec:* {total_wontexec}\t{(total_wontexec/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Passed:* {total_pass}   {(total_pass/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed:* {total_fail}   {(total_fail/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}   {(total_fail_bugs/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}   {(total_fail_nobugs/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Unexec:* {total_unexecuted}   {(total_unexecuted/total_counted)*100:.2f}%\n'
+report_string += f'>*Total WIP:* {total_wip}   {(total_wip/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Blocked:* {total_blocked}   {(total_blocked/total_counted)*100:.2f}%\n'
+report_string += f'>*Total NA:* {total_na}   {(total_na/total_counted)*100:.2f}%\n'
+report_string += f'>*Total WontExec:* {total_wontexec}   {(total_wontexec/total_counted)*100:.2f}%\n'
 
 if total_count != total_counted:
     report_string += f'*WARNING - total count did not add up. counted={total_counted} expected={total_count}*\n'
@@ -155,16 +165,23 @@ summary_string = report_string
 
 if len(failed_nobugs_string) == 0:
     failed_nobugs_string = '>None\n'
-if len(failed_bugs_string) == 0:
-    failed_bugs_string = '>None\n'
+if len(failed_bugs_string_bytestcase) == 0:
+    failed_bugs_string_bytestcase = '>None\n'
+if len(failed_bugs_string_bybug) == 0:
+    failed_bugs_string_bybug = '>None\n'
 if len(unexecuted_string) == 0:
     unexecuted_string = '>None\n'
 
     
 report_string += '>\n*Failed testcases without bugs:*\n' + failed_nobugs_string
-report_string += '>\n*Failed testcases with bugs:*\n' + failed_bugs_string
+report_string += '>\n*Failed testcases with bugs by testcase:*\n' + failed_bugs_string_bytestcase
+report_string += '>\n*Failed testcases with bugs by bug:*\n'
+for bug in bug_dict:
+    report_string += '>' + bug + '\n'
+    for tc in bug_dict[bug]:
+        report_string += '>      ' + tc + '\n'
 report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
-
+#print(failed_bugs_string_bybug)
 print(report_string)
 #sys.exit(1)
 
@@ -184,8 +201,12 @@ report_attachment = json.dumps(
                     'value': failed_nobugs_string
                 },
                 {
-                    'title':'Failed testcases with bugs:',
-                    'value': failed_bugs_string
+                    'title':'Failed testcases with bugs by testcase:',
+                    'value': failed_bugs_string_bytestcase
+                },
+                {
+                    'title':'Failed testcases with bugs by bug:',
+                    'value': failed_bugs_string_bybug
                 },
                 {
                     'title':'Unexecuted testcases:',
