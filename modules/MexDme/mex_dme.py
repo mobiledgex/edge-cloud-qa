@@ -7,6 +7,7 @@ import logging
 import jwt
 import requests
 import subprocess
+import math
 
 from mex_grpc import MexGrpc
 
@@ -112,12 +113,13 @@ class GetFqdnList():
         self.request = app_client_pb2.FqdnListRequest(**request_dict)
 
 class GetAppInstList():
-    def __init__(self, session_cookie=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
 
         request_dict = {}
         self.session_cookie = session_cookie
         self.latitude = latitude
         self.longitude = longitude
+        self.carrier_name = carrier_name
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -135,7 +137,10 @@ class GetAppInstList():
             request_dict['SessionCookie'] = self.session_cookie    
         if loc_dict:
             request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
-
+        if self.carrier_name is not None:
+            request_dict['CarrierName'] = self.carrier_name    
+        
+        print('dict', request_dict)
         self.request = app_client_pb2.AppInstListRequest(**request_dict)
 
 class VerifyLocation():
@@ -272,15 +277,15 @@ class Dme(MexGrpc):
         if not get_app_instance_request_obj:
             request = GetAppInstList(**kwargs).request
 
-        logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(get_app_instance_request_obj).replace('\n','\n\t')))
+        logger.info('get app instance list on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
 
         resp = self.match_engine_stub.GetAppInstList(request)
 
-        if resp.Status != 1: # FL_SUCCESS
+        if resp.Status != 1: # AI_SUCCESS
             raise Exception('get app inst list failed:{}'.format(str(resp)))
 
-        #resp = sorted(resp.AppFqdns, key=lambda x: x.FQDN) # sorting since need to check for may apps. this return the sorted list instead of the response itself
-        #print(resp)
+        resp = sorted(resp.Cloudlets, key=lambda x: x.CloudletName) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+        print(resp)
 
         return resp
 
@@ -362,13 +367,21 @@ class Dme(MexGrpc):
         return token
     
     #def calculate_distance(latitude1=None, longitude1=None, latitude2=None, longitude2=None):
-    def calculate_distance(origin=None, destination=None):
+    def calculate_distance(self, origin=None, destination=None):
         lat1, lon1 = origin
         lat2, lon2 = destination
+        lat1 = float(lat1)
+        lat2 = float(lat2)
+        lon1 = float(lon1)
+        lon2 = float(lon2)
+        #lat1, lon1 = (latitude1, longitude1)
+        #lat2, lon2 = (latitude2, longitude2)
+
         radius = 6371  # km
         
         dlat = math.radians(lat2 - lat1)
         dlon = math.radians(lon2 - lon1)
+        #print(dlat,dlon, math.sin(dlat / 2), math.sin(dlat / 2), math.cos(math.radians(lat1))) #, math.cos(math.radians(lat2)), math.sin(dlon / 2), math.sin(dlon / 2))
         a = (math.sin(dlat / 2) * math.sin(dlat / 2) +
              math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
              math.sin(dlon / 2) * math.sin(dlon / 2))

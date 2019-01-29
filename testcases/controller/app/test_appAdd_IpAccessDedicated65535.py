@@ -83,7 +83,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -114,7 +116,9 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-                
+
+        port_match = 'ports:\n        - containerPort: 065535\n          protocol: TCP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -145,7 +149,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -176,7 +183,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 065535\n          protocol: HTTP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -207,7 +217,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -238,7 +251,10 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
-        
+       
+        port_match = 'ports:\n        - containerPort: 065535\n          protocol: UDP'
+        expect(port_match in resp.deployment_manifest, 'manifest ports')
+ 
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
