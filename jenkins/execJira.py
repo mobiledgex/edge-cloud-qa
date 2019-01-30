@@ -347,8 +347,9 @@ def exec_testcases(z, l):
         #os.environ['AUTOMATION_IP'] = rhc
         #tmpdir = os.environ['TMPDIR']
         tmpdir = '/tmp/'
-        file_delete = tmpdir + os.environ['Cycle'] + "_" + tc + "_" + t['issue_key'] + "*"
-        file_output = tmpdir + os.environ['Cycle'] + "_" + tc + "_" + t['issue_key'] + "_" + str(int(time.time()))
+        tc_replace = tc.replace('/','')  # remove slash from filename
+        file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+        file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
@@ -371,7 +372,9 @@ def exec_testcases(z, l):
             exec_cmd = 'export PYTHONPATH=' + python_path + ';python3 -m unittest ' + tc + ' > ' + file_output + ' 2>&1'
         elif tc_type == 'csharp':
             dirname,solutionname = tc.split('/')
-            exec_cmd = f'dotnet build {tc} -c Release; dotnet {dirname}/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
+            tc_file = find(solutionname, os.environ['WORKSPACE'])
+            dll = os.path.dirname(tc_file) + f'/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
+            exec_cmd = f'dotnet build {tc} -c Release /p:Version=1.0; dotnet {dll} > {file_output} 2>&1'
         else:
             exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
