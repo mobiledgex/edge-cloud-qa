@@ -338,6 +338,9 @@ def exec_testcases(z, l):
         elif '.tc.' in  os.path.basename(t['tc']):
             tc_type = 'python'
             tc = os.path.basename(t['tc'])
+        elif '.sln' in t['tc']:
+            tc_type = 'csharp'
+            tc = t['tc']
         else:
             tc = os.path.basename(t['tc'])
         
@@ -366,6 +369,9 @@ def exec_testcases(z, l):
             file_extension = '.html'
         elif tc_type == 'python':
             exec_cmd = 'export PYTHONPATH=' + python_path + ';python3 -m unittest ' + tc + ' > ' + file_output + ' 2>&1'
+        elif tc_type == 'csharp':
+            dirname,solutionname = tc.split('/')
+            exec_cmd = f'dotnet build {tc} -c Release; dotnet {dirname}/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
         else:
             exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
