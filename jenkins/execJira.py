@@ -374,7 +374,8 @@ def exec_testcases(z, l):
             dirname,solutionname = tc.split('/')
             tc_file = find(solutionname, os.environ['WORKSPACE'])
             dll = os.path.dirname(tc_file) + f'/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
-            exec_cmd = f'dotnet build {tc} -c Release /p:Version=1.0; dotnet {dll} > {file_output} 2>&1'
+            csproj = os.path.dirname(tc_file) + f'/{dirname}/{dirname}.csproj'
+            exec_cmd = f'dotnet clean {csproj} && dotnet build {tc_file} -c Release /p:Version=1.0 && dotnet {dll} > {file_output} 2>&1'
         else:
             exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
