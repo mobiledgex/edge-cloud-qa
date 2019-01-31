@@ -8,6 +8,8 @@ Library  MexApp
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
+Test Timeout  30 minutes
+	
 *** Variables ***
 #${dme_api_address}  127.0.0.1:50051
 #${controller_api_address}  127.0.0.1:55001
@@ -127,4 +129,6 @@ Setup
     Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   
     Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+    Log To Console  Creating Cluster Instance
     Create Cluster Instance
+    Log To Console  Done Creating Cluster Instance
