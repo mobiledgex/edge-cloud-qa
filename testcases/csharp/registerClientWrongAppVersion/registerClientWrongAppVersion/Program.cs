@@ -15,7 +15,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("RegisterClient Test Case");
+            Console.WriteLine("RegisterClientWrongAppVersion Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -74,12 +74,12 @@ namespace MexGrpcSampleConsoleApp
                 //Console.WriteLine(regReplyError.Status);
                 if (regReplyError.Status.Detail == "app not found")
                 {
-                    Console.WriteLine("Register Client Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Register Client Wrong App Version Return: " + regReplyError.Status.Detail);
                     Environment.Exit(0);
                 }
                 else
                 {
-                    Console.WriteLine("Register Client Failed Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Register Client Wrong App Version Failed Return: " + regReplyError.Status.Detail);
                     Environment.Exit(1);
                 }
 
