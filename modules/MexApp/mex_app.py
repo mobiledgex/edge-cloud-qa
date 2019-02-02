@@ -5,6 +5,8 @@ import os
 import subprocess
 import time
 
+import rootlb
+import kubernetes
 import shared_variables
 
 class MexApp(object):
@@ -68,20 +70,29 @@ class MexApp(object):
         self.ping_tcp_port(host, port)
         return True
 
-    def wait_for_k8s_pod_to_be_running(self, wait_time=600):
-        #shared_variables.cluster_name_default = 'cluster1544640562'
-        kubeconfig_file = self.kubeconfig_dir + '/' + shared_variables.cluster_name_default + '.kubeconfig'
-        logging.info('kubeconfig=' + kubeconfig_file)
+    def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, wait_time=600):
 
-        kubectl_cmd = 'export KUBECONFIG={};kubectl get pods'.format(kubeconfig_file)
-        logging.info(kubectl_cmd)
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+        else:
+            rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
+            
+        #shared_variables.cluster_name_default = 'cluster1544640562'
+        #kubeconfig_file = self.kubeconfig_dir + '/' + shared_variables.cluster_name_default + '.kubeconfig'
+        #kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
+        #logging.info('kubeconfig=' + kubeconfig_file)
+
+        #kubectl_cmd = 'export KUBECONFIG={};kubectl get pods'.format(kubeconfig_file)
+        #logging.info(kubectl_cmd)
 
         for t in range(wait_time):
-            kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            kubectl_out = kubectl_return.stdout.decode('utf-8')
+            #kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            #kubectl_out = kubectl_return.stdout.decode('utf-8')
+            kubectl_out = rb.get_pods()
             logging.debug(kubectl_out)
 
-            for line in kubectl_out.splitlines():
+            for line in kubectl_out:
                 if line.split()[2] == 'Running':
                     logging.info('Found running pod:' + line)
                     return True;
