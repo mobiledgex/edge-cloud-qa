@@ -1,7 +1,7 @@
 import time
 
 #default_time_stamp = str(int(time.time()))
-default_time_stamp = str(time.time())
+default_time_stamp = str(time.time()).replace('.', '-')
 cloudlet_name_default = 'cloudlet' + default_time_stamp
 operator_name_default = 'operator' + default_time_stamp
 cluster_name_default = 'cluster' + default_time_stamp
