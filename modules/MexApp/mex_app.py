@@ -62,7 +62,10 @@ class MexApp(object):
 
     def udp_port_should_be_alive(self, host, port):
         logging.info('host:' + host + ' port:' + str(port))
-        self.ping_udp_port(host, port)
+
+        self.wait_for_dns(host)
+        
+        self.ping_udp_port(host, int(port))
         return True
 
     def tcp_port_should_be_alive(self, host, port):
@@ -70,6 +73,20 @@ class MexApp(object):
         self.ping_tcp_port(host, port)
         return True
 
+    def wait_for_dns(self, dns, wait_time=600):
+        logging.info('waiting for dns=' + dns + ' to be ready')
+
+        addr = None
+        for t in range(wait_time):
+            try:
+                addr = socket.gethostbyname(dns)
+                logging.info('dns is ready at ' + addr)
+            except:
+                logging.debug('dns not ready yet')
+                time.sleep(1)
+
+        return addr
+    
     def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, wait_time=600):
 
         rb = None
