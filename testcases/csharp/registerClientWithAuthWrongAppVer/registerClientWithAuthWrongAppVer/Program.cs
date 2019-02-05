@@ -222,7 +222,7 @@ namespace MexGrpcSampleConsoleApp
                 {
                     Console.WriteLine("AuthToken Incorrect!");
                     Console.WriteLine("Register Client With Auth Wrong App Version Return: " + regReplyError.Status.Detail);
-                    Environment.Exit(1);
+                    Environment.Exit(0);
                 }
                 else
                 {
