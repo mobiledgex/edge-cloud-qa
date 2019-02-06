@@ -73,7 +73,7 @@ class MexApp(object):
         self.ping_tcp_port(host, port)
         return True
 
-    def wait_for_dns(self, dns, wait_time=600):
+    def wait_for_dns(self, dns, wait_time=900):
         logging.info('waiting for dns=' + dns + ' to be ready')
 
         addr = None
@@ -81,6 +81,7 @@ class MexApp(object):
             try:
                 addr = socket.gethostbyname(dns)
                 logging.info('dns is ready at ' + addr)
+                return
             except:
                 logging.debug('dns not ready yet')
                 time.sleep(1)
