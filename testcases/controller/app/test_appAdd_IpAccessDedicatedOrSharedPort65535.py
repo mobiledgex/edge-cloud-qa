@@ -223,7 +223,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
        
-        port_match = 'ports:\n        - containerPort: 65535\n          protocol: HTTP' 
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: TCP' 
         expect(port_match in resp.deployment_manifest, 'manifest ports')
  
         expect_equal(found_app, True, 'find app')
@@ -259,7 +259,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
 
-        port_match = 'ports:\n        - containerPort: 65535\n          protocol: HTTP'
+        port_match = 'ports:\n        - containerPort: 065535\n          protocol: TCP'
         expect(port_match in resp.deployment_manifest, 'manifest ports')
         
         expect_equal(found_app, True, 'find app')
