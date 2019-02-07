@@ -88,6 +88,9 @@ node('jenkinsSlave1'){
           dir('go/src/github.com/mobiledgex/jenkins') {
 	     // delete the buckhornlb so it is recreated when starting the crm
 	     sh 'export OS_CACERT=$HOME/.mobiledgex/buckhornedgecloudtelecomde.crt;export OS_AUTH_URL=https://buckhornedgecloud.telecom.de:5000/v2.0;export OS_USERNAME=mexadmin;export OS_PASSWORD=kj\&shy2\%Jt5F4\$Wz;export OS_REGION_NAME=RegionOne;export OS_TENANT_NAME=mex;openstack server delete automation-buckhorn.gddt.mobiledgex.net'
+
+             // fix known_hosts file since recreating the server causes a mismatch in the file
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automation-buckhorn.gddt.mobiledgex.net"'
 	     
              //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
