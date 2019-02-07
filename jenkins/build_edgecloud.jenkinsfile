@@ -86,6 +86,8 @@ node('jenkinsSlave1'){
     try {
        stage('deploy processes in k8s') {
           dir('go/src/github.com/mobiledgex/jenkins') {
+	     sh 'source openrc.bonn;openstack server delete automation-bonn.tdg.mobiledgex.net'
+	     
              //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml'
