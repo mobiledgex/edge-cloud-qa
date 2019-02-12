@@ -26,6 +26,12 @@ spec:
         env:
          - name: PATH
            value: /tmp/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
+         - name: MEXENV_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
+         - name: CLOUDLET_KIND
+           value: azure
+         - name: MEX_AZURE_LOCATION
+           value: centralus
         args:
          - "--apiAddr"
          - "0.0.0.0:65100"
