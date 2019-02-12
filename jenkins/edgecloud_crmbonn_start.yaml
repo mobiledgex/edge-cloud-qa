@@ -27,6 +27,17 @@ spec:
             cpu: 10m
         command:
          - crmserver
+        env:
+         - name: CLOUDLET_KIND
+           value: openstack
+         - name: MEX_OS_IMAGE
+           value: mobiledgex
+         - name: MEX_EXT_NETWORK
+           value: external-network-shared
+         - name: OPENRC_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/bonn/openrc.json
+         - name: MEXENV_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
         args:
          - "--apiAddr"
          - "0.0.0.0:50051"
