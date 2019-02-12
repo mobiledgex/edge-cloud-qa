@@ -4,6 +4,7 @@
 # create app with developer that does not exist in ShowDeveloper 
 # verify 'Specified developer not found' is received
 # 
+# updated to allow apps to be created with unknown developer
 
 import unittest
 import grpc
@@ -18,6 +19,8 @@ from MexController import mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 access_ports = 'tcp:1'
+stamp = str(time.time())
+flavor_name = 'x1.small' + stamp
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -34,11 +37,15 @@ class tc(unittest.TestCase):
                                                     key = mex_key,
                                                     client_cert = mex_cert
                                                    )
+        self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
+        self.controller.create_flavor(self.flavor.flavor)
 
     def test_CreateAppDeveloperNotFound_Docker(self):
-        # [Documentation] App - User shall not be able to create app with unkown developername and type Docker
+        # [Documentation] App - User shall be able to create app with unkown developername and type Docker
         # ... Create an app with unknown developername and type Docker
-        # ... verify 'Invalid developer name' is received
+        # ... verify app is created
+
+        # updated to allow apps to be created with unknown developer
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -50,26 +57,37 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version = '1.0',
                                  cluster_name='dummyCluster',
-                                 developer_name='developerNotFound'
+                                 developer_name='developerNotFound',
+                                 default_flavor_name = flavor_name
                                 )
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
+
+        self.controller.create_app(app.app)
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified developer not found', 'error details')
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+        
+        expect_equal(found_app, True, 'find app')
+
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Specified developer not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppDeveloperNotFound_QCOW(self):
-        # [Documentation] App - User shall not be able to create app with unkown developername and type QCOW
+        # [Documentation] App - User shall be able to create app with unkown developername and type QCOW
         # ... Create an app with unknown developername and type QCOW 
-        # ... verify 'Invalid developer name' is received
+        # ... verify app is created
+
+        # updated to allow apps to be created with unknown developer
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -83,19 +101,31 @@ class tc(unittest.TestCase):
                                  app_version = '1.0',
                                  developer_name='developerNotFound'
                                 )
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
+
+        self.controller.create_app(app.app)
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified developer not found', 'error details')
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+
+        expect_equal(found_app, True, 'find app')
+
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Specified developer not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
+
+    @classmethod
+    def teardownClass(self):
+        self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)

@@ -5,6 +5,7 @@
 # create app with empty cluster and no cluster parm  
 # verify AutoCluster is created in Cluster and has smallest flavor
 # 
+# updated testcases for EDGECLOUD-295
 
 import unittest
 import grpc
@@ -101,7 +102,8 @@ class tc(unittest.TestCase):
         # find app in list
         apptemp = self.app
         # controller creates cluster with AutoCluster + app_name since cluster is empty
-        apptemp.cluster_name = 'autocluster' + app_name  
+        #apptemp.cluster_name = 'autocluster' + app_name  
+        apptemp.cluster_name = ''
         found_app = apptemp.exists(app_post)
 
         # find autocluster in list
@@ -112,7 +114,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
         
-        expect_equal(found_cluster, True, 'find cluster')
+        expect_equal(found_cluster, False, 'find cluster')
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
@@ -151,7 +153,8 @@ class tc(unittest.TestCase):
         # find app in list
         apptemp = self.app
         # controller creates cluster with AutoCluster + app_name since cluster is empty
-        apptemp.cluster_name = 'autocluster' + app_name
+        #apptemp.cluster_name = 'autocluster' + app_name
+        apptemp.cluster_name = ''
         found_app = apptemp.exists(app_post)
 
         # find autocluster in list
@@ -162,7 +165,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
         
-        expect_equal(found_cluster, True, 'find cluster')
+        expect_equal(found_cluster, False, 'find cluster')
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 

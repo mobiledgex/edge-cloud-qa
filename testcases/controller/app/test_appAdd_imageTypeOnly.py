@@ -75,7 +75,7 @@ class tc(unittest.TestCase):
     def test_CreateAppImageTypeOnlyImageTypeDocker(self):
         # [Documentation] App - User shall not be able to an app with imagetype only of Docker
         # ... create an app with imagetype only of Docker
-        # ... verify 'DefaultFlavor is required if Cluster is not specified' is received
+        # ... verify 'Specified default flavor not found' is received
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -99,14 +99,15 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
+        #expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
+        expect_equal(error.details(), 'Specified default flavor not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppImageTypeOnlyImageTypeQCOW(self):
         # [Documentation] App - User shall not be able to an app with imagetype only of QCOW
         # ... create an app with imagetype only of QCOW
-        # ... verify 'DefaultFlavor is required if Cluster is not specified' is received
+        # ... verify 'Specified default flavor not found' is received
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -130,7 +131,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
+        #expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
+        expect_equal(error.details(), 'Specified default flavor not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
