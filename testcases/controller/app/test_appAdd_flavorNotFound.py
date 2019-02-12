@@ -2,7 +2,7 @@
 
 #
 # create app with no cluster and default flavor not found in ShowFlavor
-# verify 'No cluster flavors matching flavor flavorNotFound found' is received
+# verify 'Specified default flavor not found' is received
 # 
 
 import unittest
@@ -46,7 +46,7 @@ class tc(unittest.TestCase):
     def test_CreateAppImageTypeOnlyImageTypeUnknown(self):
         # [Documentation] App - User shall not be able to create an app with no cluster and defaultflavor that doesnot exist 
         # ... create app with no cluster and default flavor not found in ShowFlavor
-        # ... verify 'No cluster flavors with node flavor flavorNotFound found' is received
+        # ... verify 'Specified default flavor not found' is received
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -70,7 +70,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'No cluster flavors with node flavor flavorNotFound found', 'error details')
+        #expect_equal(error.details(), 'No cluster flavors with node flavor flavorNotFound found', 'error details')
+        expect_equal(error.details(), 'Specified default flavor not found', 'error details')
         expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 

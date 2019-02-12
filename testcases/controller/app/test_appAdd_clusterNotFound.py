@@ -4,6 +4,7 @@
 # create app with cluster not found  in ShowCluster 
 # verify 'Specified Cluster not found' is received
 # 
+# updated to allow app creation without unknown cluster
 
 import unittest
 import grpc
@@ -50,9 +51,11 @@ class tc(unittest.TestCase):
         self.controller.create_flavor(self.flavor.flavor)
 
     def test_CreateAppClusterNotFound_docker(self):
-        # [Documentation] App - User shall not be able to create an app with unknown cluster and type Docker
+        # [Documentation] App - User shall be able to create an app with unknown cluster and type Docker
         # ... create an app with a clustername that doesnot exist and type Docker
-        # ... verify 'Specified Cluster not found' is received
+        # ... verify app is created
+
+        # updated to allow app creation with unknown cluster
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -66,24 +69,34 @@ class tc(unittest.TestCase):
                                  cluster_name='dummyCluster',
                                  developer_name=developer_name,
                                  default_flavor_name=flavor_name)
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
+
+        resp = self.controller.create_app(app.app)
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified Cluster not found', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+        
+        expect_equal(found_app, True, 'find app')
+
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Specified Cluster not found', 'error details')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppClusterNotFound_qcow(self):
-        # [Documentation] App - User shall not be able to create an app with unknown cluster and type QCOW
+        # [Documentation] App - User shall be able to create an app with unknown cluster and type QCOW
         # ... create an app with a clustername that doesnot exist and type QCOW
-        # ... verify 'Specified Cluster not found' is received
+        # ... verify app is created
+
+        # updated to allow app creation with unknown cluster
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -97,18 +110,26 @@ class tc(unittest.TestCase):
                                  cluster_name='dummyCluster',
                                  developer_name=developer_name,
                                  default_flavor_name=flavor_name)
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
+        #try:
+        #    resp = self.controller.create_app(app.app)
+        #except grpc.RpcError as e:
+        #    logger.info('got exception ' + str(e))
+        #    error = e
+
+        resp = self.controller.create_app(app.app)
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
 
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified Cluster not found', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        found_app = app.exists(app_post)
+
+        self.controller.delete_app(app.app)
+
+        expect_equal(found_app, True, 'find app')
+
+        #expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(error.details(), 'Specified Cluster not found', 'error details')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     @classmethod
