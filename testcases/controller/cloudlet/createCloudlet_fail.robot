@@ -2,7 +2,7 @@
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 
-Test Teardown	Cleanup provisioning
+
 
 
 *** Variables ***
@@ -17,18 +17,18 @@ CreateCloudlet without an operator
 	...  Trys to create a cloudlet without an operator
 	...  Expect the create to fail with the operator not found error
 
-	${error_msg}=  Run Keyword And Expect Error  *   Create Cloudlet	   cloudlet_name=${cldlet}     use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *   Create Cloudlet	   cloudlet_name=${cldlet}     number_of_dynamic_ips=default      latitude=35.0     longitude=-96.0    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Specified cloudlet operator not found"
+	Should Contain  ${error_msg}   details = "Invalid operator name"
 	
 CreateCloudlet with an invalid operator
 	[Documentation]   CreateCloudlet - Tries to create a cloudlet with an invalid operator
 	...  Trys to create a cloudlet with an invalid operator
 	...  Expect the create to fail with the operator not found drror
 
-	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	cloudlet_name=${cldlet}     operator_name=mci     use_defaults=False
-	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Specified cloudlet operator not found"
+	Create Cloudlet	cloudlet_name=${cldlet}     operator_name=mci     number_of_dynamic_ips=default      latitude=35.0     longitude=-96.0    use_defaults=False
+
+	[Teardown]	Cleanup provisioning
 	
 CreateCloudlet without a name
 	[Documentation]   CreateCloudlet - Tries to create a cloudlet without a cloudlet name
