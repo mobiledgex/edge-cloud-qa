@@ -2,8 +2,9 @@
 
 #
 # delte cluster before deleting the app that is using it
-# verify 'Cluster in use by Application' is received
-# 
+# verify cluster is deleted
+
+# updated testcases for EDGECLOUD-295
 
 import unittest
 import grpc
@@ -56,9 +57,11 @@ class tc(unittest.TestCase):
         self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
 
     def test_DeleteClusterBeforeApp(self):
-        # [Documentation] Cluster - User shall not be able to delete cluster before the app
+        # [Documentation] Cluster - User shall be able to delete cluster before the app
         # ... delete cluster before deleting the app that is using it
-        # ... verify 'Cluster in use by Application' is received
+        # ... verify cluster is deleted 
+
+        # updated testcases for EDGECLOUD-295
 
         # print the existing apps 
         cluster_pre = self.controller.show_clusters()
@@ -79,15 +82,17 @@ class tc(unittest.TestCase):
         resp = self.controller.create_app(self.app.app)
 
         # attempt to delete the cluster
-        try:
-            self.controller.delete_cluster(self.cluster.cluster)
-        except grpc.RpcError as e:
-            print('error', type(e.code()), e.details())
-            expect_equal(e.code(), grpc.StatusCode.UNKNOWN, 'status code')
-            expect_equal(e.details(), 'Cluster in use by Application', 'error details')
-        else:
-            print('cluster deleted')
+        #try:
+        #    self.controller.delete_cluster(self.cluster.cluster)
+        #except grpc.RpcError as e:
+        #    print('error', type(e.code()), e.details())
+        #    expect_equal(e.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #    expect_equal(e.details(), 'Cluster in use by Application', 'error details')
+        #else:
+        #    print('cluster deleted')
 
+        #cluster no longer tied to app
+        self.controller.delete_cluster(self.cluster.cluster)
         
         # print the cluster instances after error
         cluster_post = self.controller.show_clusters()
@@ -95,12 +100,13 @@ class tc(unittest.TestCase):
         # find cluster in list
         found_cluster = self.cluster.exists(cluster_post)
 
-        expect_equal(found_cluster, True, 'find cluster')
+        #expect_equal(found_cluster, True, 'find cluster')
+        expect_equal(found_cluster, False, 'find cluster')
         assert_expectations()
 
     def tearDown(self):
         self.controller.delete_app(self.app.app)
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
