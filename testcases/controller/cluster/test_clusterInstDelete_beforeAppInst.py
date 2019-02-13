@@ -98,10 +98,10 @@ class tc(unittest.TestCase):
         self.app_instance = mex_controller.AppInstance(cloudlet_name=cloud_name,
                                                        app_name=app_name,
                                                        app_version=app_version,
-                                                       developer_name=developer_name,
+                                                       cluster_instance_name=cluster_name, 
                                                        operator_name=operator_name)
         resp = self.controller.create_app_instance(self.app_instance.app_instance)
-
+        
         # attempt to delete the cluster instance
         try:
             self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
