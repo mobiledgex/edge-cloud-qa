@@ -1288,7 +1288,13 @@ class Controller():
         except:
             logger.info('app instance does not exist')
 
-    def delete_app_instance(self, app_instance):
+    def delete_app_instance(self, app_instance=None, **kwargs):
+        resp = None
+
+        if app_instance is None:
+            if len(kwargs) != 0:
+                app_instance = AppInstance(**kwargs).app_instance
+
         logger.info('delete app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
         resp = self.appinst_stub.DeleteAppInst(app_instance)
         for s in resp:
@@ -1395,12 +1401,14 @@ class Controller():
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)
-        temp_prov_stack = self.prov_stack
+        #temp_prov_stack = self.prov_stack
+        temp_prov_stack = list(self.prov_stack)
         temp_prov_stack.reverse()
         for obj in temp_prov_stack:
-            print('obj', type(obj))
+            logging.debug('deleting obj' + str(obj))
             obj()
-                
+            del self.prov_stack[-1]
+            
     def _build_cluster(self, operator_name, cluster_name, cloud_name, flavor_name):
         operator_key = operator_pb2.OperatorKey(name = operator_name)
         clusterinst_key = clusterinst_pb2.ClusterInstKey(cluster_key = cluster_pb2.ClusterKey(name = cluster_name),
