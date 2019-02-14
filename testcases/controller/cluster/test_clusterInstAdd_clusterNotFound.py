@@ -46,9 +46,13 @@ class tc(unittest.TestCase):
                                                              cloudlet_name=cloud_name,
                                                              operator_name=operator_name,
                                                              flavor_name=flavor_name)
+        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
+        self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
 
         #self.controller.create_operator(self.operator.operator)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
+        self.controller.create_flavor(self.flavor.flavor)
+        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
 
     def test_CreateClusterInstNoCluster(self):
         # [Documentation] ClusterInst - User shall not be able to create a cluster instance for cluster that does not exist
@@ -59,21 +63,32 @@ class tc(unittest.TestCase):
         clusterinst_pre = self.controller.show_cluster_instances()
 
         # create the cluster instance
-        try:
-            resp = self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
-        except:
-            print('error creating cluster instance')
+        #try:
+        #    resp = self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
+        #    print('clusterInst created without cluster')
+        #except:
+        #    print('error creating cluster instance')
+
+        resp = self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
 
         # print the cluster instances after error
         clusterinst_post = self.controller.show_cluster_instances()
 
-        expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified Cluster not found', 'error details')
-        expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
+        # look for the cluster
+        found_cluster_after_add = self.cluster_instance.exists(clusterinst_post)
+
+        expect_equal(found_cluster_after_add, True, 'found new cluster after add')
+
+        #expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        #expect_equal(self.controller.response.details(), 'Specified Cluster not found', 'error details')
+        #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
-    #@classmethod
-    #def tearDownClass(self):
+    @classmethod
+    def tearDownClass(self):
+        self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
+        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
+        self.controller.delete_flavor(self.flavor.flavor)
     #    self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
