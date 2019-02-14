@@ -1,8 +1,6 @@
 *** Settings ***
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
-Test Setup      Setup
-Test Teardown	Cleanup provisioning	
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -16,40 +14,50 @@ UpdateCloudlet without an operator
 	...  The test case will try and update a Cloudlet with only the cloudlet name.
 	...  An Invalid opereator name error is expected
 
+        [Setup]  Setup
+
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid operator name"
 
+        [Teardown]  Cleanup provisioning
+
 UpdateCloudlet with an invalid operator
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid operator name
 	...  The test case will try and update a Cloudlet with a valid cloudlet name and in invalid operator name.
 	...  A Key not found error is expected
+
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=mci      cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Key not found"
 
+
 UpdateCloudlet without a cloudlet name
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet without a cloudlet name
 	...  The test case will try and update a Cloudlet with only the operator name.
 	...  An Invalid cloudlet name error is expected
+
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	    operator_name=${oper}     use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid cloudlet name"
 
+
 UpdateCloudlet with an invalid cloudlet name
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet name
 	...  The test case will try and update a Cloudlet with an invalid cloudlet name.
 	...  A Key not found error is expected
 
+
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=TestMe    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Key not found"
+
 
 UpdateCloudlet with a numdynamicips 0
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet number of dynamic ips value
@@ -97,35 +105,39 @@ UpdateCloudlet with a numdynamicips 2323232232323
 UpdateCloudlet with a ipsupport of -1
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet ipsupport value
 	...  The test case will try and update a Cloudlet with an invalid ipsupport (-1).
-	...  A 'Only dynamic IPs are supported currently' error is expected
+	...  An 'invalid IpSupport' error is expected
 
 	${ipsup}    Convert To Integer 	-1
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}      use_defaults=False             
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Only dynamic IPs are supported currently"
+	Should Contain  ${error_msg}   details = "invalid IpSupport"
         
 UpdateCloudlet with a ipsupport of -8
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet ipsupport value
 	...  The test case will try and update a Cloudlet with an invalid ipsupport (-8).
-	...  A 'Only dynamic IPs are supported currently' error is expected
+	...  An 'invalid IpSupport' error is expected
 
 	${ipsup}    Convert To Integer 	-8
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}        use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Only dynamic IPs are supported currently"
+	Should Contain  ${error_msg}   details = "invalid IpSupport"
 
 UpdateCloudlet with a location of 0 0 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of 0 0.
 	...  A 'location is missing; 0,0 is not a valid location' error is expected
 
+	[Setup]  Setup
+
 	${locat}    Convert To Integer 	0
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+
+	[Teardown]  Cleanup provisioning
 
 UpdateCloudlet with a location of 100 200 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
