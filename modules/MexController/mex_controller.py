@@ -927,10 +927,20 @@ class Controller():
 
         return resp
 
-    def show_cluster_instances(self):
-        logger.info('show cluster instance on {}'.format(self.address))
+    def show_cluster_instances(self, cluster_instance=None, **kwargs):
+        resp = None
 
-        resp = list(self.clusterinst_stub.ShowClusterInst(clusterinst_pb2.ClusterInst()))
+        if cluster_instance is None:
+            if len(kwargs) != 0:
+                cluster_instance = ClusterInstance(**kwargs).cluster_instance
+
+        logger.info('show cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
+
+        if cluster_instance is None:
+            resp = list(self.clusterinst_stub.ShowClusterInst(clusterinst_pb2.ClusterInst()))
+        else:
+            resp = list(self.clusterinst_stub.ShowClusterInst(cluster_instance))
+            
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
             logger.debug('cluster instance list:')
             for c in resp:
