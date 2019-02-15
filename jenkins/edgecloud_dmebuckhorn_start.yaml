@@ -32,7 +32,7 @@ spec:
          - "--carrier"
          - "GDDT"
          - "--d"
-         - "locapi,dmedb,dmereq"
+         - "locapi,dmedb,dmereq,notify"
          - "--toksrvurl"
          - "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc" 
          - "--vaultAddr"
