@@ -14,7 +14,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("VerifyLocation10KM Test Case");
+            Console.WriteLine("VerifyLocationMisMatchOtherCountry Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -231,7 +231,7 @@ namespace MexGrpcSampleConsoleApp
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LocVerified" && locationAccuracy == "10")
+                if (locationStatus == "LocRoamingCountryMatch")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
@@ -401,7 +401,7 @@ namespace MexGrpcSampleConsoleApp
             return new DistributedMatchEngine.Loc
             {
                 Longitude = 13.4050,
-                Latitude = 52.5400
+                Latitude = 52.4100
             };
         }
 
