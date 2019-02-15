@@ -72,7 +72,7 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'No cluster flavors with node flavor flavorNotFound found', 'error details')
         expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     @classmethod
