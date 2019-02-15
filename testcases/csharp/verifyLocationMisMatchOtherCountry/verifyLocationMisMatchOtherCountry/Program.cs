@@ -231,7 +231,7 @@ namespace MexGrpcSampleConsoleApp
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LOC_MISMATCH_OTHER_COUNTRY")
+                if (locationStatus == "LocRoamingCountryMatch")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
