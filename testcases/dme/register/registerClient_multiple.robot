@@ -26,6 +26,8 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    ...  register client again to same app instance
    ...  repeat 10 times 
 
+   # EDGECLOUD-410 - RegisterClient fails if deleting and then re-adding the same app instance
+
    : FOR  ${INDEX}  IN RANGE  0  10 
    \  Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  no_auto_delete=True
 
