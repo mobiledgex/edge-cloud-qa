@@ -1232,8 +1232,12 @@ class Controller():
 
     def create_app_instance(self, app_instance=None, **kwargs):
         resp = None
-
+        auto_delete = True
+        
         if not app_instance:
+            if 'no_auto_delete' in kwargs:
+                del kwargs['no_auto_delete']
+                auto_delete = False
             app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('create app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -1254,9 +1258,10 @@ class Controller():
 
         if not success:
             raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
-        print('prov_stack1', self.prov_stack)
-        self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
-        print('prov_stack2', self.prov_stack)
+
+        if auto_delete:
+            self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
+
         resp =  self.show_app_instances(app_instance)
 
         return resp[0]
@@ -1408,7 +1413,7 @@ class Controller():
             logging.debug('deleting obj' + str(obj))
             obj()
             del self.prov_stack[-1]
-            
+
     def _build_cluster(self, operator_name, cluster_name, cloud_name, flavor_name):
         operator_key = operator_pb2.OperatorKey(name = operator_name)
         clusterinst_key = clusterinst_pb2.ClusterInstKey(cluster_key = cluster_pb2.ClusterKey(name = cluster_name),
