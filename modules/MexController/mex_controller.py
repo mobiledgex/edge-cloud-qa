@@ -1070,6 +1070,7 @@ class Controller():
 #        print("INCOMING - ", kwargs)
         if cloudlet_instance is None:
             if len(kwargs) != 0:
+                self.ctlcloudlet = Cloudlet(**kwargs)
                 cloudlet_instance = Cloudlet(include_fields=True, **kwargs).cloudlet
 
         

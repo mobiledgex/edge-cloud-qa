@@ -231,7 +231,7 @@ namespace MexGrpcSampleConsoleApp
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LOC_VERIFIED" && locationAccuracy == "10")
+                if (locationStatus == "LocVerified" && locationAccuracy == "10")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);

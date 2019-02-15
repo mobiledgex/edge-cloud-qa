@@ -14,7 +14,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("VerifyLocationBadtoken Test Case");
+            Console.WriteLine("VerifyLocation100KM Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -98,8 +98,107 @@ namespace MexGrpcSampleConsoleApp
             //Extract the sessiontoken contents
             char[] delimiterChars = { ',', '{', '}' };
             string[] words = jwtPayload.Split(delimiterChars);
+            long expTime = 0;
+            long iatTime = 0;
+            bool expParse = false;
+            bool iatParse = false;
+            string peer;
+            string dev;
+            string app;
+            string appver;
+
+            foreach (var word in words)
+            {
+                if (word.Length > 7)
+                {
+                    //Console.WriteLine(word);
+                    if (word.Substring(1, 3) == "exp")
+                    {
+                        expParse = long.TryParse(word.Substring(7, 10), out expTime);
+                    }
+                    if (word.Substring(1, 3) == "iat")
+                    {
+                        iatParse = long.TryParse(word.Substring(7, 10), out iatTime);
+                    }
+                    if (expParse && iatParse)
+                    {
+                        int divider = 60;
+                        long tokenTime = expTime - iatTime;
+                        tokenTime /= divider;
+                        tokenTime /= divider;
+                        int expLen = 24;
+                        expParse = false;
+                        if (tokenTime != expLen)
+                        {
+                            Console.WriteLine("Session Cookie Exparation Time not 24 Hours:  " + tokenTime);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
+                        }
+                    }
+                    if (word.Substring(1, 6) == "peerip")
+                    {
+                        peer = word.Substring(10);
+                        peer = peer.Substring(0, peer.Length - 1);
+                        string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
+                        if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
+                        {
+                            Console.WriteLine("Peerip Expression Matched!  " + peer);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Peerip Expression Didn't Match!  " + peer);
+                            Environment.Exit(1);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "devname")
+                    {
+                        dev = word.Substring(11);
+                        dev = dev.Substring(0, dev.Length - 1);
+                        if (dev != devName)
+                        {
+                            Console.WriteLine("Devname Didn't Match!  " + dev);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Devname Matched!  " + dev);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appname")
+                    {
+                        app = word.Substring(11);
+                        app = app.Substring(0, app.Length - 1);
+                        if (app != appName)
+                        {
+                            Console.WriteLine("AppName Didn't Match!  " + app);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("AppName Matched!  " + app);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appvers")
+                    {
+                        appver = word.Substring(11, 3);
+                        if (appver != "1.0")
+                        {
+                            Console.WriteLine("App Version Didn't Match!  " + appver);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("App Version Matched!  " + appver);
+                        }
+                    }
+
+                }
 
 
+            }
 
 
 
@@ -108,10 +207,6 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 token = RetrieveToken(regReply.TokenServerURI);
-                Console.WriteLine(token);
-                token = token.Substring(0, 10);
-                Console.WriteLine(token);
-
                 //Console.WriteLine("VerifyLocation pre-query sessionCookie: " + sessionCookie);
                 //Console.WriteLine("VerifyLocation pre-query TokenServer token: " + token);
             }
@@ -127,13 +222,16 @@ namespace MexGrpcSampleConsoleApp
 
 
             // Call the remainder. Verify and Find cloudlet.
+
+            // Async version can also be used. Blocking:
             try
             {
                 // Async version can also be used. Blocking:
                 Console.WriteLine("Verifying Location:");
-                var verifyResponse = VerifyLocation("xx");
+                var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
-                if (locationStatus == "LOC_ERROR_UNAUTHORIZED")
+                string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
+                if (locationStatus == "LocVerified" && locationAccuracy == "100")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
@@ -161,6 +259,7 @@ namespace MexGrpcSampleConsoleApp
 
             Environment.Exit(0);
         }
+
 
         RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion)
         {
@@ -302,7 +401,7 @@ namespace MexGrpcSampleConsoleApp
             return new DistributedMatchEngine.Loc
             {
                 Longitude = 13.4050,
-                Latitude = 52.5200
+                Latitude = 53.4100
             };
         }
 
