@@ -20,7 +20,7 @@ FindCloudlet - request without cookie should return 'missing cookie'
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "missing cookie"
+   Should Contain  ${error_msg}   details = "VerifyCookie failed: missing cookie"
 
 FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
    [Documentation]

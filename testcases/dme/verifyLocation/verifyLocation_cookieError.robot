@@ -38,7 +38,7 @@ VerifyLocation - request without cookie should return 'missing cookie'
    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location 
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "missing cookie"
+   Should Contain  ${error_msg}   details = "VerifyCookie failed: missing cookie"
 
 VerifyLocation - request with invalid cookie of x should return 'token contains an invalid number of segments'
    [Documentation]
