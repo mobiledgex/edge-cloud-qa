@@ -41,16 +41,16 @@ GetFqdnList - request with invalid cookie of x.x.x should return 'illegal base64
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   details = "illegal base64 data at input byte 1"
 
-GetFqdnList - request with truncated cookie should return 'crypto/rsa: verification error'
+GetFqdnList - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
    [Documentation]
    ...  Send GetFqdnList with parital session cookie
-   ...  verify 'crypto/rsa: verification error' error is received
+   ...  verify 'VerifyCookie failed: Invalid cookie, no key' error is received
 	
-   #EDGECLOUD-338 - DME crashes when sending FindCloudlet with invalid session cookie h
+   #EDGECLOUD-338 - DME crashes when sending FindCloudlet with invalid session cookie - fixed
    ${error_msg}=  Run Keyword And Expect Error  *  Get Fqdn List  session_cookie=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDIzODg0OTQsImlhdCI6MTU0MjM4ODQzNCwiZGV2bmFtZSI6IkFjbWVBcHBDbyIsImFwcG5hbWUiOiJzb21lYXBwbGljYXRpb25BdXRoIiwiYXBwdmVycyI6IjEuMCJ9.rc7V12dgiYDforzBQrPh
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "crypto/rsa: verification error"
+   Should Contain  ${error_msg}   details = "VerifyCookie failed: Invalid cookie, no key"
 
 GetFqdnList - request with expired cookie should return 'token is expired by'
    [Documentation]
