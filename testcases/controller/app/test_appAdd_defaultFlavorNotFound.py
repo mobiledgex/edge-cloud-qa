@@ -50,7 +50,7 @@ class tc(unittest.TestCase):
     def test_CreateAppDefaultFlavorNotFound_Docker(self):
         # [Documentation] App - User shall be not be able to create app with unknown defaultflavor and type Docker
         # ... create an app with unknown default flavor and type Docker
-        # ... verify 'Specified default flavor not found' is received
+        # ... verify 'Specified flavor not found' is received
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -74,14 +74,15 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified default flavor not found', 'error details')
+        #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
+        expect_equal(error.details(), 'Specified flavor not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppDefaultFlavorNotFound_QCOW(self):
         # [Documentation] App - User shall be not be able to create app with unknown defaultflavor and type QCOW
         # ... create an app with unknown default flavor and type QCOW
-        # ... verify 'Specified default flavor not found' is received
+        # ... verify 'Specified flavor not found' is received
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -105,7 +106,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Specified default flavor not found', 'error details')
+        #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
+        expect_equal(error.details(), 'Specified flavor not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
