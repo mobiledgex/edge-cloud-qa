@@ -413,6 +413,7 @@ class Cloudlet():
         self.ipsupport = ipsupport
         self.staticips = staticips
         self.number_of_dynamic_ips = number_of_dynamic_ips
+
         print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
@@ -810,6 +811,7 @@ class Controller():
         self.address = controller_address
         self.response = None
         self.prov_stack = []
+        self.ctlcloudlet = None
         
         #print(sys.path)
         #f = self._findFile(root_cert)
@@ -1077,10 +1079,11 @@ class Controller():
     def update_cloudlet(self, cloudlet_instance=None, **kwargs):
         resp = None
 
-#        print("INCOMING - ", kwargs)
+        print("INCOMING - ", kwargs)
         if cloudlet_instance is None:
             if len(kwargs) != 0:
-                self.ctlcloudlet = Cloudlet(**kwargs)
+                if self.ctlcloudlet is None:
+                    self.ctlcloudlet = Cloudlet(**kwargs)
                 cloudlet_instance = Cloudlet(include_fields=True, **kwargs).cloudlet
 
         
