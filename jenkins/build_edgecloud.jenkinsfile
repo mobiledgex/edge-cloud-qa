@@ -13,7 +13,7 @@ node('jenkinsSlave1'){
     tag = Version + '_automation_' + sdate.format(date)
     project = "${project}"
     
-    currentBuild.displayName = tag
+    currentBuild.displayName = "${params.Branch}" + ": " + tag
     try {
        stage('Checkout') {
           dir('go/src/github.com/mobiledgex/edge-cloud') {
@@ -33,9 +33,22 @@ node('jenkinsSlave1'){
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 	  }
        }
-       stage('dep ensure') {
+        stage("Git Describe") {
+            dir('go/src/github.com/mobiledgex/edge-cloud') {
+                gitdesc = sh(label: 'Git Describe', returnStdout: true, script: "git describe --tags").trim()
+            }
+            currentBuild.displayName = currentBuild.displayName + ': ' + gitdesc
+            echo "Git Build Descriptor: ${gitdesc}"
+        }
+        stage("Git Commit Hash") {
+            dir('go/src/github.com/mobiledgex/edge-cloud') {
+                gitsha = sh(label: 'Git Commit Hash', returnStdout: true, script: "git rev-parse HEAD").trim()
+            }
+            echo "Git Commit Hash: ${gitsha}"
+        }
+        stage('dep ensure') {
           dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -v'
+             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -vendor-only'
           }
        }
        stage('make tools') {
@@ -49,13 +62,19 @@ node('jenkinsSlave1'){
           }
        }
        stage('make build-docker') {
-          //date = new Date()
-          //year = date[Calendar.YEAR]
-          //month = date[Calendar.MONTH]
-          //date = date.getAt(Calendar.DATE)
-          //tag = ${Version} + '_automation' + year + month + date
           dir('go/src/github.com/mobiledgex/edge-cloud') {
-              sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;echo $HOME;cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make build-docker TAG=' + tag + ';export AUTOMATION_DOCKERTAG=' + tag
+              sh label: 'Build Docker', script: """#!/bin/bash
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin
+export GOROOT=/usr/local/go
+export GOPATH=$WORKSPACE/go
+
+echo $HOME
+cat ~/docker_password.txt \\
+    | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin
+cat ~/docker_ci_password.txt \\
+    | docker login registry.mobiledgex.net:5009 --username mex-ci --password-stdin
+make build-docker TAG=$tag ADDLTAGS="registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$gitdesc registry.mobiledgex.net:5009/mobiledgex/edge-cloud:$gitsha"
+export AUTOMATION_DOCKERTAG=$tag"""
           }
        }
     }  catch (e) {
