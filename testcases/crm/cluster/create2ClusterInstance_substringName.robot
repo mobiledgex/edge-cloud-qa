@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Start 2 cluster instances on same cloudlet
+Documentation   Create 2 cluster instances with 1 name a substring of the other
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 #Library         MexCrm
@@ -21,7 +21,12 @@ ${max_nodes}	  4
 ${num_masters}	  1
 
 *** Test Cases ***
-Start 2 clusterInst
+CRM shall be able to create 2 clusterInst with one name a substring of the other
+    [Documentation]
+    ...  Create 2 cluster instances such as cluster12345 and cluster1234
+    ...  Verify both are created
+    ...  Delete both
+    ...  Verify both are deleted
 
     # EDGECLOUD-420
 
