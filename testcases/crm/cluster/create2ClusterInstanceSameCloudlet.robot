@@ -1,27 +1,25 @@
 *** Settings ***
-Documentation   Start 2 cluster instances on same cloudlet
+Documentation   Start 2 cluster instances on same cloudlet for openstack
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-#Library         MexCrm
-#Library		MEXProcess
 Library         String
 Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
 *** Variables ***
-#${crm_api_address}  127.0.0.1:65100
 ${cloudlet_name}  automationHawkinsCloudlet   #has to match crm process startup parms
 ${operator_name}  GDDT
-#${latitude}	  32
-#${longitude}	  -90
 ${flavor_name}	  x1.medium
 ${number_nodes}	  3
 ${max_nodes}	  4
 ${num_masters}	  1
 
 *** Test Cases ***
-Start 2 clusterInst
+CRM shall be able to Create 2 cluster instances on the same cloudlet for openstack
+    [Documentation]
+    ...  Create 2 clusters and cluster instances on the same cloudlet on openstack
+    ...  Verify both are created successfully
 
     ${epoch_time}=  Get Time  epoch
 
