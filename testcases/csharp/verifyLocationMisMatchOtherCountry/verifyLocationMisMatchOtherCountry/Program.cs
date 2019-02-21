@@ -1,6 +1,8 @@
 ﻿using System;
 using Grpc.Core;
 using System.Net;
+using System.IO;
+using System.Text;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -77,6 +79,11 @@ namespace MexGrpcSampleConsoleApp
             {
                 Environment.Exit(1);
             }
+
+            //Set the location in the location server
+            Console.WriteLine("Seting the location in the Location Server");
+            setLocation("52.22977", "21.01178");
+            Console.WriteLine("Location Set\n\n");
 
             // Store sessionCookie, for later use in future requests.
             sessionCookie = regReply.SessionCookie;
@@ -227,11 +234,11 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 // Async version can also be used. Blocking:
-                Console.WriteLine("Verifying Location:");
+                Console.WriteLine("\nVerifying Location: " + getLocation());
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LocRoamingCountryMatch")
+                if (locationStatus == "LocMismatchOtherCountry")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
@@ -296,6 +303,71 @@ namespace MexGrpcSampleConsoleApp
                 GpsLocation = gpsLocation
             };
             return request;
+        }
+
+        static String setLocation(string locLat, string locLong)
+        {
+            var config = "";
+            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("curl");
+            psi.Arguments = " ifconfig.me";
+            psi.UseShellExecute = false;
+            psi.RedirectStandardOutput = true;
+            System.Diagnostics.Process curl;
+            curl = System.Diagnostics.Process.Start(psi);
+            curl.WaitForExit();
+            System.IO.StreamReader ipReader = curl.StandardOutput;
+            curl.WaitForExit();
+            if (curl.HasExited)
+            {
+                config = ipReader.ReadToEnd();
+            }
+
+
+            string resp = null;
+            string ipAddr = config;
+            string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
+            string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
+            Console.WriteLine(payload);
+            byte[] postBytes = Encoding.UTF8.GetBytes(payload);
+            WebRequest request = WebRequest.Create(serverURL);
+            request.Method = "POST";
+            request.ContentType = "application/jason; charset=UTF-8";
+            //request.ContentType = "text/html; charset=utf-8";
+            request.ContentLength = postBytes.Length;
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(postBytes, 0, postBytes.Length);
+            dataStream.Close();
+            try
+            {
+                WebResponse response = request.GetResponse();
+                //Console.WriteLine("Response: " + ((HttpWebResponse)response).StatusDescription);
+                dataStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                string responseFromServer = reader.ReadToEnd();
+                if (((HttpWebResponse)response).StatusDescription == "OK")
+                {
+                    Console.WriteLine(responseFromServer);
+                }
+                reader.Close();
+                dataStream.Close();
+                response.Close();
+                return resp;
+            }
+            catch (System.Net.WebException we)
+            {
+                WebResponse respon = (HttpWebResponse)we.Response;
+                //Console.WriteLine("Response: " + we.Status);
+                Stream dStream = respon.GetResponseStream();
+                StreamReader sr = new StreamReader(dStream);
+                string responseFromServer = sr.ReadToEnd();
+                Console.WriteLine(responseFromServer);
+                sr.Close();
+                dStream.Close();
+                respon.Close();
+                return resp;
+            }
+
+
         }
 
         static String parseToken(String uri)
