@@ -16,7 +16,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("VerifyGPSLocation Test Case");
+            Console.WriteLine("VerifyLocationMisMatchSameCountry Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -214,7 +214,6 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 token = RetrieveToken(regReply.TokenServerURI);
-                //Console.WriteLine("Received Token: " + token);
                 //Console.WriteLine("VerifyLocation pre-query sessionCookie: " + sessionCookie);
                 //Console.WriteLine("VerifyLocation pre-query TokenServer token: " + token);
             }
@@ -231,6 +230,7 @@ namespace MexGrpcSampleConsoleApp
 
             // Call the remainder. Verify and Find cloudlet.
 
+            // Async version can also be used. Blocking:
             try
             {
                 // Async version can also be used. Blocking:
@@ -238,7 +238,7 @@ namespace MexGrpcSampleConsoleApp
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LocVerified")
+                if (locationStatus == "LocMismatchSameCountry")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
@@ -325,7 +325,6 @@ namespace MexGrpcSampleConsoleApp
 
             string resp = null;
             string ipAddr = config;
-            //string ipAddr = "40.122.108.233";
             string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
             string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
             Console.WriteLine(payload);
@@ -474,7 +473,7 @@ namespace MexGrpcSampleConsoleApp
             return new DistributedMatchEngine.Loc
             {
                 Longitude = 13.4050,
-                Latitude = 52.5200
+                Latitude = 53.4200
             };
         }
 
