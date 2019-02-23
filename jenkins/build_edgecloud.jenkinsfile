@@ -90,7 +90,7 @@ node('jenkinsSlave1'){
 	     sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
 
 	     // delete the hamburg lb so it is recreated when starting the crm
-	     sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net
+	     sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
              // fix known_hosts file since recreating the server causes a mismatch in the file
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbonncloudlet.tdg.mobiledgex.net"'
