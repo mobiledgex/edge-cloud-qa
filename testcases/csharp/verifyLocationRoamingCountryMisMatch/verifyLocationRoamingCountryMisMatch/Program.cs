@@ -463,7 +463,7 @@ namespace MexGrpcSampleConsoleApp
         // The device is potentially mobile and may have data roaming.
         String getCarrierName()
         {
-            return "TDG";
+            return "";
         }
 
         // TODO: The client must retrieve a real GPS location from the platform, even if it is just the last known location,
