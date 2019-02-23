@@ -89,12 +89,17 @@ node('jenkinsSlave1'){
 	     // delete the buckhornlb so it is recreated when starting the crm
 	     sh 'source /home/jenkins/openrc.buckhorn;openstack server delete automationbuckhorncloudlet.gddt.mobiledgex.net'
 
+	     // delete the hawkins lb so it is recreated when starting the crm
+	     sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
+
              // fix known_hosts file since recreating the server causes a mismatch in the file
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbuckhorncloudlet.gddt.mobiledgex.net"'
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhawkinscloudlet.gddt.mobiledgex.net"'
 	     
              //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbuckhorn_start.yaml > $HOME/edgecloud_crmbuckhorn_start.yaml'
+     	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmhawkins_start.yaml > $HOME/edgecloud_crmhawkins_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebuckhorn_start.yaml > $HOME/edgecloud_dmebuckhorn_start.yaml'
     	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmgcpcloud1_start.yaml > $HOME/edgecloud_crmgcpcloud1_start.yaml'
       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud1_start.yaml > $HOME/edgecloud_crmdmuustmocloud1_start.yaml'
@@ -119,9 +124,12 @@ node('jenkinsSlave1'){
 	     
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebuckhorn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebuckhorn_start.yaml'
-	     
+
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbuckhorn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbuckhorn_start.yaml'  
+
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhawkins_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhawkins_start.yaml'  
 
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
