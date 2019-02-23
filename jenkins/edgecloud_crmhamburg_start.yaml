@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmhamburg
+  labels:
+    app: crmhamburg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmhamburg
+  template:
+    metadata:
+      labels:
+        app: crmhamburg
+    spec:
+      containers:
+      - name: crmhamburg
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
+        command:
+         - crmserver
+        env:
+         - name: CLOUDLET_KIND
+           value: openstack
+         - name: MEX_OS_IMAGE
+           value: mobiledgex
+         - name: MEX_EXT_NETWORK
+           value: external-network-shared
+         - name: OPENRC_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/hamburg/openrc.json
+         - name: MEXENV_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:50054"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"TDG\"},\"name\":\"automationHamburgCloudlet\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
+
