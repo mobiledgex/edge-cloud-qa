@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
@@ -25,11 +27,6 @@ node('jenkinsSlave1'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
-//                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
-//                        [$class:'SparseCheckoutPath', path:'modules/*'],
-//                        [$class:'SparseCheckoutPath', path:'protos/*'],
-//                        [$class:'SparseCheckoutPath', path:'tools/*'],
-//                        [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
                 submoduleCfg: [],
@@ -37,25 +34,15 @@ node('jenkinsSlave1'){
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
         }
     }
-    //stage('start environment') {
-    //    dir('go/src/github.com/mobiledgex/edge-cloud/tls/out/') {
-    //        sh 'cp $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/tls/out/* .'
-    //    }
-    //    dir('go/src/github.com/mobiledgex/edge-cloud/setup-env/e2e-tests/') {
-    //        sh 'export ANSIBLE_DIR=$HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$HOME/workspace/buildEdgecloud/go/bin/;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;e2e-tests -testfile testfiles/deploy_start_create_automation.yml -setupfile setups/local_multi_automation.yml -stop'
-    //    }
-    //}
 
-    stage("build protos") {
-      dir('go/src/github.com/mobiledgex/tools') {
-         status = sh(script:'python3 ./build_protos.py --sourcedir $HOME/workspace/buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
-         println status
-         if(status != 0) {
-            echo "build_protos.py failed with statuscode=" + status
-            currentBuild.result = 'FAILURE'
-         }
-      }
+    stage('make app') {
+       date = new Date()
+       sdate = new SimpleDateFormat("yyyMMdd")
+       tag = Version + '_automation_' + sdate.format(date)
 
+       dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps/FaceDetectionServer') {
+              sh 'make TAG=' + cycle
+       }
     }
 
     stage("execute tests") {
