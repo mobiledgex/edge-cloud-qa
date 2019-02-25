@@ -298,7 +298,7 @@ namespace MexGrpcSampleConsoleApp
             {
                 Console.WriteLine("Testcase Passed!");
                 Console.WriteLine(fcError.Status.Detail);
-                Environment.Exit(1);
+                Environment.Exit(0);
             }
             Environment.Exit(0);
         }
