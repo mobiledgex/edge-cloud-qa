@@ -16,7 +16,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("VerifyLocationRoamingCountryMisMatch Test Case");
+            Console.WriteLine("FindCloudletFail Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -58,7 +58,8 @@ namespace MexGrpcSampleConsoleApp
             //string devName = "EmptyMatchEngineApp";
             //string appName = "EmptyMatchEngineApp";
             string devName = "automation_api";
-            string appName = "automation_api_app";
+            string appName = "automation_api_auth_app";
+            string developerAuthToken = "";
 
             // Channel:
             // TODO: Load from file or iostream, securely generate keys, etc.
@@ -68,7 +69,26 @@ namespace MexGrpcSampleConsoleApp
 
             client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
 
-            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0");
+            // Generate the authToken
+            var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+            //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
+            psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_api -privkeyfile " + pubkey;
+            psi.RedirectStandardOutput = true;
+            System.Diagnostics.Process genauthtoken;
+            genauthtoken = System.Diagnostics.Process.Start(psi);
+            genauthtoken.WaitForExit();
+            System.IO.StreamReader reader = genauthtoken.StandardOutput;
+            genauthtoken.WaitForExit();
+            if (genauthtoken.HasExited)
+            {
+                developerAuthToken = reader.ReadToEnd();
+            }
+            developerAuthToken = developerAuthToken.Substring(6);
+            developerAuthToken = developerAuthToken.Trim();
+
+
+            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0", developerAuthToken);
             var regReply = client.RegisterClient(registerClientRequest);
 
             //Console.WriteLine("RegisterClient Reply: " + regReply);
@@ -81,9 +101,9 @@ namespace MexGrpcSampleConsoleApp
             }
 
             //Set the location in the location server
-            Console.WriteLine("Seting the location in the Location Server");
+            //Console.WriteLine("Seting the location in the Location Server");
             setLocation("52.52", "13.405");
-            Console.WriteLine("Location Set\n\n");
+            //Console.WriteLine("Location Set\n\n");
 
             // Store sessionCookie, for later use in future requests.
             sessionCookie = regReply.SessionCookie;
@@ -142,7 +162,7 @@ namespace MexGrpcSampleConsoleApp
                         }
                         else
                         {
-                            Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
+                            //Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
                         }
                     }
                     if (word.Substring(1, 6) == "peerip")
@@ -152,7 +172,7 @@ namespace MexGrpcSampleConsoleApp
                         string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
                         if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
                         {
-                            Console.WriteLine("Peerip Expression Matched!  " + peer);
+                            //Console.WriteLine("Peerip Expression Matched!  " + peer);
                         }
                         else
                         {
@@ -171,7 +191,7 @@ namespace MexGrpcSampleConsoleApp
                         }
                         else
                         {
-                            Console.WriteLine("Devname Matched!  " + dev);
+                            //Console.WriteLine("Devname Matched!  " + dev);
                         }
                     }
                     if (word.Substring(1, 7) == "appname")
@@ -185,7 +205,7 @@ namespace MexGrpcSampleConsoleApp
                         }
                         else
                         {
-                            Console.WriteLine("AppName Matched!  " + app);
+                            //Console.WriteLine("AppName Matched!  " + app);
                         }
                     }
                     if (word.Substring(1, 7) == "appvers")
@@ -198,7 +218,7 @@ namespace MexGrpcSampleConsoleApp
                         }
                         else
                         {
-                            Console.WriteLine("App Version Matched!  " + appver);
+                            //Console.WriteLine("App Version Matched!  " + appver);
                         }
                     }
 
@@ -214,6 +234,7 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 token = RetrieveToken(regReply.TokenServerURI);
+                //Console.WriteLine("Received Token: " + token);
                 //Console.WriteLine("VerifyLocation pre-query sessionCookie: " + sessionCookie);
                 //Console.WriteLine("VerifyLocation pre-query TokenServer token: " + token);
             }
@@ -230,52 +251,67 @@ namespace MexGrpcSampleConsoleApp
 
             // Call the remainder. Verify and Find cloudlet.
 
+            //try
+            //{
             // Async version can also be used. Blocking:
-            try
-            {
-                // Async version can also be used. Blocking:
-                Console.WriteLine("\nVerifying Location: " + getLocation());
-                var verifyResponse = VerifyLocation(token);
-                string locationStatus = verifyResponse.GpsLocationStatus.ToString();
-                string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
-                if (locationStatus == "LocRoamingCountryMismatch")
-                {
-                    Console.WriteLine("Testcase Passed!");
-                    Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-                    Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    Console.WriteLine("Testcase Failed!");
-                    Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-                    Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
-                    Environment.Exit(1);
-                }
+            //Console.WriteLine("\nVerifying Location: " + getLocation());
+            //var verifyResponse = VerifyLocation(token);
+            //string locationStatus = verifyResponse.GpsLocationStatus.ToString();
+            //string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
+            //if (locationStatus == "LocVerified")
+            //{
+            //Console.WriteLine("Testcase Passed!");
+            //   Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
+            //  Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
+            //Environment.Exit(0);
+            //}
+            //else
+            //{
+            //Console.WriteLine("Testcase Failed!");
+            //Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
+            //Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
+            //Environment.Exit(1);
+            //}
 
-            }
-            catch (Grpc.Core.RpcException replyerror)
+            //}
+            //catch (Grpc.Core.RpcException replyerror)
+            //{
+            //   Console.WriteLine("Testcase Failed!" + replyerror.StatusCode + replyerror.Status);
+            //   Environment.Exit(1);
+            //}
+
+            // Blocking GRPC call:
+            var findCloudletResponse = FindCloudlet();
+            string fcStatus = findCloudletResponse.Status.ToString();
+            if (fcStatus == "FindNotfound")
             {
-                Console.WriteLine("Testcase Failed!" + replyerror.StatusCode + replyerror.Status);
+                Console.WriteLine("Testcase Passed!");
+                Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
+                Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("Testcase Failed!");
+                Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
+                Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
                 Environment.Exit(1);
             }
 
-            // Blocking GRPC call:
-            //Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
-            //Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
 
             Environment.Exit(0);
         }
 
 
-        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion)
+        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion, string authToken)
         {
             var request = new RegisterClientRequest
             {
                 Ver = 1,
                 DevName = devName,
                 AppName = appName,
-                AppVers = appVersion
+                AppVers = appVersion,
+                AuthToken = authToken
             };
             return request;
         }
@@ -325,6 +361,7 @@ namespace MexGrpcSampleConsoleApp
 
             string resp = null;
             string ipAddr = config;
+            //string ipAddr = "40.122.108.233";
             string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
             string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
             Console.WriteLine(payload);
@@ -463,7 +500,7 @@ namespace MexGrpcSampleConsoleApp
         // The device is potentially mobile and may have data roaming.
         String getCarrierName()
         {
-            return "";
+            return "dmuus";
         }
 
         // TODO: The client must retrieve a real GPS location from the platform, even if it is just the last known location,
@@ -472,8 +509,8 @@ namespace MexGrpcSampleConsoleApp
         {
             return new DistributedMatchEngine.Loc
             {
-                Longitude = 21.01178,
-                Latitude = 52.22977
+                Longitude = 13.4050,
+                Latitude = 52.5200
             };
         }
 
