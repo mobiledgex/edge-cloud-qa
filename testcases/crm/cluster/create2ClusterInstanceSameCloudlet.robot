@@ -7,6 +7,8 @@ Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
+Test Timeout    30 minutes
+	
 *** Variables ***
 ${cloudlet_name}  automationHamburgCloudlet   #has to match crm process startup parms
 ${operator_name}  TDG
