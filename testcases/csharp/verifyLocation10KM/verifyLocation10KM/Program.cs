@@ -234,7 +234,7 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 // Async version can also be used. Blocking:
-                Console.WriteLine("\nVerifying Location:");
+                Console.WriteLine("\n Verifying Location:");
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
                 string locationAccuracy = verifyResponse.GPSLocationAccuracyKM.ToString();
