@@ -41,7 +41,7 @@ node('jenkinsSlave1'){
        tag = Version + '_automation_' + sdate.format(date)
 
        dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps/FaceDetectionServer') {
-              sh 'make TAG=' + cycle
+              sh 'make TAG=' + tag
        }
     }
 
