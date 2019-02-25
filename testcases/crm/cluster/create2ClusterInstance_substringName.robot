@@ -9,6 +9,8 @@ Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
+Test Timeout    30 minutes
+	
 *** Variables ***
 #${crm_api_address}  127.0.0.1:65100
 ${cloudlet_name}  automationHamburgCloudlet   #has to match crm process startup parms
