@@ -126,6 +126,7 @@ class tc(unittest.TestCase):
         # look for the cluster
         clusterinst_temp = self.cluster_instance_noflavor
         clusterinst_temp.flavor_name = flavor_name
+        clusterinst_temp.liveness = 1   #LivenessStatic
         found_cluster_after_add = clusterinst_temp.exists(clusterinst_after_add)
 
         expect_equal(found_cluster_after_add, True, 'found new cluster after add')
