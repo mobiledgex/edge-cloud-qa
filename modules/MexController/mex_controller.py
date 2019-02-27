@@ -1355,10 +1355,11 @@ class Controller():
     def app_instance_should_exist(self, app_instance=None, **kwargs):
 
         if app_instance is None:
-            if len(kwargs) != 0:
-                kwargs['use_defaults'] = False
-                app_instance = AppInstance(**kwargs).app_instance
-                 
+            if len(kwargs) == 0:
+                kwargs['app_name'] = shared_variables.app_name_default
+            kwargs['use_defaults'] = False
+            app_instance = AppInstance(**kwargs).app_instance
+                
         resp = None
 
         logger.info('should contain app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))

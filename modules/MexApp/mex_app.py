@@ -88,14 +88,17 @@ class MexApp(object):
 
         return addr
     
-    def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, wait_time=600):
+    def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, wait_time=600):
 
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
-            
+
+        if pod_name:
+            pod_name = pod_name.replace('.', '') #remove any dots
+
         #shared_variables.cluster_name_default = 'cluster1544640562'
         #kubeconfig_file = self.kubeconfig_dir + '/' + shared_variables.cluster_name_default + '.kubeconfig'
         #kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
@@ -111,9 +114,12 @@ class MexApp(object):
             logging.debug(kubectl_out)
 
             for line in kubectl_out:
-                if line.split()[2] == 'Running':
-                    logging.info('Found running pod:' + line)
-                    return True;
+                name, ready, status, restarts, age = line.split()
+                logging.debug(f'{name} {ready} {status} {restarts} {age}')
+                if pod_name in name:
+                    if line.split()[2] == 'Running':
+                        logging.info('Found running pod:' + line)
+                        return True;
             time.sleep(1)
 
         raise Exception('Running k8s pod not found')
