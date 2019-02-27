@@ -596,8 +596,10 @@ class App():
                 if self.image_path is None:
                     try:
                         new_app_name = self._docker_sanitize(self.app_name)
-                        #self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
-                        self.image_path = 'registry.mobiledgex.net:5000/' + '/' + new_app_name + ':' + self.app_version
+                        if self.developer_name is not None:
+                            self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
+                        else:
+                            self.image_path = 'registry.mobiledgex.net:5000/' + '/' + new_app_name + ':' + self.app_version
                     except:
                         self.image_path = 'failed_to_set'
                 #self.image_type = 1
