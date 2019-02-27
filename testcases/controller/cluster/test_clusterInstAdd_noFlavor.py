@@ -89,6 +89,7 @@ class tc(unittest.TestCase):
         # verify ci.tiny is picked up from the default_flavor_name
         clusterinst_temp = self.cluster_instance_noFlavor
         clusterinst_temp.flavor_name = flavor_name
+        clusterinst_temp.liveness = 1  # LivenessStatic
         found_cluster = clusterinst_temp.exists(clusterinst_resp)
 
         expect_equal(found_cluster, True, 'no flavor found new cluster')
