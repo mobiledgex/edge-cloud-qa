@@ -3,11 +3,11 @@ import logging
 from linux import Linux
 
 class Rootlb(Linux):
-    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa_mex', verbose=False):
+    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa_mex', cluster_name=None, verbose=False):
         logging.debug('init')
 
         self.kubeconfig = kubeconfig
-        
+
         if kubeconfig is None:
             self.kubeconfig = host + '.kubeconfig'
             
