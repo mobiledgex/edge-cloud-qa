@@ -27,6 +27,12 @@ node('jenkinsSlave1'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
+                        [$class:'SparseCheckoutPath', path:'testcases/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'protos/*'],
+                        [$class:'SparseCheckoutPath', path:'tools/*'],
+                        [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
                 submoduleCfg: [],
