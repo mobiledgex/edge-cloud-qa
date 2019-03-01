@@ -13,7 +13,7 @@ echo controller
 
 currentBuild.displayName = cycle
 
-node('jenkinsSlave1'){
+node('jenkinsGcpSlave1'){
     stage('Checkout') {
        dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
           git branch: 'master',
