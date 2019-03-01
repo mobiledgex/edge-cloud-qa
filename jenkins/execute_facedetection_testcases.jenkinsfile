@@ -47,7 +47,7 @@ node('jenkinsGcpSlave1'){
        tag = Version + '_automation_' + sdate.format(date)
 
        dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps/FaceDetectionServer') {
-              sh 'make TAG=' + tag
+              sh 'cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make TAG=' + tag
        }
     }
 
