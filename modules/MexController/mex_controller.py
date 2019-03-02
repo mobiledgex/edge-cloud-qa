@@ -848,7 +848,12 @@ class Controller():
                 cert = f.read()
             # create credentials
             credentials = grpc.ssl_channel_credentials(root_certificates=trusted_certs, private_key=trusted_key, certificate_chain=cert)
-            controller_channel = grpc.secure_channel(controller_address, credentials)
+            # dont think this is sending at the correct interval. seems to be sending keepalive every 5mins
+            channel_options = [('grpc.keepalive_time_ms',1000),
+                               ('grpc.keepalive_timeout_ms', 60000),
+                               ('grpc.http2.max_pings_without_data', 0),
+                               ('grpc.keepalive_permit_without_calls', 1)]
+            controller_channel = grpc.secure_channel(controller_address, credentials, options=channel_options)
         else:
                 controller_channel = grpc.insecure_channel(controller_address)
 
