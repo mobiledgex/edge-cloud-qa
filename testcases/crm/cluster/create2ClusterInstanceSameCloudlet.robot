@@ -7,7 +7,7 @@ Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
-Test Timeout    30 minutes
+Test Timeout    40 minutes
 	
 *** Variables ***
 ${cloudlet_name}  automationHawkinsCloudlet   #has to match crm process startup parms
