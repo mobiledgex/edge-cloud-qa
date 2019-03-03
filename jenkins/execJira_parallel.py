@@ -22,7 +22,7 @@ access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb2
 secret_key = 'S_KlvniknmZ1EPVVJij70fIsm8V7UqrAgxC3MGQqCqA'
 
 python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases'
-python_path = '/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/protos:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/modules:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/certs:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
+#python_path = '/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/protos:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/modules:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/certs:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
 
 found_failure = -1
 number_failed = 0
