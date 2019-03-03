@@ -27,7 +27,7 @@ ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/facedetection:Nimbus_
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008
 
-${client_path}     ../../../edge-cloud-sampleapps/FaceDetectionServer/client
+${client_path}     ../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  faceHuge.png  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
 @{image_list_bad}   1_body.png  3_bodies.png  6_bodies.jpg  empty_portrait_black.png  empty_portrait_white.png  multi_body.png  single_pixel.png
