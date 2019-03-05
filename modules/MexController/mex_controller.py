@@ -289,7 +289,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, crm_override=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -297,7 +297,7 @@ class ClusterInstance():
         self.operator_name = operator_name
         self.cloudlet_name = cloudlet_name
         self.flavor_name = flavor_name
-
+        self.crm_override = crm_override
         self.liveness = liveness
         #self.liveness = 1
         #if liveness is not None:
@@ -343,6 +343,9 @@ class ClusterInstance():
 
         if self.liveness is not None:
             clusterinst_dict['liveness'] = self.liveness
+
+        if self.crm_override:
+            appinst_dict['crm_override'] = 1  # ignore errors from CRM
 
         print("ClusterInst Dict", clusterinst_dict)    
 
@@ -565,7 +568,10 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  include_fields=False, use_defaults=True):
+
+        _fields_list = []
+
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -581,7 +587,11 @@ class App():
         self.permits_platform_apps = permits_platform_apps
         self.deployment = deployment
         self.deployment_manifest = deployment_manifest
-        
+
+        # used for UpdateApp - hardcoded from proto
+        self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
+        self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
+
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
@@ -662,6 +672,7 @@ class App():
             app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = self.default_flavor_name)
         if self.access_ports:
             app_dict['access_ports'] = self.access_ports
+            _fields_list.append(self._access_ports_field)
         if self.config:
             app_dict['config'] = self.config
         else:
@@ -676,6 +687,7 @@ class App():
             app_dict['deployment'] = self.deployment
         if self.deployment_manifest is not None:
             app_dict['deployment_manifest'] = self.deployment_manifest
+            _fields_list.append(self._deployment_manifest_field)
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
@@ -688,6 +700,10 @@ class App():
         #print('sd',self.app.__dict__,'esd')
         #print('sd2',self.app_complete.__dict__,'esd2')
         #sys.exit(1) 
+
+        if include_fields:
+            for field in _fields_list:
+                self.app.fields.append(field)
 
     def __eq__(self, a):
         logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
@@ -727,7 +743,7 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, image_type=None, image_path=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, image_type=None, image_path=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, crm_override=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
@@ -740,6 +756,7 @@ class AppInstance():
         self.cluster_name = cluster_instance_name
         self.latitude = latitude
         self.longitude = longitude
+        self.crm_override = crm_override
         
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
@@ -813,7 +830,10 @@ class AppInstance():
         if self.flavor_name is not None:
             appinst_dict['flavor'] = flavor_pb2.FlavorKey(name = self.flavor_name)
 
-    
+
+        if self.crm_override:
+            appinst_dict['crm_override'] = 1  # ignore errors from CRM
+            
         self.app_instance = app_inst_pb2.AppInst(**appinst_dict)
 
         print(appinst_dict)
@@ -849,8 +869,9 @@ class Controller():
             # create credentials
             credentials = grpc.ssl_channel_credentials(root_certificates=trusted_certs, private_key=trusted_key, certificate_chain=cert)
             # dont think this is sending at the correct interval. seems to be sending keepalive every 5mins
-            channel_options = [('grpc.keepalive_time_ms',1000),
-                               ('grpc.keepalive_timeout_ms', 60000),
+            channel_options = [('grpc.keepalive_time_ms',240000),  # 1mins. seems I cannot do less than 5mins. does 5mins anyway if set lower
+                               ('grpc.keepalive_timeout_ms', 5000),
+                               ('grpc.http2.min_time_between_pings_ms', 60000),
                                ('grpc.http2.max_pings_without_data', 0),
                                ('grpc.keepalive_permit_without_calls', 1)]
             controller_channel = grpc.secure_channel(controller_address, credentials, options=channel_options)
@@ -1009,6 +1030,12 @@ class Controller():
         return resp
 
     def delete_cluster_instance(self, cluster_instance=None, **kwargs):
+        resp = None
+
+        if cluster_instance is None:
+            if len(kwargs) != 0:
+                cluster_instance = ClusterInstance(**kwargs).cluster_instance
+
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
         resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
 
@@ -1213,7 +1240,13 @@ class Controller():
 
         return resp
 
-    def show_apps(self, app_instance=None):
+    def show_apps(self, app_instance=None, **kwargs):
+        resp = None
+
+        if not app_instance:
+            if len(kwargs) != 0:
+                app_instance = App(**kwargs).app
+
         logger.info('show apps on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = None
@@ -1237,10 +1270,11 @@ class Controller():
         logger.info('create app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = self.app_stub.CreateApp(app_instance)
-        print('prov_stack1', self.prov_stack)
+
         self.prov_stack.append(lambda:self.delete_app(app_instance))
-        print('prov_stack2', self.prov_stack)
-        resp =  self.show_apps(app_instance)
+
+        #resp =  self.show_apps(app_instance)
+        resp = self.show_apps(app_name=app_instance.key.name, use_defaults=False)
 
         if len(resp) == 0:
             return None
@@ -1253,13 +1287,15 @@ class Controller():
         resp = None
         
         if not app_instance:
+            kwargs['include_fields'] = True
             app_instance = App(**kwargs).app
 
         logger.info('update app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = self.app_stub.UpdateApp(app_instance)
 
-        resp =  self.show_apps(app_instance)
+        #resp =  self.show_apps(app_instance)
+        resp = self.show_apps(app_name=app_instance.key.name, use_defaults=False)
 
         if len(resp) == 0:
             return None
@@ -1306,7 +1342,8 @@ class Controller():
         resp = None
 
         if not app_instance:
-            app_instance = AppInstance(**kwargs).app_instance
+            if len(kwargs) != 0:
+                app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
         
