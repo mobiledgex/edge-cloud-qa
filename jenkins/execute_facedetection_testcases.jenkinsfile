@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
@@ -13,12 +15,18 @@ currentBuild.displayName = cycle
 
 node('jenkinsGcpSlave1'){
     stage('Checkout') {
+       dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps') {
+          git branch: 'master',
+          credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+          url: 'https://github.com/mobiledgex/edge-cloud-sampleapps.git'
+       }
         dir('go/src/github.com/mobiledgex') {
-            checkout([$class: 'GitSCM',
+            checkout([$class: 'GitSCM', 
                 branches: [[name: 'master']],
                 doGenerateSubmoduleConfigurations: false,
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'testcases/*'],
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
                         [$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
@@ -31,7 +39,7 @@ node('jenkinsGcpSlave1'){
                 userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
         }
-        
+
         dir('go/src/github.com/mobiledgex/edge-cloud') {
             checkout([$class: 'GitSCM',
                 branches: [[name: 'master']],
@@ -51,6 +59,16 @@ node('jenkinsGcpSlave1'){
 
     }
 
+    stage('make app') {
+       date = new Date()
+       sdate = new SimpleDateFormat("yyyMMdd")
+       tag = Version + '_automation_' + sdate.format(date)
+
+       dir('go/src/github.com/mobiledgex/edge-cloud-sampleapps/FaceDetectionServer') {
+              sh 'cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make TAG=' + tag
+       }
+    }
+
     stage("build protos") {
       dir('go/src/github.com/mobiledgex/tools') {
          status = sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
@@ -65,7 +83,7 @@ node('jenkinsGcpSlave1'){
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';./execJira_parallel.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';./execJira.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
@@ -75,4 +93,3 @@ node('jenkinsGcpSlave1'){
 
     }
 }
-
