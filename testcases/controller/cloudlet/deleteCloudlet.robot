@@ -6,7 +6,7 @@ Variables  shared_variables.py
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
 ${oper}   dmuus
-${cldlet}    tmocloud-3
+${cldlet}    tmocloud-4
 
 *** Test Cases ***
 DeleteCloudlet without an operator

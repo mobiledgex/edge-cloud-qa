@@ -595,7 +595,8 @@ class Zapi(WebService):
         logging.debug('url=' + url)
 
         #self.headers['Content-Type'] = 'multipart/form-data'
-        del self.headers['Content-Type'] 
+        if 'Content-Type' in self.headers:
+            del self.headers['Content-Type'] 
         f = open(file, 'rb')
         files = {'attachment':(os.path.basename(file), f, "multipart/form-data")}
         #self.post(url,headers = self.headers, files={'attachment': (file, open(file, 'rb'))})
