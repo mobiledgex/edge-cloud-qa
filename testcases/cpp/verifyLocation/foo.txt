@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Date: Mon, 04 Mar 2019 19:53:24 GMT
+Content-Length: 40
+Content-Type: text/plain; charset=utf-8
+
+Location DB Updated OK for 12.15.229.66
