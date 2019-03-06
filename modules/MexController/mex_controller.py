@@ -259,7 +259,10 @@ class Cluster():
         self.cluster = cluster_pb2.Cluster(
                                       key = cluster_pb2.ClusterKey(name = self.cluster_name),
                                       default_flavor = clusterflavor_pb2.ClusterFlavorKey(name = self.flavor_name)
-                                     )
+        )
+
+        shared_variables.cluster_name_default = self.cluster_name
+
     def __eq__(self, c):
         print(c.key.name, self.cluster_name, c.default_flavor.name, self.flavor_name)
         if c.key.name == self.cluster_name and c.default_flavor.name == self.flavor_name:
@@ -286,7 +289,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, crm_override=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -294,10 +297,11 @@ class ClusterInstance():
         self.operator_name = operator_name
         self.cloudlet_name = cloudlet_name
         self.flavor_name = flavor_name
-
-        self.liveness = 1
-        if liveness is not None:
-            self.liveness = liveness # LivenessStatic
+        self.crm_override = crm_override
+        self.liveness = liveness
+        #self.liveness = 1
+        #if liveness is not None:
+        #    self.liveness = liveness # LivenessStatic
 
         print("Liveness", self.liveness)    
         self.state = 5    # Ready
@@ -310,12 +314,16 @@ class ClusterInstance():
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
             if operator_name is None: self.operator_name = shared_variables.operator_name_default
             if flavor_name is None: self.flavor_name = shared_variables.cluster_flavor_name_default
-
+            if liveness is None: self.liveness = 1
+            
         clusterinst_dict = {}
         clusterinst_key_dict = {}
         operator_dict = {}
         cloudlet_key_dict = {}
         #cluster_key_dict = {}
+
+        shared_variables.cloudlet_name_default = self.cloudlet_name
+        shared_variables.operator_name_default = self.operator_name
 
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
@@ -335,6 +343,9 @@ class ClusterInstance():
 
         if self.liveness is not None:
             clusterinst_dict['liveness'] = self.liveness
+
+        if self.crm_override:
+            appinst_dict['crm_override'] = 1  # ignore errors from CRM
 
         print("ClusterInst Dict", clusterinst_dict)    
 
@@ -557,7 +568,10 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  include_fields=False, use_defaults=True):
+
+        _fields_list = []
+
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -572,7 +586,12 @@ class App():
         self.auth_public_key = auth_public_key
         self.permits_platform_apps = permits_platform_apps
         self.deployment = deployment
-        
+        self.deployment_manifest = deployment_manifest
+
+        # used for UpdateApp - hardcoded from proto
+        self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
+        self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
+
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
@@ -587,7 +606,10 @@ class App():
                 if self.image_path is None:
                     try:
                         new_app_name = self._docker_sanitize(self.app_name)
-                        self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
+                        if self.developer_name is not None:
+                            self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
+                        else:
+                            self.image_path = 'registry.mobiledgex.net:5000/' + '/' + new_app_name + ':' + self.app_version
                     except:
                         self.image_path = 'failed_to_set'
                 #self.image_type = 1
@@ -650,6 +672,7 @@ class App():
             app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = self.default_flavor_name)
         if self.access_ports:
             app_dict['access_ports'] = self.access_ports
+            _fields_list.append(self._access_ports_field)
         if self.config:
             app_dict['config'] = self.config
         else:
@@ -662,6 +685,9 @@ class App():
             app_dict['permits_platform_apps'] = self.permits_platform_apps
         if self.deployment is not None:
             app_dict['deployment'] = self.deployment
+        if self.deployment_manifest is not None:
+            app_dict['deployment_manifest'] = self.deployment_manifest
+            _fields_list.append(self._deployment_manifest_field)
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
@@ -675,8 +701,13 @@ class App():
         #print('sd2',self.app_complete.__dict__,'esd2')
         #sys.exit(1) 
 
+        if include_fields:
+            for field in _fields_list:
+                self.app.fields.append(field)
+
     def __eq__(self, a):
         logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
+        print('zzzz',a.key.name,self.app_name ,a.key.version,self.app_version,a.image_path,self.image_path,a.ip_access,self.ip_access,a.access_ports,self.access_ports,a.default_flavor.name,self.default_flavor_name,a.cluster.name,self.cluster_name,a.image_type,self.image_type,a.config,self.config)
         if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
             return True
         else:
@@ -690,7 +721,7 @@ class App():
         found_app = False
         
         for a in app_list:
-            print('xxxx', a,'s',self.access_ports, 'k', self.app_name, self.image_path, self.ip_access, self.access_ports, self.default_flavor_name, self.cluster_name, self.image_type, self.config)
+            print('xxxx','s',self.access_ports, 'k', self.app_name, self.image_path, self.ip_access, self.access_ports, self.default_flavor_name, self.cluster_name, self.image_type, self.config)
             #print('appp', a)
             #print('dddddd', self.app)
             if self.__eq__(a):
@@ -712,7 +743,7 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, image_type=None, image_path=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, image_type=None, image_path=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, crm_override=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
@@ -725,6 +756,7 @@ class AppInstance():
         self.cluster_name = cluster_instance_name
         self.latitude = latitude
         self.longitude = longitude
+        self.crm_override = crm_override
         
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
@@ -798,7 +830,10 @@ class AppInstance():
         if self.flavor_name is not None:
             appinst_dict['flavor'] = flavor_pb2.FlavorKey(name = self.flavor_name)
 
-    
+
+        if self.crm_override:
+            appinst_dict['crm_override'] = 1  # ignore errors from CRM
+            
         self.app_instance = app_inst_pb2.AppInst(**appinst_dict)
 
         print(appinst_dict)
@@ -833,7 +868,13 @@ class Controller():
                 cert = f.read()
             # create credentials
             credentials = grpc.ssl_channel_credentials(root_certificates=trusted_certs, private_key=trusted_key, certificate_chain=cert)
-            controller_channel = grpc.secure_channel(controller_address, credentials)
+            # dont think this is sending at the correct interval. seems to be sending keepalive every 5mins
+            channel_options = [('grpc.keepalive_time_ms',240000),  # 1mins. seems I cannot do less than 5mins. does 5mins anyway if set lower
+                               ('grpc.keepalive_timeout_ms', 5000),
+                               ('grpc.http2.min_time_between_pings_ms', 60000),
+                               ('grpc.http2.max_pings_without_data', 0),
+                               ('grpc.keepalive_permit_without_calls', 1)]
+            controller_channel = grpc.secure_channel(controller_address, credentials, options=channel_options)
         else:
                 controller_channel = grpc.insecure_channel(controller_address)
 
@@ -952,8 +993,12 @@ class Controller():
 
     def create_cluster_instance(self, cluster_instance=None, **kwargs):
         resp = None
+        auto_delete = True
 
         if not cluster_instance:
+            if 'no_auto_delete' in kwargs:
+                del kwargs['no_auto_delete']
+                auto_delete = False
             cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('create cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
@@ -979,11 +1024,18 @@ class Controller():
         if not success:
             raise Exception('Error creating cluster instance:{}'.format(str(resp)))
 
-        self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
+        if auto_delete:
+            self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
         
         return resp
 
-    def delete_cluster_instance(self, cluster_instance):
+    def delete_cluster_instance(self, cluster_instance=None, **kwargs):
+        resp = None
+
+        if cluster_instance is None:
+            if len(kwargs) != 0:
+                cluster_instance = ClusterInstance(**kwargs).cluster_instance
+
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
         resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
 
@@ -1000,6 +1052,36 @@ class Controller():
         logger.info('update cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
         resp = self.clusterinst_stub.UpdateClusterInst(cluster_instance)
         return resp
+
+    def cluster_instance_should_exist(self, cluster_instance=None, **kwargs):
+        if cluster_instance is None:
+            if len(kwargs) != 0:
+                kwargs['use_defaults'] = False
+                cluster_instance = ClusterInstance(**kwargs).cluster_instance
+                                 
+        resp = None
+        logger.info('should contain cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
+
+        resp = self.show_cluster_instances(cluster_instance)
+        logger.info(resp)
+        
+        if not resp:
+            print('*WARN*', 'andy1')
+            raise AssertionError('Cluster Instance does not exist'.format(str(resp)))
+
+        return resp
+
+    def cluster_instance_should_not_exist(self, cluster_instance=None, **kwargs):
+        resp = None
+        try:
+            resp = self.cluster_instance_should_exist(cluster_instance=None, **kwargs)
+            print('*WARN*', 'andy')
+        except:
+            logger.info('cluster instance does exist')
+            
+        if resp:    
+            raise AssertionError('Cluster instance does exist'.format(str(resp)))
+
 
     def create_cloudlet(self, cloudlet_instance=None, **kwargs):
         resp = None
@@ -1158,7 +1240,13 @@ class Controller():
 
         return resp
 
-    def show_apps(self, app_instance=None):
+    def show_apps(self, app_instance=None, **kwargs):
+        resp = None
+
+        if not app_instance:
+            if len(kwargs) != 0:
+                app_instance = App(**kwargs).app
+
         logger.info('show apps on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = None
@@ -1182,10 +1270,32 @@ class Controller():
         logger.info('create app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = self.app_stub.CreateApp(app_instance)
-        print('prov_stack1', self.prov_stack)
+
         self.prov_stack.append(lambda:self.delete_app(app_instance))
-        print('prov_stack2', self.prov_stack)
-        resp =  self.show_apps(app_instance)
+
+        #resp =  self.show_apps(app_instance)
+        resp = self.show_apps(app_name=app_instance.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
+        #return resp
+
+    def update_app(self, app_instance=None, **kwargs):
+        resp = None
+        
+        if not app_instance:
+            kwargs['include_fields'] = True
+            app_instance = App(**kwargs).app
+
+        logger.info('update app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
+
+        resp = self.app_stub.UpdateApp(app_instance)
+
+        #resp =  self.show_apps(app_instance)
+        resp = self.show_apps(app_name=app_instance.key.name, use_defaults=False)
 
         if len(resp) == 0:
             return None
@@ -1228,11 +1338,15 @@ class Controller():
 
         return resp
 
-    def show_app_instances(self, app_instance=None):
-        logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
-
+    def show_app_instances(self, app_instance=None, **kwargs):
         resp = None
 
+        if not app_instance:
+            if len(kwargs) != 0:
+                app_instance = AppInstance(**kwargs).app_instance
+
+        logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
+        
         if app_instance:
             resp = list(self.appinst_stub.ShowAppInst(app_instance))
         else:
@@ -1283,10 +1397,11 @@ class Controller():
     def app_instance_should_exist(self, app_instance=None, **kwargs):
 
         if app_instance is None:
-            if len(kwargs) != 0:
-                kwargs['use_defaults'] = False
-                app_instance = AppInstance(**kwargs).app_instance
-                 
+            if len(kwargs) == 0:
+                kwargs['app_name'] = shared_variables.app_name_default
+            kwargs['use_defaults'] = False
+            app_instance = AppInstance(**kwargs).app_instance
+                
         resp = None
 
         logger.info('should contain app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -1300,12 +1415,14 @@ class Controller():
         return resp
 
     def app_instance_should_not_exist(self, app_instance=None, **kwargs):
-
+        resp = None
         try:
             resp = self.app_instance_should_exist(app_instance=None, **kwargs)
-            raise AssertionError('App instance does exist'.format(str(resp)))
         except:
             logger.info('app instance does not exist')
+
+        if resp:    
+            raise AssertionError('App instance does exist'.format(str(resp)))
 
     def delete_app_instance(self, app_instance=None, **kwargs):
         resp = None
