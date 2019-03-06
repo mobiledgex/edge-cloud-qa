@@ -1,0 +1,54 @@
+	    auto decoded = jwt::decode(registerClientReply.sessioncookie());
+
+	    for(auto& e : decoded.get_payload_claims()){
+	      if (e.first == "exp"){
+		  expCatch = (int)e.second.to_json().get<double>();		  
+              }
+	      if (e.first == "iat"){
+		  iatCatch = (int)e.second.to_json().get<double>();
+	      }
+	      if (e.first == "key") {
+		  //std::cout << "KEY: " << e.first << " = " << e.second.to_json() << std::endl;
+		  //cout << e.second.to_json().get("appname") << endl;
+		string appName = e.second.to_json().get("appname").get<string>().c_str();
+		if(appName == "automation_api_app") {
+		    cout << "APP NAME CORRECT! " << appName << endl;
+		} else {
+		    cout << "APP NAME INCORRECT! " << appName << endl;
+		    exit (EXIT_FAILURE);
+		}
+		string devName =  e.second.to_json().get("devname").get<string>().c_str();
+		if(devName == "automation_api") {
+		    cout << "DEV NAME CORRECT! " << devName << endl;
+		} else {
+		    cout << "DEV NAME INCORRECT! " << devName << endl;
+		    exit (EXIT_FAILURE);
+		}
+		string appVers =  e.second.to_json().get("appvers").get<string>().c_str();
+		if(appVers == "1.0") {
+		    cout << "APP VERSION CORRECT! " << appVers << endl;
+		} else {
+		    cout << "APP VERSION INCORRECT! " << appVers << endl;
+		    exit (EXIT_FAILURE);
+		}
+		string peerIP =  e.second.to_json().get("peerip").get<string>().c_str();
+		if(std::regex_match(peerIP, regexPat)) {
+		    cout << "PEER IP PATTEREN IS CORRECT! " << peerIP << endl;
+		} else {
+		    cout << "PEER IP PATTEREN IS INCORRECT! " << peerIP << endl;
+		    exit (EXIT_FAILURE);
+		}
+
+	      }
+	      
+	    }
+	    sessionTime =  expCatch - iatCatch;
+	    sessionTime /= 60;
+	    sessionTime /= 60;
+	    if (sessionTime == 24){
+		cout << "Session Time Correct! " << sessionTime << endl;
+		cout << endl;
+	    } else {
+		cout << "Session Time Not Correct! " << sessionTime << endl;
+		exit (EXIT_FAILURE);
+	    }
