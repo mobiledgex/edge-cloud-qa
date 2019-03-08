@@ -14,6 +14,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
+            // This test case still passes with a bac carrier
             Console.WriteLine("VerifyLocationBadCarrier Test Case");
 
 
@@ -126,6 +127,7 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 // Async version can also be used. Blocking:
+                // This test case still passes with a bac carrier
                 Console.WriteLine("Verifying Location:");
                 var verifyResponse = VerifyLocation(token);
                 Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
@@ -282,6 +284,7 @@ namespace MexGrpcSampleConsoleApp
         // The device is potentially mobile and may have data roaming.
         String getCarrierName()
         {
+            // This test case still passes with a bac carrier
             return "xx";
         }
 
