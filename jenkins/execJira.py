@@ -37,6 +37,7 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
+    variable_file = os.environ['VariableFile']
 
     #print(httpTrace)
     #if httpTrace == 'true':
@@ -363,8 +364,11 @@ def exec_testcases(z, l):
             robot_file = find(tc, os.environ['WORKSPACE'])
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
+            var_cmd = ''
+            if len(variable_file) > 0:
+                var_cmd = f'--variablefile ../config/{variable_file}'
             if robot_tcname:
-                exec_cmd = 'export PYTHONPATH=' + python_path + ";robot --loglevel TRACE --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" " + robot_file
+                exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
