@@ -37,7 +37,7 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
-    variable_file = os.environ['VariableFile']
+    #variable_file = os.environ['VariableFile']
 
     #print(httpTrace)
     #if httpTrace == 'true':
@@ -365,6 +365,7 @@ def exec_testcases(z, l):
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
             var_cmd = ''
+            variable_file = os.environ['VariableFile']
             if len(variable_file) > 0:
                 var_cmd = f'--variablefile ../config/{variable_file}'
             if robot_tcname:
