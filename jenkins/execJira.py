@@ -348,7 +348,8 @@ def exec_testcases(z, l):
         #tmpdir = os.environ['TMPDIR']
         tmpdir = '/tmp/'
         tc_replace = tc.replace('/','')  # remove slash from filename
-        file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+        #file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+        file_delete = tmpdir + "*" + t['issue_key'] + "*"
         file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
