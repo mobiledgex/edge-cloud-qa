@@ -23,7 +23,9 @@ CPPFLAGS += -I.
 CPPFLAGS += -I../common
 CPPFLAGS += -I../jwt-cpp
 CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2q/include/
+CPPFLAGS += -I/usr/include/
 CXXFLAGS += -std=c++11
+CXXFLAGS += -fPIC
 ifeq ($(SYSTEM),Darwin)
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc`\
            -lgrpc++_reflection\
@@ -40,7 +42,8 @@ GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
 # Run "brew install coreutils" to get "grealpath" for protoc's requirement of absolute paths
-ABSOLUTEPATH := $(shell grealpath ../../../../edge-cloud/)
+#ABSOLUTEPATH := $(shell grealpath ../../../../edge-cloud/)
+ABSOLUTEPATH := $(shell realpath../../../../../../../../buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/
 PROTOS_PATH = $(ABSOLUTEPATH)/d-match-engine/dme-proto
 THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-mvp/third_party
 
@@ -52,7 +55,7 @@ PROTO_INCLUDE_FLAGS += $(addprefix --proto_path ,$(PROTO_INCLUDE_DIRECTORIES))
 all: system-check libmexgrpc.so findCloudletNoLocation
 
 findCloudletNoLocation: ../common/test_credentials.o findCloudletNoLocation.o
-	$(CXX) $^ $(LDFLAGS) -I. -L. -lmexgrpc -o $@
+	$(CXX) $^ $(LDFLAGS) -I. -L. -lmexgrpc -Wl,-rpath,. -o $@
 
 libmexgrpc.so: google/api/http.pb.o google/api/http.grpc.pb.o google/api/annotations.pb.o google/api/annotations.grpc.pb.o appcommon.pb.o appcommon.grpc.pb.o loc.pb.o loc.grpc.pb.o app-client.pb.o app-client.grpc.pb.o dynamic-location-group.pb.o dynamic-location-group.grpc.pb.o
 	$(CXX) $^ $(LDFLAGS) -I. -L. --shared -o $@
