@@ -17,7 +17,7 @@ Test Timeout  30 minutes
 
 ${cluster_flavor_name}  x1.small
 	
-${cloudlet_name}  automationBonnCloudlet
+${cloudlet_name_openstack}  automationBonnCloudlet
 ${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -37,7 +37,7 @@ User shall be able to access 1 UDP port on openstack
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=${cluster_name_default}
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
@@ -131,7 +131,7 @@ Setup
     Create Flavor
     Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   default_flavor_name=${cluster_flavor_name}
-    #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+    #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
