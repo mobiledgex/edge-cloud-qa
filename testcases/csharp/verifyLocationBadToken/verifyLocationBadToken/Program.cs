@@ -129,6 +129,8 @@ namespace MexGrpcSampleConsoleApp
             // Call the remainder. Verify and Find cloudlet.
             try
             {
+                // This test case does not receive a LOC_ERROR_UNAUTHORIZED .. EDGECLOUD-369 is open for this issue
+
                 // Async version can also be used. Blocking:
                 Console.WriteLine("Verifying Location:");
                 var verifyResponse = VerifyLocation("xx");
