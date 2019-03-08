@@ -367,7 +367,7 @@ def exec_testcases(z, l):
             var_cmd = ''
             variable_file = os.environ['VariableFile']
             if len(variable_file) > 0:
-                variable_file_full = find(tc, os.environ['WORKSPACE'])
+                variable_file_full = find(variable_file, os.environ['WORKSPACE'])
                 var_cmd = f'--variablefile {variable_file_full}'
             if robot_tcname:
                 exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
