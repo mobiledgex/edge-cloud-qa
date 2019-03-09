@@ -37,6 +37,7 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
+    #variable_file = os.environ['VariableFile']
 
     #print(httpTrace)
     #if httpTrace == 'true':
@@ -348,7 +349,8 @@ def exec_testcases(z, l):
         #tmpdir = os.environ['TMPDIR']
         tmpdir = '/tmp/'
         tc_replace = tc.replace('/','')  # remove slash from filename
-        file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+        #file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+        file_delete = tmpdir + "*" + t['issue_key'] + "*"
         file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time()))
         file_extension = '.txt'
         
@@ -362,8 +364,13 @@ def exec_testcases(z, l):
             robot_file = find(tc, os.environ['WORKSPACE'])
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
             xml_output = file_output + '.xml'
+            var_cmd = ''
+            variable_file = os.environ['VariableFile']
+            if len(variable_file) > 0:
+                variable_file_full = find(variable_file, os.environ['WORKSPACE'])
+                var_cmd = f'--variablefile {variable_file_full}'
             if robot_tcname:
-                exec_cmd = 'export PYTHONPATH=' + python_path + ";robot --loglevel TRACE --outputdir /tmp --output " + xml_output + " --log " + file_output + " -t \"" + robot_tcname + "\" " + robot_file
+                exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
