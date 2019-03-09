@@ -16,7 +16,7 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name}  automationHamburgCloudlet
+${cloudlet_name_openstack}  automationHamburgCloudlet
 ${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -45,8 +45,8 @@ Facedetection server shall recognize faces
     ${app_name}=    Catenate  SEPARATOR=  facedetect  ${epoch_time}
 
     Log To Console  Creating App and App Instance
-    Create App           app_name=${app_name}  image_path=${docker_image}  access_ports=${facedetection_ports}  default_flavor_name=flavor1550017240-694686
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create App           app_name=${app_name}  image_path=${docker_image}  access_ports=${facedetection_ports}  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
+    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
@@ -87,7 +87,7 @@ Setup
     Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
-    #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+    #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     #Log To Console  Creating Cluster Instance
-    #Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    #Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
     #Log To Console  Done Creating Cluster Instance
