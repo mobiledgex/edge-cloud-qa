@@ -13,7 +13,7 @@ Test Teardown	Cleanup provisioning
 *** Variables ***
 ${cluster_flavor_name}  x1.tiny
 	
-${cloudlet_name}  automationAzureCentralCloudlet
+${cloudlet_name_azure}  automationAzureCentralCloudlet
 ${operator_name}  azure
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -42,7 +42,6 @@ User shall be able to access 1 UDP port on azure
 
     Log To Console  Waiting for k8s pod to be running
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default} 
-
 
     Log To Console  Checking if port is alive
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -145,7 +144,7 @@ Setup
     Create Flavor
     Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   cluster_name=${cluster_name} 
-    Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+    Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     log to console  START creating cluster instance
     Create Cluster Instance  
     log to console  DONE creating cluster instance
