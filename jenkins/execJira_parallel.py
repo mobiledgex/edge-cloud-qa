@@ -18,7 +18,11 @@ username = 'andy.anderson@mobiledgex.com'
 #jira_token = '***REMOVED***'
 jira_token = '***REMOVED***'
 #userkey
-access_key = '***REMOVED***'
+#access_key = '***REMOVED***'
+#secret_key = '***REMOVED***'
+
+#systemkey
+access_key = '***REMOVED***';
 secret_key = '***REMOVED***'
 
 python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases'
