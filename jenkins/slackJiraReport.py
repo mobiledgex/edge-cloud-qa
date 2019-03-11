@@ -14,8 +14,13 @@ channel_number = 'CF67W3QH5'
 
 zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 username = 'andy.anderson@mobiledgex.com'
-access_key = '***REMOVED***'
+#access_key = '***REMOVED***'
+#secret_key = '***REMOVED***'
+
+#systemkey
+access_key = '***REMOVED***';
 secret_key = '***REMOVED***'
+
 jira_token = '***REMOVED***'
 
 #project_name = 'ECQ'
