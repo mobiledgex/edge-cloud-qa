@@ -11,8 +11,17 @@ import subprocess
 import argparse
 
 username = 'andy.anderson@mobiledgex.com'
-access_key = '***REMOVED***'
+
+#userkey
+#access_key = '***REMOVED***'
+#secret_key = '***REMOVED***'
+
+#systemkey
+access_key = '***REMOVED***';
 secret_key = '***REMOVED***'
+
+#secret_key = '***REMOVED***'
+
 jira_token = '***REMOVED***'
 
 def main():
