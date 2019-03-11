@@ -393,7 +393,7 @@ def exec_testcases(z, l):
         elif tc_type == 'cpp':
             dirname,cppname = tc.split('/')
             tc_file = find(cppname, os.environ['WORKSPACE'])
-            exec_cmd = f'cd {dirname};make clean  && make && ./{dirname} > {file_output} 2>&1'
+            exec_cmd = f'cd {os.path.dirname(tc_file)};make clean  && make && ./{dirname} > {file_output} 2>&1'
         else:
             exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
