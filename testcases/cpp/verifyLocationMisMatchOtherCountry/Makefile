@@ -43,7 +43,7 @@ GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
 # Run "brew install coreutils" to get "grealpath" for protoc's requirement of absolute paths
 #ABSOLUTEPATH := $(shell grealpath ../../../../edge-cloud/)
-ABSOLUTEPATH := $(shell realpath../../../../../../../../buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/
+ABSOLUTEPATH := $(shell realpath ../../../../../../../../buildEdgecloud/go/src/github.com/mobiledgex/edge-cloud/)
 PROTOS_PATH = $(ABSOLUTEPATH)/d-match-engine/dme-proto
 THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-mvp/third_party
 
@@ -77,7 +77,7 @@ google/api/%.pb.cc: $(THIRD_PARTY_PROTOS_PATH)/googleapis/google/api/%.proto
 	$(PROTOC) $(PROTO_INCLUDE_FLAGS) --cpp_out=. $<
 
 clean:
-	rm -rf *.o *.pb.cc *.pb.h google libmexgrpc.so verifyLocationMisMatchOtherCountry
+	rm -rf *.o *.pb.cc *.pb.h google ../common/*.o libmexgrpc.so verifyLocationMisMatchOtherCountry
 
 
 # The following is to test your system and ensure a smoother experience.
