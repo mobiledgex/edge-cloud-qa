@@ -409,7 +409,9 @@ def exec_testcase(z, t):
         #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
         xml_output = file_output + '.xml'
         var_cmd = ''
-        variable_file = os.environ['VariableFile']
+        variable_file = ''
+        if 'VariableFile' in os.environ:
+            variable_file = os.environ['VariableFile']
         if len(variable_file) > 0:
             variable_file_full = find(variable_file, os.environ['WORKSPACE'])
             var_cmd = f'--variablefile {variable_file_full}'
