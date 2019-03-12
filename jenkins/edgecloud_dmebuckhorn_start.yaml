@@ -27,6 +27,8 @@ spec:
          - "0.0.0.0:50051"
          - "--notifyAddrs"
          - "controller:37001"
+         - "--httpAddr"
+         - "0.0.0.0:38001"
          - "--locverurl"
          - "http://mextest.locsim.mobiledgex.net:8888/verifyLocation"
          - "--carrier"
