@@ -8,9 +8,14 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   ports:
-   - port: 50051
+   - name: api
+     port: 50051
      protocol: TCP
      targetPort: 50051
+   - name: http
+     port: 38001
+     protocol: TCP
+     targetPort: 38001
   selector:
     app: dme
   sessionAffinity: None
