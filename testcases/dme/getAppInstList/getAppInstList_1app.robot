@@ -54,7 +54,7 @@ Setup
     Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
-    ${dmuus_appinst}=           Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    ${dmuus_appinst}=           Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 
 

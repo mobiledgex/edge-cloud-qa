@@ -58,7 +58,7 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App             access_ports=${access_ports} 
-    Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}
+    Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     #Beacon
     Update Location  latitude=${beacon_lat}  longitude=${beacon_long}  

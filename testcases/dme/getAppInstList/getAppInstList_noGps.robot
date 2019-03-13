@@ -31,6 +31,6 @@ Setup
     Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1 
-    ${dmuus_appinst}=            Create App Instance  cloudlet_name=tmocloud-1  operator_name=dmuus
+    ${dmuus_appinst}=            Create App Instance  cloudlet_name=tmocloud-1  operator_name=dmuus  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 
