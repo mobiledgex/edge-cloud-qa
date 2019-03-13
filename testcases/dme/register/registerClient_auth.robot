@@ -49,5 +49,5 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App                  app_name=${app_name_auth}  auth_public_key=${app_key} 
-    Create App Instance         app_name=${app_name_auth}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create App Instance         app_name=${app_name_auth}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
