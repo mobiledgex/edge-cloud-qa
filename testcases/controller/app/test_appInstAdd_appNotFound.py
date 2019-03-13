@@ -51,6 +51,7 @@ class tc(unittest.TestCase):
            
         # create the app instance
         app_instance = mex_controller.AppInstance(cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None
@@ -78,6 +79,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(appinst_id=1,
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None
@@ -105,6 +107,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='smeApplication',
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None
@@ -132,6 +135,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_version='1.0',
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None
@@ -159,6 +163,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(developer_name='dev',
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None
@@ -188,6 +193,7 @@ class tc(unittest.TestCase):
                                                   app_version='1.0',
                                                   developer_name='dev',
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
         resp = None

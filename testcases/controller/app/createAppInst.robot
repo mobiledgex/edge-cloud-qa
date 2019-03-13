@@ -14,14 +14,14 @@ ${mobile_latitude}  1
 ${mobile_longitude}  1
 
 *** Test Cases ***
-CreateAppInst - autocluster shall be created when app instance is created without clustername
+CreateAppInst - autocluster shall be created when app instance is created with clustername='autocluster'
     [Documentation]
-    ...  create an app instance without specifying a cluster name
+    ...  create an app instance with cluster name of 'autocluster'
     ...  verify autocluster is created in cluster instance table
     ...  delete the app instance
     ...  verify autocluster is deleted from cluster instance table
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     Show Cluster Instances
     ${cluster_name}=  Catenate   SEPARATOR=  autocluster  ${app_name_default}
