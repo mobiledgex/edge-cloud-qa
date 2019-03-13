@@ -234,6 +234,7 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 // Async version can also be used. Blocking:
+                //token = "SVA9MTIuMTUuMjI5LjY2IEV4cGlyZXM9MTU1MjUwMjQyNw==";
                 Console.WriteLine("\n Verifying Location:");
                 var verifyResponse = VerifyLocation(token);
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
@@ -307,32 +308,31 @@ namespace MexGrpcSampleConsoleApp
 
         static String setLocation(string locLat, string locLong)
         {
-            var config = "";
+            string clientIP = "";
+
             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("curl");
             psi.Arguments = " ifconfig.me";
-            psi.UseShellExecute = false;
             psi.RedirectStandardOutput = true;
-            System.Diagnostics.Process curl;
-            curl = System.Diagnostics.Process.Start(psi);
-            curl.WaitForExit();
-            System.IO.StreamReader ipReader = curl.StandardOutput;
-            curl.WaitForExit();
-            if (curl.HasExited)
+            System.Diagnostics.Process ipCurl;
+            ipCurl = System.Diagnostics.Process.Start(psi);
+            ipCurl.WaitForExit();
+            System.IO.StreamReader reader = ipCurl.StandardOutput;
+            ipCurl.WaitForExit();
+            if (ipCurl.HasExited)
             {
-                config = ipReader.ReadToEnd();
+                clientIP = reader.ReadToEnd();
             }
+            Console.WriteLine(clientIP);
 
 
             string resp = null;
-            string ipAddr = config;
-            //string ipAddr = "40.122.108.233";
             string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
-            string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
+            string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + clientIP + '"' + "}";
             Console.WriteLine(payload);
             byte[] postBytes = Encoding.UTF8.GetBytes(payload);
             WebRequest request = WebRequest.Create(serverURL);
             request.Method = "POST";
-            request.ContentType = "application/jason; charset=UTF-8";
+            request.ContentType = "application/json; charset=UTF-8";
             //request.ContentType = "text/html; charset=utf-8";
             request.ContentLength = postBytes.Length;
             Stream dataStream = request.GetRequestStream();
@@ -341,15 +341,15 @@ namespace MexGrpcSampleConsoleApp
             try
             {
                 WebResponse response = request.GetResponse();
-                //Console.WriteLine("Response: " + ((HttpWebResponse)response).StatusDescription);
+                Console.WriteLine("Response: " + ((HttpWebResponse)response).StatusDescription);
                 dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
+                StreamReader sReader = new StreamReader(dataStream);
+                string responseFromServer = sReader.ReadToEnd();
                 if (((HttpWebResponse)response).StatusDescription == "OK")
                 {
                     Console.WriteLine(responseFromServer);
                 }
-                reader.Close();
+                sReader.Close();
                 dataStream.Close();
                 response.Close();
                 return resp;
@@ -357,7 +357,7 @@ namespace MexGrpcSampleConsoleApp
             catch (System.Net.WebException we)
             {
                 WebResponse respon = (HttpWebResponse)we.Response;
-                //Console.WriteLine("Response: " + we.Status);
+                Console.WriteLine("Response: " + we.Status);
                 Stream dStream = respon.GetResponseStream();
                 StreamReader sr = new StreamReader(dStream);
                 string responseFromServer = sr.ReadToEnd();
@@ -441,6 +441,7 @@ namespace MexGrpcSampleConsoleApp
             {
                 token = parseToken(uriLocation);
             }
+            Console.WriteLine("Token: " + token);
             return token;
         }
 
