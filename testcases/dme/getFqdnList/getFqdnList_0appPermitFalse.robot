@@ -41,15 +41,15 @@ Setup
 
     Create Developer         developer_name=${dev_1}
     Create App               access_ports=tcp:1  permits_platform_apps=${False}
-    ${appinst_1}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${uri_1}
+    ${appinst_1}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${uri_1}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_2}
     Create App               access_ports=tcp:1  permits_platform_apps=${False}
-    ${appinst_2}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${uri_2}
+    ${appinst_2}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${uri_2}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${platos_developer_name}
     Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
-    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}
+    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     #Set Suite Variable  ${dmuus_appinst} 
 
