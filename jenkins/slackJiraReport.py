@@ -190,7 +190,7 @@ for bug in bug_dict:
 report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
 #print(failed_bugs_string_bybug)
 print(report_string)
-sys.exit(1)
+#sys.exit(1)
 
 report_attachment = json.dumps(
     [
