@@ -1565,7 +1565,7 @@ class Controller():
             self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
         #resp =  self.show_app_instances(app_instance)
-        resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
+        resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
 
         return resp[0]
 
