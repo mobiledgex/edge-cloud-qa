@@ -111,12 +111,12 @@ Setup
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
 
     # create operator app instance
-    ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}
+    ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     # create public app instance
-    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
+    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${platos_developer_name}
     Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
-    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}
+    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${azure_appinst} 

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dme-v100
+  labels:
+    app: dme-v100
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dme-v100
+  template:
+    metadata:
+      labels:
+        app: dme-v100
+    spec:
+      containers:
+      - name: dme-v100
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:v1.0.0
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
+        command:
+         - "dme-server"
+         - "--apiAddr"
+         - "0.0.0.0:50051"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--locverurl"
+         - "http://mextest.locsim.mobiledgex.net:8888/verifyLocation"
+         - "--carrier"
+         - "GDDT"
+         - "--d"
+         - "locapi,dmedb,dmereq,notify"
+         - "--toksrvurl"
+         - "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc" 
+         - "--vaultAddr"
+         - "https://vault.mobiledgex.net"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"GDDT\"},\"name\":\"automationBuckhornCloudlet\"}"
+        env:
+         - name: LOCAPI_USER
+           value: mexserver
+         - name: LOCAPI_PASSWD
+           value: seC2835!
+         - name: VAULT_ROLE_ID
+           value: b95e3309-5964-89a2-5647-e86f745f20c7
+         - name: VAULT_SECRET_ID
+           value: ***REMOVED***
+      imagePullSecrets:
+       - name: mexreg-secret 
+
+

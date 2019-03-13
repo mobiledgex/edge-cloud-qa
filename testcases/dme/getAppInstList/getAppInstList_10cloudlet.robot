@@ -241,19 +241,19 @@ Setup
     Create Cloudlet        cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
 
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
-    ${dmuus_appinst_1}=           Create App Instance  cloudlet_name=${cloudlet_name_1}  operator_name=${operator_name}
-    ${dmuus_appinst_2}=           Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}
-    ${dmuus_appinst_3}=           Create App Instance  cloudlet_name=${cloudlet_name_3}  operator_name=${operator_name}
-    ${dmuus_appinst_4}=           Create App Instance  cloudlet_name=${cloudlet_name_4}  operator_name=${operator_name}
-    ${dmuus_appinst_5}=           Create App Instance  cloudlet_name=${cloudlet_name_5}  operator_name=${operator_name}
-    ${dmuus_appinst_6}=           Create App Instance  cloudlet_name=${cloudlet_name_6}  operator_name=${operator_name}
-    ${dmuus_appinst_7}=           Create App Instance  cloudlet_name=${cloudlet_name_7}  operator_name=${operator_name}
-    ${dmuus_appinst_8}=           Create App Instance  cloudlet_name=${cloudlet_name_8}  operator_name=${operator_name}
-    #${dmuus_appinst_9}=           Create App Instance  cloudlet_name=${cloudlet_name_9}  operator_name=${operator_name}
-    #${dmuus_appinst_10}=           Create App Instance  cloudlet_name=${cloudlet_name_10}  operator_name=${operator_name}
+    ${dmuus_appinst_1}=           Create App Instance  cloudlet_name=${cloudlet_name_1}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_2}=           Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_3}=           Create App Instance  cloudlet_name=${cloudlet_name_3}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_4}=           Create App Instance  cloudlet_name=${cloudlet_name_4}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_5}=           Create App Instance  cloudlet_name=${cloudlet_name_5}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_6}=           Create App Instance  cloudlet_name=${cloudlet_name_6}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_7}=           Create App Instance  cloudlet_name=${cloudlet_name_7}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst_8}=           Create App Instance  cloudlet_name=${cloudlet_name_8}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    #${dmuus_appinst_9}=           Create App Instance  cloudlet_name=${cloudlet_name_9}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    #${dmuus_appinst_10}=           Create App Instance  cloudlet_name=${cloudlet_name_10}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
-    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
-    ${azure_appinst}=           Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
+    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
+    ${azure_appinst}=           Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst_1} 
     Set Suite Variable  ${dmuus_appinst_2}
