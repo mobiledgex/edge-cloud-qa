@@ -122,9 +122,9 @@ Setup
     Create Cluster Flavor	
     Create Cluster		
     Create App			access_ports=tcp:1
-    Create App Instance		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}
-    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
-    ${gcp_appinst}=            Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
+    Create App Instance		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${gcp_appinst}=            Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${gcp_appinst} 
 

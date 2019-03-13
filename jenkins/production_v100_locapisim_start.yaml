@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locapisim-v100
+  labels:
+    app: locapisim-v100
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locapisim
+  template:
+    metadata:
+      labels:
+        app: locapisim
+    spec:
+       volumes:
+         - name: tmpstorage
+           hostPath:
+             path:  /var/tmp
+             type: Directory
+       containers:
+       - name: locapisim
+         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:v1.0.0
+         imagePullPolicy: Always
+         volumeMounts:
+         - name: tmpstorage
+           mountPath: /mnt/andy
+         resources:
+           requests:
+             cpu: 10m
+         command:
+          - loc-api-sim
+         args:
+          - "-port"
+          - "8888"
+          - "-country"
+          - "US"
+       imagePullSecrets:
+        - name: mexreg-secret
+

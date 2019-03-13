@@ -59,7 +59,7 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App                  access_ports=tcp:1  
-    ${tmus_appinst}=            Create App Instance         cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}
-    Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com
+    ${tmus_appinst}=            Create App Instance         cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com  cluster_instance_name=autocluster
 
     Set Suite Variable  ${tmus_appinst} 
