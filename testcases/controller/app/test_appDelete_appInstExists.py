@@ -55,6 +55,7 @@ class tc(unittest.TestCase):
                                               default_flavor_name=flavor_name)
         self.app_instance = mex_controller.AppInstance(app_name=app_name,
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,

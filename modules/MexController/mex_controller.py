@@ -136,7 +136,7 @@ class Operator():
         self.operator_name = operator_name
 
         if use_defaults:
-            self.operator_name = operator_name_default
+            self.operator_name = shared_variables.operator_name_default
             
         if self.operator_name is not None:
             op_dict['key'] = operator_pb2.OperatorKey(name = self.operator_name)
@@ -215,6 +215,8 @@ class Flavor():
 class ClusterFlavor():
     def __init__(self, cluster_flavor_name=None, node_flavor_name=None, master_flavor_name=None, number_nodes=None,max_nodes=None, number_masters=None, use_defaults=True):
         #global cluster_flavor_name_default
+
+        cluster_flavor_dict = {}
         
         self.cluster_flavor_name = cluster_flavor_name
         self.node_flavor_name = node_flavor_name
@@ -232,15 +234,30 @@ class ClusterFlavor():
             if number_masters is None: self.number_masters = 1
 
         shared_variables.cluster_flavor_name_default = self.cluster_flavor_name
-        
-        self.cluster_flavor = clusterflavor_pb2.ClusterFlavor(
-                                                              key=clusterflavor_pb2.ClusterFlavorKey(name=self.cluster_flavor_name),
-                                                              node_flavor=flavor_pb2.FlavorKey(name=self.node_flavor_name),
-                                                              master_flavor=flavor_pb2.FlavorKey(name=self.master_flavor_name),
-                                                              num_nodes=int(self.number_nodes),
-                                                              max_nodes=int(self.max_nodes),
-                                                              num_masters=int(self.number_masters)
-                                                             )
+
+        if self.number_masters:
+            cluster_flavor_dict['num_masters'] = int(self.number_masters)
+        if self.max_nodes:
+            cluster_flavor_dict['max_nodes'] = int(self.max_nodes)
+        if self.number_nodes:
+            cluster_flavor_dict['num_nodes'] = int(self.number_nodes)
+        if self.master_flavor_name:
+            cluster_flavor_dict['master_flavor'] = flavor_pb2.FlavorKey(name=self.master_flavor_name)
+        if self.node_flavor_name:
+            cluster_flavor_dict['node_flavor'] = flavor_pb2.FlavorKey(name=self.node_flavor_name)
+        if self.cluster_flavor_name:
+            cluster_flavor_dict['key'] = clusterflavor_pb2.ClusterFlavorKey(name=self.cluster_flavor_name)
+
+        self.cluster_flavor = clusterflavor_pb2.ClusterFlavor(**cluster_flavor_dict)
+
+        #self.cluster_flavor = clusterflavor_pb2.ClusterFlavor(
+        #                                                      key=clusterflavor_pb2.ClusterFlavorKey(name=self.cluster_flavor_name),
+        #                                                      node_flavor=flavor_pb2.FlavorKey(name=self.node_flavor_name),
+        #                                                      master_flavor=flavor_pb2.FlavorKey(name=self.master_flavor_name),
+        #                                                      num_nodes=int(self.number_nodes),
+        #                                                      max_nodes=int(self.max_nodes),
+        #                                                      num_masters=int(self.number_masters)
+        #                                                     )
 
 
 
@@ -869,7 +886,7 @@ class Controller():
             # create credentials
             credentials = grpc.ssl_channel_credentials(root_certificates=trusted_certs, private_key=trusted_key, certificate_chain=cert)
             # dont think this is sending at the correct interval. seems to be sending keepalive every 5mins
-            channel_options = [('grpc.keepalive_time_ms',240000),  # 1mins. seems I cannot do less than 5mins. does 5mins anyway if set lower
+            channel_options = [('grpc.keepalive_time_ms',300000),  # 1mins. seems I cannot do less than 5mins. does 5mins anyway if set lower
                                ('grpc.keepalive_timeout_ms', 5000),
                                ('grpc.http2.min_time_between_pings_ms', 60000),
                                ('grpc.http2.max_pings_without_data', 0),
@@ -910,6 +927,8 @@ class Controller():
         resp = None
 
         if not cluster_flavor:
+            if len(kwargs) == 0:
+                kwargs = {'use_defaults': True}
             cluster_flavor = ClusterFlavor(**kwargs).cluster_flavor
 
         logger.info('create cluster flavor on {}. \n\t{}'.format(self.address, str(cluster_flavor).replace('\n','\n\t')))
@@ -917,26 +936,78 @@ class Controller():
         resp = self.cluster_flavor_stub.CreateClusterFlavor(cluster_flavor)
 
         self.prov_stack.append(lambda:self.delete_cluster_flavor(cluster_flavor))
-        
+
+        resp = self.show_cluster_flavors(cluster_flavor_name=cluster_flavor.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
         return resp
 
-    def delete_cluster_flavor(self, cluster_flavor):
+    def delete_cluster_flavor(self, cluster_flavor=None, **kwargs):
+        resp = None
+
+        if cluster_flavor is None:
+            if 'cluster_flavor_name' not in kwargs:
+                kwargs['cluster_flavor_name'] = shared_variables.cluster_flavor_name_default
+            cluster_flavor = ClusterFlavor(**kwargs).cluster_flavor
+
         logger.info('delete cluster flavor on {}. \n\t{}'.format(self.address, str(cluster_flavor).replace('\n','\n\t')))
 
         resp = self.cluster_flavor_stub.DeleteClusterFlavor(cluster_flavor)
 
         return resp
 
-    def show_cluster_flavors(self):
-        logger.info('show cluster flavors on {}'.format(self.address))
+    def show_cluster_flavors(self, op_instance=None, **kwargs):
+        resp = None
 
-        resp = list(self.cluster_flavor_stub.ShowClusterFlavor(clusterflavor_pb2.ClusterFlavor()))
+        if not op_instance:
+            if len(kwargs) != 0:
+                op_instance = ClusterFlavor(**kwargs).cluster_flavor
+
+        logger.info('show cluster flavors on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+        
+        resp = None
+        if op_instance:
+            resp = list(self.cluster_flavor_stub.ShowClusterFlavor(op_instance))
+        else:
+            resp = list(self.cluster_flavor_stub.ShowClusterFlavor(clusterflavor_pb2.ClusterFlavor()))
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
             logger.debug('cluster flavor list:')
             for c in resp:
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
+
+    def cluster_flavor_should_exist(self, op_instance=None, **kwargs):
+
+        if op_instance is None:
+            kwargs['use_defaults'] = False
+            if 'cluster_flavor_name' not in kwargs:
+                kwargs['cluster_flavor_name'] = shared_variables.cluster_flavor_name_default
+            op_instance = ClusterFlavor(**kwargs).cluster_flavor
+                 
+        resp = None
+
+        logger.info('should contain operator on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+
+        resp = self.show_cluster_flavors(op_instance)
+        logger.info(resp)
+        
+        if not resp:
+            raise AssertionError('Cluster Flavor does not exist'.format(str(resp)))
+
+        return resp
+
+    def cluster_flavor_should_not_exist(self, op_instance=None, **kwargs):
+
+        try:
+            resp = self.cluster_flavor_should_exist(op_instance=None, **kwargs)
+            raise AssertionError('Cluster Flavor does exist'.format(str(resp)))
+        except:
+            logger.info('cluster flavor does not exist')
 
     def create_cluster(self, cluster=None, **kwargs):
         resp = None
@@ -947,28 +1018,78 @@ class Controller():
         logger.info('create cluster on {}. \n\t{}'.format(self.address, str(cluster).replace('\n','\n\t')))
 
         resp = self.cluster_stub.CreateCluster(cluster)
-        print('AAAANDY')
         self.prov_stack.append(lambda:self.delete_cluster(cluster))
-        
+
+        resp = self.show_clusters(cluster_name=cluster.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
         return resp
 
-    def delete_cluster(self, cluster):
+    def delete_cluster(self, cluster=None, **kwargs):
+        resp = None
+
+        if cluster is None:
+            if 'cluster_name' not in kwargs:
+                kwargs['cluster_name'] = shared_variables.cluster_name_default
+            cluster = Cluster(**kwargs).cluster
+
         logger.info('delete cluster on {}. \n\t{}'.format(self.address, str(cluster).replace('\n','\n\t')))
 
         resp = self.cluster_stub.DeleteCluster(cluster)
 
         return resp
 
-    def show_clusters(self):
-        logger.info('show clusters on {}'.format(self.address))
+    def show_clusters(self, cluster_instance=None, **kwargs):
+        resp = None
 
-        resp = list(self.cluster_stub.ShowCluster(cluster_pb2.Cluster()))
+        if not cluster_instance:
+            if len(kwargs) != 0:
+                cluster_instance = Cluster(**kwargs).cluster
+
+        logger.info('show clusters on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
+
+        resp = None
+        if cluster_instance:
+            resp = list(self.cluster_stub.ShowCluster(cluster_instance))
+        else:
+            resp = list(self.cluster_stub.ShowCluster(cluster_pb2.Cluster()))
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
             logger.debug('cluster list:')
             for c in resp:
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
+
+    def cluster_should_exist(self, op_instance=None, **kwargs):
+
+        if op_instance is None:
+            kwargs['use_defaults'] = False
+            if 'cluster_name' not in kwargs:
+                kwargs['cluster_name'] = shared_variables.cluster_name_default
+            op_instance = Cluster(**kwargs).cluster
+                 
+        resp = None
+
+        logger.info('should contain cluster on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+
+        resp = self.show_clusters(op_instance)
+        logger.info(resp)
+        
+        if not resp:
+            raise AssertionError('Cluster does not exist'.format(str(resp)))
+
+        return resp
+
+    def cluster_should_not_exist(self, op_instance=None, **kwargs):
+        try:
+            resp = self.cluster_should_exist(op_instance=None, **kwargs)
+            raise AssertionError('Cluster does exist'.format(str(resp)))
+        except:
+            logger.info('cluster does not exist')
 
     def show_cluster_instances(self, cluster_instance=None, **kwargs):
         resp = None
@@ -1066,7 +1187,6 @@ class Controller():
         logger.info(resp)
         
         if not resp:
-            print('*WARN*', 'andy1')
             raise AssertionError('Cluster Instance does not exist'.format(str(resp)))
 
         return resp
@@ -1075,7 +1195,6 @@ class Controller():
         resp = None
         try:
             resp = self.cluster_instance_should_exist(cluster_instance=None, **kwargs)
-            print('*WARN*', 'andy')
         except:
             logger.info('cluster instance does exist')
             
@@ -1209,7 +1328,14 @@ class Controller():
         resp = self.flavor_stub.CreateFlavor(flavor_instance)
         self.prov_stack.append(lambda:self.delete_flavor(flavor_instance))
 
-        return resp
+        resp = self.show_flavors(flavor_name=flavor_instance.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
+        #return resp
 
     def update_flavor(self, flavor_instance):
         logger.info('update flavor on {}. \n\t{}'.format(self.address, str(flavor_instance).replace('\n','\n\t')))
@@ -1218,7 +1344,13 @@ class Controller():
 
         return resp
 
-    def show_flavors(self, flavor_instance=None):
+    def show_flavors(self, flavor_instance=None, **kwargs):
+        resp = None
+
+        if not flavor_instance:
+            if len(kwargs) != 0:
+                flavor_instance = Flavor(**kwargs).flavor
+
         logger.info('show flavors on {}. \n\t{}'.format(self.address, str(flavor_instance).replace('\n','\n\t')))
 
         resp = None
@@ -1233,12 +1365,47 @@ class Controller():
 
         return resp
 
-    def delete_flavor(self, flavor_instance):
+    def delete_flavor(self, flavor_instance=None, **kwargs):
+        resp = None
+
+        if flavor_instance is None:
+            if 'flavor_name' not in kwargs:
+                kwargs['flavor_name'] = shared_variables.flavor_name_default
+            flavor_instance = Flavor(**kwargs).flavor
+
         logger.info('delete flavor on {}. \n\t{}'.format(self.address, str(flavor_instance).replace('\n','\n\t')))
 
         resp = self.flavor_stub.DeleteFlavor(flavor_instance)
 
         return resp
+
+    def flavor_should_exist(self, op_instance=None, **kwargs):
+
+        if op_instance is None:
+            kwargs['use_defaults'] = False
+            if 'flavor_name' not in kwargs:
+                kwargs['flavor_name'] = shared_variables.flavor_name_default
+            op_instance = Flavor(**kwargs).flavor
+                 
+        resp = None
+
+        logger.info('should contain operator on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+
+        resp = self.show_flavors(op_instance)
+        logger.info(resp)
+        
+        if not resp:
+            raise AssertionError('Flavor does not exist'.format(str(resp)))
+
+        return resp
+
+    def flavor_should_not_exist(self, op_instance=None, **kwargs):
+
+        try:
+            resp = self.flavor_should_exist(op_instance=None, **kwargs)
+            raise AssertionError('Flavor does exist'.format(str(resp)))
+        except:
+            logger.info('flavor does not exist')
 
     def show_apps(self, app_instance=None, **kwargs):
         resp = None
@@ -1331,7 +1498,14 @@ class Controller():
         except:
             logger.info('app does not exist')
         
-    def delete_app(self, app_instance):
+    def delete_app(self, app_instance=None, **kwargs):
+        resp = None
+
+        if app_instance is None:
+            if 'app_name' not in kwargs:
+                kwargs['app_name'] = shared_variables.app_name_default
+            app_instance = App(**kwargs).app
+
         logger.info('delete app on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
         resp = self.app_stub.DeleteApp(app_instance)
@@ -1354,7 +1528,7 @@ class Controller():
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
             logger.debug('app instance list:')
             for c in resp:
-                print('\t{}'.format(str(c).replace('\n','\n\t')))
+                print('xxxx\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
 
@@ -1390,7 +1564,8 @@ class Controller():
         if auto_delete:
             self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
-        resp =  self.show_app_instances(app_instance)
+        #resp =  self.show_app_instances(app_instance)
+        resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
 
         return resp[0]
 
@@ -1465,6 +1640,13 @@ class Controller():
         resp = self.operator_stub.CreateOperator(op_instance)
         self.prov_stack.append(lambda:self.delete_operator(op_instance))
 
+        resp = self.show_operators(operator_name=op_instance.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
         return resp
 
     def update_operator(self, op_instance):
@@ -1474,15 +1656,28 @@ class Controller():
 
         return resp
 
-    def delete_operator(self, op_instance):
+    def delete_operator(self, op_instance=None, **kwargs):
+        resp = None
+
+        if op_instance is None:
+            if 'operator_name' not in kwargs:
+                kwargs['operator_name'] = shared_variables.operator_name_default
+            op_instance = Operator(**kwargs).operator
+                
         logger.info('delete operator on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
 
         resp = self.operator_stub.DeleteOperator(op_instance)
 
         return resp
 
-    def show_operators(self, op_instance=None):
-        logger.info('show operator on {}'.format(self.address))
+    def show_operators(self, op_instance=None, **kwargs):
+        resp = None
+
+        if not op_instance:
+            if len(kwargs) != 0:
+                op_instance = Operator(**kwargs).operator
+
+        logger.info('show operator on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
 
         resp = None
         if op_instance:
@@ -1491,6 +1686,34 @@ class Controller():
             resp = list(self.operator_stub.ShowOperator(operator_pb2.Operator()))
 
         return resp
+
+    def operator_should_exist(self, op_instance=None, **kwargs):
+
+        if op_instance is None:
+            kwargs['use_defaults'] = False
+            if 'operator_name' not in kwargs:
+                kwargs['operator_name'] = shared_variables.operator_name_default
+            op_instance = Operator(**kwargs).operator
+                 
+        resp = None
+
+        logger.info('should contain operator on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+
+        resp = self.show_operators(op_instance)
+        logger.info(resp)
+        
+        if not resp:
+            raise AssertionError('Operator does not exist'.format(str(resp)))
+
+        return resp
+
+    def operator_should_not_exist(self, op_instance=None, **kwargs):
+
+        try:
+            resp = self.operator_should_exist(op_instance=None, **kwargs)
+            raise AssertionError('Operator does exist'.format(str(resp)))
+        except:
+            logger.info('operator does not exist')
 
     def create_developer(self, op_instance=None, **kwargs):
         resp = None
@@ -1503,7 +1726,14 @@ class Controller():
         resp = self.developer_stub.CreateDeveloper(op_instance)
         self.prov_stack.append(lambda:self.delete_developer(op_instance))
 
-        return resp
+        resp = self.show_developers(developer_name=op_instance.key.name, use_defaults=False)
+
+        if len(resp) == 0:
+            return None
+        else:
+            return resp[0]
+
+        #return resp
 
     def update_developer(self, op_instance):
         logger.info('update developer on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
@@ -1512,14 +1742,27 @@ class Controller():
 
         return resp
 
-    def delete_developer(self, op_instance):
+    def delete_developer(self, op_instance=None, **kwargs):
+        resp = None
+
+        if op_instance is None:
+            if 'developer_name' not in kwargs:
+                kwargs['developer_name'] = shared_variables.developer_name_default
+            op_instance = Developer(**kwargs).developer
+
         logger.info('delete developer on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
 
         resp = self.developer_stub.DeleteDeveloper(op_instance)
 
         return resp
 
-    def show_developers(self, op_instance=None):
+    def show_developers(self, op_instance=None, **kwargs):
+        resp = None
+
+        if not op_instance:
+            if len(kwargs) != 0:
+                op_instance = Developer(**kwargs).developer
+
         logger.info('show developers on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
 
         resp = None
@@ -1533,6 +1776,34 @@ class Controller():
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
+
+    def developer_should_exist(self, op_instance=None, **kwargs):
+
+        if op_instance is None:
+            kwargs['use_defaults'] = False
+            if 'developer_name' not in kwargs:
+                kwargs['developer_name'] = shared_variables.developer_name_default
+            op_instance = Developer(**kwargs).developer
+                 
+        resp = None
+
+        logger.info('should contain developer on {}. \n\t{}'.format(self.address, str(op_instance).replace('\n','\n\t')))
+
+        resp = self.show_developers(op_instance)
+        logger.info(resp)
+        
+        if not resp:
+            raise AssertionError('Developer does not exist'.format(str(resp)))
+
+        return resp
+
+    def developer_should_not_exist(self, op_instance=None, **kwargs):
+
+        try:
+            resp = self.developer_should_exist(op_instance=None, **kwargs)
+            raise AssertionError('Developer does exist'.format(str(resp)))
+        except:
+            logger.info('developer does not exist')
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')

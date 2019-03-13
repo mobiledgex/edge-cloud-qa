@@ -88,48 +88,48 @@ Setup
 
     Create Developer         developer_name=${dev_1}
     Create App		     access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_1}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_1}
+    ${appinst_1}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_1}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_2}
     Create App               access_ports=tcp:1  permits_platform_apps=${False}
-    ${appinst_2}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_2}
+    ${appinst_2}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_2}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_3}
     Create App               access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_3}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_3}
+    ${appinst_3}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_3}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_4}
     Create App               access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_4}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_4}
+    ${appinst_4}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_4}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_5}
     Create App               access_ports=tcp:1  
-    ${appinst_5}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_5}
+    ${appinst_5}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_5}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_6}
     Create App               access_ports=tcp:1  permits_platform_apps=${False}
-    ${appinst_6}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_6}
+    ${appinst_6}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_6}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_7}
     Create App               access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_7}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_7}
+    ${appinst_7}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_7}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_8}
     Create App               access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_8}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_8}
+    ${appinst_8}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_8}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_9}
     Create App               access_ports=tcp:1  permits_platform_apps=${True}
-    ${appinst_9}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_9}
+    ${appinst_9}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_9}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_10}
     Create App               access_ports=tcp:1 
-    ${appinst_10}=           Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_10}
+    ${appinst_10}=           Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_10}  cluster_instance_name=autocluster
 
 
     Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  
-    Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}
+    Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${appinst_1} 
     Set Suite Variable  ${appinst_2}

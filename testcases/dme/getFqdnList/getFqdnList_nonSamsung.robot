@@ -37,4 +37,4 @@ Setup
     Create Cluster	
     Create Cluster Instance     cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
-    Create App Instance		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}
+    Create App Instance		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster

@@ -123,7 +123,7 @@ while offset < total_count:
     for tc in query_content['searchObjectList']:
         print(tc['issueKey'], tc['execution']['status']['name'], tc['execution']['defects'])
         if tc['execution']['status']['name'] == 'PASS': total_pass += 1
-        if tc['execution']['status']['name'] == 'FAIL':
+        elif tc['execution']['status']['name'] == 'FAIL':
             total_fail += 1
             if len(tc['execution']['defects']) == 0:
                 total_fail_nobugs += 1
@@ -139,10 +139,12 @@ while offset < total_count:
                         bug_dict[defect['key'] + ' - ' + defect['summary']] = [tc['issueKey'] + '\t' +  tc['issueSummary']]
                 total_fail_bugs += 1
             failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
-        if tc['execution']['status']['name'] == 'UNEXECUTED':
+        elif tc['execution']['status']['name'] == 'UNEXECUTED':
             total_unexecuted += 1
             unexecuted_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
-            
+        elif tc['execution']['status']['name'] == 'WIP': total_wip += 1
+        elif tc['execution']['status']['name'] == 'BLOCKED': total_blocked += 1
+
         total_counted += 1
     
 print('totalcount', total_count, 'totalcounted', total_counted, 'pass', total_pass, 'fail', total_fail, 'unexec', total_unexecuted)

@@ -62,6 +62,6 @@ Setup
     Create Cluster Flavor
     Create Cluster
     Create App                  access_ports=tcp:1 
-    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
+    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${gcp_appinst} 
