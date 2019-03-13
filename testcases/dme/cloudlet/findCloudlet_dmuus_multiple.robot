@@ -150,18 +150,18 @@ Setup
     Create Cluster Flavor
     Create Cluster		
     Create App			access_ports=tcp:1  
-    ${appinst_1}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}
-    ${appinst_2}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}
-    ${appinst_3}=               Create App Instance		cloudlet_name=tmocloud-3  operator_name=${dmuus_operator_name}
-    ${appinst_4}=               Create App Instance		cloudlet_name=tmocloud-4  operator_name=${dmuus_operator_name}
-    ${appinst_5}=               Create App Instance		cloudlet_name=tmocloud-5  operator_name=${dmuus_operator_name}
-    ${appinst_6}=               Create App Instance		cloudlet_name=tmocloud-6  operator_name=${dmuus_operator_name}
-    ${appinst_7}=               Create App Instance		cloudlet_name=tmocloud-7  operator_name=${dmuus_operator_name}
-    ${appinst_8}=               Create App Instance		cloudlet_name=tmocloud-8  operator_name=${dmuus_operator_name}
-    ${appinst_9}=               Create App Instance		cloudlet_name=tmocloud-9  operator_name=${dmuus_operator_name}
-    ${appinst_10}=              Create App Instance		cloudlet_name=tmocloud-10  operator_name=${dmuus_operator_name}
-    ${appinst_azure}=           Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}
-    ${appinst_gcp}=             Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}
+    ${appinst_1}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_2}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_3}=               Create App Instance		cloudlet_name=tmocloud-3  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_4}=               Create App Instance		cloudlet_name=tmocloud-4  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_5}=               Create App Instance		cloudlet_name=tmocloud-5  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_6}=               Create App Instance		cloudlet_name=tmocloud-6  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_7}=               Create App Instance		cloudlet_name=tmocloud-7  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_8}=               Create App Instance		cloudlet_name=tmocloud-8  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_9}=               Create App Instance		cloudlet_name=tmocloud-9  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_10}=              Create App Instance		cloudlet_name=tmocloud-10  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_azure}=           Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${appinst_gcp}=             Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
     Register Client	
 
     Set Suite Variable  ${appinst_azure} 
