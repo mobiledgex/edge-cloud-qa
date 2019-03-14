@@ -29,7 +29,7 @@ FindCloudlet - request without lat/long should return 'Missing GpsLocation'
    Register Client	#app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Missing GpsLocation"
 
 FindCloudlet - request without carrier name should return 'missing carrierName'
@@ -43,8 +43,8 @@ FindCloudlet - request without carrier name should return 'missing carrierName'
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "missing carrierName"
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Missing carrierName"
 
 FindCloudlet - request with latitude only should return 'missing carrierName'
    [Documentation]
@@ -54,8 +54,8 @@ FindCloudlet - request with latitude only should return 'missing carrierName'
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "missing carrierName"
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Missing carrierName"
 
 FindCloudlet - request with longitude only should return 'missing carrierName'
    [Documentation]
@@ -65,8 +65,8 @@ FindCloudlet - request with longitude only should return 'missing carrierName'
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  longitude=35  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "missing carrierName"
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Missing carrierName"
 
 FindCloudlet - request with carrier_name and latitude only should succeed
    [Documentation]
