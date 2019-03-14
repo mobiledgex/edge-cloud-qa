@@ -21,8 +21,8 @@ GetAppInstList - request shall fail with no GPS coords
 
       ${error_msg}=  Run Keyword And Expect Error  *  Get App Instance List
 
-      Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-      Should Contain  ${error_msg}   details = "missing GPS location"
+      Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+      Should Contain  ${error_msg}   details = "Missing GPS location"
 
 *** Keywords ***
 Setup
