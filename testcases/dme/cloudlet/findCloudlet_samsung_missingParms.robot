@@ -26,7 +26,7 @@ FindCloudlet Samsung - request shall return error when registering samsung app a
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
       ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_name=${samsung_app_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Contain  ${error_msg}  status = StatusCode.UNKNOWN
+      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
       Should Contain  ${error_msg}  details = "Access to requested app: Devname: \ Appname: SamsungEnablingLayer AppVers: \ not allowed for the registered app: Devname: Samsung Appname: SamsungEnablingLayer Appvers: 1.0"
 
 FindCloudlet Samsung - request shall return error when registering samsung app and sending findCloudlet overriding appvers only
@@ -37,7 +37,7 @@ FindCloudlet Samsung - request shall return error when registering samsung app a
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
       ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_version=${app_version}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Contain  ${error_msg}  status = StatusCode.UNKNOWN
+      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
       Should Contain  ${error_msg}  details = "Access to requested app: Devname: \ Appname: \ AppVers: 1.0 not allowed for the registered app: Devname: Samsung Appname: SamsungEnablingLayer Appvers: 1.0"
 
 FindCloudlet Samsung - request shall return error when registering samsung app and sending findCloudlet overriding developername only
@@ -48,7 +48,7 @@ FindCloudlet Samsung - request shall return error when registering samsung app a
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
       ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  developer_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Contain  ${error_msg}  status = StatusCode.UNKNOWN
+      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
       Should Contain  ${error_msg}  details = "Access to requested app: Devname: Samsung Appname: \ AppVers: \ not allowed for the registered app: Devname: Samsung Appname: SamsungEnablingLayer Appvers: 1.0"
 
 

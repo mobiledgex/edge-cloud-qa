@@ -21,7 +21,7 @@ FindCloudlet - request with too small latitude should return 'Invalid GpsLocatio
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  carrier_name=${carrier_name}  latitude=-91  longitude=10
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 FindCloudlet - request with too large latitude should return 'Invalid GpsLocation'
@@ -32,7 +32,7 @@ FindCloudlet - request with too large latitude should return 'Invalid GpsLocatio
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  carrier_name=${carrier_name}  latitude=91  longitude=10
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 FindCloudlet - request with too small longitude should return 'Invalid GpsLocation'
@@ -43,7 +43,7 @@ FindCloudlet - request with too small longitude should return 'Invalid GpsLocati
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  carrier_name=${carrier_name}  latitude=1  longitude=-181
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 FindCloudlet - request with too large longitude should return 'Invalid GpsLocation'
@@ -54,7 +54,7 @@ FindCloudlet - request with too large longitude should return 'Invalid GpsLocati
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  carrier_name=${carrier_name}  latitude=1  longitude=181
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 FindCloudlet - request with out-of-range latitude/longitude should return 'Invalid GpsLocation'
@@ -65,7 +65,7 @@ FindCloudlet - request with out-of-range latitude/longitude should return 'Inval
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  carrier_name=${carrier_name}  latitude=99999999999999999  longitude=-99999999999999999
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 *** Keywords ***

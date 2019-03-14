@@ -21,8 +21,8 @@ VerifyLocation - request without lat/long should return 'Missing GpsLocation'
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  carrier_name=${carrier_name}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   details = "Missing GpsLocation"
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Missing GPS location"
 
 VerifyLocation - request without carrier should succeed
    [Documentation]
@@ -41,7 +41,7 @@ VerifyLocation - request without token should return 'verifyloc token required'
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "verifyloc token required"
 
 VerifyLocation - request with latitude only should succeed

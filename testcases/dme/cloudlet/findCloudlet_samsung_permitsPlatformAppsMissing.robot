@@ -34,7 +34,7 @@ FindCloudlet Samsung - request shall return error when sending FindCloudlet for 
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
        ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Contain  ${error_msg}  status = StatusCode.UNKNOWN
+      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
       Should Contain  ${error_msg}  details = "Access to requested app: Devname: ${developer_name_default} Appname: ${app_name_default} AppVers: 1.0 not allowed for the registered app: Devname: Samsung Appname: SamsungEnablingLayer Appvers: 1.0" 
 
 *** Keywords ***

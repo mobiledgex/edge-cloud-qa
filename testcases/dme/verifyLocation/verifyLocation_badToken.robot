@@ -36,7 +36,7 @@ VerifyLocation - request with empty token shall return 'verifyloc token required
       Register Client
       ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  token=  carrier_name=TDG  latitude=${berlin_lat}  longitude=${berlin_long}
 
-      Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+      Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
       Should Contain  ${error_msg}   details = "verifyloc token required"
 
 *** Keywords ***
