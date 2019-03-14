@@ -14,7 +14,7 @@ ${mobile_latitude}  1
 ${mobile_longitude}  1
 
 *** Test Cases ***
-CreateAppInst - autocluster shall be created when app instance is created with clustername='autocluster'
+AppInst - autocluster shall be created when app instance is created with clustername='autocluster'
     [Documentation]
     ...  create an app instance with cluster name of 'autocluster'
     ...  verify autocluster is created in cluster instance table

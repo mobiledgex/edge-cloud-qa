@@ -38,7 +38,7 @@ RegisterClient - request for app without authpublickey shall return 'No authkey 
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}  auth_token=1234
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "No authkey found to validate token"
 
 RegisterClient - request with invalid version in token shall return 'failed to verify token - token appvers mismatch'
@@ -50,7 +50,7 @@ RegisterClient - request with invalid version in token shall return 'failed to v
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version}  developer_name=${developer_name}  auth_token=${token}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "failed to verify token - token appvers mismatch"
 
 RegisterClient - request with invalid appname in token shall return 'failed to verify token - token appname mismatch'
@@ -62,7 +62,7 @@ RegisterClient - request with invalid appname in token shall return 'failed to v
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version}  developer_name=${developer_name}  auth_token=${token}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "failed to verify token - token appname mismatch"
 
 RegisterClient - request with invalid devname in token shall return 'failed to verify token - token developer mismatch'
@@ -74,7 +74,7 @@ RegisterClient - request with invalid devname in token shall return 'failed to v
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version}  developer_name=${developer_name}  auth_token=${token}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "failed to verify token - token developer mismatch"
 
 RegisterClient - request with invalid token shall return 'failed to verify token - token contains an invalid number of segments'
@@ -84,7 +84,7 @@ RegisterClient - request with invalid token shall return 'failed to verify token
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version}  developer_name=${developer_name}  auth_token=x
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "failed to verify token - token contains an invalid number of segments"
 
 RegisterClient - request with expired token shall return 'failed to verify token - token is expired'
@@ -102,7 +102,7 @@ RegisterClient - request with expired token shall return 'failed to verify token
 	
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version}  developer_name=${developer_name}  auth_token=${token}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
    Should Contain  ${error_msg}   details = "failed to verify token - token is expired
 
 *** Keywords ***
