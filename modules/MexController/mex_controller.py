@@ -1603,8 +1603,9 @@ class Controller():
         resp = None
 
         if app_instance is None:
-            if len(kwargs) != 0:
-                app_instance = AppInstance(**kwargs).app_instance
+            if 'app_name' not in kwargs:
+                kwargs['app_name'] = shared_variables.app_name_default
+            app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('delete app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
         resp = self.appinst_stub.DeleteAppInst(app_instance)
