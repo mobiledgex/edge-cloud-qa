@@ -52,7 +52,7 @@ DeleteCloudlet with a static app assigned
 
 	[Setup]  Setup
 	Create App                  
-	Create App Instance         
+	Create App Instance  cluster_instance_name=autocluster         
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
