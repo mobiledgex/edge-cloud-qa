@@ -29,7 +29,7 @@ RegisterClient - request with app_name only shall return 'DevName cannot be empt
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "DevName cannot be empty"
 
 RegisterClient - request with app_version only shall return 'DevName cannot be empty'
@@ -39,7 +39,7 @@ RegisterClient - request with app_version only shall return 'DevName cannot be e
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_version=${app_version}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "DevName cannot be empty"
 
 RegisterClient - request with developer name only shall return 'AppName cannot be empty'
@@ -49,7 +49,7 @@ RegisterClient - request with developer name only shall return 'AppName cannot b
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	developer_name=${developer_name}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppName cannot be empty"
 
 RegisterClient - request without developer name shall return 'DevName cannot be empty'
@@ -59,7 +59,7 @@ RegisterClient - request without developer name shall return 'DevName cannot be 
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  app_version=${app_version}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "DevName cannot be empty"
 
 RegisterClient - request without app version shall return 'AppVers cannot be empty'
@@ -69,7 +69,7 @@ RegisterClient - request without app version shall return 'AppVers cannot be emp
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  developer_name=${developer_name}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppVers cannot be empty"
 
 RegisterClient - request without app name shall return 'AppName cannot be empty'
@@ -79,7 +79,7 @@ RegisterClient - request without app name shall return 'AppName cannot be empty'
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_version=${app_version}  developer_name=${developer_name}  use_defaults=${False}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppName cannot be empty"
 
 RegisterClient - request without authtoken for app with token shall return 'No authtoken received'
@@ -89,7 +89,7 @@ RegisterClient - request without authtoken for app with token shall return 'No a
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version_default}  developer_name=${developer_name}  use_defaults=${False} 
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "No authtoken received"
 
 *** Keywords ***
