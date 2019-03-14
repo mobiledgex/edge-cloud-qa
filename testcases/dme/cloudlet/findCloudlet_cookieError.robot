@@ -19,7 +19,7 @@ FindCloudlet - request without cookie should return 'missing cookie'
    #Register Client	app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}  auth_token=1234
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWNwrong
    Should Contain  ${error_msg}   details = "VerifyCookie failed: missing cookie"
 
 FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
@@ -29,7 +29,7 @@ FindCloudlet - request with invalid cookie of x should return 'token contains an
 
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4  session_cookie=x
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWNwrong
    Should Contain  ${error_msg}   details = "token contains an invalid number of segments"
 
 FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
@@ -39,7 +39,7 @@ FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base6
 
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4  session_cookie=x.x.x
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWNwrong
    Should Contain  ${error_msg}   details = "illegal base64 data at input byte 1"
 
 FindCloudlet - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
@@ -50,7 +50,7 @@ FindCloudlet - request with truncated cookie should return 'VerifyCookie failed:
    #EDGECLOUD-338 - DME crashes when sending FindCloudlet with invalid session cookie - fixed 
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4  session_cookie=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDIzODg0OTQsImlhdCI6MTU0MjM4ODQzNCwiZGV2bmFtZSI6IkFjbWVBcHBDbyIsImFwcG5hbWUiOiJzb21lYXBwbGljYXRpb25BdXRoIiwiYXBwdmVycyI6IjEuMCJ9.rc7V12dgiYDforzBQrPh
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWNwrong
    Should Contain  ${error_msg}   details = "VerifyCookie failed: Invalid cookie, no key"
 
 FindCloudlet - request with expired cookie should return 'token is expired by'
@@ -61,5 +61,5 @@ FindCloudlet - request with expired cookie should return 'token is expired by'
    #  EDGECLOUD-339 - FindCloudlet - wrong error is returned when sending expired session cookie	
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet	carrier_name=${carrier_name}  latitude=23  longitude=-4  session_cookie=${expired_cookie}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWNwrong
    Should Contain  ${error_msg}   details = "token is expired by

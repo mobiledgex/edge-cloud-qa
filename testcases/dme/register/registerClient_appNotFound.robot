@@ -22,7 +22,7 @@ RegisterClient - request with wrong app_name shall return 'app not found'
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=dummy
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
 
 RegisterClient - request with wrong app_version shall return 'app not found'
@@ -33,7 +33,7 @@ RegisterClient - request with wrong app_version shall return 'app not found'
    [Setup]  Setup
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=1.1  developer_name=${developer_name_default}
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
    [Teardown]  Cleanup Provisioning
 
@@ -46,7 +46,7 @@ RegisterClient - request with wrong developer_name shall return 'app not found'
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=${app_version_default}  developer_name=dummy
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
 
    [Teardown]  Cleanup Provisioning
@@ -58,7 +58,7 @@ RegisterClient - request with wrong app_name,app_version, and developer_name sha
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=dummy  app_version=dummy  developer_name=dummy
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
 
 RegisterClient - request shall succeed after adding app
@@ -73,7 +73,7 @@ RegisterClient - request shall succeed after adding app
    ...  register succeeds
 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=dummy
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
 
    # create app and register again
@@ -84,7 +84,7 @@ RegisterClient - request shall succeed after adding app
    Create Cluster Flavor	
    Create Cluster		
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client  app_name=dummy
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
 
    # add appinst and then register should pass
