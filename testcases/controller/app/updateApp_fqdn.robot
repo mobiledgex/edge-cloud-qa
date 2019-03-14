@@ -44,10 +44,12 @@ CreateAppInst - autocluster shall be created when app instance is created withou
 
 AppInst - User shall be able to update the app accessports afer appInst delete
     [Documentation]
-    ...  create an app instance without specifying a cluster name
-    ...  verify autocluster is created in cluster instance table
+    ...  create an app with accessports udp:1
+    ...  create app instance
     ...  delete the app instance
-    ...  verify autocluster is deleted from cluster instance table
+    ...  update app with accessports udp:2
+    ...  create app instance again
+    ...  verify mapped_ports is correct
 
     Create App          access_ports=udp:1
 
