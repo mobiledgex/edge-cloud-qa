@@ -25,7 +25,7 @@ GetFqdnList - request fqdnlist for non-platos app should fail
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Get FQDN List 
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   status = StatusCode.PERMISSION_DENIED
    Should Contain  ${error_msg}   details = "API Not allowed for developer: ${developer_name_default} app: ${app_name_default}"
 
 *** Keywords ***
