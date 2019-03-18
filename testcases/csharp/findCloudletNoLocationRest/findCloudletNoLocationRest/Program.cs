@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletFailRest Testcase");
+                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -82,8 +82,8 @@ namespace RestSample
                     altitude = 100,
                     horizontal_accuracy = 5,
                     speed = 2,
-                    longitude = 13.405,
-                    latitude = 52.52,
+                    longitude = 0,
+                    latitude = 0,
                     vertical_accuracy = 20,
                     timestamp = ts
                 };
@@ -226,7 +226,7 @@ namespace RestSample
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
-                if(findCloudletReply.status == "FIND_FOUND")
+                if (findCloudletReply.status == "FIND_FOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
