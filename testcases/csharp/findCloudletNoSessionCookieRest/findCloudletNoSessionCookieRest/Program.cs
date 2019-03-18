@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletFailRest Testcase");
+                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -100,6 +100,7 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = sessionCookie.Insert(3,"YEYEYE");
 
                 //Setup to handle the sessiontoken
                 var jwtHandler = new JwtSecurityTokenHandler();
@@ -226,7 +227,7 @@ namespace RestSample
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
-                if(findCloudletReply.status == "FIND_FOUND")
+                if (findCloudletReply.status == "FIND_FOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
