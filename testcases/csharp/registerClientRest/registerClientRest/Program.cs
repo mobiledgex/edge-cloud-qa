@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("RegisterClientWrongAppRest Testcase");
+                Console.WriteLine("RegisterClientRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
