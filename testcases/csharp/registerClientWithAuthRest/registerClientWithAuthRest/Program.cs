@@ -94,7 +94,7 @@ namespace RestSample
                 }
                 else
                 {
-                    Console.WriteLine("\n\nToken Server URI Correct!");
+                    Console.WriteLine("Token Server URI Correct!");
                 }
 
                 // Store sessionCookie, for later use in future requests.

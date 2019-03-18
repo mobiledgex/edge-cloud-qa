@@ -13,7 +13,7 @@ namespace RestSample
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
         static string devName = "automation_api";
-        static string appName = "automation_api_app";
+        static string appName = "automation_api_auth_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
 
@@ -35,13 +35,34 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("RegisterClientWrongAppRest Testcase");
+                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
+
+                // Generate the authToken
+                //var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
+                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_api -privkeyfile " + pubkey;
+                psi.RedirectStandardOutput = true;
+                System.Diagnostics.Process genauthtoken;
+                genauthtoken = System.Diagnostics.Process.Start(psi);
+                genauthtoken.WaitForExit();
+                System.IO.StreamReader reader = genauthtoken.StandardOutput;
+                genauthtoken.WaitForExit();
+                if (genauthtoken.HasExited)
+                {
+                    developerAuthToken = reader.ReadToEnd();
+                }
+                developerAuthToken = developerAuthToken.Substring(6);
+                developerAuthToken = developerAuthToken.Trim();
+                //Console.WriteLine(developerAuthToken);
+                //developerAuthToken = "";
+
 
                 var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken);
 
@@ -79,6 +100,7 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = sessionCookie.Insert(3,"YEYEYE");
 
                 //Setup to handle the sessiontoken
                 var jwtHandler = new JwtSecurityTokenHandler();
@@ -91,6 +113,9 @@ namespace RestSample
                     jwtPayload += '"' + c.Type + "\":\"" + c.Value + "\",";
                 }
 
+                //Console.WriteLine(jwtPayload);
+
+                //Console.WriteLine("\n\n"); 
 
                 //Extract the sessiontoken contents
                 char[] delimiterChars = { ',', '{', '}' };
@@ -142,7 +167,7 @@ namespace RestSample
                             string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
                             if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
                             {
-                                Console.WriteLine("Peerip Expression Matched!" + peer);
+                                Console.WriteLine("Peerip Expression Matched!  " + peer);
                             }
                             else
                             {
@@ -193,9 +218,29 @@ namespace RestSample
                         }
 
                     }
-                    // Console.WriteLine("App Version Matched!  " + appver);
+
                 }
-                Console.WriteLine("Test Case Passed!!!");
+                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc);
+
+                // Async:
+                var findCloudletTask = me.FindCloudlet(host, port, findCloudletRequest);
+
+                // Awaits:
+                var findCloudletReply = await findCloudletTask;
+                if (findCloudletReply.status == "FIND_FOUND")
+                {
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
+                }
+                if (findCloudletReply.status == "FIND_NOTFOUND")
+                {
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
+                    Console.WriteLine("Test Case Passed!!!");
+                }
             }
             catch (InvalidTokenServerTokenException itste)
             {
