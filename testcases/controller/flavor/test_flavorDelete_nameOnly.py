@@ -12,7 +12,7 @@ from delayedassert import expect, expect_equal, assert_expectations
 import logging
 import os
 
-from MexController import mex_controller
+import MexController as mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
@@ -31,7 +31,7 @@ logger.setLevel(logging.DEBUG)
 class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.controller = mex_controller.Controller(controller_address = controller_address,
+        self.controller = mex_controller.MexController(controller_address = controller_address,
                                                     root_cert = mex_root_cert,
                                                     key = mex_key,
                                                     client_cert = mex_cert
