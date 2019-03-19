@@ -6,6 +6,9 @@ import grpc
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger()
 
+#export GRPC_VERBOSITY=DEBUG
+#export GRPC_TRACE=client_channel,channel,health_check_client,http,http2_stream_state
+
 class MexGrpc(object):
     def __init__(self, address, root_cert=None, key=None, client_cert=None):
         self.grpc_channel = None
@@ -28,7 +31,12 @@ class MexGrpc(object):
                 cert = f.read()
             # create credentials
             credentials = grpc.ssl_channel_credentials(root_certificates=trusted_certs, private_key=trusted_key, certificate_chain=cert)
-            self.grpc_channel = grpc.secure_channel(address, credentials)
+            channel_options = [('grpc.keepalive_time_ms',600000),  # 3mins. seems I cannot do less than 5mins. does 5mins anyway if set lower
+                               ('grpc.keepalive_timeout_ms', 5000),
+                               ('grpc.http2.min_time_between_pings_ms', 60000),
+                               ('grpc.http2.max_pings_without_data', 0),
+                               ('grpc.keepalive_permit_without_calls', 1)]
+            self.grpc_channel = grpc.secure_channel(address, credentials, options=channel_options)
             print('grpc channel', self.grpc_channel)
         else:
                 self.grpc_channel = grpc.insecure_channel(address)

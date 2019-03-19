@@ -11,7 +11,12 @@ class Kubernetes(object):
 
         kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         kubectl_out = kubectl_return.stdout.decode('utf-8')
+        kubectl_err = kubectl_return.stderr.decode('utf-8')
+        if kubectl_err:
+            raise Exception(kubectl_err)
 
+        logging.debug(kubectl_out)
+        
         return kubectl_out
 
     def get_pod(self, pod_name):
@@ -31,4 +36,10 @@ class Kubernetes(object):
         kubectl_out = kubectl_return.stdout.decode('utf-8')
 
         return kubectl_out
+        
+    def restart_pod(self, pod_name, process_name):
+        logging.info('restarting ' + pod_name)
+
+        self.exec_command(pod_name=pod_name, command='pkill ' + process_name)
+        
         

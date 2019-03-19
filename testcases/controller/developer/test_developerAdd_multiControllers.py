@@ -13,7 +13,7 @@ from delayedassert import expect, expect_equal, assert_expectations
 import logging
 import os
 
-from MexController import mex_controller
+import MexController as mex_controller
 
 controller_address_1 = '127.0.0.1:55001'
 controller_address_2 = '127.0.0.1:55002'
@@ -36,13 +36,13 @@ logger.setLevel(logging.DEBUG)
 class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.controller_1 = mex_controller.Controller(controller_address = controller_address_1,
+        self.controller_1 = mex_controller.MexController(controller_address = controller_address_1,
                                                       root_cert = mex_root_cert,
                                                       key = mex_key,
                                                       client_cert = mex_cert
         )
 
-        self.controller_2 = mex_controller.Controller(controller_address = controller_address_2,
+        self.controller_2 = mex_controller.MexController(controller_address = controller_address_2,
                                                       root_cert = mex_root_cert,
                                                       key = mex_key,
                                                       client_cert = mex_cert
