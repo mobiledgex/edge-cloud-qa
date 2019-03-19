@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("RegisterClientWrongAppRest Testcase");
+                Console.WriteLine("RegisterClientRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -74,7 +74,7 @@ namespace RestSample
                 }
                 else
                 {
-                    Console.WriteLine("\n\nToken Server URI Correct!");
+                    Console.WriteLine("Token Server URI Correct!");
                 }
 
                 // Store sessionCookie, for later use in future requests.
@@ -142,7 +142,7 @@ namespace RestSample
                             string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
                             if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
                             {
-                                Console.WriteLine("Peerip Expression Matched!OK HOWS THIS????? " + peer);
+                                Console.WriteLine("Peerip Expression Matched!" + peer);
                             }
                             else
                             {

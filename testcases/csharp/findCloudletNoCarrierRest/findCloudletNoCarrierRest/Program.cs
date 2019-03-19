@@ -9,7 +9,7 @@ namespace RestSample
     class Program
     {
         static string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
-        static string carrierName = "dmuus";
+        static string carrierName = "";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
         static string devName = "automation_api";
@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletSuccessRest Testcase");
+                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -211,14 +211,13 @@ namespace RestSample
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
-                    Console.WriteLine("Test Case Passed!!!");
-                    Environment.Exit(0);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
                 if (findCloudletReply.status == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
+                    Console.WriteLine("Test Case Passed!!!");
                 }
             }
             catch (InvalidTokenServerTokenException itste)
