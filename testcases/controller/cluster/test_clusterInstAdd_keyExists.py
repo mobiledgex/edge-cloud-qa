@@ -13,7 +13,7 @@ from delayedassert import expect, expect_equal, assert_expectations
 import logging
 import os
 
-from MexController import mex_controller
+import MexController as mex_controller
 
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
                                                 number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
-        self.controller = mex_controller.Controller(controller_address = controller_address,
+        self.controller = mex_controller.MexController(controller_address = controller_address,
                                                     root_cert = mex_root_cert,
                                                     key = mex_key,
                                                     client_cert = mex_cert

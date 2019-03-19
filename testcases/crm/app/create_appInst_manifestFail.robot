@@ -33,8 +33,8 @@ Controller should cleanup autocluster after CreateAppInst fail
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
 
     Log To Console  Creating App and App Instance
-    Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=xxxx  default_flavor_name=flavor1550017240-694686
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=xxxx  default_flavor_name=flavor1550017240-694686   #using this flavor since I cant change x1.medium because of other bug
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Encountered failures: [Create App Inst failed: error deploying kubernetes app
@@ -44,12 +44,12 @@ Controller should cleanup autocluster after CreateAppInst fail
     ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name}
     Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
-#*** Keywords ***
-#Setup
+*** Keywords ***
+Setup
     #Create Developer
     #Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    #Create Cluster   default_flavor_name=${cluster_flavor_name}
+    Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     #Log To Console  Creating Cluster Instance
     #Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
