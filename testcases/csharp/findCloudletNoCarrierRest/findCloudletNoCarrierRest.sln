@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "findCloudletNoCarrierRest", "findCloudletNoCarrierRest\findCloudletNoCarrierRest.csproj", "{6C7F5790-1409-480E-882B-05E7DB703DFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C7F5790-1409-480E-882B-05E7DB703DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C7F5790-1409-480E-882B-05E7DB703DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C7F5790-1409-480E-882B-05E7DB703DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C7F5790-1409-480E-882B-05E7DB703DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
