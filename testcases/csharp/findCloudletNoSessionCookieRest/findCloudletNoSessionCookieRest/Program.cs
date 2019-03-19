@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletSuccessRest Testcase");
+                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -79,6 +79,7 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = sessionCookie.Insert(3,"YEYEYE");
 
                 //Setup to handle the sessiontoken
                 var jwtHandler = new JwtSecurityTokenHandler();
@@ -211,14 +212,13 @@ namespace RestSample
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
-                    Console.WriteLine("Test Case Passed!!!");
-                    Environment.Exit(0);
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
                 if (findCloudletReply.status == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
+                    Console.WriteLine("Test Case Passed!!!");
                 }
             }
             catch (InvalidTokenServerTokenException itste)
