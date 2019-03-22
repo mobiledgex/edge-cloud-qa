@@ -90,7 +90,9 @@ UpdateCloudlet with a numdynamicips A
 
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=A        use_defaults=False
-	Should Contain  ${error_msg}   TypeError: 'A' has type str, but expected one of: int, long
+	#Should Contain  ${error_msg}   TypeError: 'A' has type str, but expected one of: int, long
+        Should Contain  ${error_msg}   TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
+
 
 UpdateCloudlet with a numdynamicips 2323232232323
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet number of dynamic ips value
@@ -203,7 +205,8 @@ UpdateCloudlet with accessuri of 6
 	${accessuri}    Convert To Integer 	6
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    accessuri=${accessuri}       use_defaults=False
-	Should Contain  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode
+	#Should Contain  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode
+        Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.access_uri
 
 UpdateCloudlet with staticips of 6 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet staticips value
@@ -213,7 +216,9 @@ UpdateCloudlet with staticips of 6
 	${statips}    Convert To Integer 	6
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}     cloudlet_name=${cldlet}     staticips=${statips}       use_defaults=False
-	Should Contain  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode
+	#Should Contain  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode
+        Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
+
 
 *** Keywords ***
 Setup
