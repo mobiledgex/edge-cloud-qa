@@ -3,7 +3,7 @@ Documentation  RegisterClient
 
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables  shared_variables.py
+#Variables  shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -16,6 +16,7 @@ ${developer_name}  AcmeAppCo
 ${app_version}  1.0
 
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
+${token_server_local_url}  http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 
 *** Test Cases ***
 RegisterClient - request without auth shall return proper JWT
@@ -27,7 +28,15 @@ RegisterClient - request without auth shall return proper JWT
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
-   Should Be Equal  ${token_server}  ${token_server_url}
+   ${status}  ${value}=  Run Keyword And Ignore Error  Should Contain  %{AUTOMATION_DME_ADDRESS}  127.0.0.1
+   Run Keyword If   '${status}' == 'PASS'   Should Be Equal  ${token_server}  ${token_server_local_url} 
+   ...  ELSE  Should Be Equal  ${token_server}  ${token_server_url}
+
+   #Should Be Equal  ${token_server}  ${token_server_url}
+
+   ${developer_name_default}=  Get Default Developer Name
+   ${app_name_default}=        Get Default App Name
+   ${app_version_default}=     Get Default App Version
 
    ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs

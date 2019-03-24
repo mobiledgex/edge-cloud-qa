@@ -1,16 +1,11 @@
 *** Settings ***
 Documentation  RegisterClient - 'app not found' error should be recieved parameters that dont match any app instances
 
-
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables  shared_variables.py
+#Variables  shared_variables.py
 
 *** Variables ***
-#${app_name}  someapplication   #has to match crm process startup parms
-#${developer_name}  AcmeAppCo
-#${app_version}  1.0
-
 ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-2  #has to match crm process startup parms
 
@@ -31,6 +26,8 @@ RegisterClient - request with wrong app_version shall return 'app not found'
    ...  verify 'app not found' error is received
 
    [Setup]  Setup
+
+   ${developer_name_default}=  Get Default Developer Name
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=1.1  developer_name=${developer_name_default}
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
@@ -44,6 +41,8 @@ RegisterClient - request with wrong developer_name shall return 'app not found'
 
    [Setup]  Setup
 
+   ${app_name_default}=        Get Default App Name
+   ${app_version_default}=     Get Default App Version
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=${app_version_default}  developer_name=dummy
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
@@ -86,6 +85,9 @@ RegisterClient - request shall succeed after adding app
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client  app_name=dummy
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
+
+   ${developer_name_default}=  Get Default Developer Name
+   ${app_version_default}=     Get Default App Version
 
    # add appinst and then register should pass
    Create App   app_name=dummy
