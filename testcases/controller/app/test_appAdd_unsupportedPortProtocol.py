@@ -56,7 +56,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker', 
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tc:80',
                                  app_name=app_name,
                                  app_version=app_version,
@@ -87,7 +87,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker', 
-                                 ip_access='IpAccessDedicatedOrShared',
+                                 #ip_access='IpAccessDedicatedOrShared',
                                  access_ports='udpp:80',
                                  app_name=app_name,
                                  app_version=app_version,
@@ -119,7 +119,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker', 
-                                 ip_access='IpAccessShared',
+                                 #ip_access='IpAccessShared',
                                  access_ports='httpp:80',
                                  app_name=app_name,
                                  app_version=app_version,

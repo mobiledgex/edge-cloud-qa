@@ -57,7 +57,7 @@ class tc(unittest.TestCase):
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
                                  image_path='automation.com',
-                                 ip_access='IpAccessShared',
+                                 #ip_access='IpAccessShared',
                                  use_defaults=False)
 
         try: 
@@ -97,7 +97,7 @@ class tc(unittest.TestCase):
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
                                  image_path='automation.com',
-                                 ip_access='IpAccessShared',
+                                 #ip_access='IpAccessShared',
                                  use_defaults=False)
 
         try:
@@ -136,7 +136,7 @@ class tc(unittest.TestCase):
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
                                  image_path='automation.com',
-                                 ip_access='IpAccessShared',
+                                 #ip_access='IpAccessShared',
                                  use_defaults=False
                                  )
 
@@ -176,7 +176,7 @@ class tc(unittest.TestCase):
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
                                  image_path='automation.com',
-                                 ip_access='IpAccessShared',
+                                 #ip_access='IpAccessShared',
                                  use_defaults=False
                                  )
 
