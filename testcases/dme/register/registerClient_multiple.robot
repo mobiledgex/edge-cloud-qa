@@ -3,7 +3,7 @@ Documentation  RegisterClient multiple times
 
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables  shared_variables.py
+#Variables  shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -27,6 +27,10 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    ...  repeat 10 times 
 
    # EDGECLOUD-410 - RegisterClient fails if deleting and then re-adding the same app instance
+
+   ${developer_name_default}=  Get Default Developer Name
+   ${app_name_default}=        Get Default App Name
+   ${app_version_default}=     Get Default App Version
 
    : FOR  ${INDEX}  IN RANGE  0  10 
    \  Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  no_auto_delete=True  cluster_instance_name=autocluster
