@@ -31,6 +31,7 @@ import loc_pb2_grpc
 from mex_grpc import MexGrpc
 
 import shared_variables
+#import MexSharedVariables
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_controller')
@@ -600,7 +601,7 @@ class App():
         self.command = command
         self.default_flavor_name = default_flavor_name
         self.cluster_name = cluster_name
-        self.ip_access = ip_access
+        #self.ip_access = ip_access
         self.access_ports = access_ports
         self.auth_public_key = auth_public_key
         self.permits_platform_apps = permits_platform_apps
@@ -618,7 +619,7 @@ class App():
             if image_type is None: self.image_type = 'ImageTypeDocker'
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
-            if ip_access is None: self.ip_access = 3 # default to shared
+            #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
 
             if self.image_type == 'ImageTypeDocker':
@@ -644,12 +645,12 @@ class App():
                 self.image_type = 2
 
         #self.ip_access = 3 # default to shared
-        if ip_access == 'IpAccessDedicated':
-            self.ip_access = 1
-        elif ip_access == 'IpAccessDedicatedOrShared':
-            self.ip_access = 2
-        elif ip_access == 'IpAccessShared':
-            self.ip_access = 3
+        #if ip_access == 'IpAccessDedicated':
+        #    self.ip_access = 1
+        #elif ip_access == 'IpAccessDedicatedOrShared':
+        #    self.ip_access = 2
+        #elif ip_access == 'IpAccessShared':
+        #    self.ip_access = 3
             
         #if access_ports is None:
         #    self.access_ports = ''
@@ -683,8 +684,8 @@ class App():
             app_dict['image_type'] = self.image_type
         if self.image_path is not None:
             app_dict['image_path'] = self.image_path
-        if self.ip_access:
-            app_dict['ip_access'] = self.ip_access
+        #if self.ip_access:
+        #    app_dict['ip_access'] = self.ip_access
         if self.cluster_name is not None:
             app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if self.default_flavor_name is not None:
@@ -710,6 +711,8 @@ class App():
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
+
+        shared_variables.app_name_default = self.app_name
         
         #self.app_complete = copy.copy(self.app)
         #self.app_complete.image_path = self.image_path
@@ -726,8 +729,9 @@ class App():
 
     def __eq__(self, a):
         logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
-        print('zzzz',a.key.name,self.app_name ,a.key.version,self.app_version,a.image_path,self.image_path,a.ip_access,self.ip_access,a.access_ports,self.access_ports,a.default_flavor.name,self.default_flavor_name,a.cluster.name,self.cluster_name,a.image_type,self.image_type,a.config,self.config)
-        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
+        #print('zzzz',a.key.name,self.app_name ,a.key.version,self.app_version,a.image_path,self.image_path,a.ip_access,self.ip_access,a.access_ports,self.access_ports,a.default_flavor.name,self.default_flavor_name,a.cluster.name,self.cluster_name,a.image_type,self.image_type,a.config,self.config)
+        #if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
+        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
             return True
         else:
             return False
@@ -740,7 +744,7 @@ class App():
         found_app = False
         
         for a in app_list:
-            print('xxxx','s',self.access_ports, 'k', self.app_name, self.image_path, self.ip_access, self.access_ports, self.default_flavor_name, self.cluster_name, self.image_type, self.config)
+            #print('xxxx','s',self.access_ports, 'k', self.app_name, self.image_path, self.ip_access, self.access_ports, self.default_flavor_name, self.cluster_name, self.image_type, self.config)
             #print('appp', a)
             #print('dddddd', self.app)
             if self.__eq__(a):
@@ -865,6 +869,8 @@ class MexController(MexGrpc):
     This library contains all of the valid controller operations for Create, Show, Delete and Update
     """
 
+    ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
+    
     def __init__(self, controller_address='127.0.0.1:55001', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         """The controller address and certs can be given at library import time.
         These will be used for controller operations
@@ -927,6 +933,19 @@ class MexController(MexGrpc):
         self.appinst_stub = app_inst_pb2_grpc.AppInstApiStub(self.grpc_channel)
         self.operator_stub = operator_pb2_grpc.OperatorApiStub(self.grpc_channel)
         self.developer_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
+
+        self._init_shared_variables()
+
+        print('*WARN*', 'INIT', shared_variables.developer_name_default)
+
+    def default_developer_name(self):
+        return shared_variables.developer_name_default
+
+    def default_app_name(self):
+        return shared_variables.app_name_default
+
+    def default_app_version(self):
+        return shared_variables.app_version_default
 
     def show_controllers(self, address=None):
         """ Shows connected controllers.
@@ -1955,3 +1974,17 @@ class MexController(MexGrpc):
             if os.path.isfile(candidate):
                 return candidate
         raise Error('cant find file {}'.format(path))
+
+    def _init_shared_variables(self):
+        print('pre', shared_variables.developer_name_default)
+        default_time_stamp = str(time.time()).replace('.', '-')
+        shared_variables.cloudlet_name_default = 'cloudlet' + default_time_stamp
+        shared_variables.operator_name_default = 'operator' + default_time_stamp
+        #cluster_name_default = 'cluster' + default_time_stamp
+        shared_variables.cluster_name_default = 'cl' + default_time_stamp
+        shared_variables.app_name_default = 'app' + default_time_stamp
+        shared_variables.app_version_default = '1.0'
+        shared_variables.developer_name_default = 'developer' + default_time_stamp
+        shared_variables.flavor_name_default = 'flavor' + default_time_stamp
+        shared_variables.cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
+        print('post', shared_variables.developer_name_default)

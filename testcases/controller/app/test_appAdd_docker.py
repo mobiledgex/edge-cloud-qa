@@ -71,7 +71,7 @@ class tc(unittest.TestCase):
                                       app_version=app_version,
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
-                                      ip_access='IpAccessShared',
+                                      #ip_access='IpAccessShared',
                                       cluster_name=cluster_name,
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
