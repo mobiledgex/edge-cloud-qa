@@ -69,7 +69,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'tcp:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -103,7 +103,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'tcp:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -139,7 +139,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'http:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -175,7 +175,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'http:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -209,7 +209,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'udp:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -243,7 +243,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'udp:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -277,7 +277,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'tcp:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -308,7 +308,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'tcp:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -339,7 +339,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'udp:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -370,7 +370,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'udp:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -401,7 +401,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'http:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
@@ -432,7 +432,7 @@ class tc(unittest.TestCase):
                                              app_version=app_version,
                                              cluster_name=cluster_name,
                                              developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicated',
+                                             #ip_access = 'IpAccessDedicated',
                                              access_ports = 'http:01',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)

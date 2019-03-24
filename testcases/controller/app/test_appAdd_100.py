@@ -27,7 +27,7 @@ flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
 app_name = 'app' + stamp
 app_version = '1.0'
-ip_access = 'IpAccessDedicatedOrShared'
+#ip_access = 'IpAccessDedicatedOrShared'
 access_ports = 'tcp:1'
 
 mex_root_cert = 'mex-ca.crt'
@@ -64,7 +64,7 @@ class tc(unittest.TestCase):
             self.app_list.append(mex_controller.App(image_type='ImageTypeDocker',
                                                     app_name=app_name,
                                                     app_version=version,
-                                                    ip_access=ip_access,
+                                                    #ip_access=ip_access,
                                                     access_ports=access_ports,
                                                     cluster_name=cluster_name,
                                                     developer_name=developer_name,

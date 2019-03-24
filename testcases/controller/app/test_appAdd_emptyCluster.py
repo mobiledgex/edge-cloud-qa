@@ -85,7 +85,7 @@ class tc(unittest.TestCase):
                                       image_path = 'myimagepath',
                                       app_version=app_version,
                                       access_ports=access_ports,
-                                      ip_access='IpAccessShared',
+                                      #ip_access='IpAccessShared',
                                       #cluster_name='',
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
@@ -138,7 +138,7 @@ class tc(unittest.TestCase):
                                       access_ports=access_ports,
                                       cluster_name='',
                                       developer_name=developer_name,
-                                      ip_access='IpAccessShared',
+                                      #ip_access='IpAccessShared',
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
 

@@ -52,7 +52,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tcp80')
         try:
             resp = self.controller.create_app(app.app)
@@ -82,7 +82,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tcp80:')
         try:
             resp = self.controller.create_app(app.app)
@@ -112,7 +112,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tcp:80:')
         try:
             resp = self.controller.create_app(app.app)
@@ -142,7 +142,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports=':')
         try:
             resp = self.controller.create_app(app.app)
@@ -172,7 +172,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='<>()!')
         try:
             resp = self.controller.create_app(app.app)
@@ -202,7 +202,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tcp:80,tcp:81,tcp82')
         try:
             resp = self.controller.create_app(app.app)
@@ -232,7 +232,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
-                                 ip_access='IpAccessDedicated',
+                                 #ip_access='IpAccessDedicated',
                                  access_ports='tcp:80,tcp:81,')
         try:
             resp = self.controller.create_app(app.app)
@@ -248,428 +248,428 @@ class tc(unittest.TestCase):
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
-    def test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'udp80' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of 'udp80' and IpAccessDedicatedOrShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was udp80' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='udp80')
-
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was udp80', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp80:' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of 'tcp80:' and IpAccessDedicatedOrShared
-        # ... verify 'tcp80 is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='tcp80:')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logging.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80:' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of 'tcp80:' and IpAccessDedicatedOrShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='tcp:80:')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4(self):
-        # [Documentation] App - User shall not be able to create an app with accessport ':' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of ':' and IpAccessDedicatedOrShared
-        # ... verify ' is not a supported Protocol'' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports=':')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), ' is not a supported Protocol', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5(self):
-        # [Documentation] App - User shall not be able to create an app with accessport with special chars and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of special chars and IpAccessDedicatedOrShared
-        # ... verify ' is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='<>()!')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,tcp82' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of 'tcp:80,tcp:81,tcp82' and IpAccessDedicatedOrShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp82' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='tcp:80,tcp:81,tcp82')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp82', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,' and IpAccessDedicatedOrShared
-        # ... create app with invalid ports format of 'tcp:80,tcp:81,' and IpAccessDedicatedOrShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='tcp:80,tcp:81,')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was ', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatlIpAccessShared_1(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'udp80' and IpAccessShared
-        # ... create app with invalid ports format of 'udp80' and IpAccessShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was udp80' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='udp80')
-
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was udp80', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessShared_2(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp80:' and IpAccessShared
-        # ... create app with invalid ports format of 'tcp80:' and IpAccessShared
-        # ... verify 'tcp80 is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='tcp80:')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logging.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormaIpAccessShared_3(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80:' and IpAccessShared
-        # ... create app with invalid ports format of 'tcp:80:' and IpAccessShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='tcp:80:')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessShared_4(self):
-        # [Documentation] App - User shall not be able to create an app with accessport ':' and IpAccessShared
-        # ... create app with invalid ports format of ':' and IpAccessShared
-        # ... verify ' is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports=':')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), ' is not a supported Protocol', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessShared_5(self):
-        # [Documentation] App - User shall not be able to create an app with accessport with special chars and IpAccessShared
-        # ... create app with invalid ports format with special chars and IpAccessShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was <>()!' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='<>()!')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessShared_6(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,tcp82' and IpAccessShared
-        # ... create app with invalid ports format of 'tcp:80,tcp:81,tcp82' and IpAccessShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp82' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='tcp:80,tcp:81,tcp82')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp82', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppInvalidFormatIpAccessShared_7(self):
-        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,' and IpAccessShared
-        # ... create app with invalid ports format of 'tcp:80,tcp:81,' and IpAccessShared
-        # ... verify 'Invalid Access Ports format, expected proto:port but was ' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 ip_access='IpAccessShared',
-                                 access_ports='tcp:80,tcp:81,')
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            logger.info('got exception ' + str(e))
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was ', 'error details')
-        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
-
-
+#    def test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'udp80' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of 'udp80' and IpAccessDedicatedOrShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was udp80' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 #ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='udp80')
+#
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was udp80', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp80:' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of 'tcp80:' and IpAccessDedicatedOrShared
+#        # ... verify 'tcp80 is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 #ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='tcp80:')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logging.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80:' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of 'tcp80:' and IpAccessDedicatedOrShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='tcp:80:')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport ':' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of ':' and IpAccessDedicatedOrShared
+#        # ... verify ' is not a supported Protocol'' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports=':')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), ' is not a supported Protocol', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport with special chars and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of special chars and IpAccessDedicatedOrShared
+#        # ... verify ' is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='<>()!')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,tcp82' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of 'tcp:80,tcp:81,tcp82' and IpAccessDedicatedOrShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp82' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='tcp:80,tcp:81,tcp82')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp82', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,' and IpAccessDedicatedOrShared
+#        # ... create app with invalid ports format of 'tcp:80,tcp:81,' and IpAccessDedicatedOrShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='tcp:80,tcp:81,')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was ', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatlIpAccessShared_1(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'udp80' and IpAccessShared
+#        # ... create app with invalid ports format of 'udp80' and IpAccessShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was udp80' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='udp80')
+#
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was udp80', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessShared_2(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp80:' and IpAccessShared
+#        # ... create app with invalid ports format of 'tcp80:' and IpAccessShared
+#        # ... verify 'tcp80 is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='tcp80:')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logging.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormaIpAccessShared_3(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80:' and IpAccessShared
+#        # ... create app with invalid ports format of 'tcp:80:' and IpAccessShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='tcp:80:')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessShared_4(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport ':' and IpAccessShared
+#        # ... create app with invalid ports format of ':' and IpAccessShared
+#        # ... verify ' is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports=':')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), ' is not a supported Protocol', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessShared_5(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport with special chars and IpAccessShared
+#        # ... create app with invalid ports format with special chars and IpAccessShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was <>()!' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='<>()!')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessShared_6(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,tcp82' and IpAccessShared
+#        # ... create app with invalid ports format of 'tcp:80,tcp:81,tcp82' and IpAccessShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was tcp82' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='tcp:80,tcp:81,tcp82')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp82', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppInvalidFormatIpAccessShared_7(self):
+#        # [Documentation] App - User shall not be able to create an app with accessport 'tcp:80,tcp:81,' and IpAccessShared
+#        # ... create app with invalid ports format of 'tcp:80,tcp:81,' and IpAccessShared
+#        # ... verify 'Invalid Access Ports format, expected proto:port but was ' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker',
+#                                 developer_name=developer_name,
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 ip_access='IpAccessShared',
+#                                 access_ports='tcp:80,tcp:81,')
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            logger.info('got exception ' + str(e))
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was ', 'error details')
+#        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#
+#
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
     sys.exit(not unittest.TextTestRunner().run(suite).wasSuccessful())
