@@ -181,6 +181,8 @@ class VerifyLocation():
         self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
 
 class Dme(MexGrpc):
+    ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
+    
     def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         #self.developer_list = []
         #self.operator_list = []
@@ -194,6 +196,12 @@ class Dme(MexGrpc):
         super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
         self.match_engine_stub = app_client_pb2_grpc.Match_Engine_ApiStub(self.grpc_channel)
+
+        self._init_globals()
+
+        global auth_token_global
+
+        print('*WARN*', 'DMEINIT', auth_token_global)
 
     #@property
     def decoded_session_cookie(self):
@@ -396,3 +404,16 @@ class Dme(MexGrpc):
             if os.path.isfile(candidate):
                 return candidate
         raise Error('cant find file {}'.format(path))
+
+    def _init_globals(self):
+        global auth_token_global
+        global session_cookie_global
+        global token_server_uri_global
+        global token_global
+
+        auth_token_global = None
+        session_cookie_global = None
+        token_server_uri_global = None
+        token_global = None
+
+        

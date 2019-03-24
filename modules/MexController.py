@@ -938,13 +938,13 @@ class MexController(MexGrpc):
 
         print('*WARN*', 'INIT', shared_variables.developer_name_default)
 
-    def default_developer_name(self):
+    def get_default_developer_name(self):
         return shared_variables.developer_name_default
 
-    def default_app_name(self):
+    def get_default_app_name(self):
         return shared_variables.app_name_default
 
-    def default_app_version(self):
+    def get_default_app_version(self):
         return shared_variables.app_version_default
 
     def show_controllers(self, address=None):
