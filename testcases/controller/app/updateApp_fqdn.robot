@@ -2,7 +2,7 @@
 Documentation   CreateAppInst 
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -27,6 +27,9 @@ CreateAppInst - autocluster shall be created when app instance is created withou
     Update App          access_ports=udp:1
 
     ${app_instance}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+
+    ${app_name_default}=  Get Default App Name
+    ${cluster_flavor_name_default}=  Get Default Cluster Flavor Name
 	
     Show Cluster Instances
     ${cluster_name}=  Catenate   SEPARATOR=  autocluster  ${app_name_default}
@@ -61,7 +64,9 @@ AppInst - User shall be able to update the app accessports afer appInst delete
     ${appInst_post}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     #${appInst_post}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-   
+  
+    ${app_name_default}=  Get Default App Name
+ 
     ${fqdn_prefix}=  Catenate  SEPARATOR=-  ${app_name_default}  udp.
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].public_port}    1
