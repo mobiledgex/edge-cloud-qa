@@ -76,70 +76,70 @@ class tc(unittest.TestCase):
         expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
-    def test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared(self):
-        # [Documentation] App - User shall not be able to create an app with unsupported protocol of udpp:80 and IpAccessDedicatedOrShared
-        # ... create app with unsupported port protocol of udpp:80 IpAccessDedicatedOrShared
-        # ... verify '%s is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker', 
-                                 #ip_access='IpAccessDedicatedOrShared',
-                                 access_ports='udpp:80',
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 developer_name=developer_name
-        )
-
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            print('got exception', e)
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'udpp is not a supported Protocol', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
-    def test_CreateAppUnsupportedProtocolIpAccessShared(self):
-        # [Documentation] App - User shall not be able to create an app with unsupported protocol of httpp:80 and IpAccessShared
-        # ... create app with unsupported port protocol of httpp:80 IpAccessShared
-        # ... verify '%s is not a supported Protocol' is received
-
-        # print the existing apps
-        app_pre = self.controller.show_apps()
-
-        # create the app with no parms
-        error = None
-        app = mex_controller.App(image_type='ImageTypeDocker', 
-                                 #ip_access='IpAccessShared',
-                                 access_ports='httpp:80',
-                                 app_name=app_name,
-                                 app_version=app_version,
-                                 developer_name=developer_name
-        )
-
-        try:
-            resp = self.controller.create_app(app.app)
-        except grpc.RpcError as e:
-            print('got exception', e)
-            error = e
-
-        # print the cluster instances after error
-        app_post = self.controller.show_apps()
-
-        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'httpp is not a supported Protocol', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
-        assert_expectations()
-
+#    def test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared(self):
+#        # [Documentation] App - User shall not be able to create an app with unsupported protocol of udpp:80 and IpAccessDedicatedOrShared
+#        # ... create app with unsupported port protocol of udpp:80 IpAccessDedicatedOrShared
+#        # ... verify '%s is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker', 
+#                                 #ip_access='IpAccessDedicatedOrShared',
+#                                 access_ports='udpp:80',
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 developer_name=developer_name
+#        )
+#
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            print('got exception', e)
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'udpp is not a supported Protocol', 'error details')
+#        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
+#    def test_CreateAppUnsupportedProtocolIpAccessShared(self):
+#        # [Documentation] App - User shall not be able to create an app with unsupported protocol of httpp:80 and IpAccessShared
+#        # ... create app with unsupported port protocol of httpp:80 IpAccessShared
+#        # ... verify '%s is not a supported Protocol' is received
+#
+#        # print the existing apps
+#        app_pre = self.controller.show_apps()
+#
+#        # create the app with no parms
+#        error = None
+#        app = mex_controller.App(image_type='ImageTypeDocker', 
+#                                 #ip_access='IpAccessShared',
+#                                 access_ports='httpp:80',
+#                                 app_name=app_name,
+#                                 app_version=app_version,
+#                                 developer_name=developer_name
+#        )
+#
+#        try:
+#            resp = self.controller.create_app(app.app)
+#        except grpc.RpcError as e:
+#            print('got exception', e)
+#            error = e
+#
+#        # print the cluster instances after error
+#        app_post = self.controller.show_apps()
+#
+#        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+#        expect_equal(error.details(), 'httpp is not a supported Protocol', 'error details')
+#        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+#        assert_expectations()
+#
     @classmethod
     def tearDownClass(self):
         self.controller.delete_developer(self.developer.developer)

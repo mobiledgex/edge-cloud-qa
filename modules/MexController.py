@@ -608,6 +608,13 @@ class App():
         self.deployment = deployment
         self.deployment_manifest = deployment_manifest
 
+        #print('*WARN*',app_pb2.App)
+        #print('*WARN*','key', vars(app_pb2.App))
+        #print('*WARN*','fields', app_pb2.App._fields, dir(app_pb2.App))
+        #print('*WARN*','fields', dir(app_pb2.App))
+        #pprint('*WARN*',vars(app_pb2.App))
+        #sys.exit(1)
+        
         # used for UpdateApp - hardcoded from proto
         self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
         self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
@@ -936,7 +943,7 @@ class MexController(MexGrpc):
 
         self._init_shared_variables()
 
-        print('*WARN*', 'INIT', shared_variables.developer_name_default)
+        #print('*WARN*', 'INIT', shared_variables.developer_name_default)
 
     def get_default_developer_name(self):
         return shared_variables.developer_name_default
@@ -946,6 +953,12 @@ class MexController(MexGrpc):
 
     def get_default_app_version(self):
         return shared_variables.app_version_default
+
+    def get_default_cluster_name(self):
+        return shared_variables.cluster_name_default
+
+    def get_default_cluster_flavor_name(self):
+        return shared_variables.cluster_flavor_name_default
 
     def show_controllers(self, address=None):
         """ Shows connected controllers.
