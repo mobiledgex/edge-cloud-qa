@@ -28,6 +28,8 @@ RegisterClient - request with wrong app_version shall return 'app not found'
    [Setup]  Setup
 
    ${developer_name_default}=  Get Default Developer Name
+   ${app_name_default}=  Get Default App Name
+
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=1.1  developer_name=${developer_name_default}
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
