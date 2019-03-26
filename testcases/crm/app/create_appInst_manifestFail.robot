@@ -37,7 +37,7 @@ Controller should cleanup autocluster after CreateAppInst fail
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Encountered failures: [Create App Inst failed: error deploying kubernetes app
+    Should Contain  ${error_msg}   details = "Encountered failures: [Create App Inst failed: invalid kubernetes deployment yaml
 
     App Instance Should Not Exist  app_name=${app_name}
 
