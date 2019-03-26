@@ -3,7 +3,7 @@ Documentation  GetFqdnList - request for non-platos app
 
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -20,10 +20,13 @@ GetFqdnList - request fqdnlist for non-platos app should fail
     ...  register client for non-platos app
     ...  Send GetFqdnList 
     ...  verify 'API Not allowed for developer' error is received
-	
+   	
    # no register thus no cookie
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Get FQDN List 
+
+   ${developer_name_default}=  Get Default Developer Name
+   ${app_name_default}=  Get Default App Name
 
    Should Contain  ${error_msg}   status = StatusCode.PERMISSION_DENIED
    Should Contain  ${error_msg}   details = "API Not allowed for developer: ${developer_name_default} app: ${app_name_default}"
