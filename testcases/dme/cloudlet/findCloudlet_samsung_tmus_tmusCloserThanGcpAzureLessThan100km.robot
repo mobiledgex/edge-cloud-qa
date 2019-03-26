@@ -35,7 +35,7 @@ Documentation   FindCloudlet Samsung - request shall return tmus with gcp/azure 
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -132,9 +132,16 @@ Setup
     Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
     Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
 
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_name_default}=  Get Default App Name
+
+    Set Suite Variable  ${tmus_appinst}
+
     Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  
     Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${tmus_appinst} 
+    Set Suite Variable  ${developer_name_default}
+    Set Suite Variable  ${app_name_default}
 

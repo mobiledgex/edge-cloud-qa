@@ -3,7 +3,7 @@ Documentation   FindCloudlet - request shall return error when sending FindCloud
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup	Setup
 Test Teardown	Cleanup provisioning
@@ -50,6 +50,8 @@ Setup
     ${tmus_appinst}=            Create App Instance		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
     Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
 
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_name_default}=        Get Default App Name
 
     Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  
@@ -57,3 +59,6 @@ Setup
 
     Set Suite Variable  ${tmus_appinst} 
     Set Suite Variable  ${samsung_appinst} 
+    Set Suite Variable  ${developer_name_default}
+    Set Suite Variable  ${app_name_default}
+
