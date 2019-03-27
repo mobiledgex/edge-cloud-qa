@@ -11,6 +11,7 @@ class CRM(object):
         self.pod_name = self.k8s.get_pod(crm_pod_name)
 
     def wait_for_pod_to_be_running_on_crm(self, cluster_name, operator_name, pod_name, wait_time=600):
+        logging.info(f'cluster_name={cluster_name} operator_name={operator_name} pod_name={pod_name}')
         cluster_name = cluster_name.replace('.', '') #remove any dots
                     
         kubeconfig = f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' 
@@ -42,7 +43,7 @@ class CRM(object):
         #kubectl_out = kubectl_return.stdout.decode('utf-8')
 
         kubectl_cmd = f'KUBECONFIG={kubeconfig} kubectl get pods'        
-        kubectl_out = self.k8s.exec_command(pod_name=self.pod_name, command=kubectl_cmd)
+        kubectl_out, kubectl_err, kubectl_returncode  = self.k8s.exec_command(pod_name=self.pod_name, command=kubectl_cmd)
 
         pod_list = kubectl_out.split('\n')[1:]
         
