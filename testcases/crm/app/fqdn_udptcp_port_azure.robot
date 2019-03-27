@@ -5,7 +5,7 @@ Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme         dme_address=%{AUTOMATION_DME_ADDRESS}	
 Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
 Library  MexApp
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown	Cleanup provisioning
@@ -41,6 +41,7 @@ User shall be able to access 1 UDP port on azure
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
+    ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default} 
 
     Log To Console  Checking if port is alive
@@ -61,6 +62,7 @@ User shall be able to access 2 UDP ports on azure
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
+    ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
@@ -82,6 +84,7 @@ User shall be able to access 1 TCP port on azure
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
+    ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
@@ -102,6 +105,7 @@ User shall be able to access 2 TCP ports on azure
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
+    ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
@@ -125,6 +129,7 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
+    ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive

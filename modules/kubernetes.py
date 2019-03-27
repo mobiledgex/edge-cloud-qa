@@ -8,6 +8,7 @@ class Kubernetes(object):
     def get_pods(self):
         kubectl_cmd = f'KUBECONFIG={self.kubeconfig} kubectl get pods'
         logging.info(kubectl_cmd)
+        print('*WARN*', kubectl_cmd)
 
         kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         kubectl_out = kubectl_return.stdout.decode('utf-8')
@@ -34,12 +35,26 @@ class Kubernetes(object):
         
         kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         kubectl_out = kubectl_return.stdout.decode('utf-8')
+        logging.debug('exec_command return=' + str(kubectl_return))
 
-        return kubectl_out
+        if kubectl_return.returncode != 0:
+            raise Exception('exec_command failed:' + kubectl_return.stderr.decode('utf-8'))
+        
+        return kubectl_return.stdout.decode('utf-8'), kubectl_return.stderr.decode('utf-8'), kubectl_return.returncode
         
     def restart_pod(self, pod_name, process_name):
         logging.info('restarting ' + pod_name)
 
-        self.exec_command(pod_name=pod_name, command='pkill ' + process_name)
-        
+        returnvalue = None
+        try:
+            returnvalue = self.exec_command(pod_name=pod_name, command='pkill ' + process_name)
+        except Exception as e:
+            print('*WARN*', e)
+            logging.info('e:' + str(e))
+            if 'exit code 137' in str(e) :
+                logging.debug('got error code 137')
+            else:
+                logging.error('restarting pod failed. Didnt receive 137 error code.' + str(e))
+                raise Exception('restart_pod failed:' + str(e))
+                
         
