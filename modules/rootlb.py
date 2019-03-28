@@ -34,3 +34,32 @@ class Rootlb(Linux):
         print(output)
 
         return output
+
+    def block_port(self, port, target):
+        logging.info(f'blocking port={port} target={target}')
+
+        cmd = f'sudo iptables -A INPUT -p tcp --dport {port} -j DROP'
+
+        output = self.run_command(cmd)
+        
+        return output
+
+    def unblock_port(self, port, target):
+        logging.info(f'blocking port={port} target={target}')
+
+        cmd = f'sudo iptables -D INPUT -p tcp --dport {port} -j DROP'
+
+        output = self.run_command(cmd)
+        
+        return output
+
+    def run_command(self, cmd):
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        print(output)
+
+        return output
