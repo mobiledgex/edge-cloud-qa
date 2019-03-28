@@ -6,7 +6,7 @@ Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  Process
 Library  OperatingSystem
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -27,7 +27,7 @@ ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/facedetection:Nimbus_
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008
 
-${client_path}     ../edge-cloud-sampleapps/FaceDetectionServer/client
+${client_path}     ../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  faceHuge.png  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
 @{image_list_bad}   1_body.png  3_bodies.png  6_bodies.jpg  empty_portrait_black.png  empty_portrait_white.png  multi_body.png  single_pixel.png
@@ -46,7 +46,7 @@ Facedetection server shall recognize faces
 
     Log To Console  Creating App and App Instance
     Create App           app_name=${app_name}  image_path=${docker_image}  access_ports=${facedetection_ports}  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686  #flavor_name=${cluster_flavor_name} 
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
@@ -57,7 +57,7 @@ Facedetection server shall recognize faces
     ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name}
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name}
 
-    Sleep  10  # wait for process to be up
+    Sleep  30  # wait for process to be up
 
     ${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
 
