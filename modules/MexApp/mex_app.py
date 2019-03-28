@@ -123,3 +123,13 @@ class MexApp(object):
             time.sleep(1)
 
         raise Exception('Running k8s pod not found')
+
+    def block_rootlb_port(self, root_loadbalancer, port, target):
+        rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        rb.block_port(port=port, target=target)
+        
+    def unblock_rootlb_port(self, root_loadbalancer, port, target):
+        rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        rb.unblock_port(port=port, target=target)

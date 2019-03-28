@@ -1,9 +1,9 @@
 *** Settings ***
-Documentation   Start 2 cluster instances on same cloudlet for openstack
+Documentation   Start 2 cluster instances at the same time on openstack
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
-Variables       shared_variables.py
+Library         runKeywordAsync
 
 Test Teardown	Cleanup provisioning
 
@@ -15,9 +15,9 @@ ${operator_name}  TDG
 ${flavor_name}	  x1.medium
 
 *** Test Cases ***
-CRM shall be able to Create 2 cluster instances on the same cloudlet for openstack
+CRM shall be able to Create 2 cluster instances at the same time on openstack
     [Documentation]
-    ...  Create 2 clusters and cluster instances on the same cloudlet on openstack
+    ...  Create 2 clusters and cluster instances at the same time on openstack
     ...  Verify both are created successfully
 
     ${epoch_time}=  Get Time  epoch
@@ -27,8 +27,13 @@ CRM shall be able to Create 2 cluster instances on the same cloudlet for opensta
 
     Create Cluster		cluster_name=${cluster_name_1}  default_flavor_name=${flavor_name}
     Create Cluster		cluster_name=${cluster_name_2}  default_flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_name=${cluster_name_1}  flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_name=${cluster_name_2}  flavor_name=${flavor_name}
+
+    # start 2 at the same time
+    ${handle1}=  Create Cluster Instance	cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_name=${cluster_name_1}  flavor_name=${flavor_name}  use_thread=${True}
+    ${handle2}=  Create Cluster Instance	cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_name=${cluster_name_2}  flavor_name=${flavor_name}  use_thread=${True}
+
+    # wait for them to finish
+    Wait For Replies  ${handle1}
 
     sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
