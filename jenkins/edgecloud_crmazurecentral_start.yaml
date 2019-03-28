@@ -32,6 +32,8 @@ spec:
            value: azure
          - name: MEX_AZURE_LOCATION
            value: centralus
+         - name: VAULT_TOKEN
+           value: ***REMOVED***
         args:
          - "--apiAddr"
          - "0.0.0.0:65100"
