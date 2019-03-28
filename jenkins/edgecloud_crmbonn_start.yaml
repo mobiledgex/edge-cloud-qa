@@ -38,6 +38,8 @@ spec:
            value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/bonn/openrc.json
          - name: MEXENV_URL
            value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
+         - name: VAULT_TOKEN
+           value: 0eb94cce-ab3f-33a3-bd66-0046e8743a14
         args:
          - "--apiAddr"
          - "0.0.0.0:50051"
