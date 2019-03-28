@@ -3,7 +3,7 @@ Documentation   Start 2 cluster instances at the same time on openstack
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
-Library         runKeywordAsync
+#Library         runKeywordAsync
 
 Test Teardown	Cleanup provisioning
 
