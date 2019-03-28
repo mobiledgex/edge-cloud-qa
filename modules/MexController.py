@@ -27,6 +27,7 @@ import app_inst_pb2
 import app_inst_pb2_grpc
 import loc_pb2
 import loc_pb2_grpc
+import threading
 
 from mex_grpc import MexGrpc
 
@@ -1232,6 +1233,7 @@ class MexController(MexGrpc):
         | flavor_name   | 'flavor' + epochTime or what was previously set by Create Flavor            |
         | liveness      | 1                                                                           |
         | use_defaults  | True. Set to True or False for whether or not to use default values         |
+        | use_thread    | False. Set to True to run the operation in a thread. Used for parallel executions         |
 
         Examples:
 
@@ -1243,41 +1245,59 @@ class MexController(MexGrpc):
 
         resp = None
         auto_delete = True
-
+        use_thread = False
+        
         if not cluster_instance:
             if 'no_auto_delete' in kwargs:
                 del kwargs['no_auto_delete']
                 auto_delete = False
+            if 'use_thread' in kwargs:
+                del kwargs['use_thread']
+                use_thread = True
             cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('create cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
 
         resp = None
         success = False
-        try:
-            resp = self.clusterinst_stub.CreateClusterInst(cluster_instance)
-        except:
-            #print("Unexpected error0:", sys.exc_info()[0])
-            resp = sys.exc_info()[0]
-            #print("Unexpected error1:", sys.exc_info()[1])
-            #print("Unexpected error2:", sys.exc_info()[2])
 
-            #print('typeerror')
-        #print('xxxxxxxxxxx',str(resp))
-        #sys.exit(1)
-        self.response = resp
-        for s in resp:
-            #print('SSSSSSSSSS=',s)
-            if "Created successfully" in str(s):
-                success = True            
-        if not success:
-            raise Exception('Error creating cluster instance:{}'.format(str(resp)))
+        def sendMessage():
+            try:
+                resp = self.clusterinst_stub.CreateClusterInst(cluster_instance)
+            except:
+                #print("Unexpected error0:", sys.exc_info()[0])
+                resp = sys.exc_info()[0]
+                #print("Unexpected error1:", sys.exc_info()[1])
+                #print("Unexpected error2:", sys.exc_info()[2])
+                
+                #print('typeerror')
+                #print('xxxxxxxxxxx',str(resp))
+                #sys.exit(1)
+            self.response = resp
+                
+            for s in resp:
+                if "Created successfully" in str(s):
+                    success = True            
+            if not success:
+                raise Exception('Error creating cluster instance:{}'.format(str(resp)))
 
-        if auto_delete:
-            self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
+            if auto_delete:
+                self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
         
-        return resp
+            return resp
 
+        if use_thread:
+            t = threading.Thread(target=sendMessage)
+            t.start()
+            return t
+        else:
+            resp = sendMessage()
+            return resp
+
+    def wait_for_replies(self, *args):
+        for x in args:
+            x.join()
+            
     def delete_cluster_instance(self, cluster_instance=None, **kwargs):
         resp = None
 
