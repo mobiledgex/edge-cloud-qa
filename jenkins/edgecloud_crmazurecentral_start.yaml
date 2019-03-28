@@ -32,6 +32,8 @@ spec:
            value: azure
          - name: MEX_AZURE_LOCATION
            value: centralus
+         - name: VAULT_TOKEN
+           value: 0eb94cce-ab3f-33a3-bd66-0046e8743a14
         args:
          - "--apiAddr"
          - "0.0.0.0:65100"
