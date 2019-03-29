@@ -392,11 +392,13 @@ namespace MexGrpcSampleConsoleApp
 
             foreach (string keyValueStr in parameters)
             {
-                string[] keyValue = keyValueStr.Split('=');
-                if (keyValue[0].Equals("dt-id"))
-                {
-                    return keyValue[1];
-                }
+                string keyValue = keyValueStr.Substring(6);
+                //Console.WriteLine("\n\nToken?: " + keyValue.ToString());
+                //    string[] keyValue = keyValueStr.Split('=');
+                //    if (keyValue[0].Equals("dt-id"))
+                //    {
+                return keyValue;
+                //    }
             }
 
             return null;
