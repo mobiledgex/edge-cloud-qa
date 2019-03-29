@@ -16,7 +16,7 @@ ${developer_name}  AcmeAppCo
 ${app_version}  1.0
 
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
-${token_server_local_url}  http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
+#${token_server_local_url}  http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 
 *** Test Cases ***
 RegisterClient - request without auth shall return proper JWT
@@ -28,11 +28,11 @@ RegisterClient - request without auth shall return proper JWT
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
-   ${status}  ${value}=  Run Keyword And Ignore Error  Should Contain  %{AUTOMATION_DME_ADDRESS}  127.0.0.1
-   Run Keyword If   '${status}' == 'PASS'   Should Be Equal  ${token_server}  ${token_server_local_url} 
-   ...  ELSE  Should Be Equal  ${token_server}  ${token_server_url}
+#   ${status}  ${value}=  Run Keyword And Ignore Error  Should Contain  %{AUTOMATION_DME_ADDRESS}  127.0.0.1
+#   Run Keyword If   '${status}' == 'PASS'   Should Be Equal  ${token_server}  ${token_server_local_url} 
+#   ...  ELSE  Should Be Equal  ${token_server}  ${token_server_url}
 
-   #Should Be Equal  ${token_server}  ${token_server_url}
+   Should Be Equal  ${token_server}  ${token_server_url}
 
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=        Get Default App Name
