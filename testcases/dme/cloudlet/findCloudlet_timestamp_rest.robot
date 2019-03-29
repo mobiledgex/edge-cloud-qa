@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   FindCloudlet REST - request shall return tmus with azure cloudlet provisioned and tmus closer and > 100km from request
+Documentation   FindCloudlet REST - request with timestamp shall return tmus
 ...		tmus tmocloud-2 cloudlet at: 35 -95
 ...             azure azurecloud-1  cloudlet at: 37 -95
 ...		find cloudlet closest to   : 34 -96
@@ -42,7 +42,7 @@ ${tmus_cloudlet_latitude}	  35
 ${tmus_cloudlet longitude}	  -95
 
 *** Test Cases ***
-FindCloudlet REST - request shall return tmus with azure cloudlet provisioned and tmus closer and > 100km from request
+FindCloudlet REST - request with timestamp shall return tmus
     [Documentation]
     ...  findCloudlet rest with tmus and azure provisioned. tmus closer and > 100km from request. return tmus
     ...             tmus tmocloud-2 cloudlet at: 35 -95
@@ -78,7 +78,6 @@ FindCloudlet REST - request shall return tmus with azure cloudlet provisioned an
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['latitude']}   ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet['cloudlet_location']['longitude']}  ${tmus_cloudlet_longitude}
 
-      #Should Be Equal As Numbers  ${cloudlet['ports'][0]['proto']}               ${tmus_appinst.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal   ${cloudlet['ports'][0]['proto']}               LProtoTCP
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['internal_port']}       ${tmus_appinst.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet['ports'][0]['public_port']}         ${tmus_appinst.mapped_ports[0].public_port}
