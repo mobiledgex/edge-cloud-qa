@@ -8,6 +8,7 @@ import jwt
 import requests
 import subprocess
 import math
+import time
 
 from mex_grpc import MexGrpc
 
@@ -180,6 +181,26 @@ class VerifyLocation():
         print(request_dict)
         self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
 
+class GetLocation():
+    def __init__(self, session_cookie=None, carrier_name=None, use_defaults=True):
+        request_dict = {}
+        self.session_cookie = session_cookie
+        self.carrier_name = carrier_name
+ 
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+ 
+        if self.session_cookie is not None:
+            request_dict['SessionCookie'] = self.session_cookie
+        if self.carrier_name is not None:
+            request_dict['CarrierName'] = self.carrier_name    
+
+        print(request_dict)
+        self.request = app_client_pb2.GetLocationRequest(**request_dict)
+
 class Dme(MexGrpc):
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
     
@@ -309,6 +330,18 @@ class Dme(MexGrpc):
 
         return resp
 
+    def get_location(self, get_location_request_obj=None, **kwargs):
+        resp = None
+
+        if not get_location_request_obj:
+            request = GetLocation(**kwargs).request
+
+        logger.info('get location on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+
+        resp = self.match_engine_stub.GetLocation(request)
+
+        return resp
+
     def update_location(self, latitude, longitude, ip_address=None):
         if ip_address is None:
             ip_address = subprocess.run('curl ifconfig.me', shell=True, check=True, capture_output=True).stdout.decode('ascii')
@@ -355,6 +388,17 @@ class Dme(MexGrpc):
         
         return token
 
+    def generate_session_cookie(self):
+        key = '{"key": {"peerip":"10.138.0.10","devname":"developer1553621810-915217","appname":"app1553621810-915217","appvers":"1.0","kid":6}'
+        current_time = int(time.time())
+        exp_time = int(time.time()) + 10
+        payload = {"exp": current_time,
+                   "iat":exp_time}
+                   #"key": {"peerip":"10.138.0.10","devname":"developer1553621810-915217","appname":"app1553621810-915217","appvers":"1.0","kid":6}}
+        encoded_jwt = jwt.encode(payload, key, algorithm='HS256')
+
+        return encoded_jwt
+    
     def get_token(self, token_server=None):
         global token_global
         
