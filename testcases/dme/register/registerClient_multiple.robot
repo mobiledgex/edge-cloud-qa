@@ -16,6 +16,7 @@ ${developer_name}  AcmeAppCo
 ${app_version}  1.0
 
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
+#${token_server_local_url}  http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 
 *** Test Cases ***
 RegisterClient - register shall work when keep creating/deleting same app instance 
@@ -38,6 +39,10 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    \  Register Client	
    \  ${decoded_cookie}=  decoded session cookie
    \  ${token_server}=    token server uri
+
+#   \  ${status}  ${value}=  Run Keyword And Ignore Error  Should Contain  %{AUTOMATION_DME_ADDRESS}  127.0.0.1
+#   \  Run Keyword If   '${status}' == 'PASS'   Should Be Equal  ${token_server}  ${token_server_local_url}
+#   \  ...  ELSE  Should Be Equal  ${token_server}  ${token_server_url}
 
    \  Should Be Equal  ${token_server}  ${token_server_url}
    \  ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
