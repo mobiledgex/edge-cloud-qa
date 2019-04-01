@@ -5,6 +5,7 @@ import logging
 import time
 import os
 import re
+import json
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger()
@@ -13,6 +14,7 @@ class MexProcessHandler():
     def __init__(self):
         self.etcd_clients = []
         self.crm_clients = []
+        self.dme_clients = []
     
     def start_etcd(self, *args):
         etcd = Etcd()
@@ -27,9 +29,20 @@ class MexProcessHandler():
         crm.start(cloudlet_name, operator_name, api_address, environment)
         self.crm_clients.append(crm)
         
-    def start_dme(self, carrier, cloudlet_name, operator_name):
+    def start_dme(self, carrier=None, cloudlet_name=None, operator_name=None, cloudlet_key=None, certificate=None):
+        """ Starts a DME process with the specified parameters
+
+        Examples:
+
+        | Start DME | carrier=${cloudlet_name} | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} |
+        | Run Keyword and Expect Error | * | Start DME | carrier=${cloudlet_name} | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} | certificate=xx |
+
+        """
+
         dme = DME()
-        dme.start(carrier, cloudlet_name, operator_name)
+        self.dme_clients.append(dme)
+        dme.start(carrier, cloudlet_name, operator_name, cloudlet_key, certificate)
+
 
     def crm_vm_should_be_up(self, timeout=600):
         crm = self.crm_clients[-1]
@@ -42,7 +55,28 @@ class MexProcessHandler():
             #if crm.vm_up_line in line:
             #    print('VM is UP')
             #    crm._stop_followFile()
-            
+
+    def dme_log_file_should_contain(self, string, timeout=600):
+        """ Waits for the specified string in the DME log file from the previous Start DME. It will wait for 5 minutes or the specified timeout in seconds
+
+        Examples:
+
+        | Run Keyword and Expect Error | * | Start DME | carrier=${cloudlet_name} | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} | certificate=xx |
+        | DME Log File Should Contain | get TLS Credentials |
+
+        """
+
+        dme = self.dme_clients[-1]
+        print('dme', self.dme_clients)
+        lines = dme._followFile(dme.log_file, string, time_secs=int(timeout))
+
+        for line in lines:
+            pass
+            print('line', line)
+            #if crm.vm_up_line in line:
+            #    print('VM is UP')
+            #    crm._stop_followFile()
+
 class Mexprocess(object):
     def __init__(self, cmd=None, log_file=None):
         print('calling mexprocess')
@@ -79,7 +113,7 @@ class Mexprocess(object):
                                        shell=False,
                                        env=env_dict,
                                        preexec_fn=os.setpgrp)
-            logger.debug('Running process with pid=' + str(process.pid))
+            logger.debug('Running process with pid=' + str(process.pid) + 'and logfile=' + log_file)
             time.sleep(1)
             if process.poll() is not None:
                 raise ProcessFailed('process is not alive')
@@ -108,7 +142,8 @@ class Mexprocess(object):
                     continue
                 
                 if line_to_find in line:
-                    print('FFFFFFFound')
+                    logging.info('Found matching line:' + line)
+                    yield line
                     break
                 yield line
 
@@ -266,25 +301,45 @@ class DME(Mexprocess):
     def __init__(self, notify_address=None, api_address=None, location_server_url=None, token_server_url=None, carrier=None, cloudlet_key=None, certificate=None, debug_options=None, dme_path='~/go/bin', log_dir='/tmp'):
         logger.debug('starting dme process')
 
+        super(DME, self).__init__()
+        
         self.ip = '127.0.0.1'
         self.api_ip = '0.0.0.0'
         self.log_dir = '/tmp'
         self.debug_options = 'locapi,dmedb,dmereq'
         self.location_server = ' http://127.0.0.1:8888/verifyLocation'
         self.token_server = 'http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc'
+        self.certificate = certificate
 
-        super(DME, self).__init__()
-
-    def start(self,carrier, cloudlet_name, operator_name):
+    def start(self,carrier=None, cloudlet_name=None, operator_name=None, cloudlet_key=None, certificate=None):
         notify_address = self.ip + ':' + str(DME.notify_port)
         api_address = self.api_ip + ':' + str(DME.api_port)
         log_file = self.log_dir + '/dme_' + api_address + '_' + str(int(time.time())) + '.log'
-        cloudlet_key = '{\\"operator_key\\":{\\"name\\":\\"' + operator_name + '\\"},\\"name\\":\\"' + cloudlet_name + '\\"}'
 
-        self.dme_cmd = 'nohup {}/dme-server --notifyAddrs {} --apiAddr {} --locverurl {} --toksrvurl {} --carrier {} --cloudletKey {} --tls {}'.format(self.bin_path, notify_address, api_address, self.location_server, self.token_server, carrier, cloudlet_key, self.certificate)
+        cloudlet_key_string = None
+        if cloudlet_key:
+            cloudlet_key_string = cloudlet_key
+        else:
+            cloudlet_dict = {}
+            if operator_name is not None:
+                cloudlet_dict['operator_key'] = {'name':operator_name}
+            if cloudlet_name is not None:
+                cloudlet_dict['name'] = cloudlet_name
+            if cloudlet_dict:
+                cloudlet_key_string = json.dumps(cloudlet_dict)
+        #cloudlet_key = '{\\"operator_key\\":{\\"name\\":\\"' + operator_name + '\\"},\\"name\\":\\"' + cloudlet_name + '\\"}'
+            
+        self.dme_cmd = 'nohup {}/dme-server --notifyAddrs {} --apiAddr {} --locverurl {} --toksrvurl {} --carrier {}'.format(self.bin_path, notify_address, api_address, self.location_server, self.token_server, carrier)
+
+
+        if cloudlet_key_string:
+            self.dme_cmd += f' --cloudletKey \'{cloudlet_key_string}\''
+            
+        if certificate is not None:
+            self.dme_cmd += f' --tls {certificate}'
         if self.debug_options:
             self.dme_cmd += ' -d ' + self.debug_options
-
+        
         super(DME, self).start(cmd=self.dme_cmd, log_file = log_file)
 
         DME.notify_port += 1
