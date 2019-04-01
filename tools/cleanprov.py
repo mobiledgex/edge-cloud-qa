@@ -7,7 +7,7 @@ import os
 import sys
 import argparse
 import logging
-from MexController import mex_controller
+import MexController as mex_controller
 
 parser = argparse.ArgumentParser(description='clean prov from controller')
 parser.add_argument('--address', default='127.0.0.1:55001', help='controller address:port default is 127.0.0.1:55001')
@@ -24,20 +24,22 @@ mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
 
-appinst_keep = []
-app_keep = [{'app_name':'dummy'}]
+appinst_keep = [{'app_name':'automation_api_app'}, {'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
+app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
+#appinst_keep = [{'app_name':'automation_api_app'}]
+#app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'}]
 clusterinst_keep = []
-cluster_keep = []
-clusterflavor_keep = []
-cloudlet_keep = [{'cloudlet_name': 'automationBuckhornCloudlet', 'operator_name': 'GDDT'}]
-flavor_keep = []
-developer_keep = []
-operator_keep = [{'operator_name': 'GDDT'}]
+cluster_keep = [{'cluster_name':'automationapicluster'}]
+clusterflavor_keep = [{'cluster_flavor_name':'automation_api_cluster_flavor'},{'cluster_flavor_name':'x1.medium'}]
+cloudlet_keep = [{'cloudlet_name': 'automationBuckhornCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationBeaconCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'attcloud-1', 'operator_name': 'att'},{'cloudlet_name': 'tmocloud-1', 'operator_name': 'dmuus'},{'cloudlet_name': 'tmocloud-2', 'operator_name': 'dmuus'},{'cloudlet_name': 'automationProdHawkinsCloudlet', 'operator_name': 'GDDT'}]
+flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor'}]
+developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
+operator_keep = [{'operator_name': 'GDDT'},{'operator_name': 'gcp'},{'operator_name': 'dmuus'},{'operator_name': 'att'},{'operator_name': 'azure'}]
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-controller = mex_controller.Controller(controller_address = controller_address,
+controller = mex_controller.MexController(controller_address = controller_address,
                                        root_cert = mex_root_cert,
                                        key = mex_key,
                                        client_cert = mex_cert
@@ -55,6 +57,7 @@ def clean_appinst():
                 print('keeping', a.key.app_key.name)
             else:
                 print('deleting', a.key.app_key.name)
+                a.crm_override = 1
                 controller.delete_app_instance(a)
 
 def clean_app():
@@ -83,7 +86,11 @@ def clean_clusterinst():
                 print('keeping', a.key.cluster_key.name)
             else:
                 print('deleting', a.key.cluster_key.name)
-                controller.delete_cluster_instance(a)
+                a.crm_override = 1
+                try:
+                    controller.delete_cluster_instance(a)
+                except:
+                    print('error deleting.continuing to next item')
 
 def clean_cluster():
     print('clean cluster')
@@ -97,7 +104,11 @@ def clean_cluster():
                 print('keeping', a.key.name)
             else:
                 print('deleting', a.key.name)
-                controller.delete_cluster(a)
+                try:
+                    controller.delete_cluster(a)
+                except:
+                    print('error deleting.continuing to next item')
+                    
 
 def clean_clusterflavor():
     print('clean cluster flavor')
@@ -139,7 +150,10 @@ def clean_flavor():
                 print('keeping', a.key.name)
             else:
                 print('deleting', a.key.name)
-                controller.delete_flavor(a)
+                try:
+                    controller.delete_flavor(a)
+                except:
+                    print('error deleting.continuing to next item')
 
 def clean_developer():
     print('clean developer')
@@ -187,15 +201,15 @@ def in_clusterinst_list(app):
             print('found clusterinst in clusterinst_keep_list', app.key.name)
             return True
 
-def in_cluster_list(app):
+def in_cluster_list(cluster):
     for a in cluster_keep:
-        if a['app_name'] == app.key.name:
-            print('found cluster in cluster_keep_list', app.key.name)
+        if a['cluster_name'] == cluster.key.name:
+            print('found cluster in cluster_keep_list', cluster.key.name)
             return True
 
 def in_clusterflavor_list(app):
     for a in clusterflavor_keep:
-        if a['app_name'] == app.key.name:
+        if a['cluster_flavor_name'] == app.key.name:
             print('found cluster flavor in clusterflavor_keep_list', app.key.name)
             return True
 
