@@ -57,3 +57,12 @@ DME shall fail to start without carrier parm
    Run Keyword and Expect Error  *  Start DME  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
    DME Log File Should Contain  carrier not specified  timeout=10
 
+DME shall fail to start if port is in use
+   [Documentation]
+   ...  Start DME twice with the same port
+   ...  Verify proper error shows in log
+
+   ${pid}=  Start DME  carrier_name=${operator_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+   Run Keyword and Expect Error  *  Start DME  carrier_name=${operator_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+   DME Log File Should Contain  bind: address already in use  timeout=10
+   Kill Process  pid=${pid} 
