@@ -41,9 +41,35 @@ class MexProcessHandler():
 
         dme = DME()
         self.dme_clients.append(dme)
-        dme.start(carrier, cloudlet_name, operator_name, cloudlet_key, certificate)
+        pid = dme.start(carrier, cloudlet_name, operator_name, cloudlet_key, certificate)
 
+        return pid
+    
+    def kill_dme(self):
+        """ Kills the previously started DME
 
+        Examples:
+
+        | Start DME | carrier=${cloudlet_name} | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} |
+        | Kill DME |
+
+        """
+        dme = self.dme_clients[-1]
+        dme.kill()
+
+    def kill_process(self, pid):
+        """ Kills the process with the given pid
+
+        Examples:
+
+        | ${pid}= | Start DME | carrier=${cloudlet_name} | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} |
+        | Kill Process | pid=${pid}
+
+        """
+
+        process = Mexprocess()
+        process.kill(pid=pid)
+        
     def crm_vm_should_be_up(self, timeout=600):
         crm = self.crm_clients[-1]
         print('crm', self.crm_clients)
@@ -113,16 +139,42 @@ class Mexprocess(object):
                                        shell=False,
                                        env=env_dict,
                                        preexec_fn=os.setpgrp)
-            logger.debug('Running process with pid=' + str(process.pid) + 'and logfile=' + log_file)
+            logger.debug('Running process with pid=' + str(process.pid) + ' and logfile=' + log_file)
             time.sleep(1)
             if process.poll() is not None:
                 raise ProcessFailed('process is not alive')
 
             self.pid = process.pid
-            
+            return self.pid
+        
         except subprocess.CalledProcessError as e:
             raise ProcessFailed(e.stderr.decode('utf-8'))
 
+    def kill(self, pid=None):
+        pid_to_kill = None
+        log_file_kill = None
+
+        if pid:
+            pid_to_kill = pid
+            log_file_kill = '/tmp/kill.log'
+        else:
+            pid_to_kill = self.pid
+            log_file_kill = self.log_file + 'kill'
+
+        if pid_to_kill:
+            cmd = 'kill ' + str(pid_to_kill)
+
+            process = subprocess.Popen(shlex.split(cmd),
+                                       stdout=open(log_file_kill, 'w'),
+                                       shell=False,
+                                       preexec_fn=os.setpgrp)
+            logger.debug('Running kill process with pid=' + str(pid_to_kill) + ' and logfile=' + log_file_kill)
+            time.sleep(1)
+            if process.poll() is None:
+                raise ProcessFailed('process is still alive')
+        else:
+            raise ProcessFailed('cannot kill process since pid is not set')
+        
     def _followFile(self, theFile, line_to_find, time_secs=60):
         start_time = time.time()
         with open(theFile, 'r') as f:
@@ -340,11 +392,13 @@ class DME(Mexprocess):
         if self.debug_options:
             self.dme_cmd += ' -d ' + self.debug_options
         
-        super(DME, self).start(cmd=self.dme_cmd, log_file = log_file)
+        pid = super(DME, self).start(cmd=self.dme_cmd, log_file = log_file)
 
         DME.notify_port += 1
         DME.api_port += 1
 
+        return pid
+    
 class ProcessFailed(Exception):
     def __init__(self, message):
         self.message = message
