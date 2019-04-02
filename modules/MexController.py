@@ -774,7 +774,7 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, image_type=None, image_path=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, crm_override=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, crm_override=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
@@ -957,6 +957,9 @@ class MexController(MexGrpc):
 
     def get_default_cluster_name(self):
         return shared_variables.cluster_name_default
+
+    #def get_default_cluster_instance_name(self):
+    #    return shared_variables.cluster_instance_name_default
 
     def get_default_cluster_flavor_name(self):
         return shared_variables.cluster_flavor_name_default
@@ -1705,6 +1708,32 @@ class MexController(MexGrpc):
         return resp
 
     def create_app_instance(self, app_instance=None, **kwargs):
+        """ Creates an app instance with the specified object, values or all default values
+
+        Equivalent to edgectl CreateAppInst.
+
+        Arguments:
+
+        | =Argument=                      | =Default Value= |
+        | app_name                        | 'app' + epochTime or appname set by previous Create App |
+        | app_version                     | 1.0 |
+        | cloudlet_name                   | 'cloudlet' + epochTime or cloudlet name set by previous Create Cloudlet |
+        | operator_name                   | 'Operator' + epochTime or operator name set by previous Create Operator |
+        | developer_name                  | 'Developer' + epochTime or operator name set by previous Create Developer |
+        | cluster_instance_name           | None |
+        | cluster_instance_developer_name | None |
+        | flavor_name                     | None |
+        | uri                             | None |
+        | appinst_id                      | None |
+        | use_defaults                    | True. Set to True or False for whether or not to use default values |
+
+        Examples:
+
+        | Create App Instance | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} | cluster_instance_name=autocluster 
+        | Create App Instance | cluster_instance_name=autocluster |
+
+        """
+
         resp = None
         auto_delete = True
         
