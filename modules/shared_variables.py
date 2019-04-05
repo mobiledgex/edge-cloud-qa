@@ -11,5 +11,6 @@ developer_name_default = 'developer' + default_time_stamp
 flavor_name_default = 'flavor' + default_time_stamp
 cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 session_cookie_default = ''
+token_default = '' 
 
 
