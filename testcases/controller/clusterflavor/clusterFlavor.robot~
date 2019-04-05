@@ -1,0 +1,19 @@
+*** Settings ***
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+
+
+Test Teardown	Cleanup provisioning
+
+
+*** Variables ***
+${controller_api_address}  127.0.0.1:55001
+${oper}  azure
+${cldlet}  CreateTest
+
+*** Test Cases ***
+CreateClusterFlavor without a key name
+	[Documentation]   CreateClusterFlavor - Tries to create a Cluster Flavor without a key name
+	...  The test case tries to create a cluster flavor with a missing key name
+	...  Expect the create to fail
+
+	CreateClusterFlavor   
