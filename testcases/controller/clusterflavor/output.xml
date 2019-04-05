@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.0.4 (Python 3.7.3 on darwin)" generated="20190401 12:18:11.527">
+<suite id="s1" name="clusterFlavor" source="/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/controller/clusterflavor/clusterFlavor.robot">
+<test id="s1-t1" name="CreateClusterFlavor without a key name">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>CreateClusterFlavor</arg>
+<arg>node_flavor_name=x1.medium</arg>
+<arg>master_flavor_name=x1.medium</arg>
+<arg>use_defaults=${False}</arg>
+</arguments>
+<assign>
+<var>${error_msg}</var>
+</assign>
+<kw name="Create Cluster Flavor" library="MexController">
+<doc>Creates a cluster flavor with the specified object, values or all default values</doc>
+<arguments>
+<arg>node_flavor_name=x1.medium</arg>
+<arg>master_flavor_name=x1.medium</arg>
+<arg>use_defaults=${False}</arg>
+</arguments>
+<msg timestamp="20190401 12:18:11.701" level="INFO">create cluster flavor on automation.mobiledgex.net:55001. 
+	node_flavor {
+	  name: "x1.medium"
+	}
+	master_flavor {
+	  name: "x1.medium"
+	}
+	</msg>
+<msg timestamp="20190401 12:18:12.032" level="FAIL">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Please specify a unique key"
+	debug_error_string = "{"created":"@1554139092.027690000","description":"Error received from peer","file":"src/core/lib/surface/call.cc","file_line":1017,"grpc_message":"Please specify a unique key","grpc_status":2}"
+&gt;</msg>
+<msg timestamp="20190401 12:18:12.032" level="DEBUG">Traceback (most recent call last):
+  File "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1024, in create_cluster_flavor
+    resp = self.cluster_flavor_stub.CreateClusterFlavor(cluster_flavor)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 533, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 467, in _end_unary_response_blocking
+    raise _Rendezvous(state, None, None, deadline)</msg>
+<status status="FAIL" starttime="20190401 12:18:11.699" endtime="20190401 12:18:12.033"></status>
+</kw>
+<msg timestamp="20190401 12:18:12.033" level="INFO">${error_msg} = _Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Please specify a unique key"
+	debug_error_string = "{"created":"@1554139092.027690000","description":"Er...</msg>
+<status status="PASS" starttime="20190401 12:18:11.699" endtime="20190401 12:18:12.033"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error_msg}</arg>
+<arg>status = StatusCode.UNKNOWN</arg>
+</arguments>
+<status status="PASS" starttime="20190401 12:18:12.033" endtime="20190401 12:18:12.034"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error_msg}</arg>
+<arg>details = "Please specify a unique key"</arg>
+</arguments>
+<status status="PASS" starttime="20190401 12:18:12.034" endtime="20190401 12:18:12.034"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20190401 12:18:12.035" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20190401 12:18:12.035" level="INFO">[]</msg>
+<status status="PASS" starttime="20190401 12:18:12.034" endtime="20190401 12:18:12.035"></status>
+</kw>
+<doc>CreateClusterFlavor - Tries to create a Cluster Flavor without a key name
+The test case tries to create a cluster flavor with a missing key name
+Expect the create to fail</doc>
+<status status="PASS" starttime="20190401 12:18:11.698" endtime="20190401 12:18:12.035" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20190401 12:18:11.528" endtime="20190401 12:18:12.036"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0">Critical Tests</stat>
+<stat pass="1" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" id="s1" name="clusterFlavor">clusterFlavor</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
