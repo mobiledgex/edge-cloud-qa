@@ -9,9 +9,9 @@ Library		MexMasterController  root_cert=../../certs/mex-ca.crt
 *** Variables ***
 
 *** Test Cases ***
-MC - User shall be able to successfully login
+MC - Superuser shall be able to successfully login
     [Documentation]
-    ...  login to the mc
+    ...  login to the mc as superuser
     ...  verify token is correct
 
    Login
@@ -21,9 +21,9 @@ MC - User shall be able to successfully login
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    Should Be Equal  ${token['username']}  mexadmin	
 
-MC - User with wrong password shall not be able to login
+MC - Superuser with wrong password shall not be able to login
     [Documentation]
-    ...  login to the mc with invalid password
+    ...  login to the mc with superuser username and invalid password
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Login  password=xx
@@ -34,9 +34,9 @@ MC - User with wrong password shall not be able to login
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Invalid username or password"}
 
-MC - User with wrong username shall not be able to login
+MC - Superuser with wrong username shall not be able to login
     [Documentation]
-    ...  login to the mc with invalid username
+    ...  login to the mc with invalid username and superuser password
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Login  username=xx
@@ -47,12 +47,12 @@ MC - User with wrong username shall not be able to login
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Invalid username or password"}
 
-MC - User with no username shall not be able to login
+MC - Superuser with no username shall not be able to login
     [Documentation]
-    ...  login to the mc with no username
+    ...  login to the mc with no username and superuser password
     ...  verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=mex123  use_defaults=${False}
+   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=mexadmin123  use_defaults=${False}
 
    ${status_code}=  Response Status Code
    ${body}=         Response Body
@@ -60,9 +60,9 @@ MC - User with no username shall not be able to login
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Username not specified"}
 
-MC - User with no password shall not be able to login
+MC - Superuser with no password shall not be able to login
     [Documentation]
-    ...  login to the mc with no password
+    ...  login to the mc with superuser username and no password
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Login  username=mexadmin  password=${None}  use_defaults=${False}
@@ -73,9 +73,9 @@ MC - User with no password shall not be able to login
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Invalid username or password"}
 
-MC - User with empty username shall not be able to login
+MC - Superuser with empty username shall not be able to login
     [Documentation]
-    ...  login to the mc with empty username
+    ...  login to the mc with empty username and superuser password
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${EMPTY}
@@ -86,9 +86,9 @@ MC - User with empty username shall not be able to login
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Username not specified"}
 
-MC - User with empty password shall not be able to login
+MC - Superuser with empty password shall not be able to login
     [Documentation]
-    ...  login to the mc with empty password
+    ...  login to the mc with superuser username and empty password
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Login  password=${EMPTY}
