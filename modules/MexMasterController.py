@@ -58,19 +58,16 @@ class MexMasterController(MexRest):
         self.token = self.decoded_data['token']
         self._decoded_token = jwt.decode(self.token, verify=False)
 
-    def create_user(self, username=None, password=None, email=None, json_data=None):
+    def create_user(self, username=None, password=None, email=None, json_data=None, use_defaults=True):
         timestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
-        
-        if username is None:
-            username = 'name' + timestamp
-        if password is None:
-            password = 'password' + timestamp
-        if email is None:
-            email = username + '@email.com'
 
-        
+        if use_defaults:
+            if username is None: username = 'name' + timestamp
+            if password is None: password = 'password' + timestamp
+            if email is None: email = username + '@email.com'
+
         if json_data:
             payload = json_data
         else:
@@ -116,3 +113,37 @@ class MexMasterController(MexRest):
         logger.info('response:\n' + str(self.resp.text))
 
         return self.decoded_data
+
+    def delete_user(self, username=None, password=None, email=None, token=None, json_data=None, use_defaults=True):
+        timestamp = str(time.time())
+        url = self.root_url + '/auth/user/delete'
+        payload = None
+
+        if use_defaults:
+            if token is None: token = self.token
+            if username is None: username = self.username
+            if password is None: password = self.password
+            if email is None: email = self.username
+        
+        if json_data:
+            payload = json_data
+        else:
+            user_dict = {}
+            if username is not None:
+                user_dict['name'] = username
+            if password is not None:
+                user_dict['passhash'] = password
+            if email is not None:
+                user_dict['email'] = email
+                
+            payload = json.dumps(user_dict)
+
+        logger.info('delete/user on mc at {}. \n\t{}'.format(url, payload))
+
+        self.post(url=url, data=payload, bearer=token)
+        
+        logger.info('response:\n' + str(self.resp.text))
+            
+        if str(self.resp.text) != '{"message":"user deleted"}':
+            raise Exception("error creating user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+

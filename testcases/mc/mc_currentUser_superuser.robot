@@ -60,11 +60,9 @@ MC - User shall be able to get the current status of new user
    Should Be Equal             ${info['Salt']}           ${EMPTY}
    Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
-		
-
-MC - User with no token shall not be able to get current status of superuser
+MC - User with no token shall not be able to get current status
     [Documentation]
-    ...  login to the mc with invalid password
+    ...  request user/current without token
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Get Current User  use_defaults=${False}
@@ -75,11 +73,12 @@ MC - User with no token shall not be able to get current status of superuser
    Should Be Equal As Numbers  ${status_code}  400	
    Should Be Equal             ${body}         {"message":"Invalid username or password"}
 
-MC - User with bad token1 shall not be able to get current status of superuser
+MC - User with bad token1 shall not be able to get current status
     [Documentation]
-    ...  login to the mc with invalid password
+    ...  request user/current with token=<some other token>
     ...  verify correct error msg is received
 
+   #this token came from verifyLocation testscases
    ${error_msg}=  Run Keyword and Expect Error  *  Get Current User  token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQzMjUxMzIsImlhdCI6MTU1NDIzODczMiwia2V5Ijp7InBlZXJpcCI6IjEwLjEzOC4wLjkiLCJkZXZuYW1lIjoiZGV2ZWxvcGVyMTU1NDIzODczMC04ODU0MDkiLCJhcHBuYW1lIjoiYXBwMTU1NDIzODczMC04ODU0MDkiLCJhcHB2ZXJzIjoiMS4wIiwia2lkIjo2fX0.oehfMCQiukTxbYtq0xa4C-XSji_BJhTp7zLDjZk_WlWPSM0uyyt1Ul0UhkCR-7e8XWLJvqaFjzmuPRxjiN0ruw
 
    ${status_code}=  Response Status Code
@@ -88,9 +87,9 @@ MC - User with bad token1 shall not be able to get current status of superuser
    Should Be Equal As Numbers  ${status_code}  401	
    Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
 
-MC - User with bad token2 shall not be able to get current status of superuser
+MC - User with bad token2 shall not be able to get current status
     [Documentation]
-    ...  login to the mc with invalid password
+    ...  request user/current with token=xx
     ...  verify correct error msg is received
 
    ${error_msg}=  Run Keyword and Expect Error  *  Get Current User  token=xx
@@ -99,5 +98,36 @@ MC - User with bad token2 shall not be able to get current status of superuser
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  401	
+   Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+
+MC - User with expired token shall not be able to get current status of superuser
+    [Documentation]
+    ...  request user/current with expired token of superuser
+    ...  verify correct error msg is received
+
+   # gen 10am 4/4 {"token":"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY2OTcsImlhdCI6MTU1NDM5MDI5NywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.PsVVex66xzIL3ebqSy9gQnN2rBykCETuwihnAAxsPk_9vwp6fpW0mD2vdvgTALY08Eq--N_ZNoguPNHXc8h5AQ"}
+	
+   ${error_msg}=  Run Keyword and Expect Error  *  Get Current User  token=expired
+
+   ${status_code}=  Response Status Code
+   ${body}=         Response Body
+
+   Should Be Equal As Numbers  ${status_code}  401xx
+   Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+
+
+MC - User with expired token shall not be able to get current status of newuser
+    [Documentation]
+    ...  request user/current with expired token of newuser
+    ...  verify correct error msg is received
+
+    # created 10am4/4 {"token":"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ0NzY0MTEsImlhdCI6MTU1NDM5MDAxMSwidXNlcm5hbWUiOiJuYW1lMTU1NDM5MDAxMS4yMDMyOTI4Iiwia2lkIjoyfQ.zs0z3rKlFzYbm7TfmuU5PpsnnF7LpotwfZh9Rb_Ym_LTpXciaBckPstBk_z64yHDV0hvh2mjLtbUp-4OVlOrNg"}
+	
+   ${error_msg}=  Run Keyword and Expect Error  *  Get Current User  token=expired
+
+   ${status_code}=  Response Status Code
+   ${body}=         Response Body
+
+   Should Be Equal As Numbers  ${status_code}  401xx
    Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
 
