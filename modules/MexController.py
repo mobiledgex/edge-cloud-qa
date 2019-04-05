@@ -310,7 +310,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, crm_override=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -320,6 +320,7 @@ class ClusterInstance():
         self.flavor_name = flavor_name
         self.crm_override = crm_override
         self.liveness = liveness
+        self.ip_access = ip_access
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -364,6 +365,9 @@ class ClusterInstance():
 
         if self.liveness is not None:
             clusterinst_dict['liveness'] = self.liveness
+
+        if self.ip_access is not None:
+            clusterinst_dict['ip_access'] = self.ip_access
 
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
@@ -458,9 +462,9 @@ class Cloudlet():
         self._cloudlet_numdynamicips_field = str(cloudlet_pb2.Cloudlet.NUM_DYNAMIC_IPS_FIELD_NUMBER)
 
         if cloudlet_name is None and use_defaults == True:
-            self.cloudlet_name = cloudlet_name_default
+            self.cloudlet_name = shared_variables.cloudlet_name_default
         if operator_name is None and use_defaults == True:
-            self.operator_name = operator_name_default
+            self.operator_name = shared_variables.operator_name_default
         if latitude is None and use_defaults == True:
             self.latitude = 10
         if longitude is None and use_defaults == True:
@@ -1235,6 +1239,7 @@ class MexController(MexGrpc):
         | cloudlet_name | 'cloudlet' + epochTime or what was previously set by Create Cloudlet        |
         | flavor_name   | 'flavor' + epochTime or what was previously set by Create Flavor            |
         | liveness      | 1                                                                           |
+        | ip_access     | None                                                                        |
         | use_defaults  | True. Set to True or False for whether or not to use default values         |
         | use_thread    | False. Set to True to run the operation in a thread. Used for parallel executions         |
 
@@ -1286,14 +1291,19 @@ class MexController(MexGrpc):
 
             if auto_delete:
                 self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
-        
-            return resp
+
+            resp =  self.show_cluster_instances(cluster_name=cluster_instance.key.cluster_key.name, operator_name=cluster_instance.key.cloudlet_key.operator_key.name, cloudlet_name=cluster_instance.key.cloudlet_key.name, use_defaults=False)
+
+            return resp[0]
+
+            #return resp
 
         if use_thread:
             t = threading.Thread(target=sendMessage)
             t.start()
             return t
         else:
+            print('sending message')
             resp = sendMessage()
             return resp
 
