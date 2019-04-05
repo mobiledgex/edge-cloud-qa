@@ -18,12 +18,10 @@ class MexRest(WebService) :
             headers['Authorization'] = 'Bearer ' + bearer
             
         self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
-        print('*WARN*', 'before decode')
         self._decode_content()
-        print('*WARN*', 'after decode')
+
         if str(self.resp.status_code) != '200':
             raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-        print('*WARN*', 'after status')
 
     def _decode_content(self):
         logging.debug('content=' + self.resp.content.decode("utf-8"))
