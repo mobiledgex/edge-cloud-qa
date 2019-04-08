@@ -25,6 +25,12 @@ node('jenkinsSlave1'){
              credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
              url: 'https://github.com/mobiledgex/edge-cloud.git'
           }
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
+          }
+
           dir('go/src/github.com/mobiledgex') {
              checkout([$class: 'GitSCM', 
                 branches: [[name: 'master']],
@@ -37,16 +43,24 @@ node('jenkinsSlave1'){
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 	  }
        }
-       stage('make dep') {
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make dep'
-          }
-       }
+
+       //stage('make dep') {
+       //   dir('go/src/github.com/mobiledgex/edge-cloud') {
+       //      sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make dep'
+       //   }
+       //}
+       
        stage('make tools') {
            dir('go/src/github.com/mobiledgex/edge-cloud') {
               sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make tools'
            }
        }
+       stage('infra make') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make'
+          }
+       }
+
        stage('regular make') {
           dir('go/src/github.com/mobiledgex/edge-cloud') {
              sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make'
