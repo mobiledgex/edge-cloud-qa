@@ -26,8 +26,6 @@ spec:
         env:
          - name: CLOUDLET_KIND
            value: openstack
-         - name: MEX_OS_IMAGE
-           value: mobiledgex
          - name: MEX_EXT_NETWORK
            value: external-network-shared
          - name: OPENRC_URL
