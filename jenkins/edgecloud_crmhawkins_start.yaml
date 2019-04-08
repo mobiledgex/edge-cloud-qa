@@ -43,6 +43,8 @@ spec:
          - "{\"operator_key\":{\"name\":\"GDDT\"},\"name\":\"automationHawkinsCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
+         - "--platform"
+         - "openstack"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--d"
