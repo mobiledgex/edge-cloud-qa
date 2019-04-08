@@ -63,7 +63,7 @@ node('jenkinsSlave1'){
        }
        stage('infra make') {
           dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make'
+             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make'
           }
        }
 
