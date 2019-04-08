@@ -44,12 +44,18 @@ node('jenkinsSlave1'){
 	  }
        }
 
-       //stage('make dep') {
-       //   dir('go/src/github.com/mobiledgex/edge-cloud') {
-       //      sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make dep'
-       //   }
-       //}
-       
+       stage('make dep') {
+          dir('go/src/github.com/mobiledgex/edge-cloud') {
+             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make dep'
+          }
+       }
+
+       stage('infra dep') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -vendor-only'
+          }
+       }
+
        stage('make tools') {
            dir('go/src/github.com/mobiledgex/edge-cloud') {
               sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make tools'
