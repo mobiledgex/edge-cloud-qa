@@ -47,6 +47,8 @@ spec:
          - "{\"operator_key\":{\"name\":\"TDG\"},\"name\":\"automationBonnCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
+         - "--platform"
+         - "openstack"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--d"
