@@ -41,6 +41,8 @@ spec:
          - "{\"operator_key\":{\"name\":\"azure\"},\"name\":\"automationAzureCentralCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
+         - "--platform"
+         - "azure"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--d"
