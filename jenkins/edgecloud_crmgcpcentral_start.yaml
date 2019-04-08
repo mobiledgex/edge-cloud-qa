@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmgcpcentral
+  labels:
+    app: crmgcpcentral
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmgcpcentral
+  template:
+    metadata:
+      labels:
+        app: crmgcpcentral
+    spec:
+      containers:
+      - name: crmgcpcentral
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
+        command:
+         - crmserver
+        env:
+         - name: PATH
+           value: /tmp/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin
+         - name: MEXENV_URL
+           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
+         - name: MEX_GCP_PROJECT
+           value: My First Project
+         - name: MEX_GCP_ZONE
+           value: us-central1-c
+         - name: VAULT_TOKEN
+           value: 0eb94cce-ab3f-33a3-bd66-0046e8743a14
+        args:
+         - "--apiAddr"
+         - "0.0.0.0:55100"
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"gcp\"},\"name\":\"automationGcpCentralCloudlet\"}"
+         - "--notifyAddrs"
+         - "controller:37001"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--platform"
+         - "gcp"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
