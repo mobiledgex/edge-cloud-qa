@@ -14,11 +14,12 @@ class CRM(object):
         logging.info(f'cluster_name={cluster_name} operator_name={operator_name} pod_name={pod_name}')
         cluster_name = cluster_name.replace('.', '') #remove any dots
                     
-        kubeconfig = f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' 
+        kubeconfig = f'{cluster_name}.{operator_name}.kubeconfig' 
         logging.info('kubeconfig=' + kubeconfig)
         
         for t in range(wait_time):
             kubectl_out = self.get_pods(kubeconfig)
+            logging.debug(f'try {t} of {wait_time}')
             logging.debug(kubectl_out)
 
             for line in kubectl_out:
