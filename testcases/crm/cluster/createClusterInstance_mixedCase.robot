@@ -12,7 +12,7 @@ ${operator_name}  TDG
 ${flavor_name}	  x1.medium
 
 *** Test Cases ***
-CRM shall be able to Create 2 cluster instances with mixed case clusternamefor openstack
+CRM shall be able to create a cluster instances with mixed case clustername for openstack
     [Documentation]
     ...  Create a clusters and cluster instances with a clustername of MyCluster  on openstack
     ...  Verify created successfully
