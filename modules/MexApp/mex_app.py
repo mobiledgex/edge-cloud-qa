@@ -24,7 +24,9 @@ class MexApp(object):
 
         return_data = ''
         try:
+            logging.debug(f'sending {data} to {host}:{port}')
             client_socket.sendto(data_to_send,(host, int(port)))
+            logging.debug(f'waiting for {exp_return_data}')
             (return_data, addr) = client_socket.recvfrom(data_size)
             logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
             client_socket.close()
@@ -92,7 +94,8 @@ class MexApp(object):
 
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
+            #rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
