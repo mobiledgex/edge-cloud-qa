@@ -479,9 +479,9 @@ AppInst - user shall be to add multiple UDP public ports
 
 AppInst - user shall not be able to allocate public port udp:22
     [Documentation]
-    ...  create an app with udp:21
+    ...  create an app with udp:22
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -502,7 +502,7 @@ AppInst - user shall not be able to allocate public port udp:18889
     [Documentation]
     ...  create an app with udp:18889
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -523,7 +523,7 @@ AppInst - user shall not be able to allocate public port udp:18888
     [Documentation]
     ...  create an app with udp:18888
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
