@@ -62,7 +62,7 @@ def main():
 
     if cycle_id: 
         #add tests to cycle
-        jql = 'project={} and type=Test and component=Automated'.format(project)
+        jql = 'project={} and type=Test and component=Automated and fixVersion={}'.format(project, version)
         print('jql', jql)
         z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, jql=jql)
         #start_date = time.strftime('%Y-%m-%d', time.gmtime())
