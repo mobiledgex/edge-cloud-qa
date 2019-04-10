@@ -115,7 +115,8 @@ node('jenkinsSlave1'){
 
 	     // delete the hawkins lb so it is recreated when starting the crm
 	     sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
-
+             sh 'source /home/jenkins/openrc.hawkins;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+	     
              // fix known_hosts file since recreating the server causes a mismatch in the file
              //sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbuckhorncloudlet.gddt.mobiledgex.net"'
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhawkinscloudlet.gddt.mobiledgex.net"'
