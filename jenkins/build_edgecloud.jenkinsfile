@@ -244,7 +244,7 @@ node('jenkinsSlave1'){
           echo "running tests"
           dir('go/src/github.com/mobiledgex/jenkins') {
               def status = -1
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + tag
               status = sh(script: s, returnStatus: true);
               println status
               if(status != 0) {
@@ -252,7 +252,7 @@ node('jenkinsSlave1'){
                   currentBuild.result = 'FAILURE'
               }
 
-              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + tag + ' --startdate'
               status2 = sh(script: s2, returnStatus: true);
               println status2
               if(status2 != 0) {
@@ -277,7 +277,7 @@ node('jenkinsSlave1'){
           }
 
           dir('go/src/github.com/mobiledgex/jenkins') {
-              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + tag + ' --enddate'
               status3 = sh(script: s3, returnStatus: true);
               println status3
               if(status3 != 0) {
