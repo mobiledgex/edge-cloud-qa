@@ -29,7 +29,7 @@ spec:
          - name: MEXENV_URL
            value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
          - name: MEX_GCP_PROJECT
-           value: My First Project
+           value: still-entity-201400
          - name: MEX_GCP_ZONE
            value: us-central1-c
          - name: VAULT_TOKEN
