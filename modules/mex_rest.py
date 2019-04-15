@@ -14,7 +14,7 @@ class MexRest(WebService) :
         logging.debug(f'url={url} data={data} cert={self.root_cert}')
 
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
-        if bearer:
+        if bearer != None:
             headers['Authorization'] = 'Bearer ' + bearer
             
         self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
