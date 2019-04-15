@@ -16,25 +16,6 @@ node('jenkinsSlave1'){
     currentBuild.displayName = tag
 
     try {
-       stage('Check Load Exists') {
-          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\"sdate.format(date)\")"'
-          def index  = sh(script: s, returnStdout: true);
-          if(index < 1) {
-             println "${s} failed"
-             currentBuild.result = 'FAILURE'
-          }
-
-       }
-    }  catch (e) {
-       dir('go/src/github.com/mobiledgex/jenkins') {
-          def status = -1
-	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + sdate.format(date) + ' failed. Aborting"'
-          //status = sh(script: s, returnStatus: true);
-       }
-       error('Aborting the build')
-    }
-
-    try {
        stage('Checkout') {
           dir('go/src/github.com/mobiledgex') {
              checkout([$class: 'GitSCM', 
@@ -56,6 +37,26 @@ node('jenkinsSlave1'){
        }
        error('Aborting the build')
     }
+
+    try {
+       stage('Check Load Exists') {
+          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\"' + sdate.format(date) + '\")"'
+          def index  = sh(script: s, returnStdout: true);
+          if(index < 1) {
+             println "${s} failed"
+             currentBuild.result = 'FAILURE'
+          }
+
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + sdate.format(date) + ' doesnt exist in registry. Aborting"'
+          //status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
     error('andy quit')
 //    try {
 //       stage('make test') {
