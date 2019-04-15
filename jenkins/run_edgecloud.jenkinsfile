@@ -14,7 +14,7 @@ node('jenkinsSlave1'){
     tag = sdate.format(date)
     project = "${project}"
     
-    currentBuild.displayName = tag
+    currentBuild.displayName = cycle
 
     try {
        stage('Checkout') {
@@ -59,7 +59,7 @@ node('jenkinsSlave1'){
        error('Aborting the build')
     }
 
-    error('andy quit')
+//    error('andy quit')
 //    try {
 //       stage('make test') {
 //          dir('go/src/github.com/mobiledgex/edge-cloud') {
