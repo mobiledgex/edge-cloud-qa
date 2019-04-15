@@ -4,7 +4,7 @@ Documentation  Create an app instance on openstack with a dot in the appname
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -34,6 +34,8 @@ User shall be able to create an app instance on openstack with a dot in the app 
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=.  app  ${epoch_time}
+
+    ${cluster_name_default}=  Get Default Cluster Name
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  app_template=${apptemplate}    #   default_flavor_name=flavor1550592128-673488   cluster_name=cl1550691984-633559 

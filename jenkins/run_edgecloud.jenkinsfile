@@ -5,32 +5,19 @@ builds1 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
-    sdate = new SimpleDateFormat("yyyMMdd")
+    sdate = new SimpleDateFormat("yyy-MM-dd")
     //year = date[Calendar.YEAR]
     //month = date[Calendar.MONTH] + 1
     //date = date.getAt(Calendar.DATE)
     //tag = Version + '_automation_' + year + month + date
-    tag = Version + '_automation_' + sdate.format(date)
+    cycle = Version + '_automation_' + sdate.format(date)
+    tag = sdate.format(date)
     project = "${project}"
     
-    currentBuild.displayName = tag
+    currentBuild.displayName = cycle
+
     try {
        stage('Checkout') {
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
-          }
-
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             git branch: 'master',
-             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-             url: 'https://github.com/mobiledgex/edge-cloud.git'
-          }
-          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-             git branch: 'master',
-             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
-          }
-
           dir('go/src/github.com/mobiledgex') {
              checkout([$class: 'GitSCM', 
                 branches: [[name: 'master']],
@@ -43,75 +30,58 @@ node('jenkinsSlave1'){
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 	  }
        }
-
-       stage('make dep') {
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make dep'
-          }
-       }
-
-       stage('infra dep') {
-          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;dep ensure -vendor-only'
-          }
-       }
-
-       stage('make tools') {
-           dir('go/src/github.com/mobiledgex/edge-cloud') {
-              sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make tools'
-           }
-       }
-       stage('infra make') {
-          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make'
-          }
-       }
-
-       stage('regular make') {
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make clean;make'
-          }
-       }
-       stage('make build-docker') {
-          //date = new Date()
-          //year = date[Calendar.YEAR]
-          //month = date[Calendar.MONTH]
-          //date = date.getAt(Calendar.DATE)
-          //tag = ${Version} + '_automation' + year + month + date
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-              sh 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;echo $HOME;cat ~/docker_password.txt | docker login registry.mobiledgex.net:5000 --username mobiledgex --password-stdin;make build-docker TAG=' + tag + ';export AUTOMATION_DOCKERTAG=' + tag
-          }
-       }
     }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "build process for Build ' + tag + ' failed. Aborting"'
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "checkout of edge-cloud-qa failed. Aborting"'
           status = sh(script: s, returnStatus: true);
        }
        error('Aborting the build')
     }
 
     try {
-       stage('make test') {
-          dir('go/src/github.com/mobiledgex/edge-cloud') {
-             sh 'export ANSIBLE_DIR=$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make test'
+       stage('Check Load Exists') {
+          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + sdate.format(date) + '\\")"'
+          def index  = sh(script: s, returnStdout: true);
+	  int indexnum = index as Integer
+          if(indexnum < 1) {
+             println "${s} failed"
+             currentBuild.result = 'FAILURE'
           }
+
        }
-    } catch (e) {
-       currentBuild.result = 'UNSTABLE'
-       result = "FAIL" // make sure other exceptions are recorded as failure too
+    }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "make test for Build ' + tag + ' failed. Continuing execution anyways"'
-          status = sh(script: s, returnStatus: true);
+	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + sdate.format(date) + ' doesnt exist in registry. Aborting"'
+          //status = sh(script: s, returnStatus: true);
        }
+       error('Aborting the build')
     }
+
+//    error('andy quit')
+//    try {
+//       stage('make test') {
+//          dir('go/src/github.com/mobiledgex/edge-cloud') {
+//             sh 'export ANSIBLE_DIR=$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make test'
+//          }
+//       }
+//    } catch (e) {
+//       currentBuild.result = 'UNSTABLE'
+//       result = "FAIL" // make sure other exceptions are recorded as failure too
+//       dir('go/src/github.com/mobiledgex/jenkins') {
+//          def status = -1
+//          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "make test for Build ' + tag + ' failed. Continuing execution anyways"'
+//          status = sh(script: s, returnStatus: true);
+//       }
+//    }
 
     try {
        stage('deploy processes in k8s') {
           dir('go/src/github.com/mobiledgex/jenkins') {
 	     // delete the bonnlb so it is recreated when starting the crm
-	     //sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
+	     sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
+     	     sh 'source /home/jenkins/openrc.bonn;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
 
 	     // delete the hamburg lb so it is recreated when starting the crm
 	     sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
@@ -123,7 +93,7 @@ node('jenkinsSlave1'){
 	     
              //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
-	     //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml'
+	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml'
      	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmhamburg_start.yaml > $HOME/edgecloud_crmhamburg_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebonn_start.yaml > $HOME/edgecloud_dmebonn_start.yaml'
       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud1_start.yaml > $HOME/edgecloud_crmtmustmocloud1_start.yaml'
@@ -152,8 +122,8 @@ node('jenkinsSlave1'){
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
 
-	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
-	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
 
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhamburg_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhamburg_start.yaml'  
@@ -222,7 +192,7 @@ node('jenkinsSlave1'){
        stage("create cycle") {
           dir('go/src/github.com/mobiledgex/jenkins') {
              def status = -1
-             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + tag
+             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
                  println "${s} failed"
@@ -245,7 +215,7 @@ node('jenkinsSlave1'){
           echo "running tests"
           dir('go/src/github.com/mobiledgex/jenkins') {
               def status = -1
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + tag
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
               status = sh(script: s, returnStatus: true);
               println status
               if(status != 0) {
@@ -253,7 +223,7 @@ node('jenkinsSlave1'){
                   currentBuild.result = 'FAILURE'
               }
 
-              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + tag + ' --startdate'
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
               status2 = sh(script: s2, returnStatus: true);
               println status2
               if(status2 != 0) {
@@ -266,7 +236,7 @@ node('jenkinsSlave1'){
              def jobName = jobList1Parallel[i];
              echo "i1=" + jobName
              builds1[jobName] = {
-                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: tag)]
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
 	     }
 	  }
 	  
@@ -278,7 +248,7 @@ node('jenkinsSlave1'){
           }
 
           dir('go/src/github.com/mobiledgex/jenkins') {
-              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + tag + ' --enddate'
+              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
               status3 = sh(script: s3, returnStatus: true);
               println status3
               if(status3 != 0) {
@@ -290,7 +260,7 @@ node('jenkinsSlave1'){
        stage('slack report') {
           echo "slack report"
           //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
-	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: tag)]
+	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
        }
    } else {
        echo "build was failure so not running any tests"
@@ -300,7 +270,7 @@ node('jenkinsSlave1'){
       failure {
          dir('go/src/github.com/mobiledgex/jenkins') {
             def status = -1
-            def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Build ' + tag + ' failed"'
+            def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Build ' + cycle + ' failed"'
             status = sh(script: s, returnStatus: true);
             if(status != 0) {
                println "${s} failed"

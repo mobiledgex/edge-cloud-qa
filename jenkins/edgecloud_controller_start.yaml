@@ -34,6 +34,8 @@ spec:
           - "0.0.0.0:36001"
           - "--tls"
           - "/root/tls/mex-server.crt"
+	  - "--influxAddr"
+          - "35.247.126.154:8086"
           - "-d"
           - "etcd,api,notify"
        imagePullSecrets:
