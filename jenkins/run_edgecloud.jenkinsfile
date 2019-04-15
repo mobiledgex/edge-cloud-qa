@@ -6,20 +6,20 @@ def jobList1Parallel = ["runControllerTests", "runDMETests", "runCSharpTests", "
 builds1 = [:]
 
 node('jenkinsSlave1'){
-    //date = new Date()
+    date = new Date()
     sdate = new SimpleDateFormat("yyy-MM-dd")
-    date = "notset"
+    dateValue = "notset"
     if(dateParm == "today") {
-       date = sdate.format(date)
+       dateValue = sdate.format(date)
     } else {
-       date = dateParm
+       dateValue = dateParm
     }
     //year = date[Calendar.YEAR]
     //month = date[Calendar.MONTH] + 1
     //date = date.getAt(Calendar.DATE)
     //tag = Version + '_automation_' + year + month + date
-    cycle = Version + '_automation_' + date
-    tag = date
+    cycle = Version + '_automation_' + dateValue
+    tag = dateValue
     project = "${project}"
     
     currentBuild.displayName = cycle
