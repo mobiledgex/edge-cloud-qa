@@ -70,8 +70,8 @@ MC - User with no token shall not be able to get current status
    ${status_code}=  Response Status Code
    ${body}=         Response Body
 
-   Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid username or password"}
+   Should Be Equal As Numbers  ${status_code}  401	
+   Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
 
 MC - User with bad token1 shall not be able to get current status
     [Documentation]
