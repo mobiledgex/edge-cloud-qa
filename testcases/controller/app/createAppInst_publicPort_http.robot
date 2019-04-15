@@ -483,9 +483,9 @@ AppInst - user shall be to add multiple HTTP public ports
 
 AppInst - user shall not be able to allocate public port http:22
     [Documentation]
-    ...  create an app with http:21
+    ...  create an app with http:22
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -506,7 +506,7 @@ AppInst - user shall not be able to allocate public port http:18889
     [Documentation]
     ...  create an app with http:18889
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -527,7 +527,7 @@ AppInst - user shall not be able to allocate public port http:18888
     [Documentation]
     ...  create an app with http:18888
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
