@@ -551,9 +551,9 @@ AppInst - user shall be to add multiple TCP public ports
 
 AppInst - user shall not be able to allocate public port tcp:22
     [Documentation]
-    ...  create an app with tcp:21
+    ...  create an app with tcp:22
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -574,7 +574,7 @@ AppInst - user shall not be able to allocate public port tcp:18889
     [Documentation]
     ...  create an app with tcp:18889
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -595,7 +595,7 @@ AppInst - user shall not be able to allocate public port tcp:18888
     [Documentation]
     ...  create an app with tcp:18888
     ...  create an app instance
-    ...  verify internal and public port is 1
+    ...  verify internal and public port is 10000
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
