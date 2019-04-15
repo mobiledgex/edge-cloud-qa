@@ -32,33 +32,33 @@ node('jenkinsSlave1'){
         }
     }
     
-   if(currentBuild.result != 'FAILURE') {
-      stage("copy tests to ${cycle}") {
-          dir('go/src/github.com/mobiledgex/jenkins') {
-              //String j = jobListAll.join(" ")
-              //def p = pwd()
-              def status = -1
-              //def s = p + '@script/copyTestsToRelease.py ' + j
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
-              status = sh(script: s, returnStatus: true);
-              println status
-              if(status != 0) {
-                  println "copyTestsToRelease.py failed"
-                  currentBuild.result = 'FAILURE'
-              }
+   //if(currentBuild.result != 'FAILURE') {
+   //   stage("copy tests to ${cycle}") {
+   //       dir('go/src/github.com/mobiledgex/jenkins') {
+   //           //String j = jobListAll.join(" ")
+   //           //def p = pwd()
+   //           def status = -1
+   //           //def s = p + '@script/copyTestsToRelease.py ' + j
+   //           def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+   //           status = sh(script: s, returnStatus: true);
+   //           println status
+   //           if(status != 0) {
+   //               println "copyTestsToRelease.py failed"
+   //               currentBuild.result = 'FAILURE'
+   //           }
 
-              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
-              status2 = sh(script: s2, returnStatus: true);
-              println status2
-              if(status2 != 0) {
-                 println "updateCycleJira.py startdate failed"
-                 currentBuild.result = 'FAILURE'
-              }
-          }
-      }
-   } else {
-      echo "error: not copying tests since currentBuild=Failure. checkout failed."
-   }
+   //           def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
+   //           status2 = sh(script: s2, returnStatus: true);
+   //           println status2
+   //           if(status2 != 0) {
+   //              println "updateCycleJira.py startdate failed"
+   //              currentBuild.result = 'FAILURE'
+   //           }
+   //       }
+   //   }
+   //} else {
+   //   echo "error: not copying tests since currentBuild=Failure. checkout failed."
+  // }
 
    if(currentBuild.result != 'FAILURE') {
       stage('run WS tests parallel batch 1') {
@@ -95,15 +95,15 @@ node('jenkinsSlave1'){
 //         }
 //      }
 
-      dir('go/src/github.com/mobiledgex/jenkins') {
-          def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
-          status3 = sh(script: s3, returnStatus: true);
-          println status3
-          if(status3 != 0) {
-              println "updateCycleJira.py endate failed"
-              currentBuild.result = 'FAILURE'
-          }
-      }
+      //dir('go/src/github.com/mobiledgex/jenkins') {
+      //    def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+      //    status3 = sh(script: s3, returnStatus: true);
+      //    println status3
+      //    if(status3 != 0) {
+      //        println "updateCycleJira.py endate failed"
+      //        currentBuild.result = 'FAILURE'
+      //    }
+      //}
    } else {
       echo "error: not running ws tests since currentBuild=Failure. copy tests to release failed"
    }

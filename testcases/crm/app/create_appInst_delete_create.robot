@@ -3,7 +3,7 @@ Documentation  User shall be able to create/delete/create an app instance on ope
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexApp
-Variables       shared_variables.py
+#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -32,9 +32,12 @@ User shall be able to create/delete/create an app instance on openstack
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
 
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
     # create the app and app instance
     Log To Console  Creating App and App Instance
-    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  
+    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name} 
     Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}  no_auto_delete=${True}
     App Instance Should Exist
 
@@ -55,7 +58,7 @@ User shall be able to create/delete/create an app instance on openstack
 *** Keywords ***
 Setup
     #Create Developer
-    Create Flavor
+    #Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
