@@ -13,38 +13,38 @@ ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlh
 
 
 *** Test Cases ***
-MC - Super user shall be able to change the password
+MC - Admin user shall be able to change the password
 	[Documentation]
-	...  create a new user change their password with an expired token 
+	...  admin user change their password 
 	...  change the password back to the original password after a successful password change
 
-	New Password    password=${newpass}     token=${superToken}     use_defaults=${False}
-	New Password    password=mexadmin123    token=${superToken}     use_defaults=${False}
+	New Password    password=${newpass}     token=${adminToken}     use_defaults=${False}
+	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
 
 	
-MC - Superuser shall be able to login with the new password 
+MC - Admin user shall be able to login with the new password 
 	[Documentation]
-	...  create a new user change their password and login
+	...  admin user change their password and login
 	...  delete users after test completes
 
-	New Password    password=${newpass}     token=${userToken}   use_defaults=${False}
-	Login   username=myuser   password=${newpass}
-	New Password    password=mexadmin123    token=${superToken}     use_defaults=${False}
+	New Password    password=${newpass}     token=${adminToken}   use_defaults=${False}
+	Login   username=mexadmin   password=${newpass}
+	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
 
-MC - Superuser shall not be able to login with the old password 
+MC - Admin user shall not be able to login with the old password 
 	[Documentation]
-	...  create a new user change their password and login
+	...  admin user change their password and login
 	...  verify the correct error is returned
 	...  delete users after test completes
 
-	New Password    password=${newpass}     token=${userToken}   use_defaults=${False}
+	New Password    password=${newpass}     token=${adminToken}   use_defaults=${False}
 
-	${error_msg}=  Run Keyword and Expect Error  *  Login   username=myuser   password=${password}
+	${error_msg}=  Run Keyword and Expect Error  *  Login   username=mexadmin   password=mexadmin123
       	
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 
-	New Password    password=mexadmin123    token=${superToken}     use_defaults=${False}
+	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
 
 	Should Be Equal As Numbers  ${status_code}  400	
 	Should Be Equal             ${body}         {"message":"Invalid username or password"}
@@ -140,11 +140,11 @@ MC - User shall not be able to change their password with an expired token
 
 *** Keywords ***
 Setup
-	${superToken}=   Login
+	${adminToken}=   Login
 	Create User  username=myuser   password=${password}   email=xy@xy.com
 	${userToken}=  Login  username=myuser  password=${password}
 	Create User  username=youruser   password=somepassword   email=xyz@xyz.com
 	${newUserToken}=  Login  username=youruser   password=somepassword
-        Set Suite Variable  ${superToken}
+        Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}
 	Set Suite Variable  ${newUserToken}
