@@ -4,6 +4,7 @@ Documentation  use FQDN to access app on openstack
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
+Library  String
 #Variables       shared_variables.py
 
 Test Setup      Setup
@@ -12,15 +13,14 @@ Test Teardown   Cleanup provisioning
 Test Timeout  30 minutes
 	
 *** Variables ***
-#${dme_api_address}  127.0.0.1:50051
-#${controller_api_address}  127.0.0.1:55001
-
 ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name_openstack}  automationHawkinsCloudlet
 ${operator_name}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
+
+${mobiledgex_domain}  mobiledgex.net
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
 
@@ -154,3 +154,8 @@ Setup
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    Set Suite Variable  ${rootlb}
