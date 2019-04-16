@@ -12,12 +12,12 @@ ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlh
 
 
 *** Test Cases ***
-MC - Super user shall be able to show roles
+MC - Admin user shall be able to show roles
 	[Documentation]
-	...  superuser can show roles 
+	...  admin user can show roles 
 	...  verify the roles returned
 
-	${roles}=  Show Role   token=${superToken}
+	${roles}=  Show Role   token=${adminToken}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
@@ -95,8 +95,8 @@ MC - User shall not be able to show roles with an expired token
 	
 *** Keywords ***
 Setup
-	${superToken}=   Login
+	${adminToken}=   Login
 	Create User  username=myuser   password=${password}   email=xy@xy.com
 	${userToken}=  Login  username=myuser  password=${password}
-        Set Suite Variable  ${superToken}
+        Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}
