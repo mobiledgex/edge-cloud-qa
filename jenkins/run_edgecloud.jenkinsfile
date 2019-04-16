@@ -49,7 +49,7 @@ node('jenkinsSlave1'){
 
     try {
        stage('Check Load Exists') {
-          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + sdate.format(date) + '\\")"'
+          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
           def index  = sh(script: s, returnStdout: true);
 	  int indexnum = index as Integer
           if(indexnum < 1) {
@@ -61,7 +61,7 @@ node('jenkinsSlave1'){
     }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + sdate.format(date) + ' doesnt exist in registry. Aborting"'
+	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
           //status = sh(script: s, returnStatus: true);
        }
        error('Aborting the build')
