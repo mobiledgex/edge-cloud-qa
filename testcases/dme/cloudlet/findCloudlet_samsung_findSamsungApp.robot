@@ -37,11 +37,11 @@ FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsu
     ...  findCloudlet with no app name
     ...  verify FIND_NOTFOUND is returned since cant search for own app 
     
-      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app
+      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app - fixed
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
-      ${cloudlet}=  Find Cloudlet	carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
+      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Be Equal As Numbers  ${cloudlet.status}  0  #FIND_NOTFOUND
+      Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
 
 FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsung app and sending findCloudlet overriding the appname with samsung app
     [Documentation]
@@ -49,11 +49,11 @@ FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsu
     ...  findCloudlet with samsung app name
     ...  verify FIND_NOTFOUND is returned since cant search for own app
 
-      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app
+      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app - fixed
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
-      ${cloudlet}=  Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
+      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
-      Should Be Equal As Numbers  ${cloudlet.status}  0  #FIND_NOTFOUND
+      Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
 
 *** Keywords ***
 Setup
