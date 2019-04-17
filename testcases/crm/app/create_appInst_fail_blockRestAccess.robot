@@ -3,6 +3,7 @@ Documentation  Create app instance on openstack with rootlb rest port blocked
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexApp
+Library  String
 
 Test Setup      Setup
 Test Teardown   Teardown
@@ -12,10 +13,12 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name}  automationHamburgCloudlet
+${cloudlet_name_openstack}  automationHamburgCloudlet
 ${operator_name}  TDG
 
-${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
+${mobiledgex_domain}  mobiledgex.net
+
+#${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
@@ -37,24 +40,24 @@ CRM shall recover when attempting to create an app instance on openstack with ro
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    Block Rootlb Port  root_loadbalancer=automationhamburgcloudlet.tdg.mobiledgex.net  port=18889  target=INPUT
+    Block Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   proxyerr: error, can\'t request nginx proxy add
 
-    Unblock Rootlb Port  root_loadbalancer=automationhamburgcloudlet.tdg.mobiledgex.net  port=18889  target=INPUT
+    Unblock Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
@@ -75,23 +78,23 @@ CRM shall recover when attempting to create an app instance with autocluster on 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Block Rootlb Port  root_loadbalancer=automationhamburgcloudlet.tdg.mobiledgex.net  port=18889  target=INPUT
+    Block Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   proxyerr: error, can\'t request nginx proxy add
 
-    Unblock Rootlb Port  root_loadbalancer=automationhamburgcloudlet.tdg.mobiledgex.net  port=18889  target=INPUT
+    Unblock Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     Sleep  2 minutes  # wait for heat cleanup to finish
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
@@ -105,6 +108,11 @@ Setup
     Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    Set Suite Variable  ${rootlb}
 
 Teardown
     Run Keyword and Ignore Error  Unblock Rootlb Port  root_loadbalancer=automationhamburgcloudlet.tdg.mobiledgex.net  port=18889  target=INPUT
