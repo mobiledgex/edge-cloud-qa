@@ -82,7 +82,7 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=${cluster_name_default}
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -94,7 +94,7 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=flavor1550017240-694686
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
