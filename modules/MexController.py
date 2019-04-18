@@ -520,7 +520,7 @@ class Cloudlet():
         if cloudlet_key_dict is not None:
             cloudlet_dict['key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
         if self.number_of_dynamic_ips is not None:
-            cloudlet_dict['num_dynamic_ips'] = self.number_of_dynamic_ips
+            cloudlet_dict['num_dynamic_ips'] = int(self.number_of_dynamic_ips)
             _fields_list.append(self._cloudlet_numdynamicips_field)
         if self.ipsupport is not None:
             cloudlet_dict['ip_support'] = self.ipsupport
@@ -2048,15 +2048,12 @@ class MexController(MexGrpc):
         raise Error('cant find file {}'.format(path))
 
     def _init_shared_variables(self):
-        print('pre', shared_variables.developer_name_default)
         default_time_stamp = str(time.time()).replace('.', '-')
         shared_variables.cloudlet_name_default = 'cloudlet' + default_time_stamp
         shared_variables.operator_name_default = 'operator' + default_time_stamp
-        #cluster_name_default = 'cluster' + default_time_stamp
-        shared_variables.cluster_name_default = 'cl' + default_time_stamp
+        shared_variables.cluster_name_default = 'cluster' + default_time_stamp
         shared_variables.app_name_default = 'app' + default_time_stamp
         shared_variables.app_version_default = '1.0'
         shared_variables.developer_name_default = 'developer' + default_time_stamp
         shared_variables.flavor_name_default = 'flavor' + default_time_stamp
         shared_variables.cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
-        print('post', shared_variables.developer_name_default)
