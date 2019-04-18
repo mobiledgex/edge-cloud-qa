@@ -115,5 +115,5 @@ Setup
     Set Suite Variable  ${rootlb}
 
 Teardown
-    Run Keyword and Ignore Error  Unblock Rootlb Port  root_loadbalancer=automationhawkinscloudlet.gddt.mobiledgex.net  port=18889  target=INPUT
+    Run Keyword and Ignore Error  Unblock Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
     Cleanup provisioning
