@@ -11,14 +11,14 @@ class MexRest(WebService) :
         super().__init__()
 
         self.root_cert = self._findFile(root_cert)
-        
+
     def post(self, url, data=None, bearer=None):
         logging.debug(f'url={url} data={data} cert={self.root_cert}')
 
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
         if bearer != None:
             headers['Authorization'] = 'Bearer ' + bearer
-            
+
         self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
         self._decode_content()
 
