@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController Org Delete
 
-Library		MexMasterController  root_cert=../../certs/mex-ca.crt
+Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -22,6 +22,28 @@ MC - Delete an org without an org name
 	
 	Should Be Equal As Numbers   ${status_code}  400	
 	Should Be Equal              ${body}         {"message":"Organization name not specified"}
+
+MC - Delete an org that doesn't exist admin token	
+	[Documentation]
+	...  delete an org that doesn't exist
+	...  verify the correct error message is returned
+
+	Delete Org     orgname=madeuporgnname    token=${adminToken}     use_defaults=${False}
+	${body}=         Response Body
+	
+	Should Be Equal              ${body}         {"message":"Organization deleted"}
+
+MC - Delete an org that doesn't exist user token	
+	[Documentation]
+	...  delete an org that doesn't exist
+	...  verify the correct error message is returned
+
+	${org}=   Run Keyword and Expect Error  *   Delete Org     orgname=madeuporgnname    token=${userToken}     use_defaults=${False}
+	${status_code}=  Response Status Code
+	${body}=         Response Body
+	
+	Should Be Equal As Numbers   ${status_code}  403	
+	Should Be Equal              ${body}         {"message":"Forbidden"}
 
 MC - Delete an org without a token	
 	[Documentation]
@@ -76,7 +98,7 @@ MC - Delete an org with a user assigned admin token
 	...  delete an org with a user assigned with the admin token
 	...  verify the correct error message is returned
 
-        ${user_role}=  Get Role
+        ${user_role}=  Get Roletype
 	Create User      username=contributor     password=${password}     email=xyz@xyz.com
         Role Adduser     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=myOrg    token=${adminToken}      use_defaults=${False}
@@ -90,17 +112,29 @@ MC - Delete an org with a user assigned user token
 	...  delete an org with a user assigned with the user token
 	...  verify the correct error message is returned
 
-        ${user_role}=  Get Role
+        ${user_role}=  Get Roletype
 	Create User      username=contributor     password=${password}     email=xyz@xyz.com
         Role Adduser     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=myOrg    token=${userToken}      use_defaults=${False}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
-	#Should Be Equal As Numbers   ${status_code}  401	
 	Should Be Equal              ${body}         {"message":"Organization deleted"}
 
+MC - Delete an org created by user1 using user2 token
+	[Documentation]
+	...  delete an org created by another user
+	...  verify the correct error message is returned
+
+	Create User       username=youruser     password=${password}     email=xyz@xyz.com
+	${user2Token}=    Login            username=youruser     password=${password} 
+	${org}=   Run Keyword and Expect Error  *   Delete Org        orgname=myOrg    token=${user2Token}      use_defaults=${False}
+	${status_code}=   Response Status Code
+	${body}=          Response Body
 	
+	Should Be Equal As Numbers   ${status_code}  403	
+	Should Be Equal              ${body}         {"message":"Forbidden"}
+		
 *** Keywords ***
 Setup
 	${adminToken}=   Login
