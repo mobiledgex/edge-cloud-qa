@@ -135,7 +135,7 @@ namespace MexGrpcSampleConsoleApp
                 Console.WriteLine("Verifying Location:");
                 var verifyResponse = VerifyLocation("xx");
                 string locationStatus = verifyResponse.GpsLocationStatus.ToString();
-                if (locationStatus == "LOC_ERROR_UNAUTHORIZED")
+                if (locationStatus == "LocErrorUnauthorized")
                 {
                     Console.WriteLine("Testcase Passed!");
                     Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
