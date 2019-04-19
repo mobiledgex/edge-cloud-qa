@@ -6,6 +6,8 @@ Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  Process
 Library  OperatingSystem
+Library  String
+
 #Variables       shared_variables.py
 
 Test Setup      Setup
@@ -21,13 +23,15 @@ ${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
+${mobiledgex_domain}  mobiledgex.net
+
+#${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/facedetection:Nimbus_automation_20190225
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008
 
-${client_path}     ../../edge-cloud-sampleapps/FaceDetectionServer/client
+${client_path}     ../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  faceHuge.png  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
 @{image_list_bad}   1_body.png  3_bodies.png  6_bodies.jpg  empty_portrait_black.png  empty_portrait_white.png  multi_body.png  single_pixel.png
@@ -91,3 +95,8 @@ Setup
     #Log To Console  Creating Cluster Instance
     #Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
     #Log To Console  Done Creating Cluster Instance
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    Set Suite Variable  ${rootlb}

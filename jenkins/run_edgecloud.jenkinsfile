@@ -8,9 +8,14 @@ builds1 = [:]
 node('jenkinsSlave1'){
     date = new Date()
     sdate = new SimpleDateFormat("yyy-MM-dd")
+    Calendar cal = Calendar.getInstance()
+
     dateValue = "notset"
     if(dateParm == "today") {
-       dateValue = sdate.format(date)
+       //dateValue = sdate.format(date)
+       cal = Calendar.getInstance()
+       cal.add(Calendar.DATE, -1)
+       dateValue = sdate.format(cal.getTime())
     } else {
        dateValue = dateParm
     }
@@ -61,8 +66,8 @@ node('jenkinsSlave1'){
     }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-	  //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
-          //status = sh(script: s, returnStatus: true);
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
+          status = sh(script: s, returnStatus: true);
        }
        error('Aborting the build')
     }
