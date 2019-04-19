@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController user/current superuser
 
-Library		MexMasterController  root_cert=../../certs/mex-ca.crt
+Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
 	
 #Test Setup	Setup
