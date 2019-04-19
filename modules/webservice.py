@@ -43,7 +43,8 @@ class WebService() :
         #    self.output_format = output_format
 
     def post(self, url, data=None, verify_cert=False, headers=None, files=None):
-        logging.debug('url=' + url + ' data=' + str(data) + ' headers=' + str(headers))
+        logging.debug('url=' + url + ' data=' + str(data) + ' headers=' + str(headers) + ' verify_cert=' + str(verify_cert))
+
         #url_to_use = self._buildUrl(url)
 
         self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files)
