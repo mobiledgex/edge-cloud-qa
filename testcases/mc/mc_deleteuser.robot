@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController User Delete
 
-Library		MexMasterController  root_cert=../../certs/mex-ca.crt
+Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
