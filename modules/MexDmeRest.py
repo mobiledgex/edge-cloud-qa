@@ -3,6 +3,7 @@ import logging
 import jwt
 import threading
 import requests
+import sys
 
 from google.protobuf.json_format import MessageToJson
 
@@ -22,7 +23,7 @@ class MexDmeRest(MexRest):
         super().__init__(address=dme_address, root_cert=root_cert)
 
         self.root_url = 'https://' + dme_address
-        self.root_cert = root_cert
+        #self.root_cert = root_cert
         self._decoded_session_cookie = None
         self._token_server_uri = None
 
