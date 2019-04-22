@@ -89,7 +89,7 @@ Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
 Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=1024  vcpus=4  disk=4 and num_nodes=4
-   ...  verify it allocates size=Standard_DS3_v2 on azure
+   ...  verify it allocates size=Standard_DS1_v2 with 4 nodes on azure
 
    Create Flavor          ram=1024  vcpus=1  disk=1
    Create Cluster Flavor  number_nodes=4
