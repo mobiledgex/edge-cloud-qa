@@ -17,7 +17,7 @@ MC - Admin user shall be able to show roles
 	...  admin user can show roles 
 	...  verify the roles returned
 
-	${roles}=  Show Role   token=${adminToken}
+	${roles}=   Show Role   token=${adminToken}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
