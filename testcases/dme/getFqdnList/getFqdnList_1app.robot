@@ -28,7 +28,7 @@ GetFqdnList - request shall return 1 app
       Should Be Equal             ${appfqdns[0].AppName}  ${tmus_appinst.key.app_key.name}
       Should Be Equal             ${appfqdns[0].AppVers}  ${tmus_appinst.key.app_key.version}
       Should Be Equal             ${appfqdns[0].DevName}  ${tmus_appinst.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[0].FQDN}     ${tmus_appinst.uri}
+      Should Be Equal             ${appfqdns[0].FQDNs[0]}     ${tmus_appinst.uri}
 
       Length Should Be   ${appfqdns}  1
 
