@@ -39,32 +39,32 @@ GetFqdnList - request shall only return apps with permits_platform_apps=True
       Should Be Equal             ${appfqdns[0].AppName}  ${appinst_1.key.app_key.name}
       Should Be Equal             ${appfqdns[0].AppVers}  ${appinst_1.key.app_key.version}
       Should Be Equal             ${appfqdns[0].DevName}  ${appinst_1.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[0].FQDN}     ${appinst_1.uri}
+      Should Be Equal             ${appfqdns[0].FQDNs[0]}     ${appinst_1.uri}
 
       Should Be Equal             ${appfqdns[1].AppName}  ${appinst_3.key.app_key.name}
       Should Be Equal             ${appfqdns[1].AppVers}  ${appinst_3.key.app_key.version}
       Should Be Equal             ${appfqdns[1].DevName}  ${appinst_3.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[1].FQDN}     ${appinst_3.uri}
+      Should Be Equal             ${appfqdns[1].FQDNs[0]}     ${appinst_3.uri}
 
       Should Be Equal             ${appfqdns[2].AppName}  ${appinst_4.key.app_key.name}
       Should Be Equal             ${appfqdns[2].AppVers}  ${appinst_4.key.app_key.version}
       Should Be Equal             ${appfqdns[2].DevName}  ${appinst_4.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[2].FQDN}     ${appinst_4.uri}
+      Should Be Equal             ${appfqdns[2].FQDNs[0]}     ${appinst_4.uri}
 
       Should Be Equal             ${appfqdns[3].AppName}  ${appinst_7.key.app_key.name}
       Should Be Equal             ${appfqdns[3].AppVers}  ${appinst_7.key.app_key.version}
       Should Be Equal             ${appfqdns[3].DevName}  ${appinst_7.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[3].FQDN}     ${appinst_7.uri}
+      Should Be Equal             ${appfqdns[3].FQDNs[0]}     ${appinst_7.uri}
 
       Should Be Equal             ${appfqdns[4].AppName}  ${appinst_8.key.app_key.name}
       Should Be Equal             ${appfqdns[4].AppVers}  ${appinst_8.key.app_key.version}
       Should Be Equal             ${appfqdns[4].DevName}  ${appinst_8.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[4].FQDN}     ${appinst_8.uri}
+      Should Be Equal             ${appfqdns[4].FQDNs[0]}     ${appinst_8.uri}
 
       Should Be Equal             ${appfqdns[5].AppName}  ${appinst_9.key.app_key.name}
       Should Be Equal             ${appfqdns[5].AppVers}  ${appinst_9.key.app_key.version}
       Should Be Equal             ${appfqdns[5].DevName}  ${appinst_9.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[5].FQDN}     ${appinst_9.uri}
+      Should Be Equal             ${appfqdns[5].FQDNs[0]}     ${appinst_9.uri}
 
       Length Should Be   ${appfqdns}  6 
 
