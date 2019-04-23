@@ -295,7 +295,7 @@ class Dme(MexGrpc):
         if resp.Status != 1: # FL_SUCCESS
             raise Exception('get fqdn list failed:{}'.format(str(resp)))
 
-        resp = sorted(resp.AppFqdns, key=lambda x: x.FQDN) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+        resp = sorted(resp.AppFqdns, key=lambda x: x.FQDNs[0]) # sorting since need to check for may apps. this return the sorted list instead of the response itself
         print(resp)
 
         return resp
