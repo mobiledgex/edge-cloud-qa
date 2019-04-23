@@ -12,10 +12,10 @@ node('jenkinsSlave1'){
 
     dateValue = "notset"
     if(dateParm == "today") {
-       //dateValue = sdate.format(date)
-       cal = Calendar.getInstance()
-       cal.add(Calendar.DATE, -1)
-       dateValue = sdate.format(cal.getTime())
+       dateValue = sdate.format(date)
+       //cal = Calendar.getInstance()
+       //cal.add(Calendar.DATE, -1)
+       //dateValue = sdate.format(cal.getTime())
     } else {
        dateValue = dateParm
     }
