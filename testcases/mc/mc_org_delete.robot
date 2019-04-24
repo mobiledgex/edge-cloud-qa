@@ -100,7 +100,7 @@ MC - Delete an org with a user assigned admin token
 
         ${user_role}=  Get Roletype
 	Create User      username=contributor     password=${password}     email=xyz@xyz.com
-        Role Adduser     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
+        Adduser Role     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=myOrg    token=${adminToken}      use_defaults=${False}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
@@ -114,7 +114,7 @@ MC - Delete an org with a user assigned user token
 
         ${user_role}=  Get Roletype
 	Create User      username=contributor     password=${password}     email=xyz@xyz.com
-        Role Adduser     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
+        Adduser Role     orgname=myOrg       username=contributor     role=${user_role}      token=${userToken}      use_defaults=${False}
 	Delete Org    orgname=myOrg    token=${userToken}      use_defaults=${False}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
