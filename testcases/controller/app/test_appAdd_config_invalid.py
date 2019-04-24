@@ -135,7 +135,7 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     @classmethod
-    def tearDownClassxs(self):
+    def tearDownClass(self):
         self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
