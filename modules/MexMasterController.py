@@ -11,6 +11,8 @@ from mex_rest import MexRest
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_mastercontroller rest')
 
+timestamp = str(time.time())
+
 class MexMasterController(MexRest):
 
     def __init__(self, mc_address='127.0.0.1:9900', root_cert='mex-ca.crt'):
@@ -43,6 +45,17 @@ class MexMasterController(MexRest):
         self._number_showrole_requests = 0
         self._number_showrole_requests_success = 0
         self._number_showrole_requests_fail = 0
+        self._number_createorg_requests = 0
+        self._number_createorg_requests_success = 0
+        self._number_createorg_requests_fail = 0
+        self._number_showorg_requests = 0
+        self._number_showorg_requests_success = 0
+        self._number_showorg_requests_fail = 0
+        self._number_adduserrole_requests = 0
+        self._number_adduserrole_requests_success = 0
+        self._number_adduserrole_requests_fail = 0
+        
+                
         
         self.super_token = self.login(self.username, self.password, None, False)
 
@@ -92,6 +105,38 @@ class MexMasterController(MexRest):
     def number_of_failed_showrole_requests(self):
         return self._number_showrole_requests_fail
 
+    def number_of_createorg_requests(self):
+        return self._number_createorg_requests
+
+    def number_of_successful_createorg_requests(self):
+        return self._number_createorg_requests_success
+    
+    def number_of_failed_createorg_requests(self):
+        return self._number_createorg_requests_fail
+
+    def number_of_showorg_requests(self):
+        return self._number_showorg_requests
+
+    def number_of_successful_showorg_requests(self):
+        return self._number_showorg_requests_success
+    
+    def number_of_failed_showorg_requests(self):
+        return self._number_showorg_requests_fail
+
+    def reset_user_count:
+        self._number_createuser_requests = 0
+        self._number_createuser_requests_success = 0
+        self._number_createuser_requests_fail = 0
+
+    def number_of_adduserrole_requests(self):
+        return self._number_adduserrole_requests
+
+    def number_of_successful_adduserrole_requests(self):
+        return self._number_adduserrole_requests_success
+
+    def number_of_failed_adduserrole_requests(self):
+        return self._number_adduserrole_requests_fail
+    
     def decoded_token(self):
         return self._decoded_token
 
@@ -155,12 +200,12 @@ class MexMasterController(MexRest):
             return self.token
 
     def create_user(self, username=None, password=None, email=None, json_data=None, use_defaults=True, use_thread=False):
-        timestamp = str(time.time())
+        namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
 
         if use_defaults == True:
-            if username == None: username = 'name' + timestamp
+            if username == None: username = 'name' + namestamp
             if password == None: password = 'password' + timestamp
             if email == None: email = username + '@email.com'
 
@@ -246,7 +291,6 @@ class MexMasterController(MexRest):
             return resp
         
     def delete_user(self, username=None, password=None, email=None, token=None, json_data=None, use_defaults=True):
-        timestamp = str(time.time())
         url = self.root_url + '/auth/user/delete'
         payload = None
 
@@ -279,7 +323,6 @@ class MexMasterController(MexRest):
             raise Exception("error deleting  user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
-        timestamp = str(time.time())
         url = self.root_url + '/auth/user/newpass'
      
         if use_defaults == True:
@@ -305,7 +348,6 @@ class MexMasterController(MexRest):
             raise Exception("error changing password. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
     def show_role(self, token=None, use_defaults=True, use_thread=False):    
-        timestamp = str(time.time())
         url = self.root_url + '/auth/role/show'
      
         if use_defaults == True:
@@ -342,7 +384,6 @@ class MexMasterController(MexRest):
             return str(self.resp.text)
 
     def show_role_assignment(self, token=None, use_defaults=True):    
-        timestamp = str(time.time())
         url = self.root_url + '/auth/role/assignment/show'
      
         if use_defaults == True:
@@ -363,14 +404,14 @@ class MexMasterController(MexRest):
         
         return str(self.resp.text)
 
-    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True):
-        timestamp = str(time.time())
+    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        orgstamp = str(time.time())
         url = self.root_url + '/auth/org/create'
         payload = None
         
         if use_defaults == True:
             if token == None: token = self.token
-            if orgname == None: orgname = 'orgname' + timestamp
+            if orgname == None: orgname = 'orgname' + orgstamp
             if orgtype == None: orgtype = 'developer'
             if address == None: address = '111 somewhere dr'
             if phone == None: phone = '123-456-7777'
@@ -392,13 +433,22 @@ class MexMasterController(MexRest):
 
         logger.info('create org on mc at {}. \n\t{}'.format(url, payload))
 
-        self.post(url=url, data=payload, bearer=token)
+        def send_message():
+            self._number_createorg_requests += 1
+
+            try:
+                self.post(url=url, data=payload, bearer=token)
         
-        logger.info('response:\n' + str(self.resp.text))
-            
-        if str(self.resp.text) != '{"message":Organization created","name":"' + orgname + '"}':
-            if str(self.resp.text) == '{"message":"Organization type must be developer, or operator"}':
-                raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                logger.info('response:\n' + str(self.resp.text))
+                
+                if str(self.resp.status_code) != '200':
+                    self._number_createorg_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createorg_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_createorg_requests_success += 1
 
         self.prov_stack.append(lambda:self.delete_org(orgname, self.super_token))
 
@@ -407,31 +457,60 @@ class MexMasterController(MexRest):
         self.address = address
         self.phone = phone
 
-    def show_org(self, token=None, use_defaults=True):              
-        timestamp = str(time.time())
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            if str(self.resp.text) != '{"message":Organization created","name":"' + orgname + '"}':
+                if str(self.resp.text) == '{"message":"Organization type must be developer, or operator"}':
+                    raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            return orgname
+
+    def show_org(self, token=None, use_defaults=True, use_thread=False):              
         url = self.root_url + '/auth/org/show'
      
         if use_defaults == True:
             if token == None: token = self.token
 
-        self.post(url=url, bearer=token)
-        
-        logger.info('response:\n' + str(self.resp.text))
+        def send_message():
+            self._number_showorg_requests += 1
 
-        respText = str(self.resp.text)
+            try:
+                self.post(url=url, bearer=token)
         
-        if respText != '[]':
-            match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', respText)
+                logger.info('response:\n' + str(self.resp.text))
+
+                respText = str(self.resp.text)
+                
+                if str(self.resp.status_code) != '200':
+                    self._number_showorg_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_showorg_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_showorg_requests_success += 1
+        
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            if respText != '[]':
+                match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', respText)
             # print('*WARN*',match)    
             if not match:
                 raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            return self.decoded_data
 
-        return self.decoded_data
-
-        #return str(self.resp.text)
 
     def delete_org(self, orgname=None, token=None, json_data=None, use_defaults=True):
-        timestamp = str(time.time())
         url = self.root_url + '/auth/org/delete'
         payload = None
 
@@ -457,8 +536,7 @@ class MexMasterController(MexRest):
         if str(self.resp.text) != '{"message":"Organization deleted"}':
             raise Exception("error deleting org. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-    def role_adduser(self, orgname= None, username=None, role=None, token=None, json_data=None, use_defaults=True):
-        timestamp = str(time.time())
+    def adduser_role(self, orgname= None, username=None, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/role/adduser'
         payload = None
 
@@ -483,12 +561,32 @@ class MexMasterController(MexRest):
 
         logger.info('role adduser  on mc at {}. \n\t{}'.format(url, payload))
 
-        self.post(url=url, data=payload, bearer=token)
-        
-        logger.info('response:\n' + str(self.resp.text))
+        def send_message():
+            self._number_adduserrole_requests += 1
             
-        if str(self.resp.text) != '{"message":"Role added to user"}':
-            raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            try:
+                self.post(url=url, data=payload, bearer=token)
+        
+            logger.info('response:\n' + str(self.resp.text))
+            
+                if str(self.resp.status_code) != '200':
+                    self._number_adduserrole_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_adduserrole_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_adduserrole_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            if str(self.resp.text) != '{"message":"Role added to user"}':
+                raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
         
     def cleanup_provisioning(self):
