@@ -134,7 +134,8 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        #expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
