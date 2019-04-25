@@ -149,11 +149,11 @@ Setup
     #Create Operator   operator_name=${operator_name}
     Create Developer
     Create Flavor
-    Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
+    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   cluster_name=${cluster_name} 
     #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     log to console  START creating cluster instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
     log to console  DONE creating cluster instance
 
     Set Suite Variable  ${cluster_name}
