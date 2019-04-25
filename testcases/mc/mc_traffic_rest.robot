@@ -501,4 +501,4 @@ Send AdduserRole
 	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      use_thread=${True}
 	\  Append To List  ${handle_list}  ${handle}
 	
-	MexMasterController.Wait For Replies  @{handle_list}
+	MexMasterController.Wait For Replies  @{handle_list}          #to run sequentially comment this line and use_threads=${True} above
