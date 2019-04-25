@@ -312,11 +312,11 @@ def exec_testcases_parallel(z, l, num_executors):
     
     threads = []
     
-    logging.info('number of testcases is ' +len(l))
+    logging.info('number of testcases is ' + str(len(l)))
     for t in range(0, len(l), num_executors):
         print('t',t)
         plist = l[t:t+num_executors]
-        logging.info('adding this may testcases:' + len(plist))
+        logging.info('adding this may testcases:' + str(len(plist)))
         for p in plist:
             logging.info('adding thread for tc=' + p['tc'])
             thread = threading.Thread(target=exec_testcase, args=(z,p))
