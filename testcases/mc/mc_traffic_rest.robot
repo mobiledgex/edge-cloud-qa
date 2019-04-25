@@ -498,7 +498,7 @@ Send AdduserRole
 	@{handle_list}=   Create List
 
 	: FOR  ${INDEX}  IN RANGE  0  ${number_requests}
-	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      #use_thread=${True}
+	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      use_thread=${True}
 	\  Append To List  ${handle_list}  ${handle}
 	
-	#MexMasterController.Wait For Replies  @{handle_list}
+	MexMasterController.Wait For Replies  @{handle_list}
