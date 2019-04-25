@@ -333,6 +333,10 @@ MC - Adduser Role mc requests different users Traffic
 	\  Send CreateRoleuserSeq
 
 	Sleep   10s    Wait for replies
+
+	Log To Console  SLEEPING
+
+	Sleep   30s    Wait for replies
 	
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send AdduserRole
@@ -354,23 +358,20 @@ MC - Adduser Role mc requests different users Traffic
 	${userfail}=      Number of Failed Createuser Requests
 	${usertotal_total}=    Evaluate  ${number_requests}*${number_batches}
 
-	${addusertotal}=    Number of Adduser Requests
-	${addusersuccess}=  Number of Successful Adduser Requests
-	${adduserfail}=     Number of Failed Adduser Requests
+	${addusertotal}=    Number of Adduserrole Requests
+	${addusersuccess}=  Number of Successful Adduserrole Requests
+	${adduserfail}=     Number of Failed Adduserrole Requests
 	${addusertotal_total}=    Evaluate  ${number_requests}*${number_batches}
 
-	Should Be Equal As Numbers  ${usertotal}  ${usertotal_total}
-	Should Be Equal As Numbers  ${usersuccess}  ${usertotal_total}
-	Should Be Equal As Numbers  ${userfail}  0
 	Should Be Equal As Numbers  ${logintotal}  ${logintotal_total}
 	Should Be Equal As Numbers  ${loginsuccess}  ${logintotal_total}
 	Should Be Equal As Numbers  ${loginfail}  0
 	Should Be Equal As Numbers  ${orgtotal}  ${orgtotal_total}
 	Should Be Equal As Numbers  ${orgsuccess}  ${orgtotal_total}
 	Should Be Equal As Numbers  ${orgfail}  0
-	Should Be Equal As Numbers  ${roleusertotal}  ${roleusertotal_total}
-	Should Be Equal As Numbers  ${roleusersuccess}  ${roleusertotal_total}
-	Should Be Equal As Numbers  ${roleuserfail}  0
+	Should Be Equal As Numbers  ${usertotal}  ${usertotal_total}
+	Should Be Equal As Numbers  ${usersuccess}  ${usertotal_total}
+	Should Be Equal As Numbers  ${userfail}  0
 	Should Be Equal As Numbers  ${addusertotal}  ${addusertotal_total}
 	Should Be Equal As Numbers  ${addusersuccess}  ${addusertotal_total}
 	Should Be Equal As Numbers  ${adduserfail}  0
@@ -477,7 +478,7 @@ Send CreateRoleuserSeq
 	@{rolepass_list}=     Create List
 	
 	: FOR  ${INDEX}  IN RANGE  0  ${number_requests}
-	\  ${user}    ${pass}   ${email}=    Create User     token=@{token_list}[${INDEX}] 
+	\  ${user}    ${pass}   ${email}=     Create User    
 	\  Append To List  ${roleuser_list}    ${user}
 	\  Append To List  ${rolepass_list}    ${pass}
 
@@ -497,7 +498,7 @@ Send AdduserRole
 	@{handle_list}=   Create List
 
 	: FOR  ${INDEX}  IN RANGE  0  ${number_requests}
-	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      use_thread=${True}
+	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      #use_thread=${True}
 	\  Append To List  ${handle_list}  ${handle}
 	
-	MexMasterController.Wait For Replies  @{handle_list}
+	#MexMasterController.Wait For Replies  @{handle_list}
