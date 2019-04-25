@@ -123,7 +123,7 @@ class MexMasterController(MexRest):
     def number_of_failed_showorg_requests(self):
         return self._number_showorg_requests_fail
 
-    def reset_user_count:
+    def reset_user_count(self):
         self._number_createuser_requests = 0
         self._number_createuser_requests_success = 0
         self._number_createuser_requests_fail = 0
@@ -433,6 +433,8 @@ class MexMasterController(MexRest):
 
         logger.info('create org on mc at {}. \n\t{}'.format(url, payload))
 
+        #print('*WARN*', orgname, token)
+
         def send_message():
             self._number_createorg_requests += 1
 
@@ -544,7 +546,7 @@ class MexMasterController(MexRest):
             if token is None: token = self.token
             if orgname is None: orgname = self.orgname
             if username is None: username = self.username
-            if role is None: role = self.get_role()
+            if role is None: role = self.get_roletype()
         
         if json_data !=  None:
             payload = json_data
@@ -561,13 +563,15 @@ class MexMasterController(MexRest):
 
         logger.info('role adduser  on mc at {}. \n\t{}'.format(url, payload))
 
+        print('*WARN*', orgname, token)
+
         def send_message():
             self._number_adduserrole_requests += 1
             
             try:
                 self.post(url=url, data=payload, bearer=token)
         
-            logger.info('response:\n' + str(self.resp.text))
+                logger.info('response:\n' + str(self.resp.text))
             
                 if str(self.resp.status_code) != '200':
                     self._number_adduserrole_requests_fail += 1
