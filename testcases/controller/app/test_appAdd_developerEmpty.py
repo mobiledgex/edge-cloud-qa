@@ -76,7 +76,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppDeveloperEmpty_QCOW(self):
@@ -116,7 +116,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppDeveloperNotExist_Docker(self):
@@ -156,7 +156,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
     def test_CreateAppDeveloperNotExist_QCOW(self):
@@ -196,7 +196,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(len(app_pre), len(app_post), 'same number of apps')
+        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
 if __name__ == '__main__':

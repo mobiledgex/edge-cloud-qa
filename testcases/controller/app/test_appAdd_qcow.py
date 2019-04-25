@@ -57,9 +57,9 @@ class tc(unittest.TestCase):
         self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppQCOWNoImagePath(self):
-        # [Documentation] App - User shall be able to create an app of type QCOW and no image path
+        # [Documentation] App - User shall not be able to create an app of type QCOW and no image path
         # ... create an app with image_type=ImageTypeQCOW and no image path
-        # ... verify image_path='qcow path not determined yet'
+        # ... verify error='imagepath is required for imagetype ImageTypeQCOW'
 
         # print the existing apps 
         app_pre = self.controller.show_apps()
@@ -75,24 +75,31 @@ class tc(unittest.TestCase):
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
-        resp = self.controller.create_app(self.app.app)
+        #resp = self.controller.create_app(self.app.app)
+
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'qcow path not determined yet'
-        found_app = self.app.exists(app_post)
+        found_app = self.app.exists(apps_post)
 
-        self.controller.delete_app(self.app.app)
-        
-        expect_equal(found_app, True, 'find app')
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
+        expect_equal(found_app, False, 'find app')
+
         assert_expectations()
 
     def test_CreateAppQCOWEmptyImagePath(self):
-        # [Documentation] App - User shall be able to create an app of type QCOW and empty image path
+        # [Documentation] App - User shall not be able to create an app of type QCOW and empty image path
         # ... create an app with image_type=ImageTypeQCOW and empty image path
-        # ... verify image_path='qcow path not determined yet'
+        # ... verify error='imagepath is required for imagetype ImageTypeQCOW'
 
         # print the existing apps
         app_pre = self.controller.show_apps()
@@ -109,18 +116,25 @@ class tc(unittest.TestCase):
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
-        resp = self.controller.create_app(self.app.app)
+        #resp = self.controller.create_app(self.app.app)
+
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'qcow path not determined yet'
-        found_app = self.app.exists(app_post)
+        found_app = self.app.exists(apps_post)
 
-        self.controller.delete_app(self.app.app)
-        
-        expect_equal(found_app, True, 'find app')
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
+        expect_equal(found_app, False, 'find app')
+
         assert_expectations()
 
     @classmethod
