@@ -90,7 +90,7 @@ UpdateCloudlet with a numdynamicips A
 
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=A        use_defaults=False
-	Should Contain Any  ${error_msg}   TypeError: 'A' has type str, but expected one of: int, long    TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
+	Should Contain Any  ${error_msg}   ValueError: invalid literal for int() with base 10: 'A'  TypeError: 'A' has type str, but expected one of: int, long    TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
         #Should Contain  ${error_msg}   TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
 
 
