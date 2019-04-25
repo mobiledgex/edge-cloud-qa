@@ -124,7 +124,7 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     @classmethod
-    def teardownClass(self):
+    def tearDownClass(self):
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':

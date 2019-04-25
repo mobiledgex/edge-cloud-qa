@@ -15,7 +15,7 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationHawkinsCloudlet
+${cloudlet_name_openstack}  automationBuckhornCloudlet
 ${operator_name}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -147,12 +147,12 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
 *** Keywords ***
 Setup
     Create Developer
-    #Create Flavor
-    #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
+    Create Flavor
+    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
+    Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
