@@ -193,7 +193,7 @@ class MexMasterController(MexRest):
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
-            return t, self.token
+            return t
         else:
             print('sending message')
             resp = send_message()
@@ -250,7 +250,7 @@ class MexMasterController(MexRest):
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
-            return t, username, password
+            return t
         else:
             print('sending message')
             resp = send_message()
@@ -610,5 +610,5 @@ class MexMasterController(MexRest):
             if isinstance(x, list):
                 for x2 in x:
                     x.join()
-            #x.join()
+            x.join()
            
