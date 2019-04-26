@@ -310,7 +310,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -321,6 +321,7 @@ class ClusterInstance():
         self.crm_override = crm_override
         self.liveness = liveness
         self.ip_access = ip_access
+        self.developer_name = developer_name
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -351,11 +352,13 @@ class ClusterInstance():
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
         if self.cloudlet_name:
             cloudlet_key_dict['name'] = self.cloudlet_name
-
+            
         if self.cluster_name:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+        if self.developer_name is not None:
+            clusterinst_key_dict['developer'] = self.developer_name
 
         if clusterinst_key_dict:
             clusterinst_dict['key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)

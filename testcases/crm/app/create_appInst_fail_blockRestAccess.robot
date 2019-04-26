@@ -40,7 +40,7 @@ CRM shall recover when attempting to create an app instance on openstack with ro
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
     Block Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
@@ -54,6 +54,8 @@ CRM shall recover when attempting to create an app instance on openstack with ro
     Should Contain  ${error_msg}   proxyerr: error, can\'t request nginx proxy add
 
     Unblock Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
+
+    Sleep  60 seconds     # wait for failure cleanup
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
@@ -76,13 +78,14 @@ CRM shall recover when attempting to create an app instance with autocluster on 
     ${app_name}=    Catenate  SEPARATOR=  app  ${epoch_time}
 
     ${cluster_name_default}=  Get Default Cluster Name
+    #${flavor_name_default}=   Get Default Flavor Name
     ${app_name_default}=  Get Default App Name
 
     Block Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=${cluster_name_default}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  #flavor_name=${flavor_name_default}
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -94,18 +97,19 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  flavor_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  #flavor_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name}  pod_name=${app_name_default}
+    ${auto_cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name_default}
+    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${auto_cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
 *** Keywords ***
 Setup
     #Create Developer
     Create Flavor
-    #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
+    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
+    Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
 
