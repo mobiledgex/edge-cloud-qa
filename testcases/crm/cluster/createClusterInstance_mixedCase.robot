@@ -4,6 +4,8 @@ Documentation   Create cluster instances with mixed case clustername on openstac
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
 
+Test Teardown   Cleanup provisioning
+
 Test Timeout    40 minutes
 	
 *** Variables ***
