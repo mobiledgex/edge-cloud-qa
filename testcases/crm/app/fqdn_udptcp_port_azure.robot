@@ -69,6 +69,8 @@ User shall be able to access 2 UDP ports on azure
     ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
+    Sleep  10 seconds
+
     Log To Console  Checking if port is alive
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[1].public_port}
@@ -91,6 +93,8 @@ User shall be able to access 1 TCP port on azure
     ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
+    Sleep  10 seconds
+
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
 
@@ -112,6 +116,8 @@ User shall be able to access 2 TCP ports on azure
     ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
+    Sleep  10 seconds
+
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[1].public_port}
@@ -130,17 +136,22 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].FQDN_prefix}  ${cloudlet.FQDN}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
     Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
+    Sleep  10 seconds
+	
     Log To Console  Checking if port is alive
-    TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[1].public_port}
-    UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[2].public_port}
-    UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[3].public_port}
+    TCP Port Should Be Alive  ${fqdn0}  ${cloudlet.ports[0].public_port}
+    TCP Port Should Be Alive  ${fqdn1}  ${cloudlet.ports[1].public_port}
+    UDP Port Should Be Alive  ${fqdn2}  ${cloudlet.ports[2].public_port}
+    UDP Port Should Be Alive  ${fqdn3}  ${cloudlet.ports[3].public_port}
 
 *** Keywords ***
 Setup
