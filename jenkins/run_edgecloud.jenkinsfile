@@ -2,7 +2,7 @@ import java.text.SimpleDateFormat
 
 dateParm = "${BuildDate}"
 
-def jobList1Parallel = ["runControllerTests", "runCSharpTests", "runCPPTests", "runCrmTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests"]
+def jobList1Parallel = ["runControllerTests", "runCSharpTests", "runCPPTests", "runCrmTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
 builds1 = [:]
 
 node('jenkinsSlave1'){
