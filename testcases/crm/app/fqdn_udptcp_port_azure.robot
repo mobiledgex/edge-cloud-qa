@@ -12,7 +12,7 @@ Library  String
 Test Setup      Setup
 Test Teardown	Cleanup provisioning
 
-Test Timeout  15 minutes
+Test Timeout  30 minutes
 
 *** Variables ***
 ${cluster_flavor_name}  x1.tiny
