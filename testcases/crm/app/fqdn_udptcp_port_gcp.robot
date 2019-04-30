@@ -1,43 +1,35 @@
 *** Settings ***
-Documentation  use FQDN to access app on azure
+Documentation  use FQDN to access app on gcp
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme         dme_address=%{AUTOMATION_DME_ADDRESS}	
-Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
+Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_GCP_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
 Library  MexApp
-Library  DateTime
-Library  String
-#Variables       shared_variables.py
 
 Test Setup      Setup
 Test Teardown	Cleanup provisioning
 
-Test Timeout  15 minutes
-
 *** Variables ***
-${cluster_flavor_name}  x1.tiny
-	
-${cloudlet_name_azure}  automationAzureCentralCloudlet
-${operator_name}  azure
-${latitude}       32.7767
-${longitude}      -96.7970
+${cloudlet_name_gcp}  automationGcpCentralCloudlet
+${operator_name_gcp}  gcp
 
-${crm_pod_name}   crmazurecloud1
+${crm_pod_name}   crmgcpcloud1
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
 
-${app_template}    http://35.199.188.102/apps/apptemplate.yaml
-	
 *** Test Cases ***
-User shall be able to access 1 UDP port on azure
+User shall be able to access 1 UDP port on gcp
     [Documentation]
-    ...  deploy app with 1 UDP port on azure
+    ...  deploy app with 1 UDP port on gcp
     ...  verify the port as accessible 
 
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
     Log To Console  Creating App and App Instance	
-    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
+    Create App Instance  cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}  cluster_instance_name=${cluster_name_default} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -58,7 +50,7 @@ User shall be able to access 2 UDP ports on azure
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App Instance  cluster_instance_name=${cluster_name} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -80,7 +72,7 @@ User shall be able to access 1 TCP port on azure
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App Instance  cluster_instance_name=${cluster_name} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -101,7 +93,7 @@ User shall be able to access 2 TCP ports on azure
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App Instance  cluster_instance_name=${cluster_name} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -125,7 +117,7 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
 
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App Instance  cluster_instance_name=${cluster_name} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -144,21 +136,19 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
 
 *** Keywords ***
 Setup
-    ${current_date}=  Get Current Date
+
     #${epoch_time}=  Get Time  epoch
-    ${epoch_time}=  Convert Date  ${current_date}  epoch
-    ${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
-    ${cluster_name}=  Remove String  ${cluster_name}  .
-	
+    #${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
+
     #Create Operator   operator_name=${operator_name}
     Create Developer
     Create Flavor
     Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   cluster_name=${cluster_name} 
+    Create Cluster   #cluster_name=${cluster_name} 
     #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     log to console  START creating cluster instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance   cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}
     log to console  DONE creating cluster instance
 
-    Set Suite Variable  ${cluster_name}
+    #Set Suite Variable  ${cluster_name}
 
