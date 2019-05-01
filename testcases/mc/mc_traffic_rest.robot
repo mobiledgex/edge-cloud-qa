@@ -26,8 +26,6 @@ MC - Login mc requests admin user Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send Login
-
-	Sleep   10s    Wait for replies 
 	
 	${total}=    Number of Login Requests
 	${success}=  Number of Successful Login Requests
@@ -47,8 +45,6 @@ MC - Create User requests create different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send Createuser
 
-	Sleep   30s    Wait for replies 
-
 	${total}=     Number of Createuser Requests
 	${success}=   Number of Successful Createuser Requests
 	${fail}=      Number of Failed Createuser Requests
@@ -67,14 +63,10 @@ MC - Login mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-        Sleep    10s    Wait for replies
-	
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send LoginUsers
 
-        Sleep    10s    Wait for replies
-
-	${usertotal}=     Number of Createuser Requests
+ 	${usertotal}=     Number of Createuser Requests
 	${usersuccess}=   Number of Successful Createuser Requests
 	${userfail}=      Number of Failed Createuser Requests
 	${usertotal_total}=    Evaluate  ${number_requests}*${number_batches}
@@ -99,8 +91,6 @@ MC - Current users mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-	Sleep    10s    Wait for replies
-
 	@{token_list}=   Create List
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
@@ -111,8 +101,6 @@ MC - Current users mc requests different users Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CurrentUser
-
-	Sleep    10s    Wait for replies
 	
 	${usertotal}=     Number of Createuser Requests
 	${usersuccess}=   Number of Successful Createuser Requests
@@ -146,9 +134,7 @@ MC - Show Role mc requests admin user Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send ShowRole
-	
-	Sleep   30s    Wait for replies
-	
+		
 	${total}=    Number of Showrole Requests
 	${success}=  Number of Successful Showrole Requests
 	${fail}=     Number of Failed Showrole Requests
@@ -167,17 +153,11 @@ MC - Show Role mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send UserLoginSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send ShowRoleUsers
-
-	Sleep   30s    Wait for replies
 	
 	${usertotal}=     Number of Createuser Requests
 	${usersuccess}=   Number of Successful Createuser Requests
@@ -212,17 +192,11 @@ MC - Create Org mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send UserLoginSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateOrg
-
-	Sleep   30s    Wait for replies
 	
 	${usertotal}=     Number of Createuser Requests
 	${usersuccess}=   Number of Successful Createuser Requests
@@ -257,23 +231,15 @@ MC - Show Org mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send UserLoginSeq
-
-	Sleep   10s    Wait for replies
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateOrgSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send ShowOrg
 
-	Sleep   30s    Wait for replies
-	
 	${usertotal}=     Number of Createuser Requests
 	${usersuccess}=   Number of Successful Createuser Requests
 	${userfail}=      Number of Failed Createuser Requests
@@ -315,34 +281,20 @@ MC - Adduser Role mc requests different users Traffic
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send UserLoginSeq
 
-	Sleep   10s    Wait for replies
-
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateOrgSeq
-
-	Sleep   10s    Wait for replies
 
 	Reset User Count
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateRoleuserSeq
 
-	Sleep   10s    Wait for replies
-
-	Log To Console  SLEEPING
-
-	Sleep   30s    Wait for replies
-	
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send AdduserRole
 
-	Sleep   30s    Wait for replies
-	
 	${logintotal}=    Number of Login Requests
 	${loginsuccess}=  Number of Successful Login Requests
 	${loginfail}=     Number of Failed Login Requests
@@ -501,4 +453,4 @@ Send AdduserRole
 	\  ${handle}=    Adduser Role     orgname=@{orgname_list}[${INDEX}]     username=@{roleuser_list}[${INDEX}]    token=@{token_list}[${INDEX}]      use_thread=${True}
 	\  Append To List  ${handle_list}  ${handle}
 	
-	MexMasterController.Wait For Replies  @{handle_list}          #to run sequentially comment this line and use_threads=${True} above
+	MexMasterController.Wait For Replies  @{handle_list}     #to run sequentially comment this line and use_threads=${True} above
