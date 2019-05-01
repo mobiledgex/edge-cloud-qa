@@ -402,7 +402,7 @@ class MexMasterController(MexRest):
             if not match:
                 raise Exception("error showing role assignments. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
         
-        return str(self.resp.text)
+        return self.decoded_data
 
     def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         orgstamp = str(time.time())
@@ -563,7 +563,7 @@ class MexMasterController(MexRest):
 
         logger.info('role adduser  on mc at {}. \n\t{}'.format(url, payload))
 
-        print('*WARN*', orgname, token)
+        #print('*WARN*', orgname, token)
 
         def send_message():
             self._number_adduserrole_requests += 1
