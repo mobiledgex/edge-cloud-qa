@@ -73,6 +73,19 @@ MC - User with no token shall not be able to get current status
    Should Be Equal As Numbers  ${status_code}  401	
    Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
 
+MC - User with an empty token shall not be able to get current status
+    [Documentation]
+    ...  request user/current with an empty token
+    ...  verify correct error msg is received
+
+   ${error_msg}=  Run Keyword and Expect Error  *  Get Current User   token=${EMPTY}    use_defaults=${False}
+
+   ${status_code}=  Response Status Code
+   ${body}=         Response Body
+
+   Should Be Equal As Numbers  ${status_code}  401	
+   Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+
 MC - User with bad token1 shall not be able to get current status
     [Documentation]
     ...  request user/current with token=<some other token>
