@@ -5,7 +5,7 @@ Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 #Variables       shared_variables.py
 
 Test Setup	Setup
-#Test Teardown	Teardown
+Test Teardown	Teardown
 
 *** Variables ***
 ${operator_name}  dmuus
