@@ -47,4 +47,4 @@ class MexGrpc(object):
             candidate = os.path.join(dirname, path)
             if os.path.isfile(candidate):
                 return candidate
-        raise Error('cant find file {}'.format(path))
+        raise Exception('cant find file {}'.format(path))
