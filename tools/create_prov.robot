@@ -34,6 +34,7 @@ Create Cloudlet
    Create Cloudlet  cloudlet_name=attcloud-1  operator_name=att  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationProdHamburgCloudlet  operator_name=att  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationAzureCentralCloudlet  operator_name=azure  number_of_dynamic_ips=254  latitude=32.7767  longitude=-96.797  ipsupport=IpSupportDynamic
+   Create Cloudlet  cloudlet_name=automationGcpCentralCloudlet  operator_name=gcp  number_of_dynamic_ips=254  latitude=33.7767  longitude=-97.797  ipsupport=IpSupportDynamic
 
 Create App
    Create App  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  image_type=ImageTypeDocker  cluster_name=automationapicluster  default_flavor_name=automation_api_flavor
