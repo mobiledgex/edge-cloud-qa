@@ -54,6 +54,9 @@ class MexMasterController(MexRest):
         self._number_adduserrole_requests = 0
         self._number_adduserrole_requests_success = 0
         self._number_adduserrole_requests_fail = 0
+        self._number_removeuserrole_requests = 0
+        self._number_removeuserrole_requests_success = 0
+        self._number_removeuserrole_requests_fail = 0
         
                 
         
@@ -136,6 +139,15 @@ class MexMasterController(MexRest):
 
     def number_of_failed_adduserrole_requests(self):
         return self._number_adduserrole_requests_fail
+    
+    def number_of_removeuserrole_requests(self):
+        return self._number_removeuserrole_requests
+
+    def number_of_successful_removeuserrole_requests(self):
+        return self._number_removeuserrole_requests_success
+
+    def number_of_failed_renmoveuserrole_requests(self):
+        return self._number_removeuserrole_requests_fail
     
     def decoded_token(self):
         return self._decoded_token
@@ -561,7 +573,7 @@ class MexMasterController(MexRest):
                 
             payload = json.dumps(adduser_dict)
 
-        logger.info('role adduser  on mc at {}. \n\t{}'.format(url, payload))
+        logger.info('role adduser on mc at {}. \n\t{}'.format(url, payload))
 
         #print('*WARN*', orgname, token)
 
@@ -592,6 +604,61 @@ class MexMasterController(MexRest):
             if str(self.resp.text) != '{"message":"Role added to user"}':
                 raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
+
+    def removeuser_role(self, orgname= None, username=None, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):        
+        url = self.root_url + '/auth/role/removeuser'
+        payload = None
+
+        if use_defaults == True:
+            if token is None: token = self.token
+            if orgname is None: orgname = self.orgname
+            if username is None: username = self.username
+            if role is None: role = self.get_roletype()
+        
+        if json_data !=  None:
+            payload = json_data
+        else:
+            removeuser_dict = {}
+            if orgname is not None:
+                removeuser_dict['org'] = orgname
+            if username is not None:
+                removeuser_dict['username'] = username
+            if role is not None:
+                removeuser_dict['role'] = role
+                
+            payload = json.dumps(removeuser_dict)
+
+        logger.info('role removeuser on mc at {}. \n\t{}'.format(url, payload))
+
+        #print('*WARN*', orgname, token)
+
+        def send_message():
+            self._number_removeuserrole_requests += 1
+            
+            try:
+                self.post(url=url, data=payload, bearer=token)
+        
+                logger.info('response:\n' + str(self.resp.text))
+            
+                if str(self.resp.status_code) != '200':
+                    self._number_removeuserrole_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_removeuserrole_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_removeuserrole_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            if str(self.resp.text) != '{"message":"Role removed from user"}':
+                raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            return str(self.resp.text)
         
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
