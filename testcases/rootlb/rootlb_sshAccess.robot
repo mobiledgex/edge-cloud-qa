@@ -22,6 +22,6 @@ Openstack rootlb ssh access should be protected
 
     ${login}=  Catenate  SEPARATOR=@  test  ${rootlb}
 	
-    ${result}=  Run Process  ssh  -oBatchMode\=true  ${login}  shell=True  stderr=STDOUT  #stdout=andy.out
+    ${result}=  Run Process  ssh  -oBatchMode\=true  -oStrictHostKeyChecking\=no  ${login}  shell=True  stderr=STDOUT  #stdout=andy.out
 
     Should Contain  ${result.stdout}  Permission denied (publickey)
