@@ -7,13 +7,14 @@ Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_GCP_POD_NAME}  kubeconfig=
 Library  MexApp
 
 Test Setup      Setup
-Test Teardown	Cleanup provisioning
+#Test Teardown	Cleanup provisioning
 
 *** Variables ***
 ${cloudlet_name_gcp}  automationGcpCentralCloudlet
 ${operator_name_gcp}  gcp
 
-${crm_pod_name}   crmgcpcloud1
+${latitude}       32.7767
+${longitude}      -96.7970
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
@@ -38,7 +39,7 @@ User shall be able to access 1 UDP port on gcp
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default} 
+    Wait for pod to be running on CRM  cluster_name=${cluster_name_default}  operator_name=${operator_name_gcp}  pod_name=${app_name_default} 
 
     Log To Console  Checking if port is alive
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -140,12 +141,11 @@ Setup
     #${epoch_time}=  Get Time  epoch
     #${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
 
-    #Create Operator   operator_name=${operator_name}
     Create Developer
     Create Flavor
     Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   #cluster_name=${cluster_name} 
-    #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
+
     log to console  START creating cluster instance
     Create Cluster Instance   cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}
     log to console  DONE creating cluster instance
