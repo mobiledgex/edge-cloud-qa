@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config-mcdb
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: mcdb
+  POSTGRES_USER: mcuser
