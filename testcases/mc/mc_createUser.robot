@@ -1,11 +1,11 @@
 *** Settings ***
 Documentation   MasterController user/current superuser
 
-Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
+Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
 	
-Test Setup	Setup
-Test Teardown   Cleanup provisioning
+Test Setup	 Setup
+Test Teardown    Cleanup provisioning
 
 *** Variables ***
 ${password}=   mex1234567
@@ -26,9 +26,8 @@ MC - User shall be able to create a new user
 	\  ${username}  ${password}  ${email}=  Create User  username=${name}  password=${password}  email=${email}
 	\  Login
 	
-	\  ${info}=  Get Current User
+	\  ${info}=   Get Current User
 
-	\  Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	\  Should Be Equal             ${info['Email']}          ${email}
 	\  Should Be Equal             ${info['EmailVerified']}  ${False}
 	\  Should Be Equal             ${info['FamilyName']}     ${EMPTY}
@@ -39,10 +38,10 @@ MC - User shall be able to create a new user
 	\  Should Be Equal             ${info['Passhash']}       ${EMPTY}
 	\  Should Be Equal             ${info['Picture']}        ${EMPTY}
 	\  Should Be Equal             ${info['Salt']}           ${EMPTY}
+	\  Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	\  Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	
 	\  Login  username=${name}  password=${password}
-	\  Delete User
 
 
 MC - User shall not be able to create a new user with no username
@@ -50,7 +49,7 @@ MC - User shall not be able to create a new user with no username
 	...  create a new user without username
 	...  verify proper error is received
 	
-	Run Keyword and Expect Error  *  Create User  password=${password}  email=x@x.com  use_defaults=${False}
+	Run Keyword and Expect Error  *  Create User   password=${password}   email=x@x.com   use_defaults=${False}
 	
 	${status_code}=  Response Status Code
 	${body}=         Response Body
@@ -203,7 +202,7 @@ MC - User shall not be able to create the same new user twice same info
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 	
 MC - User shall not be able to create the same new user twice different password
 	[Documentation]
@@ -218,7 +217,7 @@ MC - User shall not be able to create the same new user twice different password
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 
 MC - User shall not be able to create the same new user twice different email
 	[Documentation]
@@ -233,7 +232,7 @@ MC - User shall not be able to create the same new user twice different email
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 
 MC - User shall not be able to create the superuser twice same info
 	[Documentation]
@@ -246,7 +245,7 @@ MC - User shall not be able to create the superuser twice same info
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 
 MC - User shall not be able to create the superuser twice different password
 	[Documentation]
@@ -259,7 +258,7 @@ MC - User shall not be able to create the superuser twice different password
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 
 MC - User shall not be able to create the superuser twice different email
 	[Documentation]
@@ -272,9 +271,7 @@ MC - User shall not be able to create the superuser twice different email
 	${body}=         Response Body
 
 	Should Be Equal As Numbers  ${status_code}  400	
-	Should Be Equal             ${body}         {"message":"User already exists"}
-
-
+	Should Be Equal             ${body}         {"message":"Username already exists"}
 
         
 *** Keywords ***

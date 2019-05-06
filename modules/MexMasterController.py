@@ -56,9 +56,7 @@ class MexMasterController(MexRest):
         self._number_adduserrole_requests_fail = 0
         self._number_removeuserrole_requests = 0
         self._number_removeuserrole_requests_success = 0
-        self._number_removeuserrole_requests_fail = 0
-        
-                
+        self._number_removeuserrole_requests_fail = 0            
         
         self.super_token = self.login(self.username, self.password, None, False)
 
@@ -247,11 +245,13 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createuser_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                
+                self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
+                
             except Exception as e:
                 self._number_createuser_requests_fail += 1
                 raise Exception("post failed:", e)
 
-        self.prov_stack.append(lambda:self.delete_user(username, password, email, self.super_token))
 
         self.username = username
         self.password = password
@@ -300,9 +300,9 @@ class MexMasterController(MexRest):
         else:
             print('sending message')
             resp = send_message()
-            return resp
+            return self.decoded_data
         
-    def delete_user(self, username=None, password=None, email=None, token=None, json_data=None, use_defaults=True):
+    def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/delete'
         payload = None
 
@@ -318,10 +318,6 @@ class MexMasterController(MexRest):
             user_dict = {}
             if username is not None:
                 user_dict['name'] = username
-            if password is not None:
-                user_dict['passhash'] = password
-            if email is not None:
-                user_dict['email'] = email
                 
             payload = json.dumps(user_dict)
 
@@ -458,13 +454,15 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createorg_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                
+                self.prov_stack.append(lambda:self.delete_org(orgname, self.super_token))
+                
             except Exception as e:
                 self._number_createorg_requests_fail += 1
                 raise Exception("post failed:", e)
 
             self._number_createorg_requests_success += 1
 
-        self.prov_stack.append(lambda:self.delete_org(orgname, self.super_token))
 
         self.orgname = orgname
         self.orgtype = orgtype
@@ -516,11 +514,11 @@ class MexMasterController(MexRest):
         else:
             print('sending message')
             resp = send_message()
-            if respText != '[]':
-                match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', respText)
-            # print('*WARN*',match)    
-            if not match:
-                raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            if str(self.resp.text) != '[]':
+                match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
+                # print('*WARN*',match)    
+                if not match:
+                    raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return self.decoded_data
 
 
