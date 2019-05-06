@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController New User Login
 
-Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
+Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 Test Setup	Setup
 #Test Teardown	Cleanup Provisioning
@@ -22,6 +22,19 @@ MC - New User shall be able to successfully login
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    Should Be Equal             ${token['username']}  ${username}	
 
+MC - New User shall be able to login with thier email and password
+    [Documentation]
+    ...  login to the mc as a new user using the email as a username
+    ...  verify token is correct
+
+   Login  username=${email}  password=${password}
+	
+   ${token}=     Decoded Token
+	
+   ${expire_time}=             Evaluate  (${token['exp']} - ${token['iat']}) / 60 / 60
+   Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
+   Should Be Equal             ${token['username']}  ${username}	
+	
 MC - New User with wrong password shall not be able to login
     [Documentation]
     ...  login to the mc as new user with invalid password
@@ -102,8 +115,8 @@ MC - New User with empty password shall not be able to login
 
 *** Keywords ***
 Setup
-    ${username}  ${password}  ${email}=  Create User   	
+	${username}  ${password}  ${email}=  Create User   	
 
-    Set Suite Variable  ${username}
-    Set Suite Variable  ${password} 
-
+	Set Suite Variable  ${username}
+	Set Suite Variable  ${password} 
+	Set Suite Variable  ${email}
