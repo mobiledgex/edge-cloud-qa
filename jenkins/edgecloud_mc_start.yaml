@@ -1,0 +1,45 @@
+metadata:
+  name: mc
+  labels:
+    app: mc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mc
+  template:
+    metadata:
+      labels:
+        app: mc
+    spec:
+       containers:
+       - name: mc
+         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-05-06
+         imagePullPolicy: Always
+         resources:
+           requests:
+             cpu: 10m
+         command:
+          - mc
+         args:
+          - "--sqlAddr"
+          - "postgres:5432"
+          - "--addr"
+          - "0.0.0.0:9900"
+          - "--vaultAddr"
+          - "https://vault.mobiledgex.net"
+          - "--tls"
+          - "/root/tls/mex-server.crt"
+          - "--tlskey"
+          - "/root/tls/mex-server.key"
+          - "--clientCert"
+          - "/root/tls/mex-client.crt"
+          - "-d"
+          - "etcd,api,notify"
+         env:
+          - name: VAULT_ROLE_ID
+            value: f4207f0f-c965-ac3e-181c-235de8838ff7
+          - name: VAULT_SECRET_ID
+            value: 528a3921-5afc-0150-1f9b-9e1fa4a49727
+       imagePullSecrets:
+        - name: mexreg-secret
