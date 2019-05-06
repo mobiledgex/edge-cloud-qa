@@ -855,8 +855,8 @@ class AppInstance():
             appinst_key_dict['app_key'] = app_pb2.AppKey(**app_key_dict)
         if cloudlet_key_dict:
             appinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict) 
-        if appinst_id is not None:
-            appinst_key_dict['id'] = appinst_id
+        if self.appinst_id is not None:
+            appinst_key_dict['id'] = int(self.appinst_id)
 
 
         if appinst_key_dict:
@@ -955,6 +955,9 @@ class MexController(MexGrpc):
 
     def get_default_developer_name(self):
         return shared_variables.developer_name_default
+
+    def get_default_flavor_name(self):
+        return shared_variables.flavor_name_default
 
     def get_default_app_name(self):
         return shared_variables.app_name_default
