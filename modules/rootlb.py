@@ -58,7 +58,7 @@ class Rootlb(Linux):
         logging.debug('output=' + str(output))
 
         if errcode != 0:
-            raise Exception("cmd returned non-zero status of " + errcode)
+            raise Exception("cmd returned non-zero status of " + str(errcode))
 
         print(output)
 
