@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController Login
 
-Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
+Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 #Test Setup	Setup
 #Test Teardown	Cleanup Provisioning
