@@ -14,7 +14,7 @@ spec:
     spec:
        containers:
        - name: mc
-         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-05-06
+         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
          imagePullPolicy: Always
          resources:
            requests:
