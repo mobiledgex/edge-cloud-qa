@@ -18,7 +18,7 @@ Test Timeout  30 minutes
 ${cluster_flavor_name}  x1.tiny
 	
 ${cloudlet_name_azure}  automationAzureCentralCloudlet
-${operator_name}  azure
+${operator_name_azure}  azure
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
@@ -37,7 +37,7 @@ User shall be able to access 1 UDP port on azure
 
     Log To Console  Creating App and App Instance	
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  app_template=${apptemplate}
-    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  cluster_instance_name=${cluster_name} 
+    Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -46,7 +46,7 @@ User shall be able to access 1 UDP port on azure
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default} 
+    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name_azure}  pod_name=${app_name_default} 
 
     Log To Console  Checking if port is alive
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -159,16 +159,15 @@ Setup
     #${epoch_time}=  Get Time  epoch
     ${epoch_time}=  Convert Date  ${current_date}  epoch
     ${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
-    ${cluster_name}=  Remove String  ${cluster_name}  .
+    #${cluster_name}=  Remove String  ${cluster_name}  .
 	
-    #Create Operator   operator_name=${operator_name}
     Create Developer
     Create Flavor
     Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   cluster_name=${cluster_name} 
     #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     log to console  START creating cluster instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  #flavor_name=${cluster_flavor_name}
     log to console  DONE creating cluster instance
 
     Set Suite Variable  ${cluster_name}
