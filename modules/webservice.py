@@ -65,12 +65,12 @@ class WebService() :
 
         return self.resp
 
-    def get(self, url, data=None, verify_cert=False, headers=None):
-        logging.debug('url=' + url + ' headers=' + str(headers))
+    def get(self, url, data=None, verify_cert=False, headers=None, params=None):
+        logging.debug('url=' + url + ' headers=' + str(headers) + ' data=' + str(data) + ' params=' + str(params))
         #url_to_use = self._buildUrl(url, self.output_format)
         #self.resp = requests.get(url_to_use, verify=verify_cert)
         #print('headers=' + str(headers))
-        self.resp = requests.get(url, verify=verify_cert, headers=headers)
+        self.resp = requests.get(url, verify=verify_cert, headers=headers, data=data, params=params)
 
         if self.http_trace:
             self._print_trace()
