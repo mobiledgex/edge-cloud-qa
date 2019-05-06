@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation   MasterController New User Login
 
-Library		MexMasterController  root_cert=%{AUTOMATION_MC_CERT}
+Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         Collections
 
 Test Setup	Setup
@@ -292,8 +292,8 @@ MC - Assign a user role to a user with an empty token
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 
-	Should Be Equal As Numbers  ${status_code}  401	
-	Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal As Numbers  ${status_code}  400	
+	Should Be Equal             ${body}         {"message":"no token found"}
 
 MC - Assign a user role to a user with a bad token
 	[Documentation]
