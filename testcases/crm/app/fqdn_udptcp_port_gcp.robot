@@ -7,7 +7,7 @@ Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_GCP_POD_NAME}  kubeconfig=
 Library  MexApp
 
 Test Setup      Setup
-#Test Teardown	Cleanup provisioning
+Test Teardown	Cleanup provisioning
 
 *** Variables ***
 ${cloudlet_name_gcp}  automationGcpCentralCloudlet
