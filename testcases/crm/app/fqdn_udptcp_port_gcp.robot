@@ -42,6 +42,7 @@ User shall be able to access 1 UDP port on gcp
     Wait for pod to be running on CRM  cluster_name=${cluster_name_default}  operator_name=${operator_name_gcp}  pod_name=${app_name_default} 
 
     Log To Console  Checking if port is alive
+    Sleep  1 min
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
 
 User shall be able to access 2 UDP ports on azure
