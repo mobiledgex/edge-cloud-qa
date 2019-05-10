@@ -32,7 +32,9 @@ spec:
            value: azure
          - name: MEX_AZURE_LOCATION
            value: centralus
-         - name: VAULT_TOKEN
+         - name: VAULT_ROLE_ID
+           value: e017fc39-dff7-adc3-364f-bb8e04805454
+         - name: VAULT_SECRET_ID
            value: ***REMOVED***
         args:
          - "--apiAddr"
