@@ -30,7 +30,7 @@ appinst_keep = [{'app_name':'automation_api_app'}]
 app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'}]
 clusterinst_keep = []
 cluster_keep = [{'cluster_name':'automationapicluster'}]
-clusterflavor_keep = [{'cluster_flavor_name':'automation_api_cluster_flavor'},{'cluster_flavor_name':'x1.medium'}]
+#clusterflavor_keep = [{'cluster_flavor_name':'automation_api_cluster_flavor'},{'cluster_flavor_name':'x1.medium'}]
 cloudlet_keep = [{'cloudlet_name': 'automationBuckhornCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationBeaconCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'attcloud-1', 'operator_name': 'att'},{'cloudlet_name': 'tmocloud-1', 'operator_name': 'dmuus'},{'cloudlet_name': 'tmocloud-2', 'operator_name': 'dmuus'},{'cloudlet_name': 'automationProdHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationAzureCentralCloudlet', 'operator_name': 'azure'},{'cloudlet_name': 'automationGcpCentralCloudlet', 'operator_name': 'gcp'}]
 flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor'}]
 developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
@@ -110,19 +110,19 @@ def clean_cluster():
                     print('error deleting.continuing to next item')
                     
 
-def clean_clusterflavor():
-    print('clean cluster flavor')
-    app_list = controller.show_cluster_flavors()
-    if len(app_list) == 0:
-        print('nothing to delete')
-    else:
-        for a in app_list:
-            print('aaa',a.key.name)
-            if in_clusterflavor_list(a):
-                print('keeping', a.key.name)
-            else:
-                print('deleting', a.key.name)
-                controller.delete_cluster_flavor(a)
+#def clean_clusterflavor():
+#    print('clean cluster flavor')
+#    app_list = controller.show_cluster_flavors()
+#    if len(app_list) == 0:
+#        print('nothing to delete')
+#    else:
+#        for a in app_list:
+#            print('aaa',a.key.name)
+#            if in_clusterflavor_list(a):
+#                print('keeping', a.key.name)
+#            else:
+#                print('deleting', a.key.name)
+#                controller.delete_cluster_flavor(a)
 
 def clean_cloudlet():
     print('clean cloudlet')
@@ -207,11 +207,11 @@ def in_cluster_list(cluster):
             print('found cluster in cluster_keep_list', cluster.key.name)
             return True
 
-def in_clusterflavor_list(app):
-    for a in clusterflavor_keep:
-        if a['cluster_flavor_name'] == app.key.name:
-            print('found cluster flavor in clusterflavor_keep_list', app.key.name)
-            return True
+#def in_clusterflavor_list(app):
+#    for a in clusterflavor_keep:
+#        if a['cluster_flavor_name'] == app.key.name:
+#            print('found cluster flavor in clusterflavor_keep_list', app.key.name)
+#            return True
 
 def in_flavor_list(app):
     for a in flavor_keep:
@@ -241,7 +241,7 @@ clean_appinst()
 clean_app()
 clean_clusterinst()
 clean_cluster()
-clean_clusterflavor()
+#clean_clusterflavor()
 clean_flavor()
 clean_cloudlet()
 clean_developer()
