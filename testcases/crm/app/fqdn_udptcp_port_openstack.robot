@@ -148,7 +148,6 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
 Setup
     Create Developer
     Create Flavor
-    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance

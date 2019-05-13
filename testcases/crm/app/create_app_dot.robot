@@ -16,10 +16,11 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationHamburgCloudlet
+${cloudlet_name_openstack}  automationBonnCloudlet
 ${operator_name}  TDG
-${latitude}       32.7767
-${longitude}      -96.7970
+
+#${latitude}       32.7767
+#${longitude}      -96.7970
 
 ${mobiledgex_domain}  mobiledgex.net
 
@@ -60,8 +61,7 @@ User shall be able to create an app instance on openstack with a dot in the app 
 Setup
     Create Developer
     Create Flavor
-    #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
+    Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}

@@ -33,7 +33,6 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
    ...  verify fails since it maps size=m4.tiny on openstack which has a disk of 10g. Must be at least 20g
 
    Create Flavor  ram=512  vcpus=1  disk=1
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -50,10 +49,10 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ...  verify it allocates size=m4.small on openstack
 
    Create Flavor  ram=1024  vcpus=1  disk=1
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -66,8 +65,8 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.small
-   Should Be Equal  ${cluster_inst.master_flavor}   m4.small 
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
+   Should Be Equal  ${cluster_inst.node_flavor}   m4.small 
 	
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -77,10 +76,10 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ...  verify it allocates size=m4.small on openstack
 
    Create Flavor  ram=2048  vcpus=2  disk=2
-   Create Cluster Flavor 
    Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -93,8 +92,8 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.small
-   Should Be Equal  ${cluster_inst.master_flavor}   m4.small
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
+   Should Be Equal  ${cluster_inst.node_flavor}   m4.small
 
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -104,10 +103,10 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=4096  vcpus=4  disk=4
-   Create Cluster Flavor 
    Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -120,9 +119,9 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
-   Should Be Equal  ${cluster_inst.node_flavor}    sdwan-ESC 
-   Should Be Equal  ${cluster_inst.master_flavor}  sdwan-ESC 
-	
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
+   Should Be Equal  ${cluster_inst.node_flavor}   sdwan-ESC 
+
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
@@ -131,10 +130,10 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ...  verify it allocates size=m4.large on openstack
 
    Create Flavor  ram=8192  vcpus=4  disk=40
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -147,8 +146,8 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.large
-   Should Be Equal  ${cluster_inst.master_flavor}   m4.large 
 	
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -158,10 +157,10 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ...  verify it allocates size=m4.xlarge on openstack
 
    Create Flavor  ram=16384  vcpus=8  disk=160
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -174,8 +173,8 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
-   Should Be Equal  ${cluster_inst.master_flavor}   m4.xlarge 
 	
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -185,10 +184,10 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=8192  vcpus=1  disk=1
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -201,8 +200,8 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     sdwan-ESC
-   Should Be Equal  ${cluster_inst.master_flavor}   sdwan-ESC 
 	
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -212,10 +211,10 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=1024  vcpus=1  disk=160
-   Create Cluster Flavor 
    Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
+   ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
@@ -228,51 +227,51 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
+   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
-   Should Be Equal  ${cluster_inst.master_flavor}   m4.xlarge 
 	
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
-Cluster shall create with different master and node flavors on openstack
-   [Documentation]
-   ...  create a cluster on openstack with different node and maste flavors
-   ...  verify it allocates different flavors for mastor and nodes
-
-   ${epoch_time}=  Get Time  epoch
-   ${flavor_name_1}=    Catenate  SEPARATOR=  flavor  ${epoch_time}  _1
-   ${flavor_name_2}=    Catenate  SEPARATOR=  flavor  ${epoch_time}  _2
-	
-   Create Flavor          flavor_name=${flavor_name_1}  ram=1024  vcpus=1  disk=1
-   Create Flavor          flavor_name=${flavor_name_2}  ram=4096  vcpus=4  disk=4
-   Create Cluster Flavor  number_nodes=4  node_flavor_name=${flavor_name_1}  master_flavor_name=${flavor_name_2}
-   Create Cluster        
-
-   ${cluster_name}=  Get Default Cluster Name
-
-   Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
-   Log to Console  DONE creating cluster instance
-
-   ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
-   ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
-
-   ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
-   ${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
-   Should Be Equal   ${server_info_node[0]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[1]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[2]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[3]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_master[0]['Flavor']}  sdwan-ESC
-   
-   ${num_servers_node}=     Get Length  ${server_info_node}
-   ${num_servers_master}=   Get Length  ${server_info_master}
-   Should Be Equal As Numbers  ${num_servers_node}    4   # 4 nodes
-   Should Be Equal As Numbers  ${num_servers_master}  1   # 1 master
- 
-   Should Be Equal  ${cluster_inst.node_flavor}    m4.small
-   Should Be Equal  ${cluster_inst.master_flavor}  sdwan-ESC
-
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+#Cluster shall create with different master and node flavors on openstack
+#   [Documentation]
+#   ...  create a cluster on openstack with different node and maste flavors
+#   ...  verify it allocates different flavors for mastor and nodes
+#
+#   ${epoch_time}=  Get Time  epoch
+#   ${flavor_name_1}=    Catenate  SEPARATOR=  flavor  ${epoch_time}  _1
+#   ${flavor_name_2}=    Catenate  SEPARATOR=  flavor  ${epoch_time}  _2
+#	
+#   Create Flavor          flavor_name=${flavor_name_1}  ram=1024  vcpus=1  disk=1
+#   Create Flavor          flavor_name=${flavor_name_2}  ram=4096  vcpus=4  disk=4
+#   Create Cluster Flavor  number_nodes=4  node_flavor_name=${flavor_name_1}  master_flavor_name=${flavor_name_2}
+#   Create Cluster        
+#
+#   ${cluster_name}=  Get Default Cluster Name
+#
+#   Log to Console  START creating cluster instance
+#   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  
+#   Log to Console  DONE creating cluster instance
+#
+#   ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
+#   ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
+#
+#   ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
+#   ${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
+#   Should Be Equal   ${server_info_node[0]['Flavor']}    m4.small
+#   Should Be Equal   ${server_info_node[1]['Flavor']}    m4.small
+#   Should Be Equal   ${server_info_node[2]['Flavor']}    m4.small
+#   Should Be Equal   ${server_info_node[3]['Flavor']}    m4.small
+#   Should Be Equal   ${server_info_master[0]['Flavor']}  sdwan-ESC
+#   
+#   ${num_servers_node}=     Get Length  ${server_info_node}
+#   ${num_servers_master}=   Get Length  ${server_info_master}
+#   Should Be Equal As Numbers  ${num_servers_node}    4   # 4 nodes
+#   Should Be Equal As Numbers  ${num_servers_master}  1   # 1 master
+#
+#   Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
+#   Should Be Equal  ${cluster_inst.node_flavor}    m4.small
+#
+#   Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    [Documentation]
@@ -280,7 +279,6 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=4096  vcpus=20  disk=4
-   Create Cluster Flavor 
    Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -301,7 +299,6 @@ Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=40960  vcpus=1  disk=1
-   Create Cluster Flavor 
    Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -322,7 +319,6 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=1024  vcpus=1  disk=1000
-   Create Cluster Flavor 
    Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name

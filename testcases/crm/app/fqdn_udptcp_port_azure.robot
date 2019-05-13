@@ -163,7 +163,6 @@ Setup
 	
     Create Developer
     Create Flavor
-    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   cluster_name=${cluster_name} 
     #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     log to console  START creating cluster instance
