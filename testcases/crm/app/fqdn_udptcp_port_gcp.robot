@@ -144,7 +144,6 @@ Setup
 
     Create Developer
     Create Flavor
-    Create Cluster Flavor  #cluster_flavor_name=${cluster_flavor_name}  
     Create Cluster   #cluster_name=${cluster_name} 
 
     log to console  START creating cluster instance
