@@ -377,10 +377,10 @@ class ClusterInstance():
         if self.ip_access is not None:
             clusterinst_dict['ip_access'] = self.ip_access
 
-        if self.num_masters is not None:
+        if self.number_masters is not None:
             clusterinst_dict['num_masters'] = int(self.number_masters)
 
-        if self.num_nodes is not None:
+        if self.number_nodes is not None:
             clusterinst_dict['num_nodes'] = int(self.number_nodes)
 
         if self.crm_override:
