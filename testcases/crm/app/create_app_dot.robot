@@ -19,8 +19,8 @@ ${cluster_flavor_name}  x1.medium
 ${cloudlet_name_openstack}  automationBonnCloudlet
 ${operator_name}  TDG
 
-#${latitude}       32.7767
-#${longitude}      -96.7970
+${latitude}       32.7767
+${longitude}      -96.7970
 
 ${mobiledgex_domain}  mobiledgex.net
 
