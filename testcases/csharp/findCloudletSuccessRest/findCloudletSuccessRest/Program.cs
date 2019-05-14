@@ -205,7 +205,7 @@ namespace RestSample
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
-                if (findCloudletReply.status == "FIND_FOUND")
+                if (findCloudletReply.status.ToString() == "FIND_FOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
@@ -214,7 +214,7 @@ namespace RestSample
                     Console.WriteLine("Test Case Passed!!!");
                     Environment.Exit(0);
                 }
-                if (findCloudletReply.status == "FIND_NOTFOUND")
+                if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("Test Case Failed!!!");
