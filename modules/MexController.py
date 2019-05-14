@@ -323,8 +323,8 @@ class ClusterInstance():
         self.liveness = liveness
         self.ip_access = ip_access
         self.developer_name = developer_name
-        self.num_masters = number_masters
-        self.num_nodes = number_nodes
+        self.number_masters = number_masters
+        self.number_nodes = number_nodes
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -378,10 +378,10 @@ class ClusterInstance():
             clusterinst_dict['ip_access'] = self.ip_access
 
         if self.num_masters is not None:
-            clusterinst_dict['num_masters'] = int(self.num_masters)
+            clusterinst_dict['num_masters'] = int(self.number_masters)
 
         if self.num_nodes is not None:
-            clusterinst_dict['num_nodes'] = int(self.num_nodes)
+            clusterinst_dict['num_nodes'] = int(self.number_nodes)
 
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
