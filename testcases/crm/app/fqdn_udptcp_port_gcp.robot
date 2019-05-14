@@ -16,7 +16,7 @@ ${operator_name_gcp}  gcp
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
+${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
 
 *** Test Cases ***
