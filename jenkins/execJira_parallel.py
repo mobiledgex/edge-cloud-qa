@@ -25,7 +25,7 @@ jira_token = 'Qoi6yaqSNTvjdyJAhgNz1AE4'
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
 secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
 
-python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases'
+python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases:$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
 #python_path = '/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/protos:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/modules:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/certs:/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
 
 found_failure = -1
