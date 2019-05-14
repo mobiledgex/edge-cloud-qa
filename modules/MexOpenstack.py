@@ -15,7 +15,7 @@ class MexOpenstack():
             cmd += f' --name {name}'
 
         logging.debug(f'getting openstack server list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
         o_out = o_return.stdout.decode('utf-8')
         o_err = o_return.stderr.decode('utf-8')
 
