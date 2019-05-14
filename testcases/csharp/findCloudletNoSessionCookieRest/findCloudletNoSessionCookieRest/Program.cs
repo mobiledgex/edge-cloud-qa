@@ -79,126 +79,11 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
+                Console.WriteLine("sessionCookie = " + sessionCookie );
                 sessionCookie = sessionCookie.Insert(3,"YEYEYE");
+                sessionCookie = "";
+                Console.WriteLine("sessionCookie = " + sessionCookie);
 
-                //Setup to handle the sessiontoken
-                var jwtHandler = new JwtSecurityTokenHandler();
-                System.IdentityModel.Tokens.Jwt.JwtSecurityToken secToken = null;
-                secToken = jwtHandler.ReadJwtToken(sessionCookie);
-                var claims = secToken.Claims;
-                var jwtPayload = "";
-                foreach (Claim c in claims)
-                {
-                    jwtPayload += '"' + c.Type + "\":\"" + c.Value + "\",";
-                }
-
-                //Console.WriteLine(jwtPayload);
-
-                //Console.WriteLine("\n\n"); 
-
-                //Extract the sessiontoken contents
-                char[] delimiterChars = { ',', '{', '}' };
-                string[] words = jwtPayload.Split(delimiterChars);
-                long expTime = 0;
-                long iatTime = 0;
-                bool expParse = false;
-                bool iatParse = false;
-                string peer;
-                string dev;
-                string app;
-                string appver;
-
-                foreach (var word in words)
-                {
-                    if (word.Length > 7)
-                    {
-                        //Console.WriteLine(word);
-                        if (word.Substring(1, 3) == "exp")
-                        {
-                            expParse = long.TryParse(word.Substring(7, 10), out expTime);
-                        }
-                        if (word.Substring(1, 3) == "iat")
-                        {
-                            iatParse = long.TryParse(word.Substring(7, 10), out iatTime);
-                        }
-                        if (expParse && iatParse)
-                        {
-                            int divider = 60;
-                            long tokenTime = expTime - iatTime;
-                            tokenTime /= divider;
-                            tokenTime /= divider;
-                            int expLen = 24;
-                            expParse = false;
-                            if (tokenTime != expLen)
-                            {
-                                Console.WriteLine("Session Cookie Exparation Time not 24 Hours:  " + tokenTime);
-                                Environment.Exit(1);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
-                            }
-                        }
-                        if (word.Substring(1, 6) == "peerip")
-                        {
-                            peer = word.Substring(10);
-                            peer = peer.Substring(0, peer.Length - 1);
-                            string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
-                            if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
-                            {
-                                Console.WriteLine("Peerip Expression Matched!  " + peer);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Peerip Expression Didn't Match!  " + peer);
-                                Environment.Exit(1);
-                            }
-                        }
-                        if (word.Substring(1, 7) == "devname")
-                        {
-                            dev = word.Substring(11);
-                            dev = dev.Substring(0, dev.Length - 1);
-                            if (dev != devName)
-                            {
-                                Console.WriteLine("Devname Didn't Match!  " + dev);
-                                Environment.Exit(1);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Devname Matched!  " + dev);
-                            }
-                        }
-                        if (word.Substring(1, 7) == "appname")
-                        {
-                            app = word.Substring(11);
-                            app = app.Substring(0, app.Length - 1);
-                            if (app != appName)
-                            {
-                                Console.WriteLine("AppName Didn't Match!  " + app);
-                                Environment.Exit(1);
-                            }
-                            else
-                            {
-                                Console.WriteLine("AppName Matched!  " + app);
-                            }
-                        }
-                        if (word.Substring(1, 7) == "appvers")
-                        {
-                            appver = word.Substring(11, 3);
-                            if (appver != "1.0")
-                            {
-                                Console.WriteLine("App Version Didn't Match!  " + appver);
-                                Environment.Exit(1);
-                            }
-                            else
-                            {
-                                Console.WriteLine("App Version Matched!  " + appver);
-                            }
-                        }
-
-                    }
-
-                }
                 var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc);
 
                 // Async:
@@ -206,7 +91,7 @@ namespace RestSample
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
-                if (findCloudletReply.status == "FIND_FOUND")
+                if (findCloudletReply.status.ToString() == "FIND_FOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
@@ -215,7 +100,7 @@ namespace RestSample
                     Console.WriteLine("Test Case Failed!!!");
                     Environment.Exit(1);
                 }
-                if (findCloudletReply.status == "FIND_NOTFOUND")
+                if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
                     Console.WriteLine("Test Case Passed!!!");
