@@ -28,6 +28,7 @@ import app_inst_pb2_grpc
 import loc_pb2
 import loc_pb2_grpc
 import threading
+import queue
 
 from mex_grpc import MexGrpc
 
@@ -275,11 +276,11 @@ class Cluster():
             
         if use_defaults:
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
-            if default_flavor_name is None: self.flavor_name = shared_variables.cluster_flavor_name_default
+            if default_flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
 
         self.cluster = cluster_pb2.Cluster(
                                       key = cluster_pb2.ClusterKey(name = self.cluster_name),
-                                      default_flavor = clusterflavor_pb2.ClusterFlavorKey(name = self.flavor_name)
+                                      default_flavor = flavor_pb2.FlavorKey(name = self.flavor_name)
         )
 
         shared_variables.cluster_name_default = self.cluster_name
@@ -310,7 +311,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -322,6 +323,8 @@ class ClusterInstance():
         self.liveness = liveness
         self.ip_access = ip_access
         self.developer_name = developer_name
+        self.num_masters = number_masters
+        self.num_nodes = number_nodes
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -336,8 +339,10 @@ class ClusterInstance():
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
             if operator_name is None: self.operator_name = shared_variables.operator_name_default
-            if flavor_name is None: self.flavor_name = shared_variables.cluster_flavor_name_default
+            if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if liveness is None: self.liveness = 1
+            if number_masters is None: self.number_masters = 1
+            if number_nodes is None: self.number_nodes = 1
             
         clusterinst_dict = {}
         clusterinst_key_dict = {}
@@ -364,13 +369,19 @@ class ClusterInstance():
             clusterinst_dict['key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
 
         if self.flavor_name is not None:
-            clusterinst_dict['flavor'] = clusterflavor_pb2.ClusterFlavorKey(name = self.flavor_name)
+            clusterinst_dict['flavor'] = flavor_pb2.FlavorKey(name = self.flavor_name)
 
         if self.liveness is not None:
             clusterinst_dict['liveness'] = self.liveness
 
         if self.ip_access is not None:
             clusterinst_dict['ip_access'] = self.ip_access
+
+        if self.num_masters is not None:
+            clusterinst_dict['num_masters'] = int(self.num_masters)
+
+        if self.num_nodes is not None:
+            clusterinst_dict['num_nodes'] = int(self.num_nodes)
 
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
@@ -903,7 +914,8 @@ class MexController(MexGrpc):
         self.response = None
         self.prov_stack = []
         self.ctlcloudlet = None
-
+        self._queue_obj = None
+        
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
         #print(sys.path)
@@ -1273,25 +1285,27 @@ class MexController(MexGrpc):
         logger.info('create cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
 
         resp = None
-        success = False
 
         def sendMessage():
+            success = False
+
             try:
                 resp = self.clusterinst_stub.CreateClusterInst(cluster_instance)
             except:
-                #print("Unexpected error0:", sys.exc_info()[0])
+                print("*WARN*", "Unexpected error0:", sys.exc_info()[0])
                 resp = sys.exc_info()[0]
-                #print("Unexpected error1:", sys.exc_info()[1])
-                #print("Unexpected error2:", sys.exc_info()[2])
-                
-                #print('typeerror')
-                #print('xxxxxxxxxxx',str(resp))
-                #sys.exit(1)
+
             self.response = resp
-                
-            for s in resp:
-                if "Created successfully" in str(s):
-                    success = True            
+
+            try:
+                for s in resp:
+                    if "Created successfully" in str(s):
+                        success = True
+            except:
+                if self._queue_obj:
+                    self._queue_obj.put(sys.exc_info())
+                else:
+                    raise Exception(sys.exc_info())
             if not success:
                 raise Exception('Error creating cluster instance:{}'.format(str(resp)))
 
@@ -1305,6 +1319,7 @@ class MexController(MexGrpc):
             #return resp
 
         if use_thread:
+            self._queue_obj = queue.Queue()
             t = threading.Thread(target=sendMessage)
             t.start()
             return t
@@ -1316,25 +1331,51 @@ class MexController(MexGrpc):
     def wait_for_replies(self, *args):
         for x in args:
             x.join()
-            
+        print('*WARN*', 'queue', self._queue_obj)
+        try:
+            exec = self._queue_obj.get(block=False)
+            print('*WARN*', 'waitforreplies exception')
+            raise Exception(exec)
+        except queue.Empty:
+            pass
+                    
     def delete_cluster_instance(self, cluster_instance=None, **kwargs):
-        resp = None
+        #resp = None
+        use_thread = False
 
         if cluster_instance is None:
+            if 'use_thread' in kwargs:
+                del kwargs['use_thread']
+                use_thread = True
             if len(kwargs) != 0:
                 cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
-        resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
 
-        success = False
+        def sendMessage():
+            success = False
+            try:
+                resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
+            except:
+                resp = sys.exc_info()[0]
+
+            self.response = resp
+            for s in resp:
+                if "Deleted ClusterInst successfully" in str(s):
+                    success = True
+            if not success:
+                raise Exception('Error deleting cluster instance:{}'.format(str(resp)))
+
+            return resp
         
-        self.response = resp
-        for s in resp:
-            if "Deleted ClusterInst successfully" in str(s):
-                success = True
-        if not success:
-            raise Exception('Error deleting cluster instance:{}'.format(str(resp)))
+        if use_thread:
+            t = threading.Thread(target=sendMessage)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = sendMessage()
+            return resp
 
     def update_cluster_instance(self, cluster_instance):
         logger.info('update cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
@@ -1714,6 +1755,8 @@ class MexController(MexGrpc):
         
         if app_instance:
             resp = list(self.appinst_stub.ShowAppInst(app_instance))
+            logger.debug('show' + str(resp))
+            logger.debug('level' + str(logging.getLogger().getEffectiveLevel()))
         else:
             resp = list(self.appinst_stub.ShowAppInst(app_inst_pb2.AppInst()))
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
@@ -1742,6 +1785,7 @@ class MexController(MexGrpc):
         | uri                             | None |
         | appinst_id                      | None |
         | use_defaults                    | True. Set to True or False for whether or not to use default values |
+        | use_thread    | False. Set to True to run the operation in a thread. Used for parallel executions         |
 
         Examples:
 
@@ -1752,39 +1796,59 @@ class MexController(MexGrpc):
 
         resp = None
         auto_delete = True
-        
+        use_thread = False
+
         if not app_instance:
             if 'no_auto_delete' in kwargs:
                 del kwargs['no_auto_delete']
                 auto_delete = False
+            if 'use_thread' in kwargs:
+                del kwargs['use_thread']
+                use_thread = True
             app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('create app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
 
+        resp = None
         success = False
 
-        resp = self.appinst_stub.CreateAppInst(app_instance)
+        def sendMessage():
+            try:
+                resp = self.appinst_stub.CreateAppInst(app_instance)
+            except:
+                resp = sys.exc_info()[0]
 
-        self.response = resp
+            self.response = resp
 
-        for s in resp:
-            logger.debug(s)
-            if "Created successfully" in str(s):
+            for s in resp:
+                logger.debug(s)
+                if "Created successfully" in str(s):
+                    success = True
+
+            if 'StatusCode.OK' in str(resp):  #check for OK because platos isnt currently printing Created successfull
                 success = True
 
-        if 'StatusCode.OK' in str(resp):  #check for OK because platos isnt currently printing Created successfull
-            success = True
+            if not success:
+                raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
 
-        if not success:
-            raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
+            if auto_delete:
+                self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
-        if auto_delete:
-            self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
+            #resp =  self.show_app_instances(app_instance)
+            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
 
-        #resp =  self.show_app_instances(app_instance)
-        resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
+            return resp[0]
+        
+        if use_thread:
+            t = threading.Thread(target=sendMessage)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = sendMessage()
+            return resp
 
-        return resp[0]
+
 
     def app_instance_should_exist(self, app_instance=None, **kwargs):
 
@@ -1818,18 +1882,46 @@ class MexController(MexGrpc):
 
     def delete_app_instance(self, app_instance=None, **kwargs):
         resp = None
+        use_thread = False
 
         if app_instance is None:
             if 'app_name' not in kwargs:
                 kwargs['app_name'] = shared_variables.app_name_default
+            if 'use_thread' in kwargs:
+                del kwargs['use_thread']
+                use_thread = True
             app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('delete app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
-        resp = self.appinst_stub.DeleteAppInst(app_instance)
-        for s in resp:
-            print(s)
+
+        resp = None
+
+        def sendMessage():
+            success = False
+            try:
+                resp = self.appinst_stub.DeleteAppInst(app_instance)
+            except:
+                resp = sys.exc_info()[0]
+
+            self.response = resp
+
+            for s in resp:
+                print(s)
+                if "Deleted AppInst successfully" in str(s):
+                    success = True            
+            if not success:
+                raise Exception('Error deleting app instance:{}'.format(str(resp)))
+
+        if use_thread:
+            t = threading.Thread(target=sendMessage)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = sendMessage()
+            return resp
         
-        return resp
+        #return resp
 
     #def create_developer(self, dev_instance):
     #    logger.info('create dddeveloper on {}. app={}'.format(self.address, str(dev_instance)))
