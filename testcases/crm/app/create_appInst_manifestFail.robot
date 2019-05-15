@@ -15,7 +15,7 @@ Test Timeout  30 minutes
 ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name_openstack}  automationHamburgCloudlet
-${operator_name}  TDG
+${operator_name_openstack}  TDG
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
@@ -34,7 +34,7 @@ Controller should cleanup autocluster after CreateAppInst fail
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=xxxx  default_flavor_name=${cluster_flavor_name}
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=autocluster
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Encountered failures: Create App Inst failed: invalid kubernetes deployment yaml
