@@ -14,7 +14,7 @@ Test Timeout  30 minutes
 ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name_openstack}  automationHawkinsCloudlet
-${operator_name}  GDDT
+${operator_name_openstack}  GDDT
 
 ${mobiledgex_domain}  mobiledgex.net
 
@@ -40,14 +40,14 @@ CRM shall recover when attempting to create an app instance on openstack with ro
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
     Block Rootlb Port  root_loadbalancer=${rootlb}  port=18889  target=INPUT
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -59,11 +59,11 @@ CRM shall recover when attempting to create an app instance on openstack with ro
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name}  pod_name=${app_name_default}
+    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 CRM shall recover when attempting to create an app instance with autocluster on openstack with rootlb rest port blocked
     [Documentation]
@@ -85,7 +85,7 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 
     # create the app instance
     Log To Console  Creating App Instance
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  #flavor_name=${flavor_name_default}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=autocluster  #flavor_name=${flavor_name_default}
     App Instance Should Not Exist
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -97,12 +97,12 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 
     # create the app instance again
     Log To Console  Creating App Instance After unblock
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=autocluster  #flavor_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=autocluster  #flavor_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
     ${auto_cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name_default}
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${auto_cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
+    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${auto_cluster_name}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 *** Keywords ***
 Setup
@@ -112,7 +112,7 @@ Setup
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}

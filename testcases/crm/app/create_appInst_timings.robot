@@ -12,7 +12,7 @@ Test Timeout  15 minutes
 ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name_openstack}  automationHawkinsCloudlet
-${operator_name}  GDDT
+${operator_name_openstack}  GDDT
 
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
@@ -39,7 +39,7 @@ Setup
 
     Log To Console  Creating Cluster Instance
     ${clusterInst_start_epoch_time}=  Get Time  epoch
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
     ${clusterInst_end_epoch_time}=  Get Time  epoch
     Log To Console  Done Creating Cluster Instance
 
@@ -47,7 +47,7 @@ Setup
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name} 
     ${cluster_name_default}=  Get Default Cluster Name
     ${appInst_start_epoch_time}=  Get Time  epoch
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}   cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}
     ${appInst_end_epoch_time}=  Get Time  epoch
     App Instance Should Exist
 
