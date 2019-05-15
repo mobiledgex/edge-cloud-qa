@@ -71,7 +71,6 @@ GetFqdnList - request shall only return apps with permits_platform_apps=True
 *** Keywords ***
 Setup
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
 
     ${dev_1}                 Catenate  ${developer_name_default}  01

@@ -82,7 +82,6 @@ RegisterClient - request shall succeed after adding app
    Create Developer
    Create Flavor
    #Create Cloudlet             cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-   Create Cluster Flavor	
    Create Cluster		
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client  app_name=dummy
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
@@ -110,7 +109,6 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    Create Cluster Flavor
     Create Cluster
     Create App 
     Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster

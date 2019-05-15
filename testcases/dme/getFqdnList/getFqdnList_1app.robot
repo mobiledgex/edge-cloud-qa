@@ -36,7 +36,6 @@ GetFqdnList - request shall return 1 app
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
     ${dmuus_appinst}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
