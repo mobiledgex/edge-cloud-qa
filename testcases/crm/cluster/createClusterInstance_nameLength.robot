@@ -12,7 +12,7 @@ Test Teardown   Cleanup provisioning
 *** Variables ***
 ${k8s_name}       mex-k8s-node-1-
 ${cloudlet_name_openstack}  automationHamburgCloudlet   #has to match crm process startup parms
-${operator_name}  TDG
+${operator_name_openstack}  TDG
 ${flavor_name}	  x1.medium
 ${cluster_name_long}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
@@ -23,7 +23,7 @@ CRM shall be able to create a cluster instances with 64 chars on openstack
     ...  Verify created successfully
 
     Create Cluster              cluster_name=${cluster_name}  default_flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_name=${cluster_name}  flavor_name=${flavor_name}
+    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name}  flavor_name=${flavor_name}
 
     Sleep  120 s
 
@@ -33,7 +33,7 @@ CRM shall be able to create a cluster instances with long name on openstack
     ...  Verify created successfully
 
     Create Cluster              cluster_name=${cluster_name_long}  default_flavor_name=${flavor_name}
-    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_name=${cluster_name_long}  flavor_name=${flavor_name}
+    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  flavor_name=${flavor_name}
 
     Sleep  120 s
 
