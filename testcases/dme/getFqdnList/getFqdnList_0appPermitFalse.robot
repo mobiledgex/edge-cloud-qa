@@ -36,7 +36,6 @@ Setup
     ${dev_2}                 Catenate  ${developer_name_default}  02
 
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
 
     Create Developer         developer_name=${dev_1}
