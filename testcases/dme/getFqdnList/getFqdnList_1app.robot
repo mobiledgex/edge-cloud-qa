@@ -36,7 +36,6 @@ GetFqdnList - request shall return 1 app
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
     ${tmus_appinst}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster

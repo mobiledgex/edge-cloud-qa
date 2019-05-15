@@ -100,7 +100,6 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    Create Cluster Flavor
     Create Cluster
     Create App                 app_name=${app_name} 
     Create App Instance        app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
