@@ -3,6 +3,7 @@ Documentation  User shall be able to create/delete/create an app instance on ope
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexApp
+Library  String
 #Variables       shared_variables.py
 
 Test Setup      Setup
@@ -16,7 +17,8 @@ ${cluster_flavor_name}  x1.medium
 ${cloudlet_name_openstack}  automationHawkinsCloudlet
 ${operator_name_openstack}  GDDT
 
-${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
+#${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
+${mobiledgex_domain}  mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
@@ -65,3 +67,9 @@ Setup
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    Set Suite Variable  ${rootlb}
+
