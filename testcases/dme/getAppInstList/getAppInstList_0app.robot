@@ -30,7 +30,6 @@ GetAppInstList - request with no app instance shall return 0 app
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
 

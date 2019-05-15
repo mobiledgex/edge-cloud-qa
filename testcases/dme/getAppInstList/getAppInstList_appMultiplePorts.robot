@@ -59,7 +59,6 @@ GetAppInstList - request shall return app with mulitple ports
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
     Create Cluster	
     Create App			access_ports=tcp:1,udp:2,http:3
     ${tmus_appinst}=           Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster

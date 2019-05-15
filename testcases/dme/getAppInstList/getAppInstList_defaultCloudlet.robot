@@ -56,7 +56,6 @@ GetAppInstList - request shall not return default cloudlet apps
 Setup
     Create Developer
     Create Flavor
-    Create Cluster Flavor
     Create Cluster
     Create App                  access_ports=tcp:1  
     ${tmus_appinst}=            Create App Instance         cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
