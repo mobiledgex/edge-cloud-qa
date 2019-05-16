@@ -161,7 +161,7 @@ namespace RestSample
                     Console.WriteLine("Verify Location Failed!!");
                     Environment.Exit(1);
                 }
-                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.GPS_Location_Accuracy_KM.ToString() == "100")
+                if (verifyLocationReply.gps_location_status.ToString() == "LOC_ROAMING_COUNTRY_MATCH")
                 {
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.GPS_Location_Accuracy_KM + "KM");

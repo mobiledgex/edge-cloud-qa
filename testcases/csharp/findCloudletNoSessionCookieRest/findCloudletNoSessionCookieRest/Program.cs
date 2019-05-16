@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
+                Console.WriteLine("FindCloudletNoSessionCookieRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -79,10 +79,9 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
-                Console.WriteLine("sessionCookie = " + sessionCookie );
-                sessionCookie = sessionCookie.Insert(3,"YEYEYE");
-                sessionCookie = "";
-                Console.WriteLine("sessionCookie = " + sessionCookie);
+
+                me.sessionCookie = "";
+                //Console.WriteLine("sessionCookie = " + sessionCookie);
 
                 var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc);
 
@@ -112,7 +111,9 @@ namespace RestSample
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Error Message: " + e.Message);
+                Console.WriteLine("Test Case Passed!");
+                Environment.Exit(0);
             }
 
         }

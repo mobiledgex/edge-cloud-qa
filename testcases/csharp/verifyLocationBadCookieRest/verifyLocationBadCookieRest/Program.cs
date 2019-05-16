@@ -102,7 +102,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("VerifyLocationBadCarrierRest Testcase");
+                Console.WriteLine("VerifyLocationBadCookieRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -151,7 +151,8 @@ namespace RestSample
 
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
-                sessionCookie = sessionCookie.Insert(3, "YEYEYE");
+
+                me.sessionCookie = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTgwMjE3NTgsImlhdCI6MTU1NzkzNTM1OCwia2V5Ijp7InBlZXJpcCI6IjEyNy4wLjAuMSIsImRldm5hbWUiOiJhdXRvbWF0aW9uX2FwaSIsImFwcG5hbWUiOiJhdXRvbWF0aW9uX2FwaV9hcHAiLCJhcHB2ZXJzIjoiMS4wIiwia2lkIjo2fX0.KGk2bzQmBIt-YST67A05a9vtlkVojXYTHmChEKDT7R_V7IEJ7hdD82y2oXkNhm5Xl7N4BcDAPWyNOWcDzMiHBt";
 
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(carrierName, loc);
                 var verfiyLocationTask = me.VerifyLocation(host, port, verifyLocationRequest);
@@ -161,14 +162,14 @@ namespace RestSample
                 if (verifyLocationReply.gps_location_status.ToString() == "LOC_UNKNOWN")
                 {
                     Console.WriteLine("Verify Location Failed!!");
-                    Environment.Exit(1);
+                    Environment.Exit(0);
                 }
                 if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.GPS_Location_Accuracy_KM.ToString() == "2")
                 {
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.GPS_Location_Accuracy_KM + "KM");
-                    Console.WriteLine("Test Case Passed!!!");
-
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
                 else
                 {
@@ -185,7 +186,9 @@ namespace RestSample
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Error Messge: " + e.Message);
+                Console.WriteLine("Test Case Pass!!");
+                Environment.Exit(0);
             }
 
         }
