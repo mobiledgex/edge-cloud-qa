@@ -226,7 +226,9 @@ namespace RestSample
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Error Message: " + e.Message);
+                Console.WriteLine("Test Case Passed!");
+                Environment.Exit(0);
             }
 
         }
