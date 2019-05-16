@@ -4,6 +4,7 @@ import sys
 import os
 import subprocess
 import time
+import requests
 
 import rootlb
 import kubernetes
@@ -62,6 +63,22 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
+    def make_http_request(self, host, port, page):
+        url = f'http://{host}:{port}/{page}'
+        logging.info(f'checking for {url}')
+
+        resp = requests.get(url)
+        logging.info(f'recieved status_code={resp.status_code}')
+        logging.info(f'recieved body={resp.text}')
+        
+        if resp.status_code != 200:
+            raise Exception('error. got {resp.status_code}. expected 200')
+
+        if '<p>test server is running</p>' not in resp.text:
+            raise Exception(f'error. did not get proper html text. got={resp.text}')
+        
+        return resp
+    
     def udp_port_should_be_alive(self, host, port):
         logging.info('host:' + host + ' port:' + str(port))
 
@@ -72,8 +89,19 @@ class MexApp(object):
 
     def tcp_port_should_be_alive(self, host, port):
         logging.info('host:' + host + ' port:' + str(port))
+
+        self.wait_for_dns(host)
+        
         self.ping_tcp_port(host, port)
         return True
+
+    def http_port_should_be_alive(self, host, port, page):
+        logging.info('host:' + host + ' port:' + str(port))
+
+        self.wait_for_dns(host)
+        
+        resp = self.make_http_request(host, port, page)
+        return True          
 
     def wait_for_dns(self, dns, wait_time=900):
         logging.info('waiting for dns=' + dns + ' to be ready')
