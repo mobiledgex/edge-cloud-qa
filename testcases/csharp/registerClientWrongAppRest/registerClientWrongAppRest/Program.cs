@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("RegisterClientWronfAppRest Testcase");
+                Console.WriteLine("RegisterClientWrongAppRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -206,8 +206,9 @@ namespace RestSample
             }
             catch (Exception e)
             {
-                //Console.WriteLine("IT IS HERE");
-                Console.WriteLine(e);
+                Console.WriteLine("Error Message: " + e.Message);
+                Console.WriteLine("Test Case Passed!");
+                Environment.Exit(0);
             }
 
         }
