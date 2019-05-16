@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletNoSessionCookieRest Testcase");
+                Console.WriteLine("FindCloudletBadSessionCookieRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -80,7 +80,7 @@ namespace RestSample
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.SessionCookie;
 
-                me.sessionCookie = "";
+                me.sessionCookie = "XX";
                 //Console.WriteLine("sessionCookie = " + sessionCookie);
 
                 var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc);
@@ -102,7 +102,8 @@ namespace RestSample
                 if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
-                    Console.WriteLine("Test Case Passed!!!");
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
             }
             catch (InvalidTokenServerTokenException itste)
