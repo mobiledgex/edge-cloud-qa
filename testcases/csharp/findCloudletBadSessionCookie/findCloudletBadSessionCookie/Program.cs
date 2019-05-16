@@ -1,6 +1,8 @@
 ﻿using System;
 using Grpc.Core;
 using System.Net;
+using System.IO;
+using System.Text;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,7 +16,7 @@ namespace MexGrpcSampleConsoleApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("VerifyLocationBadtoken Test Case");
+            Console.WriteLine("FindCloudletBadSesasionCookie Test Case");
 
 
             var mexGrpcLibApp = new MexGrpcLibApp();
@@ -57,6 +59,8 @@ namespace MexGrpcSampleConsoleApp
             //string appName = "EmptyMatchEngineApp";
             string devName = "automation_api";
             string appName = "automation_api_app";
+            string developerAuthToken = "";
+            string replyTokenServer = "";
 
             // Channel:
             // TODO: Load from file or iostream, securely generate keys, etc.
@@ -66,22 +70,39 @@ namespace MexGrpcSampleConsoleApp
 
             client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
 
-            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0");
-            var regReply = client.RegisterClient(registerClientRequest);
+
+            var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0", developerAuthToken);
+            try
+            {
+                var regReply = client.RegisterClient(registerClientRequest);
+                if (regReply.TokenServerURI != tokenServerURI)
+                {
+                    Environment.Exit(1);
+                }
+
+                //Set the location in the location server
+                //Console.WriteLine("Seting the location in the Location Server");
+                setLocation("52.52", "13.405");
+                //Console.WriteLine("Location Set\n\n");
+
+                // Store sessionCookie, for later use in future requests.
+                sessionCookie = regReply.SessionCookie;
+                //sessionCookie = expSessionCookie;
+                //essionCookie = missingApp_SessionCookie;
+
+                replyTokenServer = regReply.TokenServerURI;
+            }
+            catch (Grpc.Core.RpcException replyerror)
+            {
+                Console.WriteLine("Testcase Failed Registered Client!" + replyerror.StatusCode + replyerror.Status);
+                Environment.Exit(1);
+            }
+
 
             //Console.WriteLine("RegisterClient Reply: " + regReply);
             //Console.WriteLine("RegisterClient TokenServerURI: " + regReply.TokenServerURI);
 
             //Verify the Token Server URI is correct
-            if (regReply.TokenServerURI != tokenServerURI)
-            {
-                Environment.Exit(1);
-            }
-
-            // Store sessionCookie, for later use in future requests.
-            sessionCookie = regReply.SessionCookie;
-            //sessionCookie = expSessionCookie;
-            //essionCookie = missingApp_SessionCookie;
 
             //Setup to handle the sessiontoken
             var jwtHandler = new JwtSecurityTokenHandler();
@@ -98,8 +119,107 @@ namespace MexGrpcSampleConsoleApp
             //Extract the sessiontoken contents
             char[] delimiterChars = { ',', '{', '}' };
             string[] words = jwtPayload.Split(delimiterChars);
+            long expTime = 0;
+            long iatTime = 0;
+            bool expParse = false;
+            bool iatParse = false;
+            string peer;
+            string dev;
+            string app;
+            string appver;
+
+            foreach (var word in words)
+            {
+                if (word.Length > 7)
+                {
+                    //Console.WriteLine(word);
+                    if (word.Substring(1, 3) == "exp")
+                    {
+                        expParse = long.TryParse(word.Substring(7, 10), out expTime);
+                    }
+                    if (word.Substring(1, 3) == "iat")
+                    {
+                        iatParse = long.TryParse(word.Substring(7, 10), out iatTime);
+                    }
+                    if (expParse && iatParse)
+                    {
+                        int divider = 60;
+                        long tokenTime = expTime - iatTime;
+                        tokenTime /= divider;
+                        tokenTime /= divider;
+                        int expLen = 24;
+                        expParse = false;
+                        if (tokenTime != expLen)
+                        {
+                            Console.WriteLine("Session Cookie Exparation Time not 24 Hours:  " + tokenTime);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            //Console.WriteLine("Session Cookie Exparation Time correct:  " + tokenTime);
+                        }
+                    }
+                    if (word.Substring(1, 6) == "peerip")
+                    {
+                        peer = word.Substring(10);
+                        peer = peer.Substring(0, peer.Length - 1);
+                        string pattern = "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$";
+                        if (System.Text.RegularExpressions.Regex.IsMatch(peer, pattern))
+                        {
+                            //Console.WriteLine("Peerip Expression Matched!  " + peer);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Peerip Expression Didn't Match!  " + peer);
+                            Environment.Exit(1);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "devname")
+                    {
+                        dev = word.Substring(11);
+                        dev = dev.Substring(0, dev.Length - 1);
+                        if (dev != devName)
+                        {
+                            Console.WriteLine("Devname Didn't Match!  " + dev);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            //Console.WriteLine("Devname Matched!  " + dev);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appname")
+                    {
+                        app = word.Substring(11);
+                        app = app.Substring(0, app.Length - 1);
+                        if (app != appName)
+                        {
+                            Console.WriteLine("AppName Didn't Match!  " + app);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            //Console.WriteLine("AppName Matched!  " + app);
+                        }
+                    }
+                    if (word.Substring(1, 7) == "appvers")
+                    {
+                        appver = word.Substring(11, 3);
+                        if (appver != "1.0")
+                        {
+                            Console.WriteLine("App Version Didn't Match!  " + appver);
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            //Console.WriteLine("App Version Matched!  " + appver);
+                        }
+                    }
+
+                }
 
 
+            }
 
 
 
@@ -107,11 +227,8 @@ namespace MexGrpcSampleConsoleApp
             string token = null;
             try
             {
-                token = RetrieveToken(regReply.TokenServerURI);
-                Console.WriteLine(token);
-                token = token.Substring(0, 10);
-                Console.WriteLine(token);
-
+                token = RetrieveToken(replyTokenServer);
+                //Console.WriteLine("Received Token: " + token);
                 //Console.WriteLine("VerifyLocation pre-query sessionCookie: " + sessionCookie);
                 //Console.WriteLine("VerifyLocation pre-query TokenServer token: " + token);
             }
@@ -125,53 +242,44 @@ namespace MexGrpcSampleConsoleApp
                 return;
             }
 
-
-            // Call the remainder. Verify and Find cloudlet.
             try
             {
-                // This test case does not receive a LOC_ERROR_UNAUTHORIZED .. EDGECLOUD-369 is open for this issue
-
-                // Async version can also be used. Blocking:
-                Console.WriteLine("Verifying Location:");
-                var verifyResponse = VerifyLocation("xx");
-                string locationStatus = verifyResponse.GpsLocationStatus.ToString();
-                if (locationStatus == "LocErrorUnauthorized")
+                var findCloudletResponse = FindCloudlet();
+                string fcStatus = findCloudletResponse.Status.ToString();
+                if (fcStatus == "FindFound")
                 {
-                    Console.WriteLine("Testcase Passed!");
-                    Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-                    Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
-                    Environment.Exit(0);
+                    Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
+                    Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                    Console.WriteLine("Testcase Failed!");
+                    Environment.Exit(1);
                 }
                 else
                 {
+                    Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
+                    Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
                     Console.WriteLine("Testcase Failed!");
-                    Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-                    Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
                     Environment.Exit(1);
                 }
-
             }
-            catch (Grpc.Core.RpcException replyerror)
+            catch (Grpc.Core.RpcException fcError)
             {
-                Console.WriteLine("Testcase Failed!" + replyerror.StatusCode + replyerror.Status);
-                Environment.Exit(1);
+                Console.WriteLine("Error Message: " + fcError.Status.Detail);
+                Console.WriteLine("Testcase Passed!");
+                Environment.Exit(0);
             }
-
-            // Blocking GRPC call:
-            //Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
-            //Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
-
             Environment.Exit(0);
         }
 
-        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion)
+
+        RegisterClientRequest CreateRegisterClientRequest(string devName, string appName, string appVersion, string authToken)
         {
             var request = new RegisterClientRequest
             {
                 Ver = 1,
                 DevName = devName,
                 AppName = appName,
-                AppVers = appVersion
+                AppVers = appVersion,
+                AuthToken = authToken
             };
             return request;
         }
@@ -194,11 +302,77 @@ namespace MexGrpcSampleConsoleApp
             var request = new FindCloudletRequest
             {
                 Ver = 1,
-                SessionCookie = sessionCookie,
+                SessionCookie = "eXXcd",
                 CarrierName = carrierName,
                 GpsLocation = gpsLocation
             };
             return request;
+        }
+
+        static String setLocation(string locLat, string locLong)
+        {
+            var config = "";
+            System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("curl");
+            psi.Arguments = " ifconfig.me";
+            psi.UseShellExecute = false;
+            psi.RedirectStandardOutput = true;
+            System.Diagnostics.Process curl;
+            curl = System.Diagnostics.Process.Start(psi);
+            curl.WaitForExit();
+            System.IO.StreamReader ipReader = curl.StandardOutput;
+            curl.WaitForExit();
+            if (curl.HasExited)
+            {
+                config = ipReader.ReadToEnd();
+            }
+
+
+            string resp = null;
+            string ipAddr = config;
+            //string ipAddr = "40.122.108.233";
+            string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
+            string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
+            Console.WriteLine(payload);
+            byte[] postBytes = Encoding.UTF8.GetBytes(payload);
+            WebRequest request = WebRequest.Create(serverURL);
+            request.Method = "POST";
+            request.ContentType = "application/jason; charset=UTF-8";
+            //request.ContentType = "text/html; charset=utf-8";
+            request.ContentLength = postBytes.Length;
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(postBytes, 0, postBytes.Length);
+            dataStream.Close();
+            try
+            {
+                WebResponse response = request.GetResponse();
+                //Console.WriteLine("Response: " + ((HttpWebResponse)response).StatusDescription);
+                dataStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(dataStream);
+                string responseFromServer = reader.ReadToEnd();
+                if (((HttpWebResponse)response).StatusDescription == "OK")
+                {
+                    Console.WriteLine(responseFromServer);
+                }
+                reader.Close();
+                dataStream.Close();
+                response.Close();
+                return resp;
+            }
+            catch (System.Net.WebException we)
+            {
+                WebResponse respon = (HttpWebResponse)we.Response;
+                //Console.WriteLine("Response: " + we.Status);
+                Stream dStream = respon.GetResponseStream();
+                StreamReader sr = new StreamReader(dStream);
+                string responseFromServer = sr.ReadToEnd();
+                Console.WriteLine(responseFromServer);
+                sr.Close();
+                dStream.Close();
+                respon.Close();
+                return resp;
+            }
+
+
         }
 
         static String parseToken(String uri)
@@ -294,7 +468,7 @@ namespace MexGrpcSampleConsoleApp
         // The device is potentially mobile and may have data roaming.
         String getCarrierName()
         {
-            return "TDG";
+            return "tmus";
         }
 
         // TODO: The client must retrieve a real GPS location from the platform, even if it is just the last known location,
@@ -303,11 +477,10 @@ namespace MexGrpcSampleConsoleApp
         {
             return new DistributedMatchEngine.Loc
             {
-                Longitude = 13.4050,
-                Latitude = 52.5200
+                Longitude = 13.405,
+                Latitude = 52.52
             };
         }
-
     }
 
 
