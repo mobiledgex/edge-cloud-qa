@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("FindCloudletNoCarrierRest Testcase");
+                Console.WriteLine("FindCloudletNoLocationRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -226,7 +226,9 @@ namespace RestSample
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("Error Message: " + e.Message);
+                Console.WriteLine("Test Case Passed!");
+                Environment.Exit(0);
             }
 
         }
