@@ -6,6 +6,7 @@ class LoginPageLocators(object):
     login_button = (By.XPATH, '//button[text()="Log In"]')
     login_switch_button = (By.XPATH, '//button/span[text()="Login"]')
     signup_switch_button = (By.XPATH, '//button/span[text()="SignUp"]')
+    forgot_password_link = (By.CSS_SELECTOR, 'div.login-text')
 
 class MainPageLocators(object):
     compute_button = (By.XPATH, '//button[text()="MobiledgeX Compute"]')
@@ -44,5 +45,14 @@ class ComputePageLocators(object):
     apps_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Apps"]')
     app_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="App Instances"]')
 
-
-    
+class SignupPageLocators(object):
+    username_field = (By.NAME, 'username')
+    password_field = (By.NAME, 'password')
+    confirmpassword_field = (By.NAME, 'confirmpassword')
+    email_field = (By.NAME, 'email')
+    signup_button = (By.XPATH, '//button[text()="Sign Up"]')
+    login_switch_button = (By.XPATH, '//button/span[text()="Login"]')
+    signup_switch_button = (By.XPATH, '//button/span[text()="SignUp"]')
+    terms_link = (By.XPATH, '//a[text()="Terms"]')
+    datapolicy_link = (By.XPATH, '//a[text()="Data Policy"]')
+    cookiespolicy_link = (By.XPATH, '//a[text()="Cookies Policy"]')
