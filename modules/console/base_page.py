@@ -8,7 +8,12 @@ class BasePage(object):
         self.timeout = 30
 
     def is_element_present(self, element, text=None):
-        element = self.driver.find_element(*element)
+        try:
+            element = self.driver.find_element(*element)
+        except:
+            logging.error(f'element={element} is not found')
+            return False
+        
         print('*WARN*', 'iselmentpresent', element, text, element.text)
         if text and element.text != text:
             logging.error(f'Expected text={text} but got {element.text}')
