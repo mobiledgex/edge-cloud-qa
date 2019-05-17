@@ -119,13 +119,43 @@ class MexConsole() :
         else:
             raise Exception('support not present')
 
-    def get_organization_data(self):
-        self.take_screenshot('get_organization_pre')
+    #def get_organization_data(self):
+    #    self.take_screenshot('get_organization_pre')
+
+    #    rows = self.compute_page.get_table_rows()
+    #    for r in rows:
+    #        print('*WARN*', 'r', r)
+
+    def change_region(self, region):
+        logging.info(f'Changing region to {region}')
+
+        self.compute_page.click_region_pulldown()
+        self.compute_page.click_region_pulldown_option(region)
+
+        time.sleep(3)
+        
+    def open_flavors(self):
+        self.compute_page.click_flavors()
+
+        if self.compute_page.is_table_heading_present('Flavors'):
+            logging.info('flavor heading present')
+        else:
+            raise Exception('flavor heading not present')
+
+        if self.compute_page.is_flavor_table_header_present():
+            logging.info('flavor table header present')
+        else:
+            raise Exception('flavor header not present')
+
+        time.sleep(3)  # wait for table to load. maybe a better way to do this
+        
+    def get_table_data(self):
+        self.take_screenshot('get_table_data_pre')
 
         rows = self.compute_page.get_table_rows()
         for r in rows:
             print('*WARN*', 'r', r)
-            
+
     def take_screenshot(self, name):
         self.driver.save_screenshot(name+'.png')
         logger.info(f'<img src="{name}.png">', html=True)
