@@ -25,3 +25,6 @@ class LoginPage(BasePage):
 
     def get_signup_switch_button(self):
         return self.driver.find_element(*LoginPageLocators.signup_switch_button)
+
+    def click_forgot_password_link(self):
+        element = self.driver.find_element(*LoginPageLocators.forgot_password_link).click()
