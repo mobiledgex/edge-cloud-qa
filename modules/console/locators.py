@@ -20,5 +20,29 @@ class ComputePageLocators(object):
     username_div = (By.XPATH, '//*[@class="ui avatar image"]/..')
     support = (By.XPATH, '//span[text()="Support"]')
 
+    table_title = (By.CSS_SELECTOR, 'div.column.title_align')
+    table_new_button = (By.XPATH, '//button[@class="ui teal button" and contains(text(), "New")]')
+    table_help_button = (By.CSS_SELECTOR, 'i.question.circle.outline.small.icon')
+    table_region_label = (By.XPATH, '//div[@class="row"]/label[text()="Region"]')
+    table_region_pulldown = (By.XPATH, '//div[@class="row"]/div[@class="ui dropdown selection"]')
+    table_region_pulldown_option_all = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="ALL"]')
+    table_region_pulldown_option_us = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="US"]')
+    table_region_pulldown_option_eu = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="EU"]')
     table_class = (By.CSS_SELECTOR, 'div.grid_table')
     table_data = (By.CSS_SELECTOR, 'tbody.tbBodyList')
+
+    flavors_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
+    flavors_table_header_flavorname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="FlavorName"]')
+    flavors_table_header_ram = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="RAM"]')
+    flavors_table_header_vcpus = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="VCPUS"]')
+    flavors_table_header_disk = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DISK"]')
+    flavors_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
+                        
+    cloudlets_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cloudlets"]')
+    flavors_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Flavors"]')
+    cluster_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cluster Instances"]')
+    apps_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Apps"]')
+    app_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="App Instances"]')
+
+
+    

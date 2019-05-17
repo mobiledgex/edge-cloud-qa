@@ -1,6 +1,8 @@
 from console.base_page import BasePage
 from console.locators import ComputePageLocators
 
+import logging
+
 class ComputePage(BasePage):
     def is_branding_present(self):
         image_present = False
@@ -43,6 +45,67 @@ class ComputePage(BasePage):
             return False
         #return self.is_element_present(username, text=username)
 
+    def is_table_heading_present(self, label):
+        header_present = True
+        
+        if self.is_element_present(ComputePageLocators.table_title, label):
+            logging.info('heading title present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.table_new_button):
+            logging.info('new button present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.table_region_label):
+            logging.info('region label present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.table_region_pulldown):
+            logging.info('region pulldown label present')
+        else:
+            header_present = False
+
+            
+        return header_present
+    
+    def is_flavor_table_header_present(self):
+        header_present = True
+        
+        if self.is_element_present(ComputePageLocators.flavors_table_header_region):
+            logging.info('region header present')
+        else:
+            header_present = False
+            
+        if self.is_element_present(ComputePageLocators.flavors_table_header_flavorname):
+            logging.info('flavorname header present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.flavors_table_header_ram):
+            logging.info('ram header present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.flavors_table_header_vcpus):
+            logging.info('vcpus header present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.flavors_table_header_disk):
+            logging.info('disk header present')
+        else:
+            header_present = False
+
+        if self.is_element_present(ComputePageLocators.flavors_table_header_edit):
+            logging.info('edit header present')
+        else:
+            header_present = False
+
+        return header_present
+    
     def get_table_rows(self):
         table = self.driver.find_element(*ComputePageLocators.table_data)
 
@@ -56,3 +119,24 @@ class ComputePage(BasePage):
             row_list.append(list(cell_data))
 
         return row_list
+
+    def click_region_pulldown(self):
+        self.driver.find_element(*ComputePageLocators.table_region_pulldown).click()
+
+    def click_region_pulldown_option(self, option):
+        self.driver.find_element(*ComputePageLocators.table_region_pulldown_option_us).click()
+        
+    def click_flavors(self):
+        self.driver.find_element(*ComputePageLocators.flavors_button).click()
+
+    def click_cloudlets(self):
+        self.driver.find_element(*ComputePageLocators.cloudlets_button).click()
+
+    def click_cluster_instances(self):
+        self.driver.find_element(*ComputePageLocators.cluster_instances_button).click()
+
+    def click_apps(self):
+        self.driver.find_element(*ComputePageLocators.apps_button).click()
+
+    def click_app_instances(self):
+        self.driver.find_element(*ComputePageLocators.app_instances_button).click()
