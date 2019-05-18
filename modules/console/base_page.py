@@ -58,5 +58,14 @@ class BasePageElement(object):
         element = driver.find_element_by_name(self.locator)
         return element.get_attribute("value")
 
+class BasePagePulldownElement(object):
+    def __set__(self, obj, value):
+        print('*WARN*', '__set__', value, *self.locator)
+        driver = obj.driver
+
+        driver.find_element(*self.locator).click()
+        driver.find_element_by_name(f'{self.locator}/..//div[text()="{value}"')
+        #driver.find_element(*NewPageLocators.region_pulldown_option_us).click()
+
 #class TextBoxElement(BasePageElement):
 #    locator
