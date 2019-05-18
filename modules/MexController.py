@@ -835,6 +835,7 @@ class AppInstance():
         app_key_dict = {}
         cloudlet_key_dict = {}
         clusterinst_key_dict = {}
+        cluster_key_dict = {}
         loc_dict = {}
         
         if self.app_name:
@@ -845,7 +846,8 @@ class AppInstance():
             app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
 
         if self.cluster_name is not None:
-            clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(name = self.cluster_name)
+            #clusterinst_key_dict['cluster_key'] = clusterinst_pb2.ClusterInstKey(name = self.cluster_name)
+            cluster_key_dict['name'] = self.cluster_name
         #if self.developer_name is not None:
         #    clusterinst_key_dict['developer'] = self.developer_name
         if self.cloudlet_name is not None:
@@ -854,7 +856,8 @@ class AppInstance():
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
-
+        if cluster_key_dict:
+            clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
         if self.latitude is not None:
             loc_dict['latitude'] = float(self.latitude)
         if self.longitude is not None:
@@ -864,16 +867,17 @@ class AppInstance():
 
         if app_key_dict:
             appinst_key_dict['app_key'] = app_pb2.AppKey(**app_key_dict)
-        if cloudlet_key_dict:
-            appinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict) 
-        if self.appinst_id is not None:
-            appinst_key_dict['id'] = int(self.appinst_id)
+        if clusterinst_key_dict:
+            appinst_key_dict['cluster_inst_key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
+        #if cloudlet_key_dict:
+        #    appinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict) 
+        #if self.appinst_id is not None:
+        #    appinst_key_dict['id'] = int(self.appinst_id)
 
 
         if appinst_key_dict:
             appinst_dict['key'] = app_inst_pb2.AppInstKey(**appinst_key_dict)
-        if clusterinst_key_dict:
-            appinst_dict['cluster_inst_key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
+        
         if self.uri is not None:
             appinst_dict['uri'] = self.uri
         if self.flavor_name is not None:
@@ -1835,7 +1839,7 @@ class MexController(MexGrpc):
                 self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
             #resp =  self.show_app_instances(app_instance)
-            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cloudlet_key.name, operator_name=app_instance.key.cloudlet_key.operator_key.name, use_defaults=False)
+            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_name=app_instance.key.cluster_inst_key.cloudlet_key.operator_key.name, use_defaults=False)
 
             return resp[0]
         
