@@ -49,6 +49,8 @@ class NewPageLocators(object):
     heading = (By.XPATH, '//*[@class="ui modal transition visible active"]/div[text()="Settings"]')
     region =  (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="Region"]')
     region_pulldown = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[@name="Region" and @role="listbox"]/div[text()="Select Region"]')
+    region_pulldown_option_us = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[@name="Region" and @role="listbox"]//div[@role="option"]/span[text()="US"]')
+    region_pulldown_option_eu = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[@name="Region" and @role="listbox"]//div[@role="option"]/span[text()="EU"]')
     cancel_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Cancel"]')
     save_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Save"]')
     flavor_flavorname = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="FlavorName"]')

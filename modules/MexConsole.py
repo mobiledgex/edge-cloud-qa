@@ -8,6 +8,8 @@ from console.main_page import MainPage
 from console.compute_page import ComputePage
 from console.new_settings_page import NewFlavorSettingsPage
 
+from mex_controller_classes import Flavor
+
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 #logger = logging.getLogger('mexInfluxDb')
 
@@ -155,16 +157,21 @@ class MexConsole() :
 
         self.take_screenshot('open_flavors_post')
         
-    def add_new_flavor(self, region, flavor_name, ram, vcpus, disk):
+    def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
         self.take_screenshot('add_new_flavor_pre')
 
         self.compute_page.click_new_button()
 
         if self.new_flavor_page.are_elements_present():
-            logging.info('click New button verification succeeded')
+            logging.info('click New Flavor button verification succeeded')
         else:
-            raise Exception('click New button verifcation failed')
+            raise Exception('click New Flavor button verifcation failed')
 
+        flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
+        print('*WARN*', 'flavor', flavor)
+
+        self.new_flavor_page.region = 'US'
+        
         self.take_screenshot('add_new_flavor_post')
         
     def get_table_data(self):
