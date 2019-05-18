@@ -1,4 +1,5 @@
 from console.base_page import BasePage
+from console.new_settings_page import NewSettingsPage, NewFlavorSettingsPage
 from console.locators import ComputePageLocators
 
 import logging
@@ -105,7 +106,7 @@ class ComputePage(BasePage):
             header_present = False
 
         return header_present
-    
+     
     def get_table_rows(self):
         table = self.driver.find_element(*ComputePageLocators.table_data)
 
@@ -119,6 +120,9 @@ class ComputePage(BasePage):
             row_list.append(list(cell_data))
 
         return row_list
+
+    def click_new_button(self):
+        self.driver.find_element(*ComputePageLocators.table_new_button).click()
 
     def click_region_pulldown(self):
         self.driver.find_element(*ComputePageLocators.table_region_pulldown).click()
