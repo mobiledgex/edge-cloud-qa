@@ -47,7 +47,6 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
@@ -69,7 +68,6 @@ class tc(unittest.TestCase):
                                       use_defaults=False)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_cluster(self.cluster.cluster)
         self.controller.create_app(self.app.app)
@@ -109,7 +107,6 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':
