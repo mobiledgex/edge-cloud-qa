@@ -46,7 +46,6 @@ class tc(unittest.TestCase):
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.flavor_2 = mex_controller.Flavor(flavor_name=flavor_name_2, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
@@ -55,7 +54,6 @@ class tc(unittest.TestCase):
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_flavor(self.flavor_2.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_cluster(self.cluster.cluster)
 
@@ -154,7 +152,6 @@ class tc(unittest.TestCase):
     def tearDownClass(self):
         self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         self.controller.delete_flavor(self.flavor_2.flavor)
 
