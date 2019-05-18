@@ -6,6 +6,7 @@ import time
 from console.login_page import LoginPage
 from console.main_page import MainPage
 from console.compute_page import ComputePage
+from console.new_settings_page import NewFlavorSettingsPage
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 #logger = logging.getLogger('mexInfluxDb')
@@ -27,6 +28,7 @@ class MexConsole() :
         self.driver.get(url)
 
         self.compute_page = ComputePage(self.driver)
+        self.new_flavor_page = NewFlavorSettingsPage(self.driver)
         
     def login_to_mex_console(self, browser='Chrome', username='mexadmin', password='mexadmin123'):
         self.take_screenshot('loginpage_pre')
@@ -135,6 +137,8 @@ class MexConsole() :
         time.sleep(3)
         
     def open_flavors(self):
+        self.take_screenshot('open_flavors_pre')
+
         self.compute_page.click_flavors()
 
         if self.compute_page.is_table_heading_present('Flavors'):
@@ -148,6 +152,20 @@ class MexConsole() :
             raise Exception('flavor header not present')
 
         time.sleep(3)  # wait for table to load. maybe a better way to do this
+
+        self.take_screenshot('open_flavors_post')
+        
+    def add_new_flavor(self, region, flavor_name, ram, vcpus, disk):
+        self.take_screenshot('add_new_flavor_pre')
+
+        self.compute_page.click_new_button()
+
+        if self.new_flavor_page.are_elements_present():
+            logging.info('click New button verification succeeded')
+        else:
+            raise Exception('click New button verifcation failed')
+
+        self.take_screenshot('add_new_flavor_post')
         
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')

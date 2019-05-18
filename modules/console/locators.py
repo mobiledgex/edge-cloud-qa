@@ -45,6 +45,21 @@ class ComputePageLocators(object):
     apps_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Apps"]')
     app_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="App Instances"]')
 
+class NewPageLocators(object):
+    heading = (By.XPATH, '//*[@class="ui modal transition visible active"]/div[text()="Settings"]')
+    region =  (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="Region"]')
+    region_pulldown = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[@name="Region" and @role="listbox"]/div[text()="Select Region"]')
+    cancel_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Cancel"]')
+    save_button = (By.XPATH, '//*[@class="ui modal transition visible active"]//button[text()="Save"]')
+    flavor_flavorname = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="FlavorName"]')
+    flavor_flavorname_input = (By.NAME, 'FlavorName')
+    flavor_ram = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="RAM"]')
+    flavor_ram_input = (By.NAME, 'RAM')
+    flavor_vcpus = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="VCPUS"]')
+    flavor_vcpus_input = (By.NAME, 'VCPUS')
+    flavor_disk = (By.XPATH, '//*[@class="ui modal transition visible active"]//div[text()="DISK"]')
+    flavor_disk_input = (By.NAME, 'DISK')
+    
 class SignupPageLocators(object):
     username_field = (By.NAME, 'username')
     password_field = (By.NAME, 'password')
