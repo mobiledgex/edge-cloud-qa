@@ -38,7 +38,7 @@ spec:
           - "35.247.126.154:8086"
           - "-d"
           - "etcd,api,notify"
-	  - "-autoUpgrade"
+          - "-autoUpgrade"
        imagePullSecrets:
         - name: mexreg-secret
 
