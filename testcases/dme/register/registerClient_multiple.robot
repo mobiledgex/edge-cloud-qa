@@ -52,7 +52,7 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    \  Should Be Equal  ${decoded_cookie['key']['appname']}  ${app_name_default}	
    \  Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version_default}	
  
-   \  Delete App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+   \  Delete App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
 *** Keywords ***
 Setup
@@ -60,6 +60,6 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    Create Cluster
+    #Create Cluster
     Create App                  
 
