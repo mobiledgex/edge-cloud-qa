@@ -42,6 +42,21 @@ node('jenkinsSlave1'){
                 userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 	  }
+	  dir('go/src/github.com/mobiledgex/edge-cloud') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+          }
+
+          dir('go/src/github.com/mobiledgex/edge-cloud') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
+          }
+
        }
     }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
@@ -88,6 +103,26 @@ node('jenkinsSlave1'){
 //          status = sh(script: s, returnStatus: true);
 //       }
 //    }
+
+    try {
+       stage('Pull Image') {
+          def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
+          def index  = sh(script: s, returnStdout: true);
+          def (commit_version, image_name) = index.split(',')
+  	  dir('go/src/github.com/mobiledgex/edge-cloud') {
+             def t = 'git reset --hard ' + commit_version
+             def tout  = sh(script: t, returnStdout: true);
+          }
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "Error pulling image load=' + tag + '. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+    error('andy quit')
 
     try {
        stage('deploy processes in k8s') {
