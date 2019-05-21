@@ -1,7 +1,7 @@
 *** Settings ***
-Documentation   VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
+Documentation   VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
 
-Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}    root_cert=%{AUTOMATION_DME_CERT}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 		
 Suite Setup      Setup
@@ -16,7 +16,7 @@ ${berlin_lat}      52.5200
 ${berlin_long}     13.4050
 
 *** Test Cases ***
-VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
+VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
 #EDGECLOUD-369 - VerifyToken with token=xx does not return LOC_ERROR_UNAUTHORIZED
     [Documentation]
     ...  send VerifyLocatoin with token=xx
@@ -28,7 +28,7 @@ VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  6  #LOC_ERROR_UNAUTHORIZED
       Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
 
-VerifyLocation - request with empty token shall return 'verifyloc token required'
+VerifyLocation REST - request with empty token shall return 'verifyloc token required'
     [Documentation]
     ...  send VerifyLocatoin with empty token
     ...  verify return 'verifyloc token required'
