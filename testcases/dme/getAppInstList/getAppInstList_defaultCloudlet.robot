@@ -35,8 +35,8 @@ GetAppInstList - request shall not return default cloudlet apps
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].Distance}  1  
 
-      Should Be Equal             ${appfqdns[0].CarrierName}                             ${dmuus_appinst.key.cloudlet_key.operator_key.name}
-      Should Be Equal             ${appfqdns[0].CloudletName}                            ${dmuus_appinst.key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].CarrierName}                             ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].CloudletName}                            ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].GpsLocation.latitude}                    ${dmuus_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].GpsLocation.longitude}                   ${dmuus_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
