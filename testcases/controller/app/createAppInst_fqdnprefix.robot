@@ -327,7 +327,8 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
 
     # create app2 and appInst on the same port
     #Create App  app_name=${app_default_2}  access_ports=tcp:1
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${autocluster}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster}
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -340,7 +341,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
-    Should Be Equal              ${appInst_2.mapped_ports[0].FQDN_prefix}    ${fqdn_prefix_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].FQDN_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
@@ -481,15 +482,17 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
     ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  -  tcp  .
+    ${autocluster_2}=  Catenate  SEPARATOR=-  autocluster  2
     Create App  app_name=${app_name_2}  access_ports=tcp:1
-    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
 
     # create appInst4 on the port 10000
     ${app_name_3}=  Catenate  SEPARATOR=-  ${app_default_1}  3
     ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  -  tcp  .
+    ${autocluster_3}=  Catenate  SEPARATOR=-  autocluster  3
     Create App  app_name=${app_name_3}  access_ports=tcp:10000
-    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_3}
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -572,6 +575,8 @@ AppInst - user shall be to add multiple TCP public ports
     ...  verify app2 internal port is 1 and public port is 10000
     ...  verify app3 internal port is 10000 and public port is 10001
 
+    ${epoch_time}=  Get Time  epoch
+
     ${cluster_instance_default}=  Get Default Cluster Name
 
     # create app1 and appIns 1
@@ -632,11 +637,11 @@ AppInst - user shall not be able to allocate public port tcp:22
     Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
-AppInst - user shall not be able to allocate public port tcp:18889
+AppInst - user shall be able to allocate public port tcp:18889
     [Documentation]
     ...  create an app with tcp:18889
     ...  create an app instance
-    ...  verify internal and public port is 10000
+    ...  verify internal and public port is 18889
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -647,7 +652,7 @@ AppInst - user shall not be able to allocate public port tcp:18889
     ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  tcp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18889
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    10000
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
     Should Be Equal              ${appInst.mapped_ports[0].FQDN_prefix}    ${fqdn_prefix}
 
@@ -656,11 +661,11 @@ AppInst - user shall not be able to allocate public port tcp:18889
     Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
-AppInst - user shall not be able to allocate public port tcp:18888
+AppInst - user shall be able to allocate public port tcp:18888
     [Documentation]
     ...  create an app with tcp:18888
     ...  create an app instance
-    ...  verify internal and public port is 10000
+    ...  verify internal and public port is 18888
 
     ${cluster_instance_default}=  Get Default Cluster Name
 
@@ -671,7 +676,7 @@ AppInst - user shall not be able to allocate public port tcp:18888
     ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  tcp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18888
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    10000
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
     Should Be Equal              ${appInst.mapped_ports[0].FQDN_prefix}    ${fqdn_prefix}
 
