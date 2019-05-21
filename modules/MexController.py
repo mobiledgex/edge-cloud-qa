@@ -822,7 +822,7 @@ class AppInstance():
             if not app_name: self.app_name = shared_variables.app_name_default
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
-            #if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
             if not app_version: self.app_version = shared_variables.app_version_default
             if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_name: self.operator_name = shared_variables.operator_name_default

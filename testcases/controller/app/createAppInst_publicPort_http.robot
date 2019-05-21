@@ -32,7 +32,7 @@ AppInst - user shall be able to add 1 HTTP port
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          3  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[0].public_path}    ${public_path}
+    Should Be Equal              ${appInst.mapped_ports[0].path_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -61,52 +61,52 @@ AppInst - user shall be able to add 10 HTTP ports
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst.mapped_ports[0].path_prefix}    ${public_path_1}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  2
     Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[1].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[1].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst.mapped_ports[1].path_prefix}    ${public_path_2}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[2].internal_port}  3
     Should Be Equal As Integers  ${appInst.mapped_ports[2].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[2].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[2].public_path}    ${public_path_3}
+    Should Be Equal              ${appInst.mapped_ports[2].path_prefix}    ${public_path_3}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[3].internal_port}  4
     Should Be Equal As Integers  ${appInst.mapped_ports[3].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[3].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[3].public_path}    ${public_path_4}
+    Should Be Equal              ${appInst.mapped_ports[3].path_prefix}    ${public_path_4}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[4].internal_port}  5
     Should Be Equal As Integers  ${appInst.mapped_ports[4].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[4].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[4].public_path}    ${public_path_5}
+    Should Be Equal              ${appInst.mapped_ports[4].path_prefix}    ${public_path_5}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[5].internal_port}  6
     Should Be Equal As Integers  ${appInst.mapped_ports[5].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[5].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[5].public_path}    ${public_path_6}
+    Should Be Equal              ${appInst.mapped_ports[5].path_prefix}    ${public_path_6}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[6].internal_port}  7
     Should Be Equal As Integers  ${appInst.mapped_ports[6].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[6].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[6].public_path}    ${public_path_7}
+    Should Be Equal              ${appInst.mapped_ports[6].path_prefix}    ${public_path_7}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[7].internal_port}  8
     Should Be Equal As Integers  ${appInst.mapped_ports[7].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[7].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[7].public_path}    ${public_path_8}
+    Should Be Equal              ${appInst.mapped_ports[7].path_prefix}    ${public_path_8}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[8].internal_port}  9
     Should Be Equal As Integers  ${appInst.mapped_ports[8].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[8].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[8].public_path}    ${public_path_9}
+    Should Be Equal              ${appInst.mapped_ports[8].path_prefix}    ${public_path_9}
 
     Should Be Equal As Integers  ${appInst.mapped_ports[9].internal_port}  10
     Should Be Equal As Integers  ${appInst.mapped_ports[9].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[9].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[9].public_path}    ${public_path_10}
+    Should Be Equal              ${appInst.mapped_ports[9].path_prefix}    ${public_path_10}
 
     Length Should Be   ${appInst.mapped_ports}  10
 
@@ -134,14 +134,14 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall be
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be             ${appInst_1.mapped_ports}                   1
 
     # verify app2 uses port 10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_2}
     Length Should Be             ${appInst_2.mapped_ports}                   1
 
 AppInst - 2 appInst on different app and different cluster and same cloudlet shall be able to allocate the same HTTP port
@@ -168,14 +168,14 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be             ${appInst_1.mapped_ports}                   1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_2}
     Length Should Be             ${appInst_2.mapped_ports}                   1
 
 AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same HTTP port
@@ -203,14 +203,14 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be             ${appInst_1.mapped_ports}                   1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_2}
     Length Should Be             ${appInst_2.mapped_ports}                   1
 
 AppInst - 2 appInst on same app and different cluster and same cloudlet shall be able to allocate the same HTTP port
@@ -221,6 +221,8 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
     ...  verify app2 public port is 443 and public_path is correct
 
     # EDGECLOUD-414 trying to create 2 appinst on different cluster but same cloudlet
+
+    ${epoch_time}=  Get Time  epoch
 	
     # create app1 and appIns 1
     Create App  access_ports=http:1
@@ -229,25 +231,26 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
 
-    ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${public_path_2}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_2}${version_default}  p1
+    #${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
+    #${public_path_2}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_2}${version_default}  p1
 
     # create app2 and appInst on the same port
     #Create App  app_name=${app_default_2}  access_ports=tcp:1
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${autocluster}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster}
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 AppInst - 2 appInst on same app and different cluster and different cloudlet shall be able to allocate the same public HTTP port
@@ -283,14 +286,14 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 AppInst - User shall be able to add app/appInst, delete, and readd with same HTTP port
@@ -316,14 +319,14 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same HTT
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 AppInst - User shall be able to add app, udpate app, add appInst with same HTTP port
@@ -350,11 +353,11 @@ AppInst - User shall be able to add app, udpate app, add appInst with same HTTP 
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  3
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].internal_port}  4
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[1].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[1].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_1.mapped_ports[1].path_prefix}    ${public_path_2}
 
     Length Should Be   ${appInst_1.mapped_ports}  2
 
@@ -367,6 +370,8 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     ...  verify app2 public port is 443
     ...  verify app3 public port is 443
 
+    ${epoch_time}=  Get Time  epoch
+
     # create app1 and appIns 1
     Create App  access_ports=http:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
@@ -377,35 +382,37 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
     ${public_path_2}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name_2}${version_default}  p1
+    ${autocluster_2}=  Catenate  SEPARATOR=-  autocluster  2
     Create App  app_name=${app_name_2}  access_ports=http:1
-    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
 
     # create appInst4 on the port 10000
     ${app_name_3}=  Catenate  SEPARATOR=-  ${app_default_1}  3
     ${public_path_3}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name_3}${version_default}  p10000
+    ${autocluster_3}=  Catenate  SEPARATOR=-  autocluster  3
     Create App  app_name=${app_name_3}  access_ports=http:10000
-    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_3}
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     # verify app2 uses port 443
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_3.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_3.mapped_ports[0].public_path}    ${public_path_3}
+    Should Be Equal              ${appInst_3.mapped_ports[0].path_prefix}    ${public_path_3}
     Length Should Be   ${appInst_3.mapped_ports}  1
 
 AppInst - appInst shall allocate HTTP port 10000 if already allocated
@@ -433,14 +440,14 @@ AppInst - appInst shall allocate HTTP port 10000 if already allocated
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     # verify app2 uses port 10001
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].public_path}    ${public_path_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
 AppInst - user shall be to add multiple HTTP public ports
@@ -462,7 +469,7 @@ AppInst - user shall be to add multiple HTTP public ports
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
     FOR  ${index}  IN RANGE  0  100
@@ -476,7 +483,7 @@ AppInst - user shall be to add multiple HTTP public ports
     \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
     \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoTCP
-    \   Should Be Equal              ${appInst_1.mapped_ports[0].public_path}    ${public_path_1}
+    \   Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
     \   Length Should Be   ${appInst_1.mapped_ports}  1
 
 AppInst - user shall be able to allocate port http:22
@@ -494,7 +501,7 @@ AppInst - user shall be able to allocate port http:22
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  22
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[0].public_path}    ${public_path}
+    Should Be Equal              ${appInst.mapped_ports[0].path_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -513,7 +520,7 @@ AppInst - user shall be able to allocate port http:18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[0].public_path}    ${public_path}
+    Should Be Equal              ${appInst.mapped_ports[0].path_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
@@ -532,7 +539,7 @@ AppInst - user shall be able to allocate port http:18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    443
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst.mapped_ports[0].public_path}    ${public_path}
+    Should Be Equal              ${appInst.mapped_ports[0].path_prefix}    ${public_path}
 
     Length Should Be   ${appInst.mapped_ports}  1
 
