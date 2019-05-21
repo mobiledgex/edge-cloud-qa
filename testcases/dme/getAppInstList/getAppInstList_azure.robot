@@ -35,8 +35,8 @@ GetAppInstList - request shall return azure app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].Distance}  1  
 
-      Should Be Equal             ${appfqdns[0].CarrierName}                             ${azure_appinst.key.cloudlet_key.operator_key.name}
-      Should Be Equal             ${appfqdns[0].CloudletName}                            ${azure_appinst.key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].CarrierName}                             ${azure_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].CloudletName}                            ${azure_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].GpsLocation.latitude}                    ${azure_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].GpsLocation.longitude}                   ${azure_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
