@@ -60,7 +60,6 @@ Setup
     Create Developer  developer_name=${developer_name_1}          
     Create Developer  developer_name=${developer_name_2}  
     Create Flavor
-    Create Cluster Flavor
     Create App			developer_name=${developer_name_1}  access_ports=tcp:1
     Create App                  developer_name=${developer_name_2}  access_ports=tcp:1
 

@@ -44,7 +44,6 @@ AppInst - autocluster shall be created when app instance is created with cluster
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
     Create App			access_ports=tcp:1
 
 Teardown
