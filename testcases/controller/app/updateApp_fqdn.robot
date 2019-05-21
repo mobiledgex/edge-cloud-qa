@@ -82,5 +82,4 @@ AppInst - User shall be able to update the app accessports afer appInst delete
 Setup
     #Create Developer            
     Create Flavor
-    Create Cluster Flavor
 
