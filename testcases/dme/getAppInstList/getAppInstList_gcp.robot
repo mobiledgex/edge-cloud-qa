@@ -35,8 +35,8 @@ GetAppInstList - request shall return GCP app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].Distance}  1  
 
-      Should Be Equal             ${appfqdns[0].CarrierName}                             ${gcp_appinst.key.cloudlet_key.operator_key.name}
-      Should Be Equal             ${appfqdns[0].CloudletName}                            ${gcp_appinst.key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].CarrierName}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].CloudletName}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].GpsLocation.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].GpsLocation.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
