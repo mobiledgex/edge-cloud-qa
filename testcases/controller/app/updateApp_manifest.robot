@@ -36,7 +36,6 @@ UpdateApp - user shall be able to update the manifest
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster Flavor
 
     Create Session      manifest_server         http://35.199.188.102
     ${tcp_yml}          Get Request             manifest_server      apps/iperfapp.yml  

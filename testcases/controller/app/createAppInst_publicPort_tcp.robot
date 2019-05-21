@@ -682,7 +682,6 @@ AppInst - user shall not be able to allocate public port tcp:18888
 Setup
     Create Developer
     Create Flavor
-    Create Cluster Flavor   
     Create Cluster  
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
