@@ -122,7 +122,6 @@ node('jenkinsSlave1'){
        }
        error('Aborting the build')
     }
-    error('andy quit')
 
     try {
        stage('deploy processes in k8s') {
