@@ -153,6 +153,32 @@ class tc(unittest.TestCase):
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
+    def test_CreateClusterInstNoDeveloper(self):
+        # [Documentation] ClusterInst - User shall not be able to create a cluster instance with no developer
+        # ... create clusterinst with no developer
+        # ... verify error is received
+
+        # print the existing cluster instances
+        clusterinst_pre = self.controller.show_cluster_instances()
+
+        # create the cluster instance with no develeper 
+        self.cluster_instance = mex_controller.ClusterInstance(cluster_name='mycluster',
+                                                             cloudlet_name='tmocloud-1',
+                                                             operator_name='dmuus',
+                                                             flavor_name='flavor_name',
+                                                             use_defaults=False)
+        try:
+            resp = self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
+        except Exception as e:
+            print('got exception', e)
+
+        # print the cluster instances after error
+        clusterinst_post = self.controller.show_cluster_instances()
+
+        expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(self.controller.response.details(), 'Developer cannot be empty', 'error details')
+        assert_expectations()
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
     sys.exit(not unittest.TextTestRunner().run(suite).wasSuccessful())

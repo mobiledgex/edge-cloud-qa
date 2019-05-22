@@ -20,16 +20,45 @@ AppInst - autocluster shall be created when app instance is created with cluster
     ...  delete the app instance
     ...  verify autocluster is deleted from cluster instance table
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${epoch_time}=  Get Time  epoch
+
+    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     Show Cluster Instances
-    ${clusterInst}=  Show Cluster Instances  cluster_name=autocluster  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}	
-    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                autocluster	
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}	
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}	
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}	
+    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+
+    Length Should Be   ${clusterInst}  1
+
+AppInst - autocluster shall be created when app instance is created with clustername='autocluster' and no developer
+    [Documentation]
+    ...  create an app instance with cluster name of 'autocluster' and no developer
+    ...  verify autocluster is created in cluster instance table
+    ...  delete the app instance
+    ...  verify autocluster is deleted from cluster instance table
+
+    ${epoch_time}=  Get Time  epoch
+
+    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+
+    Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
+
+    Show Cluster Instances
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+
+    Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
+    Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
     Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
@@ -40,9 +69,13 @@ Setup
     Create Flavor
     Create App			access_ports=tcp:1
 
+    ${app_name_default}=  Get Default App Name
+    ${app_version_default}=  Get Default App Version
     ${developer_name_default}=  Get Default Developer Name
     ${flavor_name_default}=  Get Default Flavor Name
-   
+  
+    Set Suite Variable  ${app_name_default}
+    Set Suite Variable  ${app_version_default}
     Set Suite Variable  ${developer_name_default}
     Set Suite Variable  ${flavor_name_default}
 

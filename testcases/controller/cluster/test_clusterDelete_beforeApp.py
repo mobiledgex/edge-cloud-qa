@@ -48,13 +48,11 @@ class tc(unittest.TestCase):
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
         self.flavor = mex_controller.Flavor(flavor_name=flavor, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor, node_flavor_name=flavor, master_flavor_name=flavor, number_nodes=1, max_nodes=1, number_masters=1)
         self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
                                               default_flavor_name=flavor)
 
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
 
     def test_DeleteClusterBeforeApp(self):
         # [Documentation] Cluster - User shall be able to delete cluster before the app
@@ -108,7 +106,6 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':

@@ -340,6 +340,7 @@ class ClusterInstance():
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
             if operator_name is None: self.operator_name = shared_variables.operator_name_default
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
+            if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
             if number_masters is None: self.number_masters = 1
             if number_nodes is None: self.number_nodes = 1
@@ -823,6 +824,7 @@ class AppInstance():
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
             if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cluster_instance_developer_name: self.cluster_developer_name = shared_variables.developer_name_default
             if not app_version: self.app_version = shared_variables.app_version_default
             if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_name: self.operator_name = shared_variables.operator_name_default
@@ -858,6 +860,8 @@ class AppInstance():
             clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
         if cluster_key_dict:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
+        if self.cluster_developer_name is not None:
+            clusterinst_key_dict['developer'] = self.cluster_developer_name
         if self.latitude is not None:
             loc_dict['latitude'] = float(self.latitude)
         if self.longitude is not None:
