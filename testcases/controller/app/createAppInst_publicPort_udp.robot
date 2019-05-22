@@ -526,7 +526,7 @@ AppInst - user shall be able to allocate public port udp:18889
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-AppInst - user shall not be able to allocate public port udp:18888
+AppInst - user shall be able to allocate public port udp:18888
     [Documentation]
     ...  create an app with udp:18888
     ...  create an app instance

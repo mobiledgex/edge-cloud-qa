@@ -43,7 +43,6 @@ class tc(unittest.TestCase):
 
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
                                          default_flavor_name=flavor_name)
         self.cluster_instance_flavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
@@ -60,7 +59,6 @@ class tc(unittest.TestCase):
 
         #self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
         self.controller.create_cluster(self.cluster.cluster)
 
@@ -150,7 +148,6 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
