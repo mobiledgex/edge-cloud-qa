@@ -38,7 +38,6 @@ class tc(unittest.TestCase):
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.controller = mex_controller.MexController(controller_address = controller_address,
                                                     root_cert = mex_root_cert,
                                                     key = mex_key,
@@ -53,7 +52,6 @@ class tc(unittest.TestCase):
                                                              flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
         #self.controller.create_operator(self.operator.operator)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
@@ -86,7 +84,6 @@ class tc(unittest.TestCase):
     def tearDown(self):
         self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
         self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
