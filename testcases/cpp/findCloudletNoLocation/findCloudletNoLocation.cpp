@@ -483,7 +483,6 @@ int main() {
                 cout << ", AppPort: Protocol: " << findCloudletReply.ports().Get(i).proto()
                      << ", AppPort: Internal Port: " << findCloudletReply.ports().Get(i).internal_port()
                      << ", AppPort: Public Port: " << findCloudletReply.ports().Get(i).public_port()
-                     << ", AppPort: Public Path: " << findCloudletReply.ports().Get(i).public_path()
                      << endl;
 	      }
 	      cout << endl;	    	    
