@@ -41,7 +41,6 @@ class tc(unittest.TestCase):
       
         self.operator = mex_controller.Operator(operator_name = operator_name)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster_flavor = mex_controller.ClusterFlavor(cluster_flavor_name=flavor_name, node_flavor_name=flavor_name, master_flavor_name=flavor_name, number_nodes=1, max_nodes=1, number_masters=1)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -49,7 +48,6 @@ class tc(unittest.TestCase):
                                               default_flavor_name='dummyflavor')
         self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_cluster_flavor(self.cluster_flavor.cluster_flavor)
  
     def test_CreateClusterFlavorNotFound(self):
         # [Documentation] Cluster - User shall not be able to create a cluster with a defaultflavor that does not exist
@@ -68,7 +66,6 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     def tearDown(self):
-        self.controller.delete_cluster_flavor(self.cluster_flavor.cluster_flavor)
         self.controller.delete_flavor(self.flavor.flavor)
         self.controller.delete_operator(self.operator.operator)
 
