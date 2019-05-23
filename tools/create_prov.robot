@@ -18,12 +18,12 @@ Create Flavor
    Create Flavor  flavor_name=x1.medium  ram=4096  vcpus=4  disk=4
    Create Flavor  flavor_name=automation_api_flavor  ram=4096  vcpus=4  disk=4
 
-Create Cluster Flavor
-   Create Cluster Flavor  cluster_flavor_name=x1.medium  node_flavor_name=x1.medium  master_flavor_name=x1.medium  number_nodes=3  max_nodes=4  number_masters=1
-   Create Cluster Flavor  cluster_flavor_name=automation_api_cluster_flavor  node_flavor_name=automation_api_flavor  master_flavor_name=automation_api_flavor  number_nodes=1  max_nodes=1  number_masters=1
+#Create Cluster Flavor
+#   Create Cluster Flavor  cluster_flavor_name=x1.medium  node_flavor_name=x1.medium  master_flavor_name=x1.medium  number_nodes=3  max_nodes=4  number_masters=1
+#   Create Cluster Flavor  cluster_flavor_name=automation_api_cluster_flavor  node_flavor_name=automation_api_flavor  master_flavor_name=automation_api_flavor  number_nodes=1  max_nodes=1  number_masters=1
 
 Create Cluster
-   Create Cluster  cluster_name=automationapicluster  default_flavor_name=automation_api_cluster_flavor
+   Create Cluster  cluster_name=automationapicluster  default_flavor_name=automation_api_flavor
 	
 Create Cloudlet
    Create Cloudlet  cloudlet_name=tmocloud-1  operator_name=tmus  number_of_dynamic_ips=254  latitude=31  longitude=-91  ipsupport=IpSupportDynamic
