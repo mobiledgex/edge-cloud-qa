@@ -88,6 +88,5 @@ Setup
 	Create Developer            
 	Create Flavor
 	Create Cloudlet		operator_name=${oper}       cloudlet_name=${cldlet}  
-	Create Cluster Flavor
 	Create Cluster
 

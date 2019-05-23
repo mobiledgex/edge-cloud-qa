@@ -14,6 +14,10 @@ spec:
       labels:
         app: mc
     spec:
+       hostAliases:
+        - ip: "35.202.131.16"
+          hostnames:
+          - "automation.ctrl.mobiledgex.net"
        containers:
        - name: mc
          image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
@@ -35,7 +39,7 @@ spec:
           - "--tlskey"
           - "/root/tls/mex-server.key"
           - "--clientCert"
-          - "/root/tls/mex-client.crt"
+          - "/root/tls/mex-server.crt"
           - "-d"
           - "etcd,api,notify"
          env:
