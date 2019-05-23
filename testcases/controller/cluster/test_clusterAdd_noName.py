@@ -54,7 +54,6 @@ class tc(unittest.TestCase):
 
         self.cluster_stub = cluster_pb2_grpc.ClusterApiStub(controller_channel)
         self.flavor_stub = flavor_pb2_grpc.FlavorApiStub(controller_channel)
-        self.cluster_flavor_stub = clusterflavor_pb2_grpc.ClusterFlavorApiStub(controller_channel)
 
         self.stamp = str(time.time())
         self.flavor_name = 'flavor' + self.stamp
@@ -65,19 +64,8 @@ class tc(unittest.TestCase):
                                         disk=1)
         self.flavor_stub.CreateFlavor(self.flavor)
 
-        self.cluster_flavor = clusterflavor_pb2.ClusterFlavor(
-                                                              key=clusterflavor_pb2.ClusterFlavorKey(name=self.flavor_name),
-                                                              node_flavor=flavor_pb2.FlavorKey(name=self.flavor_name),
-                                                              master_flavor=flavor_pb2.FlavorKey(name=self.flavor_name),
-                                                              num_nodes=int(1),
-                                                              max_nodes=int(1),
-                                                              num_masters=int(1)
-                                                             )
-
-        self.cluster_flavor_stub.CreateClusterFlavor(self.cluster_flavor)
-
         self.cluster = cluster_pb2.Cluster(
-                                           default_flavor = clusterflavor_pb2.ClusterFlavorKey(name = self.flavor_name)
+                                           default_flavor = flavor_pb2.FlavorKey(name = self.flavor_name)
                                           )
 
     def test_AddClusterWithNoName(self):
@@ -146,7 +134,6 @@ class tc(unittest.TestCase):
         raise Error('cant find file {}'.format(path))
 
     def tearDown(self):
-        self.cluster_flavor_stub.DeleteClusterFlavor(self.cluster_flavor)
         self.flavor_stub.DeleteFlavor(self.flavor)
 
 if __name__ == '__main__':
