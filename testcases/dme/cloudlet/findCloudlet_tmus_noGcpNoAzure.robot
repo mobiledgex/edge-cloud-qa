@@ -36,24 +36,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_1.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_1.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_1.mapped_ports[2].fqdn_prefix}
 
 FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same coord as tmocloud-2
     [Documentation]
@@ -64,24 +64,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_2.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_2.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_2.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_2.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_2.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_2.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_2.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_2.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_2.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_2.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_2.mapped_ports[2].fqdn_prefix}
 
 FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord closer to tmocloud-1
     [Documentation]
@@ -92,24 +92,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_1.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_1.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_1.mapped_ports[2].fqdn_prefix}
 
 FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord closer to tmocloud-2
     [Documentation]
@@ -120,24 +120,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_2.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_2.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_2.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_2.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_2.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_2.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_2.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_2.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_2.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_2.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_2.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_2.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_2.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_2.mapped_ports[2].fqdn_prefix}
 
 FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord of max distance 
     [Documentation]
@@ -154,24 +154,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
   
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_1.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_1.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_1.mapped_ports[2].fqdn_prefix}
 
 FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord of min distance
     [Documentation]
@@ -182,24 +182,24 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${appinst_1.uri}
+      Should Be Equal             ${cloudlet.fqdn}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${appinst_1.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${appinst_1.mapped_ports[0].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1.mapped_ports[1].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1.mapped_ports[1].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1.mapped_ports[1].public_port}
-      Should Be Equal             ${cloudlet.ports[1].FQDN_prefix}    ${appinst_1.mapped_ports[1].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_1.mapped_ports[1].fqdn_prefix}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1.mapped_ports[2].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1.mapped_ports[2].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[2].public_port}    ${appinst_1.mapped_ports[2].public_port}
-      Should Be Equal             ${cloudlet.ports[2].FQDN_prefix}    ${appinst_1.mapped_ports[2].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[2].fqdn_prefix}    ${appinst_1.mapped_ports[2].fqdn_prefix}
 
 *** Keywords ***
 Setup
