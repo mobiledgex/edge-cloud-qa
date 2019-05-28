@@ -102,14 +102,14 @@ FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned an
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}                         ${dmuus_appinst.uri}
+      Should Be Equal             ${cloudlet.fqdn}                         ${dmuus_appinst.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${dmuus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${dmuus_cloudlet_longitude}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${dmuus_appinst.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${dmuus_appinst.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${dmuus_appinst.mapped_ports[0].public_port}
-      Should Be Equal             ${cloudlet.ports[0].FQDN_prefix}    ${dmuus_appinst.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${dmuus_appinst.mapped_ports[0].fqdn_prefix}
 
 *** Keywords ***
 Setup
