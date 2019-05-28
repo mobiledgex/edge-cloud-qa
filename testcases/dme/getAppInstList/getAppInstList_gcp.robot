@@ -30,27 +30,27 @@ GetAppInstList - request shall return GCP app
       ${appfqdns}=  Get App Instance List  latitude=${mobile_latitude}  longitude=${mobile_longitude}
 
       @{origin}=  Create List  ${mobile_latitude}  ${mobile_longitude}
-      @{dest}=    Create List  ${appfqdns[0].GpsLocation.latitude}  ${appfqdns[0].GpsLocation.longitude}
+      @{dest}=    Create List  ${appfqdns[0].gps_location.latitude}  ${appfqdns[0].gps_location.longitude}
       ${distance}=  Calculate Distance  ${origin}  ${dest} 
       ${distance_round}=  Convert To Number  ${distance}  1
-      ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].Distance}  1  
+      ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
 
-      Should Be Equal             ${appfqdns[0].CarrierName}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
-      Should Be Equal             ${appfqdns[0].CloudletName}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[0].GpsLocation.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[0].GpsLocation.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].AppName}                 ${gcp_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].AppVers}                 ${gcp_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].FQDN}                    ${gcp_appinst.uri}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].ports[0].proto}          ${gcp_appinst.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].ports[0].internal_port}  ${gcp_appinst.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].ports[0].public_port}    ${gcp_appinst.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].ports[0].FQDN_prefix}    ${gcp_appinst.mapped_ports[0].FQDN_prefix}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${gcp_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${gcp_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${gcp_appinst.uri}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${gcp_appinst.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${gcp_appinst.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${gcp_appinst.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${gcp_appinst.mapped_ports[0].fqdn_prefix}
 
       Length Should Be   ${appfqdns}  1
-      Length Should Be   ${appfqdns[0].Appinstances}  1
-      Length Should Be   ${appfqdns[0].Appinstances[0].ports}  1
+      Length Should Be   ${appfqdns[0].appinstances}  1
+      Length Should Be   ${appfqdns[0].appinstances[0].ports}  1
 
 *** Keywords ***
 Setup
