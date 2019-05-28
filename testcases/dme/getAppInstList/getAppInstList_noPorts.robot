@@ -25,23 +25,23 @@ GetAppInstList - request shall return app with no ports
       ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}
 
       @{origin}=  Create List  ${mobile_latitude}  ${mobile_longitude}
-      @{dest}=    Create List  ${appfqdns[0].GpsLocation.latitude}  ${appfqdns[0].GpsLocation.longitude}
+      @{dest}=    Create List  ${appfqdns[0].gps_location.latitude}  ${appfqdns[0].gps_location.longitude}
       ${distance}=  Calculate Distance  ${origin}  ${dest} 
       ${distance_round}=  Convert To Number  ${distance}  1
-      ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].Distance}  1  
+      ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
 
-      Should Be Equal             ${appfqdns[0].CarrierName}                             ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
-      Should Be Equal             ${appfqdns[0].CloudletName}                            ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[0].GpsLocation.latitude}                    ${dmuus_appinst.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[0].GpsLocation.longitude}                   ${dmuus_appinst.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${dmuus_appinst.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${dmuus_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].AppName}                 ${dmuus_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].AppVers}                 ${dmuus_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].Appinstances[0].FQDN}                    ${dmuus_appinst.uri}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${dmuus_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${dmuus_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${dmuus_appinst.uri}
 
       Length Should Be   ${appfqdns}  1
-      Length Should Be   ${appfqdns[0].Appinstances}  1
-      Length Should Be   ${appfqdns[0].Appinstances[0].ports}  0
+      Length Should Be   ${appfqdns[0].appinstances}  1
+      Length Should Be   ${appfqdns[0].appinstances[0].ports}  0
 
 *** Keywords ***
 Setup
