@@ -20,8 +20,8 @@ GetLocation - request should return LOC_FOUND
       Register Client
       ${verify_reply}=  Get Location  carrier_name=${operator_name}
 
-      Should Be Equal As Numbers  ${verify_reply.Status}  1  #LOC_FOUND
-      Should Be Equal  ${verify_reply.CarrierName}  ${operator_name}
+      Should Be Equal As Numbers  ${verify_reply.status}  1  #LOC_FOUND
+      Should Be Equal  ${verify_reply.carrier_name}  ${operator_name}
 
 *** Keywords ***
 Setup
