@@ -45,13 +45,13 @@ class Client():
         #if auth_token == 'default':
         #    self.auth_token = 
         if self.dev_name is not None:
-            client_dict['DevName'] = self.dev_name
+            client_dict['dev_name'] = self.dev_name
         if self.app_name is not None:
-            client_dict['AppName'] = self.app_name
+            client_dict['app_name'] = self.app_name
         if self.app_vers is not None:
-            client_dict['AppVers'] = self.app_vers
+            client_dict['app_vers'] = self.app_vers
         if self.auth_token is not None:
-            client_dict['AuthToken'] = self.auth_token
+            client_dict['auth_token'] = self.auth_token
             
         self.client = app_client_pb2.RegisterClientRequest(**client_dict)
 
@@ -80,18 +80,18 @@ class FindCloudletRequest():
             loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name
+            request_dict['carrier_name'] = self.carrier_name
         if self.app_name is not None:
-            request_dict['AppName'] = self.app_name
+            request_dict['app_name'] = self.app_name
         if self.app_version is not None:
-            request_dict['AppVers'] = self.app_version
+            request_dict['app_vers'] = self.app_version
         if self.developer_name is not None:
-            request_dict['DevName'] = self.developer_name
+            request_dict['dev_name'] = self.developer_name
 
         if loc_dict:
-            request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
 
         #print(loc_dict)
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
@@ -109,7 +109,7 @@ class GetFqdnList():
             if not session_cookie: self.session_cookie = session_cookie_global
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
 
         self.request = app_client_pb2.FqdnListRequest(**request_dict)
 
@@ -135,11 +135,11 @@ class GetAppInstList():
             loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie    
+            request_dict['session_cookie'] = self.session_cookie    
         if loc_dict:
-            request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name    
+            request_dict['carrier_name'] = self.carrier_name    
         
         print('dict', request_dict)
         self.request = app_client_pb2.AppInstListRequest(**request_dict)
@@ -170,13 +170,13 @@ class VerifyLocation():
             loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name    
+            request_dict['carrier_name'] = self.carrier_name    
         if loc_dict:
-            request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
         if self.token is not None:
-            request_dict['VerifyLocToken'] = self.token
+            request_dict['verify_loc_token'] = self.token
 
         print(request_dict)
         self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
@@ -194,9 +194,9 @@ class GetLocation():
             if not session_cookie: self.session_cookie = session_cookie_global
  
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name    
+            request_dict['carrier_name'] = self.carrier_name    
 
         print(request_dict)
         self.request = app_client_pb2.GetLocationRequest(**request_dict)
@@ -216,7 +216,7 @@ class Dme(MexGrpc):
         
         super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
-        self.match_engine_stub = app_client_pb2_grpc.Match_Engine_ApiStub(self.grpc_channel)
+        self.match_engine_stub = app_client_pb2_grpc.MatchEngineApiStub(self.grpc_channel)
 
         self._init_globals()
 
@@ -250,12 +250,12 @@ class Dme(MexGrpc):
             request = Client(**kwargs).client
 
         logger.info('register client on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
-                    
+
         resp = self.match_engine_stub.RegisterClient(request)
-        self.session_cookie = resp.SessionCookie
-        session_cookie_global = resp.SessionCookie
-        token_server_uri_global = resp.TokenServerURI
-        self._token_server_uri = resp.TokenServerURI
+        self.session_cookie = resp.session_cookie
+        session_cookie_global = resp.session_cookie
+        token_server_uri_global = resp.token_server_uri
+        self._token_server_uri = resp.token_server_uri
         logger.debug('session_cookie=' + self.session_cookie)
         logger.debug('token server uri=' + self._token_server_uri)
 
@@ -292,7 +292,7 @@ class Dme(MexGrpc):
                     
         resp = self.match_engine_stub.GetFqdnList(request)
 
-        if resp.Status != 1: # FL_SUCCESS
+        if resp.status != 1: # FL_SUCCESS
             raise Exception('get fqdn list failed:{}'.format(str(resp)))
 
         resp = sorted(resp.AppFqdns, key=lambda x: x.FQDNs[0]) # sorting since need to check for may apps. this return the sorted list instead of the response itself
@@ -310,10 +310,10 @@ class Dme(MexGrpc):
 
         resp = self.match_engine_stub.GetAppInstList(request)
 
-        if resp.Status != 1: # AI_SUCCESS
+        if resp.status != 1: # AI_SUCCESS
             raise Exception('get app inst list failed:{}'.format(str(resp)))
 
-        resp = sorted(resp.Cloudlets, key=lambda x: x.CloudletName) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+        resp = sorted(resp.cloudlets, key=lambda x: x.cloudlet_name) # sorting since need to check for may apps. this return the sorted list instead of the response itself
         print(resp)
 
         return resp
