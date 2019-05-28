@@ -44,22 +44,22 @@ node('jenkinsSlave1'){
                 userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
         }
-        dir('go/src/github.com/mobiledgex/edge-cloud') {
-            checkout([$class: 'GitSCM',
-                branches: [[name: 'master']],
-                doGenerateSubmoduleConfigurations: false,
-                extensions: [
-                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-                        [$class:'SparseCheckoutPath', path:'edgeproto/*'],
-                        [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
-                        [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
-                        [$class:'SparseCheckoutPath', path:'protogen/*']
-                    ]]
-                ],
-                submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                url: 'https://github.com/mobiledgex/edge-cloud.git']]])
-        }
+//        dir('go/src/github.com/mobiledgex/edge-cloud') {
+//            checkout([$class: 'GitSCM',
+//                branches: [[name: 'master']],
+//                doGenerateSubmoduleConfigurations: false,
+//                extensions: [
+//                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+//                        [$class:'SparseCheckoutPath', path:'edgeproto/*'],
+//                        [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
+//                        [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
+//                        [$class:'SparseCheckoutPath', path:'protogen/*']
+//                    ]]
+//                ],
+//                submoduleCfg: [],
+//                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+//                url: 'https://github.com/mobiledgex/edge-cloud.git']]])
+//        }
 
     }
     //stage('start environment') {
