@@ -122,7 +122,7 @@ Find Cloudlet for dmuus closest to latitude ${lat} longitude ${long} should retu
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.FQDN}  ${expected_cloudlet}
+      Should Be Equal             ${cloudlet.fqdn}  ${expected_cloudlet}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}  ${expected_lat}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${expected_long}
 
