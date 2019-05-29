@@ -32,7 +32,7 @@ Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 #Variables       shared_variables.py
 	
 Suite Setup	Setup
-#Suite Teardown	Cleanup provisioning
+Suite Teardown	Cleanup provisioning
 
 *** Variables ***
 ${azure_operator_name}  azure
