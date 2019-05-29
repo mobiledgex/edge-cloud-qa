@@ -29,7 +29,6 @@ Documentation   findCloudlet Samsung - with tmus and azure. tmus farther but gre
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-#Variables       shared_variables.py
 	
 Suite Setup	Setup
 Suite Teardown	Cleanup provisioning
