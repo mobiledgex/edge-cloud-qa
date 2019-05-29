@@ -25,10 +25,10 @@ GetFqdnList - request shall return 1 app
       Register Client	developer_name=${platos_developer_name}  app_name=${platos_app_name}
       ${appfqdns}=  Get Fqdn List
 
-      Should Be Equal             ${appfqdns[0].AppName}  ${dmuus_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].AppVers}  ${dmuus_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].DevName}  ${dmuus_appinst.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[0].FQDNs[0]}     ${dmuus_appinst.uri}
+      Should Be Equal             ${appfqdns[0].app_name}  ${dmuus_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].app_vers}  ${dmuus_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].dev_name}  ${dmuus_appinst.key.app_key.developer_key.name}
+      Should Be Equal             ${appfqdns[0].fqdns[0]}     ${dmuus_appinst.uri}
 
       Length Should Be   ${appfqdns}  1
 
