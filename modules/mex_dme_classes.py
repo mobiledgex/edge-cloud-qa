@@ -30,13 +30,13 @@ class RegisterClientObject():
         #if auth_token == 'default':
         #    self.auth_token = 
         if self.dev_name is not None:
-            client_dict['DevName'] = self.dev_name
+            client_dict['dev_name'] = self.dev_name
         if self.app_name is not None:
-            client_dict['AppName'] = self.app_name
+            client_dict['app_name'] = self.app_name
         if self.app_vers is not None:
-            client_dict['AppVers'] = self.app_vers
+            client_dict['app_vers'] = self.app_vers
         if self.auth_token is not None:
-            client_dict['AuthToken'] = self.auth_token
+            client_dict['auth_token'] = self.auth_token
 
         self.request = app_client_pb2.RegisterClientRequest(**client_dict)
 
@@ -79,18 +79,18 @@ class FindCloudletRequestObject():
             loc_dict['timestamp'] = loc_pb2.Timestamp(**time_dict)
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name
+            request_dict['carrier_name'] = self.carrier_name
         if self.app_name is not None:
-            request_dict['AppName'] = self.app_name
+            request_dict['app_name'] = self.app_name
         if self.app_version is not None:
-            request_dict['AppVers'] = self.app_version
+            request_dict['appVers'] = self.app_version
         if self.developer_name is not None:
-            request_dict['DevName'] = self.developer_name
+            request_dict['dev_name'] = self.developer_name
 
         if loc_dict:
-            request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
 
         #self.request_dict = request_dict
         #self.request_dict_string = str(request_dict).replace('\n', ',')
@@ -123,13 +123,13 @@ class VerifyLocationRequestObject():
             loc_dict['longitude'] = float(self.longitude)
 
         if self.session_cookie is not None:
-            request_dict['SessionCookie'] = self.session_cookie
+            request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
-            request_dict['CarrierName'] = self.carrier_name    
+            request_dict['carrier_name'] = self.carrier_name    
         if loc_dict:
-            request_dict['GpsLocation'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
         if self.token is not None:
-            request_dict['VerifyLocToken'] = self.token
+            request_dict['verify_locToken'] = self.token
 
         print(request_dict)
         self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
