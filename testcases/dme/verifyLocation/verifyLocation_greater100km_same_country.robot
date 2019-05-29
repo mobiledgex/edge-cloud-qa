@@ -30,7 +30,7 @@ VerifyLocation - request with coord barely > 100km and still within country shal
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=53.42  longitude=${berlin_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  2  #LOC_MISMATCH_SAME_COUNTRY
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 VerifyLocation - request with coord > 100km and within same country shall return LOC_MISMATCH_SAME_COUNTRY
     [Documentation]
@@ -44,7 +44,7 @@ VerifyLocation - request with coord > 100km and within same country shall return
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=50.73438  longitude=7.09549
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  2  #LOC_MISMATCH_SAME_COUNTRY
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 *** Keywords ***
 Setup
