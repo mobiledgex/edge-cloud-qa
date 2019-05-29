@@ -36,7 +36,7 @@ VerifyLocation - request claiming to be home but actually in neighboring country
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=${beacon_lat}  longitude=${beacon_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  3  #LOC_MISMATCH_OTHER_COUNTRY
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 VerifyLocation - request claiming to be home but actually overseas shall return LOC_MISMATCH_OTHER_COUNTRY
     [Documentation]
@@ -52,7 +52,7 @@ VerifyLocation - request claiming to be home but actually overseas shall return 
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=${beacon_lat}  longitude=${beacon_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  3  #LOC_MISMATCH_OTHER_COUNTRY
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 *** Keywords ***
 Setup
