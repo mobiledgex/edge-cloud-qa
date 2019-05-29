@@ -26,7 +26,7 @@ VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
       ${verify_reply}=  Verify Location  token=xx  carrier_name=GDDT  latitude=${beacon_lat}  longitude=${beacon_long}
       log to console  ${verify_reply}
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  6  #LOC_ERROR_UNAUTHORIZED
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 VerifyLocation - request with empty token shall return 'verifyloc token required'
     [Documentation]

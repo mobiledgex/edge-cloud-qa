@@ -36,7 +36,7 @@ VerifyLocation - request claiming to be in neighboring country and actually ther
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=${warsaw_lat}  longitude=${warsaw_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  4  #LOC_ROAMING_COUNTRY_MISMATCH
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 VerifyLocation - request claiming to be overseas and actually there shall return LOC_ROAMING_COUNTRY_MATCH
     [Documentation]
@@ -52,7 +52,7 @@ VerifyLocation - request claiming to be overseas and actually there shall return
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=${allen_lat}  longitude=${allen_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  4  #LOC_ROAMING_COUNTRY_MATCH
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  -1
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
 
 *** Keywords ***
 Setup
