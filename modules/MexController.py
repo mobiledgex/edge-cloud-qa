@@ -344,7 +344,21 @@ class ClusterInstance():
             if liveness is None: self.liveness = 1
             if number_masters is None: self.number_masters = 1
             if number_nodes is None: self.number_nodes = 1
-            
+
+        if self.liveness == 'LivenessStatic':
+            self.liveness = 1
+        elif self.liveness == 'LivenessDynamic':
+            self.liveness = 2
+
+        if self.ip_access == 'IpAccessUnknown':
+            self.ip_access = 0
+        elif self.ip_access == 'IpAccessDedicated':
+            self.ip_access = 1
+        elif self.ip_access == 'IpAccessDedicatedOrShared':
+            self.ip_access = 2
+        elif self.ip_access == 'IpAccessShared':
+            self.ip_access = 3
+
         clusterinst_dict = {}
         clusterinst_key_dict = {}
         operator_dict = {}
