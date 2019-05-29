@@ -112,6 +112,7 @@ node('jenkinsSlave1'){
   	  dir('go/src/github.com/mobiledgex/edge-cloud') {
              def t = 'git reset --hard ' + commit_version
              def tout  = sh(script: t, returnStdout: true);
+	     stash name:'edge-cloud_stash', includes:'edge-cloud/**'
           }
        }
     }  catch (e) {
