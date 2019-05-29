@@ -29,7 +29,6 @@ Documentation   findCloudlet platos - with dmuus and azure. dmuus farther but gr
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-#Variables       shared_variables.py
 	
 Suite Setup	Setup
 Suite Teardown	Cleanup provisioning
