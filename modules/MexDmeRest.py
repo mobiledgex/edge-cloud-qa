@@ -103,12 +103,12 @@ class MexDmeRest(MexRest):
             #global token_server_uri_global
 
             logger.debug(self.decoded_data)
-            shared_variables.session_cookie_default = self.decoded_data['SessionCookie']
+            shared_variables.session_cookie_default = self.decoded_data['session_cookie']
 
-            self._decoded_session_cookie = jwt.decode(self.decoded_data['SessionCookie'], verify=False)
-            self._token_server_uri = self.decoded_data['TokenServerURI']
+            self._decoded_session_cookie = jwt.decode(self.decoded_data['session_cookie'], verify=False)
+            self._token_server_uri = self.decoded_data['token_server_uri']
             
-            shared_variables.token_server_uri_default = self.decoded_data['TokenServerURI']
+            shared_variables.token_server_uri_default = self.decoded_data['token_server_uri']
 
         if use_thread is True:
             t = threading.Thread(target=send_message)
@@ -225,8 +225,11 @@ class MexDmeRest(MexRest):
         return token
 
     def wait_for_replies(self, *args):
+        print('*WARN*', type(args))
         for x in args:
             if isinstance(x, list):
                 for x2 in x:
+                    print('*WARN*', 'list')
                     x.join()
+            #print('*WARN*', 'join again')
             x.join()
