@@ -30,7 +30,7 @@ VerifyLocation - request with coord barely > 10km and < 100km shall return LOC_V
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=52.61  longitude=${berlin_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  1  #LOC_VERIFIED
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  100.0
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  100.0
 
 VerifyLocation - request with coord > 10km and < 100km shall return LOC_VERIFIED of 100km
     [Documentation]
@@ -44,7 +44,7 @@ VerifyLocation - request with coord > 10km and < 100km shall return LOC_VERIFIED
       ${verify_reply}=  Verify Location  carrier_name=${operator_name}  latitude=53.41  longitude=${berlin_long}
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  1  #LOC_VERIFIED
-      Should Be Equal As Numbers  ${verify_reply.GPS_Location_Accuracy_KM}  100.0
+      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  100.0
 
 *** Keywords ***
 Setup
