@@ -279,8 +279,8 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     ${fqdn}=    Catenate  SEPARATOR=.  ${cloudlet_name}    ${operator_name}  mobiledgex.net
     ${fqdn_2}=  Catenate  SEPARATOR=.  ${cloudlet_name_2}  ${operator_name}  mobiledgex.net
     
-    Should Be Equal              ${cloudlet_1.FQDN}  ${fqdn}
-    Should Be Equal              ${cloudlet_2.FQDN}  ${fqdn_2}
+    Should Be Equal              ${cloudlet_1.fqdn}  ${fqdn}
+    Should Be Equal              ${cloudlet_2.fqdn}  ${fqdn_2}
 	
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1

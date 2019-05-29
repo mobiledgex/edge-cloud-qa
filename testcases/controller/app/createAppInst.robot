@@ -67,6 +67,7 @@ AppInst - autocluster shall be created when app instance is created with cluster
 Setup
     Create Developer            
     Create Flavor
+    #Create Cloudlet  cloudlet_name=tmocloud-10  operator_name=dmuus
     Create App			access_ports=tcp:1
 
     ${app_name_default}=  Get Default App Name

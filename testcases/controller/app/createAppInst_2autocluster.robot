@@ -20,8 +20,8 @@ AppInst - Shall be able to create to AppInsts with autocluster on the same app w
     ...  create an app instance with cluster name of 'autocluster' on each app
     ...  verify autocluster is created in cluster instance table with proper developer name
 
-    Create App Instance  developer_name=${developer_name_1}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    Create App Instance  developer_name=${developer_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance  developer_name=${developer_name_1}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_name=${developer_name_1}
+    Create App Instance  developer_name=${developer_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_name=${developer_name_2}
 
     #${cluster_flavor_name_default}=  Get Default Cluster Flavor Name
     #${app_name_default}=  Get Default App Name
