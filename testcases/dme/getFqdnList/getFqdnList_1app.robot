@@ -25,10 +25,10 @@ GetFqdnList - request shall return 1 app
       Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
       ${appfqdns}=  Get Fqdn List
 
-      Should Be Equal             ${appfqdns[0].AppName}  ${tmus_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].AppVers}  ${tmus_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].DevName}  ${tmus_appinst.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[0].FQDNs[0]}     ${tmus_appinst.uri}
+      Should Be Equal             ${appfqdns[0].app_name}  ${tmus_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].app_vers}  ${tmus_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].dev_name}  ${tmus_appinst.key.app_key.developer_key.name}
+      Should Be Equal             ${appfqdns[0].fqdns[0]}     ${tmus_appinst.uri}
 
       Length Should Be   ${appfqdns}  1
 
