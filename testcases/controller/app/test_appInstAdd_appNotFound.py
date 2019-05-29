@@ -164,6 +164,7 @@ class tc(unittest.TestCase):
         app_instance = mex_controller.AppInstance(developer_name='dev',
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
+                                                  cluster_instance_developer_name='dev',
                                                   operator_name=operator_name)
 
         resp = None
@@ -194,6 +195,7 @@ class tc(unittest.TestCase):
                                                   developer_name='dev',
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
+                                                  cluster_instance_developer_name='dev',
                                                   operator_name=operator_name)
 
         resp = None
