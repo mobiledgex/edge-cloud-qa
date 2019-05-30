@@ -51,12 +51,16 @@ class tc(unittest.TestCase):
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
+                                                                        developer_name='mydev',
+                                                                        number_masters=1,
+                                                                        number_nodes=1,
                                                                         use_defaults=False
                                                                        )
         # flavor_name is empty
         self.cluster_instance_emptyFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                            cloudlet_name=cloud_name,
                                                                            flavor_name='',
+                                                                           developer_name='mydev',
                                                                            operator_name=operator_name
                                                                           )
 

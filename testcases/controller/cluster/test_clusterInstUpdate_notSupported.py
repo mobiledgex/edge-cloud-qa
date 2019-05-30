@@ -43,7 +43,7 @@ class tc(unittest.TestCase):
                                                              flavor_name=flavor_name)
 
     def test_UpdateClusterInst(self):
-        # [Documentation] ClusterInst - User shall not be able to update a cluster instance
+        # [Documentation] ClusterInst - User shall not be able to update an unsupported field in cluster instance
         # ... send update cluster instance
         # ... verify error of unsupported is retruned
 
@@ -51,7 +51,7 @@ class tc(unittest.TestCase):
         resp = self.controller.update_cluster_instance(self.cluster_instance.cluster_instance)
 
         expect_equal(resp.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(resp.details(), 'Update cluster instance not supported yet', 'error details')
+        expect_equal(resp.details(), 'nothing specified to update', 'error details')
         assert_expectations()
 
 #    def tearDown(self):
