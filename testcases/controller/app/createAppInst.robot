@@ -97,6 +97,93 @@ AppInst - appinst shall be created when app instance is created without cluster 
 
     Length Should Be   ${clusterInst}  1
 
+AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicated
+    [Documentation]
+    ...  create an app instance with autocluster and autoclusteripaccess=IpAccessDedicated 
+    ...  verify appinst is created with autocluster with ipaccess=IpAccessDedicated
+
+    ${epoch_time}=  Get Time  epoch
+
+    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicated
+
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+
+    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+
+    Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
+    Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal As Integers  ${clusterInst[0].ip_access}                           1  # IpAccessDedicated
+    Should Be Equal              ${clusterInst[0].deployment}                          kubernetes 
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1 
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1 
+
+    Length Should Be   ${clusterInst}  1
+
+AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessShared
+    [Documentation]
+    ...  create an app instance with autocluster and autoclusteripaccess=IpAccessShared
+    ...  verify appinst is created with autocluster with ipaccess=IpAccessShared
+
+    ${epoch_time}=  Get Time  epoch
+
+    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessShared
+
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+
+    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+
+    Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
+    Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal As Integers  ${clusterInst[0].ip_access}                           3  # IpAccessShared
+    Should Be Equal              ${clusterInst[0].deployment}                          kubernetes
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
+
+    Length Should Be   ${clusterInst}  1
+
+AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicatedOrShared
+    [Documentation]
+    ...  create an app instance with autocluster and autoclusteripaccess=IpAccessDedicatedOrShared
+    ...  verify appinst is created with autocluster with ipaccess=IpAccessShared
+
+    ${epoch_time}=  Get Time  epoch
+
+    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
+
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicatedOrShared
+
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+
+    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+
+    Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
+    Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal As Integers  ${clusterInst[0].ip_access}                           3  # IpAccessShared
+    Should Be Equal              ${clusterInst[0].deployment}                          kubernetes
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
+    Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
+
+    Length Should Be   ${clusterInst}  1
+
 *** Keywords ***
 Setup
     Create Developer            
