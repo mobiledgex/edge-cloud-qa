@@ -311,7 +311,7 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -325,6 +325,7 @@ class ClusterInstance():
         self.developer_name = developer_name
         self.number_masters = number_masters
         self.number_nodes = number_nodes
+        self.deployment = deployment
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -401,6 +402,9 @@ class ClusterInstance():
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
 
+        if self.deployment is not None:
+            clusterinst_dict['deployment'] = self.deployment
+            
         print("ClusterInst Dict", clusterinst_dict)    
 
         self.cluster_instance = clusterinst_pb2.ClusterInst(**clusterinst_dict)
@@ -684,6 +688,8 @@ class App():
                 self.image_type = 1
         elif self.image_type == 'ImageTypeQCOW':
                 self.image_type = 2
+        elif self.image_type == 'ImageTypeUnknown':
+                self.image_type = 0
 
         #self.ip_access = 3 # default to shared
         #if ip_access == 'IpAccessDedicated':
@@ -807,7 +813,7 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, crm_override=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
@@ -821,6 +827,7 @@ class AppInstance():
         self.latitude = latitude
         self.longitude = longitude
         self.crm_override = crm_override
+        self.autocluster_ipaccess = autocluster_ip_access
         
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
@@ -846,6 +853,15 @@ class AppInstance():
         if self.cluster_name == 'default':
             self.cluster_name = shared_variables.cluster_name_default
 
+        if self.autocluster_ipaccess == 'IpAccessUnknown':
+            self.autocluster_ipaccess = 0
+        elif self.autocluster_ipaccess == 'IpAccessDedicated':
+            self.autocluster_ipaccess = 1
+        elif self.autocluster_ipaccess == 'IpAccessDedicatedOrShared':
+            self.autocluster_ipaccess = 2
+        elif self.autocluster_ipaccess == 'IpAccessShared':
+            self.autocluster_ipaccess = 3
+        print('*WARN*', self.autocluster_ipaccess)
         appinst_dict = {}
         appinst_key_dict = {}
         app_key_dict = {}
@@ -900,7 +916,8 @@ class AppInstance():
             appinst_dict['uri'] = self.uri
         if self.flavor_name is not None:
             appinst_dict['flavor'] = flavor_pb2.FlavorKey(name = self.flavor_name)
-
+        if self.autocluster_ipaccess is not None:
+            appinst_dict['auto_cluster_ip_access'] = self.autocluster_ipaccess 
 
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM

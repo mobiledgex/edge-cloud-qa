@@ -9,6 +9,8 @@ Test Teardown   Cleanup Provisioning
 ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
+# not supported anymore. we can now create it without a developer
+
 *** Test Cases ***
 AppInst - User shall not be able to create an AppInst with a developer mismatch with ClusterInst Developer
     [Documentation]
