@@ -73,7 +73,7 @@ class tc(unittest.TestCase):
         clusterinst_after_add = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CloudletStateNotPresent', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
 
         #expect_equal(len(clusterinst_after_add), len(clusterinst_before), 'count after add')
 

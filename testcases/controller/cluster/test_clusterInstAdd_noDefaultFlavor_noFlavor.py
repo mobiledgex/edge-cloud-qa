@@ -45,11 +45,15 @@ class tc(unittest.TestCase):
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
+                                                                        developer_name='mydev',
+                                                                        number_nodes=1,
+                                                                        number_masters=1,
                                                                         use_defaults=False
                                                                        )
         self.cluster_instance_emptyFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                            cloudlet_name=cloud_name,
                                                                            flavor_name='',
+                                                                           developer_name='mydev',
                                                                            operator_name=operator_name
                                                                           )
 
@@ -92,7 +96,7 @@ class tc(unittest.TestCase):
         expect_equal(found_cluster, False, 'no flavor found new cluster')
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
         # EDGECLOUD-171
-        expect_equal(self.controller.response.details(), 'No ClusterFlavor specified and no default ClusterFlavor for Cluster', 'error details')
+        expect_equal(self.controller.response.details(), 'No Flavor specified and no default Flavor for Cluster', 'error details')
 
         assert_expectations()
 
@@ -123,7 +127,7 @@ class tc(unittest.TestCase):
         expect_equal(found_cluster, False, 'empty flavor found new cluster')
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
         # EDGECLOUD-171
-        expect_equal(self.controller.response.details(), 'No ClusterFlavor specified and no default ClusterFlavor for Cluster', 'error details')
+        expect_equal(self.controller.response.details(), 'No Flavor specified and no default Flavor for Cluster', 'error details')
 
         assert_expectations()
 
