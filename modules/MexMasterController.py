@@ -16,10 +16,12 @@ timestamp = str(time.time())
 class MexMasterController(MexRest):
 
     def __init__(self, mc_address='127.0.0.1:9900', root_cert='mex-ca.crt'):
-        super().__init__(address=mc_address, root_cert=root_cert)
+        self.root_cert = self._findFile(root_cert)
+        
+        super().__init__(address=mc_address, root_cert=self.root_cert)
         #print('*WARN*', 'mcinit')
         self.root_url = f'https://{mc_address}/api/v1'
-        self.root_cert = root_cert
+
         self.token = None
         self.prov_stack = []
 
@@ -57,6 +59,10 @@ class MexMasterController(MexRest):
         self._number_removeuserrole_requests = 0
         self._number_removeuserrole_requests_success = 0
         self._number_removeuserrole_requests_fail = 0            
+
+        self._number_showflavor_requests = 0
+        self._number_showflavor_requests_success = 0
+        self._number_showflavor_requests_fail = 0
         
         self.super_token = self.login(self.username, self.password, None, False)
 
@@ -657,7 +663,65 @@ class MexMasterController(MexRest):
             if str(self.resp.text) != '{"message":"Role removed from user"}':
                 raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
+
+    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):              
+        url = self.root_url + '/auth/ctrl/ShowFlavor'
+
+        payload = None
         
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            flavor_dict = {}
+            if region is not None:
+                flavor_dict['region'] = region
+
+            payload = json.dumps(flavor_dict)
+
+        logger.info('show flavor on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_showflavor_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+        
+                logger.info('response:\n' + str(self.resp.text))
+
+                respText = str(self.resp.text)
+                
+                if str(self.resp.status_code) != '200':
+                    self._number_showorg_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_showflavor_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            print('*WARN*', 'ff', self.decoded_data[0], type(self.decoded_data[0]))
+            self._number_showflavor_requests_success += 1
+        
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            #if str(self.resp.) != '[]':
+            #    #match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
+            #    # print('*WARN*',match)    
+            #    if not match:
+            #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            return self.decoded_data
+
+    def create_flavor(self):
+        #todo
+        pass
+    
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)

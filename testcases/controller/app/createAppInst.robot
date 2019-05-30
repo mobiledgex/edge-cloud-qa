@@ -49,10 +49,13 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
 
     Show Cluster Instances
     ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+
+    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
@@ -82,8 +85,8 @@ AppInst - appinst shall be created when app instance is created without cluster 
     Delete App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
     Delete Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}                       ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}                       ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            1  # LivenessStatic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
