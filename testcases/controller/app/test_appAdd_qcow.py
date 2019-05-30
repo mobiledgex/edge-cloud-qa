@@ -89,7 +89,7 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(apps_post)
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
+        expect_equal(error.details(), 'imagepath is required for imagetype IMAGE_TYPE_QCOW', 'error details')
         expect_equal(found_app, False, 'find app')
 
         assert_expectations()
@@ -130,7 +130,7 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(apps_post)
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
+        expect_equal(error.details(), 'imagepath is required for imagetype IMAGE_TYPE_QCOW', 'error details')
         expect_equal(found_app, False, 'find app')
 
         assert_expectations()

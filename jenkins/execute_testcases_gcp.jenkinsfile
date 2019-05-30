@@ -6,6 +6,7 @@ kubeconfig="kubeconfigunset"
 crm_azure_pod_name = "crmazurepodnameunset"
 crm_gcp_pod_name = "crmgcppodnameunset"
 openstack_env = "openstackenvunset"
+commit_version = "${CommitVersion}"
 
 if (env.dme) {
     dme = "${DME}"
@@ -53,22 +54,27 @@ node('jenkinsGcpSlave1'){
                 unstash 'edge-cloud_stash'
         }
         
-//        dir('go/src/github.com/mobiledgex/edge-cloud') {
-//            checkout([$class: 'GitSCM',
-//                branches: [[name: 'master']],
-//                doGenerateSubmoduleConfigurations: false,
-//                extensions: [
-//                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-//                        [$class:'SparseCheckoutPath', path:'edgeproto/*'],
-//                        [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
-//                        [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
-//                        [$class:'SparseCheckoutPath', path:'protogen/*']
-//                    ]]
-//                ],
-//                submoduleCfg: [],
-//                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-//                url: 'https://github.com/mobiledgex/edge-cloud.git']]])
-//        }
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+            checkout([$class: 'GitSCM',
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'edgeproto/*'],
+                        [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
+                        [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
+                        [$class:'SparseCheckoutPath', path:'protogen/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                url: 'https://github.com/mobiledgex/edge-cloud.git']]])
+        }
+
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+           def t = 'git reset --hard ' + commit_version
+           def tout  = sh(script: t, returnStdout: true);
+        }
 
     }
 

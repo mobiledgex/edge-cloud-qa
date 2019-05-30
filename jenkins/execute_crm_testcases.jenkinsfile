@@ -3,6 +3,7 @@ version = "${version}"
 cycle = "${cycle}"
 controller = "${controller}"
 dme = "${dme}"
+commit_version = "${CommitVersion}"
 
 //jobName = "${components}"
 
@@ -30,8 +31,10 @@ node('jenkinsSlave1'){
                 userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
         }
+
     }
-    
+
+
    //if(currentBuild.result != 'FAILURE') {
    //   stage("copy tests to ${cycle}") {
    //       dir('go/src/github.com/mobiledgex/jenkins') {
@@ -66,7 +69,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'CommitVersion', value: commit_version)]
 	    }
          }
 
