@@ -72,40 +72,6 @@ class ComputePage(BasePage):
             
         return header_present
     
-    def is_flavor_table_header_present(self):
-        header_present = True
-        
-        if self.is_element_present(ComputePageLocators.flavors_table_header_region):
-            logging.info('region header present')
-        else:
-            header_present = False
-            
-        if self.is_element_present(ComputePageLocators.flavors_table_header_flavorname):
-            logging.info('flavorname header present')
-        else:
-            header_present = False
-
-        if self.is_element_present(ComputePageLocators.flavors_table_header_ram):
-            logging.info('ram header present')
-        else:
-            header_present = False
-
-        if self.is_element_present(ComputePageLocators.flavors_table_header_vcpus):
-            logging.info('vcpus header present')
-        else:
-            header_present = False
-
-        if self.is_element_present(ComputePageLocators.flavors_table_header_disk):
-            logging.info('disk header present')
-        else:
-            header_present = False
-
-        if self.is_element_present(ComputePageLocators.flavors_table_header_edit):
-            logging.info('edit header present')
-        else:
-            header_present = False
-
-        return header_present
      
     def get_table_rows(self):
         table = self.driver.find_element(*ComputePageLocators.table_data)

@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 import logging
+import time
+from robot.api import logger
 
 class BasePage(object):
     def __init__(self, driver):
@@ -35,7 +37,11 @@ class BasePage(object):
                     found = True
                     break
         return found
-    
+
+    def take_screenshot(self, name):
+        self.driver.save_screenshot(name)
+        logger.info(f'<img src="{name}">', html=True)
+        
 class BasePageElement(object):
     def __set__(self, obj, value):
         print('*WARN*', '__set__', value, *self.locator)
@@ -63,8 +69,20 @@ class BasePagePulldownElement(object):
         print('*WARN*', '__set__', value, *self.locator)
         driver = obj.driver
 
-        driver.find_element(*self.locator).click()
-        driver.find_element_by_name(f'{self.locator}/..//div[text()="{value}"')
+        pulldown = driver.find_element(*self.locator)
+        print('*WARN*', 'pulldown', pulldown, self.locator[1])
+        pulldown.click()
+        #driver.find_element_by_xpath(f'{self.locator}')
+        #elem = pulldown.find_element_by_xpath(f'//span[text()="{value}"]/parent::div')
+        #elem = driver.find_element_by_xpath(f'//span[text()="{value}"]')
+        #elem = driver.find_element_by_xpath('//span[text()="EU"]')
+        time.sleep(2)
+        choice = f'{self.locator[1]}//span[text()="{value}"]'
+        print('*WARN*', 'choice', choice)
+        #elem = driver.find_element_by_xpath('//*[@class="ui modal transition visible active"]//div[@name="Region" and @role="listbox"]//div[@role="option"]/span[text()="US"]')
+        driver.find_element_by_xpath(choice).click()
+        #print('*WARN*', 'pulldown2', elem)
+        #elem.click()
         #driver.find_element(*NewPageLocators.region_pulldown_option_us).click()
 
 #class TextBoxElement(BasePageElement):
