@@ -18,7 +18,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno
 
 class MexConsole() :
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-    
+
     def __init__(self, url):
         print('*WARN*', 'INIT')
         self.url = url
@@ -27,12 +27,12 @@ class MexConsole() :
         self._region = None
         self._flavor = None
         self._cloudlet = None
-        
+
         chrome_options = Options()
         #chrome_options.add_argument("--disable-extensions")
         #chrome_options.add_argument("--disable-gpu")
         #chrome_options.add_argument("--headless")
-        
+
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
 
         self.driver.get(url)
@@ -42,12 +42,12 @@ class MexConsole() :
         self.cloudlets_page = CloudletsPage(self.driver)
         self.new_flavor_page = NewFlavorSettingsPage(self.driver)
         self.new_cloudlet_page = NewCloudletSettingsPage(self.driver)
-        
+
     def login_to_mex_console(self, browser='Chrome', username='mexadmin', password='mexadmin123'):
         self.take_screenshot('loginpage_pre')
 
         self.username = username
-        
+
         assert 'MEX MONITORING' in self.driver.title, 'Page title is not correct'
 
         login_page = LoginPage(self.driver)
@@ -66,7 +66,7 @@ class MexConsole() :
         login_page.password = password
 
         login_page.click_login_button()
-                
+
         main_page = MainPage(self.driver)
         if main_page.is_compute_button_present():
             logging.info('Compute button present')
@@ -84,7 +84,7 @@ class MexConsole() :
             logging.info(f'Username {username} present')
         else:
             raise Exception(f'Username {username} not present')
-        
+
         self.take_screenshot('loginpage_post')
 
     def open_compute(self):
@@ -94,7 +94,7 @@ class MexConsole() :
         main_page.click_compute_button()
 
         self.take_screenshot('compute_clicked')
-        
+
         compute_page = ComputePage(self.driver)
         if compute_page.is_branding_present():
             logging.info('branding present')
@@ -150,7 +150,12 @@ class MexConsole() :
         self.compute_page.click_region_pulldown_option(region)
 
         time.sleep(3)
-        
+
+    def order_flavor_names(self):
+        logging.info('Sorting names alphabetically')
+
+        self.flavors_page.
+
     def open_flavors(self):
         self.take_screenshot('open_flavors_pre')
 
@@ -205,7 +210,7 @@ class MexConsole() :
         print('*WARN*', 'flavor', flavor)
 
         self.new_flavor_page.create_flavor(region, flavor['key']['name'], flavor['ram'], flavor['vcpus'], flavor['disk'])
-              
+
         self.take_screenshot('add_new_flavor_post')
 
     def add_new_cloudlet(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
@@ -224,24 +229,24 @@ class MexConsole() :
         print('*WARN*', 'cloudlet', cloudlet)
 
         self.new_cloudlet_page.create_cloudlet(region, flavor['key']['name'], flavor['ram'], flavor['vcpus'], flavor['disk'])
-              
+
         self.take_screenshot('add_new_cloudlet_post')
 
     def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
         self.take_screenshot('flavor_should_exist_pre')
         logging.info(f'flavor_should_exist region={region} flavor={flavor_name} ram={ram} vcpus={vcpus} disk={disk} wait={wait}')
-        
+
         if region is None: region = self._region
         if flavor_name is None: flavor_name = self._flavor['key']['name']
         if ram is None: ram = self._flavor['ram']
         if vcpus is None: vcpus = self._flavor['vcpus']
         if disk is None: disk = self._flavor['disk']
-        
+
         if self.flavors_page.wait_for_flavor(region, flavor_name, ram, vcpus, disk):
             logging.info('flavor found')
         else:
             raise Exception('Flavor NOT found')
-            
+
         #rows = self.get_table_data()
         #print('*WARN*', 'sf', self._flavor)
         #for r in rows:
@@ -251,7 +256,7 @@ class MexConsole() :
         #        return True
 
         #return False
-            
+
     #def flavor_should
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')
@@ -261,14 +266,13 @@ class MexConsole() :
         #    print('*WARN*', 'r', r)
 
         return rows
-    
+
     def take_screenshot(self, name):
         self.compute_page.take_screenshot(name + '.png')
         #self.driver.save_screenshot(name+'.png')
         #logger.info(f'<img src="{name}.png">', html=True)
-        
+
     def close_browser(self):
         #self.take_screenshot('closebrowser')
         self.compute_page.take_screenshot('closebrowser.png')
         self.driver.close()
-        
