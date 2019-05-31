@@ -155,6 +155,27 @@ class MexApp(object):
 
         raise Exception('Running k8s pod not found')
 
+    def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, wait_time=600):
+
+        self.wait_for_dns(root_loadbalancer)
+        
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        container_id = rb.get_docker_container_id()
+        logging.debug(container_id)
+
+        for t in range(wait_time):
+            info = rb.get_docker_container_info(container_id)
+            if docker_image == info['image']:
+                if info['status'] == 'running':
+                    logging.info('Found running container:' + info['image'])
+                    return True
+            time.sleep(1)
+
+        raise Exception('Running docker container not found')
+
     def block_rootlb_port(self, root_loadbalancer, port, target):
         rb = rootlb.Rootlb(host=root_loadbalancer)
 

@@ -29,11 +29,44 @@ class Rootlb(Linux):
         logging.debug('output=' + str(output))
 
         if errcode != 0:
-            raise Exception("sqlite3 cmd returned non-zero status of " + errcode)
+            raise Exception("cmd returned non-zero status of " + errcode)
 
         print(output)
 
         return output
+
+    def get_docker_container_id(self):
+        cmd = 'docker ps --format "{{.ID}}"'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        print(output)
+        
+        #ps_list = []
+        #output.pop(0)  #remove header
+        #for line in output:
+        #    print('*WARN*', line)
+        #    ps_dict = {'container_id': 
+        return output[0].rstrip()
+
+    def get_docker_container_info(self, container_id):
+        cmd = f'docker inspect --format="{{{{.State.Status}}}} {{{{.Config.Image}}}} {{{{.Path}}}}" {container_id}'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        print(output)
+        (status, image, path) = output[0].split(' ')
+        info_dict = {'status': status, 'image': image, 'path': path} 
+
+        return info_dict
 
     def block_port(self, port, target):
         logging.info(f'blocking port={port} target={target}')

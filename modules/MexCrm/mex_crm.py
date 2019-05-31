@@ -12,7 +12,8 @@ class CRM(object):
 
     def wait_for_pod_to_be_running_on_crm(self, cluster_name, operator_name, pod_name, wait_time=600):
         logging.info(f'cluster_name={cluster_name} operator_name={operator_name} pod_name={pod_name}')
-        cluster_name = cluster_name.replace('.', '') #remove any dots
+        #cluster_name = cluster_name.replace('.', '') #remove any dots
+        pod_name = pod_name.replace('.', '') #remove any dots
                     
         kubeconfig = f'{cluster_name}.{operator_name}.kubeconfig' 
         logging.info('kubeconfig=' + kubeconfig)
