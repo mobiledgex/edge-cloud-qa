@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 
 dateParm = "${BuildDate}"
 commit_version = "notset"
+image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
 def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
 def jobListGcp = ["runCrmTests"]
@@ -144,6 +145,7 @@ node('jenkinsSlave1'){
 	     
              //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
+     	     //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_eu_start.yaml > $HOME/edgecloud_controller_eu_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbonn_start.yaml > $HOME/edgecloud_crmbonn_start.yaml'
      	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmhamburg_start.yaml > $HOME/edgecloud_crmhamburg_start.yaml'
 	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebonn_start.yaml > $HOME/edgecloud_dmebonn_start.yaml'
@@ -171,6 +173,8 @@ node('jenkinsSlave1'){
 	     
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl --record deployment.v1.apps/controllereu set image deployment.v1.apps/controllereu controllereu=' + image + ':' + tag'
 	     
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
