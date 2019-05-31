@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controllereu
+  labels:
+    app: controllereu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: controllereu
+  template:
+    metadata:
+      labels:
+        app: controllereu
+    spec:
+       containers:
+       - name: controllereu
+         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-05-31
+         imagePullPolicy: Always
+         resources:
+           requests:
+             cpu: 10m
+         command:
+          - controller
+         args:
+          - "--etcdUrls"
+          - "mex-etcd-cluster-eu:2379"
+          - "--notifyAddr"
+          - "0.0.0.0:37002"
+          - "--apiAddr"
+          - "0.0.0.0:55002"
+          - "--httpAddr"
+          - "0.0.0.0:36002"
+          - "--tls"
+          - "/root/tls/mex-server.crt"
+          - "--influxAddr"
+          - "35.247.126.154:8086"
+          - "-d"
+          - "etcd,api,notify"
+          - "-autoUpgrade"
+       imagePullSecrets:
+        - name: mexreg-secret
