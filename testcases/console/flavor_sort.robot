@@ -26,8 +26,8 @@ Web UI - user shall be able sort flavors by name
 
     @{rows}=  Get Table Data
 
+    #@{sorted}= Order Flavor Names
     Order Flavor Names
-
     ${num_flavors_listed}= Get Length  ${ft)}
     ${num_flavors_table}=  Get Length  ${rows}
 
