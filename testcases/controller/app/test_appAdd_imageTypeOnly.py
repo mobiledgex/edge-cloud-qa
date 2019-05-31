@@ -68,7 +68,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'unknown image type ImageTypeUnknown', 'error details')
+        expect_equal(error.details(), 'unknown image type IMAGE_TYPE_UNKNOWN', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -135,7 +135,7 @@ class tc(unittest.TestCase):
         #expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
         #expect_equal(error.details(), 'Specified flavor not found', 'error details')
-        expect_equal(error.details(), 'imagepath is required for imagetype ImageTypeQCOW', 'error details')
+        expect_equal(error.details(), 'imagepath is required for imagetype IMAGE_TYPE_QCOW', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 

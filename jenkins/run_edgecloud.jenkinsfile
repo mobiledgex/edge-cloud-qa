@@ -1,8 +1,11 @@
 import java.text.SimpleDateFormat
 
 dateParm = "${BuildDate}"
+commit_version = "notset"
 
-def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runCrmTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
+def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
+def jobListGcp = ["runCrmTests"]
+
 builds1 = [:]
 
 node('jenkinsSlave1'){
@@ -108,11 +111,11 @@ node('jenkinsSlave1'){
        stage('Pull Image') {
           def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
           def index  = sh(script: s, returnStdout: true);
-          def (commit_version, image_name) = index.split(',')
+          (commit_version, image_name) = index.split(',')
   	  dir('go/src/github.com/mobiledgex/edge-cloud') {
              def t = 'git reset --hard ' + commit_version
              def tout  = sh(script: t, returnStdout: true);
-	     stash name:'edge-cloud_stash', includes:'edge-cloud/**'
+	     //stash name:'edge-cloud_stash', includes:'edge-cloud/**'
           }
        }
     }  catch (e) {
@@ -283,6 +286,15 @@ node('jenkinsSlave1'){
                  println "updateCycleJira.py startdate failed"
                  currentBuild.result = 'FAILURE'
               }
+	  }
+
+
+          for(int i=0; i < jobListGcp.size(); ++i) {
+             def jobName = jobListGcp[i];
+             echo "i1=" + jobName
+             builds1[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle), string(name: 'CommitVersion', value: commit_version)]
+	     }
 	  }
 
           for(int i=0; i < jobList1Parallel.size(); ++i) {

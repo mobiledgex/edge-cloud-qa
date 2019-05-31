@@ -35,7 +35,7 @@ User shall be able to access 1 UDP port on gcp
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
@@ -57,7 +57,7 @@ User shall be able to access 2 UDP ports on azure
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
@@ -79,7 +79,7 @@ User shall be able to access 1 TCP port on azure
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
@@ -100,7 +100,7 @@ User shall be able to access 2 TCP ports on azure
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
@@ -124,7 +124,7 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
