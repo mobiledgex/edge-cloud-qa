@@ -154,7 +154,14 @@ class MexConsole() :
     def order_flavor_names(self):
         logging.info('Sorting names alphabetically')
 
-        self.flavors_page.
+        self.flavors_page.click_flavorName()
+        sorted = self.flavors_page.get_flavor_sort()
+
+        time.sleep(3)
+
+        self.take_screenshot('Flavor table sorted')
+
+        return(sorted)
 
     def open_flavors(self):
         self.take_screenshot('open_flavors_pre')

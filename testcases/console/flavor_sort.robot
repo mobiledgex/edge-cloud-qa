@@ -21,33 +21,19 @@ Web UI - user shall be able sort flavors by name
     ...  Confirm flavor alphabetically sorted
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
-    @{ws}=  Show Flavors
-    # to check against name sort funct
-
-    Log to console  ${ws[0]['data']['key']['name']}
-
-
-
-
     Open Flavors
     # this checks if flavor table headings exist
-
-    Change Region  US
-    # THIS RIGHT HERE AH
+    @{flist}= Order Flavor Names
 
     @{rows}=  Get Table Data
 
-   : FOR  ${row}  IN  @{ws}
-   \  Log To Console  ${row['data']['key']['name']}
-   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+    ${num_flavors_listed}= Get Length  ${flist)}
+    ${num_flavors_table}=  Get Length  ${rows}
 
-   ${num_flavors_ws}=     Get Length  ${ws}
-   ${num_flavors_table}=  Get Length  ${rows}
-
-   Should Be Equal  ${num_flavors_ws}  ${num_flavors_table}
+   Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
 
-   *** Keywords ***
+*** Keywords ***
 Setup
     #create some flavors
     Log to console  login
