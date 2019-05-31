@@ -61,8 +61,8 @@ class FlavorsPage(ComputePage):
             resp.append(FlavorsPageLocators.flavors_table_header_flavorname)
             print('*WARN*', 'flavor: ', r)
 
-        resp = sort(resp)  # only need alphabetically
-        logger.info('Flavor name list sorted alphabetically')
+        resp = sorted(resp)  # only need alphabetically
+        logging.info('Flavor name list sorted alphabetically')
         print(resp)
         return resp
 

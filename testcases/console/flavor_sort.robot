@@ -23,11 +23,12 @@ Web UI - user shall be able sort flavors by name
 
     Open Flavors
     # this checks if flavor table headings exist
-    @{flist}= Order Flavor Names
 
     @{rows}=  Get Table Data
 
-    ${num_flavors_listed}= Get Length  ${flist)}
+    Order Flavor Names
+
+    ${num_flavors_listed}= Get Length  ${ft)}
     ${num_flavors_table}=  Get Length  ${rows}
 
    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
