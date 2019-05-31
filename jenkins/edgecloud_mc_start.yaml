@@ -29,7 +29,7 @@ spec:
           - mc
          args:
           - "--sqlAddr"
-          - "postgres:5432"
+          - "40.122.108.233:5432"
           - "--addr"
           - "0.0.0.0:9900"
           - "--vaultAddr"
