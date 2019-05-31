@@ -45,7 +45,7 @@ User shall be able to access 1 UDP port on openstack
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -70,8 +70,8 @@ User shall be able to access 2 UDP ports on openstack
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 	
     Log To Console  Waiting for k8s pod to be running
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -92,7 +92,7 @@ User shall be able to access 1 TCP port on openstack
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -113,8 +113,8 @@ User shall be able to access 2 TCP ports on openstack
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
@@ -136,10 +136,10 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
@@ -170,7 +170,7 @@ User shall be able to access HTTP port on openstack
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
-    HTTP Port Should Be Alive  ${cloudlet.FQDN}  ${cloudlet.ports[0].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  ${page}
 
 User shall be able to access UDP,TCP and HTTP ports on openstack
     [Documentation]
@@ -185,8 +185,8 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
-    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -194,7 +194,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.FQDN}  ${cloudlet.ports[2].public_port}  ${page}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
 *** Keywords ***
 Setup

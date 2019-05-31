@@ -44,7 +44,7 @@ User shall be able to create an app instance on azure with a dot in the app name
     ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  -udp.
 
     # verify dot is gone
-    Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].FQDN_prefix}
+    Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
