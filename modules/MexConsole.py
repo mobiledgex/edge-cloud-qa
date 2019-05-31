@@ -153,11 +153,14 @@ class MexConsole() :
 
     def order_flavor_names(self):
         logging.info('Sorting names alphabetically')
-
-        self.flavors_page.click_flavorName()
+        count = 5
+        while (count != 0):
+            self.flavors_page.click_flavorName()
+            count -= 1
+            time.sleep(1)
         sorted = self.flavors_page.get_flavor_sort()
 
-        time.sleep(3)
+        time.sleep(1)
 
         self.take_screenshot('Flavor table sorted')
 
