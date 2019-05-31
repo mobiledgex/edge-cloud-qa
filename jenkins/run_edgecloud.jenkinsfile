@@ -4,7 +4,7 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 
 def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
-def libListGcp = [""runCrmTests"]
+def libListGcp = ["runCrmTests"]
 
 builds1 = [:]
 
