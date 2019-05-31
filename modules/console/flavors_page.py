@@ -52,17 +52,17 @@ class FlavorsPage(ComputePage):
 
         return False
 
-    def get_flavor_sort(self):
+    def get_flavor_sort(self, type):
         resp = []
-                    # this part changes
+                    # type is flavorname/ram/vcpus/disk
         rows = self.get_table_rows()
-
+        targetSort = "flavors_table_header_" + type
         for r in rows:
-            resp.append(FlavorsPageLocators.flavors_table_header_flavorname)
+            resp.append(FlavorsPageLocators.targetSort)
             print('*WARN*', 'flavor: ', r)
 
         resp = sorted(resp)  # only need alphabetically
-        logging.info('Flavor name list sorted alphabetically')
+        logging.info('Flavor list sorted')
         print(resp)
         return resp
 
@@ -76,6 +76,15 @@ class FlavorsPage(ComputePage):
 
         return False
 
-        # will need to add the buttons to FlavorsPageLocators
+
     def click_flavorName(self):
         self.driver.find_element(*FlavorsPageLocators.flavors_table_header_flavorname).click()
+
+    def click_flavorRAM(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_header_ram).click()
+
+    def click_flavorVCPUS(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_header_vcpus).click()
+
+    def click_flavorDisk(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_header_disk).click()

@@ -152,16 +152,58 @@ class MexConsole() :
         time.sleep(3)
 
     def order_flavor_names(self):
-        logging.info('Sorting names alphabetically')
+        logging.info('Sorting flavors alphabetically')
         count = 5
         while (count != 0):
             self.flavors_page.click_flavorName()
             count -= 1
             time.sleep(1)
-        sorted = self.flavors_page.get_flavor_sort()
+        sorted = self.flavors_page.get_flavor_sort("flavorname")
 
         time.sleep(1)
 
+        self.take_screenshot('Flavor table sorted')
+
+        return(sorted)
+
+    def order_flavor_ram(self):
+        logging.info('Sorting flavors numerically by ram')
+        count = 5
+        while (count != 0):
+            self.flavors_page.click_flavorRAM()
+            count -= 1
+            time.sleep(1)
+        sorted = self.flavors_page.get_flavor_sort("ram")
+
+        time.sleep(1)
+        self.take_screenshot('Flavor table sorted')
+
+        return(sorted)
+
+    def order_flavor_vcpus(self):
+        logging.info('Sorting flavors numerically by vcpus')
+        count = 5
+        while (count != 0):
+            self.flavors_page.click_flavorVCPUS("vcpus")
+            count -= 1
+            time.sleep(1)
+        sorted = self.flavors_page.get_flavor_sort()
+
+        time.sleep(1)
+        self.take_screenshot('Flavor table sorted')
+
+        return(sorted)
+
+    def order_flavor_disk(self):
+        logging.info('Sorting flavors numerically by disk')
+        count = 5
+        while (count != 0):
+            self.flavors_page.click_flavorDisk("disk")
+            count -= 1
+            time.sleep(1)
+        sorted = self.flavors_page.get_flavor_sort()
+
+        time.sleep(1)
         self.take_screenshot('Flavor table sorted')
 
         return(sorted)
