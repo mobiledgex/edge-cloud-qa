@@ -14,18 +14,26 @@ ${console_username}  mexadmin
 ${console_password}  mexadmin123
 
 *** Test Cases ***
-Web UI - user shall be able show US flavors
+Web UI - user shall be able sort flavors by name
     [Documentation]
-    ...  Show US flavors
-    ...  Get US flavors from WS
-    ...  Verify all flavors exist
+    ...  Show flavor name
+    ...  Sort flavors by flavor_name
+    ...  Confirm flavor alphabetically sorted
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
-    @{ws}=  Show Flavors  region=US
+    @{ws}=  Show Flavors
+    # to check against name sort funct
+
     Log to console  ${ws[0]['data']['key']['name']}
+
+
+
+
     Open Flavors
+    # this checks if flavor table headings exist
 
     Change Region  US
+    # THIS RIGHT HERE AH
 
     @{rows}=  Get Table Data
 
