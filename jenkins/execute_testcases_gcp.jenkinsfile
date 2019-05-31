@@ -51,7 +51,7 @@ node('jenkinsGcpSlave1'){
                 userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 
-                unstash 'edge-cloud_stash'
+                //unstash 'edge-cloud_stash'
         }
         
         dir('go/src/github.com/mobiledgex/edge-cloud') {
