@@ -174,7 +174,7 @@ node('jenkinsSlave1'){
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_start.yaml'
 
-             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl --record deployment.v1.apps/controllereu set image deployment.v1.apps/controllereu controllereu=' + image + ':' + tag'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl --record deployment.v1.apps/controllereu set image deployment.v1.apps/controllereu controllereu=' + image + ':' + tag
 	     
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
