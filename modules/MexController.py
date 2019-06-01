@@ -861,7 +861,7 @@ class AppInstance():
             self.autocluster_ipaccess = 2
         elif self.autocluster_ipaccess == 'IpAccessShared':
             self.autocluster_ipaccess = 3
-        print('*WARN*', self.autocluster_ipaccess)
+
         appinst_dict = {}
         appinst_key_dict = {}
         app_key_dict = {}
@@ -1874,7 +1874,7 @@ class MexController(MexGrpc):
                 self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
             #resp =  self.show_app_instances(app_instance)
-            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_name=app_instance.key.cluster_inst_key.cloudlet_key.operator_key.name, use_defaults=False)
+            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_name=app_instance.key.cluster_inst_key.cloudlet_key.operator_key.name, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
 
             return resp[0]
         
