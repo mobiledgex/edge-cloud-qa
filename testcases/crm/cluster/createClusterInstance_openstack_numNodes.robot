@@ -22,7 +22,7 @@ ${operator_name_openstack}  GDDT
 #${cluster_name}=  cluster1556727500-74324
 	
 *** Test Cases ***
-Cluster shall create with num_nodes=4 on openstack
+Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    [Documentation]
    ...  create a cluster on openstack with num_nodes=4
    ...  verify it 4 nodes and 1 master
@@ -34,7 +34,7 @@ Cluster shall create with num_nodes=4 on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=1
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=1  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -56,9 +56,9 @@ Cluster shall create with num_nodes=4 on openstack
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}   m4.small
 
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
-Cluster shall create with num_nodes=10 on openstack
+Cluster shall create with IpAccessShared and num_nodes=10 on openstack
    [Documentation]
    ...  create a cluster on openstack with num_nodes=10
    ...  verify it 10 nodes and 1 master
@@ -70,7 +70,7 @@ Cluster shall create with num_nodes=10 on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=10  number_masters=1
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=10  number_masters=1  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
@@ -98,10 +98,10 @@ Cluster shall create with num_nodes=10 on openstack
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}    m4.large
 
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 
-Cluster shall not create multiple masters
+Cluster shall not create with IpAccessShared and multiple masters
    [Documentation]
    ...  create a cluster on openstack with multiple masters
    ...  verify error is received
@@ -114,7 +114,7 @@ Cluster shall not create multiple masters
 
    Log to Console  START creating cluster instance
    #${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -141,6 +141,21 @@ Cluster shall not create multiple masters
    #Should Be Equal  ${cluster_inst.node_flavor}    m4.small
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
+
+Cluster shall not create clusterInst with IpAccessShared and 0 masters
+   [Documentation]
+   ...  create a clusterInst on openstack with IpAccessShared and 0 masters
+   ...  verify error is received
+
+   Create Flavor          ram=1024  vcpus=1  disk=1
+   Create Cluster        
+
+   Log to Console  START creating cluster instance
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessShared
+   Log to Console  DONE creating cluster instance
+
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   NumMasters cannot be 0 except for dedicated clusters
 
 
 *** Keywords ***
