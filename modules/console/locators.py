@@ -31,7 +31,7 @@ class ComputePageLocators(object):
     table_region_pulldown_option_eu = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="EU"]')
     table_class = (By.CSS_SELECTOR, 'div.grid_table')
     table_data = (By.CSS_SELECTOR, 'tbody.tbBodyList')
-                     
+
     cloudlets_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cloudlets"]')
     flavors_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Flavors"]')
     cluster_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cluster Instances"]')
@@ -45,6 +45,7 @@ class FlavorsPageLocators(object):
     flavors_table_header_vcpus = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="VCPUS"]')
     flavors_table_header_disk = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DISK"]')
     flavors_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
+    flavors_table_button_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/div[@class="ui teal disabled button"][text()="Edit"]')
 
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
