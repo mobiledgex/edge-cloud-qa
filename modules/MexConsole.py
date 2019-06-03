@@ -151,9 +151,9 @@ class MexConsole() :
 
         time.sleep(3)
 
-    def order_flavor_names(self):
+    def order_flavor_names(self, count):
         logging.info('Sorting flavors alphabetically')
-        count = 5
+        count = int(count)
         while (count != 0):
             self.flavors_page.click_flavorName()
             count -= 1
@@ -182,7 +182,7 @@ class MexConsole() :
 
     def order_flavor_vcpus(self):
         logging.info('Sorting flavors numerically by vcpus')
-        count = 5
+        count = 4
         while (count != 0):
             self.flavors_page.click_flavorVCPUS()
             count -= 1
@@ -207,6 +207,26 @@ class MexConsole() :
         self.take_screenshot('Flavor table sorted')
 
         return(sorted)
+
+    def order_flavor_edit(self):
+        logging.info('Not Able to Sort by Edit')
+        count = 5
+        while (count != 0):
+            self.flavors_page.click_flavorEdit()
+            count -= 1
+            time.sleep(1)
+        # Unsorted = self.flavors_page.get_flavor_sort("edit")
+
+        time.sleep(1)
+        self.take_screenshot('Flavor Table Unsorted')
+
+        # return(Unsorted)
+
+    def flavor_edit_fail(self):
+        self.flavors_page.click_flavorButtonEdit()
+        self.flavors_page.click_flavorButtonEdit()
+        self.flavors_page.click_flavorButtonEdit()
+        self.take_screenshot('Flavor Editing Unsupported')
 
     def open_flavors(self):
         self.take_screenshot('open_flavors_pre')

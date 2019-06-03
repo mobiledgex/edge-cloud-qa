@@ -70,23 +70,27 @@ class FlavorsPage(ComputePage):
             for r in rows:
                 resp.append(FlavorsPageLocators.flavors_table_header_flavorname)
                 print('*WARN*', 'flavor: ', r)
+                resp = sorted(resp)  # only need alphabetically
         elif (type == "ram"):
             for r in rows:
                 resp.append(FlavorsPageLocators.flavors_table_header_ram)
                 print('*WARN*', 'flavor: ', r)
+                resp = sorted(resp)  # only need #ers
         elif type == "vcpus":
             for r in rows:
                 resp.append(FlavorsPageLocators.flavors_table_header_vcpus)
                 print('*WARN*', 'flavor: ', r)
+                resp = sorted(resp)
         elif type == "disk":
             for r in rows:
                 resp.append(FlavorsPageLocators.flavors_table_header_disk)
                 print('*WARN*', 'flavor: ', r)
-        else:
+                resp = sorted(resp)
+        else:  # edit passed in (or a weird error)
             print('*WARN*', 'flavor sort FAILED: ', rows)
-        resp = sorted(resp)  # only need alphabetically
+
         logging.info('Flavor list sorted')
-        print(resp)
+        print(resp)  # for Edit should be identical
         return resp
 
     def check_numerical_sorted(self, inList, type):
@@ -106,3 +110,9 @@ class FlavorsPage(ComputePage):
 
     def click_flavorDisk(self):
         self.driver.find_element(*FlavorsPageLocators.flavors_table_header_disk).click()
+
+    def click_flavorEdit(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_header_edit).click()
+
+    def click_flavorButtonEdit(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_button_edit).click()
