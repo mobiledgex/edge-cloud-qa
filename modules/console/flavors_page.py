@@ -52,20 +52,6 @@ class FlavorsPage(ComputePage):
 
         return False
 
-    def get_flavor_sort(self, type):
-        resp = []
-                    # type is flavorname/ram/vcpus/disk
-        rows = self.get_table_rows()
-        targetSort = "flavors_table_header_" + type
-        for r in rows:
-            resp.append(FlavorsPageLocators.targetSort)
-            print('*WARN*', 'flavor: ', r)
-
-        resp = sorted(resp)  # only need alphabetically
-        logging.info('Flavor list sorted')
-        print(resp)
-        return resp
-
     def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
         for attempt in range(wait):
             print('*WARN*', 'WWWWW')
@@ -76,6 +62,38 @@ class FlavorsPage(ComputePage):
 
         return False
 
+    def get_flavor_sort(self, type):  # START HERE MONDAY! CAN U PASS A STRING AS AN ATTRIBUTE
+        resp = []
+                    # type is flavorname/ram/vcpus/disk
+        rows = self.get_table_rows()
+        if (type == "flavorname"):
+            for r in rows:
+                resp.append(FlavorsPageLocators.flavors_table_header_flavorname)
+                print('*WARN*', 'flavor: ', r)
+        elif (type == "ram"):
+            for r in rows:
+                resp.append(FlavorsPageLocators.flavors_table_header_ram)
+                print('*WARN*', 'flavor: ', r)
+        elif type == "vcpus":
+            for r in rows:
+                resp.append(FlavorsPageLocators.flavors_table_header_vcpus)
+                print('*WARN*', 'flavor: ', r)
+        elif type == "disk":
+            for r in rows:
+                resp.append(FlavorsPageLocators.flavors_table_header_disk)
+                print('*WARN*', 'flavor: ', r)
+        else:
+            print('*WARN*', 'flavor sort FAILED: ', rows)
+        resp = sorted(resp)  # only need alphabetically
+        logging.info('Flavor list sorted')
+        print(resp)
+        return resp
+
+    def check_numerical_sorted(self, inList, type):
+        for entryOfType in inList:
+            if entryOfType >= entryOfType + 1:
+                variable = 0
+        # if I can find out how table is ordered, like, inList[ram][0]
 
     def click_flavorName(self):
         self.driver.find_element(*FlavorsPageLocators.flavors_table_header_flavorname).click()

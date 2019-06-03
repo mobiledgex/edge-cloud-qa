@@ -184,10 +184,10 @@ class MexConsole() :
         logging.info('Sorting flavors numerically by vcpus')
         count = 5
         while (count != 0):
-            self.flavors_page.click_flavorVCPUS("vcpus")
+            self.flavors_page.click_flavorVCPUS()
             count -= 1
             time.sleep(1)
-        sorted = self.flavors_page.get_flavor_sort()
+        sorted = self.flavors_page.get_flavor_sort("vcpus")
 
         time.sleep(1)
         self.take_screenshot('Flavor table sorted')
@@ -198,10 +198,10 @@ class MexConsole() :
         logging.info('Sorting flavors numerically by disk')
         count = 5
         while (count != 0):
-            self.flavors_page.click_flavorDisk("disk")
+            self.flavors_page.click_flavorDisk()
             count -= 1
             time.sleep(1)
-        sorted = self.flavors_page.get_flavor_sort()
+        sorted = self.flavors_page.get_flavor_sort("disk")
 
         time.sleep(1)
         self.take_screenshot('Flavor table sorted')
