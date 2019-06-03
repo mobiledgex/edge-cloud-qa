@@ -18,6 +18,9 @@ spec:
         - ip: "35.202.131.16"
           hostnames:
           - "automation.ctrl.mobiledgex.net"
+        - ip: "35.238.36.211"
+          hostnames:
+          - "automationeu.ctrl.mobiledgex.net"
        containers:
        - name: mc
          image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
