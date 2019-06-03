@@ -326,7 +326,8 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
 
     # create app2 and appInst on the same port
     #Create App  app_name=${app_default_2}  access_ports=tcp:1
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${cluster_name_2}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name_2}
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -339,7 +340,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    10000
     Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
-    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
+    Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
     Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
