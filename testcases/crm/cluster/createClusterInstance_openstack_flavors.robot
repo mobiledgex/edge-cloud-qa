@@ -19,12 +19,14 @@ Library  String
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout  15 minutes
+Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationBonnCloudlet
 ${operator_name_openstack}  TDG 
 #${cluster_name}=  cluster1556727500-74324
+
+${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 Cluster with flavor less than 20g on openstack shall fail with size too small

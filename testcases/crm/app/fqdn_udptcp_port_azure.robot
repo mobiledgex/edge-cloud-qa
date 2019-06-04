@@ -12,7 +12,7 @@ Library  String
 Test Setup      Setup
 Test Teardown	Cleanup provisioning
 
-Test Timeout  30 minutes
+Test Timeout    ${test_timeout_crm} 
 
 *** Variables ***
 ${cluster_flavor_name}  x1.tiny
@@ -28,6 +28,8 @@ ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:
 ${docker_command}  ./server_ping_threaded.py
 
 ${app_template}    http://35.199.188.102/apps/apptemplate.yaml
+
+${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 User shall be able to access 1 UDP port on azure

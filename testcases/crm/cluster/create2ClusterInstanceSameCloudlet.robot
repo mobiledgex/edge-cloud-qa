@@ -7,12 +7,13 @@ Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
-Test Timeout    40 minutes
+Test Timeout    ${test_timeout_crm}
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationHamburgCloudlet   #has to match crm process startup parms
 ${operator_name_openstack}  TDG
 ${flavor_name}	  x1.medium
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 CRM shall be able to Create 2 cluster instances on the same cloudlet for openstack
@@ -30,7 +31,7 @@ CRM shall be able to Create 2 cluster instances on the same cloudlet for opensta
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_1}  flavor_name=${flavor_name}
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_2}  flavor_name=${flavor_name}
 
-    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
+#    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
 #*** Keywords ***
 #Setup

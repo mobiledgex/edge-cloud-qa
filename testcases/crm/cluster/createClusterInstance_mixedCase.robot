@@ -6,12 +6,14 @@ Library         String
 
 Test Teardown   Cleanup provisioning
 
-Test Timeout    40 minutes
+Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationHamburgCloudlet   #has to match crm process startup parms
 ${operator_name_openstack}  TDG
 ${flavor_name}	  x1.medium
+
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 CRM shall be able to create a cluster instances with mixed case clustername for openstack
