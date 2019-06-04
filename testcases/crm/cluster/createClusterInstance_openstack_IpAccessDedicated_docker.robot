@@ -8,12 +8,14 @@ Library  String
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout  15 minutes
+Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT 
 ${mobiledgex_domain}  mobiledgex.net
+
+${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 ClusterInst shall create with IpAccessDedicated/docker on openstack

@@ -8,7 +8,7 @@ Library  String
 Test Setup      Setup
 Test Teardown   Teardown
 
-Test Timeout  30 minutes
+Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
@@ -22,6 +22,8 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
+
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 CRM shall recover when attempting to create an app instance on openstack with rootlb rest port blocked

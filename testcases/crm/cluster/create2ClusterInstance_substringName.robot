@@ -6,12 +6,13 @@ Variables       shared_variables.py
 
 Test Teardown	Cleanup provisioning
 
-Test Timeout    30 minutes
+Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationHawkinsCloudlet   #has to match crm process startup parms
 ${operator_name_openstack}  GDDT
 ${flavor_name}	  x1.medium
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 CRM shall be able to create 2 clusterInst with one name a substring of the other
@@ -33,7 +34,7 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_default}  flavor_name=${flavor_name}
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_2}       flavor_name=${flavor_name}
 
-    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
+#    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
 #*** Keywords ***
 #Setup
