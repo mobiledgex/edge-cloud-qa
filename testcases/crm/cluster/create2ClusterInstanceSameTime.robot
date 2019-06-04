@@ -7,12 +7,13 @@ Library         String
 
 Test Teardown	Cleanup provisioning
 
-Test Timeout    40 minutes
+Test Timeout     ${test_timeout_crm}
 	
 *** Variables ***
 ${cloudlet_name_openstack}  automationHamburgCloudlet   #has to match crm process startup parms
 ${operator_name_openstack}  TDG
 ${flavor_name}	  x1.medium
+${test_timeout_crm}   15 min
 
 *** Test Cases ***
 CRM shall be able to Create 2 cluster instances at the same time on openstack
@@ -35,7 +36,7 @@ CRM shall be able to Create 2 cluster instances at the same time on openstack
     # wait for them to finish
     Wait For Replies  ${handle1}
 
-    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
+#    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
 #*** Keywords ***
 #Setup
