@@ -20,7 +20,7 @@ Web UI - user shall be able sort flavors by name
     ...  Show flavor name
     ...  Sort flavors by flavor_name
     ...  Confirm flavor alphabetically sorted
-    # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
+    # need to add some flavor so we can be sure some exist when we run it. can do this in setup
 
     Open Flavors
     #@{rows}=  Get Table Data
