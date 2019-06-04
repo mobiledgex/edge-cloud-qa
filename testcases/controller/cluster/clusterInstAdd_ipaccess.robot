@@ -134,6 +134,36 @@ CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessU
 
     Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
+CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessUnknown and deployment=docker
+    [Documentation]
+    ...  create a cluster instance with ipaccess=IpAccessUnknown and deployment=docker
+    ...  verify it is set to IpAccessDedicated
+
+    ${clusterInst}=  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessUnknown  deployment=docker  number_masters=0  number_nodes=0
+
+    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
+    Should Be Equal             ${clusterInst.deployment}  docker
+
+CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessShared and deployment=docker
+    [Documentation]
+    ...  create a cluster instance with ipaccess=IpAccessShared and deployment=docker
+    ...  verify  error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  number_masters=0  number_nodes=0
+
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   IpAccess must be dedicated for deployment type docker
+
+CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
+    [Documentation]
+    ...  create a cluster instance with ipaccess=IpAccessDedicatedOrShared and deployment=docker
+    ...  verify  error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicatedOrShared  deployment=docker  number_masters=0  number_nodes=0
+
+   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   Should Contain  ${error_msg}   IpAccess must be dedicated for deployment type docker
+
 *** Keywords ***
 Setup
     Create Developer            
