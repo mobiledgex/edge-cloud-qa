@@ -13,7 +13,7 @@ class ComputePage(BasePage):
             brand_image = image.value_of_css_property('background-image')
             if '/assets/brand/logo_mex.svg' in brand_image:
                 image_present = True
-                
+
         return image_present
 
     def is_refresh_icon_present(self):
@@ -24,7 +24,7 @@ class ComputePage(BasePage):
 
     def is_notifications_icon_present(self):
         return self.is_element_present_in_list(ComputePageLocators.icons_class, 'notifications_none')
-    
+
     def is_add_icon_present(self):
         return self.is_element_present_in_list(ComputePageLocators.icons_class, 'add')
 
@@ -48,7 +48,7 @@ class ComputePage(BasePage):
 
     def is_table_heading_present(self, label):
         header_present = True
-        
+
         if self.is_element_present(ComputePageLocators.table_title, label):
             logging.info('heading title present')
         else:
@@ -69,16 +69,16 @@ class ComputePage(BasePage):
         else:
             header_present = False
 
-            
+
         return header_present
-    
-     
+
+
     def get_table_rows(self):
         table = self.driver.find_element(*ComputePageLocators.table_data)
 
         row_list = []
         cell_data = []
-        
+
         for row in table.find_elements_by_css_selector('tr'):
             cell_data = []
             for cell in row.find_elements_by_css_selector('td'):
@@ -95,7 +95,7 @@ class ComputePage(BasePage):
 
     def click_region_pulldown_option(self, option):
         self.driver.find_element(*ComputePageLocators.table_region_pulldown_option_us).click()
-        
+
     def click_flavors(self):
         self.driver.find_element(*ComputePageLocators.flavors_button).click()
 

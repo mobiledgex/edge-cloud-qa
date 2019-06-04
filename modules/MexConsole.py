@@ -329,11 +329,11 @@ class MexConsole() :
 
         #return False
 
-    #def flavor_should
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')
-
         rows = self.compute_page.get_table_rows()
+        rows = sorted(rows)
+
         #for r in rows:
         #    print('*WARN*', 'r', r)
 

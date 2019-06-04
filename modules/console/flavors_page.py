@@ -68,7 +68,7 @@ class FlavorsPage(ComputePage):
         rows = self.get_table_rows()
         if (type == "flavorname"):
             for r in rows:
-                resp.append(FlavorsPageLocators.flavors_table_header_flavorname)
+                resp.append([FlavorsPageLocators.flavors_table_header_flavorname, FlavorsPageLocators.flavors_table_header_ram,FlavorsPageLocators.flavors_table_header_vcpus,FlavorsPageLocators.flavors_table_header_disk,'Edit'])
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)  # only need alphabetically
         elif (type == "ram"):
