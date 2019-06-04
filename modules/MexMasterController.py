@@ -7,6 +7,7 @@ import threading
 import requests
 
 from mex_rest import MexRest
+from mex_controller_classes import Flavor
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_mastercontroller rest')
@@ -63,6 +64,12 @@ class MexMasterController(MexRest):
         self._number_showflavor_requests = 0
         self._number_showflavor_requests_success = 0
         self._number_showflavor_requests_fail = 0
+        self._number_createflavor_requests = 0
+        self._number_createflavor_requests_success = 0
+        self._number_createflavor_requests_fail = 0
+        self._number_deleteflavor_requests = 0
+        self._number_deleteflavor_requests_success = 0
+        self._number_deleteflavor_requests_fail = 0
         
         self.super_token = self.login(self.username, self.password, None, False)
 
@@ -718,10 +725,99 @@ class MexMasterController(MexRest):
             #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return self.decoded_data
 
-    def create_flavor(self):
-        #todo
-        pass
-    
+    def create_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateFlavor'
+
+        payload = None
+        flavor = None
+        
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
+            flavor_dict = {'flavor': flavor}
+            if region is not None:
+                flavor_dict['region'] = region
+
+            payload = json.dumps(flavor_dict)
+
+        logger.info('create flavor on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createflavor_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createflavor_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createflavor_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self.prov_stack.append(lambda:self.delete_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], disk=flavor['disk'], vcpus=flavor['vcpus']))
+
+            self._number_createflavor_requests_success += 1
+        
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteFlavor'
+
+        payload = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
+            flavor_dict = {'flavor': flavor}
+            if region is not None:
+                flavor_dict['region'] = region
+
+            payload = json.dumps(flavor_dict)
+
+        logger.info('delete flavor on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deleteflavor_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deleteflavor_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_deleteflavor_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deleteflavor_requests_success += 1
+        
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)
