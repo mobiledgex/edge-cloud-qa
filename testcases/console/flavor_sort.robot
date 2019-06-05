@@ -49,20 +49,33 @@ Web UI - user shall be able sort flavors by name
 
     ${num_flavors_fl}=  Evaluate  ${num_flavors_fl} - ${match1}
     Log To Console  THIS IS THE TABLE ______
-    Log To Console  ${num_flavors_fl}
-    Log To Console  and why not ask ${num_flavors_listed}
+    Log To Console  HEYYY
+    Log To Console  and why not ask EU ONES ________________________________
+    Log To Console  ${rowsCombined}[1]
+    Log To Console  THEN THE US ONES ________________________________
+    Log To Console  ${rowsCombined}[0]
 
-    #  ${i}=  ${0}  # ${}
+    &{dictTotal}=  Create Dictionary
+    #${i}=  ${0}  # ${}
     #  iteration
+    #  MY TROUBLE IS THAT I CAN"T COMBINE THE DICTS OF US AND EU.
+    # @{rowsEU}  == ${num_flavors_2}
     :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
-    \  Log To Console  ${rowsCombined}[0][${i}]
-    # \  Should Be Equal  ${rowsCombined}[0][${i}]['data']['key']['name']  @{fl}[${i}]
     \  Log To Console  ${i}
+    \  set to dictionary  ${dictTotal}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
+
     # Now for the EU
+    Log To Console  That was the US additions. Check for total? It should be 17...
     :FOR    ${i}    IN RANGE    ${num_flavors_1}    ${num_flavors_2}
-    \  Log To Console  ${rowsCombined}[0][${i}]
-    # \  Should Be Equal  ${rowsCombined}[0][${i}]['data']['key']['name']  @{fl}[${i}]
     \  Log To Console  ${i}
+    \  set to dictionary  ${dictTotal}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
+
+    ${bruh}=  Get Length  ${dictTotal}
+    Log To Console  ${num_flavors_1}
+    Log To Console  ${num_flavors_2}
+
+    #\  Log To Console  ${rowsCombined}[0][${i}]
+    # \  Should Be Equal  ${rowsCombined}[0][${i}][data][key][name]  @{fl}[${i}]
 
     # Lists Should Be Equal  ${L1}  ${L2}
 
