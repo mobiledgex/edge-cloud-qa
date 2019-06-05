@@ -166,9 +166,9 @@ class MexConsole() :
 
         return(sorted)
 
-    def order_flavor_ram(self):
+    def order_flavor_ram(self, count):
         logging.info('Sorting flavors numerically by ram')
-        count = 5
+        count = int(count)
         while (count != 0):
             self.flavors_page.click_flavorRAM()
             count -= 1
@@ -180,9 +180,9 @@ class MexConsole() :
 
         return(sorted)
 
-    def order_flavor_vcpus(self):
+    def order_flavor_vcpus(self, count):
         logging.info('Sorting flavors numerically by vcpus')
-        count = 4
+        count = int(count)
         while (count != 0):
             self.flavors_page.click_flavorVCPUS()
             count -= 1
@@ -194,9 +194,9 @@ class MexConsole() :
 
         return(sorted)
 
-    def order_flavor_disk(self):
+    def order_flavor_disk(self, count):
         logging.info('Sorting flavors numerically by disk')
-        count = 5
+        count = int(count)
         while (count != 0):
             self.flavors_page.click_flavorDisk()
             count -= 1
@@ -332,7 +332,8 @@ class MexConsole() :
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')
         rows = self.compute_page.get_table_rows()
-        rows = sorted(rows)
+
+        rows = sorted(rows)  # If THIS ISN'T NECESSARY IT IS EASY TO CHANGE (for row specific tests)
 
         #for r in rows:
         #    print('*WARN*', 'r', r)
