@@ -41,6 +41,10 @@ spec:
          - "https://vault.mobiledgex.net"
          - "--tls"
          - "/root/tls/mex-server.crt"
+         - "--tlsApiCertFile"
+         - "/root/tls/mex-server.crt"
+         - "--tlsApiKeyFile"
+         - "/root/tls/mex-server.key"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"GDDT\"},\"name\":\"automationBuckhornCloudlet\"}"
         env:
