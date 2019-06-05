@@ -9,6 +9,8 @@ Library  MexApp
 Test Setup      Setup
 Test Teardown	Cleanup provisioning
 
+Test Timeout    ${test_timeout_crm}
+
 *** Variables ***
 ${cloudlet_name_gcp}  automationGcpCentralCloudlet
 ${operator_name_gcp}  gcp
@@ -18,6 +20,8 @@ ${longitude}      -96.7970
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
+
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 User shall be able to access 1 UDP port on gcp
