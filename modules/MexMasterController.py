@@ -671,7 +671,7 @@ class MexMasterController(MexRest):
                 raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
 
-    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):              
+    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowFlavor'
 
         payload = None
@@ -709,7 +709,15 @@ class MexMasterController(MexRest):
 
             print('*WARN*', 'ff', self.decoded_data[0], type(self.decoded_data[0]))
             self._number_showflavor_requests_success += 1
-        
+
+            resp_data = self.decoded_data
+            reverse = True if sort_order == 'descending' else False
+            if sort_field == 'flavor_name':
+                print('*WARN*', 'sorting by flavor_name')
+                resp_data = sorted(self.decoded_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            print('*WARN*', 'sorted', resp_data)
+
+            return resp_data
 
         if use_thread is True:
             t = threading.Thread(target=send_message)
@@ -723,7 +731,8 @@ class MexMasterController(MexRest):
             #    # print('*WARN*',match)    
             #    if not match:
             #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            return self.decoded_data
+            #return self.decoded_data
+            return resp
 
     def create_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateFlavor'
