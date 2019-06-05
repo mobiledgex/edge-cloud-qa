@@ -68,22 +68,22 @@ class FlavorsPage(ComputePage):
         rows = self.get_table_rows()
         if (type == "flavorname"):
             for r in rows:
-                resp.append([FlavorsPageLocators.flavors_table_header_flavorname, FlavorsPageLocators.flavors_table_header_ram,FlavorsPageLocators.flavors_table_header_vcpus,FlavorsPageLocators.flavors_table_header_disk,'Edit'])
+                resp.append(r)
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)  # only need alphabetically
         elif (type == "ram"):
             for r in rows:
-                resp.append(FlavorsPageLocators.flavors_table_header_ram)
+                resp.append(r)  # FlavorsPageLocators.flavors_table_header_ram
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)  # only need #ers
         elif type == "vcpus":
             for r in rows:
-                resp.append(FlavorsPageLocators.flavors_table_header_vcpus)
+                resp.append(r)  # FlavorsPageLocators.flavors_table_header_vcpus
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)
         elif type == "disk":
             for r in rows:
-                resp.append(FlavorsPageLocators.flavors_table_header_disk)
+                resp.append(r)  # FlavorsPageLocators.flavors_table_header_disk
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)
         else:  # edit passed in (or a weird error)

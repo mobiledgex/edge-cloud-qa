@@ -20,15 +20,10 @@ Web UI - user shall be able sort flavors by name
     ...  Show flavor name
     ...  Sort flavors by flavor_name
     ...  Confirm flavor alphabetically sorted
-    # need to add some flavor so we can be sure some exist when we run it. can do this in setup
 
     Open Flavors
     @{fl}=  Order Flavor Names  5
     @{rowsSorted}=  Get Table Data
-    @{rowUS}=  Show Flavors  region=US
-    @{rowEU}=  Show Flavors  region=EU
-    #@{rows}=  Order Flavor Names  5
-
 
     ${num_flavors_listed}=  Get Length  ${rowsSorted}
     ${num_flavors_table}=  Get Length  ${fl}
@@ -36,14 +31,8 @@ Web UI - user shall be able sort flavors by name
     ${L1}=  Create List  @{fl}
     ${L2}=  Create List  @{rowsSorted}
 
-    ${L3}=  Create List  @{rowUS}
-    ${L4}=  Create List  @{rowEU}
-
-    Append To List  ${L3}  ${L4}
-    ${testList}=  Sort List  ${L3}
-
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
-    Lists Should Be Equal  ${fl}  ${testList}
+    Lists Should Be Equal  ${L1}  ${L2}
 
 Web UI - user shall be able sort flavors by RAM
     [Documentation]
@@ -53,12 +42,16 @@ Web UI - user shall be able sort flavors by RAM
 
     Open Flavors
     @{rows}=  Get Table Data
+    @{fl}=  Order Flavor Ram  5
 
-    @{fl}=  Order Flavor Ram
     ${num_flavors_listed}=  Get Length  ${fl}
     ${num_flavors_table}=  Get Length  ${rows}
 
-   Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+    ${L1}=  Create List  @{fl}
+    ${L2}=  Create List  @{rows}
+
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+    Lists Should Be Equal  ${L1}  ${L2}
 
 Web UI - user shall be able sort flavors by VCPUS
     [Documentation]
@@ -68,12 +61,15 @@ Web UI - user shall be able sort flavors by VCPUS
 
     Open Flavors
     @{rows}=  Get Table Data
+    @{fl}=  Order Flavor Vcpus  5
 
-    @{fl}=  Order Flavor Vcpus
     ${num_flavors_listed}=  Get Length  ${fl}
     ${num_flavors_table}=  Get Length  ${rows}
+    ${L1}=  Create List  @{fl}
+    ${L2}=  Create List  @{rows}
 
-   Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+    Lists Should Be Equal  ${L1}  ${L2}
 
 
 Web UI - user shall be able sort flavors by DISK
@@ -84,13 +80,17 @@ Web UI - user shall be able sort flavors by DISK
 
     Open Flavors
     @{rows}=  Get Table Data
-
-    @{fl}=  Order Flavor Disk
+    @{fl}=  Order Flavor Disk  5
+    
     ${num_flavors_listed}=  Get Length  ${fl}
     ${num_flavors_table}=  Get Length  ${rows}
+    ${L1}=  Create List  @{fl}
+    ${L2}=  Create List  @{rows}
 
-   Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
-   Teardown
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+    Lists Should Be Equal  ${L1}  ${L2}
+
+    Teardown
 
 *** Keywords ***
 Setup
