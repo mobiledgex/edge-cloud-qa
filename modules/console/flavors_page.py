@@ -68,21 +68,25 @@ class FlavorsPage(ComputePage):
         rows = self.get_table_rows()
         if (type == "flavorname"):
             for r in rows:
+                r[0] = r[1]  # this replaces the Region since we dont sort on EU/US
                 resp.append(r)
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)  # only need alphabetically
         elif (type == "ram"):
             for r in rows:
+                r[0] = r[2]
                 resp.append(r)  # FlavorsPageLocators.flavors_table_header_ram
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)  # only need #ers
         elif type == "vcpus":
             for r in rows:
+                r[0] = r[3]
                 resp.append(r)  # FlavorsPageLocators.flavors_table_header_vcpus
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)
         elif type == "disk":
             for r in rows:
+                r[0] = r[4]
                 resp.append(r)  # FlavorsPageLocators.flavors_table_header_disk
                 print('*WARN*', 'flavor: ', r)
                 resp = sorted(resp)
