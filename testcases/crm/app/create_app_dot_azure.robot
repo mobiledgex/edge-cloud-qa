@@ -9,7 +9,7 @@ Library  String
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout  30 minutes
+Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
 ${cloudlet_name_azure}  automationAzureCentralCloudlet
@@ -22,6 +22,7 @@ ${longitude}            -96.7970
 ${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
 
+${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 User shall be able to create an app instance on azure with a dot in the app name

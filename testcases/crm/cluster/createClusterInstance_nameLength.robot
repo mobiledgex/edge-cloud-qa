@@ -4,7 +4,7 @@ Documentation   Create cluster instances with long name on opentstack
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
 
-Test Timeout    30 minutes
+Test Timeout     ${test_timeout_crm}
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -15,6 +15,8 @@ ${cloudlet_name_openstack}  automationHamburgCloudlet   #has to match crm proces
 ${operator_name_openstack}  TDG
 ${flavor_name}	  x1.medium
 ${cluster_name_long}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+${test_timeout_crm}  15 min
 
 *** Test Cases ***
 CRM shall be able to create a cluster instances with 64 chars on openstack
