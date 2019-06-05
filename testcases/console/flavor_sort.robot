@@ -25,59 +25,47 @@ Web UI - user shall be able sort flavors by name
     @{fl}=  Order Flavor Names  5
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
-
-    ${rowsCombined}=  Create List  ${rowsUS}  ${rowsEU}
-
+    ${num_flavors_fl}=  Get Length  ${fl}
     ${num_flavors_1}=  Get Length  ${rowsUS}
     ${num_flavors_2}=  Get Length  ${rowsEU}
     ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
-    ${num_flavors_fl}=  Get Length  ${fl}
-
-    ${L1}=  Create List  @{fl}
-    ${matches1}=  Get Matches  ${rowsCombined}[1]  ''
-    ${matches2}=  Get Matches  ${rowsCombined}[0]  ''
-    ${match1}=  Get Length  ${matches1}
-    ${match2}=  Get Length  ${matches2}
-    # ${match1}=  Evaluate  ${match1} + 1
-    # Should be unnecessary
-
-    Log To Console  There is a hard error finding a total empty flavor
-    Should Be Equal  ${match1}  ${match2}
-    Remove From Dictionary  ${rowsCombined}[1]  ''
-    Remove From Dictionary  ${rowsCombined}[0]  ''
+    Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_fl}
 
-    ${num_flavors_fl}=  Evaluate  ${num_flavors_fl} - ${match1}
-    Log To Console  THIS IS THE TABLE ______
-    Log To Console  HEYYY
-    Log To Console  and why not ask EU ONES ________________________________
-    Log To Console  ${rowsCombined}[1]
-    Log To Console  THEN THE US ONES ________________________________
-    Log To Console  ${rowsCombined}[0]
+    # Should be unnecessary
+    #${rowsCombined}=  Create List  ${rowsUS}  ${rowsEU}
+    #${matches1}=  Get Matches  ${rowsCombined}[1]  ''
+    #${matches2}=  Get Matches  ${rowsCombined}[0]  ''
+    #${match1}=  Get Length  ${matches1}
+    #${match2}=  Get Length  ${matches2}
+    #${match1}=  Evaluate  ${match1} + 1
 
-    &{dictTotal}=  Create Dictionary
-    #${i}=  ${0}  # ${}
-    #  iteration
-    #  MY TROUBLE IS THAT I CAN"T COMBINE THE DICTS OF US AND EU.
-    # @{rowsEU}  == ${num_flavors_2}
+    #I WAS GETTING A RANDOM EMPTY FLAVOR BUT HONESTLY SORT SHOULD FIX IT
+    #Log To Console  There is a hard error finding a total empty flavor
+    #Should Be Equal  ${match1}  ${match2}
+    #Remove From Dictionary  ${rowsCombined}[1]  ''
+    #Remove From Dictionary  ${rowsCombined}[0]  ''
+
+
+    # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
+    &{dictShowFlavors}=  Create Dictionary
     :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
-    \  Log To Console  ${i}
-    \  set to dictionary  ${dictTotal}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
+    \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
 
-    # Now for the EU
-    Log To Console  That was the US additions. Check for total? It should be 17...
-    :FOR    ${i}    IN RANGE    ${num_flavors_1}    ${num_flavors_2}
-    \  Log To Console  ${i}
-    \  set to dictionary  ${dictTotal}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
 
-    ${bruh}=  Get Length  ${dictTotal}
-    Log To Console  ${num_flavors_1}
-    Log To Console  ${num_flavors_2}
+    ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
 
-    #\  Log To Console  ${rowsCombined}[0][${i}]
-    # \  Should Be Equal  ${rowsCombined}[0][${i}][data][key][name]  @{fl}[${i}]
+    ${ForLoop}=  Get Length  ${dictShowFlavors}
+    ${ForLoop}=  Evaluate  ${ForLoop} - 1
+    :FOR    ${i}    IN RANGE    0    ${ForLoop}
+    \  ${o}=  Set Variable  ${i}
+    \  ${o}=  Evaluate  ${o} * 2
+    \  Log To Console   ${sortedDictShowFlavors}[${o}]
+    \  Log To Console   ${fl}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${fl}[${i}][1]
 
-    # Lists Should Be Equal  ${L1}  ${L2}
 
 Web UI - user shall be able sort flavors by RAM
     [Documentation]
@@ -86,20 +74,36 @@ Web UI - user shall be able sort flavors by RAM
     ...  Confirm flavor numerically sorted
 
     Open Flavors
-    @{rows}=  Get Table Data
+    @{fl}=  Order Flavor Ram  5
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_ram  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_ram  sort_order=ascending
+    ${num_flavors_1}=  Get Length  ${rowsUS}
+    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_fl}=  Get Length  ${fl}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    Log To Console  ____ If this error is thrown then there is an odd mismatch _____
+    Should Be Equal  ${num_flavors_fl}  ${num_flavors_regions}
 
-    @{fl}=  Order Flavor Ram  5
+    # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
+    &{dictShowFlavors}=  Create Dictionary
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
 
-    ${num_flavors_listed}=  Get Length  ${fl}
-    ${num_flavors_table}=  Get Length  ${rows}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
 
-    ${L1}=  Create List  @{fl}
-    ${L2}=  Create List  @{rows}
+    ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
 
-    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
-    Lists Should Be Equal  ${L1}  ${L2}
+    ${ForLoop}=  Get Length  ${dictShowFlavors}
+    ${ForLoop}=  Evaluate  ${ForLoop} - 1
+    :FOR    ${i}    IN RANGE    0    ${ForLoop}
+    \  ${o}=  Set Variable  ${i}
+    \  ${o}=  Evaluate  ${o} * 2
+    \  Log To Console   ${sortedDictShowFlavors}[${o}]
+    \  Log To Console   ${fl}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${fl}[${i}][1]
+
+
 
 Web UI - user shall be able sort flavors by VCPUS
     [Documentation]
