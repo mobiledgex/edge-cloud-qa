@@ -5,7 +5,7 @@ Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_C
 Library         Collections
 
 Suite Setup     Setup
-Suite Teardown  Close Browser
+Suite Teardown  Teardown
 
 Test Timeout    20 minutes
 
@@ -23,16 +23,48 @@ Web UI - user shall be able sort flavors by name
 
     Open Flavors
     @{fl}=  Order Flavor Names  5
-    @{rowsSorted}=  Get Table Data
+    @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
+    @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
 
-    ${num_flavors_listed}=  Get Length  ${rowsSorted}
-    ${num_flavors_table}=  Get Length  ${fl}
+    ${rowsCombined}=  Create List  ${rowsUS}  ${rowsEU}
+
+    ${num_flavors_1}=  Get Length  ${rowsUS}
+    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_fl}=  Get Length  ${fl}
 
     ${L1}=  Create List  @{fl}
-    ${L2}=  Create List  @{rowsSorted}
+    ${matches1}=  Get Matches  ${rowsCombined}[1]  ''
+    ${matches2}=  Get Matches  ${rowsCombined}[0]  ''
+    ${match1}=  Get Length  ${matches1}
+    ${match2}=  Get Length  ${matches2}
+    # ${match1}=  Evaluate  ${match1} + 1
+    # Should be unnecessary
 
-    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
-    Lists Should Be Equal  ${L1}  ${L2}
+    Log To Console  There is a hard error finding a total empty flavor
+    Should Be Equal  ${match1}  ${match2}
+    Remove From Dictionary  ${rowsCombined}[1]  ''
+    Remove From Dictionary  ${rowsCombined}[0]  ''
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_fl}
+
+    ${num_flavors_fl}=  Evaluate  ${num_flavors_fl} - ${match1}
+    Log To Console  THIS IS THE TABLE ______
+    Log To Console  ${num_flavors_fl}
+    Log To Console  and why not ask ${num_flavors_listed}
+
+    #  ${i}=  ${0}  # ${}
+    #  iteration
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    \  Log To Console  ${rowsCombined}[0][${i}]
+    # \  Should Be Equal  ${rowsCombined}[0][${i}]['data']['key']['name']  @{fl}[${i}]
+    \  Log To Console  ${i}
+    # Now for the EU
+    :FOR    ${i}    IN RANGE    ${num_flavors_1}    ${num_flavors_2}
+    \  Log To Console  ${rowsCombined}[0][${i}]
+    # \  Should Be Equal  ${rowsCombined}[0][${i}]['data']['key']['name']  @{fl}[${i}]
+    \  Log To Console  ${i}
+
+    # Lists Should Be Equal  ${L1}  ${L2}
 
 Web UI - user shall be able sort flavors by RAM
     [Documentation]
@@ -42,6 +74,9 @@ Web UI - user shall be able sort flavors by RAM
 
     Open Flavors
     @{rows}=  Get Table Data
+    @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_ram  sort_order=ascending
+    @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_ram  sort_order=ascending
+
     @{fl}=  Order Flavor Ram  5
 
     ${num_flavors_listed}=  Get Length  ${fl}
@@ -81,7 +116,7 @@ Web UI - user shall be able sort flavors by DISK
     Open Flavors
     @{rows}=  Get Table Data
     @{fl}=  Order Flavor Disk  5
-    
+
     ${num_flavors_listed}=  Get Length  ${fl}
     ${num_flavors_table}=  Get Length  ${rows}
     ${L1}=  Create List  @{fl}
@@ -90,7 +125,6 @@ Web UI - user shall be able sort flavors by DISK
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
     Lists Should Be Equal  ${L1}  ${L2}
 
-    Teardown
 
 *** Keywords ***
 Setup
@@ -101,5 +135,5 @@ Setup
     Create Flavor  region=US  flavor_name=andyflavor2  ram=2  disk=2  vcpus=2
 
 Teardown
-    Delete Flavor  region=US  flavor_name=andyflavor2  ram=2  disk=2  vcpus=2
     Cleanup Provisioning
+    Close Browser

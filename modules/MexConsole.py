@@ -333,8 +333,6 @@ class MexConsole() :
         self.take_screenshot('get_table_data_pre')
         rows = self.compute_page.get_table_rows()
 
-        rows = sorted(rows)  # If THIS ISN'T NECESSARY IT IS EASY TO CHANGE (for row specific tests)
-
         #for r in rows:
         #    print('*WARN*', 'r', r)
 
