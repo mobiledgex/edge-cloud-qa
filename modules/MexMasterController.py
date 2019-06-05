@@ -713,6 +713,15 @@ class MexMasterController(MexRest):
             if sort_field == 'flavor_name':
                 print('*WARN*', 'sorting by flavor_name')
                 resp_data = sorted(self.decoded_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            elif sort_field == 'flavor_ram':
+                print('*WARN*', 'sorting by flavor_name')
+                resp_data = sorted(self.decoded_data, key=lambda x: x['data']['ram'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            elif sort_field == 'flavor_vcpus':
+                print('*WARN*', 'sorting by flavor_name')
+                resp_data = sorted(self.decoded_data, key=lambda x: x['data']['vcpus'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            elif sort_field == 'flavor_disk':
+                print('*WARN*', 'sorting by flavor_name')
+                resp_data = sorted(self.decoded_data, key=lambda x: x['data']['disk'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
             print('*WARN*', 'sorted', resp_data)
 
             return resp_data
