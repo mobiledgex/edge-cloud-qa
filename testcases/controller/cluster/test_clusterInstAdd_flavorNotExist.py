@@ -80,7 +80,7 @@ class tc(unittest.TestCase):
 
         expect_equal(found_cluster, False, 'no flavor found new cluster')
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cluster flavor {} not found'.format(flavor_name), 'error details')
+        expect_equal(self.controller.response.details(), 'flavor {} not found'.format(flavor_name), 'error details')
 
         assert_expectations()
 
