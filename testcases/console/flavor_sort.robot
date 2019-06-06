@@ -82,15 +82,20 @@ Web UI - user shall be able sort flavors by RAM
     ${num_flavors_fl}=  Get Length  ${fl}
     ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
-    Should Be Equal  ${num_flavors_fl}  ${num_flavors_regions}
+    Should Be Equal  ${num_flavors_fl}  ${num_flavors_listed}
+    Log To Console  ${fl}
+    Log To Console  ${rowsUS}[0]
 
     # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
     &{dictShowFlavors}=  Create Dictionary
     :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
-    \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
+    \  Log To Console  ${i}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][ram]  ${rowsUS}[${i}]
 
     :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
-    \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
+    \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][ram]  ${rowsEU}[${i}]
+
+
 
     ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
 
