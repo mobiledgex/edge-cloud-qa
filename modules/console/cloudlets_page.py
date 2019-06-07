@@ -35,25 +35,52 @@ class CloudletsPage(ComputePage):
 
         return header_present
 
-    def is_flavor_present(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
-        self.take_screenshot('is_flavor_present_pre.png')
+    def is_cloudlet_present(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None):
+        #self.take_screenshot('is_cloudlet_present_pre.png')
 
         rows = self.get_table_rows()
         for r in rows:
-            print('*WARN*', 'flavorr', r, r[2], region, flavor_name, ram, vcpus, disk)
-            if r[0] == region and r[1] == flavor_name and r[2] == str(ram) and r[3] == str(vcpus) and r[4] == str(disk):
-                print('*WARN*', 'found flavor')
+            print('*WARN*', 'cloudlet', r, r[2], region, cloudlet_name, operator)
+            location = f'Latitude : {latitude} Longitude : {longitude}'
+            if r[0] == region and r[1] == cloudlet_name and r[2] == operator and r[3] == location:
+                logging.info('found app')
                 return True
 
         return False
 
-    def wait_for_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
+    def wait_for_cloudlet(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, wait=5):
+        logging.info(f'wait_for_cloudlet region={region} cloudlet={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude}')
         for attempt in range(wait):
-            if self.is_flavor_present(region, flavor_name, ram, vcpus, disk):
+            if self.is_cloudlet_present(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude ):
                 return True
             else:
                 time.sleep(1)
 
+        logging.error(f'timeout waiting for cloudlet region={region} cloudlet={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude}')
         return False
 
+    def get_cloudlet_icon_numbers(self):
+        number_cloudlets = 0
+        elements = self.get_all_elements(CloudletsPageLocators.cloudlets_map_icon)
+        for e in elements:
+            print('*WARN*', e, e.text)
+            if len(e.text) > 0:
+                number_cloudlets += int(e.text)
+
+        return number_cloudlets
     
+    def zoom_out_map(self, number_zooms=1):
+        print('*WARN*', 'zoomoutmap')
+        element = self.driver.find_element(*CloudletsPageLocators.cloudlets_zoom_out_icon)
+        for num in range(number_zooms):
+            print('*WARN*', 'zoomoutmap click')
+            element.click()
+
+    def click_cloudlet_name_heading(self):
+        self.driver.find_element(*CloudletsPageLocators.cloudlets_table_header_cloudletname).click()
+
+    def click_region_heading(self):
+        self.driver.find_element(*CloudletsPageLocators.cloudlets_table_header_region).click()
+
+    def click_operator_heading(self):
+        self.driver.find_element(*CloudletsPageLocators.cloudlets_table_header_operator).click()

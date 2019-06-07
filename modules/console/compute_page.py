@@ -80,6 +80,8 @@ class ComputePage(BasePage):
         cell_data = []
 
         for row in table.find_elements_by_css_selector('tr'):
+            row.location_once_scrolled_into_view   # cause row to scroll into view
+
             cell_data = []
             for cell in row.find_elements_by_css_selector('td'):
                 cell_data.append(cell.text)
@@ -94,7 +96,10 @@ class ComputePage(BasePage):
         self.driver.find_element(*ComputePageLocators.table_region_pulldown).click()
 
     def click_region_pulldown_option(self, option):
-        self.driver.find_element(*ComputePageLocators.table_region_pulldown_option_us).click()
+        if option.lower() == 'us':
+            self.driver.find_element(*ComputePageLocators.table_region_pulldown_option_us).click()
+        elif  option.lower() == 'eu':
+            self.driver.find_element(*ComputePageLocators.table_region_pulldown_option_eu).click()
 
     def click_flavors(self):
         self.driver.find_element(*ComputePageLocators.flavors_button).click()
