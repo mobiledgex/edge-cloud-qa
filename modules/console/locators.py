@@ -1,5 +1,8 @@
 from selenium.webdriver.common.by import By
 
+class BasePageLocators(object):
+    alert_box = (By.CSS_SELECTOR, 'div.s-alert-box-inner')
+        
 class LoginPageLocators(object):
     username_field = (By.NAME, 'username')
     password_field = (By.NAME, 'password')
@@ -7,13 +10,16 @@ class LoginPageLocators(object):
     login_switch_button = (By.XPATH, '//button/span[text()="Login"]')
     signup_switch_button = (By.XPATH, '//button/span[text()="SignUp"]')
     forgot_password_link = (By.CSS_SELECTOR, 'div.login-text')
-
+    login_validation = (By.CSS_SELECTOR, 'div.loginValidation')
+    #login_validation = (By.XPATH, '//*[@class="loginValidation"]')
+    
 class MainPageLocators(object):
     compute_button = (By.XPATH, '//button[text()="MobiledgeX Compute"]')
     monitoring_button = (By.XPATH, '//button[text()="MobiledgeX Monitoring"]')
     avatar = (By.XPATH, '//img[@src="/assets/avatar/avatar_default.svg"]')
     username = (By.XPATH, '//*[@class="navbar_right"]//span')
-
+    alert_box = (By.CSS_SELECTOR, 'div.s-alert-box-inner')
+    
 class ComputePageLocators(object):
     brand_class = (By.CSS_SELECTOR, 'div.content.brand')
     icons_class = (By.CSS_SELECTOR, 'i.material-icons.md-24.md-dark')
@@ -29,7 +35,8 @@ class ComputePageLocators(object):
     table_region_pulldown_option_all = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="ALL"]')
     table_region_pulldown_option_us = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="US"]')
     table_region_pulldown_option_eu = (By.XPATH, '//div[@class="row"]/div[@class="ui active visible dropdown selection"]//div[@role="option"]/span[text()="EU"]')
-    table_class = (By.CSS_SELECTOR, 'div.grid_table')
+    #table_class = (By.CSS_SELECTOR, 'div.grid_table')
+    table_class = (By.CSS_SELECTOR, 'table.viewListTable')
     table_data = (By.CSS_SELECTOR, 'tbody.tbBodyList')
 
     cloudlets_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cloudlets"]')
@@ -53,6 +60,20 @@ class CloudletsPageLocators(object):
     cloudlets_table_header_operator = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Operator"]')
     cloudlets_table_header_cloudletlocation = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="CloudletLocation"]')
     cloudlets_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
+    cloudlets_map_icon = (By.CSS_SELECTOR, 'text.marker_value')
+    cloudlets_expand_icon = (By.CSS_SELECTOR, 'i.expand.icon')
+    cloudlets_zoom_out_icon = (By.CSS_SELECTOR, 'i.minus.square.outline.icon')
+    cloudlets_zoom_in_icon = (By.CSS_SELECTOR, 'i.plus.square.outline.icon')
+    
+class AppsPageLocators(object):
+    apps_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
+    apps_table_header_appname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="AppName"]')
+    apps_table_header_orgname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="OrganizationName"]')
+    apps_table_header_version = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Version"]')
+    apps_table_header_deploymenttype = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DeploymentType"]')
+    apps_table_header_defaultflavor = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DefaultFlavor"]')
+    apps_table_header_ports = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Ports"]')
+    apps_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
 
 class NewPageLocators(object):
     heading = (By.XPATH, '//*[@class="ui modal transition visible active"]/div[text()="Settings"]')
