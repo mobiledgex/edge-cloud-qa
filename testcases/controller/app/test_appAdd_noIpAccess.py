@@ -101,7 +101,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      image_path='myimagepath',
+                                      image_path='myimagepath#md5:12345',
                                       access_ports=access_ports,
                                       cluster_name=cluster_name,
                                       developer_name=developer_name,
