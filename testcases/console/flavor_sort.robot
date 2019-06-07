@@ -69,13 +69,7 @@ Web UI - user shall be able sort flavors by name
     # Orders table descending
     @{sorting_flavors_Controller}=  Order Flavor Names  1
     # check that this number is DESCENDING now
-
     @{ws_sorted}=  Get Table Data
-
-    Log To Console  THE ROWSSS ________
-    Log To Console  ${rowsEU}
-    Log To Console  THE ROWSSS ________
-    Log To Console  ${rowsUS}
 
     ${num_flavors_table}=  Get Length  ${ws_sorted}
     ${num_flavors_1}=  Get Length  ${rowsUS}
@@ -91,8 +85,10 @@ Web UI - user shall be able sort flavors by name
     :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
     \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
 
-    # This here returns sorted. I dont want sorted we already have in reverse
+    # This here returns sorted.
     ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
+    # Reverse list to have descending order
+    Reverse List  ${sortedDictShowFlavors}
 
     ${ForLoop}=  Get Length  ${dictShowFlavors}
     ${ForLoop}=  Evaluate  ${ForLoop} - 1
@@ -100,9 +96,9 @@ Web UI - user shall be able sort flavors by name
     :FOR    ${i}    IN RANGE    0    ${ForLoop}
     \  ${o}=  Set Variable  ${i}
     \  ${o}=  Evaluate  ${o} * 2
-    \  Log To Console   ${sortedDictShowFlavors}[${o}]
+    \  Log To Console   ${sortedDictShowFlavors}[${o}][data][key][name]
     \  Log To Console   ${ws_sorted}[${i}][1]
-    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${ws_sorted}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}][data][key][name]  ${ws_sorted}[${i}][1]
 
 
 Web UI - user shall be able sort flavors by RAM
