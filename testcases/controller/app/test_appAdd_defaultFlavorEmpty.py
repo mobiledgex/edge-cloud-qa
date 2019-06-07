@@ -159,7 +159,7 @@ class tc(unittest.TestCase):
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
                                  developer_name=developer_name,
-                                 image_path='xxx',
+                                 image_path='imagepath#md5:12345',
                                  use_defaults=False
                                  )
         try:
