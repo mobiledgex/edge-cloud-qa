@@ -70,8 +70,8 @@ MC - User with no token shall not be able to get current status
    ${status_code}=  Response Status Code
    ${body}=         Response Body
 
-   Should Be Equal As Numbers  ${status_code}  401	
-   Should Be Equal             ${body}         {"message":"invalid or expired jwt"}
+   Should Be Equal As Numbers  ${status_code}  400	
+   Should Be Equal             ${body}         {"message":"no bearer token found"}
 
 MC - User with an empty token shall not be able to get current status
     [Documentation]
@@ -84,7 +84,7 @@ MC - User with an empty token shall not be able to get current status
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"no token found"}
+   Should Be Equal             ${body}         {"message":"no bearer token found"}
 
 MC - User with bad token1 shall not be able to get current status
     [Documentation]
