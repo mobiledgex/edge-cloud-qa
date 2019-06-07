@@ -1,7 +1,10 @@
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
 import logging
 import time
 from robot.api import logger
+
+from console.locators import BasePageLocators
 
 class BasePage(object):
     def __init__(self, driver):
@@ -13,7 +16,7 @@ class BasePage(object):
         try:
             element = self.driver.find_element(*element)
         except:
-            logging.error(f'element={element} is not found')
+            logging.warning(f'element={element} is not found')
             return False
         
         print('*WARN*', 'iselmentpresent', element, text, element.text)
@@ -41,7 +44,20 @@ class BasePage(object):
     def take_screenshot(self, name):
         self.driver.save_screenshot(name)
         logger.info(f'<img src="{name}">', html=True)
-        
+
+    def send_keys(self, element, keys):
+        logger.info('sending keys:' + keys)
+        self.driver.find_element(*element).send_keys(keys)
+
+    def is_alert_box_present(self):
+        return self.is_element_present(BasePageLocators.alert_box)
+
+    def get_alert_box_text(self):
+        return self.driver.find_element(*BasePageLocators.alert_box).text
+
+    def get_all_elements(self, element):
+        return  self.driver.find_elements(*element)
+    
 class BasePageElement(object):
     def __set__(self, obj, value):
         print('*WARN*', '__set__', value, *self.locator)
