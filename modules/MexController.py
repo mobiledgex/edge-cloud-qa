@@ -680,7 +680,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'qcow path not determined yet'
+                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345'
                 #self.image_type = 2
 
 
