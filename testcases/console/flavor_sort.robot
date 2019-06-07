@@ -22,16 +22,21 @@ Web UI - user shall be able sort flavors by name
     ...  Confirm flavor alphabetically sorted
 
     Open Flavors
-    @{fl}=  Order Flavor Names  5
-    # just to sort based on Flavor
-    @{rows}=  Get Table Data
-    Log To Console  THE ROWSSS ________
-    Log To Console  ${rows}
-    Log To Console  THE ROWSSS ________
-
+    # Sort Ascending With Both Regions
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
-    ${num_flavors_table}=  Get Length  ${rows}
+
+    # Orders table ascending
+    @{sorting_flavors_Controller}=  Order Flavor Names  5
+    # check that this number is ascending
+
+    @{ws_sorted}=  Get Table Data
+
+    Log To Console  THE ROWSSS ________
+    Log To Console  ${ws_sorted}
+    Log To Console  THE ROWSSS ________
+
+    ${num_flavors_table}=  Get Length  ${ws_sorted}
     ${num_flavors_1}=  Get Length  ${rowsUS}
     ${num_flavors_2}=  Get Length  ${rowsEU}
     ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
@@ -69,8 +74,8 @@ Web UI - user shall be able sort flavors by name
     \  ${o}=  Set Variable  ${i}
     \  ${o}=  Evaluate  ${o} * 2
     \  Log To Console   ${sortedDictShowFlavors}[${o}]
-    \  Log To Console   ${fl}[${i}][1]
-    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${fl}[${i}][1]
+    \  Log To Console   ${ws_sorted}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${ws_sorted}[${i}][1]
 
 
 Web UI - user shall be able sort flavors by RAM
