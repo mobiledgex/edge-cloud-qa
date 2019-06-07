@@ -8,6 +8,7 @@ from console.main_page import MainPage
 from console.compute_page import ComputePage
 from console.flavors_page import FlavorsPage
 from console.cloudlets_page import CloudletsPage
+from console.apps_page import AppsPage
 from console.new_settings_page import NewFlavorSettingsPage
 from console.new_cloudlet_settings_page import NewCloudletSettingsPage
 
@@ -29,21 +30,35 @@ class MexConsole() :
         self._cloudlet = None
         
         chrome_options = Options()
-        #chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--disable-extensions")
         #chrome_options.add_argument("--disable-gpu")
+        #chrome_options.add_argument("--proxy-server='direct://'")
+        #chrome_options.add_argument("--proxy-server=")
+        #chrome_options.add_argument("--proxy-bypass-list=*")
+        chrome_options.add_argument("--proxy-server='direct://'")
+        chrome_options.add_argument("--proxy-bypass-list=*")
+        chrome_options.add_argument("--start-maximized")
         #chrome_options.add_argument("--headless")
+        #chrome_options.add_argument('--disable-dev-shm-usage')
+        #chrome_options.add_argument('--no-sandbox')
+        #chrome_options.add_argument('disable-infobars')
+        #chrome_options.add_argument('--no-proxy-server')
+        chrome_options.add_argument('--enable-logging=stderr')
+
         
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
-
+        print('*WARN*', self.driver)
         self.driver.get(url)
 
         self.compute_page = ComputePage(self.driver)
         self.flavors_page = FlavorsPage(self.driver)
         self.cloudlets_page = CloudletsPage(self.driver)
+        self.apps_page = AppsPage(self.driver)
         self.new_flavor_page = NewFlavorSettingsPage(self.driver)
         self.new_cloudlet_page = NewCloudletSettingsPage(self.driver)
         
-    def login_to_mex_console(self, browser='Chrome', username='mexadmin', password='mexadmin123'):
+    def login_to_mex_console(self, browser='Chrome', username='mexadmin', password='mexadmin123', enter_key=False):
         self.take_screenshot('loginpage_pre')
 
         self.username = username
@@ -51,6 +66,8 @@ class MexConsole() :
         assert 'MEX MONITORING' in self.driver.title, 'Page title is not correct'
 
         login_page = LoginPage(self.driver)
+        #login_validation_text = login_page.get_login_validation_text()
+        #print('*WARN*', 'logintext1', login_validation_text)
 
         if login_page.is_login_switch_button_present:
             logging.info('login switch button is present')
@@ -62,11 +79,28 @@ class MexConsole() :
         else:
             raise Exception('signup switch button not found')
 
-        login_page.username = username
-        login_page.password = password
+        if username: login_page.username = username
+        if password: login_page.password = password
 
-        login_page.click_login_button()
-                
+        if enter_key:
+            logging.info('logging in with ENTER key')
+            login_page.hit_enter_key()
+        else:
+            logging.info('logging in with Login button key')
+            login_page.click_login_button()
+
+        #time.sleep(1)
+        
+        login_validation_text = login_page.get_login_validation_text()
+        print('*WARN*', 'logintext', login_validation_text)
+        if login_validation_text:
+            raise Exception(login_validation_text)
+        
+        if login_page.is_alert_box_present():
+            alert_text = login_page.get_alert_box_text()
+            logging.error(f'alert present box present with text={alert_text}')
+            raise Exception(alert_text)
+            
         main_page = MainPage(self.driver)
         if main_page.is_compute_button_present():
             logging.info('Compute button present')
@@ -189,6 +223,25 @@ class MexConsole() :
 
         self.take_screenshot('open_cloudlets_post')
 
+    def open_apps(self):
+        self.take_screenshot('open_apps_pre')
+
+        self.compute_page.click_apps()
+
+        if self.compute_page.is_table_heading_present('Apps'):
+            logging.info('apps heading present')
+        else:
+            raise Exception('apps heading not present')
+
+        if self.apps_page.is_apps_table_header_present():
+            logging.info('apps table header present')
+        else:
+            raise Exception('apps header not present')
+
+        time.sleep(3)  # wait for table to load. maybe a better way to do this
+
+        self.take_screenshot('open_apps_post')
+
     def add_new_flavor(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
         self.take_screenshot('add_new_flavor_pre')
 
@@ -251,8 +304,55 @@ class MexConsole() :
         #        return True
 
         #return False
-            
-    #def flavor_should
+
+    def app_should_exist(self, region=None, org_name=None, app_name=None, version=None, deployment_type=None, default_flavor=None, ports=None, wait=5):
+        self.take_screenshot('app_should_exist_pre')
+        logging.info(f'app_should_exist {region} {app_name} {org_name} {version} {deployment_type} {default_flavor} {ports}')
+        
+        if region is None: region = self._region
+        if app_name is None: flavor_name = self._app['key']['name']
+        if org_name is None: ram = self._flavor['ram']
+        if version is None: vcpus = self._flavor['vcpus']
+        if deployment_type is None: disk = self._flavor['disk']
+        if default_flavor is None: disk = self._flavor['disk']
+        if ports is None: disk = self._flavor['disk']
+        
+        if self.apps_page.wait_for_app(region=region, org_name=org_name, app_name=app_name, version=version, deployment_type=deployment_type, default_flavor=default_flavor, ports=ports):
+            logging.info('app found')
+        else:
+            raise Exception('App NOT found')
+
+    def cloudlet_should_exist(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, wait=5):
+        self.take_screenshot('cloudlet_should_exist_pre')
+        logging.info(f'cloudlet_should_exist {region} {cloudlet_name} {operator} {latitude} {longitude}')
+        
+        if region is None: region = self._region
+        if cloudlet_name is None: flavor_name = self._app['key']['name']
+        if operator is None: ram = self._flavor['ram']
+        if latitude is None: vcpus = self._flavor['vcpus']
+        if longitude is None: disk = self._flavor['disk']
+        
+        if self.cloudlets_page.wait_for_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude):
+            logging.info('cloudlet found')
+        else:
+            raise Exception('cloudlet NOT found')
+
+    def cloudlets_should_show_on_map(self, number_cloudlets):
+        self.cloudlets_page.zoom_out_map(2)
+
+        cloudlets = self.cloudlets_page.get_cloudlet_icon_numbers()
+        if cloudlets == number_cloudlets:
+            logging.info(f'number of cloudlet icons match. found {number_cloudlets} cloudlets')
+        else:
+            logging.error(f'didnot find all cloudlets. looking for {number_cloudlets} but found {cloudlets}')
+            raise Exception('not all cloudlets found on map')
+
+    def sort_cloudlets_by_cloudlet_name(self):
+        self.cloudlets_page.click_cloudlet_name_heading()
+
+    def sort_cloudlets_by_region(self):
+        self.cloudlets_page.click_region_heading()
+
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')
 
@@ -271,4 +371,5 @@ class MexConsole() :
         #self.take_screenshot('closebrowser')
         self.compute_page.take_screenshot('closebrowser.png')
         self.driver.close()
+        time.sleep(5)
         
