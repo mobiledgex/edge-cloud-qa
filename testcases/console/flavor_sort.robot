@@ -23,14 +23,20 @@ Web UI - user shall be able sort flavors by name
 
     Open Flavors
     @{fl}=  Order Flavor Names  5
+    # just to sort based on Flavor
+    @{rows}=  Get Table Data
+    Log To Console  THE ROWSSS ________
+    Log To Console  ${rows}
+    Log To Console  THE ROWSSS ________
+
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
-    ${num_flavors_fl}=  Get Length  ${fl}
+    ${num_flavors_table}=  Get Length  ${rows}
     ${num_flavors_1}=  Get Length  ${rowsUS}
     ${num_flavors_2}=  Get Length  ${rowsEU}
     ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
-    Should Be Equal  ${num_flavors_listed}  ${num_flavors_fl}
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
     # Should be unnecessary
     #${rowsCombined}=  Create List  ${rowsUS}  ${rowsEU}
