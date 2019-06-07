@@ -3,18 +3,18 @@ Documentation   Sort cloudlets
 
 #Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
-	
+
 #Suite Setup      Setup
 #Suite Teardown   Teardown
 
 Test Timeout    ${timeout}
-	
+
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadmin123
 ${timeout}           15 min
-	
+
 *** Test Cases ***
 Web UI - user shall be able to sort cloudlets by cloudlet name
    [Documentation]
@@ -32,7 +32,7 @@ Web UI - user shall be able to sort cloudlets by cloudlet name
    ${num_cloudlets_ws_asc}=     Get Length  ${ws_asc}
 
    Sort Cloudlets By Cloudlet Name
-	
+
    @{table_rows_asc}=  Get Table Data
    ${num_cloudlets_table_asc}=  Get Length  ${table_rows_asc}
 
@@ -46,7 +46,7 @@ Web UI - user shall be able to sort cloudlets by cloudlet name
    \  ${location}=  Catenate  SEPARATOR=${SPACE}  Latitude  :  ${row['data']['location']['latitude']}  Longitude  :  ${row['data']['location']['longitude']}
    \  Should Be Equal  ${location}  ${table_rows_asc[${counter}][3]}
    \  ${counter}=  Evaluate  ${counter} + 1
-	
+
    Should Be Equal  ${num_cloudlets_ws_asc}  ${num_cloudlets_table_asc}
 
 
@@ -57,7 +57,7 @@ Web UI - user shall be able to sort cloudlets by cloudlet name
    ${num_cloudlets_ws_desc}=     Get Length  ${ws_desc}
 
    Sort Cloudlets By Cloudlet Name
-	
+
    @{table_rows_desc}=  Get Table Data
    ${num_cloudlets_table_desc}=  Get Length  ${table_rows_desc}
 
@@ -71,7 +71,7 @@ Web UI - user shall be able to sort cloudlets by cloudlet name
    \  ${location}=  Catenate  SEPARATOR=${SPACE}  Latitude  :  ${row['data']['location']['latitude']}  Longitude  :  ${row['data']['location']['longitude']}
    \  Should Be Equal  ${location}  ${table_rows_desc[${counter}][3]}
    \  ${counter}=  Evaluate  ${counter} + 1
-	
+
    Should Be Equal  ${num_cloudlets_ws_desc}  ${num_cloudlets_table_desc}
 
 Web UI - user shall be able to sort cloudlets by region
@@ -90,7 +90,7 @@ Web UI - user shall be able to sort cloudlets by region
    ${num_cloudlets_ws_asc}=     Get Length  ${ws_asc}
 
    Sort Cloudlets By Region
-	
+
    @{table_rows_asc}=  Get Table Data
    ${num_cloudlets_table_asc}=  Get Length  ${table_rows_asc}
 
@@ -104,7 +104,7 @@ Web UI - user shall be able to sort cloudlets by region
    \  ${location}=  Catenate  SEPARATOR=${SPACE}  Latitude  :  ${row['data']['location']['latitude']}  Longitude  :  ${row['data']['location']['longitude']}
    \  Should Be Equal  ${location}  ${table_rows_asc[${counter}][3]}
    \  ${counter}=  Evaluate  ${counter} + 1
-	
+
    Should Be Equal  ${num_cloudlets_ws_asc}  ${num_cloudlets_table_asc}
 
 
@@ -115,7 +115,7 @@ Web UI - user shall be able to sort cloudlets by region
    ${num_cloudlets_ws_desc}=     Get Length  ${ws_desc}
 
    Sort Cloudlets By Region
-	
+
    @{table_rows_desc}=  Get Table Data
    ${num_cloudlets_table_desc}=  Get Length  ${table_rows_desc}
 
@@ -129,14 +129,13 @@ Web UI - user shall be able to sort cloudlets by region
    \  ${location}=  Catenate  SEPARATOR=${SPACE}  Latitude  :  ${row['data']['location']['latitude']}  Longitude  :  ${row['data']['location']['longitude']}
    \  Should Be Equal  ${location}  ${table_rows_desc[${counter}][3]}
    \  ${counter}=  Evaluate  ${counter} + 1
-	
+
    Should Be Equal  ${num_cloudlets_ws_desc}  ${num_cloudlets_table_desc}
 
 
 
 *** Keywords ***
 Setup
-    #create some flavors
     Log to console  login
 
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
