@@ -72,7 +72,7 @@ class MexApp(object):
         logging.info(f'recieved body={resp.text}')
         
         if resp.status_code != 200:
-            raise Exception('error. got {resp.status_code}. expected 200')
+            raise Exception(f'error. got {resp.status_code}. expected 200')
 
         if '<p>test server is running</p>' not in resp.text:
             raise Exception(f'error. did not get proper html text. got={resp.text}')
