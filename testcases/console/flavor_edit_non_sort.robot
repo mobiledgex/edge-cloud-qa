@@ -24,6 +24,7 @@ Web UI - user shall NOT be able to sort flavors by Edit
     Open Flavors
 
     @{rows}=  Get Table Data
+    Log To Console  Clicking Edit "sort" Button
     Order Flavor Edit
     @{identical}=  Get Table Data
     Lists Should Be Equal  ${rows}  ${identical}

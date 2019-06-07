@@ -26,15 +26,12 @@ Web UI - user shall be able sort flavors by name
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
 
-    # Orders table ascending
     @{sorting_flavors_Controller}=  Order Flavor Names  5
-    # check that this number is ascending
-
     @{ws_sorted}=  Get Table Data
 
-    Log To Console  THE ROWSSS ________
+    Log To Console  THE ROWS NOT SORTED AGAIN __x_________________----
     Log To Console  ${ws_sorted}
-    Log To Console  THE ROWSSS ________
+    Log To Console  THE ROWS ___x________----__--__-
 
     ${num_flavors_table}=  Get Length  ${ws_sorted}
     ${num_flavors_1}=  Get Length  ${rowsUS}
@@ -42,21 +39,6 @@ Web UI - user shall be able sort flavors by name
     ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
-
-    # Should be unnecessary
-    #${rowsCombined}=  Create List  ${rowsUS}  ${rowsEU}
-    #${matches1}=  Get Matches  ${rowsCombined}[1]  ''
-    #${matches2}=  Get Matches  ${rowsCombined}[0]  ''
-    #${match1}=  Get Length  ${matches1}
-    #${match2}=  Get Length  ${matches2}
-    #${match1}=  Evaluate  ${match1} + 1
-
-    #I WAS GETTING A RANDOM EMPTY FLAVOR BUT HONESTLY SORT SHOULD FIX IT
-    #Log To Console  There is a hard error finding a total empty flavor
-    #Should Be Equal  ${match1}  ${match2}
-    #Remove From Dictionary  ${rowsCombined}[1]  ''
-    #Remove From Dictionary  ${rowsCombined}[0]  ''
-
 
     # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
     &{dictShowFlavors}=  Create Dictionary
@@ -70,6 +52,51 @@ Web UI - user shall be able sort flavors by name
 
     ${ForLoop}=  Get Length  ${dictShowFlavors}
     ${ForLoop}=  Evaluate  ${ForLoop} - 1
+    # this math might change: depending where the name is
+    :FOR    ${i}    IN RANGE    0    ${ForLoop}
+    \  ${o}=  Set Variable  ${i}
+    \  ${o}=  Evaluate  ${o} * 2
+    \  Log To Console   ${sortedDictShowFlavors}[${o}]
+    \  Log To Console   ${ws_sorted}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${ws_sorted}[${i}][1]
+
+    #
+    # Sort Descending Flavor Names
+    #
+    @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=descending
+    @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=descending
+
+    # Orders table descending
+    @{sorting_flavors_Controller}=  Order Flavor Names  1
+    # check that this number is DESCENDING now
+
+    @{ws_sorted}=  Get Table Data
+
+    Log To Console  THE ROWSSS ________
+    Log To Console  ${rowsEU}
+    Log To Console  THE ROWSSS ________
+    Log To Console  ${rowsUS}
+
+    ${num_flavors_table}=  Get Length  ${ws_sorted}
+    ${num_flavors_1}=  Get Length  ${rowsUS}
+    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+
+    Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
+
+    &{dictShowFlavors}=  Create Dictionary
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
+
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
+
+    # This here returns sorted. I dont want sorted we already have in reverse
+    ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
+
+    ${ForLoop}=  Get Length  ${dictShowFlavors}
+    ${ForLoop}=  Evaluate  ${ForLoop} - 1
+    # this math might change: depending where the name is
     :FOR    ${i}    IN RANGE    0    ${ForLoop}
     \  ${o}=  Set Variable  ${i}
     \  ${o}=  Evaluate  ${o} * 2
@@ -97,7 +124,6 @@ Web UI - user shall be able sort flavors by RAM
     Log To Console  ${fl}
     Log To Console  ${rowsUS}[0]
 
-    # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
     &{dictShowFlavors}=  Create Dictionary
     :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
     \  Log To Console  ${i}
@@ -105,7 +131,6 @@ Web UI - user shall be able sort flavors by RAM
 
     :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
     \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][ram]  ${rowsEU}[${i}]
-
 
 
     ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
@@ -118,7 +143,6 @@ Web UI - user shall be able sort flavors by RAM
     \  Log To Console   ${sortedDictShowFlavors}[${o}]
     \  Log To Console   ${fl}[${i}][1]
     \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${fl}[${i}][1]
-
 
 
 Web UI - user shall be able sort flavors by VCPUS
