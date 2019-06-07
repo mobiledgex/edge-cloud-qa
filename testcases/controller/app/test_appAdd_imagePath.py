@@ -97,7 +97,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains QCOW and image_path
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                      image_path='/home/andy/myimage.exe',
+                                      image_path='/home/andy/myimage.exe#md5:12345',
                                       app_name=app_name,
                                       app_version=app_version,
                                       cluster_name=cluster_name,
