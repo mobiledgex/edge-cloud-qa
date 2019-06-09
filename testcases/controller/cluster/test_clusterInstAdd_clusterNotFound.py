@@ -30,7 +30,7 @@ class tc(unittest.TestCase):
         cluster_name = 'cluster' + str(time.time())
         operator_name = 'dmuus'
         cloud_name = 'tmocloud-1'
-        flavor_name = 'c1.small'
+        flavor_name = 'c1.small' + str(time.time())
 
         self.controller = mex_controller.MexController(controller_address = controller_address,
                                                     root_cert = mex_root_cert,
