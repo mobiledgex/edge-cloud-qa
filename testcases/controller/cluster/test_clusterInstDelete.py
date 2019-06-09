@@ -52,6 +52,9 @@ class tc(unittest.TestCase):
         self.cluster_instance_noflavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
+                                                                        developer_name='mydev',
+                                                                        number_masters=1,
+                                                                        number_nodes=1,
                                                                         use_defaults=False)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,

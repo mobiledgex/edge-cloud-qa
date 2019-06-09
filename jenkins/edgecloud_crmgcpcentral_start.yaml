@@ -47,6 +47,8 @@ spec:
          - "/root/tls/mex-server.crt"
          - "--platform"
          - "gcp"
+         - "--vaultAddr"
+         - "vault.mobiledgex.net"
          - "--d"
          - "api,notify,mexos"
       imagePullSecrets:

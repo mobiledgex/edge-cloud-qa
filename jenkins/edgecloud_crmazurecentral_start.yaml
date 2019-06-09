@@ -47,6 +47,8 @@ spec:
          - "azure"
          - "--tls"
          - "/root/tls/mex-server.crt"
+         - "--vaultAddr"
+         - "vault.mobiledgex.net"
          - "--d"
          - "api,notify,mexos"
       imagePullSecrets:
