@@ -47,12 +47,12 @@ class tc(unittest.TestCase):
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_developer(self.developer.developer) 
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppDockerImagePath(self):
         # [Documentation] App - User shall be able to create an app with imagepath and type Docker
@@ -68,7 +68,7 @@ class tc(unittest.TestCase):
                                       image_path='/home/andy/myimage.exe',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      cluster_name=cluster_name,
+                                      #cluster_name=cluster_name,
                                       developer_name=developer_name,
                                       access_ports=access_ports,
                                       default_flavor_name=flavor_name)
@@ -100,7 +100,7 @@ class tc(unittest.TestCase):
                                       image_path='/home/andy/myimage.exe#md5:12345',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      cluster_name=cluster_name,
+                                      #cluster_name=cluster_name,
                                       developer_name=developer_name,
                                       access_ports=access_ports,
                                       default_flavor_name=flavor_name)
@@ -119,7 +119,7 @@ class tc(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
