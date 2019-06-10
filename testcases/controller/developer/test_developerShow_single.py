@@ -46,16 +46,16 @@ class tc(unittest.TestCase):
 
         # create developer
         self.developer = mex_controller.Developer(developer_name = developer_name,
-                                                  developer_email = developer_email,
-                                                  developer_address = developer_address,
-                                                  developer_username = developer_email,
-                                                  developer_passhash = developer_passhash,
+#                                                  developer_email = developer_email,
+#                                                  developer_address = developer_address,
+#                                                  developer_username = developer_email,
+#                                                  developer_passhash = developer_passhash,
         )
         self.developer_2 = mex_controller.Developer(developer_name = developer_name + '_2',
-                                                  developer_email = developer_email,
-                                                  developer_address = developer_address,
-                                                  developer_username = developer_email,
-                                                  developer_passhash = developer_passhash,
+#                                                  developer_email = developer_email,
+#                                                  developer_address = developer_address,
+#                                                  developer_username = developer_email,
+#                                                  developer_passhash = developer_passhash,
         )
 
         self.controller.create_developer(self.developer.developer)

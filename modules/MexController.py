@@ -49,24 +49,25 @@ logger = logging.getLogger('mex_controller')
 #cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 
 class Developer():
-    def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
+    #def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
+    def __init__(self, developer_name=None, include_fields=False, use_defaults=True):
         #global developer_name_default
         
         dev_dict = {}
         _fields_list = []
 
         self.developer_name = developer_name
-        self.developer_address = developer_address
-        self.developer_email = developer_email
-        self.developer_passhash = developer_passhash
-        self.developer_username = developer_username
+        #self.developer_address = developer_address
+        #self.developer_email = developer_email
+        #self.developer_passhash = developer_passhash
+        #self.developer_username = developer_username
 
         # used for UpdateDeveloper - hardcoded from proto
         self._developer_name_field = str(developer_pb2.Developer.KEY_FIELD_NUMBER) + '.' + str(developer_pb2.DeveloperKey.NAME_FIELD_NUMBER)
-        self._developer_username_field = str(developer_pb2.Developer.USERNAME_FIELD_NUMBER)
-        self._developer_passhash_field = str(developer_pb2.Developer.PASSHASH_FIELD_NUMBER)
-        self._developer_address_field = str(developer_pb2.Developer.ADDRESS_FIELD_NUMBER)
-        self._developer_email_field = str(developer_pb2.Developer.EMAIL_FIELD_NUMBER)
+        #self._developer_username_field = str(developer_pb2.Developer.USERNAME_FIELD_NUMBER)
+        #self._developer_passhash_field = str(developer_pb2.Developer.PASSHASH_FIELD_NUMBER)
+        #self._developer_address_field = str(developer_pb2.Developer.ADDRESS_FIELD_NUMBER)
+        #self._developer_email_field = str(developer_pb2.Developer.EMAIL_FIELD_NUMBER)
 
         #print('key', vars(developer_pb2.Developer))
         #print('fields', developer_pb2.DeveloperKey._fields, dir(developer_pb2.DeveloperKey))
@@ -84,26 +85,26 @@ class Developer():
         if self.developer_name is not None:
             dev_dict['key'] = developer_pb2.DeveloperKey(name=self.developer_name)
             _fields_list.append(self._developer_name_field)
-        if developer_address is not None:
-            dev_dict['address'] = developer_address
-            _fields_list.append(self._developer_address_field)
-        else:
-            self.developer_address = ''
-        if developer_email is not None:
-            dev_dict['email'] = developer_email
-            _fields_list.append(self._developer_email_field)
-        else:
-            self.developer_email = ''
-        if developer_passhash is not None:
-            dev_dict['passhash'] = developer_passhash
-            _fields_list.append(self._developer_passhash_field)
-        else:
-            self.developer_passhash = ''
-        if developer_username is not None:
-            dev_dict['username'] = developer_username
-            _fields_list.append(self._developer_username_field)
-        else:
-            self.developer_username = ''
+        #if developer_address is not None:
+        #    dev_dict['address'] = developer_address
+        #    _fields_list.append(self._developer_address_field)
+        #else:
+        #    self.developer_address = ''
+        #if developer_email is not None:
+        #    dev_dict['email'] = developer_email
+        #    _fields_list.append(self._developer_email_field)
+        #else:
+        #    self.developer_email = ''
+        #if developer_passhash is not None:
+        #    dev_dict['passhash'] = developer_passhash
+        #    _fields_list.append(self._developer_passhash_field)
+        #else:
+        #    self.developer_passhash = ''
+        #if developer_username is not None:
+        #    dev_dict['username'] = developer_username
+        #    _fields_list.append(self._developer_username_field)
+        #else:
+        #    self.developer_username = ''
         #dev_dict['fields'] = 'andy'
         #print(dev_dict)
         self.developer = developer_pb2.Developer(**dev_dict)
@@ -114,7 +115,8 @@ class Developer():
         
     def __eq__(self, c):
         #print('c',c.address, 'a',self.developer_address)
-        if c.key.name == self.developer_name and c.address == self.developer_address and c.email == self.developer_email and c.username == self.developer_username and c.passhash == self.developer_passhash:
+        #if c.key.name == self.developer_name and c.address == self.developer_address and c.email == self.developer_email and c.username == self.developer_username and c.passhash == self.developer_passhash:
+        if c.key.name == self.developer_name:
             #print('contains')
             return True
         else:
