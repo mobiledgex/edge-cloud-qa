@@ -168,7 +168,7 @@ CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessD
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster
+    #Create Cluster
     Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  latitude=1  longitude=1
     Create Cloudlet  cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}  latitude=1  longitude=1
 	
