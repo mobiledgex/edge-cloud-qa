@@ -135,6 +135,6 @@ CreateClusterInst - shall not create with IpAccessDedicated and invalid deployme
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster
+    #Create Cluster
 	
 

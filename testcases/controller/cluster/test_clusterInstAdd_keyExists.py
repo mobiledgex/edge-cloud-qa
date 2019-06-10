@@ -43,8 +43,8 @@ class tc(unittest.TestCase):
                                                     key = mex_key,
                                                     client_cert = mex_cert
                                                    )
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
 
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
@@ -64,7 +64,7 @@ class tc(unittest.TestCase):
         clusterinst_pre = self.controller.show_cluster_instances()
 
         # create a new cluster and cluster instance
-        create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
         #time.sleep(1)
 
@@ -83,7 +83,7 @@ class tc(unittest.TestCase):
 
     def tearDown(self):
         self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
