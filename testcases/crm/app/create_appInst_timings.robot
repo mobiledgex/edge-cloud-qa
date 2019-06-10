@@ -37,7 +37,7 @@ CreateAppInst on openstack shall create quickly
 *** Keywords ***
 Setup
 
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
+    #Create Cluster   default_flavor_name=${cluster_flavor_name}
 
     Log To Console  Creating Cluster Instance
     ${clusterInst_start_epoch_time}=  Get Time  epoch

@@ -31,7 +31,7 @@ ClusterInst shall create with IpAccessDedicated/K8s and num_masters=1 and num_no
    ...  verify it creates 1 lb and 1 node and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -81,7 +81,7 @@ ClusterInst shall create with IpAccessDedicated/k8s and num_masters=1 and num_no
    ...  verify it creates 1 lb and 5 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -148,7 +148,7 @@ ClusterInst shall create with IpAccessDedicated/k8s and num_masters=0 and num_no
 
    #  EDGECLOUD-641 - Should not be able to do CreateClusterInst with IpAccessDedicated and num_masters=0 and num_nodes=1
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name

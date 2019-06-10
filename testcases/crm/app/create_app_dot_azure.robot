@@ -59,7 +59,7 @@ Setup
 
     Create Developer
     Create Flavor
-    Create Cluster   cluster_name=${cluster_name} 
+    #Create Cluster   cluster_name=${cluster_name} 
     
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}
