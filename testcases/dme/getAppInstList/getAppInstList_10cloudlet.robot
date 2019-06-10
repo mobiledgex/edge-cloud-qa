@@ -226,7 +226,7 @@ GetAppInstList - request shall return 10 cloudlets
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster	
+    #Create Cluster	
     Create Cloudlet	   cloudlet_name=${cloudlet_name3}  operator_name=${operator_name}  latitude=3  longitude=3
     Create Cloudlet        cloudlet_name=${cloudlet_name4}  operator_name=${operator_name}  latitude=4  longitude=4
     Create Cloudlet        cloudlet_name=${cloudlet_name5}  operator_name=${operator_name}  latitude=5  longitude=5
