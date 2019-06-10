@@ -64,7 +64,7 @@ Setup
     #Create Developer
     #Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
+    #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}

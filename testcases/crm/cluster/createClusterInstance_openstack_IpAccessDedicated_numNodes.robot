@@ -31,7 +31,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    ...  verify it creates 1 lb and 1 node and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -82,7 +82,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
    ...  verify it creates 1 lb and 3 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -141,7 +141,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
    ...  verify it creates 1 lb and 12 nodes and 1 master
 
    Create Flavor          ram=8192  vcpus=4  disk=40
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -235,7 +235,7 @@ ClusterInst shall not create with IpAccessDedicated and multiple masters
    ...  verify error is received
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -277,7 +277,7 @@ ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 
 
    #  EDGECLOUD-641 - Should not be able to do CreateClusterInst with IpAccessDedicated and num_masters=0 and num_nodes=1
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -318,7 +318,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
    ...  verify it creates lb only
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
