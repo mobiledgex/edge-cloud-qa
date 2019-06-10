@@ -471,14 +471,14 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
         _fields_list = []
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
-        self.accessuri = accessuri
+        self.accesscredentials = accesscredentials
         self.latitude = latitude
         self.longitude = longitude
         self.ipsupport = ipsupport
@@ -489,7 +489,7 @@ class Cloudlet():
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
-        self._cloudlet_accessuri_field = str(cloudlet_pb2.Cloudlet.ACCESS_URI_FIELD_NUMBER)
+        self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
         self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
         self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONGITUDE_FIELD_NUMBER)
         self._cloudlet_ipsupport_field = str(cloudlet_pb2.Cloudlet.IP_SUPPORT_FIELD_NUMBER)
@@ -508,8 +508,8 @@ class Cloudlet():
             self.number_of_dynamic_ips = 254
         if ipsupport is None and use_defaults == True:
             self.ipsupport=2
-        if accessuri is None and use_defaults == True:
-            self.accessuri='https://www.edgesupport.com/test'
+        if accesscredentials is None and use_defaults == True:
+            self.accesscredentials='https://www.edgesupport.com/test'
         if staticips is None and use_defaults == True:
             self.staticips = '10.10.10.10'
             
@@ -560,9 +560,9 @@ class Cloudlet():
         if self.ipsupport is not None:
             cloudlet_dict['ip_support'] = self.ipsupport
             _fields_list.append(self._cloudlet_ipsupport_field)
-        if self.accessuri is not None:
-            cloudlet_dict['access_uri'] = self.accessuri
-            _fields_list.append(self._cloudlet_accessuri_field)
+        if self.accesscredentials is not None:
+            cloudlet_dict['access_credentials'] = self.accesscredentials
+            _fields_list.append(self._cloudlet_accesscredentials_field)
         if self.staticips is not None:
             cloudlet_dict['static_ips'] = self.staticips
             _fields_list.append(self._cloudlet_staticips_field)
