@@ -43,7 +43,7 @@ class tc(unittest.TestCase):
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                cloudlet_name=cloud_name,
                                                                flavor_name=flavor_name,
@@ -51,7 +51,7 @@ class tc(unittest.TestCase):
                                                               )
 
         # create a new cluster for adding the instance
-        create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         #self.controller.create_operator(self.operator.operator)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
@@ -84,10 +84,10 @@ class tc(unittest.TestCase):
 
         assert_expectations()
 
-    @classmethod
-    def tearDownClass(self):
+#    @classmethod
+#    def tearDownClass(self):
         # delete cluster instance
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         #time.sleep(1)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
