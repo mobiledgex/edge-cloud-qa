@@ -547,7 +547,7 @@ AppInst - user shall be able to allocate port http:18888
 Setup
     Create Developer
     Create Flavor
-    Create Cluster  
+    #Create Cluster  
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     Log To Console  Done Creating Cluster Instance
