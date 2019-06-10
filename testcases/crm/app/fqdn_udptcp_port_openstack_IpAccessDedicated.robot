@@ -26,7 +26,6 @@ ${mobiledgex_domain}  mobiledgex.net
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_command}  ./server_ping_threaded.py
 ${http_page}       automation.html
-${app_template}    http://35.199.188.102/apps/apptemplate.yaml
 
 ${test_timeout_crm}  15 min
 	
@@ -40,7 +39,7 @@ User shall be able to access 1 UDP port on openstack with IpAccessDedicated
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  app_template=${apptemplate}  default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 	
     Log To Console  Registering Client and Finding Cloudlet
@@ -65,7 +64,7 @@ User shall be able to access 2 UDP ports on openstack with IpAccessDedicated
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  app_template=${apptemplate}  default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Log To Console  Registering Client and Finding Cloudlet
@@ -88,7 +87,7 @@ User shall be able to access 1 TCP port on openstack with IpAccessDedicated
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  app_template=${apptemplate}  default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -109,7 +108,7 @@ User shall be able to access 2 TCP ports on openstack with IpAccessDedicated
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  app_template=${apptemplate}  default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -132,7 +131,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDed
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  app_template=${apptemplate}  default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -201,7 +200,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDe
 Setup
     Create Developer
     Create Flavor
-    Create Cluster   #default_flavor_name=${cluster_flavor_name}
+    #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated
