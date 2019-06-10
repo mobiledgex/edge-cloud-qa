@@ -48,8 +48,8 @@ class tc(unittest.TestCase):
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
 
         # create the app
         self.app = mex_controller.App(image_type='ImageTypeDocker',
@@ -57,13 +57,13 @@ class tc(unittest.TestCase):
                                       app_version=app_version,
                                       #ip_access=ip_access,
                                       access_ports=access_ports,
-                                      cluster_name=cluster_name,
+                                      #cluster_name=cluster_name,
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_developer(self.developer.developer) 
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
         self.controller.create_app(self.app.app)
 
 
@@ -118,7 +118,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.controller.delete_app(self.app.app)
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
