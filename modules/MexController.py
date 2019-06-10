@@ -635,10 +635,10 @@ class App():
         self.developer_name = developer_name
         self.image_type = image_type
         self.image_path = image_path
-        self.config = config
+        #self.config = config
         self.command = command
         self.default_flavor_name = default_flavor_name
-        self.cluster_name = cluster_name
+        #self.cluster_name = cluster_name
         #self.ip_access = ip_access
         self.access_ports = access_ports
         self.auth_public_key = auth_public_key
@@ -662,7 +662,7 @@ class App():
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
             if image_type is None: self.image_type = 'ImageTypeDocker'
-            if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
+            #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
@@ -710,8 +710,8 @@ class App():
             self.app_version = shared_variables.app_version_default
         if self.developer_name == 'default':
             self.developer_name = shared_variables.developer_name_default
-        if self.cluster_name == 'default':
-            self.cluster_name = shared_variables.cluster_name_default
+        #if self.cluster_name == 'default':
+        #    self.cluster_name = shared_variables.cluster_name_default
         if self.default_flavor_name == 'default':
             self.default_flavor_name = shared_variables.flavor_name_default
             
@@ -733,17 +733,17 @@ class App():
             app_dict['image_path'] = self.image_path
         #if self.ip_access:
         #    app_dict['ip_access'] = self.ip_access
-        if self.cluster_name is not None:
-            app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
+        #if self.cluster_name is not None:
+        #    app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if self.default_flavor_name is not None:
             app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = self.default_flavor_name)
         if self.access_ports:
             app_dict['access_ports'] = self.access_ports
             _fields_list.append(self._access_ports_field)
-        if self.config:
-            app_dict['config'] = self.config
-        else:
-            self.config = ''
+        #if self.config:
+        #    app_dict['config'] = self.config
+        #else:
+        #    self.config = ''
         if self.command is not None:
             app_dict['command'] = self.command
         if self.auth_public_key is not None:
@@ -775,10 +775,10 @@ class App():
                 self.app.fields.append(field)
 
     def __eq__(self, a):
-        logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
+        #logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
         #print('zzzz',a.key.name,self.app_name ,a.key.version,self.app_version,a.image_path,self.image_path,a.ip_access,self.ip_access,a.access_ports,self.access_ports,a.default_flavor.name,self.default_flavor_name,a.cluster.name,self.cluster_name,a.image_type,self.image_type,a.config,self.config)
         #if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
-        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
+        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.image_type:
             return True
         else:
             return False
