@@ -35,7 +35,7 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
    ...  verify fails since it maps size=m4.tiny on openstack which has a disk of 10g. Must be at least 20g
 
    Create Flavor  ram=512  vcpus=1  disk=1
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
 
@@ -51,7 +51,7 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ...  verify it allocates size=m4.small on openstack
 
    Create Flavor  ram=1024  vcpus=1  disk=1
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -70,7 +70,7 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}   m4.small 
 	
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    [Documentation]
@@ -78,7 +78,7 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ...  verify it allocates size=m4.small on openstack
 
    Create Flavor  ram=2048  vcpus=2  disk=2
-   Create Cluster  
+   #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -97,7 +97,7 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}   m4.small
 
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    [Documentation]
@@ -105,7 +105,7 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=4096  vcpus=4  disk=4
-   Create Cluster  
+   #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -124,7 +124,7 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}   sdwan-ESC 
 
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    [Documentation]
@@ -132,7 +132,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ...  verify it allocates size=m4.large on openstack
 
    Create Flavor  ram=8192  vcpus=4  disk=40
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -151,7 +151,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.large
 	
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    [Documentation]
@@ -159,7 +159,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ...  verify it allocates size=m4.xlarge on openstack
 
    Create Flavor  ram=16384  vcpus=8  disk=160
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -178,7 +178,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
 	
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    [Documentation]
@@ -186,7 +186,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=8192  vcpus=1  disk=1
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -205,7 +205,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     sdwan-ESC
 	
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    [Documentation]
@@ -213,7 +213,7 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ...  verify it allocates size=sdwan-ESC on openstack
 
    Create Flavor  ram=1024  vcpus=1  disk=160
-   Create Cluster  #cluster_name=${cluster_name}
+   #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -232,7 +232,7 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
 	
-   Sleep  120 seconds  #wait for metrics apps to build before can delete
+   #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
 #Cluster shall create with different master and node flavors on openstack
 #   [Documentation]
@@ -281,7 +281,7 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=4096  vcpus=20  disk=4
-   Create Cluster  
+   #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -301,7 +301,7 @@ Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=40960  vcpus=1  disk=1
-   Create Cluster  
+   #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -321,7 +321,7 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    ...  verify it fails since it cannot find a suitable flavor
 
    Create Flavor  ram=1024  vcpus=1  disk=1000
-   Create Cluster  
+   #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name

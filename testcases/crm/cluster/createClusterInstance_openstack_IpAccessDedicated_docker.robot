@@ -24,7 +24,7 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    ...  verify it creates lb only
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
