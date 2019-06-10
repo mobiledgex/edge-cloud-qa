@@ -992,7 +992,7 @@ class MexController(MexGrpc):
         self.controller_stub = controller_pb2_grpc.ControllerApiStub(self.grpc_channel)
 
         self.cluster_flavor_stub = clusterflavor_pb2_grpc.ClusterFlavorApiStub(self.grpc_channel)
-        self.cluster_stub = cluster_pb2_grpc.ClusterApiStub(self.grpc_channel)
+        #self.cluster_stub = cluster_pb2_grpc.ClusterApiStub(self.grpc_channel)
         self.clusterinst_stub = clusterinst_pb2_grpc.ClusterInstApiStub(self.grpc_channel)
         self.cloudlet_stub = cloudlet_pb2_grpc.CloudletApiStub(self.grpc_channel)
         self.flavor_stub = flavor_pb2_grpc.FlavorApiStub(self.grpc_channel)
