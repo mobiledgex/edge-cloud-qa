@@ -41,8 +41,8 @@ class tc(unittest.TestCase):
 
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                         default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                 default_flavor_name=flavor_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -67,7 +67,7 @@ class tc(unittest.TestCase):
         # create a new cluster for adding the instance
         #self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
-        create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
     def test_NoFlavor(self):
@@ -126,7 +126,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         # delete cluster instance
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
