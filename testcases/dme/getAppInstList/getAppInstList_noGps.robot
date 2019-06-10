@@ -28,7 +28,7 @@ GetAppInstList - request shall fail with no GPS coords
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster	
+    #Create Cluster	
     Create App			access_ports=tcp:1 
     ${dmuus_appinst}=            Create App Instance  cloudlet_name=tmocloud-1  operator_name=dmuus  cluster_instance_name=autocluster
 

@@ -56,7 +56,7 @@ GetAppInstList - request shall not return default cloudlet apps
 Setup
     Create Developer
     Create Flavor
-    Create Cluster
+    #Create Cluster
     Create App                  access_ports=tcp:1  
     ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com  cluster_instance_name=autocluster

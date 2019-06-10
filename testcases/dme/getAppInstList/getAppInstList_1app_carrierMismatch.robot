@@ -51,7 +51,7 @@ GetAppInstList - request shall return only app that matches carrier
 Setup
     Create Developer            
     Create Flavor
-    Create Cluster	
+    #Create Cluster	
     Create App			access_ports=tcp:1
     ${dmuus_appinst}=           Create App Instance  cloudlet_name=tmocloud-1  operator_name=dmuus  cluster_instance_name=autocluster
     Create App Instance         cloudlet_name=attcloud-1  operator_name=att  cluster_instance_name=autocluster
