@@ -21,7 +21,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 
 operator_name = 'dmuus'
 cloud_name = 'tmocloud-1'
-flavor_name = 'c1.tiny'
+flavor_name = 'c1.tiny' + str(time.time())
 cluster_name = 'cluster' + str(time.time())
 
 mex_root_cert = 'mex-ca.crt'
@@ -41,7 +41,7 @@ class tc(unittest.TestCase):
                                                    ) 
 
         # no default flavor
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
@@ -65,7 +65,7 @@ class tc(unittest.TestCase):
 
         # create a new cluster for adding the instance
         self.controller.create_flavor(self.flavor.flavor)
-        create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
         #self.controller.create_operator(self.operator.operator)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
@@ -96,7 +96,7 @@ class tc(unittest.TestCase):
         expect_equal(found_cluster, False, 'no flavor found new cluster')
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
         # EDGECLOUD-171
-        expect_equal(self.controller.response.details(), 'No Flavor specified and no default Flavor for Cluster', 'error details')
+        expect_equal(self.controller.response.details(), 'No Flavor specified', 'error details')
 
         assert_expectations()
 
@@ -127,14 +127,14 @@ class tc(unittest.TestCase):
         expect_equal(found_cluster, False, 'empty flavor found new cluster')
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
         # EDGECLOUD-171
-        expect_equal(self.controller.response.details(), 'No Flavor specified and no default Flavor for Cluster', 'error details')
+        expect_equal(self.controller.response.details(), 'No Flavor specified', 'error details')
 
         assert_expectations()
 
     @classmethod
     def tearDownClass(self):
         # delete cluster instance
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)

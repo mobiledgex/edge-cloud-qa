@@ -66,6 +66,6 @@ VerifyLocation - request with longitude only should succeed
 Setup
     Create Developer
     Create Flavor
-    Create Cluster
+    #Create Cluster
     Create App
     Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}  cluster_instance_name=autocluster

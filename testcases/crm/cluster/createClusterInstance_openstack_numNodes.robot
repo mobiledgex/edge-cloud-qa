@@ -30,7 +30,7 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    ...  verify it 4 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -66,7 +66,7 @@ Cluster shall create with IpAccessShared and num_nodes=10 on openstack
    ...  verify it 10 nodes and 1 master
 
    Create Flavor          ram=8192  vcpus=4  disk=40
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -109,7 +109,7 @@ Cluster shall not create with IpAccessShared and multiple masters
    ...  verify error is received
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -150,7 +150,7 @@ Cluster shall not create clusterInst with IpAccessShared and 0 masters
    ...  verify error is received
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   Create Cluster        
+   #Create Cluster        
 
    Log to Console  START creating cluster instance
    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessShared

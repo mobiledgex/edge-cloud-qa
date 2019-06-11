@@ -36,7 +36,7 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
-    Create Cluster	
+    #Create Cluster	
     Create Cluster Instance     cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}	
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
     Create App Instance		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster

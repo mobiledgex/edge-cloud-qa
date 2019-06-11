@@ -52,9 +52,9 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_developer(self.developer.developer) 
         
@@ -125,7 +125,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      image_path = 'myimagepath#md5:12345',
+                                      image_path = 'myimagepath#md5:12345678901234567890123456789012',
                                       access_ports=access_ports,
                                       cluster_name='',
                                       developer_name=developer_name,

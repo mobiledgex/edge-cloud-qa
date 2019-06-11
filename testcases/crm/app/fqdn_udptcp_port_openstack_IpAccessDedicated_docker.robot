@@ -149,7 +149,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with docker
 Setup
     Create Developer
     Create Flavor
-    Create Cluster   #default_flavor_name=${cluster_flavor_name}
+    #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker

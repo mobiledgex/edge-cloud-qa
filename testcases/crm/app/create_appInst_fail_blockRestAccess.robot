@@ -110,7 +110,7 @@ CRM shall recover when attempting to create an app instance with autocluster on 
 Setup
     #Create Developer
     Create Flavor
-    Create Cluster   #default_flavor_name=${cluster_flavor_name}
+    #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
 

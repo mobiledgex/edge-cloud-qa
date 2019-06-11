@@ -91,6 +91,6 @@ VerifyLocation - request with expired cookie should return 'token is expired by'
 Setup
     Create Developer
     Create Flavor
-    Create Cluster
+    #Create Cluster
     Create App              
 

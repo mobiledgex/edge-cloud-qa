@@ -43,15 +43,15 @@ class tc(unittest.TestCase):
                                                    )
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
 
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_developer(self.developer.developer) 
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP1(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeDocker/tcp:1
@@ -66,7 +66,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:1',
@@ -100,7 +100,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:01',
@@ -134,7 +134,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:1',
@@ -168,7 +168,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:01',
@@ -204,7 +204,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:1',
@@ -240,7 +240,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:01',
@@ -274,7 +274,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:1',
@@ -305,7 +305,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:01',
@@ -336,7 +336,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:1',
@@ -367,7 +367,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:01',
@@ -398,7 +398,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:1',
@@ -429,7 +429,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:01',
@@ -460,7 +460,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
                                              app_name=app_name,
                                              app_version=app_version,
-                                             cluster_name=cluster_name,
+                                             #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'HTTP:01',
@@ -480,7 +480,7 @@ class tc(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 

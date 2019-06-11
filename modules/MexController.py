@@ -49,24 +49,25 @@ logger = logging.getLogger('mex_controller')
 #cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 
 class Developer():
-    def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
+    #def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
+    def __init__(self, developer_name=None, include_fields=False, use_defaults=True):
         #global developer_name_default
         
         dev_dict = {}
         _fields_list = []
 
         self.developer_name = developer_name
-        self.developer_address = developer_address
-        self.developer_email = developer_email
-        self.developer_passhash = developer_passhash
-        self.developer_username = developer_username
+        #self.developer_address = developer_address
+        #self.developer_email = developer_email
+        #self.developer_passhash = developer_passhash
+        #self.developer_username = developer_username
 
         # used for UpdateDeveloper - hardcoded from proto
         self._developer_name_field = str(developer_pb2.Developer.KEY_FIELD_NUMBER) + '.' + str(developer_pb2.DeveloperKey.NAME_FIELD_NUMBER)
-        self._developer_username_field = str(developer_pb2.Developer.USERNAME_FIELD_NUMBER)
-        self._developer_passhash_field = str(developer_pb2.Developer.PASSHASH_FIELD_NUMBER)
-        self._developer_address_field = str(developer_pb2.Developer.ADDRESS_FIELD_NUMBER)
-        self._developer_email_field = str(developer_pb2.Developer.EMAIL_FIELD_NUMBER)
+        #self._developer_username_field = str(developer_pb2.Developer.USERNAME_FIELD_NUMBER)
+        #self._developer_passhash_field = str(developer_pb2.Developer.PASSHASH_FIELD_NUMBER)
+        #self._developer_address_field = str(developer_pb2.Developer.ADDRESS_FIELD_NUMBER)
+        #self._developer_email_field = str(developer_pb2.Developer.EMAIL_FIELD_NUMBER)
 
         #print('key', vars(developer_pb2.Developer))
         #print('fields', developer_pb2.DeveloperKey._fields, dir(developer_pb2.DeveloperKey))
@@ -84,26 +85,26 @@ class Developer():
         if self.developer_name is not None:
             dev_dict['key'] = developer_pb2.DeveloperKey(name=self.developer_name)
             _fields_list.append(self._developer_name_field)
-        if developer_address is not None:
-            dev_dict['address'] = developer_address
-            _fields_list.append(self._developer_address_field)
-        else:
-            self.developer_address = ''
-        if developer_email is not None:
-            dev_dict['email'] = developer_email
-            _fields_list.append(self._developer_email_field)
-        else:
-            self.developer_email = ''
-        if developer_passhash is not None:
-            dev_dict['passhash'] = developer_passhash
-            _fields_list.append(self._developer_passhash_field)
-        else:
-            self.developer_passhash = ''
-        if developer_username is not None:
-            dev_dict['username'] = developer_username
-            _fields_list.append(self._developer_username_field)
-        else:
-            self.developer_username = ''
+        #if developer_address is not None:
+        #    dev_dict['address'] = developer_address
+        #    _fields_list.append(self._developer_address_field)
+        #else:
+        #    self.developer_address = ''
+        #if developer_email is not None:
+        #    dev_dict['email'] = developer_email
+        #    _fields_list.append(self._developer_email_field)
+        #else:
+        #    self.developer_email = ''
+        #if developer_passhash is not None:
+        #    dev_dict['passhash'] = developer_passhash
+        #    _fields_list.append(self._developer_passhash_field)
+        #else:
+        #    self.developer_passhash = ''
+        #if developer_username is not None:
+        #    dev_dict['username'] = developer_username
+        #    _fields_list.append(self._developer_username_field)
+        #else:
+        #    self.developer_username = ''
         #dev_dict['fields'] = 'andy'
         #print(dev_dict)
         self.developer = developer_pb2.Developer(**dev_dict)
@@ -114,7 +115,8 @@ class Developer():
         
     def __eq__(self, c):
         #print('c',c.address, 'a',self.developer_address)
-        if c.key.name == self.developer_name and c.address == self.developer_address and c.email == self.developer_email and c.username == self.developer_username and c.passhash == self.developer_passhash:
+        #if c.key.name == self.developer_name and c.address == self.developer_address and c.email == self.developer_email and c.username == self.developer_username and c.passhash == self.developer_passhash:
+        if c.key.name == self.developer_name:
             #print('contains')
             return True
         else:
@@ -469,14 +471,14 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
         _fields_list = []
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
-        self.accessuri = accessuri
+        self.accesscredentials = accesscredentials
         self.latitude = latitude
         self.longitude = longitude
         self.ipsupport = ipsupport
@@ -487,7 +489,7 @@ class Cloudlet():
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
-        self._cloudlet_accessuri_field = str(cloudlet_pb2.Cloudlet.ACCESS_URI_FIELD_NUMBER)
+        self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
         self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
         self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONGITUDE_FIELD_NUMBER)
         self._cloudlet_ipsupport_field = str(cloudlet_pb2.Cloudlet.IP_SUPPORT_FIELD_NUMBER)
@@ -506,8 +508,8 @@ class Cloudlet():
             self.number_of_dynamic_ips = 254
         if ipsupport is None and use_defaults == True:
             self.ipsupport=2
-        if accessuri is None and use_defaults == True:
-            self.accessuri='https://www.edgesupport.com/test'
+        if accesscredentials is None and use_defaults == True:
+            self.accesscredentials='https://www.edgesupport.com/test'
         if staticips is None and use_defaults == True:
             self.staticips = '10.10.10.10'
             
@@ -558,9 +560,9 @@ class Cloudlet():
         if self.ipsupport is not None:
             cloudlet_dict['ip_support'] = self.ipsupport
             _fields_list.append(self._cloudlet_ipsupport_field)
-        if self.accessuri is not None:
-            cloudlet_dict['access_uri'] = self.accessuri
-            _fields_list.append(self._cloudlet_accessuri_field)
+        if self.accesscredentials is not None:
+            cloudlet_dict['access_credentials'] = self.accesscredentials
+            _fields_list.append(self._cloudlet_accesscredentials_field)
         if self.staticips is not None:
             cloudlet_dict['static_ips'] = self.staticips
             _fields_list.append(self._cloudlet_staticips_field)
@@ -572,7 +574,7 @@ class Cloudlet():
                 self.cloudlet.fields.append(field)
 
 
-    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
+    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         print ("In Update", staticips)
         
         if latitude is not None:
@@ -581,9 +583,9 @@ class Cloudlet():
         if longitude is not None:
             print("Long Changed")
             self.longitude = float(longitude)
-        if accessuri is not None:
+        if accesscredentials is not None:
             print("Acc Changed")
-            self.accessuri = accessuri
+            self.accesscredentials = accesscredentials
         if ipsupport is not None:
             print("Sup Changed")
             self.ipsupport = ipsupport
@@ -599,13 +601,13 @@ class Cloudlet():
     def __eq__(self, c):
         if self.ipsupport is None:
             self.ipsupport = 2
-        if self.accessuri is None:
-            self.accessuri=""
+        if self.accesscredentials is None:
+            self.accesscredentials=""
         if self.staticips is None:
             self.staticips=""
-        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
+        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_credentials == self.accesscredentials and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
             return True
         else:
             return False
@@ -635,10 +637,10 @@ class App():
         self.developer_name = developer_name
         self.image_type = image_type
         self.image_path = image_path
-        self.config = config
+        #self.config = config
         self.command = command
         self.default_flavor_name = default_flavor_name
-        self.cluster_name = cluster_name
+        #self.cluster_name = cluster_name
         #self.ip_access = ip_access
         self.access_ports = access_ports
         self.auth_public_key = auth_public_key
@@ -662,7 +664,7 @@ class App():
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
             if image_type is None: self.image_type = 'ImageTypeDocker'
-            if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
+            #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
@@ -680,7 +682,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345'
+                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345678901234567890123456789012'
                 #self.image_type = 2
 
 
@@ -710,8 +712,8 @@ class App():
             self.app_version = shared_variables.app_version_default
         if self.developer_name == 'default':
             self.developer_name = shared_variables.developer_name_default
-        if self.cluster_name == 'default':
-            self.cluster_name = shared_variables.cluster_name_default
+        #if self.cluster_name == 'default':
+        #    self.cluster_name = shared_variables.cluster_name_default
         if self.default_flavor_name == 'default':
             self.default_flavor_name = shared_variables.flavor_name_default
             
@@ -733,17 +735,17 @@ class App():
             app_dict['image_path'] = self.image_path
         #if self.ip_access:
         #    app_dict['ip_access'] = self.ip_access
-        if self.cluster_name is not None:
-            app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
+        #if self.cluster_name is not None:
+        #    app_dict['cluster'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if self.default_flavor_name is not None:
             app_dict['default_flavor'] = flavor_pb2.FlavorKey(name = self.default_flavor_name)
         if self.access_ports:
             app_dict['access_ports'] = self.access_ports
             _fields_list.append(self._access_ports_field)
-        if self.config:
-            app_dict['config'] = self.config
-        else:
-            self.config = ''
+        #if self.config:
+        #    app_dict['config'] = self.config
+        #else:
+        #    self.config = ''
         if self.command is not None:
             app_dict['command'] = self.command
         if self.auth_public_key is not None:
@@ -775,10 +777,10 @@ class App():
                 self.app.fields.append(field)
 
     def __eq__(self, a):
-        logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
+        #logging.info('aaaaaa ' + str(a.cluster.name) + 'bbbbbb ' + str(self.cluster_name))
         #print('zzzz',a.key.name,self.app_name ,a.key.version,self.app_version,a.image_path,self.image_path,a.ip_access,self.ip_access,a.access_ports,self.access_ports,a.default_flavor.name,self.default_flavor_name,a.cluster.name,self.cluster_name,a.image_type,self.image_type,a.config,self.config)
         #if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.ip_access == self.ip_access and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
-        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.cluster.name == self.cluster_name and a.image_type == self.image_type and a.config == self.config:
+        if a.key.name == self.app_name and a.key.version == self.app_version and a.image_path == self.image_path and a.access_ports == self.access_ports and a.default_flavor.name == self.default_flavor_name and a.image_type:
             return True
         else:
             return False
@@ -990,7 +992,7 @@ class MexController(MexGrpc):
         self.controller_stub = controller_pb2_grpc.ControllerApiStub(self.grpc_channel)
 
         self.cluster_flavor_stub = clusterflavor_pb2_grpc.ClusterFlavorApiStub(self.grpc_channel)
-        self.cluster_stub = cluster_pb2_grpc.ClusterApiStub(self.grpc_channel)
+        #self.cluster_stub = cluster_pb2_grpc.ClusterApiStub(self.grpc_channel)
         self.clusterinst_stub = clusterinst_pb2_grpc.ClusterInstApiStub(self.grpc_channel)
         self.cloudlet_stub = cloudlet_pb2_grpc.CloudletApiStub(self.grpc_channel)
         self.flavor_stub = flavor_pb2_grpc.FlavorApiStub(self.grpc_channel)

@@ -43,7 +43,7 @@ User shall be able to delete/create an app instance at the same time on openstac
 Setup
     Create Developer
     Create Flavor
-    Create Cluster
+    #Create Cluster
 
     ${cluster_name_1}=  Get Default Cluster Name
     ${cluster_name_2}=  Catenate  SEPARATOR=.  ${cluster_name_1}  2

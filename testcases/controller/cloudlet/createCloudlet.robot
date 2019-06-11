@@ -16,7 +16,7 @@ CreateCloudlet with all parameters
 	...  The test case creates a cloudlet with all valid parameters
 	...  Expect the cloudlet to be created sucessfully
 		
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accessuri=https://support.sup.com/supersupport   ipsupport=IpSupportDynamic    staticips=30.30.30.1
+	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport   ipsupport=IpSupportDynamic    staticips=30.30.30.1
 	Cloudlet Should Exist   
 
 CreateCloudlet without the optional parameters
@@ -32,7 +32,7 @@ CreateCloudlet with required parameters and accessuri
 	...  The test case creates a cloudlet with required parameters and the optional accessuri parameter
 	...  Expect the cloudlet to be created sucessfully. Ipsupport will be set to IpSupportDynamic by default
 
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accessuri=https://support.sup.com/supersupport    use_defaults=False
+	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport    use_defaults=False
 	Cloudlet Should Exist   
 
 CreateCloudlet with required parameters and ipsupport

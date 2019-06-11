@@ -147,7 +147,7 @@ Setup
     Create Cloudlet		cloudlet_name=tmocloud-8  operator_name=dmuus  latitude=35  longitude=-101
     Create Cloudlet		cloudlet_name=tmocloud-9  operator_name=dmuus  latitude=35  longitude=-102
     Create Cloudlet		cloudlet_name=tmocloud-10  operator_name=dmuus  latitude=35  longitude=-103
-    Create Cluster		
+    #Create Cluster		
     Create App			access_ports=tcp:1  
     ${appinst_1}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name1}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     ${appinst_2}=               Create App Instance		cloudlet_name=${dmuus_cloudlet_name2}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster

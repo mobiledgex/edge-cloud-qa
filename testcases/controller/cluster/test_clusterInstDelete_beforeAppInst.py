@@ -54,8 +54,8 @@ class tc(unittest.TestCase):
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   developer_address=developer_address,
                                                   developer_email=developer_email)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
@@ -71,7 +71,7 @@ class tc(unittest.TestCase):
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
         # create the cluster
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
 
         # create the app
         resp = self.controller.create_app(self.app.app)
@@ -125,7 +125,7 @@ class tc(unittest.TestCase):
         #time.sleep(1) # wait till app instance is actually deleted else delete app will fail
         self.controller.delete_app(self.app.app)
         self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)

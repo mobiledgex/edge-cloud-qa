@@ -32,8 +32,6 @@ spec:
            value: openstack
          - name: MEX_EXT_NETWORK
            value: external-network-shared
-         - name: OPENRC_URL
-           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/buckhorn/openrc.json
          - name: MEXENV_URL
            value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
          - name: VAULT_ROLE_ID
@@ -51,6 +49,10 @@ spec:
          - "openstack"
          - "--tls"
          - "/root/tls/mex-server.crt"
+         - "--vaultAddr"
+         - "vault.mobiledgex.net"
+         - "--physicalName"
+         - "buckhorn"
          - "--d"
          - "api,notify,mexos"
       imagePullSecrets:

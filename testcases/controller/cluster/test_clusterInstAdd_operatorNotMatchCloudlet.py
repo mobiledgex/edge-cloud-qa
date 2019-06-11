@@ -41,8 +41,8 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                         default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                 default_flavor_name=flavor_name)
 
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
@@ -61,7 +61,7 @@ class tc(unittest.TestCase):
         clusterinst_pre = self.controller.show_cluster_instances()
 
         # create a new cluster for adding the instance
-        create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller.create_cluster(self.cluster.cluster)
 
         # create the cluster instance with operator name that does not match cloudlet operator name 
         try:
@@ -78,7 +78,7 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     def tearDown(self):
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
 
 
