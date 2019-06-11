@@ -16,7 +16,7 @@ UpdateCloudlet accessuri
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      accessuri=https://support.net/supportme
+	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      accesscredentials=https://support.net/supportme
 	Cloudlet Should Exist  
 
 UpdateCloudlet staticips
@@ -90,7 +90,7 @@ UpdateCloudlet optional accessuri
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    use_defaults=False
 	Cloudlet Should Exist	   
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     accessuri=https://support.net/supportme     use_defaults=False
+	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     accesscredentials=https://support.net/supportme     use_defaults=False
 	Cloudlet Should Exist      
 
 UpdateCloudlet optional staticips	
