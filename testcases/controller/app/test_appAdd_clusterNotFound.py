@@ -44,9 +44,9 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
         self.controller.create_developer(self.developer.developer) 
         self.controller.create_flavor(self.flavor.flavor)
 
