@@ -41,9 +41,9 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
         self.controller.create_developer(self.developer.developer) 
 
     def test_CreateAppDefaultFlavorEmpty_Docker(self):
@@ -159,7 +159,7 @@ class tc(unittest.TestCase):
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
                                  developer_name=developer_name,
-                                 image_path='imagepath#md5:12345',
+                                 image_path='imagepath#md5:'12345678901234567890123456789012,
                                  use_defaults=False
                                  )
         try:
