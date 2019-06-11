@@ -574,7 +574,7 @@ class Cloudlet():
                 self.cloudlet.fields.append(field)
 
 
-    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accessuri=None, staticips=None, include_fields=False, use_defaults=True):
+    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         print ("In Update", staticips)
         
         if latitude is not None:
@@ -583,9 +583,9 @@ class Cloudlet():
         if longitude is not None:
             print("Long Changed")
             self.longitude = float(longitude)
-        if accessuri is not None:
+        if accesscredentials is not None:
             print("Acc Changed")
-            self.accessuri = accessuri
+            self.accesscredentials = accesscredentials
         if ipsupport is not None:
             print("Sup Changed")
             self.ipsupport = ipsupport
@@ -601,13 +601,13 @@ class Cloudlet():
     def __eq__(self, c):
         if self.ipsupport is None:
             self.ipsupport = 2
-        if self.accessuri is None:
-            self.accessuri=""
+        if self.accesscredentials is None:
+            self.accesscredentials=""
         if self.staticips is None:
             self.staticips=""
-        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_uri, self.accessuri, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
+        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_uri == self.accessuri and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_credentials == self.accesscredentials and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
             return True
         else:
             return False
@@ -682,7 +682,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345'
+                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345678901234567890123456789012'
                 #self.image_type = 2
 
 
