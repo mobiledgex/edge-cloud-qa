@@ -55,7 +55,7 @@ VerifyLocation - request within < 2KM shall return LOC_VERIFIED of 2KM
 Setup
     Create Developer
     Create Flavor
-    Create Cluster
+    #Create Cluster
     Create App             access_ports=${access_ports} 
     Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
