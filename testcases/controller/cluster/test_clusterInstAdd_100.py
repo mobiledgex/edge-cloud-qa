@@ -42,8 +42,8 @@ class tc(unittest.TestCase):
 
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
-                                         default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
+        #                                 default_flavor_name=flavor_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
                                                 number_of_dynamic_ips = 254)
@@ -72,12 +72,12 @@ class tc(unittest.TestCase):
         # ... verify all cluster instance is created
 
         # print the existing cluster and cluster instances
-        clusters_before = self.controller.show_clusters()
+        #clusters_before = self.controller.show_clusters()
         cluster_instances_before = self.controller.show_cluster_instances()
 
         # create a new cluster for adding the instance
-        for i in self.cluster_list:
-            self.controller.create_cluster(i.cluster)
+        #for i in self.cluster_list:
+        #    self.controller.create_cluster(i.cluster)
 
         # create the cluster instance
         for i in self.clusterinst_list:
@@ -85,7 +85,7 @@ class tc(unittest.TestCase):
 
         # print the cluster instances after adding 
         #time.sleep(1)
-        clusters_after = self.controller.show_clusters()
+        #clusters_after = self.controller.show_clusters()
         cluster_instances_after = self.controller.show_cluster_instances()
 
         # look for the cluster
@@ -98,8 +98,8 @@ class tc(unittest.TestCase):
     def tearDown(self):
         for c in self.clusterinst_list:
             self.controller.delete_cluster_instance(c.cluster_instance)
-        for c in self.cluster_list:
-            self.controller.delete_cluster(c.cluster)
+        #for c in self.cluster_list:
+        #    self.controller.delete_cluster(c.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)

@@ -47,11 +47,11 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
-        self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
-                                              default_flavor_name=flavor_name)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
+        #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
+        #                                      default_flavor_name=flavor_name)
         self.app_instance = mex_controller.AppInstance(app_name=app_name,
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
@@ -62,14 +62,14 @@ class tc(unittest.TestCase):
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
                                       #ip_access='IpAccessShared',
-                                      cluster_name=cluster_name,
+                                      #cluster_name=cluster_name,
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
 
         self.controller.create_flavor(self.flavor.flavor)
         self.controller.create_developer(self.developer.developer) 
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
         self.controller.create_app(self.app.app)
         self.controller.create_app_instance(self.app_instance.app_instance)
 
@@ -105,7 +105,7 @@ class tc(unittest.TestCase):
     def tearDownClass(self):
         self.controller.delete_app_instance(self.app_instance.app_instance)
         self.controller.delete_app(self.app.app)
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 

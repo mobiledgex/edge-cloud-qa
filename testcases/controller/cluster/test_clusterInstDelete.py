@@ -43,8 +43,8 @@ class tc(unittest.TestCase):
 
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
-                                         default_flavor_name=flavor_name)
+        #self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
+        #                                 default_flavor_name=flavor_name)
         self.cluster_instance_flavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                       cloudlet_name=cloud_name,
                                                                       operator_name=operator_name,
@@ -52,6 +52,9 @@ class tc(unittest.TestCase):
         self.cluster_instance_noflavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
+                                                                        developer_name='mydev',
+                                                                        number_masters=1,
+                                                                        number_nodes=1,
                                                                         use_defaults=False)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
                                                 operator_name = operator_name,
@@ -60,7 +63,7 @@ class tc(unittest.TestCase):
         #self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
-        self.controller.create_cluster(self.cluster.cluster)
+        #self.controller.create_cluster(self.cluster.cluster)
 
     def test_DeleteClusterInstanceFlavor(self):
         # [Documentation] ClusterInst - User shall be able to delete a cluster instance with flavor name
@@ -107,6 +110,9 @@ class tc(unittest.TestCase):
         # ... create a cluster instance with no flavor_name
         # ... delete the cluster instance
         # ... verify cluster instance is deleted
+
+        # removed from Stratus since can no longer create a clusterInst without a flavor name
+
         print('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
         # print the existing cluster instances
         clusterinst_before = self.controller.show_cluster_instances()
@@ -147,7 +153,7 @@ class tc(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.controller.delete_cluster(self.cluster.cluster)
+        #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_flavor(self.flavor.flavor)
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)

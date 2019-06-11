@@ -39,7 +39,7 @@ Setup
     Create Flavor
     #Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
     #Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
-    Create Cluster
+    #Create Cluster
     Create App             access_ports=${access_ports} 
     ${appinst_1}=          Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
 

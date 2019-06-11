@@ -29,8 +29,8 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
 
     #Create Cluster Flavor	cluster_flavor_name=${flavor}  node_flavor_name=${flavor}  master_flavor_name=${flavor}  number_nodes=${number_nodes}  max_nodes=${max_nodes}  number_masters=${num_masters}
 
-    Create Cluster		default_flavor_name=${flavor_name}
-    Create Cluster		cluster_name=${cluster_name_2}  default_flavor_name=${flavor_name}
+    #Create Cluster		default_flavor_name=${flavor_name}
+    #Create Cluster		cluster_name=${cluster_name_2}  default_flavor_name=${flavor_name}
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_default}  flavor_name=${flavor_name}
     Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_2}       flavor_name=${flavor_name}
 

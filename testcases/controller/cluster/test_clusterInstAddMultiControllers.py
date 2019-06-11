@@ -48,8 +48,8 @@ class tc(unittest.TestCase):
                                                       client_cert = mex_cert
                                                      )
 
-        self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
-                                              default_flavor_name=flavor_name)
+#        self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
+#                                              default_flavor_name=flavor_name)
 
         self.cluster_instance_1 = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                  cloudlet_name=cloud_name_1,
@@ -66,7 +66,7 @@ class tc(unittest.TestCase):
         self.controller_1.show_cluster_instances()
 
         # create a new cluster for adding the instance
-        create_cluster_resp = self.controller_1.create_cluster(self.cluster.cluster)
+        #create_cluster_resp = self.controller_1.create_cluster(self.cluster.cluster)
 
         # create the cluster instance
         self.controller_1.create_cluster_instance(self.cluster_instance_1.cluster_instance)
@@ -94,7 +94,7 @@ class tc(unittest.TestCase):
     def tearDown(self):
         self.controller_1.delete_cluster_instance(self.cluster_instance_1.cluster_instance)
         self.controller_2.delete_cluster_instance(self.cluster_instance_2.cluster_instance)
-        self.controller_1.delete_cluster(self.cluster.cluster)
+        #self.controller_1.delete_cluster(self.cluster.cluster)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)

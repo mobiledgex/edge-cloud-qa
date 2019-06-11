@@ -56,7 +56,7 @@ FindCloudlet Samsung - request shall return error when registering samsung app a
 *** Keywords ***
 Setup
     Create Flavor
-    Create Cluster	
+    #Create Cluster	
     Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  
     Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster

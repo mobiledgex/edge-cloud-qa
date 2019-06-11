@@ -26,26 +26,27 @@ clustersvc shall create/delete MEXPrometheusAppName and MEXMetricsExporter app a
 	
     Show Apps
     # check that apps are created
-    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
-    App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=mexinfradev_  image_path=registry.mobiledgex.net:5000/mobiledgex/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
+    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  deployment=helm   #cluster_name=default  ip_access=IpAccessShared
+    App Should Exist  app_name=MEXMetricsExporter    app_version=1.0  developer_name=MobiledgeX  image_path=registry.mobiledgex.net:5000/mobiledgex/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes  image_type=ImageTypeDocker  #cluster_name=default  ip_access=IpAccessShared
 
+    Show App Instances
     # check that app instances are created
-    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    App Instance Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  appinst_id=1
+    App Instance Should Exist  app_name=MEXMetricsExporter    app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
 
 *** Keywords ***
 Setup
     Create Developer
     Create Flavor
     Create Cluster Flavor
-    Create Cluster
+    #Create Cluster
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}  
 
 Teardown
     Cleanup provisioning
 
-    App Instance Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    App Instance Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    App Instance Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    App Instance Should Not Exist  app_name=MEXMetricsExporter    app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
 
-    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
-    App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=mexinfradev_  image_path=registry.mobiledgex.net:5000/mobiledgex/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
+    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
+    App Should Exist  app_name=MEXMetricsExporter    app_version=1.0  developer_name=MobiledgeX  image_path=registry.mobiledgex.net:5000/mobiledgex/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes

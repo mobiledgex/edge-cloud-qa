@@ -42,9 +42,9 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  developer_address=developer_address,
-                                                  developer_email=developer_email)
+        self.developer = mex_controller.Developer(developer_name=developer_name)#,
+                                                  #developer_address=developer_address,
+                                                  #developer_email=developer_email)
         self.controller.create_developer(self.developer.developer) 
 
     def test_CreateAppDefaultFlavorNotFound_Docker(self):

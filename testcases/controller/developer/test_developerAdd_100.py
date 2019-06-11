@@ -43,10 +43,10 @@ class tc(unittest.TestCase):
         self.developer_list = []
         for i in range(number_of_developers):
             self.developer_list.append(mex_controller.Developer(developer_name = developer_name + str(i),
-                                                                developer_email = developer_email,
-                                                                developer_address = developer_address,
-                                                                developer_username = developer_email,
-                                                                developer_passhash = developer_passhash
+#                                                                developer_email = developer_email,
+#                                                                developer_address = developer_address,
+#                                                                developer_username = developer_email,
+#                                                                developer_passhash = developer_passhash
             ))
             
     def test_createDeveloper(self):

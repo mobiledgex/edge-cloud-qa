@@ -148,7 +148,7 @@ Setup
 
     Create Developer
     Create Flavor
-    Create Cluster   #cluster_name=${cluster_name} 
+    #Create Cluster   #cluster_name=${cluster_name} 
 
     log to console  START creating cluster instance
     Create Cluster Instance   cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}

@@ -13,7 +13,7 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name}  automationBonnCloudlet
+${cloudlet_name}  automationHamburgCloudlet
 ${operator_name}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -27,12 +27,12 @@ ${longitude}      -96.7970
 #${app_template}    http://35.199.188.102/apps/apptemplate.yaml
 	
 *** Test Cases ***
-Create clusterInst for clustersvc
+Create clusterInst for clustersvc on openstack
     [Documentation]
-    ...  deploy app with 1 UDP port
-    ...  verify the port as accessible via fqdn
+    ...  create a clusterInst on openstack
+    ...  verify MEXPrometheusAppName and MEXMetricsWriter are created
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
 
     # check that apps are created
     App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
@@ -51,8 +51,8 @@ Setup
     Create Developer
     Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
-    Create Cluster   default_flavor_name=${cluster_flavor_name}
-    Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}  
+    #Create Cluster   default_flavor_name=${cluster_flavor_name}
+    #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}  
 
 Teardown
     Cleanup provisioning
