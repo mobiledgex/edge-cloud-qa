@@ -728,10 +728,10 @@ class MexMasterController(MexRest):
                 print('*WARN*', 'sorting by flavor_ram')
                 resp_data = sorted(self.decoded_data, key=lambda x: x['data']['ram'],reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
             elif sort_field == 'flavor_vcpus':
-                print('*WARN*', 'sorting by flavor_ram')
+                print('*WARN*', 'sorting by flavor_vcpus')
                 resp_data = sorted(self.decoded_data, key=lambda x: x['data']['vcpus'],reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
             elif sort_field == 'flavor_disk':
-                print('*WARN*', 'sorting by flavor_ram')
+                print('*WARN*', 'sorting by flavor_disk')
                 resp_data = sorted(self.decoded_data, key=lambda x: x['data']['disk'],reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
             print('*WARN*', 'sorted', resp_data)
 

@@ -192,12 +192,8 @@ class MexConsole() :
             self.flavors_page.click_flavorName()
             count -= 1
             time.sleep(1)
-        #sorted = self.flavors_page.get_flavor_sort("flavorname")
-        #time.sleep(1)
 
         self.take_screenshot('Flavor table sorted')
-
-        #return(sorted)
 
     def order_flavor_ram(self, count):
         logging.info('Sorting flavors numerically by ram')
@@ -206,12 +202,6 @@ class MexConsole() :
             self.flavors_page.click_flavorRAM()
             count -= 1
             time.sleep(1)
-        #sorted = self.flavors_page.get_flavor_sort("ram")
-
-        #time.sleep(1)
-        #self.take_screenshot('Flavor table sorted')
-
-        #return(sorted)
 
     def order_flavor_vcpus(self, count):
         logging.info('Sorting flavors numerically by vcpus')
@@ -220,12 +210,6 @@ class MexConsole() :
             self.flavors_page.click_flavorVCPUS()
             count -= 1
             time.sleep(1)
-        #sorted = self.flavors_page.get_flavor_sort("vcpus")
-
-        #time.sleep(1)
-        #self.take_screenshot('Flavor table sorted')
-
-        #return(sorted)
 
     def order_flavor_disk(self, count):
         logging.info('Sorting flavors numerically by disk')
@@ -234,12 +218,6 @@ class MexConsole() :
             self.flavors_page.click_flavorDisk()
             count -= 1
             time.sleep(1)
-        #sorted = self.flavors_page.get_flavor_sort("disk")
-
-        #time.sleep(1)
-        #self.take_screenshot('Flavor table sorted')
-
-        #return(sorted)
 
     def order_flavor_edit(self):
         logging.info('Not Able to Sort by Edit')
@@ -248,12 +226,7 @@ class MexConsole() :
             self.flavors_page.click_flavorEdit()
             count -= 1
             time.sleep(1)
-        # Unsorted = self.flavors_page.get_flavor_sort("edit")
 
-        #time.sleep(1)
-        #self.take_screenshot('Flavor Table Unsorted')
-
-        # return(Unsorted)
 
     def flavor_edit_fail(self):
         self.flavors_page.click_flavorButtonEdit()
