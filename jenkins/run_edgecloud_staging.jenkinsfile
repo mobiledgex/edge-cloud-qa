@@ -1,6 +1,8 @@
 import java.text.SimpleDateFormat
 
 dateParm = "${BuildDate}"
+controller = "${Controller}"
+dme = "mydme"
 
 def jobList1Parallel = ["runControllerTests"]
 //def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runCrmTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
@@ -28,7 +30,7 @@ node('jenkinsSlave1'){
     tag = dateValue
     project = "${project}"
 
-    controller = 'mexplat-stage.ctrl.mobiledgex.net:55001'
+    //controller = 'mexplat-stage.ctrl.mobiledgex.net:55001'
     
     currentBuild.displayName = cycle
 
@@ -174,7 +176,7 @@ node('jenkinsSlave1'){
              def jobName = jobList1Parallel[i];
              echo "i1=" + jobName
              builds1[jobName] = {
-                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller)]
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
 	     }
 	  }
 	  
