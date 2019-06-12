@@ -227,6 +227,24 @@ class MexConsole() :
             count -= 1
             time.sleep(1)
 
+    def click_edit_button(self):
+        # Just testing. This will be deleted
+        count = 5
+        next = count
+        while (count != 0):
+            self.flavors_page.click_flavorButtonEdit()
+            count -= 1
+            time.sleep(1)
+
+    def  click_delete_button(self):
+        self.flavors_page.click_flavorDelete()
+        self.take_screenshot('Flavor Delete Page')
+        time.sleep(1)
+
+    def  click_delete_success(self):
+        time.sleep(1)
+        self.flavors_page.click_deleteSuccess()
+        self.take_screenshot('Flavor Successfully Deleted')
 
     def flavor_edit_fail(self):
         self.flavors_page.click_flavorButtonEdit()
