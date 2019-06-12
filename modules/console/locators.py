@@ -38,13 +38,15 @@ class ComputePageLocators(object):
     #table_class = (By.CSS_SELECTOR, 'div.grid_table')
     table_class = (By.CSS_SELECTOR, 'table.viewListTable')
     table_data = (By.CSS_SELECTOR, 'tbody.tbBodyList')
-                     
+    #table_delete = (By.CSS_SELECTOR, 'i.trash')
+    table_delete = (By.XPATH, './/i[@class="trash alternate icon"]')
+    
     cloudlets_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cloudlets"]')
     flavors_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Flavors"]')
     cluster_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Cluster Instances"]')
     apps_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="Apps"]')
     app_instances_button = (By.XPATH, '//*[@class="left_menu_item"]//div[text()="App Instances"]')
-
+    
 class FlavorsPageLocators(object):
     flavors_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
     flavors_table_header_flavorname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="FlavorName"]')
@@ -108,13 +110,40 @@ class NewPageLocators(object):
     cloudlet_numdynamicips_input = (By.NAME, 'Num_dynamic_ips')
 
 class SignupPageLocators(object):
+    title = (By.XPATH, '//span[@class="title" and text()="Create New Account"]')
     username_field = (By.NAME, 'username')
     password_field = (By.NAME, 'password')
-    confirmpassword_field = (By.NAME, 'confirmpassword')
+    confirm_password_field = (By.NAME, 'confirmpassword')
     email_field = (By.NAME, 'email')
     signup_button = (By.XPATH, '//button[text()="Sign Up"]')
     login_switch_button = (By.XPATH, '//button/span[text()="Login"]')
     signup_switch_button = (By.XPATH, '//button/span[text()="SignUp"]')
-    terms_link = (By.XPATH, '//a[text()="Terms"]')
-    datapolicy_link = (By.XPATH, '//a[text()="Data Policy"]')
-    cookiespolicy_link = (By.XPATH, '//a[text()="Cookies Policy"]')
+    agree_text = (By.XPATH, '//div[@class="login-text" and contains(text(), "By clicking SignUp, you agree to our")]')
+    terms_link = (By.XPATH, '//a[@href="https://www.mobiledgex.com/privacy-policy" and text()="Terms"]')
+    datapolicy_link = (By.XPATH, '//a[@href="https://www.mobiledgex.com/privacy-policy" and text()="Data Policy"]')
+    cookiespolicy_link = (By.XPATH, '//a[@href="https://www.mobiledgex.com/privacy-policy" and text()="Cookies Policy"]')
+
+class DetailsPageLocators(object):
+    details_data = (By.CSS_SELECTOR, 'div.ui.divided.grid')
+    details_row = (By.CSS_SELECTOR, 'div.ui.small.modal.transition.visible.active div.two.column.row')
+    details_row_key = (By.XPATH, './div[1]/div')
+    details_row_value = (By.XPATH, './div[2]/div')
+    details_title = (By.CSS_SELECTOR, 'div.ui.small.modal.transition.visible.active div.header')
+    close_button =  (By.XPATH, '//button[text()="Close"]')
+    region_label =  (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Region"]')
+
+class CloudletDetailsPageLocators(object):
+    cloudletname_label = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[2][@class="two column row"]//div[1]/div[text()="CloudletName"]')
+    operator_label = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Operator"]')
+    cloudletlocation_label = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="CloudletLocation"]')
+    ipsupport_label = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Ip_support"]')
+    numdynamicips_label = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[text()="Num_dynamic_ips"]')
+
+    cloudletname_field = (By.XPATH, '//*[@class="ui small modal transition visible active"]//div[2][@class="two column row"]//div[2]/div')
+    
+class DeleteConfirmationPageLocators(object):
+    no_button = (By.XPATH, '//button[@class="ui negative button" and text()="No"]')
+    yes_button = (By.XPATH, '//button[@class="ui icon positive right labeled button" and text()="Yes"]')
+    header = (By.XPATH, '//button[@class="header"]')
+    content = (By.XPATH, '//button[@class="content"]/p[text()="Are you sure you want to delete"]')
+    content_item = (By.XPATH, '//button[@class="content"]/p/b')

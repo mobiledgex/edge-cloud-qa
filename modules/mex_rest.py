@@ -30,7 +30,10 @@ class MexRest(WebService) :
 
         datasplit = self.resp.content.decode("utf-8").splitlines()
         if len(datasplit) == 1:
-            self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
+            try:
+                self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
+            except:
+                self.decoded_data = self.resp.content.decode("utf-8")
         else:
             data_list = []
             for data in datasplit:

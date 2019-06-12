@@ -57,7 +57,16 @@ class BasePage(object):
 
     def get_all_elements(self, element):
         return  self.driver.find_elements(*element)
+
+    def get_element_text(self, element):
+        return self.driver.find_element(*element).text
     
+    def is_element_text_present(self, element, text):
+        if self.get_element_text(element) == text:
+            return True
+        else:
+            return False
+            
 class BasePageElement(object):
     def __set__(self, obj, value):
         print('*WARN*', '__set__', value, *self.locator)
