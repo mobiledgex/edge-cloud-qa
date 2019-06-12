@@ -82,3 +82,6 @@ class FlavorsPage(ComputePage):
 
     def click_flavorDelete(self):
         self.driver.find_element(*FlavorsPageLocators.flavors_table_delete).click()
+
+    def click_deleteSuccess(self):
+        self.driver.find_element(*FlavorsPageLocators.flavors_table_delete_success).click()
