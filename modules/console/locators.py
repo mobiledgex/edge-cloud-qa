@@ -52,9 +52,11 @@ class FlavorsPageLocators(object):
     flavors_table_header_vcpus = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="VCPUS"]')
     flavors_table_header_disk = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DISK"]')
     flavors_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
-    flavors_table_button_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/button/[text()="Edit"]')
-    # flavors_table_button_edit = (By.XPATH, '//*[@class="ui teal disabled button"]/div[text()="Edit"]')
-    flavors_table_delete = ((By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/button//div[@class="ui button"]'))
+    flavors_table_button_edit = (By.XPATH, '//div[@class="grid_table"]/table/tbody/tr/td/button[text()="Edit"]')
+    flavors_table_delete = ((By.XPATH, '//div[@class="grid_table"]/table/tbody/tr/td/button/i[@class="trash alternate icon"]'))
+    flavors_table_delete_success = ((By.XPATH, '//div[@class="actions"]/button/i[@class="checkmark icon"]'))
+    # //div[@class="ui page modals dimmer transition visible active"]//div[@class="ui modal transition visible active"]
+
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
     cloudlets_table_header_cloudletname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="CloudletName"]')
