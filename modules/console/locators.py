@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 class BasePageLocators(object):
     alert_box = (By.CSS_SELECTOR, 'div.s-alert-box-inner')
-        
+
 class LoginPageLocators(object):
     username_field = (By.NAME, 'username')
     password_field = (By.NAME, 'password')
@@ -12,14 +12,14 @@ class LoginPageLocators(object):
     forgot_password_link = (By.CSS_SELECTOR, 'div.login-text')
     login_validation = (By.CSS_SELECTOR, 'div.loginValidation')
     #login_validation = (By.XPATH, '//*[@class="loginValidation"]')
-    
+
 class MainPageLocators(object):
     compute_button = (By.XPATH, '//button[text()="MobiledgeX Compute"]')
     monitoring_button = (By.XPATH, '//button[text()="MobiledgeX Monitoring"]')
     avatar = (By.XPATH, '//img[@src="/assets/avatar/avatar_default.svg"]')
     username = (By.XPATH, '//*[@class="navbar_right"]//span')
     alert_box = (By.CSS_SELECTOR, 'div.s-alert-box-inner')
-    
+
 class ComputePageLocators(object):
     brand_class = (By.CSS_SELECTOR, 'div.content.brand')
     icons_class = (By.CSS_SELECTOR, 'i.material-icons.md-24.md-dark')
@@ -52,8 +52,9 @@ class FlavorsPageLocators(object):
     flavors_table_header_vcpus = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="VCPUS"]')
     flavors_table_header_disk = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="DISK"]')
     flavors_table_header_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Edit"]')
-    flavors_table_button_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/div[@class="ui teal disabled button"][text()="Edit"]')
-
+    flavors_table_button_edit = (By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/button/[text()="Edit"]')
+    # flavors_table_button_edit = (By.XPATH, '//*[@class="ui teal disabled button"]/div[text()="Edit"]')
+    flavors_table_delete = ((By.XPATH, '//div[@class="grid_table"]/table/thead/tbody/tr/td/button//div[@class="ui button"]'))
 class CloudletsPageLocators(object):
     cloudlets_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
     cloudlets_table_header_cloudletname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="CloudletName"]')
@@ -64,7 +65,7 @@ class CloudletsPageLocators(object):
     cloudlets_expand_icon = (By.CSS_SELECTOR, 'i.expand.icon')
     cloudlets_zoom_out_icon = (By.CSS_SELECTOR, 'i.minus.square.outline.icon')
     cloudlets_zoom_in_icon = (By.CSS_SELECTOR, 'i.plus.square.outline.icon')
-    
+
 class AppsPageLocators(object):
     apps_table_header_region = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="Region"]')
     apps_table_header_appname = (By.XPATH, '//div[@class="grid_table"]/table/thead/tr/th[text()="AppName"]')
