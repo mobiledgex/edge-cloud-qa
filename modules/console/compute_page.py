@@ -89,6 +89,35 @@ class ComputePage(BasePage):
 
         return row_list
 
+    #def get_table_row_by_value(self, value, value_index):
+    def get_table_row_by_value(self, row_values):
+        table = self.driver.find_element(*ComputePageLocators.table_data)
+
+        row_found = 0
+        row_list = []
+        cell_data = []
+        print('*WARN*', 'row_values', row_values)
+        
+        for row in table.find_elements_by_css_selector('tr'):
+            row.location_once_scrolled_into_view   # cause row to scroll into view
+
+            for value in row_values:
+                print('*WARN*', 'value', value, value[1])
+                text_value = row.find_element_by_xpath(f'./td[{value[1]}]/div').text
+                print('*WARN*', 'text_value', text_value, value[0])
+            
+                if text_value == value[0]:
+                    print('*WARN*', 'FOUIND VLAUE', text_value)
+                    row_found += 1
+                else:
+                    row_found = 0
+                    break
+                    
+                if row_found == len(row_values):
+                    return row
+
+        raise Exception('row not found')
+
     def click_new_button(self):
         self.driver.find_element(*ComputePageLocators.table_new_button).click()
 
