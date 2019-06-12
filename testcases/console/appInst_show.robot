@@ -1,27 +1,26 @@
 *** Settings ***
-Documentation   Show flavors
+Documentation   Show appinsts
 
-#Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 	
-#Suite Setup      Setup
-#Suite Teardown   Close Browser
-Test Teardown  Cleanup Provisioning
+Suite Setup      Setup
+Suite Teardown   Teardown
 
-#Test Timeout    40 minutes
 Test Timeout    ${timeout}
 	
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadmin123
-${timeout}     15 s
+${timeout}     15 min
+
 *** Test Cases ***
-Web UI - user shall be able show US flavors
+Web UI - user shall be able show US app instances
     [Documentation]
-    ...  Show US flavors
-    ...  Get US flavors from WS
-    ...  Verify all flavors exist
+    ...  Show US app instances
+    ...  Get US instances from WS
+    ...  Verify all instances exist
 
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
@@ -111,3 +110,6 @@ Setup
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
 
+Teardown
+    Close Browser
+    Cleanup Provisioning

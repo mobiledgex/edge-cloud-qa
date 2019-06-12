@@ -33,7 +33,7 @@ class WebService() :
 
         if os.getenv('AUTOMATION_HTTPTRACE') == '1':
             self.http_trace = True
-            
+
         if debug:
             http_client.HTTPConnection.debuglevel = 1
 

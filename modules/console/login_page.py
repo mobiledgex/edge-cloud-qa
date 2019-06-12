@@ -15,6 +15,9 @@ class LoginPage(BasePage):
     def click_login_button(self):
         element = self.driver.find_element(*LoginPageLocators.login_button).click()
 
+    def click_signup_switch_button(self):
+        element = self.driver.find_element(*LoginPageLocators.signup_switch_button).click()
+
     def hit_enter_key(self):
         self.send_keys(LoginPageLocators.password_field, Keys.RETURN)
 
