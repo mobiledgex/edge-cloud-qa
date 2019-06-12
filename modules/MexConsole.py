@@ -11,8 +11,10 @@ from console.cloudlets_page import CloudletsPage
 from console.apps_page import AppsPage
 from console.new_settings_page import NewFlavorSettingsPage
 from console.new_cloudlet_settings_page import NewCloudletSettingsPage
+from console.details_page import CloudletDetailsPage
+from console.signup_page import SignupPage
 
-from mex_controller_classes import Flavor
+from mex_controller_classes import Flavor, Cloudlet
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 #logger = logging.getLogger('mexInfluxDb')
@@ -51,12 +53,15 @@ class MexConsole() :
         print('*WARN*', self.driver)
         self.driver.get(url)
 
+        self.login_page = LoginPage(self.driver)
+        self.signup_page = SignupPage(self.driver)
         self.compute_page = ComputePage(self.driver)
         self.flavors_page = FlavorsPage(self.driver)
         self.cloudlets_page = CloudletsPage(self.driver)
         self.apps_page = AppsPage(self.driver)
         self.new_flavor_page = NewFlavorSettingsPage(self.driver)
         self.new_cloudlet_page = NewCloudletSettingsPage(self.driver)
+        self.cloudlet_details_page = CloudletDetailsPage(self.driver)
 
     def login_to_mex_console(self, browser='Chrome', username='mexadmin', password='mexadmin123', enter_key=False):
         self.take_screenshot('loginpage_pre')
@@ -65,39 +70,39 @@ class MexConsole() :
 
         assert 'MEX MONITORING' in self.driver.title, 'Page title is not correct'
 
-        login_page = LoginPage(self.driver)
+        #login_page = LoginPage(self.driver)
         #login_validation_text = login_page.get_login_validation_text()
         #print('*WARN*', 'logintext1', login_validation_text)
 
-        if login_page.is_login_switch_button_present:
+        if self.login_page.is_login_switch_button_present:
             logging.info('login switch button is present')
         else:
             raise Exception('Login switch button not found')
 
-        if login_page.is_signup_switch_button_present:
+        if self.login_page.is_signup_switch_button_present:
             logging.info('signup switch button is present')
         else:
             raise Exception('signup switch button not found')
 
-        if username: login_page.username = username
-        if password: login_page.password = password
+        if username: self.login_page.username = username
+        if password: self.login_page.password = password
 
         if enter_key:
             logging.info('logging in with ENTER key')
-            login_page.hit_enter_key()
+            self.login_page.hit_enter_key()
         else:
             logging.info('logging in with Login button key')
-            login_page.click_login_button()
+            self.login_page.click_login_button()
 
         #time.sleep(1)
 
-        login_validation_text = login_page.get_login_validation_text()
-        print('*WARN*', 'logintext', login_validation_text)
+        login_validation_text = self.login_page.get_login_validation_text()
+        print('*WARN*', 'logintext', self.login_validation_text)
         if login_validation_text:
             raise Exception(login_validation_text)
 
-        if login_page.is_alert_box_present():
-            alert_text = login_page.get_alert_box_text()
+        if self.login_page.is_alert_box_present():
+            alert_text = self.login_page.get_alert_box_text()
             logging.error(f'alert present box present with text={alert_text}')
             raise Exception(alert_text)
 
@@ -120,6 +125,26 @@ class MexConsole() :
             raise Exception(f'Username {username} not present')
 
         self.take_screenshot('loginpage_post')
+
+    def open_signup(self):
+        self.take_screenshot('open_signup_pre')
+
+        self.login_page.click_signup_switch_button()
+
+        if self.signup_page.are_elements_present():
+            logging.info('click signup button verification succeeded')
+        else:
+            raise Exception('click signup button verifcation failed')
+
+        self.take_screenshot('open_signup_post')
+
+    def signup_new_user(self, username=None, password=None, email=None, confirm_password=None):
+        if username: self.signup_page.username = username
+        if password: self.signup_page.password = password
+        if confirm_password: self.signup_page.confirm_password = confirm_password
+        if email: self.signup_page.email = email
+
+        self.signup_page.click_signup_button()
 
     def open_compute(self):
         self.take_screenshot('open_compute_pre')
@@ -328,7 +353,7 @@ class MexConsole() :
 
         self.take_screenshot('add_new_flavor_post')
 
-    def add_new_cloudlet(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
+    def add_new_cloudlet(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, ip_support=None, number_dynamic_ips=None):
         self.take_screenshot('add_new_cloudlet_pre')
 
         self.compute_page.click_new_button()
@@ -338,14 +363,32 @@ class MexConsole() :
         else:
             raise Exception('click New Cloudlet button verifcation failed')
 
-        cloudlet = Cloudlet(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).cloudlet
+        logging.info(f'Adding new cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator} latitude={latitude} longitude={longitude} ip_support={ip_support} number_dynamic_ips=number_dynamic_ips')
+        cloudlet = Cloudlet(cloudlet_name=cloudlet_name, operator_name=operator, latitude=latitude, longitude=longitude, ip_support=ip_support, number_dynamic_ips=number_dynamic_ips).cloudlet
         self._cloudlet = cloudlet
         self._region = region
         print('*WARN*', 'cloudlet', cloudlet)
 
-        self.new_cloudlet_page.create_cloudlet(region, flavor['key']['name'], flavor['ram'], flavor['vcpus'], flavor['disk'])
+        self.new_cloudlet_page.create_cloudlet(region=region, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['operator_key']['name'], latitude=cloudlet['location']['latitude'], longitude=cloudlet['location']['longitude'], ip_support=cloudlet['ip_support'], number_dynamic_ips=cloudlet['num_dynamic_ips'])
+
+        if self.compute_page.is_alert_box_present():
+            if self.compute_page.get_alert_box_text() != 'SUCCESS':
+                raise Exception('SUCCESS alert box not found. got ' + self.compute_page.get_alert_box_text())
 
         self.take_screenshot('add_new_cloudlet_post')
+
+    def delete_cloudlet(self, region=None, cloudlet_name=None, operator=None):
+        self.take_screenshot('delete_cloudlet_pre')
+
+        if region is None: region = self._region
+        if cloudlet_name is None: cloudlet_name = self._cloudlet['key']['name']
+        if operator is None: operator = self._cloudlet['key']['operator_key']['name']
+
+        logging.info(f'Deleting cloudlet region={region} cloudlet_name={cloudlet_name} operator={operator}')
+
+        self.cloudlets_page.delete_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator)
+
+        time.sleep(2)  # wait for table to show again
 
     def flavor_should_exist(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, wait=5):
         self.take_screenshot('flavor_should_exist_pre')
@@ -391,18 +434,36 @@ class MexConsole() :
 
     def cloudlet_should_exist(self, region=None, cloudlet_name=None, operator=None, latitude=None, longitude=None, wait=5):
         self.take_screenshot('cloudlet_should_exist_pre')
-        logging.info(f'cloudlet_should_exist {region} {cloudlet_name} {operator} {latitude} {longitude}')
 
         if region is None: region = self._region
-        if cloudlet_name is None: flavor_name = self._app['key']['name']
-        if operator is None: ram = self._flavor['ram']
-        if latitude is None: vcpus = self._flavor['vcpus']
-        if longitude is None: disk = self._flavor['disk']
+        if cloudlet_name is None: cloudlet_name = self._cloudlet['key']['name']
+        if operator is None: operator = self._cloudlet['key']['operator_key']['name']
+        if latitude is None: latitude = self._cloudlet['location']['latitude']
+        if longitude is None: longitude = self._cloudlet['location']['longitude']
+
+        logging.info(f'cloudlet_should_exist {region} {cloudlet_name} {operator} {latitude} {longitude}')
 
         if self.cloudlets_page.wait_for_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude):
-            logging.info('cloudlet found')
+            logging.info(f'cloudlet={cloudlet_name} found')
         else:
-            raise Exception('cloudlet NOT found')
+            raise Exception(f'cloudlet={cloudlet_name} NOT found')
+
+    def cloudlet_should_not_exist(self, region=None, cloudlet_name=None, operator=None):  #, latitude=None, longitude=None, wait=5):
+        self.take_screenshot('cloudlet_should_not_exist_pre')
+
+        if region is None: region = self._region
+        if cloudlet_name is None: cloudlet_name = self._cloudlet['key']['name']
+        if operator is None: operator = self._cloudlet['key']['operator_key']['name']
+        #if latitude is None: latitude = self._cloudlet['location']['latitude']
+        #if longitude is None: longitude = self._cloudlet['location']['longitude']
+        #logging.info(f'cloudlet_should_not_exist {region} {cloudlet_name} {operator} {latitude} {longitude}')
+        logging.info(f'cloudlet_should_not_exist {region} {cloudlet_name} {operator}')
+
+        #if self.cloudlets_page.wait_for_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator, latitude=latitude, longitude=longitude):
+        if self.cloudlets_page.wait_for_cloudlet(region=region, cloudlet_name=cloudlet_name, operator=operator):
+            raise Exception(f'cloudlet={cloudlet_name} found')
+        else:
+            logging.info(f'cloudlet={cloudlet_name} NOT found')
 
     def cloudlets_should_show_on_map(self, number_cloudlets):
         self.cloudlets_page.zoom_out_map(2)
@@ -414,11 +475,31 @@ class MexConsole() :
             logging.error(f'didnot find all cloudlets. looking for {number_cloudlets} but found {cloudlets}')
             raise Exception('not all cloudlets found on map')
 
+    #def click_cloudlet_icon(self, icon_number):
+
+
     def sort_cloudlets_by_cloudlet_name(self):
         self.cloudlets_page.click_cloudlet_name_heading()
 
     def sort_cloudlets_by_region(self):
         self.cloudlets_page.click_region_heading()
+
+    def open_cloudlet_details(self, cloudlet_name):
+        logging.info('Opening cloudlet details for cloudletname=' + cloudlet_name)
+
+        self.cloudlets_page.click_cloudlet_row(cloudlet_name=cloudlet_name)
+
+        if self.cloudlet_details_page.are_elements_present(cloudlet_name=cloudlet_name):
+            logging.info('cloudlet details page verification succeeded')
+        else:
+            raise Exception('cloudlet details page verifcation failed')
+
+        details = self.cloudlet_details_page.get_details()
+
+        return details
+
+    def close_cloudlet_details(self):
+        self.cloudlet_details_page.click_close_button()
 
     def get_table_data(self):
         self.take_screenshot('get_table_data_pre')
