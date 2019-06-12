@@ -79,22 +79,29 @@ class tc(unittest.TestCase):
         self.controller.show_cluster_instances()
 
         # create the cluster instance withour the flavor_name
-        self.controller.create_cluster_instance(self.cluster_instance_noFlavor.cluster_instance)
+        try:
+           self.controller.create_cluster_instance(self.cluster_instance_noFlavor.cluster_instance)
+        except:
+           print('create clusterInst successful')
 
         # print the cluster instances after adding 
         #time.sleep(1)
         clusterinst_resp = self.controller.show_cluster_instances()
 
         # delete cluster instance
-        self.controller.delete_cluster_instance(self.cluster_instance_noFlavor.cluster_instance)
+        #self.controller.delete_cluster_instance(self.cluster_instance_noFlavor.cluster_instance)
 
         # verify ci.tiny is picked up from the default_flavor_name
-        clusterinst_temp = self.cluster_instance_noFlavor
-        clusterinst_temp.flavor_name = flavor_name
-        clusterinst_temp.liveness = 1  # LivenessStatic
-        found_cluster = clusterinst_temp.exists(clusterinst_resp)
+        #clusterinst_temp = self.cluster_instance_noFlavor
+        #clusterinst_temp.flavor_name = flavor_name
+        #clusterinst_temp.liveness = 1  # LivenessStatic
+        #found_cluster = clusterinst_temp.exists(clusterinst_resp)
 
-        expect_equal(found_cluster, True, 'no flavor found new cluster')
+        #expect_equal(found_cluster, True, 'no flavor found new cluster')
+
+        expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(self.controller.response.details(), 'No Flavor specified', 'error details')
+
         assert_expectations()
 
     def test_EmptyFlavor(self):
@@ -106,21 +113,28 @@ class tc(unittest.TestCase):
         self.controller.show_cluster_instances()
 
         # create the cluster instance with flavor_name empty
-        self.controller.create_cluster_instance(self.cluster_instance_emptyFlavor.cluster_instance)
+        try:
+           self.controller.create_cluster_instance(self.cluster_instance_emptyFlavor.cluster_instance)
+        except:
+           print('clusterInst created succesfully')
 
         # print the cluster instances after adding
         #time.sleep(1)
-        clusterinst_resp = self.controller.show_cluster_instances()
+        #clusterinst_resp = self.controller.show_cluster_instances()
 
         # delete cluster instance
-        self.controller.delete_cluster_instance(self.cluster_instance_emptyFlavor.cluster_instance)
+        #self.controller.delete_cluster_instance(self.cluster_instance_emptyFlavor.cluster_instance)
 
         # verify ci.tiny is picked up from the default_flavor_name
-        clusterinst_temp = self.cluster_instance_emptyFlavor
-        clusterinst_temp.flavor_name = flavor_name
-        found_cluster = clusterinst_temp.exists(clusterinst_resp)
+        #clusterinst_temp = self.cluster_instance_emptyFlavor
+        #clusterinst_temp.flavor_name = flavor_name
+        #found_cluster = clusterinst_temp.exists(clusterinst_resp)
 
-        expect_equal(found_cluster, True, 'empty flavor found new cluster')
+        #expect_equal(found_cluster, True, 'empty flavor found new cluster')
+
+        expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(self.controller.response.details(), 'No Flavor specified', 'error details')
+
         assert_expectations()
 
     @classmethod
