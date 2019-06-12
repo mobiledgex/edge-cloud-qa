@@ -59,8 +59,8 @@ class tc(unittest.TestCase):
 
         for i in range(number_of_clusterInsts):
             cluster_name = 'cluster' + str(i) + '-' + self.stamp
-            self.cluster_list.append(mex_controller.Cluster(cluster_name=cluster_name,
-                                                            default_flavor_name=flavor_name))
+            #self.cluster_list.append(mex_controller.Cluster(cluster_name=cluster_name,
+            #                                                default_flavor_name=flavor_name))
             self.clusterinst_list.append(mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
                                                                         operator_name=operator_name,
