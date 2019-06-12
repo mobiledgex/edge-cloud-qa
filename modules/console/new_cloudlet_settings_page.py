@@ -28,7 +28,7 @@ class NewCloudletSettingsPage(NewSettingsPage):
     latitude = LatitudeElement()
     longitude = LongitudeElement()
     ip_support = IpSupportElement()
-    num_dynamic_ips = NumDynamicIpsElement()
+    number_dynamic_ips = NumDynamicIpsElement()
 
     def is_cloudletname_label_present(self):
         return self.is_element_present(NewPageLocators.cloudlet_cloudletname)
@@ -111,13 +111,17 @@ class NewCloudletSettingsPage(NewSettingsPage):
 
         return settings_present
 
-    def create_cloudlet(self, region=None, flavor_name=None, ram=None, vcpus=None, disk=None):
+    def create_cloudlet(self, region=None, cloudlet_name=None, operator_name=None, latitude=None, longitude=None, ip_support=None, number_dynamic_ips=None):
+        logging.info('creating cloudlet')
+        
         self.region = region
-        self.flavor_name = flavor_name
-        self.ram = ram
-        self.vcpus = vcpus
-        self.disk = disk
-
+        self.cloudlet_name = cloudlet_name
+        self.operator_name = operator_name
+        self.latitude = str(latitude)
+        self.longitude = str(longitude)
+        self.ip_support = str(ip_support)
+        self.number_dynamic_ips = str(number_dynamic_ips)
+        
         self.take_screenshot('add_new_cloudlet_settings.png')
 
         self.click_save_button()

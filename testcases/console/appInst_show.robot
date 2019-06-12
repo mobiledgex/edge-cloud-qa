@@ -1,27 +1,26 @@
 *** Settings ***
-Documentation   Show flavors
+Documentation   Show appinsts
 
-#Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
+	
+Suite Setup      Setup
+Suite Teardown   Teardown
 
-#Suite Setup      Setup
-#Suite Teardown   Close Browser
-Test Teardown  Cleanup Provisioning
-
-#Test Timeout    40 minutes
 Test Timeout    ${timeout}
-
+	
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadmin123
-${timeout}     15 s
+${timeout}     15 min
+
 *** Test Cases ***
-Web UI - user shall be able show US flavors
+Web UI - user shall be able show US app instances
     [Documentation]
-    ...  Show US flavors
-    ...  Get US flavors from WS
-    ...  Verify all flavors exist
+    ...  Show US app instances
+    ...  Get US instances from WS
+    ...  Verify all instances exist
 
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
@@ -29,24 +28,24 @@ Web UI - user shall be able show US flavors
     Sleep  10s
 
     @{ws}=  Show Flavors  region=EU  #sort_field=flavor_name  sort_order=ascending
-    Log to console  ${ws[0]['data']['key']['name']}
+    Log to console  ${ws[0]['data']['key']['name']}	
 
 #    Open Flavors
 
 #    Change Region  US
-
+	
 #    @{rows}=  Get Table Data
 
    : FOR  ${row}  IN  @{ws}
    \	Log to console  ${row}
 #   \  Log To Console  ${row['data']['key']['name']}
 #   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
-
+	
 #   ${num_flavors_ws}=     Get Length  ${ws}
 #   ${num_flavors_table}=  Get Length  ${rows}
 
 #   Should Be Equal  ${num_flavors_ws}  ${num_flavors_table}
-
+   
 Web UI - user shall be able show EU flavors
     [Documentation]
     ...  Show EU flavors
@@ -59,7 +58,7 @@ Web UI - user shall be able show EU flavors
     Log to console  ${ws[0]['data']['key']['name']}
     Open Flavors
 
-    Change Region  EU
+    Change Region  EU 
 
     @{rows}=  Get Table Data
 
@@ -90,7 +89,7 @@ Web UI - user shall be able show All flavors
 
    : FOR  ${row}  IN  @{wseu}
    \  Log To Console  ${row['data']['key']['name']}
-   \  Flavor Should Exist  region=EU  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
 
    : FOR  ${row}  IN  @{wsus}
    \  Log To Console  ${row['data']['key']['name']}
@@ -110,3 +109,7 @@ Setup
 
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
+
+Teardown
+    Close Browser
+    Cleanup Provisioning
