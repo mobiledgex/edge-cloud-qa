@@ -27,21 +27,21 @@ Web UI - user shall be able sort flavors by name
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
 
     @{sorting_flavors_Controller}=  Order Flavor Names  5
-    @{ws_sorted}=  Get Table Data
+    @{ws_asc}=  Get Table Data
 
-    ${num_flavors_table}=  Get Length  ${ws_sorted}
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_table}=  Get Length  ${ws_asc}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
 
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
-    # @{rowsUS}  == ${num_flavors_1}  ||  @{rowsEU} == ${num_flavors_2}
+    # @{rowsUS}  == ${num_flavors_US}  ||  @{rowsEU} == ${num_flavors_EU}
     &{dictShowFlavors}=  Create Dictionary
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
 
     ${sortedDictShowFlavors}=  Get Dictionary Items  ${dictShowFlavors}
@@ -53,8 +53,8 @@ Web UI - user shall be able sort flavors by name
     \  ${o}=  Set Variable  ${i}
     \  ${o}=  Evaluate  ${o} * 2
     \  Log To Console   ${sortedDictShowFlavors}[${o}]
-    #\  Log To Console   ${ws_sorted}[${i}][1]
-    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${ws_sorted}[${i}][1]
+    #\  Log To Console   ${ws_asc}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}]  ${ws_asc}[${i}][1]
 
     #
     # Sort Descending Flavor Names
@@ -65,20 +65,20 @@ Web UI - user shall be able sort flavors by name
     # Orders table descending
     @{sorting_flavors_Controller}=  Order Flavor Names  1
     # check that this number is DESCENDING now
-    @{ws_sorted}=  Get Table Data
+    @{ws_asc}=  Get Table Data
 
-    ${num_flavors_table}=  Get Length  ${ws_sorted}
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_table}=  Get Length  ${ws_asc}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
     &{dictShowFlavors}=  Create Dictionary
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  set to dictionary  ${dictShowFlavors}  ${rowsUS}[${i}][data][key][name]  ${rowsUS}[${i}]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  set to dictionary  ${dictShowFlavors}  ${rowsEU}[${i}][data][key][name]  ${rowsEU}[${i}]
 
     # This here returns sorted.
@@ -92,8 +92,8 @@ Web UI - user shall be able sort flavors by name
     \  ${o}=  Set Variable  ${i}
     \  ${o}=  Evaluate  ${o} * 2
     \  Log To Console   ${sortedDictShowFlavors}[${o}][data][key][name]
-    #\  Log To Console   ${ws_sorted}[${i}][1]
-    \  Should Be Equal  ${sortedDictShowFlavors}[${o}][data][key][name]  ${ws_sorted}[${i}][1]
+    #\  Log To Console   ${ws_asc}[${i}][1]
+    \  Should Be Equal  ${sortedDictShowFlavors}[${o}][data][key][name]  ${ws_asc}[${i}][1]
 
 
 Web UI - user shall be able sort flavors by RAM
@@ -109,20 +109,20 @@ Web UI - user shall be able sort flavors by RAM
 
     @{fl}=  Order Flavor Ram  5
     ${ws_ram_sort}=  Get Table Data
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
     ${num_flavors_ws}=  Get Length  ${ws_ram_sort}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_ws}  ${num_flavors_listed}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][ram]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][ram]
     # Append to List because dictionary overwrites same key
 
@@ -146,21 +146,21 @@ Web UI - user shall be able sort flavors by RAM
     # Orders table descending
     @{sorting_flavors_Controller}=  Order Flavor Ram  1
     # check that this number is DESCENDING now
-    @{ws_sorted}=  Get Table Data
+    @{ws_asc}=  Get Table Data
 
-    ${num_flavors_table}=  Get Length  ${ws_sorted}
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_table}=  Get Length  ${ws_asc}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][ram]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][ram]
     # Append to List because dictionary overwrites same key
 
@@ -173,8 +173,8 @@ Web UI - user shall be able sort flavors by RAM
     :FOR    ${i}    IN RANGE    0    ${ForLoop}
     \  ${finalInt}=  Set Variable  ${i}
     \  Log To Console   ${listShowFlavors}[${i}]
-    #\  Log To Console   ${ws_sorted}[${i}][2]
-    \  ${finalInt}=  Convert To Integer  ${ws_sorted}[${i}][2]
+    #\  Log To Console   ${ws_asc}[${i}][2]
+    \  ${finalInt}=  Convert To Integer  ${ws_asc}[${i}][2]
     \  Should Be Equal  ${listShowFlavors}[${i}]  ${finalInt}
 
 
@@ -192,20 +192,20 @@ Web UI - user shall be able sort flavors by VCPUS
     @{fl}=  Order Flavor Vcpus  5
     ${ws_vcpus_sort}=  Get Table Data
 
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
     ${num_flavors_ws}=  Get Length  ${ws_vcpus_sort}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_ws}  ${num_flavors_listed}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][vcpus]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][vcpus]
     # Append to List because dictionary overwrites same key
 
@@ -229,21 +229,21 @@ Web UI - user shall be able sort flavors by VCPUS
     # Orders table descending
     @{sorting_flavors_Controller}=  Order Flavor Vcpus  1
     # check that this number is DESCENDING now
-    @{ws_sorted}=  Get Table Data
+    @{ws_asc}=  Get Table Data
 
-    ${num_flavors_table}=  Get Length  ${ws_sorted}
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_table}=  Get Length  ${ws_asc}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][vcpus]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][vcpus]
     # Append to List because dictionary overwrites same key
 
@@ -256,8 +256,8 @@ Web UI - user shall be able sort flavors by VCPUS
     :FOR    ${i}    IN RANGE    0    ${ForLoop}
     \  ${finalInt}=     Set Variable  ${i}
     \  Log To Console   ${listShowFlavors}[${i}]
-    #\  Log To Console   ${ws_sorted}[${i}][3]
-    \  ${finalInt}=     Convert To Integer  ${ws_sorted}[${i}][3]
+    #\  Log To Console   ${ws_asc}[${i}][3]
+    \  ${finalInt}=     Convert To Integer  ${ws_asc}[${i}][3]
     \  Should Be Equal  ${listShowFlavors}[${i}]  ${finalInt}
 
 
@@ -276,20 +276,20 @@ Web UI - user shall be able sort flavors by DISK
     @{fl}=  Order Flavor Disk  5
     ${ws_disk_sort}=  Get Table Data
 
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
     ${num_flavors_ws}=  Get Length  ${ws_disk_sort}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Log To Console  ____ If this error is thrown then there is an odd mismatch _____
     Should Be Equal  ${num_flavors_ws}  ${num_flavors_listed}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][disk]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][disk]
     # Append to List because dictionary overwrites same key
 
@@ -313,20 +313,20 @@ Web UI - user shall be able sort flavors by DISK
     # Orders table descending
     @{sorting_flavors_Controller}=  Order Flavor Disk  1
     # check that this number is DESCENDING now
-    @{ws_sorted}=  Get Table Data
-    ${num_flavors_table}=  Get Length  ${ws_sorted}
-    ${num_flavors_1}=  Get Length  ${rowsUS}
-    ${num_flavors_2}=  Get Length  ${rowsEU}
-    ${num_flavors_listed}=  Evaluate  ${num_flavors_1}+${num_flavors_2}
+    @{ws_asc}=  Get Table Data
+    ${num_flavors_table}=  Get Length  ${ws_asc}
+    ${num_flavors_US}=  Get Length  ${rowsUS}
+    ${num_flavors_EU}=  Get Length  ${rowsEU}
+    ${num_flavors_listed}=  Evaluate  ${num_flavors_US}+${num_flavors_EU}
     Should Be Equal  ${num_flavors_listed}  ${num_flavors_table}
 
     ${listShowFlavors}=  Create List
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_1}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsUS}[${i}][data][disk]
 
-    :FOR    ${i}    IN RANGE    0    ${num_flavors_2}
+    :FOR    ${i}    IN RANGE    0    ${num_flavors_EU}
     \  ${o}=  Set Variable  ${i}
-    \  ${o}=  Evaluate  ${i}+${num_flavors_1}
+    \  ${o}=  Evaluate  ${i}+${num_flavors_US}
     \  Append To List  ${listShowFlavors}  ${rowsEU}[${i}][data][disk]
     # Append to List because dictionary overwrites same key
 
@@ -339,8 +339,8 @@ Web UI - user shall be able sort flavors by DISK
     :FOR    ${i}    IN RANGE    0    ${ForLoop}
     \  ${finalInt}=     Set Variable  ${i}
     \  Log To Console   ${listShowFlavors}[${i}]
-    #\  Log To Console   ${ws_sorted}[${i}][4]
-    \  ${finalInt}=     Convert To Integer  ${ws_sorted}[${i}][4]
+    #\  Log To Console   ${ws_asc}[${i}][4]
+    \  ${finalInt}=     Convert To Integer  ${ws_asc}[${i}][4]
     \  Should Be Equal  ${listShowFlavors}[${i}]  ${finalInt}
 
 
