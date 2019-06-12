@@ -1,51 +1,50 @@
 *** Settings ***
-Documentation   Show flavors
+Documentation   Show apps
 
-#Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
+Library		MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
 Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 	
-#Suite Setup      Setup
-#Suite Teardown   Close Browser
-Test Teardown  Cleanup Provisioning
+Suite Setup      Setup
+Suite Teardown   Teardown
 
-#Test Timeout    40 minutes
 Test Timeout    ${timeout}
 	
 *** Variables ***
 ${browser}           Chrome
 ${console_username}  mexadmin
 ${console_password}  mexadmin123
-${timeout}     15 s
+${timeout}     15 min
+
 *** Test Cases ***
-Web UI - user shall be able show US flavors
+Web UI - user shall be able show US apps
     [Documentation]
-    ...  Show US flavors
-    ...  Get US flavors from WS
-    ...  Verify all flavors exist
+    ...  Show US apps
+    ...  Get US apps from WS
+    ...  Verify all apps exist
 
     # need to add some flavor on US region so we can be sure some exist when we run it. can do this in setup
 
     #Create Flavor  region=US  flavor_name=andyflavor2  ram=2  disk=2  vcpus=2
-    Sleep  10s
+    #Sleep  10s
 
-    @{ws}=  Show Flavors  region=EU  #sort_field=flavor_name  sort_order=ascending
+    @{ws}=  Show Apps  region=US  #sort_field=flavor_name  sort_order=ascending
     Log to console  ${ws[0]['data']['key']['name']}	
 
-#    Open Flavors
+    Open Apps
 
-#    Change Region  US
+    Change Region  US
 	
-#    @{rows}=  Get Table Data
+    @{rows}=  Get Table Data
 
    : FOR  ${row}  IN  @{ws}
-   \	Log to console  ${row}
-#   \  Log To Console  ${row['data']['key']['name']}
-#   \  Flavor Should Exist  region=US  flavor_name=${row['data']['key']['name']}  ram=${row['data']['ram']}  vcpus=${row['data']['vcpus']}  disk=${row['data']['disk']}
+   \  Log To Console  ${row['data']['key']['name']}
+   \  ${ports}=  Get Variable Value  ${row['data']['access_ports']}  -
+   \  App Should Exist  region=US  app_name=${row['data']['key']['name']}  org_name=${row['data']['key']['developer_key']['name']}  version=${row['data']['key']['version']}  deployment_type=${row['data']['deployment']}  default_flavor=${row['data']['default_flavor']['name']}  ports=${ports}
 	
-#   ${num_flavors_ws}=     Get Length  ${ws}
-#   ${num_flavors_table}=  Get Length  ${rows}
+   ${num_apps_ws}=     Get Length  ${ws}
+   ${num_apps_table}=  Get Length  ${rows}
 
-#   Should Be Equal  ${num_flavors_ws}  ${num_flavors_table}
+   Should Be Equal  ${num_apps_ws}  ${num_apps_table}
    
 Web UI - user shall be able show EU flavors
     [Documentation]
@@ -111,3 +110,6 @@ Setup
     Login to Mex Console  browser=${browser}  #username=${console_username}  password=${console_password}
     Open Compute
 
+Teardown
+    Close Browser
+    Cleanup Provisioning

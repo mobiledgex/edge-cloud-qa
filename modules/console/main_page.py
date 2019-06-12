@@ -16,3 +16,5 @@ class MainPage(BasePage):
 
     def is_username_present(self, username):
         return self.is_element_present(MainPageLocators.username, text=username)
+        
+    
