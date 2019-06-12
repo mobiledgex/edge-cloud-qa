@@ -26,7 +26,7 @@ Web UI - user shall be able sort flavors by name
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_name  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=ascending
 
-    @{sorting_flavors_Controller}=  Order Flavor Names  5
+    Order Flavor Names  5
     @{ws_asc}=  Get Table Data
 
     ${num_flavors_table}=  Get Length  ${ws_asc}
@@ -63,7 +63,7 @@ Web UI - user shall be able sort flavors by name
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_name  sort_order=descending
 
     # Orders table descending
-    @{sorting_flavors_Controller}=  Order Flavor Names  1
+    Order Flavor Names  1
     # check that this number is DESCENDING now
     @{ws_asc}=  Get Table Data
 
@@ -107,7 +107,7 @@ Web UI - user shall be able sort flavors by RAM
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_ram  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_ram  sort_order=ascending
 
-    @{fl}=  Order Flavor Ram  5
+    Order Flavor Ram  5
     ${ws_ram_sort}=  Get Table Data
     ${num_flavors_US}=  Get Length  ${rowsUS}
     ${num_flavors_EU}=  Get Length  ${rowsEU}
@@ -144,7 +144,7 @@ Web UI - user shall be able sort flavors by RAM
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_ram  sort_order=descending
 
     # Orders table descending
-    @{sorting_flavors_Controller}=  Order Flavor Ram  1
+    Order Flavor Ram  1
     # check that this number is DESCENDING now
     @{ws_asc}=  Get Table Data
 
@@ -189,7 +189,7 @@ Web UI - user shall be able sort flavors by VCPUS
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_vcpus  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_vcpus  sort_order=ascending
 
-    @{fl}=  Order Flavor Vcpus  5
+    Order Flavor Vcpus  5
     ${ws_vcpus_sort}=  Get Table Data
 
     ${num_flavors_US}=  Get Length  ${rowsUS}
@@ -227,7 +227,7 @@ Web UI - user shall be able sort flavors by VCPUS
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_vcpus  sort_order=descending
 
     # Orders table descending
-    @{sorting_flavors_Controller}=  Order Flavor Vcpus  1
+    Order Flavor Vcpus  1
     # check that this number is DESCENDING now
     @{ws_asc}=  Get Table Data
 
@@ -273,7 +273,7 @@ Web UI - user shall be able sort flavors by DISK
     @{rowsEU}=  Show Flavors  region=EU  sort_field=flavor_disk  sort_order=ascending
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_disk  sort_order=ascending
 
-    @{fl}=  Order Flavor Disk  5
+    Order Flavor Disk  5
     ${ws_disk_sort}=  Get Table Data
 
     ${num_flavors_US}=  Get Length  ${rowsUS}
@@ -311,7 +311,7 @@ Web UI - user shall be able sort flavors by DISK
     @{rowsUS}=  Show Flavors  region=US  sort_field=flavor_disk  sort_order=descending
 
     # Orders table descending
-    @{sorting_flavors_Controller}=  Order Flavor Disk  1
+    Order Flavor Disk  1
     # check that this number is DESCENDING now
     @{ws_asc}=  Get Table Data
     ${num_flavors_table}=  Get Length  ${ws_asc}
