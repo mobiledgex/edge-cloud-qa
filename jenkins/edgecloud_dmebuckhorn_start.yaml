@@ -39,6 +39,8 @@ spec:
          - "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc" 
          - "--vaultAddr"
          - "https://vault.mobiledgex.net"
+         - "--region"
+         - ""
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--tlsApiCertFile"
