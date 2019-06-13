@@ -1,11 +1,14 @@
 *** Settings ***
-Documentation   Show flavors
+Documentation   Sort flavors by heading
 Library		      MexConsole  url=%{AUTOMATION_CONSOLE_ADDRESS}
-Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
+# Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
 Library         Collections
 
 Suite Setup     Setup
 Suite Teardown  Teardown
+
+#Test Setup     Setup
+#Test Teardown  Teardown
 
 Test Timeout    20 minutes
 
