@@ -12,27 +12,28 @@ import argparse
 
 parser = argparse.ArgumentParser(description='create proto files for testcases')
 parser.add_argument('--sourcedir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud/', help='dir where go source dir exists')
-parser.add_argument('--sourcedir_infra', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-infra/', help='dir where go source dir exists')
+#parser.add_argument('--sourcedir_infra', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-infra/', help='dir where go source dir exists')
 parser.add_argument('--qadir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-qa/', help='dir where qa is')
 
 args = parser.parse_args()
 
 #home_dir = os.environ['HOME']
 edgecloud_dir = args.sourcedir
-edgecloud_dir_infra = args.sourcedir_infra
+#edgecloud_dir_infra = args.sourcedir_infra
 edgecloud_qa_dir = args.qadir
-
+pkg_dir = os.environ['HOME'] + '/go/pkg/mod/github.com/gogo/protobuf@v1.0.0/gogoproto/'
 #edgecloud_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud/'
 #edgecloud_qa_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud-qa/'
 
-protos_src_list = (edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/api/',
-                   edgecloud_dir + 'vendor/github.com/gogo/protobuf/gogoproto/',
+protos_src_list = (#edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/api/',
+                   #edgecloud_dir + 'vendor/github.com/gogo/protobuf/gogoproto/',
                    edgecloud_dir + 'edge-mvp/third_party/googleapis/google/api/',
-                   edgecloud_dir_infra + 'vendor/github.com/gogo/protobuf/gogoproto/',
-                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
-                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/any/',
+                   pkg_dir, 
+#                   edgecloud_dir_infra + 'vendor/github.com/gogo/protobuf/gogoproto/',
+#                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
+#                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/any/',
                    #edgecloud_dir + 'vendor/github.com/golang/protobuf/protoc-gen-go/descriptor/',
-                   edgecloud_dir + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
+#                   edgecloud_dir + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
                    edgecloud_dir + 'd-match-engine/dme-proto/',
                    edgecloud_dir + 'edgeproto/',
                    edgecloud_dir + 'protoc-gen-cmd/protocmd/',
@@ -47,15 +48,17 @@ generate_proto_cmd = 'python3 -m grpc_tools.protoc -I{} --python_out={} --grpc_p
 
 # copy protofiles and change import statement to remove path info
 for proto in protos_src_list:
-    #flist = os.listdir(proto)
+    flist = os.listdir(proto)
+    print(proto, flist)
     flist = glob.glob(proto + '*.proto')
-    #print(flist)
+    print(flist)
     for file in flist:
         print('copy {} to {}'.format(file, protos_dest))
         filename = os.path.basename(file)
         dest_file_copy = protos_dest + '/' + filename + '.orig'
         dest_file_new = protos_dest + '/' + filename
         shutil.copy2(file, dest_file_copy)
+        os.chmod(dest_file_copy, 0o777)
 
         with open(dest_file_copy) as read_file, open(dest_file_new, 'w') as write_file:
             line = read_file.readline()
