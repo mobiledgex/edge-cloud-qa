@@ -42,8 +42,7 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   #${flavor_msg}=  Catenate  SEPARATOR=  no suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
-   Should Contain  ${error_msg}   somemesage
+   Should Contain  ${error_msg}   details = "Encountered failures: Create failed: Insufficient disk size, please specify a flavor with at least 20gb"
 
 Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    [Documentation]
