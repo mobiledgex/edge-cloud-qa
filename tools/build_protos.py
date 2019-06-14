@@ -12,12 +12,14 @@ import argparse
 
 parser = argparse.ArgumentParser(description='create proto files for testcases')
 parser.add_argument('--sourcedir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud/', help='dir where go source dir exists')
+parser.add_argument('--sourcedir_infra', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-infra/', help='dir where go source dir exists')
 parser.add_argument('--qadir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud-qa/', help='dir where qa is')
 
 args = parser.parse_args()
 
 #home_dir = os.environ['HOME']
 edgecloud_dir = args.sourcedir
+edgecloud_dir_infra = args.sourcedir_infra
 edgecloud_qa_dir = args.qadir
 
 #edgecloud_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud/'
@@ -25,6 +27,10 @@ edgecloud_qa_dir = args.qadir
 
 protos_src_list = (edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/api/',
                    edgecloud_dir + 'vendor/github.com/gogo/protobuf/gogoproto/',
+                   edgecloud_dir + 'edge-mvp/third_party/googleapis/google/api/',
+                   edgecloud_dir_infra + 'vendor/github.com/gogo/protobuf/gogoproto/',
+                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
+                   edgecloud_dir_infra + 'vendor/github.com/golang/protobuf/ptypes/any/',
                    #edgecloud_dir + 'vendor/github.com/golang/protobuf/protoc-gen-go/descriptor/',
                    edgecloud_dir + 'vendor/github.com/golang/protobuf/ptypes/timestamp/',
                    edgecloud_dir + 'd-match-engine/dme-proto/',
