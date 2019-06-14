@@ -48,10 +48,10 @@ generate_proto_cmd = 'python3 -m grpc_tools.protoc -I{} --python_out={} --grpc_p
 
 # copy protofiles and change import statement to remove path info
 for proto in protos_src_list:
-    flist = os.listdir(proto)
-    print(proto, flist)
+    #flist = os.listdir(proto)
+    #print(proto, flist)
     flist = glob.glob(proto + '*.proto')
-    print(flist)
+    #print(flist)
     for file in flist:
         print('copy {} to {}'.format(file, protos_dest))
         filename = os.path.basename(file)
