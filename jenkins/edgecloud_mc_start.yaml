@@ -45,10 +45,14 @@ spec:
           - "/root/tls/mex-server.crt"
           - "-d"
           - "etcd,api,notify"
+          - "--gitlabAddr"
+          - "https://gitlab-qa.mobiledgex.net"
          env:
           - name: VAULT_ROLE_ID
             value: f4207f0f-c965-ac3e-181c-235de8838ff7
           - name: VAULT_SECRET_ID
             value: 528a3921-5afc-0150-1f9b-9e1fa4a49727
+          - name: gitlab_token
+            value: gitlabtesttoken
        imagePullSecrets:
         - name: mexreg-secret
