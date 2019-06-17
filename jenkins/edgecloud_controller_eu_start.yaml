@@ -16,7 +16,7 @@ spec:
     spec:
        containers:
        - name: controllereu
-         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-05-31
+         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
          imagePullPolicy: Always
          resources:
            requests:
