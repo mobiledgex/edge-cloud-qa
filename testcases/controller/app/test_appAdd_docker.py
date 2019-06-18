@@ -18,13 +18,16 @@ import MexController as mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 stamp = str(time.time())
-developer_name = 'developer' + stamp
+#developer_name = 'developer' + stamp
+developer_name = 'mobiledgex'
 developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
-app_name = 'app' + stamp
-app_version = '1.0'
+#app_name = 'app' + stamp
+app_name = 'server_ping_threaded'
+#app_version = '1.0'
+app_version = '5.0'
 access_ports = 'tcp:1'
 
 mex_root_cert = 'mex-ca.crt'
@@ -80,7 +83,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
+        #self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
+        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
@@ -113,7 +117,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
+        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
