@@ -32,6 +32,8 @@ spec:
           - "0.0.0.0:55002"
           - "--httpAddr"
           - "0.0.0.0:36002"
+          - "--vaultAddr"
+          - "https://vault.mobiledgex.net"
           - "--tls"
           - "/root/tls/mex-server.crt"
           - "--influxAddr"
@@ -39,5 +41,10 @@ spec:
           - "-d"
           - "etcd,api,notify"
           - "-autoUpgrade"
+         env:
+          - name: VAULT_ROLE_ID
+            value: 1c2a5271-31af-96e9-da03-b3f63d7fd628
+          - name: VAULT_SECRET_ID
+            value: ed7f877a-1528-78e2-3610-f007606601ae
        imagePullSecrets:
         - name: mexreg-secret
