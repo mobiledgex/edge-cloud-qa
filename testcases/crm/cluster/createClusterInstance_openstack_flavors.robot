@@ -114,14 +114,14 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  sdwan-ESC
-   Should Be Equal   ${server_info[0]['Flavor']}  sdwan-ESC
+   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
+   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   sdwan-ESC 
+   Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC 
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -195,14 +195,14 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  sdwan-ESC
-   Should Be Equal   ${server_info[1]['Flavor']}  sdwan-ESC 
+   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
+   Should Be Equal   ${server_info[1]['Flavor']}  flavor_ESC_ESC 
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     sdwan-ESC
+   Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -279,7 +279,7 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ...  create a cluster on openstack with flavor of ram=4096  vcpus=20  disk=4
    ...  verify it fails since it cannot find a suitable flavor
 
-   Create Flavor  ram=4096  vcpus=20  disk=4
+   Create Flavor  ram=4096  vcpus=30  disk=4
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
