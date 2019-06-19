@@ -88,7 +88,7 @@ namespace RestSample
                 };
 
                 //Verify the Token Server URI is correct
-                if (registerClientReply.TokenServerURI != tokenServerURI)
+                if (registerClientReply.token_server_uri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
@@ -98,7 +98,7 @@ namespace RestSample
                 }
 
                 // Store sessionCookie, for later use in future requests.
-                sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = registerClientReply.session_cookie;
 
                 //Setup to handle the sessiontoken
                 var jwtHandler = new JwtSecurityTokenHandler();
