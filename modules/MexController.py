@@ -368,6 +368,7 @@ class ClusterInstance():
         cloudlet_key_dict = {}
         #cluster_key_dict = {}
 
+        shared_variables.cluster_name_default = self.cluster_name
         shared_variables.cloudlet_name_default = self.cloudlet_name
         shared_variables.operator_name_default = self.operator_name
 
