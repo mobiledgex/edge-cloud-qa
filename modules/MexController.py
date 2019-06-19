@@ -671,14 +671,15 @@ class App():
 
             if self.image_type == 'ImageTypeDocker':
                 if self.image_path is None:
-                    try:
-                        new_app_name = self._docker_sanitize(self.app_name)
-                        if self.developer_name is not None:
-                            self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
-                        else:
-                            self.image_path = 'registry.mobiledgex.net:5000/' + '/' + new_app_name + ':' + self.app_version
-                    except:
-                        self.image_path = 'failed_to_set'
+                    self.image_path='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                    #try:
+                    #    new_app_name = self._docker_sanitize(self.app_name)
+                    #    if self.developer_name is not None:
+                    #        self.image_path = 'registry.mobiledgex.net:5000/' + self.developer_name + '/' + new_app_name + ':' + self.app_version
+                    #    else:
+                    #        self.image_path = 'registry.mobiledgex.net:5000/' + '/' + new_app_name + ':' + self.app_version
+                    #except:
+                    #    self.image_path = 'failed_to_set'
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
