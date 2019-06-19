@@ -48,7 +48,7 @@ namespace MexGrpcSampleConsoleApp
         //string dmeHost = "gddt2.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
-        Match_Engine_Api.Match_Engine_ApiClient client;
+        MatchEngineApi.MatchEngineApiClient client;
 
         public void RunSampleFlow()
         {
@@ -68,14 +68,14 @@ namespace MexGrpcSampleConsoleApp
             var sslCredentials = new SslCredentials(Credentials.caCrt, clientKeyPair);
             Channel channel = new Channel(uri, sslCredentials);
 
-            client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
+            client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
 
             var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0", developerAuthToken);
             try
             {
                 var regReply = client.RegisterClient(registerClientRequest);
-                if (regReply.TokenServerURI != tokenServerURI)
+                if (regReply.TokenServerUri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
@@ -90,7 +90,7 @@ namespace MexGrpcSampleConsoleApp
                 //sessionCookie = expSessionCookie;
                 //essionCookie = missingApp_SessionCookie;
 
-                replyTokenServer = regReply.TokenServerURI;
+                replyTokenServer = regReply.TokenServerUri;
             }
             catch (Grpc.Core.RpcException replyerror)
             {
