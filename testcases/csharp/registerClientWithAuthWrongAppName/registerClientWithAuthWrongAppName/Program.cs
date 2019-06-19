@@ -43,7 +43,7 @@ namespace MexGrpcSampleConsoleApp
         //string dmeHost = "tdg2.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
-        Match_Engine_Api.Match_Engine_ApiClient client;
+        MatchEngineApi.MatchEngineApiClient client;
 
         public void RunSampleFlow()
         {
@@ -61,7 +61,7 @@ namespace MexGrpcSampleConsoleApp
             var sslCredentials = new SslCredentials(Credentials.caCrt, clientKeyPair);
             Channel channel = new Channel(uri, sslCredentials);
 
-            client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
+            client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
             // Generate the authToken
             var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
@@ -90,8 +90,9 @@ namespace MexGrpcSampleConsoleApp
                 var regReply = client.RegisterClient(registerClientRequest);
 
                 Console.WriteLine("AuthToken is correct!");
-                if (regReply.TokenServerURI != tokenServerURI)
+                if (regReply.TokenServerUri != tokenServerURI)
                 {
+                    Console.WriteLine("Test Case Failed!!");
                     Environment.Exit(1);
                 }
 
@@ -222,11 +223,13 @@ namespace MexGrpcSampleConsoleApp
                 {
                     Console.WriteLine("AuthToken Incorrect!");
                     Console.WriteLine("Register Client With Auth Wrong App Name Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Test Case Pass!");
                     Environment.Exit(0);
                 }
                 else
                 {
                     Console.WriteLine("Register Client With Auth Wrong App Name Failed Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Test Case Failed!!");
                     Environment.Exit(1);
                 }
 

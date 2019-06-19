@@ -68,7 +68,7 @@ namespace RestSample
                 };
 
                 //Verify the Token Server URI is correct
-                if (registerClientReply.TokenServerURI != tokenServerURI)
+                if (registerClientReply.token_server_uri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
@@ -78,7 +78,7 @@ namespace RestSample
                 }
 
                 // Store sessionCookie, for later use in future requests.
-                sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = registerClientReply.session_cookie;
 
                 //Setup to handle the sessiontoken
                 var jwtHandler = new JwtSecurityTokenHandler();
@@ -208,7 +208,7 @@ namespace RestSample
                 if (findCloudletReply.status.ToString() == "FIND_FOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
-                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.FQDN);
+                    Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
                     Console.WriteLine("Test Case Failed!!!");
