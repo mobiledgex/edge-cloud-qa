@@ -43,7 +43,7 @@ namespace MexGrpcSampleConsoleApp
         //string dmeHost = "gddt2.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
-        Match_Engine_Api.Match_Engine_ApiClient client;
+        MatchEngineApi.MatchEngineApiClient client;
 
         public void RunSampleFlow()
         {
@@ -61,7 +61,7 @@ namespace MexGrpcSampleConsoleApp
             var sslCredentials = new SslCredentials(Credentials.caCrt, clientKeyPair);
             Channel channel = new Channel(uri, sslCredentials);
 
-            client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
+            client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
             // Generate the authToken
             var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
@@ -90,7 +90,7 @@ namespace MexGrpcSampleConsoleApp
                 var regReply = client.RegisterClient(registerClientRequest);
 
                 Console.WriteLine("AuthToken is correct!");
-                if (regReply.TokenServerURI != tokenServerURI)
+                if (regReply.TokenServerUri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
