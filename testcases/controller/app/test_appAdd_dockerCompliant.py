@@ -18,14 +18,17 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 
 stamp = str(time.time())
 image_type = 'ImageTypeDocker'
-developer_name = 'developer' + stamp
+#developer_name = 'developer' + stamp
+developer_name = 'mobiledgex'
 developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
-app_name = 'app' + stamp
-app_version = '1.0'
+#app_name = 'app' + stamp
+app_name = 'server_ping_threaded'
+app_version = '5.0'
 access_ports = 'tcp:1'
+docker = 'docker.mobiledgex.net'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -64,7 +67,8 @@ class tc(unittest.TestCase):
 
         # create the app
         self.app = mex_controller.App(image_type=image_type,
-                                      app_name='andy dandy',
+                                      #app_name='andy dandy',
+                                      app_name='server_ ping_ threaded',
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       #ip_access='IpAccessShared',
@@ -79,7 +83,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/andydandy:1.0'
+        self.app.image_path = docker + '/' + developer_name + '/images/server_ping_threaded:' + app_version
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -99,12 +103,14 @@ class tc(unittest.TestCase):
 
         # create the app
         self.app = mex_controller.App(image_type=image_type,
-                                      app_name='andy&dandy',
+                                      app_name='server_ping&threaded',
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
                                       developer_name=developer_name,
-                                      default_flavor_name=flavor_name)
+                                      default_flavor_name=flavor_name,
+                                      use_defaults=False
+                                    )
 
         resp = self.controller.create_app(self.app.app)
 
@@ -112,7 +118,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andy-dandy:1.0'
+        self.app.image_path = docker + '/' + developer_name + '/images/server_ping-threaded:' + app_version
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -132,12 +138,14 @@ class tc(unittest.TestCase):
 
         # create the app
         self.app = mex_controller.App(image_type=image_type,
-                                      app_name='andy,dandy',
+                                      #app_name='andy,dandy',
+                                      app_name='server_ping,_threaded',
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
                                       developer_name=developer_name,
-                                      default_flavor_name=flavor_name)
+                                      default_flavor_name=flavor_name,
+                                      use_defaults=False)
 
         resp = self.controller.create_app(self.app.app)
 
@@ -145,7 +153,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andydandy:1.0'
+        self.app.image_path = docker + '/' + developer_name + '/images/server_ping_threaded:' + app_version
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
@@ -165,12 +173,13 @@ class tc(unittest.TestCase):
 
         # create the app
         self.app = mex_controller.App(image_type=image_type,
-                                      app_name='andy!dandy',
+                                      app_name='server_ping!threaded',
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
                                       developer_name=developer_name,
-                                      default_flavor_name=flavor_name)
+                                      default_flavor_name=flavor_name,
+                                      use_defaults=False)
 
         resp = self.controller.create_app(self.app.app)
 
@@ -178,7 +187,7 @@ class tc(unittest.TestCase):
         apps_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'registry.mobiledgex.net:5000/' + developer_name + '/andy.dandy:1.0'
+        self.app.image_path = docker + '/' + developer_name + '/images/server_ping.threaded:' + app_version
         found_app = self.app.exists(apps_post)
 
         self.controller.delete_app(self.app.app)
