@@ -25,6 +25,7 @@ developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
+docker_image = 'docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -68,6 +69,7 @@ class tc(unittest.TestCase):
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
+                                 image_path=docker_image,
                                  #ip_access='IpAccessDedicated',
                                  #cluster_name=cluster_name,
                                  default_flavor_name=flavor_name,
@@ -90,7 +92,7 @@ class tc(unittest.TestCase):
         #assert_expectations()
 
         # look for app
-        app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
+        #app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
         app.access_ports = ''
         found_app = app.exists(app_post)
 

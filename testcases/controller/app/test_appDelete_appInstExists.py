@@ -20,6 +20,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 stamp = str(time.time())
 image_type = 'ImageTypeDocker'
 app_name = 'app' + stamp
+#app_name = 'server_ping_threaded'
 app_version = '1.0'
 developer_name = 'developer' + stamp
 developer_address = 'allen tx'
@@ -59,6 +60,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
+                                      image_path='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0',
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
                                       #ip_access='IpAccessShared',
@@ -97,7 +99,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Application in use by static Application Instance', 'error details')
-        expect_equal(found_app, False, 'find app')
+        expect_equal(found_app, True, 'find app')
 
         assert_expectations()
 
