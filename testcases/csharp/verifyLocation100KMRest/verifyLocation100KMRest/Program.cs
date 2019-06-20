@@ -139,7 +139,7 @@ namespace RestSample
                 };
 
                 //Verify the Token Server URI is correct
-                if (registerClientReply.TokenServerURI != tokenServerURI)
+                if (registerClientReply.token_server_uri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
@@ -149,7 +149,7 @@ namespace RestSample
                 }
 
                 // Store sessionCookie, for later use in future requests.
-                sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = registerClientReply.session_cookie;
 
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(carrierName, loc);
                 var verfiyLocationTask = me.VerifyLocation(host, port, verifyLocationRequest);
@@ -161,10 +161,10 @@ namespace RestSample
                     Console.WriteLine("Verify Location Failed!!");
                     Environment.Exit(1);
                 }
-                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.GPS_Location_Accuracy_KM.ToString() == "100")
+                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.gps_location_accuracy_km.ToString() == "100")
                 {
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
-                    Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.GPS_Location_Accuracy_KM + "KM");
+                    Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.gps_location_accuracy_km + "KM");
                     Console.WriteLine("Test Case Passed!!!");
 
                 }
