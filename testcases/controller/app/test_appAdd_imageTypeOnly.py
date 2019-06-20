@@ -21,7 +21,7 @@ stamp = str(int(time.time()))
 app_name = 'appname' + stamp
 app_version = '1.0'
 developer_name = 'developer' + stamp
-
+docker = 'docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 access_ports = 'tcp:1'
 
 mex_root_cert = 'mex-ca.crt'
@@ -85,6 +85,7 @@ class tc(unittest.TestCase):
         app = mex_controller.App(image_type='ImageTypeDocker',
                                  developer_name=developer_name,
                                  app_name=app_name,
+                                 image_path=docker,
                                  app_version=app_version,
                                  use_defaults=False
         )
