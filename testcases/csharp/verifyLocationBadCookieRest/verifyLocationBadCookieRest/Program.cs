@@ -140,7 +140,7 @@ namespace RestSample
                 };
 
                 //Verify the Token Server URI is correct
-                if (registerClientReply.TokenServerURI != tokenServerURI)
+                if (registerClientReply.token_server_uri != tokenServerURI)
                 {
                     Environment.Exit(1);
                 }
@@ -150,7 +150,7 @@ namespace RestSample
                 }
 
                 // Store sessionCookie, for later use in future requests.
-                sessionCookie = registerClientReply.SessionCookie;
+                sessionCookie = registerClientReply.session_cookie;
 
                 me.sessionCookie = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTgwMjE3NTgsImlhdCI6MTU1NzkzNTM1OCwia2V5Ijp7InBlZXJpcCI6IjEyNy4wLjAuMSIsImRldm5hbWUiOiJhdXRvbWF0aW9uX2FwaSIsImFwcG5hbWUiOiJhdXRvbWF0aW9uX2FwaV9hcHAiLCJhcHB2ZXJzIjoiMS4wIiwia2lkIjo2fX0.KGk2bzQmBIt-YST67A05a9vtlkVojXYTHmChEKDT7R_V7IEJ7hdD82y2oXkNhm5Xl7N4BcDAPWyNOWcDzMiHBt";
 
@@ -164,10 +164,10 @@ namespace RestSample
                     Console.WriteLine("Verify Location Failed!!");
                     Environment.Exit(0);
                 }
-                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.GPS_Location_Accuracy_KM.ToString() == "2")
+                if (verifyLocationReply.gps_location_status.ToString() == "LOC_VERIFIED" && verifyLocationReply.gps_location_accuracy_km.ToString() == "2")
                 {
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
-                    Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.GPS_Location_Accuracy_KM + "KM");
+                    Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.gps_location_accuracy_km + "KM");
                     Console.WriteLine("Test Case Failed!!!");
                     Environment.Exit(1);
                 }
