@@ -48,7 +48,7 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cluster	
-    Create App		       app_name=default  app_version=default  developer_name=default  cluster_name=default  image_type=ImageTypeDocker  default_flavor_name=default  use_defaults=${False} 
+    Create App		       app_name=default  app_version=default  developer_name=default  cluster_name=default  image_path=default  image_type=ImageTypeDocker  default_flavor_name=default  use_defaults=${False} 
     ${dmuus_appinst}=           Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 

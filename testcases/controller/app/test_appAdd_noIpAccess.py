@@ -26,6 +26,7 @@ cluster_name = 'cluster' + stamp
 app_name = 'app' + stamp
 app_version = '1.0'
 access_ports = 'http:1'
+docker_image='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -67,7 +68,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      image_path='myimagepath',
+                                      image_path=docker_image,
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
                                       developer_name=developer_name,
