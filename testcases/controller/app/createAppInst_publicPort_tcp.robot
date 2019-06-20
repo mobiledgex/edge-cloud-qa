@@ -35,7 +35,7 @@ AppInst - user shall be able to add 1 TCP port with same public port
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall be able to add 10 TCP port with same public port
@@ -104,7 +104,7 @@ AppInst - user shall be able to add 10 TCP port with same public port
 
     Length Should Be   ${appInst.mapped_ports}  10
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall be able to add TCP and UDP ports with the same port numbers
@@ -174,7 +174,7 @@ AppInst - user shall be able to add TCP and UDP ports with the same port numbers
 
     Length Should Be   ${appInst.mapped_ports}  10
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 2 appInst on different app and same cluster and same cloudlet shall not be able to allocate the same public TCP port
@@ -214,9 +214,9 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 2 appInst on different app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
@@ -256,9 +256,9 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same public TCP port
@@ -298,9 +298,9 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 2 appInst on same app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
@@ -343,9 +343,9 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 2 appInst on same app and different cluster and different cloudlet shall not be able to allocate the same public TCP port
@@ -381,9 +381,9 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - User shall be able to add app/appInst, delete, and readd with same public TCP port
@@ -421,9 +421,9 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - User shall be able to add app, udpate app, add /appInst with same public TCP port
@@ -457,7 +457,7 @@ AppInst - User shall be able to add app, udpate app, add /appInst with same publ
 
     Length Should Be   ${appInst_1.mapped_ports}  2
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - 3 appInst on different app and different cluster and different cloudlet shall not be able to allocate public TCP port 10000
@@ -516,11 +516,11 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     Should Be Equal              ${appInst_3.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_3}
     Length Should Be   ${appInst_3.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_3.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_3.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_3.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - appInst shall not allocate TCP port 10000 if already allocated
@@ -562,9 +562,9 @@ AppInst - appInst shall not allocate TCP port 10000 if already allocated
     Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_2}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_2.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall be to add multiple TCP public ports
@@ -591,10 +591,11 @@ AppInst - user shall be to add multiple TCP public ports
     Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     Length Should Be   ${appInst_1.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
     FOR  ${index}  IN RANGE  0  100
+    \   ${epoch_time_multi}=  Get Time  epoch
     \   ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
     \   Create App  app_name=${app_name}  access_ports=tcp:1
     \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
@@ -608,7 +609,7 @@ AppInst - user shall be to add multiple TCP public ports
     \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
     \   Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
     \   Length Should Be   ${appInst_1.mapped_ports}  1
-    \   Run Keyword Unless  (${epoch_time}-60) < ${appInst_1.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    \   Run Keyword Unless  (${epoch_time_multi}-90) < ${appInst_1.created_at.seconds} < (${epoch_time_multi}+90)  Fail  # verify created_at is within 1 minute
     \   Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall not be able to allocate public port tcp:22
@@ -632,7 +633,7 @@ AppInst - user shall not be able to allocate public port tcp:22
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall be able to allocate public port tcp:18889
@@ -656,7 +657,7 @@ AppInst - user shall be able to allocate public port tcp:18889
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 AppInst - user shall be able to allocate public port tcp:18888
@@ -680,7 +681,7 @@ AppInst - user shall be able to allocate public port tcp:18888
 
     Length Should Be   ${appInst.mapped_ports}  1
 
-    Run Keyword Unless  (${epoch_time}-60) < ${appInst.created_at.seconds} < (${epoch_time}+60)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
 *** Keywords ***
