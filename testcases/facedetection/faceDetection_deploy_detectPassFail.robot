@@ -8,10 +8,8 @@ Library  Process
 Library  OperatingSystem
 Library  String
 
-#Variables       shared_variables.py
-
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout  30 minutes
 	
@@ -27,11 +25,12 @@ ${mobiledgex_domain}  mobiledgex.net
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
 
-${docker_image}    registry.mobiledgex.net:5000/mobiledgex/facedetection:Nimbus_automation_20190225
+${docker_image_facedetection}    docker.mobiledgex.net/mobiledgex/images/facedetection:latest
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008
 
 ${client_path}     ../edge-cloud-sampleapps/FaceDetectionServer/client
+#${client_path}     ../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  faceHuge.png  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
 @{image_list_bad}   1_body.png  3_bodies.png  6_bodies.jpg  empty_portrait_black.png  empty_portrait_white.png  multi_body.png  single_pixel.png
@@ -47,18 +46,18 @@ Facedetection server shall recognize faces
 
     ${epoch_time}=  Get Time  epoch
     ${app_name}=    Catenate  SEPARATOR=  facedetect  ${epoch_time}
+    ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name}
 
     Log To Console  Creating App and App Instance
-    Create App           app_name=${app_name}  image_path=${docker_image}  access_ports=${facedetection_ports}  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=${cluster_flavor_name} 
+    Create App           app_name=${app_name}  image_path=${docker_image_facedetection}  access_ports=${facedetection_ports}  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
+    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  flavor_name=${cluster_flavor_name} 
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name}
-    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].FQDN_prefix}  ${cloudlet.FQDN}
+    ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
-    ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${app_name}
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name}
 
     Sleep  30  # wait for process to be up
