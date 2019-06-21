@@ -14,7 +14,7 @@
 using namespace std;
 using namespace std::chrono;
 using namespace distributed_match_engine;
-using distributed_match_engine::Match_Engine_Api;
+using distributed_match_engine::MatchEngineApi;
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -38,7 +38,7 @@ class MexGrpcClient {
     const string appVersionStr = "1.0";
 
     MexGrpcClient(std::shared_ptr<Channel> channel)
-        : stub_(Match_Engine_Api::NewStub(channel)) {}
+        : stub_(MatchEngineApi::NewStub(channel)) {}
 
     // Retrieve the carrier name of the cellular network interface.
     string getCarrierName() {
@@ -79,10 +79,10 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_devname(devName);
-        request->set_appname(appName);
-        request->set_appvers(appVersionStr);
-        request->set_authtoken(authToken);
+        request->set_dev_name(devName);
+        request->set_app_name(appName);
+        request->set_app_vers(appVersionStr);
+        request->set_auth_token(authToken);
 
         return request;
     }
@@ -93,16 +93,16 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_sessioncookie(sessioncookie);
-        request->set_carriername(carrierName);
+        request->set_session_cookie(sessioncookie);
+        request->set_carrier_name(carrierName);
 
         Loc *ownedLocation = gpslocation->New();
         ownedLocation->CopyFrom(*gpslocation);
-        request->set_allocated_gpslocation(ownedLocation);
+        request->set_allocated_gps_location(ownedLocation);
 
         // This is a carrier supplied token.
         if (verifyloctoken.length() != 0) {
-            request->set_verifyloctoken(verifyloctoken);
+            request->set_verify_loc_token(verifyloctoken);
         }
 
         return request;
@@ -114,12 +114,12 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_sessioncookie(sessioncookie);
-        request->set_carriername(carrierName);
+        request->set_session_cookie(sessioncookie);
+        request->set_carrier_name(carrierName);
 
         Loc *ownedLocation = gpslocation->New();
         ownedLocation->CopyFrom(*gpslocation);
-        request->set_allocated_gpslocation(ownedLocation);
+        request->set_allocated_gps_location(ownedLocation);
 
         return request;
     }
@@ -135,8 +135,8 @@ class MexGrpcClient {
         grpc::Status grpcStatus = stub_->RegisterClient(&context, *request, &reply);
 
         // Save some Mex state info for other calls.
-        this->sessioncookie = reply.sessioncookie();
-        this->tokenserveruri = reply.tokenserveruri();
+        this->sessioncookie = reply.session_cookie();
+        this->tokenserveruri = reply.token_server_uri();
 
         return grpcStatus;
     }
@@ -153,7 +153,7 @@ class MexGrpcClient {
         unique_ptr<VerifyLocationRequest> tokenizedRequest = unique_ptr<VerifyLocationRequest>(new VerifyLocationRequest());
         tokenizedRequest->CopyFrom(*request);
 
-        tokenizedRequest->set_verifyloctoken(token);
+        tokenizedRequest->set_verify_loc_token(token);
         grpc::Status grpcStatus = stub_->VerifyLocation(&context, *tokenizedRequest, &reply);
 
         return grpcStatus;
@@ -214,7 +214,7 @@ class MexGrpcClient {
     }
 
   private:
-    std::unique_ptr<Match_Engine_Api::Stub> stub_;
+    std::unique_ptr<MatchEngineApi::Stub> stub_;
     string token;  // short lived carrier dt-id token.
     string tokenserveruri;
     string sessioncookie;
@@ -395,14 +395,14 @@ int main() {
         } else {
             // Get the token (and wait for it)
             // GPRC uses "Channel". But, we can use libcurl here.
-	  if(tokenURI == registerClientReply.tokenserveruri()){
+	  if(tokenURI == registerClientReply.token_server_uri()){
             cout << "Token Server URI Matches!" << endl;
           } else {
 	    cout << "Token Server URI Does Not Match!" << endl;
 	    exit (EXIT_FAILURE);
 	  }   
 	  
-	    auto decoded = jwt::decode(registerClientReply.sessioncookie());
+	    auto decoded = jwt::decode(registerClientReply.session_cookie());
 
 	    for(auto& e : decoded.get_payload_claims()){
 	      if (e.first == "exp"){
