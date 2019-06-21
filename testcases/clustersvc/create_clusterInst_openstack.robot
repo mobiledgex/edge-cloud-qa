@@ -4,6 +4,7 @@ Documentation  use FQDN to access app on openstack
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
+Library  String
 
 Test Setup      Setup
 Test Teardown   Teardown
@@ -13,8 +14,10 @@ Test Timeout  30 minutes
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name}  automationHamburgCloudlet
-${operator_name}  TDG
+${cloudlet_name_openstack}  automationHamburgCloudlet
+${operator_name_openstack}  TDG
+${mobiledgex_domain}  mobiledgex.net
+
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
@@ -32,18 +35,20 @@ Create clusterInst for clustersvc on openstack
     ...  create a clusterInst on openstack
     ...  verify MEXPrometheusAppName and MEXMetricsWriter are created
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
+    ${cluster_name_default}=  Get Default Cluster Name
 
     # check that apps are created
-    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
-    App Should Exist  app_name=MEXMetricsWriter  app_version=1.0  developer_name=mexinfradev_  image_path=registry.mobiledgex.net:5000/mexinfradev_/MEXMetricsWriter:1.0  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
+    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
+    App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
 
     # check that pods are running
-    Wait for k8s pod to be running  pod=${clustersvc_pods}  root_loadbalancer=automation-bonn.tdg.mobiledgex.net
+    : FOR  ${pod}  IN  @{clustersvc_pods}
+    \  Wait for k8s pod to be running  pod_name=${pod}  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}
 
     # check that app instances are created
-    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    App Instance Should Exist  app_name=MEXMetricsWriter  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    App Instance Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
 
 
 *** Keywords ***
@@ -53,11 +58,15 @@ Setup
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}  
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    Set Suite Variable  ${rootlb}
 
 Teardown
     Cleanup provisioning
 
-    App Instance Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    App Instance Should Not Exist  app_name=MEXMetricsWriter  app_version=1.0  developer_name=mexinfradev_  flavor_name=x1.medium  cluster_name=default  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    App Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=mexinfradev_  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
-    App Should Not Exist  app_name=MEXMetricsWriter  app_version=1.0  developer_name=mexinfradev_  image_path=registry.mobiledgex.net:5000/mexinfradev_/MEXMetricsWriter:1.0  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
+    App Instance Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    App Instance Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    App Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
+    App Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
