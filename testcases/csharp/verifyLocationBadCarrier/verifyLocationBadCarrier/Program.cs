@@ -47,7 +47,7 @@ namespace MexGrpcSampleConsoleApp
         //string dmeHost = "tdg2.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
-        Match_Engine_Api.Match_Engine_ApiClient client;
+        MatchEngineApi.MatchEngineApiClient client;
 
         public void RunSampleFlow()
         {
@@ -65,7 +65,7 @@ namespace MexGrpcSampleConsoleApp
             var sslCredentials = new SslCredentials(Credentials.caCrt, clientKeyPair);
             Channel channel = new Channel(uri, sslCredentials);
 
-            client = new DistributedMatchEngine.Match_Engine_Api.Match_Engine_ApiClient(channel);
+            client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
             var registerClientRequest = CreateRegisterClientRequest(devName, appName, "1.0");
             var regReply = client.RegisterClient(registerClientRequest);
@@ -74,7 +74,7 @@ namespace MexGrpcSampleConsoleApp
             //Console.WriteLine("RegisterClient TokenServerURI: " + regReply.TokenServerURI);
 
             //Verify the Token Server URI is correct
-            if (regReply.TokenServerURI != tokenServerURI)
+            if (regReply.TokenServerUri != tokenServerURI)
             {
                 Environment.Exit(1);
             }
@@ -108,7 +108,7 @@ namespace MexGrpcSampleConsoleApp
             string token = null;
             try
             {
-                token = RetrieveToken(regReply.TokenServerURI);
+                token = RetrieveToken(regReply.TokenServerUri);
                 //Console.WriteLine("VerifyLocation pre-query sessionCookie: " + sessionCookie);
                 //Console.WriteLine("VerifyLocation pre-query TokenServer token: " + token);
             }
@@ -131,7 +131,7 @@ namespace MexGrpcSampleConsoleApp
                 Console.WriteLine("Verifying Location:");
                 var verifyResponse = VerifyLocation(token);
                 Console.WriteLine("VerifyLocation Status: " + verifyResponse.GpsLocationStatus);
-                Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GPSLocationAccuracyKM);
+                Console.WriteLine("VerifyLocation Accuracy: " + verifyResponse.GpsLocationAccuracyKm);
                 Console.WriteLine("Testcase Pass!");
                 Environment.Exit(0);
             }
