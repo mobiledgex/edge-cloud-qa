@@ -23,6 +23,7 @@ CPPFLAGS += -I.
 CPPFLAGS += -I../common
 CPPFLAGS += -I../jwt-cpp
 CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2q/include/
+CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2r/include/  
 CPPFLAGS += -I/usr/include/
 CXXFLAGS += -std=c++11
 CXXFLAGS += -fPIC
