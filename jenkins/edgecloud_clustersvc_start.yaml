@@ -29,6 +29,6 @@ spec:
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--influxdb"
-         - "35.247.126.154:8086"
+         - "http://35.202.161.23:8086"
       imagePullSecrets:
        - name: mexreg-secret
