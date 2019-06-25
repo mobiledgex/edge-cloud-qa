@@ -368,7 +368,7 @@ int main() {
         } else {
             // Get the token (and wait for it)
             // GPRC uses "Channel". But, we can use libcurl here.
-	  if(tokenURI == registerClientReply.token_serveruri()){
+	  if(tokenURI == registerClientReply.token_server_uri()){
             cout << "Token Server URI Matches!" << endl;
           } else {
 	    cout << "Token Server URI Does Not Match!" << endl;
