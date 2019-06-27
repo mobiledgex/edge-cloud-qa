@@ -684,7 +684,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'docker.register.net/images/fakeimage:#md5:12345678901234567890123456789012'
+                    self.image_path = 'docker.mobiledgex.net/mobiledgex/images/fakeimage:#md5:12345678901234567890123456789012'
                 #self.image_type = 2
 
 
@@ -1389,11 +1389,14 @@ class MexController(MexGrpc):
         use_thread = False
 
         if cluster_instance is None:
+            if 'cluster_name' not in kwargs:
+                kwargs['cluster_name'] = shared_variables.cluster_name_default
             if 'use_thread' in kwargs:
                 del kwargs['use_thread']
                 use_thread = True
-            if len(kwargs) != 0:
-                cluster_instance = ClusterInstance(**kwargs).cluster_instance
+            #if len(kwargs) != 0:
+            #    cluster_instance = ClusterInstance(**kwargs).cluster_instance
+            cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
 
