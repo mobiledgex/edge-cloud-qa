@@ -28,7 +28,5 @@ spec:
          - "mexos,notify"
          - "--tls"
          - "/root/tls/mex-server.crt"
-         - "--influxdb"
-         - "http://35.202.161.23:8086"
       imagePullSecrets:
        - name: mexreg-secret
