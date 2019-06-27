@@ -99,52 +99,6 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
-User shall be able to access HTTP port on openstack with docker
-    [Documentation]
-    ...  deploy app with HTTP port with docker
-    ...  verify the port as accessible via fqdn
-
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-
-    Log To Console  Creating App and App Instance
-    Create App  image_path=${docker_image}  access_ports=http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
-	
-    Log To Console  Registering Client and Finding Cloudlet
-    Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
-    ${page}=  Catenate  SEPARATOR=/  ${cloudlet.ports[0].path_prefix}  ${http_page}
-
-    Log To Console  Waiting for k8s pod to be running
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
-
-    Log To Console  Checking if port is alive
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  ${page}
-
-User shall be able to access UDP,TCP and HTTP ports on openstack with docker
-    [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports
-    ...  verify all ports are accessible via fqdn
-
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-
-    Create App  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
-
-    Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
-
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
-
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
-
 *** Keywords ***
 Setup
     Create Developer
