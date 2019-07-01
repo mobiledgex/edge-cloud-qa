@@ -49,6 +49,8 @@ spec:
           - "https://gitlab-qa.mobiledgex.net"
           - "--artifactoryAddr"
           - "https://artifactory.mobiledgex.net"
+          - "--tag"
+          - "qa"
          env:
           - name: VAULT_ROLE_ID
             value: f4207f0f-c965-ac3e-181c-235de8838ff7
