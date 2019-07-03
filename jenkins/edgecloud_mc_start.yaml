@@ -37,6 +37,8 @@ spec:
           - "0.0.0.0:9900"
           - "--vaultAddr"
           - "https://vault.mobiledgex.net"
+          - "-ldapAddr"
+          - "0.0.0.0:9389"
           - "--tls"
           - "/root/tls/mex-server.crt"
           - "--tlskey"
