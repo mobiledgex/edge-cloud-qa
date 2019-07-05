@@ -1,0 +1,17 @@
+# andy-mac:e2e-tests andyanderson$ e2e-tests -setupfile ../../edge-cloud-qa/tools/dns.yaml  -testfile testfiles/deploy_start.yml --varsfile vars.yml
+cloudflare:
+  zone: mobiledgex.net
+  records:
+  - name: automation.ctrl.mobiledgex.net
+    type: A
+    content: "35.202.131.16"
+  - name: automationeu.ctrl.mobiledgex.net
+    type: A
+    content: "35.238.36.211"
+  - name: automation.dme.mobiledgex.net
+    type: A
+    content: "35.192.148.74"
+  - name: automationmc.mobiledgex.net
+    type: A
+    content: "35.193.32.143"
+
