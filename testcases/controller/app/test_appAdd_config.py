@@ -32,6 +32,7 @@ config_http = 'http://35.199.188.102/apps/dummyconfig.json'
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -98,6 +99,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains config
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
+                                      image_path=qcow_image,
                                       app_name=app_name,
                                       access_ports=access_ports,
                                       app_version=app_version,
@@ -129,6 +131,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains config
         self.app = mex_controller.App(image_type='ImageTypeDocker',
+                                      image_path=qcow_image,
                                       app_name=app_name,
                                       access_ports=access_ports,
                                       app_version=app_version,
@@ -162,6 +165,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains config
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
+                                      image_path=qcow_image,
                                       app_name=app_name,
                                       access_ports=access_ports,
                                       app_version=app_version,
