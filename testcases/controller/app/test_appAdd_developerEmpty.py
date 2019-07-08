@@ -22,6 +22,7 @@ stamp = str(time.time())
 app_name = 'app' + stamp
 flavor_name = 'x1.medium'
 cluster_name = 'cluster' + stamp
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -96,7 +97,8 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
-                                 image_path='automation.com',
+                                 #image_path='automation.com',
+                                 image_path=qcow_image,
                                  #ip_access='IpAccessShared',
                                  use_defaults=False)
 
@@ -175,7 +177,8 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
-                                 image_path='automation.com',
+                                 #image_path='automation.com',
+                                 image_path=qcow_image,
                                  #ip_access='IpAccessShared',
                                  use_defaults=False
                                  )

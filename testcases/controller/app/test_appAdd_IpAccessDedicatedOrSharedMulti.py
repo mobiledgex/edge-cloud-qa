@@ -25,6 +25,7 @@ flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
 app_name = 'app' + stamp
 app_version = '1.0'
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -459,13 +460,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 2 tcp ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'tcp:655,tcp:2',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'tcp:655,tcp:2',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -490,13 +492,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 10 tcp ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'tcp:1,tcp:2,tcp:3,tcp:4,tcp:5,tcp:6,tcp:7,tcp:8,tcp:9,tcp:10',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'tcp:1,tcp:2,tcp:3,tcp:4,tcp:5,tcp:6,tcp:7,tcp:8,tcp:9,tcp:10',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -524,13 +527,14 @@ class tc(unittest.TestCase):
         for i in range(100):
             tcp_list += 'tcp:' + str(i+1) + ','
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = tcp_list[:-1],
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = tcp_list[:-1],
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -555,13 +559,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and tcp and udp ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -586,13 +591,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 2 udp ports:
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'udp:5535,udp:55',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'udp:5535,udp:55',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -617,13 +623,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 10 udp ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'udp:10,udp:9,udp:8,udp:7,udp:6,udp:5,udp:4,udp:3,udp:2,udp:1',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'udp:10,udp:9,udp:8,udp:7,udp:6,udp:5,udp:4,udp:3,udp:2,udp:1',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -651,13 +658,14 @@ class tc(unittest.TestCase):
         for i in range(100):
             udp_list += 'udp:' + str(i+1) + ','
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = udp_list[:-1],
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = udp_list[:-1],
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -682,13 +690,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 2 http ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'http:655,http:2',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'http:655,http:2',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -713,13 +722,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and 10 http ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -747,13 +757,14 @@ class tc(unittest.TestCase):
         for i in range(100):
             tcp_list += 'http:' + str(i+1) + ','
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = tcp_list[:-1],
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = tcp_list[:-1],
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
@@ -778,13 +789,14 @@ class tc(unittest.TestCase):
         # create the app
         # contains ip_access=IpAccessDedicatedOrShared and tcp and udp ports
         self.app = mex_controller.App(image_type='ImageTypeQCOW',
-                                             app_name=app_name,
-                                             app_version=app_version,
-                                             #cluster_name=cluster_name,
-                                             developer_name=developer_name,
-                                             ip_access = 'IpAccessDedicatedOrShared',
-                                             access_ports = 'http:80,tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3,http:8080',
-                                             default_flavor_name=flavor_name)
+                                      image_path = qcow_image,
+                                      app_name=app_name,
+                                      app_version=app_version,
+                                      #cluster_name=cluster_name,
+                                      developer_name=developer_name,
+                                      ip_access = 'IpAccessDedicatedOrShared',
+                                      access_ports = 'http:80,tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3,http:8080',
+                                      default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
