@@ -25,6 +25,7 @@ developer_email = 'dev@dev.com'
 app_name = 'app' + stamp
 app_version = '1.0'
 access_ports = 'tcp:1'
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -90,6 +91,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeQCOW',
+                                 image_path=qcow_image,
                                  cluster_name='dummyCluster',
                                  access_ports=access_ports,
                                  app_name=app_name,

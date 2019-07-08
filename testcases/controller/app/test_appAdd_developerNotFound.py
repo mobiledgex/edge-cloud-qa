@@ -21,6 +21,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 access_ports = 'tcp:1'
 stamp = str(time.time())
 flavor_name = 'x1.small' + stamp
+qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -95,6 +96,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeQCOW',
+                                 image_path=qcow_image,
                                  cluster_name='dummyCluster',
                                  access_ports=access_ports,
                                  app_name = 'dummpyApp',
