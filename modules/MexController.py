@@ -629,7 +629,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
@@ -648,7 +648,8 @@ class App():
         self.permits_platform_apps = permits_platform_apps
         self.deployment = deployment
         self.deployment_manifest = deployment_manifest
-
+        self.scale_with_cluster = scale_with_cluster
+        
         #print('*WARN*',app_pb2.App)
         #print('*WARN*','key', vars(app_pb2.App))
         #print('*WARN*','fields', app_pb2.App._fields, dir(app_pb2.App))
@@ -684,7 +685,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'docker.mobiledgex.net/mobiledgex/images/fakeimage:#md5:12345678901234567890123456789012'
+                    self.image_path = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
                 #self.image_type = 2
 
 
@@ -761,6 +762,8 @@ class App():
         if self.deployment_manifest is not None:
             app_dict['deployment_manifest'] = self.deployment_manifest
             _fields_list.append(self._deployment_manifest_field)
+        if self.scale_with_cluster:
+            app_dict['scale_with_cluster'] = True
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
