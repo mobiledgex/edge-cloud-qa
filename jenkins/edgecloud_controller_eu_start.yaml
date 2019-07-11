@@ -32,6 +32,8 @@ spec:
           - "0.0.0.0:55002"
           - "--httpAddr"
           - "0.0.0.0:36002"
+          - "--region"
+          - "EU"
           - "--vaultAddr"
           - "https://vault.mobiledgex.net"
           - "--tls"
