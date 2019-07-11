@@ -42,7 +42,7 @@ def main():
         sys.exit()
     
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
     logging.getLogger('urllib3').setLevel(logging.ERROR)
     logging.getLogger('zapi').setLevel(logging.DEBUG)
