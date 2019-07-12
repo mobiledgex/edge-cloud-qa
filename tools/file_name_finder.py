@@ -42,7 +42,7 @@ def main():
         sys.exit()
     
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG,
         format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
     logging.getLogger('urllib3').setLevel(logging.ERROR)
     logging.getLogger('zapi').setLevel(logging.DEBUG)
@@ -86,13 +86,18 @@ def main():
    # print('exec_id', exec_id)
 
         z.update_status(execution_id=exec_id, issue_id=issue_id, project_id=project_id, cycle_id=cycle_id, version_id=version_id, status=status_var)
+        print('TCID changed to', status)
 
     sresult = z.get_teststeps(issue_id,project_id)
     sresult_content = json.loads(sresult)
     step = sresult_content[0]['step']
-    filename,title = step.split('\n')
-    print('File Name=', filename, 'Title=',title)
-    print('TCID changed to', status)
+    if "robot" in step:
+        filename,title = step.split('\n')
+        print('File Name=', filename, 'Title=',title)
+    else:
+        print("testcase =", step)
+        
+   
         
 if __name__ == '__main__':
     main()
