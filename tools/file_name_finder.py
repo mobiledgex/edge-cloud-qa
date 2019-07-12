@@ -40,6 +40,11 @@ def main():
     if status and (not new_cycle or not tcid):
         print(parser.print_help())
         sys.exit()
+
+    if not (status and not new_cycle and not tcid):
+        print(parser.print_help())
+        sys.exit()
+
     
     logging.basicConfig(
         level=logging.DEBUG,
@@ -96,8 +101,6 @@ def main():
         print('File Name=', filename, 'Title=',title)
     else:
         print("testcase =", step)
-        
-   
         
 if __name__ == '__main__':
     main()
