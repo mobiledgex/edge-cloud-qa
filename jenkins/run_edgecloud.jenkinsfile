@@ -185,8 +185,8 @@ node('jenkinsSlave1'){
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
 
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhamburg_start.yaml'
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhamburg_start.yaml'  
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhamburg_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhamburg_start.yaml'  
 
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
