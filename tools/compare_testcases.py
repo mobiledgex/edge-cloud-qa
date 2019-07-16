@@ -1,17 +1,7 @@
 #!/usr/bin/python3
 # Recursive function to look for .XX type of files
 
-import sys
 import os
-import logging
-import json
-import time
-import zapi
-import jiraapi
-import subprocess
-import argparse
-import unittest
-import glob
 
 username = 'andy.anderson@mobiledgex.com'
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
@@ -28,17 +18,16 @@ def get_tests():
     for r, d, f in os.walk(python_path):
         for files in f:
             if '.py' in files:
-                with open(files, 'r') as o:
-                    if "testcases" in files:
-
-                        
-                        edge_cloudqa.append(line.strip() for line in o)
-             #   edge_cloudqa.append(os.path.join(files))
-           # elif ".robot" in files:
-             #   edge_cloudqa.append(os.path.join(files))
+               # with open(files, 'r') as o:
+                    #if "testcases" in files:
+                #edge_cloudqa.append(line.strip() for line in o)
+                edge_cloudqa.append(os.path.join(files))
+            elif ".robot" in files:
+                edge_cloudqa.append(os.path.join(files))
     edge_cloudqa.sort()
     print(edge_cloudqa)
 get_tests()
+
 
     # logging.basicConfig(
   #      level=logging.DEBUG,
