@@ -30,6 +30,8 @@ def get_tests():
             if '.py' in files:
                 with open(files, 'r') as o:
                     if "testcases" in files:
+
+                        
                         edge_cloudqa.append(line.strip() for line in o)
              #   edge_cloudqa.append(os.path.join(files))
            # elif ".robot" in files:
