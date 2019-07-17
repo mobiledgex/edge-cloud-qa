@@ -14,20 +14,23 @@ python_path = '/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testc
 edge_cloudqa = []
 
 # r=root, d=directories, f = files
-def get_tests():
+def get_files():
     for r, d, f in os.walk(python_path):
         for files in f:
             if '.py' in files:
-               # with open(files, 'r') as o:
-                    #if "testcases" in files:
-                #edge_cloudqa.append(line.strip() for line in o)
                 edge_cloudqa.append(os.path.join(files))
             elif ".robot" in files:
                 edge_cloudqa.append(os.path.join(files))
-    edge_cloudqa.sort()
-    print(edge_cloudqa)
-get_tests()
 
+            edge_cloudqa.sort()
+    print(edge_cloudqa)
+    
+get_files()
+
+
+#def go_inside_files():
+   # for files in edge_cloudqa:
+        
 
     # logging.basicConfig(
   #      level=logging.DEBUG,
@@ -48,3 +51,6 @@ get_tests()
 #if __name__ == '__main__':
          #     get_all_tests()
    # parser = argparse.ArgumentParser(description='update cycle')
+
+
+   # DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
