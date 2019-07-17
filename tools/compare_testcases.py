@@ -1,56 +1,59 @@
-#!/usr/bin/python3
-# Recursive function to look for .XX type of files
+# Script that extracts testcase names and filenames from .py and .robot files in BASE_DIRECTORY
 
 import os
+#Change base directory
+BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases"
 
-username = 'andy.anderson@mobiledgex.com'
-access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
-secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
+file_list = []             # List of files that are .py or .robot
 
-jira_token = 'Qoi6yaqSNTvjdyJAhgNz1AE4'
+def extract_testcases():
+    for (dirpath, dirnames, filenames) in os.walk(BASE_DIRECTORY):
+        for f in filenames:
+            if f[0] == ".":
+                pass
+            elif ".pyc" in str(f):
+                pass
+            elif '.py' in str(f):
+                e = os.path.join(str(dirpath), str(f))
+                file_list.append(e)
+            elif '.robot' in str(f):
+                e = os.path.join(str(dirpath), str(f))
+                file_list.append(e)
+    #appends all paths into a file_list 
+            
+    filehandle = open('Testcases and files.txt', 'w')
+    filehandle.write('All Files and Testcase names:\n')
+    for files in file_list:
+        testname= None
+        line_previous = ''
+        list_tests = []
+        list_tests2 = []
+        file_name = os.path.basename(files)
+        txtfile = open(files, 'r')
+        for line in txtfile:
+            if '[Documentation]' in line:
+                testname= line_previous 
+                list_tests2.append(testname)
+                type_of_file = "robot"
+            if "def test" in line:
+                testname = line
+                testname1 = line[4:]
+                testname = testname1[0:-8]
+                list_tests.append(testname)
+                type_of_file ="python"
+                line_previous = line
+                if testname != None:
+                  if type_of_file == 'robot':
+                      for test in list_tests2:
+                          testname3 = test[0:-1]
+                          list_tests.append(testname3)
+        filehandle.write('%s\n' % "File Path: ")
+        filehandle.write('%s\n' % file_name)
+        filehandle.write('%s\n' % "Testname: ")
+        filehandle.write('%s\n' % list_tests)
+        filehandle.write('\n')
 
-python_path = '/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases'
 
-edge_cloudqa = []
+extract_testcases()
 
-# r=root, d=directories, f = files
-def get_files():
-    for r, d, f in os.walk(python_path):
-        for files in f:
-            if '.py' in files:
-                edge_cloudqa.append(os.path.join(files))
-            elif ".robot" in files:
-                edge_cloudqa.append(os.path.join(files))
-
-            edge_cloudqa.sort()
-    print(edge_cloudqa)
-    
-get_files()
-
-
-#def go_inside_files():
-   # for files in edge_cloudqa:
-        
-
-    # logging.basicConfig(
-  #      level=logging.DEBUG,
-  #      format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
-   # logging.getLogger('urllib3').setLevel(logging.ERROR)
-   # logging.getLogger('zapi').setLevel(logging.DEBUG)
-
-   # z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
-   # j = jiraapi.Jiraapi(username=username, token=jira_token)
-
-    
-  #  jiraQueryUrl = f'key={tcid}'
-   # result = j.search(query=jiraQueryUrl)
-  #  query_content = json.loads(result)
-  #  issue_id = query_content['issues'][0]['id']
-
-    
-#if __name__ == '__main__':
-         #     get_all_tests()
-   # parser = argparse.ArgumentParser(description='update cycle')
-
-
-   # DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
+# DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
