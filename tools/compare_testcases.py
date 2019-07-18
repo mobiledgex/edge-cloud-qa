@@ -61,7 +61,7 @@ secret_key = '***REMOVED***'
 
 jira_token = '***REMOVED***'
 
-def extract_Jiracases():
+#def extract_Jiracases():
    #  logging.basicConfig(
     #    level=logging.INFO,
     #    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
