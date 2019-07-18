@@ -21,7 +21,6 @@ def extract_testcases():
                 e = os.path.join(str(dirpath), str(f))
                 file_list.append(e)
     #appends all paths into a file_list 
-            
     filehandle = open('Testcases and files.txt', 'w')
     filehandle.write('All Files and Testcase names:\n')
     for files in file_list:
@@ -55,7 +54,6 @@ def extract_testcases():
         filehandle.write('\n')
 
 extract_testcases()
-
 
 username = 'andy.anderson@mobiledgex.com'
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
