@@ -1,4 +1,5 @@
 # Script that extracts testcase names and filenames from .py and .robot files in BASE_DIRECTORY
+# DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
 
 import os
 #Change base directory
@@ -53,7 +54,21 @@ def extract_testcases():
         filehandle.write('%s\n' % list_tests)
         filehandle.write('\n')
 
-
 extract_testcases()
 
-# DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
+
+username = 'andy.anderson@mobiledgex.com'
+access_key = '***REMOVED***';
+secret_key = '***REMOVED***'
+
+jira_token = '***REMOVED***'
+
+def extract_Jiracases():
+   #  logging.basicConfig(
+    #    level=logging.INFO,
+    #    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
+  #  logging.getLogger('urllib3').setLevel(logging.ERROR)
+  #  logging.getLogger('zapi').setLevel(logging.DEBUG)
+
+   # z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
+   # j = jiraapi.Jiraapi(username=username, token=jira_token)
