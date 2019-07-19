@@ -60,34 +60,84 @@ def extract_testcases():
             filehandle.write('%s\n' % list_tests)
             filehandle.write('\n')
     
-extract_testcases()
+#extract_testcases()
+#_____________________________________________________________________________________________________________________
+
+zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 
 
-username = 'andy.anderson@mobiledgex.com'
-access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
-secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
-jira_token = 'Qoi6yaqSNTvjdyJAhgNz1AE4'
+component_list = component.split(',')
+component_query = ''
+for component in component_list:
+    component_query += ' AND component = ' + component
+zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
+jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
+jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
 
-#def extract_Jiracases():
-    # logging.basicConfig(
-    #    level=logging.INFO,
-    #    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
-  #  logging.getLogger('urllib3').setLevel(logging.ERROR)
-  #  logging.getLogger('zapi').setLevel(logging.DEBUG)
+logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
 
-  #  z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
-  #  j = jiraapi.Jiraapi(username=username, token=jira_token)
+#result = z.execute_query(zephyrQueryUrl)
+startat = 0
+maxresults = 0
+total = 1
+tc_list = []
+while (startat + maxresults) < total:
+    result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
+    query_content = json.loads(result)
+    startat = query_content['startAt']
+    maxresults = query_content['maxResults']
+    total = query_content['total']
+    print(startat,maxresults,total)
+    #sys.exit(1)
+    tc_list += get_testcases(z, result, cycle_id, project_id, version_id)
+
+        
+print('tc_list',tc_list)
+print('lentclist', len(tc_list))
 
 
+def get_testcases(z, result, cycle_id, project_id, version_id):
+    query_content = json.loads(result)
+    tc_list = []
+    
+    #for s in query_content['executions']:
+    for s in query_content['issues']:
+        print('issueKey', s['key'])
+        logging.info("getting script for:" + s['key'])
+        sresult = z.get_teststeps(s['id'],s['fields']['project']['id'])
+        sresult_content = json.loads(sresult)
 
+        if sresult_content: # list is not empty;therefore, has a teststep
+            logging.info("found a teststep")
+            #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
+            #tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
+            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'defects': s['fields']['issuelinks']}
+            print(s)
+            tmp_list['defect_count'] = len(s['fields']['issuelinks']) # need to check for issueslink section
+            #if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
+            #    tmp_list['defect_count'] = s['execution']['totalDefectCount']
+            #else:
+            #    tmp_list['defect_count'] = 0
+            logging.info("script is " + sresult_content[0]['step'])
+        else:
+            logging.info("did NOT find a teststep")
+            tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
+
+        tc_list.append(tmp_list)
+    print(tc_list)
+    #sys.exit(1)
+    return tc_list
+
+
+#____________________________________________________________________________________________________________________________________
 first_file = "/Users/mexloaner/compare1.txt"  #Change location to file 1
 second_file = "/Users/mexloaner/compare2.txt"  #Change location to file 2
 
 # Compares 2 text files returns differences into another .txt file
-import difflib
 
-f1 = "/Users/mexloaner/compare1.txt"
-f2 = "/Users/mexloaner/compare2.txt"
+f1 = "/Users/mexloaner/compare1.txt"  # Change file to file needed for comparison
+f2 = "/Users/mexloaner/compare2.txt"  # Change file to file needed for comparison
+difference = "/Users/mexloaner/difference_file.txt"  # Change file to file for the differences
 
 list_tests1 = []
 list_tests2 = []
@@ -95,8 +145,8 @@ list_tests2 = []
 def compare(f1,f2):
     text1 = open(f1).readlines() 
     text2 = open(f2).readlines()
-    difference_report = open("/Users/mexloaner/difference_file.txt", 'w')  #Change file for differences
-    difference_report.write('%s\n' % "Things not in file2.txt: ")
+    difference_report = open(difference, 'w') 
+    difference_report.write('%s\n' % "Things not in file 2: ")
     for lines in text1:   
         list_tests1.append(lines)
     for lines in text2:
@@ -109,7 +159,7 @@ def compare(f1,f2):
         else:
             pass
     difference_report.write('\n')
-    difference_report.write('%s\n' % "Things not in file1.txt: ")
+    difference_report.write('%s\n' % "Things not in file 1: ")
     for things in list_tests2:
         if things == '':
             list_test2.remove('')
