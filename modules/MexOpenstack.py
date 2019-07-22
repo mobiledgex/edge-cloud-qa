@@ -26,7 +26,42 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
+    def get_openstack_image_list(self, name=None):
+        cmd = f'source {self.env_file};openstack image list -f json'
 
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting openstack image list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
+
+
+    def delete_openstack_image(self, name=None):
+        cmd = f'source {self.env_file};openstack image delete {name}'
+
+        logging.debug(f'deleting openstack image with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        #return json.loads(o_out)
+
+
+    
     def _findFile(self, path):
         for dirname in sys.path:
             candidate = os.path.join(dirname, path)
