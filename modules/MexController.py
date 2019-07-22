@@ -690,11 +690,11 @@ class App():
 
 
         if self.image_type == 'ImageTypeDocker':
-                self.image_type = 1
+            self.image_type = 1
         elif self.image_type == 'ImageTypeQCOW':
-                self.image_type = 2
+            self.image_type = 2
         elif self.image_type == 'ImageTypeUnknown':
-                self.image_type = 0
+            self.image_type = 0
 
         #self.ip_access = 3 # default to shared
         #if ip_access == 'IpAccessDedicated':
@@ -870,6 +870,8 @@ class AppInstance():
             self.autocluster_ipaccess = 2
         elif self.autocluster_ipaccess == 'IpAccessShared':
             self.autocluster_ipaccess = 3
+
+        shared_variables.operator_name_default = self.operator_name
 
         appinst_dict = {}
         appinst_key_dict = {}
