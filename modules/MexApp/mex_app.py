@@ -13,7 +13,6 @@ import shared_variables
 class MexApp(object):
     def __init__(self):
         self.kubeconfig_dir = os.getenv('HOME') + '/.mobiledgex'
-        self.rootlb = None
         
     def ping_udp_port(self, host, port):
         data = 'ping'
@@ -128,8 +127,6 @@ class MexApp(object):
         else:
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
-        self.rootlb = rb
-        
         if pod_name:
             pod_name = pod_name.replace('.', '') #remove any dots
 
@@ -188,48 +185,3 @@ class MexApp(object):
         rb = rootlb.Rootlb(host=root_loadbalancer)
 
         rb.unblock_port(port=port, target=target)
-
-    def reboot_rootlb(self, root_loadbalancer):
-        rb = rootlb.Rootlb(host=root_loadbalancer)
-
-        rb.reboot()
-        
-    def mount_should_exist_on_pod(self, root_loadbalancer=None, cluster_name=None, operator_name=None, pod_name=None, mount=None):
-
-        rb = None
-        if root_loadbalancer is not None:
-            #rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
-            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
-        else:
-            rb = self.rootlb
-
-        try:
-            rb.mount_exists_on_pod(pod=pod_name, mount=mount)
-            logging.info(f'mount={mount} exists on pod={pod_name}')
-        except:
-            raise Exception(f'mount={mount} DOES NOT exist on pod={pod_name}')
-        try:
-            rb.write_file_to_pod(pod=pod_name, mount=mount)
-            logging.info(f'successfully wrote file to pod={pod_name} on mount={mount}')
-        except:
-            raise Exception(f'error writing file to mount={mount} and pod={pod_name}. {sys.exc_info()[0]}')
-
-        node_file = f'/data/{cluster_name}_node.txt'
-        try:
-            output = rb.read_file_from_pod(pod=pod_name, filename=node_file)
-            #logging.info('output', output)
-            assert output[0].rstrip() == cluster_name
-        except:
-            raise Exception(f'error. file not found on node for file={node_file} and pod={pod_name}. {sys.exc_info()[0]}')
-
-
-        
-    def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
-        rb = None
-        if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
-        else:
-            rb = self.rootlb
-
-        rb.write_file_to_node(node=node, mount=mount, data=data)
-        

@@ -1,7 +1,6 @@
 import os
 import logging
 from linux import Linux
-from kubernetes import Kubernetes
 
 class Rootlb(Linux):
     def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa_mex', cluster_name=None, verbose=False):
@@ -32,16 +31,9 @@ class Rootlb(Linux):
         if errcode != 0:
             raise Exception("cmd returned non-zero status of " + errcode)
 
+        print(output)
+
         return output
-
-    def get_pod(self, pod_name):
-        pod_list = self.get_pods()
-
-        for pod in pod_list:
-            if pod_name in pod:
-                return pod.split()[0]
-
-        raise Exception(f'pod with name={pod_name} not found')
 
     def get_docker_container_id(self):
         cmd = 'docker ps --format "{{.ID}}"'
@@ -94,78 +86,6 @@ class Rootlb(Linux):
         
         return output
 
-    def reboot(self):
-        try:
-            logging.info('rebooting rootlb')
-            self.run_command('sudo reboot')
-        except:
-            logging.info('caught reboot exception')
-
-            
-    def mount_exists_on_pod(self, pod, mount):
-        logging.info(f'mount exists on pod={pod} mount={mount}')
-
-        cmd = f'df {mount}'
-
-        real_pod = self.get_pod(pod)
-        self.run_command_on_pod(real_pod, cmd)
-        
-        #k8s = Kubernetes(kubeconfig=self.kubeconfig)
-
-        #k8s.exec_command(pod_name=real_pod, command=command)
-
-    def write_file_to_pod(self, pod, mount, data=None):
-        logging.info(f'writing file on pod pod={pod} mount={mount}')
-
-        real_pod = self.get_pod(pod)
-        
-        data_to_write = None
-        if data:
-            data_to_write = data
-        else:
-            data_to_write = real_pod
-            
-        cmd = f'echo {data_to_write} > {mount}/{pod}.txt'
-
-        self.run_command_on_pod(real_pod, cmd)
-
-    def read_file_from_pod(self, pod, filename):
-        logging.info(f'reading file on pod pod={pod} file={filename}')
-
-        real_pod = self.get_pod(pod)
-        
-        cmd = f'cat {filename}'
-
-        output = self.run_command_on_pod(real_pod, cmd)
-
-        return output
-    
-    def run_command_on_pod(self, pod_name, command):
-        kubectl_cmd = f'KUBECONFIG={self.kubeconfig} kubectl exec -it {pod_name} -- bash -c "{command}"'
-
-        output = self.run_command(kubectl_cmd)
-        return output
-    
-    def write_file_to_node(self, node, mount, data=None):
-        logging.info(f'write file to node={node} mount={mount}')
-        network, ip = node.split('=')
-
-        data_to_write = None
-        if data:
-            data_to_write = data
-        else:
-            data_to_write = ip
-
-        command = f'sudo bash -c "echo {data_to_write} > /var/opt/{data_to_write}_node.txt"'
-        self.run_command_on_node(node, command)
-        
-    def run_command_on_node(self, node, command):
-        network, ip = node.split('=')
-        command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
-
-        output = self.run_command(command)
-        return output
-    
     def run_command(self, cmd):
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
