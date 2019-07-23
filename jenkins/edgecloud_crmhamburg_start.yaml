@@ -37,14 +37,12 @@ spec:
          #- name: CLEANUP_ON_FAILURE
          #  value: "no"
         args:
-         - "--apiAddr"
-         - "0.0.0.0:50054"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"TDG\"},\"name\":\"automationHamburgCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
          - "--platform"
-         - "openstack"
+         - "PLATFORM_TYPE_OPENSTACK"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--vaultAddr"

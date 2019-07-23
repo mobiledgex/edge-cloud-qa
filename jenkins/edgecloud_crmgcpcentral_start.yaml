@@ -37,8 +37,6 @@ spec:
          - name: VAULT_SECRET_ID
            value: 6e88cd75-7297-ba5e-6b27-9d612e3792b7
         args:
-         - "--apiAddr"
-         - "0.0.0.0:55100"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"gcp\"},\"name\":\"automationGcpCentralCloudlet\"}"
          - "--notifyAddrs"
@@ -46,7 +44,7 @@ spec:
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--platform"
-         - "gcp"
+         - "PLATFORM_TYPE_GCP"
          - "--vaultAddr"
          - "vault.mobiledgex.net"
          - "--d"
