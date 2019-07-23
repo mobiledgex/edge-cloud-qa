@@ -37,14 +37,12 @@ spec:
          - name: VAULT_SECRET_ID
            value: ***REMOVED***
         args:
-         - "--apiAddr"
-         - "0.0.0.0:65100"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"azure\"},\"name\":\"automationAzureCentralCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
          - "--platform"
-         - "azure"
+         - "PLATFORM_TYPE_AZURE"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--vaultAddr"

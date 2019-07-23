@@ -24,8 +24,6 @@ spec:
         command:
          - crmserver
         args:
-         - "--apiAddr"
-         - "0.0.0.0:50094"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"dmuus\"},\"name\":\"tmocloud-4\"}"
          - "--notifyAddrs"
@@ -33,7 +31,7 @@ spec:
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--platform"
-         - "fakecloudlet"
+         - "PLATFORM_TYPE_FAKE"
          - "--d"
          - "api,notify,mexos"
       imagePullSecrets:
