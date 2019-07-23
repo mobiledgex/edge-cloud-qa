@@ -36,6 +36,8 @@ spec:
           - "EU"
           - "--vaultAddr"
           - "https://vault.mobiledgex.net"
+          - "--versionTag"
+          - "$AUTOMATION_DOCKERTAG"
           - "--tls"
           - "/root/tls/mex-server.crt"
           - "--influxAddr"

@@ -39,14 +39,12 @@ spec:
          - name: VAULT_SECRET_ID
            value: ***REMOVED***
         args:
-         - "--apiAddr"
-         - "0.0.0.0:50051"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"GDDT\"},\"name\":\"automationBuckhornCloudlet\"}"
          - "--notifyAddrs"
          - "controller:37001"
          - "--platform"
-         - "openstack"
+         - "PLATFORM_TYPE_OPENSTACK"
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--vaultAddr"
