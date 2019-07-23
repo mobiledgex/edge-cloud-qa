@@ -1,5 +1,4 @@
-# Script that extracts testcase names and filenames from .py and .robot files in BASE_DIRECTORY and
-# Jira and compares tests
+# Script that extracts testcase names and filenames from .py and .robot files in BASE_DIRECTORY and Jira and compares tests
 # DIRECTORY = /Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools
 
 import os
@@ -7,6 +6,12 @@ import logging
 import zapi
 import jiraapi
 import difflib
+import sys
+import urllib
+import json
+import time
+import subprocess
+import argparse
 
 #Change base directory
 BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases"
@@ -54,89 +59,144 @@ def extract_testcases():
                     testname3 = test[0:-1]
                     list_tests.append(testname3)
         #print(list_tests)
-            filehandle.write('%s\n' % "File Path: ")
+            #filehandle.write('%s\n' % "File Path: ")
             filehandle.write('%s\n' % file_name)
-            filehandle.write('%s\n' % "Testname: ")
+            #filehandle.write('%s\n' % "Testname: ")
             filehandle.write('%s\n' % list_tests)
-            filehandle.write('\n')
+            #filehandle.write('\n')
     
 #extract_testcases()
 #_____________________________________________________________________________________________________________________
+# Extracts from Jira
 
-zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
+username = 'andy.anderson@mobiledgex.com'
+jira_token = '***REMOVED***'
+access_key = '***REMOVED***';
+secret_key = '***REMOVED***'
 
+python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases::$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
 
-component_list = component.split(',')
-component_query = ''
-for component in component_list:
-    component_query += ' AND component = ' + component
-zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
-jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
-jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
+def main():
+    
+    parser = argparse.ArgumentParser(description='copy tests to release')
+    parser.add_argument('--version_from_load', action='store_true')
+    args = parser.parse_args()
 
-logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
+    #print(os.environ)
+    cycle = os.environ['Cycle']
+    version = os.environ['Version']
+    project = os.environ['Project']
 
-#result = z.execute_query(zephyrQueryUrl)
-startat = 0
-maxresults = 0
-total = 1
-tc_list = []
-while (startat + maxresults) < total:
-    result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
-    query_content = json.loads(result)
-    startat = query_content['startAt']
-    maxresults = query_content['maxResults']
-    total = query_content['total']
-    print(startat,maxresults,total)
-    #sys.exit(1)
-    tc_list += get_testcases(z, result, cycle_id, project_id, version_id)
+    component = os.environ['Components']
+    workspace = os.environ['WORKSPACE']
+    zephyrBaseUrl = "https://mobiledgex.atlassian.net/rest/zapi/latest/"
 
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
+    
+    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    j = jiraapi.Jiraapi(username=username, token=jira_token)
+
+    project_info = j.get_project(project)
+    content = json.loads(project_info)
+    project_id = content['id']
+    version_id = None
+    for v in content['versions']:
+        if v['name'] == version:
+            version_id = v['id']
+    cycle_id = z.get_cycle_id(name=cycle, project_id=project_id, version_id=version_id)
+
+    component_list = component.split(',')
+    component_query = ''
+    for component in component_list:
+        component_query += ' AND component = ' + component
+    zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
+    jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
+    jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
         
-print('tc_list',tc_list)
-print('lentclist', len(tc_list))
+    startat = 0
+    maxresults = 0
+    total = 900
+    tc_list = []
+    while (startat + maxresults) < total:
+        result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
+        #print(result)
+        query_content = json.loads(result)
+        startat = query_content['startAt']
+        maxresults = query_content['maxResults']
+        total = query_content['total']
+        tc_list += get_testcases(z, result)
+        #tempstring = json.dumps(result)
+        #filehandle.write(result)
+    test = "test"
 
+    return test
 
-def get_testcases(z, result, cycle_id, project_id, version_id):
+def get_testcases(z, result):
     query_content = json.loads(result)
     tc_list = []
-    
-    #for s in query_content['executions']:
+    randomlist = []
+    filehandle = open('hella_stuff', 'w')               # change to different text file
+
     for s in query_content['issues']:
-        print('issueKey', s['key'])
-        logging.info("getting script for:" + s['key'])
         sresult = z.get_teststeps(s['id'],s['fields']['project']['id'])
         sresult_content = json.loads(sresult)
+        #print('XXXXXXXXXXXXXXXXXXXX', sresult_content)
 
-        if sresult_content: # list is not empty;therefore, has a teststep
-            logging.info("found a teststep")
-            #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
-            #tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'defects': s['fields']['issuelinks']}
-            print(s)
-            tmp_list['defect_count'] = len(s['fields']['issuelinks']) # need to check for issueslink section
-            #if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
-            #    tmp_list['defect_count'] = s['execution']['totalDefectCount']
-            #else:
-            #    tmp_list['defect_count'] = 0
+        if sresult_content:
+            tmp_list = {}
+            tmp_list['defect_count'] = len(s['fields']['issuelinks'])
+            randomlist.append(sresult_content[0]['step'])
             logging.info("script is " + sresult_content[0]['step'])
         else:
             logging.info("did NOT find a teststep")
             tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
-
         tc_list.append(tmp_list)
-    print(tc_list)
+    #print(tc_list)
     #sys.exit(1)
+    print(randomlist)
     return tc_list
 
+def get_testcases_z(z, result, cycle):
+    query_content = json.loads(result)
+    tc_list = []
+    
+    for s in query_content['searchObjectList']:
+        if s['execution']['cycleName'] == cycle:
+            sresult = z.get_teststeps(s['execution']['issueId'],s['execution']['projectId'])
+            sresult_content = json.loads(sresult)
+            if sresult_content:
+                tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
+                if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
+                    tmp_list['defect_count'] = s['execution']['totalDefectCount']
+                else:
+                    tmp_list['defect_count'] = 0
+            else:
+                tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['issueKey']}
+            
+            tc_list.append(tmp_list)
 
+    return tc_list
+
+def find(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)
+    return 'fileNotFound'
+
+#if __name__ == '__main__':
+    main()
+
+## Not working? Try: export Cycle=Stratus_automation_2019-07-16;export Version=Stratus;export Project=ECQ;export “Components=Automated, Controller, Flavor”;export WORKSPACE=
 #____________________________________________________________________________________________________________________________________
 first_file = "/Users/mexloaner/compare1.txt"  #Change location to file 1
 second_file = "/Users/mexloaner/compare2.txt"  #Change location to file 2
 
 # Compares 2 text files returns differences into another .txt file
 
-f1 = "/Users/mexloaner/compare1.txt"  # Change file to file needed for comparison
-f2 = "/Users/mexloaner/compare2.txt"  # Change file to file needed for comparison
+f1 = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools/testcases and files.txt"  # Change file to file needed for comparison
+f2 = "/Users/mexloaner/hella_stuff"  # Change file to file needed for comparison
 difference = "/Users/mexloaner/difference_file.txt"  # Change file to file for the differences
 
 list_tests1 = []
@@ -152,8 +212,13 @@ def compare(f1,f2):
     for lines in text2:
         list_tests2.append(lines)
     for stuff in list_tests1:
-        if stuff == '':
-            list_test1.remove('')
+        if stuff =='\n':
+            list_tests1.remove(stuff)
+        if stuff =='Testname: \n' :
+            list_tests1.remove(stuff)
+        if stuff =='File Path: \n':
+            print('YAAAAAAAAAAAAY FOUND IT')
+            list_tests1.remove(stuff)
         if stuff not in list_tests2:
             difference_report.write(stuff)
         else:
@@ -162,11 +227,13 @@ def compare(f1,f2):
     difference_report.write('%s\n' % "Things not in file 1: ")
     for things in list_tests2:
         if things == '':
-            list_test2.remove('')
+            list_tests2.remove(things)
+
         if things not in list_tests1:
             difference_report.write(things)
         else:
             pass
+    print(list_tests1)
     difference_report.write('\n')
     difference_report.close()
 
