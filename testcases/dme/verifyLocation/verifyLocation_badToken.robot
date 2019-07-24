@@ -17,7 +17,6 @@ ${berlin_long}     13.4050
 
 *** Test Cases ***
 VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
-#EDGECLOUD-369 - VerifyToken with token=xx does not return LOC_ERROR_UNAUTHORIZED
     [Documentation]
     ...  send VerifyLocatoin with token=xx
     ...  verify return LOC_ERROR_UNAUTHORIZED
