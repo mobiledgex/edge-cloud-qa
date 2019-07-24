@@ -1,0 +1,709 @@
+controller.operators.test_operatorAdd.tc.test_createOperator
+controller.operators.test_operatorAdd.tc.test_createOperatorSpace
+controller.operators.test_operatorAdd.tc.test_createOperatorUnderscore
+controller.operators.test_operatorAdd_100.tc.test_createOperator
+controller.operators.test_operatorAdd_sameName.tc.test_createOperator
+controller.operators.test_operatorAdd_noName.tc.test_createOperatorEmptyName
+controller.operators.test_operatorAdd_noName.tc.test_createOperatorNoName
+controller.operators.test_operatorAdd_invalidName.tc.test_createOperatorStartUnderscore
+controller.operators.test_operatorAdd_invalidName.tc.test_createOperatorParenthesis
+controller.operators.test_operatorAdd_invalidName.tc.test_createOperatorDollarsign
+controller.operators.test_operatorAdd_invalidName.tc.test_createOperatorOtherInvalidChars
+controller.operators.test_operatorAdd_nameDeveloper.tc.test_createOperator
+controller.operators.test_operatorDelete_unknown.tc.test_DeleteOperatorUnknown
+controller.operators.test_operatorDelete_beforeCloudlet.tc.test_DeleteOperatorBeforeCloudlet
+controller.operators.test_operatorUpdate.tc.test_updateOperator
+controller.operators.test_operatorUpdate.tc.test_updateOperatorSpace
+controller.operators.test_operatorUpdate_unknown.tc.test_updateOperatorUnknown
+controller.operators.test_operatorShow_single.tc.test_ShowOperatorSingle
+controller.operators.test_operatorDelete.tc.test_deleteOperator
+controller.developer.test_developerAdd_nameOnly.tc.test_createDeveloper_nameOnly
+controller.developer.test_developerAdd_100.tc.test_createDeveloper
+controller.developer.test_developerAdd_sameName.tc.test_createDeveloper_sameName_nameOnly
+controller.developer.test_developerAdd_invalidName.tc.test_createDeveloperStartUnderscore
+controller.developer.test_developerAdd_invalidName.tc.test_createDeveloperParenthesis
+controller.developer.test_developerAdd_invalidName.tc.test_createDeveloperDollarsign
+controller.developer.test_developerAdd_invalidName.tc.test_createDeveloperOtherInvalidChars
+controller.developer.test_developerAdd_noName.tc.test_createDeveloperEmptyName
+controller.developer.test_developerAdd_noName.tc.test_createDeveloperNoName
+controller.developer.test_developerDelete_unknown.tc.test_DeleteDeveloperUnknown
+controller.developer.test_deleteDeveloper_beforeApp.tc.test_DeleteDeveloperBeforeApp
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperNameOnly
+controller.developer.test_developerUpdate_unknown.tc.test_updateDeveloperUnknown
+controller.developer.test_developerShow_single.tc.test_showDeveloper_nameOnly
+controller.developer.test_developerDelete.tc.test_deleteDeveloper
+controller.flavor.test_flavorAdd_ram0.tc.test_createFlavorRamOnly
+controller.flavor.test_flavorAdd_ram0.tc.test_createFlavorRam0OtherParms
+controller.flavor.test_flavorAdd_vcpus0.tc.test_createFlavorVcpusOnly
+controller.flavor.test_flavorAdd_vcpus0.tc.test_createFlavorVcpus0OtherParms
+controller.flavor.test_flavorAdd_nameOnly.tc.test_createFlavorNameOnly
+controller.flavor.test_flavorShow_single.tc.test_showFlavor_nameOnly
+controller.flavor.test_flavorAdd_invalidName.tc.test_createFlavorStartUnderscore
+controller.flavor.test_flavorAdd_invalidName.tc.test_createFlavorParenthesis
+controller.flavor.test_flavorAdd_invalidName.tc.test_createFlavorDollarsign
+controller.flavor.test_flavorAdd_invalidName.tc.test_createFlavorOtherInvalidChars
+controller.flavor.test_flavorAdd_largerThanMaxValues.tc.test_createFlavorRamTooLarge
+controller.flavor.test_flavorAdd_largerThanMaxValues.tc.test_createFlavorVcpusTooLarge
+controller.flavor.test_flavorAdd_largerThanMaxValues.tc.test_createFlavorDiskTooLarge
+controller.flavor.test_flavorAdd_sameName.tc.test_createFlavorSameName
+controller.flavor.test_flavorDelete_unknown.tc.test_DeleteDeveloperUnknown
+controller.flavor.test_flavorShow_ramVcupsDisk.tc.test_showFlavor_ram
+controller.flavor.test_flavorShow_ramVcupsDisk.tc.test_showFlavor_disk
+controller.flavor.test_flavorShow_ramVcupsDisk.tc.test_showFlavor_vcpus
+controller.flavor.test_flavorUpdate_notSupported.tc.test_updateFlavor
+controller.flavor.test_flavorAdd_disk0.tc.test_createFlavorDisk0OtherParms
+controller.flavor.test_flavorAdd_noName.tc.test_createFlavorEmptyName
+controller.flavor.test_flavorAdd_noName.tc.test_createFlavorNoName
+controller.flavor.test_flavorAdd_noName.tc.test_createFlavorNoNameOtherParms
+controller.flavor.test_flavorAdd_minValues.tc.test_createFlavorMinValue
+controller.flavor.test_flavorDelete_wrongParms.tc.test_createFlavorMinValue
+controller.flavor.test_flavorDelete_nameOnly.tc.test_deleteFlavorNameOnly
+controller.flavor.test_flavorAdd_maxValues.tc.test_createFlavorMaxValue
+controller.flavor.test_flavorAdd_invalidParms.tc.test_createFlavorRamInvalid
+controller.flavor.test_flavorAdd_invalidParms.tc.test_createFlavorVcpusInvalid
+controller.flavor.test_flavorAdd_invalidParms.tc.test_createFlavorDiskInvalid
+controller.flavor.test_flavorAdd_100.tc.test_createFlavor
+controller.controller.test_showController_addr.tc.test_showControllersAddr
+controller.controller.test_showController_all.tc.test_showControllersAll
+controller.controller.test_showController_wrongAddr.tc.test_showControllersWrongAddr
+controller.cluster.test_clusterInstAdd.tc.test_AddClusterInstance
+controller.cluster.test_clusterInstAdd_100.tc.test_AddClusterInstance
+controller.cluster.test_clusterInstAdd_cloudletInfoNotFound.tc.test_CreateClusterInstCloudletNotFound
+controller.cluster.test_clusterInstAdd_clusterNotFound.tc.test_CreateClusterInstNoCluster
+controller.cluster.test_clusterInstAdd_flavorNotExist.tc.test_NoFlavor
+controller.cluster.test_clusterInstAdd_keyExists.tc.test_CreateClusterTwice
+controller.cluster.test_clusterInstAdd_liveness1.tc.test_AddClusterInstance
+controller.cluster.test_clusterInstAdd_liveness2.tc.test_AddClusterInstance
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstFlavorOnly
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstOperatorOnly
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstCloudletNameOnly
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstClusterNameOnly
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstNoParms
+controller.cluster.test_clusterInstAdd_noDefaultFlavor_noFlavor.tc.test_NoFlavor
+controller.cluster.test_clusterInstAdd_noDefaultFlavor_noFlavor.tc.test_EmptyFlavor
+controller.cluster.test_clusterInstAdd_noFlavor.tc.test_NoFlavor
+controller.cluster.test_clusterInstAdd_noFlavor.tc.test_EmptyFlavor
+controller.cluster.test_clusterInstAdd_operatorNotMatchCloudlet.tc.test_OperatorNotMatchCloudlet
+controller.cluster.test_clusterInstDelete.tc.test_DeleteClusterInstanceFlavor
+controller.cluster.test_clusterInstDelete_beforeAppInst.tc.test_DeleteClusterBeforeApp
+controller.cluster.test_clusterInstDelete_notFound.tc.test_DeleteClusterNameOnly
+controller.cluster.test_clusterInstDelete_notFound.tc.test_DeleteClusterNoFlavor
+controller.cluster.test_clusterInstDelete_notFound.tc.test_DeleteClusterNoName
+controller.cluster.test_clusterInstUpdate_notSupported.tc.test_UpdateClusterInst
+controller.app.test_appAdd_100.tc.test_CreateApp100
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedTCP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedTCP065535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedHTTP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedHTTP065535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedUDP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedUDP065535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedTCP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedTCP065535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedHTTP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedHTTP065535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedUDP65535
+controller.app.test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedUDP065535
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedTCP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedTCP01
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedHTTP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedHTTP01
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedUDP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedUDP01
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedTCP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedTCP01
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedUDP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedUDP01
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedHTTP1
+controller.app.test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedHTTP01
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP100Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCPUDPPorts
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP100Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCPUDPHTTPPorts
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP100Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP100Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCPUDPPorts
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP100Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCPUDPHTTPPorts
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP2Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP10Ports
+controller.app.test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCPUDPPorts
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCPUDPHTTPPorts
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCPUDPPorts
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP2Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP10Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP100Ports
+controller.app.test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCPUDPHTTPPorts
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedTCP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedTCP01
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedUDP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedUDP01
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedHTTP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedHTTP01
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedTCP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedTCP01
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedUDP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedUDP01
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTP1
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTPUppercase
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedTCP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedTCP065535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedUDP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedUDP065535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedHTTP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedHTTP065535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedTCP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedTCP065535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedUDP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedUDP065535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedHTTP65535
+controller.app.test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedHTTP065535
+controller.app.test_appAdd_appNameEmpty.tc.test_CreateAppNameEmpty
+controller.app.test_appAdd_appNameEmpty.tc.test_CreateAppNameMissing
+controller.app.test_appAdd_appNameInvalid.tc.test_CreateNameAtSymbol
+controller.app.test_appAdd_appNameInvalid.tc.test_CreateNameStartUnderscore
+controller.app.test_appAdd_appNameInvalid.tc.test_CreateNameParenthesis
+controller.app.test_appAdd_clusterNotFound.tc.test_CreateAppClusterNotFound_docker
+controller.app.test_appAdd_clusterNotFound.tc.test_CreateAppClusterNotFound_qcow
+controller.app.test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTP01
+controller.app.test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorEmpty_Docker
+controller.app.test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorEmpty_QCOW
+controller.app.test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorNotExist_Docker
+controller.app.test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorNotExist_QCOW
+controller.app.test_appAdd_defaultFlavorNotFound.tc.test_CreateAppDefaultFlavorNotFound_Docker
+controller.app.test_appAdd_defaultFlavorNotFound.tc.test_CreateAppDefaultFlavorNotFound_QCOW
+controller.app.test_appAdd_developerEmpty.tc.test_CreateAppDeveloperEmpty_Docker
+controller.app.test_appAdd_developerEmpty.tc.test_CreateAppDeveloperEmpty_QCOW
+controller.app.test_appAdd_developerEmpty.tc.test_CreateAppDeveloperNotExist_Docker
+controller.app.test_appAdd_developerEmpty.tc.test_CreateAppDeveloperNotExist_QCOW
+controller.app.test_appAdd_developerNotFound.tc.test_CreateAppDeveloperNotFound_Docker
+controller.app.test_appAdd_developerNotFound.tc.test_CreateAppDeveloperNotFound_QCOW
+controller.app.test_appAdd_docker.tc.test_CreateAppDockerNoImagePath
+controller.app.test_appAdd_docker.tc.test_CreateAppDockerEmptyImagePath
+controller.app.test_appAdd_dockerCompliant.tc.test_CreateNameSpace
+controller.app.test_appAdd_dockerCompliant.tc.test_CreateAndSymbol
+controller.app.test_appAdd_dockerCompliant.tc.test_CreateComma
+controller.app.test_appAdd_dockerCompliant.tc.test_CreateBang
+controller.app.test_appAdd_flavorNotFound.tc.test_CreateAppImageTypeOnlyImageTypeUnknown
+controller.app.test_appAdd_imagePath.tc.test_CreateAppDockerImagePath
+controller.app.test_appAdd_imagePath.tc.test_CreateAppQCOWImagePath
+controller.app.test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeUnknown
+controller.app.test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeDocker
+controller.app.test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeQCOW
+controller.app.test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeWrong
+controller.app.test_appAdd_invalidImageType.tc.test_CreateInvalidImageType
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_1
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_2
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_3
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_4
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_5
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_6
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_7
+controller.app.test_appAdd_keyExists.tc.test_CreateAppDockerKeyExists
+controller.app.test_appAdd_keyExists.tc.test_CreateAppDockerKeyExists_2
+controller.app.test_appAdd_noIpAccess.tc.test_CreateAppDockerNoAccessLayer
+controller.app.test_appAdd_noIpAccess.tc.test_CreateAppQCOWNoAccessLayer
+controller.app.test_appAdd_noParms.tc.test_CreateAppNoParms
+controller.app.test_appAdd_noPorts.tc.test_CreateAppNoPortsDedicated
+controller.app.test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidDedicated
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_1
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_2
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_3
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_4
+controller.app.test_appAdd_qcow.tc.test_CreateAppQCOWNoImagePath
+controller.app.test_appAdd_qcow.tc.test_CreateAppQCOWEmptyImagePath
+controller.app.test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedDedicated
+controller.app.test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_noKey
+controller.app.test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_appNameOnly
+controller.app.test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_wrongVersion
+controller.app.test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_wrongDeveloperName
+controller.app.test_appShow_queryParms.tc.test_QueryAppName
+controller.app.test_appShow_queryParms.tc.test_QueryDeveloperName
+controller.app.test_appShow_queryParms.tc.test_QueryAppNameVersion
+registerClient.robot: RegisterClient - request without auth shall return proper JWT
+registerClient_appNotFound.robot: RegisterClient - request with wrong app_name shall return 'app not found'
+registerClient_appNotFound.robot: RegisterClient - request with wrong app_version shall return 'app not found'
+registerClient_appNotFound.robot: RegisterClient - request with wrong developer_name shall return 'app not found'
+registerClient_appNotFound.robot: RegisterClient - request with wrong app_name,app_version, and developer_name shall return 'app not found'
+registerClient_appNotFound.robot: RegisterClient - request shall succeed after adding app
+registerClient_auth.robot: RegisterClient - request with auth shall return proper JWT
+registerClient_authFail.robot: RegisterClient - request for app without authpublickey shall return 'No authkey found to validate token'
+registerClient_authFail.robot: RegisterClient - request with invalid version in token shall return 'failed to verify token - token appvers mismatch'
+registerClient_authFail.robot: RegisterClient - request with invalid appname in token shall return 'failed to verify token - token appname mismatch'
+registerClient_authFail.robot: RegisterClient - request with invalid devname in token shall return 'failed to verify token - token developer mismatch'
+registerClient_authFail.robot: RegisterClient - request with invalid token shall return 'failed to verify token - token contains an invalid number of segments'
+registerClient_authFail.robot: RegisterClient - request with expired token shall return 'failed to verify token - token is expired'
+registerClient_missingParms.robot: RegisterClient - request with app_name only shall return 'DevName cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request with app_version only shall return 'DevName cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request with developer name only shall return 'AppName cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request without developer name shall return 'DevName cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request without app version shall return 'AppVers cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request without app name shall return 'AppName cannot be empty'
+registerClient_missingParms.robot: RegisterClient - request without authtoken for app with token shall return 'No authtoken received'
+createCloudlet.robot: CreateCloudlet with all parameters
+createCloudlet.robot: CreateCloudlet without the optional parameters
+createCloudlet.robot: CreateCloudlet with required parameters and accessuri
+createCloudlet.robot: CreateCloudlet with required parameters and ipsupport
+createCloudlet.robot: CreateCloudlet with required parameters and staticips
+createCloudlet_fail.robot: CreateCloudlet without an operator
+createCloudlet_fail.robot: CreateCloudlet with an invalid operator
+createCloudlet_fail.robot: CreateCloudlet without a name
+createCloudlet_fail.robot: CreateCloudlet with a location of 0 0
+createCloudlet_fail.robot: CreateCloudlet with a location of 100 200
+createCloudlet_fail.robot: CreateCloudlet with a location of -100 -200
+createCloudlet_fail.robot: CreateCloudlet with numdynamic set to 0
+createCloudlet_fail.robot: CreateCloudlet with an invalid ipsupport enumeration -1
+createCloudlet_fail.robot: CreateCloudlet with an invalid ipsupport IPSupportStatic
+createCloudlet_fail.robot: CreateCloudlet with an invalid ipsupport enumeration 3
+deleteCloudlet.robot: DeleteCloudlet without an operator
+deleteCloudlet.robot: DeleteCloudlet with an invalid operator
+deleteCloudlet.robot: DeleteCloudlet without a cloudlet name
+deleteCloudlet.robot: DeleteCloudlet with an invalid cloudlet name
+deleteCloudlet.robot: DeleteCloudlet with a valid operator and cloudlet name
+showCloudlet.robot: ShowCloudlets all
+showCloudlet.robot: ShowCloudlets selected
+showCloudlet.robot: ShowCloudlets invalid
+updateCloutlet.robot: UpdateCloudlet accessuri
+updateCloutlet.robot: UpdateCloudlet staticips
+updateCloutlet.robot: UpdateCloudlet number_of_dynamic_ips
+updateCloutlet.robot: UpdateCloudlet location
+updateCloutlet.robot: UpdateCloudlet location lat
+updateCloutlet.robot: UpdateCloudlet location long
+updateCloutlet.robot: UpdateCloudlet optional accessuri
+updateCloutlet.robot: UpdateCloudlet optional staticips
+updateCloutlet_fail.robot: UpdateCloudlet without an operator
+updateCloutlet_fail.robot: UpdateCloudlet with an invalid operator
+updateCloutlet_fail.robot: UpdateCloudlet without a cloudlet name
+updateCloutlet_fail.robot: UpdateCloudlet with an invalid cloudlet name
+updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips 0
+updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips -1
+updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips A
+updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips 2323232232323
+updateCloutlet_fail.robot: UpdateCloudlet with a ipsupport of -1
+updateCloutlet_fail.robot: UpdateCloudlet with a ipsupport of -8
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 0 0
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 100 200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of -100 -200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of A A
+updateCloutlet_fail.robot: UpdateCloudlet with accessuri of 6
+updateCloutlet_fail.robot: UpdateCloudlet with staticips of 6
+findCloudlet_azure_azureCloser.robot: FindCloudlet - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
+findCloudlet_azure_azureCloserThanTmusGcp_azureGreaterThan100km_gcpGreaterThan100km.robot: FindCloudlet - request shall return azure with tmus and gcp/azure cloudlet provisioned and tmus farther and > 100km than azure and gcp and azure closer than gcp
+findCloudlet_azure_azureCloserThanTmusGcp_azureGreaterThan100km_gcpLessThan100km.robot: FindCloudlet - request shall return azure with tmus and gcp/azure cloudlet provisioned and tmus farther but > 100km than azure and < 100km than gcp and azure closer than gcp
+findCloudlet_azure_requestAzure.robot: FindCloudlet - request shall return azure with tmus and gcp/azure cloudlet provisioned and requesting azure
+findCloudlet_cookieError.robot: FindCloudlet - request without cookie should return 'missing cookie'
+findCloudlet_cookieError.robot: FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
+findCloudlet_cookieError.robot: FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+findCloudlet_cookieError.robot: FindCloudlet - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+findCloudlet_cookieError.robot: FindCloudlet - request with expired cookie should return 'token is expired by'
+findCloudlet_gcp_GcpCloserThanTmusAzure_gcpGreaterThan100km_azureGreaterThan100km.robot: FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and tmus farther and > 100km from gcp and azure and gcp closer than azure
+findCloudlet_gcp_gcpCloser.robot: FindCloudlet - request shall return gcp with tmus farther and > 100km farther than gcp
+findCloudlet_gcp_gcpCloserThanTmusAzure_gcpGreaterThan100km_azureLessThan100km.robot: FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and tmus farther and > 100km than gcp and < 100km than azure and gcp closer than azure
+findCloudlet_gcp_requestGcp.robot: FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisioned and requesting gcp
+findCloudlet_missingParms.robot: FindCloudlet - request without lat/long should return 'Missing GpsLocation'
+findCloudlet_missingParms.robot: FindCloudlet - request without carrier name should return 'missing carrierName'
+findCloudlet_missingParms.robot: FindCloudlet - request with latitude only should return 'missing carrierName'
+findCloudlet_missingParms.robot: FindCloudlet - request with longitude only should return 'missing carrierName'
+findCloudlet_missingParms.robot: FindCloudlet - request with carrier_name and latitude only should succeed
+findCloudlet_missingParms.robot: FindCloudlet - request with carrier_name and longitude only should succeed
+findCloudlet_tmus_azureCloser_noAppinst.robot: FindCloudlet - request shall return tmus with azure cloudlet closer but no appinst provisioned
+findCloudlet_tmus_cloudletNotFound.robot: FindCloudlet - request shall return FIND_NOT_FOUND when requesting an operator that doesnt exist
+findCloudlet_tmus_gcpCloser_noAppinst.robot: FindCloudlet - request shall return tmus with gcp cloudlet closer but no appinst provisioned
+findCloudlet_tmus_multiple.robot: FindCloudlet - request shall return proper cloudlet when multiple cloudlets exist
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same coord as tmocloud-1
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same coord as tmocloud-2
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord closer to tmocloud-1
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord closer to tmocloud-2
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord of max distance
+findCloudlet_tmus_noGcpNoAzure.robot: FindCloudlet - request shall return tmus with no gcp/azure provisioned ond coord of min distance
+findCloudlet_tmus_tmusAzureSameCoord.robot: FindCloudlet - request shall return tmus with azure cloudlet provisioned and tmus and azure same coord
+findCloudlet_tmus_tmusAzureSameDistance.robot: FindCloudlet shall return tmus with azure cloudlet provisioned and tmus and azure same distance
+findCloudlet_tmus_tmusCloserThanAzureGreaterThan100km.robot: FindCloudlet - request shall return tmus with azure cloudlet provisioned and tmus closer and > 100km from request
+findCloudlet_tmus_tmusCloserThanAzureLessThan100km.robot: FindCloudlet - request shall return tmus with azure cloudlet provisioned and tmus closer and < 100km from request
+findCloudlet_tmus_tmusCloserThanGcpAzureGreaterThan100km.robot: FindCloudlet - request shall return tmus with gcp/azure cloudlet provisioned and tmus closer and > 100km from request
+findCloudlet_tmus_tmusCloserThanGcpAzureLessThan100km.robot: FindCloudlet - request shall return tmus with gcp/azure cloudlet provisioned and tmus closer and < 100km from request
+findCloudlet_tmus_tmusCloserThanGcpAzure_largeDistance.robot: FindCloudlet - request shall return tmus with gcp/azure cloudlet provisioned and tmus closer and with large distances
+findCloudlet_tmus_tmusCloserThanGcpGreaterThan100km.robot: FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus closer and > 100km from request
+findCloudlet_tmus_tmusCloserThanGcpLessThan100km.robot: FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus closer and < 100km from request
+findCloudlet_tmus_tmusFartherThanAzureLessThan100km.robot: FindCloudlet - request shall return tmus with azure cloudlet provisioned and tmus farther but < 100km than azure
+findCloudlet_tmus_tmusFartherThanGcpAzureLessThan100km.robot: FindCloudlet - request shall return tmus with gcp/azure cloudlet provisioned and tmus farther but < 100km from gcp/azure
+findCloudlet_tmus_tmusFartherThanGcpLessThan100km.robot: FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus farther but < 100km than gcp
+findCloudlet_tmus_tmusGcpAzureSameCoord.robot: FindCloudlet - request shall return tmus with azure/gcp cloudlet provisioned and tmus/azure/gcp same coord
+findCloudlet_tmus_tmusGcpSameCoord.robot: FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus and gcp same coord
+findCloudlet_tmus_tmusGcpSameDistance.robot: FindCloudlet - request shall return tmus with gcp cloudlet provisioned and tmus and gcp same distance away
+findCloudlet_samsung_azure_azureCloser.robot: FindCloudlet Samsung - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
+findCloudlet_samsung_findSamsungApp.robot: FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsung app and sending findCloudlet without overriding the appname
+findCloudlet_samsung_findSamsungApp.robot: FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsung app and sending findCloudlet overriding the appname with samsung app
+findCloudlet_samsung_gcp_gcpCloser.robot: FindCloudlet Samsung - request shall return gcp with tmus farther and > 100km farther than gcp
+findCloudlet_samsung_missingParms.robot: FindCloudlet Samsung - request shall return error when registering samsung app and sending findCloudlet overriding appname only
+findCloudlet_samsung_missingParms.robot: FindCloudlet Samsung - request shall return error when registering samsung app and sending findCloudlet overriding appvers only
+findCloudlet_samsung_missingParms.robot: FindCloudlet Samsung - request shall return error when registering samsung app and sending findCloudlet overriding developername only
+findCloudlet_samsung_permitsPlatformAppsFalse.robot: FindCloudlet Samsung - request shall return error when sending FindCloudlet for app with permits_platform_apps=False
+findCloudlet_samsung_permitsPlatformAppsMissing.robot: FindCloudlet Samsung - request shall return error when sending FindCloudlet for app without permits_platform_apps
+findCloudlet_samsung_tmus_tmusCloserThanAzureGreaterThan100km.robot: FindCloudlet Samsung - request shall return tmus with azure cloudlet provisioned and tmus closer and > 100km from request
+findCloudlet_samsung_tmus_tmusCloserThanGcpAzureLessThan100km.robot: FindCloudlet Samsung - request shall return tmus with gcp/azure cloudlet provisioned and tmus closer and < 100km from request
+findCloudlet_samsung_tmus_tmusCloserThanGcpLessThan100km.robot: FindCloudlet Samsung - request shall return tmus with gcp cloudlet provisioned and tmus closer and < 100km from request
+createCloudlet_fail.robot: CreateCloudlet with a location of 90 200
+createCloudlet_fail.robot: CreateCloudlet with a location of -90 -200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 90 200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of -90 -200
+deleteCloudlet.robot: DeleteCloudlet with a static app assigned
+deleteCloudlet.robot: DeleteCloudlet with a static cluster instance assigned
+getFqdnList_0app.robot: GetFqdnList - request shall return 0 apps
+getFqdnList_0appPermitFalse.robot: GetFqdnList - request for apps with permits_platform_apps=False shall return 0 apps
+getFqdnList_0appPermitNone.robot: GetFqdnList - request for apps with no permits_platform_apps shall return 0 apps
+getFqdnList_10app.robot: GetFqdnList - request shall return 10 apps
+getFqdnList_1app.robot: GetFqdnList - request shall return 1 app
+getFqdnList_cookieError.robot: GetFqdnList - request without cookie should return 'missing cookie'
+getFqdnList_cookieError.robot: GetFqdnList - request with invalid cookie of x should return 'token contains an invalid number of segments'
+getFqdnList_cookieError.robot: GetFqdnList - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+getFqdnList_cookieError.robot: GetFqdnList - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+getFqdnList_cookieError.robot: GetFqdnList - request with expired cookie should return 'token is expired by'
+getFqdnList_nonSamsung.robot: GetFqdnList - request fqdnlist for non-samsung app should fail
+getFqdnList_permitMixture.robot: GetFqdnList - request shall only return apps with permits_platform_apps=True
+verifyLocation_100km.robot: VerifyLocation - request with coord barely > 10km and < 100km shall return LOC_VERIFIED of 100km
+verifyLocation_100km.robot: VerifyLocation - request with coord > 10km and < 100km shall return LOC_VERIFIED of 100km
+verifyLocation_10km.robot: VerifyLocation - request with coord barely > 2km and < 10km shall return LOC_VERIFIED of 10km
+verifyLocation_10km.robot: VerifyLocation - request with coord > 2km and < 10km shall return LOC_VERIFIED of 10km
+verifyLocation_2km.robot: VerifyLocation - request with same coord shall return LOC_VERIFIED of 2KM
+verifyLocation_2km.robot: VerifyLocation - request within < 2KM shall return LOC_VERIFIED of 2KM
+verifyLocation_badToken.robot: VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
+verifyLocation_badToken.robot: VerifyLocation - request with empty token shall return 'verifyloc token required'
+verifyLocation_carrierNotFound.robot: VerifyLocation - request with carrier not found should pass
+verifyLocation_cookieError.robot: VerifyLocation - request with bad session cookie shall return app not found
+verifyLocation_cookieError.robot: VerifyLocation - request without cookie should return 'missing cookie'
+verifyLocation_cookieError.robot: VerifyLocation - request with invalid cookie of x should return 'token contains an invalid number of segments'
+verifyLocation_cookieError.robot: VerifyLocation - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+verifyLocation_cookieError.robot: VerifyLocation - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+verifyLocation_cookieError.robot: VerifyLocation - request with expired cookie should return 'token is expired by'
+verifyLocation_greater100km_other_country.robot: VerifyLocation - request claiming to be home but actually in neighboring country shall return LOC_MISMATCH_OTHER_COUNTRY
+verifyLocation_greater100km_other_country.robot: VerifyLocation - request claiming to be home but actually overseas shall return LOC_MISMATCH_OTHER_COUNTRY
+verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be in neighboring country but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
+verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be overseas but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
+verifyLocation_greater100km_roaming_same_country.robot: VerifyLocation - request claiming to be in neighboring country and actually there shall return LOC_ROAMING_COUNTRY_MATCH
+verifyLocation_greater100km_roaming_same_country.robot: VerifyLocation - request claiming to be overseas and actually there shall return LOC_ROAMING_COUNTRY_MATCH
+verifyLocation_greater100km_same_country.robot: VerifyLocation - request with coord barely > 100km and still within country shall return LOC_MISMATCH_SAME_COUNTRY
+verifyLocation_greater100km_same_country.robot: VerifyLocation - request with coord > 100km and within same country shall return LOC_MISMATCH_SAME_COUNTRY
+verifyLocation_missingParms.robot: VerifyLocation - request without lat/long should return 'Missing GpsLocation'
+verifyLocation_missingParms.robot: VerifyLocation - request without carrier should succeed
+verifyLocation_missingParms.robot: VerifyLocation - request without token should return 'verifyloc token required'
+verifyLocation_missingParms.robot: VerifyLocation - request with latitude only should succeed
+verifyLocation_missingParms.robot: VerifyLocation - request with longitude only should succeed
+getAppInstList_0app.robot: GetAppInstList - request with no app instance shall return 0 app
+getAppInstList_10cloudlet.robot: GetAppInstList - request shall return 10 cloudlets
+getAppInstList_1app.robot: GetAppInstList - request shall return 1 app
+getAppInstList_1app_carrierMismatch.robot: GetAppInstList - request shall return only app that matches carrier
+getAppInstList_appMultiplePorts.robot: GetAppInstList - request shall return app with mulitple ports
+getAppInstList_cookieError.robot: GetAppInstList - request without cookie should return 'missing cookie'
+getAppInstList_cookieError.robot: GetAppInstList - request with invalid cookie of x should return 'token contains an invalid number of segments'
+getAppInstList_cookieError.robot: GetAppInstList - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+getAppInstList_cookieError.robot: GetAppInstList - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+getAppInstList_cookieError.robot: GetAppInstList - request with expired cookie should return 'token is expired by'
+getAppInstList_noGps.robot: GetAppInstList - request shall fail with no GPS coords
+getAppInstList_noPorts.robot: GetAppInstList - request shall return app with no ports
+createCloudlet_fail.robot: CreateCloudlet without a location
+findCloudlet_invalidParms.robot: FindCloudlet - request with too small latitude should return 'Invalid GpsLocation'
+findCloudlet_invalidParms.robot: FindCloudlet - request with too large latitude should return 'Invalid GpsLocation'
+findCloudlet_invalidParms.robot: FindCloudlet - request with too small longitude should return 'Invalid GpsLocation'
+findCloudlet_invalidParms.robot: FindCloudlet - request with too large longitude should return 'Invalid GpsLocation'
+findCloudlet_invalidParms.robot: FindCloudlet - request with out-of-range latitude/longitude should return 'Invalid GpsLocation'
+registerClient/registerClient.sln
+registerClientWrongApp/registerClientWrongApp.sln
+registerClientWrongDevName/registerClientWrongDevName.sln
+registerClientWrongAppVersion/registerClientWrongAppVersion.sln
+fqdn_udptcp_port_openstack.robot: User shall be able to access 1 UDP port on openstack
+fqdn_udptcp_port_openstack.robot: User shall be able to access 2 UDP ports on openstack
+fqdn_udptcp_port_openstack.robot: User shall be able to access 1 TCP port on openstack
+fqdn_udptcp_port_openstack.robot: User shall be able to access 2 TCP ports on openstack
+fqdn_udptcp_port_openstack.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack
+registerClientWithAuth/registerClientWithAuth.sln
+registerClientWithAuthWrongAppVer/registerClientWithAuthWrongAppVer.sln
+registerClientWithAuthWrongAppName/registerClientWithAuthWrongAppName.sln
+registerClientWithAuthWrongDevName/registerClientWithAuthWrongDevName.sln
+verifyGPSLocation/verifyGPSLocation.sln
+findCloudletBadSessionCookie/findCloudletBadSessionCookie.sln
+verifyLocationBadCookie/verifyLocationBadCookie.sln
+verifyLocationBadCarrier/verifyLocationBadCarrier.sln
+verifyLocation10KM/verifyLocation10KM.sln
+registerClient_multiple.robot: RegisterClient - register shall work when keep creating/deleting same app instance
+verifyLocation100KM/verifyLocation100KM.sln
+verifyLocationMisMatchOtherCountry/verifyLocationMisMatchOtherCountry.sln
+controller.app.test_appDelete_appInstExists.tc.test_DeleteApp_appInstance_exists
+createAppInst.robot: AppInst - autocluster shall be created when app instance is created with clustername='autocluster'
+VerifyLocationMisMatchSameCountry/VerifyLocationMisMatchSameCountry.sln
+verifyLocationRoamingCountryMisMatch/verifyLocationRoamingCountryMisMatch.sln
+verifyLocationRoamingCountryMatch/verifyLocationRoamingCountryMatch.sln
+create2ClusterInstanceSameCloudlet.robot: CRM shall be able to Create 2 cluster instances on the same cloudlet for openstack
+create2ClusterInstance_substringName.robot: CRM shall be able to create 2 clusterInst with one name a substring of the other
+getAppInstList_azure.robot: GetAppInstList - request shall return azure app
+getAppInstList_gcp.robot: GetAppInstList - request shall return GCP app
+getAppInstList_defaultCloudlet.robot: GetAppInstList - request shall not return default cloudlet apps
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_nodata
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_idonly
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_appnameonly
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_versiononly
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_developeronly
+controller.app.test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_nameVersionDeveloperonly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_nodata
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_idonly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_appnameonly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_versiononly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_developeronly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_nameVesrsionDeveloperonly
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_cloudletNotFound
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_noCloudlet
+controller.app.test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_cloudletNameOnly
+findCloudletSuccess/findCloudletSuccess.sln
+findCloudletFail/findCloudletFail.sln
+findCloudletNoCarrier/findCloudletNoCarrier.sln
+findCloudletNoLocation/findCloudletNoLocation.sln
+findCloudletNoSessionCookie/findCloudletNoSessionCookie.sln
+create_appInst_manifestFail.robot: Controller should cleanup autocluster after CreateAppInst fail
+create_app_dot.robot: User shall be able to create an app instance on openstack with a dot in the app name
+create_appInst_delete_create.robot: User shall be able to create/delete/create an app instance on openstack
+faceDetection_deploy_detectPassFail.robot: Facedetection server shall recognize faces
+updateApp_manifest.robot: UpdateApp - user shall be able to update the manifest
+fqdn_udptcp_port_azure.robot: User shall be able to access 1 UDP port on azure
+fqdn_udptcp_port_azure.robot: User shall be able to access 2 UDP ports on azure
+fqdn_udptcp_port_azure.robot: User shall be able to access 1 TCP port on azure
+fqdn_udptcp_port_azure.robot: User shall be able to access 2 TCP ports on azure
+fqdn_udptcp_port_azure.robot: User shall be able to access 2 UDP and 2 TCP ports on azure
+registerClient/registerClient.cpp
+registerClientWrongApp/registerClientWrongApp.cpp
+registerClientWrongDevName/registerClientWrongDevName.cpp
+registerClientWrongAppVersion/registerClientWrongAppVersion.cpp
+registerClientWithAuth/registerClientWithAuth.cpp
+registerClientWithAuthWrongAppVer/registerClientWithAuthWrongAppVer.cpp
+registerClientWithAuthWrongApp/registerClientWithAuthWrongApp.cpp
+registerClientWithAuthWrongDev/registerClientWithAuthWrongDev.cpp
+verifyLocation/verifyLocation.cpp
+verifyLocationBadToken/verifyLocationBadToken.cpp
+verifyLocationBadCookie/verifyLocationBadCookie.cpp
+verifyLocationBadCarrier/verifyLocationBadCarrier.cpp
+verifyLocation10KM/verifyLocation10KM.cpp
+verifyLocation100KM/verifyLocation100KM.cpp
+verifyLocationMisMatchOtherCountry/verifyLocationMisMatchOtherCountry.cpp
+verifyLocationMisMatchSameCountry/verifyLocationMisMatchSameCountry.cpp
+verifyLocationRoamingCountryMisMatch/verifyLocationRoamingCountryMisMatch.cpp
+verifyLocationRoamingCountryMatch/verifyLocationRoamingCountryMatch.cpp
+findCloudletSuccess/findCloudletSuccess.cpp
+findCloudletFail/findCloudletFail.cpp
+findCloudletNoCarrier/findCloudletNoCarrier.cpp
+findCloudletNoLocation/findCloudletNoLocation.cpp
+findCloudletNoSessionCookie/findCloudletNoSessionCookie.cpp
+createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an AppInst without a ClusterInst
+updateApp_fqdn.robot: AppInst - User shall be able to update the app accessports afer appInst delete
+registerClientRest/registerClientRest.sln
+registerClientWrongAppRest/registerClientWrongAppRest.sln
+registerClientWrongDevNameRest/registerClientWrongDevNameRest.sln
+registerClientWrongAppVerRest/registerClientWrongAppVerRest.sln
+registerClientWithAuthRest/registerClientWithAuthRest.sln
+registerClientWithAuthWrongAppVerRest/registerClientWithAuthWrongAppVerRest.sln
+registerClientWithAuthWrongAppRest/registerClientWithAuthWrongAppRest.sln
+registerClientWithAuthWrongDevRest/registerClientWithAuthWrongDevRest.sln
+verifyLocationRest/verifyLocationRest.sln
+findCloudletBadSessionCookieRest/findCloudletBadSessionCookieRest.sln
+verifyLocationBadCookieRest/verifyLocationBadCookieRest.sln
+verifyLocationBadCarrierRest/verifyLocationBadCarrierRest.sln
+verifyLocation10KMRest/verifyLocation10KMRest.sln
+verifyLocation100KMRest/verifyLocation100KMRest.sln
+verifyLocationMisMatchOtherCountryRest/verifyLocationMisMatchOtherCountryRest.sln
+verifyLocationMisMatchSameCountryRest/verifyLocationMisMatchSameCountryRest.sln
+verifyLocationRoamingCountryMisMatchRest/verifyLocationRoamingCountryMisMatchRest.sln
+verifyLocationRoamingCountryMatchRest/verifyLocationRoamingCountryMatchRest.sln
+findCloudletSuccessRest/findCloudletSuccessRest.sln
+findCloudletFailRest/findCloudletFailRest.sln
+findCloudletNoCarrierRest/findCloudletNoCarrierRest.sln
+findCloudletNoLocationRest/findCloudletNoLocationRest.sln
+findCloudletNoSessionCookieRest/findCloudletNoSessionCookieRest.sln
+create2ClusterInstanceSameTime.robot: CRM shall be able to Create 2 cluster instances at the same time on openstack
+createClusterInstance_mixedCase.robot: CRM shall be able to create a cluster instances with mixed case clustername for openstack
+findCloudlet_tmus_registerFindMismatch.robot: FindCloudlet - request shall return error when FindCloudlet app does not match Registered App
+getLocation.robot: GetLocation - request should return LOC_FOUND
+getLocation_cookieError.robot: GetLocation - request without cookie should return 'missing cookie'
+getLocation_cookieError.robot: GetLocation - request with invalid cookie of x should return 'token contains an invalid number of segments'
+getLocation_cookieError.robot: GetLocation - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+getLocation_cookieError.robot: GetLocation - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+getLocation_cookieError.robot: GetLocation - request with expired cookie should return 'token is expired by'
+verifyLocation_invalidParms.robot: VerifyLocation - request with invalid low lat should return 'Invalid GpsLocation'
+verifyLocation_invalidParms.robot: VerifyLocation - request with invalid high lat should return 'Invalid GpsLocation'
+verifyLocation_invalidParms.robot: VerifyLocation - request with invalid low long should return 'Invalid GpsLocation'
+verifyLocation_invalidParms.robot: VerifyLocation - request with invalid high long should return 'Invalid GpsLocation'
+findCloudlet_timestamp_rest.robot: FindCloudlet REST - request with timestamp shall return tmus
+start_dme_fail.robot: DME shall fail to start when cert is not found
+start_dme_fail.robot: DME shall fail to start without cloudlet name
+start_dme_fail.robot: DME shall fail to start without cloudlet operator name
+start_dme_fail.robot: DME shall fail to start without cloudletKey parm
+start_dme_fail.robot: DME shall fail to start with invalid cloudletKey
+start_dme_fail.robot: DME shall fail to start without carrier parm
+start_dme_fail.robot: DME shall fail to start if port is in use
+createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add 1 TCP port with same public port
+createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add 10 TCP port with same public port
+createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add TCP and UDP ports with the same port numbers
+createAppInst_publicPort_tcp.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - 2 appInst on different app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - 2 appInst on same app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - 2 appInst on same app and different cluster and different cloudlet shall not be able to allocate the same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - User shall be able to add app/appInst, delete, and readd with same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - User shall be able to add app, udpate app, add /appInst with same public TCP port
+createAppInst_publicPort_tcp.robot: AppInst - 3 appInst on different app and different cluster and different cloudlet shall not be able to allocate public TCP port 10000
+createAppInst_publicPort_tcp.robot: AppInst - appInst shall not allocate TCP port 10000 if already allocated
+createAppInst_publicPort_tcp.robot: AppInst - user shall be to add multiple TCP public ports
+createAppInst_publicPort_tcp.robot: AppInst - user shall not be able to allocate public port tcp:22
+createAppInst_publicPort_tcp.robot: AppInst - user shall be able to allocate public port tcp:18889
+createAppInst_publicPort_tcp.robot: AppInst - user shall be able to allocate public port tcp:18888
+createAppInst_publicPort_udp.robot: AppInst - user shall be able to add 1 UDP port with same public port
+createAppInst_publicPort_udp.robot: AppInst - user shall be able to add 10 UDP port with same public port
+createAppInst_publicPort_udp.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall not be able to allocate the same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - 2 appInst on different app and different cluster and same cloudlet shall not be able to allocate the same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - 2 appInst on same app and different cluster and same cloudlet shall not be able to allocate the same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - 2 appInst on same app and different cluster and different cloudlet shall not be able to allocate the same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - User shall be able to add app/appInst, delete, and readd with same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - User shall be able to add app, udpate app, add /appInst with same public UDP port
+createAppInst_publicPort_udp.robot: AppInst - 3 appInst on different app and different cluster and different cloudlet shall not be able to allocate public UDP port 10000
+createAppInst_publicPort_udp.robot: AppInst - appInst shall not allocate UDP port 10000 if already allocated
+createAppInst_publicPort_udp.robot: AppInst - user shall be to add multiple UDP public ports
+createAppInst_publicPort_udp.robot: AppInst - user shall not be able to allocate public port udp:22
+createAppInst_publicPort_udp.robot: AppInst - user shall be able to allocate public port udp:18889
+createAppInst_publicPort_udp.robot: AppInst - user shall be able to allocate public port udp:18888
+clusterInstAdd_ipaccess.robot: CreateClusterInst - creating cluster inst with ipaccess=IpAccessUnknown shall set to IpAccessShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessDedicated
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessDedicatedOrShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessDedicated
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessUnknown
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessDedicatedOrShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessDedicated
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessShared
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessUnknown
+createClusterInstance_nameLength.robot: CRM shall be able to create a cluster instances with 64 chars on openstack
+createClusterInstance_nameLength.robot: CRM shall be able to create a cluster instances with long name on openstack
+createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
+createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
+createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
+createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
+createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
+createAppInst_2autocluster.robot: AppInst - Shall be able to create to AppInsts with autocluster on the same app with different developer
+clusterSvc_influxdb_clusterInst.robot: ClusterInst Stats shall be created on azure
+fqdn_udptcp_port_gcp.robot: User shall be able to access 1 UDP port on gcp
+rootlb_sshAccess.robot: Openstack rootlb ssh access should be protected
+create_clusterInst_openstack.robot: Create clusterInst for clustersvc on openstack
+mc_currentUser.robot: MC - User with no token shall not be able to get current status
+mc_currentUser.robot: MC - User with an empty token shall not be able to get current status
+mc_org_create.robot: MC - Create an org without a token
+mc_org_create.robot: MC - Create an org with an empty token
+mc_role_removeuser.robot: MC - Admin remove an AdminManager role from a user
+mc_role_removeuser.robot: MC - Admin remove an AdminCondtributor role from a user
+mc_role_removeuser.robot: MC - Admin remove an AdminViewer role from a user
+createClusterInstance_openstack_flavors.robot: Cluster with flavor less than 20g on openstack shall fail with size too small
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
+createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no flavor found
+create_app_dot_azure.robot: User shall be able to create an app instance on azure with a dot in the app name
+createClusterInstance_openstack_numNodes.robot: Cluster shall create with IpAccessShared and num_nodes=4 on openstack
+createClusterInstance_openstack_numNodes.robot: Cluster shall create with IpAccessShared and num_nodes=10 on openstack
+createClusterInstance_openstack_numNodes.robot: Cluster shall not create with IpAccessShared and multiple masters
+fqdn_udptcp_port_openstack.robot: User shall be able to access HTTP port on openstack
+fqdn_udptcp_port_openstack.robot: User shall be able to access UDP,TCP and HTTP ports on openstack
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall not create with IpAccessDedicated and multiple masters
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on openstack
+controller.cluster.test_clusterInstAdd_missingParms.tc.test_CreateClusterInstNoDeveloper
+createAppInst_developerMismatch.robot: AppInst - User shall not be able to create an AppInst with a developer mismatch with ClusterInst Developer
+createAppInst.robot: AppInst - autocluster shall be created when app instance is created with clustername='autocluster' and no developer
+flavor_create.robot: Web UI - user shall be able to create a new US flavor
+createAppInst.robot: AppInst - appinst shall be created when app instance is created without cluster developer
+createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an AppInst with a ClusterInst that doesnt exist
+createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an app instance without cluster developer and no matching cluster instance
+createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicated
+createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessShared
+createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicatedOrShared
+fqdn_udptcp_port_openstack_autocluster.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
+fqdn_udptcp_port_openstack_IpAccessDedicated_autocluster_docker.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and autocluster
+fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 1 UDP port on openstack with docker
+fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 1 TCP port on openstack with docker
+fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessUnknown and deployment=docker
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessShared and deployment=docker
+clusterInstAdd_ipaccess.robot: CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - create a clusterinst with ipaccess=IpAccessDedicated and no deployment shall default to kubernetes
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=kubernetes
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - create a clusterinst with ipaccess=IpAccessDedicated and deployment=helm shall default to kubernetes
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not be able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=vm
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be not able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=docker num_masters=0 num_nodes=1
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be not able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=docker num_masters=1 num_nodes=0
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be not able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=docker num_masters=1 num_nodes=1
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=docker num_masters=0 num_nodes=0
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and multiple masters
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_masters=0 num_nodes=0
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_masters=1 num_nodes=0
+clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated and invalid deployment
+createApp_manifest.robot: CreateApp - error shall be received with ImageTypeQCOW and no manifest md5
+createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 too short
+createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 invalid
+createApp_imagepath.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=kubernetes image_path=mypath
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path of bad domain
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and access denied to registry
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and invalid tag
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path tag doesnt exist
+createApp_imagepath.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker image_path=mypath
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path of bad domain
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and access denied to registry
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and invalid tag
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path tag doesnt exist
+createApp_imagepath.robot: CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm image_path=mypath
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path of bad domain
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid tag
+createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path tag doesnt exist
+createApp_deployementDocker.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker and access_ports=http
+createApp_deployementDocker.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker and access_ports=tcp,udp,http
+fqdn_udptcp_port_openstack_numMasters1_numNodes0.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with num_masters=1 and num_nodes=0
+xx
+fqdn_udptcp_port_openstack_reboot.robot: User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=1
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=2
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes
+fqdn_udptcp_port_openstack_IpAccessDedicated_docker_compose.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose
+fqdn_udptcp_port_openstack_volume_mounts.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with volume mounts
+fqdn_udptcp_port_openstack_IpAccessDedicated_volume_mounts.robot: User shall be able to access UDP and TCP ports on openstack with IpAccessDedicated and volume mounts
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with new image
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with existing image
