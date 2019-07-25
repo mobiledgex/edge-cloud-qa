@@ -613,7 +613,7 @@ createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=4 and ram=4096 on 
 createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
 createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
 createAppInst_2autocluster.robot: AppInst - Shall be able to create to AppInsts with autocluster on the same app with different developer
-clusterSvc_influxdb_clusterInst.robot: ClusterInst Stats shall be created on azure
+clusterSvc_influxdb_clusterInst.robot: Cluster Stats shall be created on azure
 fqdn_udptcp_port_gcp.robot: User shall be able to access 1 UDP port on gcp
 rootlb_sshAccess.robot: Openstack rootlb ssh access should be protected
 create_clusterInst_openstack.robot: Create clusterInst for clustersvc on openstack
@@ -701,7 +701,7 @@ xx
 fqdn_udptcp_port_openstack_reboot.robot: User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
 fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=1
 fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=2
-fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=10
 fqdn_udptcp_port_openstack_IpAccessDedicated_docker_compose.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose
 fqdn_udptcp_port_openstack_volume_mounts.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with volume mounts
 fqdn_udptcp_port_openstack_IpAccessDedicated_volume_mounts.robot: User shall be able to access UDP and TCP ports on openstack with IpAccessDedicated and volume mounts
