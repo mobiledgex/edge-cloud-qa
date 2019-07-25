@@ -65,8 +65,10 @@ def extract_testcases():
                     string1 += file_name
                     string1 += ': '
                     string1 += tests
-                    string1 += '\n'
-                    filehandle.write('%s' % string1)
+                    #string1 += '\n'
+                    
+                    filehandle.write('%s' % string1.rstrip())
+                    filehandle.write('\n')
             else:
                 filehandle.write('%s' % file_name)
     filehandle.close()
@@ -75,7 +77,7 @@ def extract_testcases():
             #filehandle.write('%s\n' % "Testname: ")
             #filehandle.write('%s\n' % list_tests)
             #filehandle.write('\n')
-extract_testcases()
+#extract_testcases()
 
 
 
