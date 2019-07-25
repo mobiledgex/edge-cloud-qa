@@ -16,9 +16,9 @@ import argparse
 
 #Extracts Testcases and filenames from base_directory
 #Change base directory
-BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases"
+BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/controller"
 
-file_list = []             # List of files that are .py or .robot
+file_dict = {}             # List of files that are .py or .robot
 
 def extract_testcases():
     for (dirpath, dirnames, filenames) in os.walk(BASE_DIRECTORY):
@@ -29,56 +29,68 @@ def extract_testcases():
                 pass
             elif '.py' in str(f):
                 e = os.path.join(str(dirpath), str(f))
-                file_list.append(e)
+                file_dict.update({e : 'python file'})
             elif '.robot' in str(f):
                 e = os.path.join(str(dirpath), str(f))
-                file_list.append(e)
-    #appends all paths into a file_list 
+                file_dict.update({e : 'robot file'})
+    #appends all paths into a file_dict 
     filehandle = open('Testcases and files.txt', 'w')
     #filehandle.write('All Files and Testcase names:\n')
-    for files in file_list:
+    #print(file_dict)
+    for files, typeOfFile in file_dict.items():
         testname= None
         lines_previous = ''
-        list_tests = []
-        list_tests2 = []
+        python_tests = []
+        robot_tests = []
         file_name = os.path.basename(files)
+       
         txtfile = open(files, 'r')
-        for lines in txtfile:
-            if '[Documentation]' in lines:
-                testname= lines_previous 
-                list_tests2.append(testname)
-                type_of_file = "robot"
-            if "def test" in lines:
-                testname = lines
-                testname1 = lines[4:]
-                testname = testname1[0:-8]
-                list_tests.append(testname)
-                type_of_file ="python"
-            lines_previous = lines
+        if typeOfFile == 'python file':
+            for lines in txtfile:
+                if "def test" in lines:
+                    testname = lines
+                    testname1 = lines[4:]
+                    testname = testname1[0:-8]
+                    python_tests.append(testname)
+        elif typeOfFile =='robot file':
+            for lines in txtfile:
+                if '[Documentation]' in lines:
+                    testname= lines_previous 
+                    robot_tests.append(testname)
+                    type_of_file = "robot"
+                lines_previous = lines
         if testname != None:
-            if type_of_file == 'robot':
-                for tests in list_tests2:
-                    testname3 = tests[0:-1]
-                    list_tests.append(testname3)
-                for tests in list_tests:
+            if typeOfFile == 'python file':
+                for tests in python_tests:
+                    tests = tests[4:]
+                    string2 = ''
+                    string2 += 'controller'
+                    string2 += '.'
+                    pfiles_name = (files[81:-3])
+                    string2 += pfiles_name
+                    string2 += '.tc.'
+                    string2 += tests.strip()
+                    filehandle.write('%s' % string2.rstrip())
+                    filehandle.write('\n')
+            elif typeOfFile =='robot file':
+                for rtests in robot_tests:
+                    testname3 = rtests[0:-1]
                     string1 = ''
-                    string1 += file_name
+                    rfiles_name = file_name
+                    string1 += rfiles_name
                     string1 += ': '
-                    string1 += tests
-                    #string1 += '\n'
-                    
+                    string1 += testname3                    
                     filehandle.write('%s' % string1.rstrip())
                     filehandle.write('\n')
             else:
-                filehandle.write('%s' % file_name)
+                print('something wrong')
     filehandle.close()
             #filehandle.write('%s\n' % "File Path: ")
             #filehandle.write('%s:%s' % file_name)
             #filehandle.write('%s\n' % "Testname: ")
             #filehandle.write('%s\n' % list_tests)
             #filehandle.write('\n')
-#extract_testcases()
-
+extract_testcases()
 
 
 
@@ -135,6 +147,8 @@ def main():
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
+    print(jiraQueryUrl)
+    #sys.exit(1)
   
     startat = 0
     maxresults = 0
@@ -142,6 +156,7 @@ def main():
     tc_list = []
     while (startat + maxresults) < total:
         result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
+        
         #print(result)
         #sys.exit(1)
         query_content = json.loads(result)
@@ -152,10 +167,12 @@ def main():
         #sys.exit(1)
         our_list = get_testcases_x(z, result)
         ourlist = [x.replace('\n', ': ') for x in our_list]
+        tc_list += ourlist
         for i in ourlist:
             filehandle.write(i)
             filehandle.write('\n')
-        filehandle.close()
+    filehandle.close()
+    print('lentclist', len(tc_list))
 
 
        
@@ -184,7 +201,7 @@ def get_testcases_x(z, result):
 
 
 #if __name__ == '__main__':
-    #main()
+#    main()
   
 #____________________________________________________________________________________________________________________________________
 # Compares 2 text files returns differences into another .txt file
@@ -233,4 +250,4 @@ def compare(f1,f2):
     difference_report.write('\n')
     difference_report.close()
 
-compare(f1,f2)
+#compare(f1,f2)
