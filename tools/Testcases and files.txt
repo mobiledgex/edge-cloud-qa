@@ -22,7 +22,7 @@ getLocation_cookieError.robot: GetLocation - request with truncated cookie shoul
 getLocation_cookieError.robot: GetLocation - request with expired cookie should return 'token is expired by'
 getLocation.robot: GetLocation - request should return LOC_FOUND
 verifyLocation_carrierNotFound.robot: VerifyLocation - request with carrier not found should pass
-verifyLocation_2km.robot: VerifyLocation - request with same coord shall return LOC_VERIFIED of 2KM 
+verifyLocation_2km.robot: VerifyLocation - request with same coord shall return LOC_VERIFIED of 2KM
 verifyLocation_2km.robot: VerifyLocation - request within < 2KM shall return LOC_VERIFIED of 2KM
 verifyLocation_cookieError.robot: VerifyLocation - request with bad session cookie shall return app not found
 verifyLocation_cookieError.robot: VerifyLocation - request without cookie should return 'missing cookie'
@@ -39,9 +39,9 @@ verifyLocation_10km.robot: VerifyLocation - request with coord barely > 2km and 
 verifyLocation_10km.robot: VerifyLocation - request with coord > 2km and < 10km shall return LOC_VERIFIED of 10km
 verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be in neighboring country but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
 verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be overseas but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
-verifyLocation_badToken_rest.robot: #EDGECLOUD-369 - VerifyToken with token=xx does not return LOC_ERROR_UNAUTHORIZED
+verifyLocation_badToken_rest.robot: VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
 verifyLocation_badToken_rest.robot: VerifyLocation REST - request with empty token shall return 'verifyloc token required'
-verifyLocation_badToken.robot: #EDGECLOUD-369 - VerifyToken with token=xx does not return LOC_ERROR_UNAUTHORIZED
+verifyLocation_badToken.robot: VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
 verifyLocation_badToken.robot: VerifyLocation - request with empty token shall return 'verifyloc token required'
 verifyLocation_100km.robot: VerifyLocation - request with coord barely > 10km and < 100km shall return LOC_VERIFIED of 100km
 verifyLocation_100km.robot: VerifyLocation - request with coord > 10km and < 100km shall return LOC_VERIFIED of 100km
@@ -68,10 +68,10 @@ registerClient_appNotFound.robot: RegisterClient - request with wrong developer_
 registerClient_appNotFound.robot: RegisterClient - request with wrong app_name,app_version, and developer_name shall return 'app not found'
 registerClient_appNotFound.robot: RegisterClient - request shall succeed after adding app
 registerClient_auth.robot: RegisterClient - request with auth shall return proper JWT
-registerClient_multiple.robot: RegisterClient - register shall work when keep creating/deleting same app instance 
-registerClient_traffic_rest.robot: RegisterClient - DME should handle simultaneous register requests 
-registerClient_traffic_rest.robot: FindCloudlet - DME should handle simultaneous FindCloudlet requests 
-registerClient_traffic_rest.robot: VerifyLocation - DME should handle simultaneous VerifyLocation requests 
+registerClient_multiple.robot: RegisterClient - register shall work when keep creating/deleting same app instance
+registerClient_traffic_rest.robot: RegisterClient - DME should handle simultaneous register requests
+registerClient_traffic_rest.robot: FindCloudlet - DME should handle simultaneous FindCloudlet requests
+registerClient_traffic_rest.robot: VerifyLocation - DME should handle simultaneous VerifyLocation requests
 registerClient_authFail.robot: RegisterClient - request for app without authpublickey shall return 'No authkey found to validate token'
 registerClient_authFail.robot: RegisterClient - request with invalid version in token shall return 'failed to verify token - token appvers mismatch'
 registerClient_authFail.robot: RegisterClient - request with invalid appname in token shall return 'failed to verify token - token appname mismatch'
@@ -91,7 +91,7 @@ getFqdnList_0app.robot: GetFqdnList - request shall return 0 apps
 getFqdnList_10app.robot: GetFqdnList - request shall return 10 apps
 getFqdnList_0appPermitNone.robot: GetFqdnList - request for apps with no permits_platform_apps shall return 0 apps
 getFqdnList_0appPermitFalse.robot: GetFqdnList - request for apps with permits_platform_apps=False shall return 0 apps
-start_dme_fail.robot: DME shall fail to start when cert is not found 
+start_dme_fail.robot: DME shall fail to start when cert is not found
 start_dme_fail.robot: DME shall fail to start without cloudlet name
 start_dme_fail.robot: DME shall fail to start without cloudlet operator name
 start_dme_fail.robot: DME shall fail to start without cloudletKey parm
@@ -108,7 +108,7 @@ findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus
 findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same coord as tmocloud-2
 findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-1
 findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-2
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of max distance 
+findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of max distance
 findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of min distance
 findCloudlet_platos_permitsPlatformAppsFalse.robot: FindCloudlet platos - request shall return error when sending FindCloudlet for app with permits_platform_apps=False
 findCloudlet_timestamp_rest.robot: FindCloudlet REST - request with timestamp shall return dmuus
@@ -244,6 +244,7 @@ fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to
 fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker
 fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with new image
 fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with existing image
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with command
 create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance on openstack with rootlb rest port blocked
 create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance with autocluster on openstack with rootlb rest port blocked
 fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 1 UDP port on openstack with IpAccessDedicated
@@ -440,7 +441,7 @@ test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDed
 test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedUDP100Ports(self):
 createApp_manifest.robot: CreateApp - error shall be received with ImageTypeQCOW and no manifest md5
 createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 too short
-createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 invalid 
+createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 invalid
 createAppInst_developerMismatch.robot: AppInst - User shall not be able to create an AppInst with a developer mismatch with ClusterInst Developer
 test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedTCP65535
 test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedTCP065535
@@ -477,7 +478,7 @@ test_appAdd_defaultFlavorNotFound.py:     def test_CreateAppDefaultFlavorNotFoun
 test_appAdd_defaultFlavorNotFound.py:     def test_CreateAppDefaultFlavorNotFound_QCOW(self):
 test_appDelete_appInstExists.py: def test_DeleteApp_appInstance_exists
 test_appDelete_appInstExists.py:     def test_DeleteApp_appInstance_exists(self):
-createAppInst_2autocluster.robot: AppInst - Shall be able to create to AppInsts with autocluster on the same app with different developer 
+createAppInst_2autocluster.robot: AppInst - Shall be able to create to AppInsts with autocluster on the same app with different developer
 test_appAdd_invalidImageType.py: def test_CreateInvalidImageType
 test_appAdd_invalidImageType.py:     def test_CreateInvalidImageType(self):
 test_appAdd_noIpAccess.py: def test_CreateAppDockerNoAccessLayer
@@ -978,7 +979,8 @@ test_appAdd_docker.py: def test_CreateAppDockerNoImagePath
 test_appAdd_docker.py: def test_CreateAppDockerEmptyImagePath
 test_appAdd_docker.py:     def test_CreateAppDockerNoImagePath(self):
 test_appAdd_docker.py:     def test_CreateAppDockerEmptyImagePath(self):
-test_operatorAdd_invalidName.pytest_operatorAdd_100.pytest_operatorAdd.pytest_operatorAdd_noName.pytest_operatorDelete_beforeCloudlet.pytest_operatorAdd_nameDeveloper.pytest_operatorAdd_multiControllers.pytest_operatorUpdate.pytest_operatorDelete.pytest_operatorAdd_sameName.pytest_operatorShow_single.pytest_operatorUpdate_unknown.pytest_operatorDelete_unknown.pyclusterFlavor.robot~: CreateClusterFlavor without a key name
+test_operatorAdd_invalidName.pytest_operatorAdd_100.pytest_operatorAdd.pytest_operatorAdd_noName.pytest_operatorDelete_beforeCloudlet.pytest_operatorAdd_nameDeveloper.pytest_operatorAdd_multiControllers.pytest_operatorUpdate.pytest_operatorDelete.pytest_operatorAdd_sameName.pytest_operatorShow_single.pytest_operatorUpdate_unknown.pytest_operatorDelete_unknown.py
+clusterFlavor.robot~: CreateClusterFlavor without a key name
 clusterFlavor.robot: CreateClusterFlavor without a key name
 test_showController_all.py: def test_showControllersAll
 test_showController_all.py:     def test_showControllersAll(self):
@@ -1058,11 +1060,11 @@ createCloudlet.robot: CreateCloudlet with required parameters and staticips
 updateCloutlet.robot: UpdateCloudlet accessuri
 updateCloutlet.robot: UpdateCloudlet staticips
 updateCloutlet.robot: UpdateCloudlet number_of_dynamic_ips
-updateCloutlet.robot: UpdateCloudlet location 
+updateCloutlet.robot: UpdateCloudlet location
 updateCloutlet.robot: UpdateCloudlet location lat
 updateCloutlet.robot: UpdateCloudlet location long
 updateCloutlet.robot: UpdateCloudlet optional accessuri
-updateCloutlet.robot: UpdateCloudlet optional staticips	
+updateCloutlet.robot: UpdateCloudlet optional staticips
 updateCloutlet_fail.robot: UpdateCloudlet without an operator
 updateCloutlet_fail.robot: UpdateCloudlet with an invalid operator
 updateCloutlet_fail.robot: UpdateCloudlet without a cloudlet name
@@ -1073,14 +1075,14 @@ updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips A
 updateCloutlet_fail.robot: UpdateCloudlet with a numdynamicips 2323232232323
 updateCloutlet_fail.robot: UpdateCloudlet with a ipsupport of -1
 updateCloutlet_fail.robot: UpdateCloudlet with a ipsupport of -8
-updateCloutlet_fail.robot: UpdateCloudlet with a location of 0 0 
-updateCloutlet_fail.robot: UpdateCloudlet with a location of 100 200 
-updateCloutlet_fail.robot: UpdateCloudlet with a location of 90 200 
-updateCloutlet_fail.robot: UpdateCloudlet with a location of -100 -200 
-updateCloutlet_fail.robot: UpdateCloudlet with a location of -90 -200 
-updateCloutlet_fail.robot: UpdateCloudlet with a location of A A 
-updateCloutlet_fail.robot: UpdateCloudlet with accessuri of 6 
-updateCloutlet_fail.robot: UpdateCloudlet with staticips of 6 
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 0 0
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 100 200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of 90 200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of -100 -200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of -90 -200
+updateCloutlet_fail.robot: UpdateCloudlet with a location of A A
+updateCloutlet_fail.robot: UpdateCloudlet with accessuri of 6
+updateCloutlet_fail.robot: UpdateCloudlet with staticips of 6
 updateCloutlet_fail.robot~: UpdateCloudlet - without an operator
 updateCloutlet_fail.robot~: UpdateCloudlet - with an invalid operator
 updateCloutlet_fail.robot~: UpdateCloudlet - without a cloudlet name
@@ -1091,10 +1093,10 @@ updateCloutlet_fail.robot~: UpdateCloudlet - with a numdynamicips A
 updateCloutlet_fail.robot~: UpdateCloudlet - with a numdynamicips 2323232232323
 updateCloutlet_fail.robot~: UpdateCloudlet - with a ipsupport of -1
 updateCloutlet_fail.robot~: UpdateCloudlet - with a ipsupport of -8
-updateCloutlet_fail.robot~: UpdateCloudlet - with a location of 0 0 
-updateCloutlet_fail.robot~: UpdateCloudlet - with a location of A A 
-updateCloutlet_fail.robot~: UpdateCloudlet - with accessuri of 6 
-updateCloutlet_fail.robot~: UpdateCloudlet - with staticips of 6 
+updateCloutlet_fail.robot~: UpdateCloudlet - with a location of 0 0
+updateCloutlet_fail.robot~: UpdateCloudlet - with a location of A A
+updateCloutlet_fail.robot~: UpdateCloudlet - with accessuri of 6
+updateCloutlet_fail.robot~: UpdateCloudlet - with staticips of 6
 deleteCloudlet.robot: DeleteCloudlet without an operator
 deleteCloudlet.robot: DeleteCloudlet with an invalid operator
 deleteCloudlet.robot: DeleteCloudlet without a cloudlet name
@@ -1119,24 +1121,24 @@ showCloudlet.robot: ShowCloudlets all
 showCloudlet.robot: ShowCloudlets selected
 showCloudlet.robot: ShowCloudlets invalid
 rootlb_sshAccess.robot: Openstack rootlb ssh access should be protected
-mc_traffic_rest.robot: MC - Login mc requests admin user Traffic 
-mc_traffic_rest.robot: MC - Create User requests create different users Traffic 
-mc_traffic_rest.robot: MC - Login mc requests different users Traffic 
-mc_traffic_rest.robot: MC - Current users mc requests different users Traffic 
-mc_traffic_rest.robot: MC - Show Role mc requests admin user Traffic 
-mc_traffic_rest.robot: MC - Show Role mc requests different users Traffic 
-mc_traffic_rest.robot: MC - Create Org mc requests different users Traffic 
-mc_traffic_rest.robot: MC - Show Org mc requests different users Traffic 
-mc_traffic_rest.robot: MC - Adduser Role mc requests different users Traffic 
-mc_org_delete.robot: MC - Delete an org without an org name	
-mc_org_delete.robot: MC - Delete an org that doesn't exist admin token	
-mc_org_delete.robot: MC - Delete an org that doesn't exist user token	
-mc_org_delete.robot: MC - Delete an org without a token	
-mc_org_delete.robot: MC - Delete an org with an empty token	
-mc_org_delete.robot: MC - Delete an org with a bad token	
-mc_org_delete.robot: MC - Delete an org with an expired token	
-mc_org_delete.robot: MC - Delete an org with a user assigned admin token	
-mc_org_delete.robot: MC - Delete an org with a user assigned user token	
+mc_traffic_rest.robot: MC - Login mc requests admin user Traffic
+mc_traffic_rest.robot: MC - Create User requests create different users Traffic
+mc_traffic_rest.robot: MC - Login mc requests different users Traffic
+mc_traffic_rest.robot: MC - Current users mc requests different users Traffic
+mc_traffic_rest.robot: MC - Show Role mc requests admin user Traffic
+mc_traffic_rest.robot: MC - Show Role mc requests different users Traffic
+mc_traffic_rest.robot: MC - Create Org mc requests different users Traffic
+mc_traffic_rest.robot: MC - Show Org mc requests different users Traffic
+mc_traffic_rest.robot: MC - Adduser Role mc requests different users Traffic
+mc_org_delete.robot: MC - Delete an org without an org name
+mc_org_delete.robot: MC - Delete an org that doesn't exist admin token
+mc_org_delete.robot: MC - Delete an org that doesn't exist user token
+mc_org_delete.robot: MC - Delete an org without a token
+mc_org_delete.robot: MC - Delete an org with an empty token
+mc_org_delete.robot: MC - Delete an org with a bad token
+mc_org_delete.robot: MC - Delete an org with an expired token
+mc_org_delete.robot: MC - Delete an org with a user assigned admin token
+mc_org_delete.robot: MC - Delete an org with a user assigned user token
 mc_org_delete.robot: MC - Delete an org created by user1 using user2 token
 mc_login_newuser.robot: MC - New User shall be able to successfully login
 mc_login_newuser.robot: MC - New User shall be able to login with thier email and password
@@ -1147,11 +1149,11 @@ mc_login_newuser.robot: MC - New User with no password shall not be able to logi
 mc_login_newuser.robot: MC - New User with empty username shall not be able to login
 mc_login_newuser.robot: MC - New User with empty password shall not be able to login
 mc_login_newpass.robot: MC - Admin user shall be able to change the password
-mc_login_newpass.robot: MC - Admin user shall be able to login with the new password 
-mc_login_newpass.robot: MC - Admin user shall not be able to login with the old password 
+mc_login_newpass.robot: MC - Admin user shall be able to login with the new password
+mc_login_newpass.robot: MC - Admin user shall not be able to login with the old password
 mc_login_newpass.robot: MC - User shall be able to change their password
 mc_login_newpass.robot: MC - User shall be able to change to the same password as another user
-mc_login_newpass.robot: MC - User shall not be able to login with the old password 
+mc_login_newpass.robot: MC - User shall not be able to login with the old password
 mc_login_newpass.robot: MC - User shall not be able to change their password without a token
 mc_login_newpass.robot: MC - User shall not be able to change their password with an empty token
 mc_login_newpass.robot: MC - User shall not be able to change their password with a bad token
@@ -1165,8 +1167,8 @@ mc_createUser.robot: MC - User shall not be able to create a new user without an
 mc_createUser.robot: MC - User shall not be able to create a new user with an empty email
 mc_createUser.robot: MC - User shall not be able to create a new user with :: in the username
 mc_createUser.robot: MC - User shall not be able to create a new user with an invalid email
-mc_createUser.robot: MC - User shall not be able to create a new user with an invalid username characters  
-mc_createUser.robot: MC - User shall not be able to create a new user with spaces before the username   
+mc_createUser.robot: MC - User shall not be able to create a new user with an invalid username characters
+mc_createUser.robot: MC - User shall not be able to create a new user with spaces before the username
 mc_createUser.robot: MC - User shall not be able to create a new user with an invalid password
 mc_createUser.robot: MC - User shall not be able to create the same new user twice same info
 mc_createUser.robot: MC - User shall not be able to create the same new user twice different password
@@ -1191,10 +1193,10 @@ mc_role_show.robot: MC - User shall not be able to show roles without a token
 mc_role_show.robot: MC - User shall not be able to show roles with an empty token
 mc_role_show.robot: MC - User shall not be able to show roles with a bad token
 mc_role_show.robot: MC - User shall not be able to show roles with an expired token
-mc_role_removeuser.robot: MC - Admin remove an AdminManager role from a user 
-mc_role_removeuser.robot: MC - Admin remove an AdminCondtributor role from a user 
-mc_role_removeuser.robot: MC - Admin remove an AdminViewer role from a user 
-mc_role_removeuser.robot: MC - Admin remove an DeveloperManager role from a user 
+mc_role_removeuser.robot: MC - Admin remove an AdminManager role from a user
+mc_role_removeuser.robot: MC - Admin remove an AdminCondtributor role from a user
+mc_role_removeuser.robot: MC - Admin remove an AdminViewer role from a user
+mc_role_removeuser.robot: MC - Admin remove an DeveloperManager role from a user
 mc_role_removeuser.robot: MC - Remove a user role from a user with a bad token
 mc_org_create.robot: MC - Show org with admin user no orgs created
 mc_org_create.robot: MC - Add an Admin org with the admin user
@@ -1205,14 +1207,14 @@ mc_org_create.robot: MC - New user can create a developer org
 mc_org_create.robot: MC - New user can create a operator org
 mc_org_create.robot: MC - New user can create multiple organizations
 mc_org_create.robot: MC - Admin user can see orgs created by other users
-mc_org_create.robot: MC - Create an org without an org name	
-mc_org_create.robot: MC - Create an org without an org type	
-mc_org_create.robot: MC - Create an org without an org address	
-mc_org_create.robot: MC - Create an org without an org phone	
-mc_org_create.robot: MC - Create an org without a token	
-mc_org_create.robot: MC - Create an org with an empty token	
-mc_org_create.robot: MC - Create an org with a bad token	
-mc_org_create.robot: MC - Create an org with an expired token	
+mc_org_create.robot: MC - Create an org without an org name
+mc_org_create.robot: MC - Create an org without an org type
+mc_org_create.robot: MC - Create an org without an org address
+mc_org_create.robot: MC - Create an org without an org phone
+mc_org_create.robot: MC - Create an org without a token
+mc_org_create.robot: MC - Create an org with an empty token
+mc_org_create.robot: MC - Create an org with a bad token
+mc_org_create.robot: MC - Create an org with an expired token
 mc_role_adduser.robot: MC - Admin user shall be able show role assignments with no assignments
 mc_role_adduser.robot: MC - Admin user shall be able to assign a user role to an org
 mc_role_adduser.robot: MC - Admin user shall be able to assign a manager user role to an org
@@ -1221,7 +1223,7 @@ mc_role_adduser.robot: MC - Admin user shall be able to assign Operator user rol
 mc_role_adduser.robot: MC - Admin user shall be able to assign all user roles to users
 mc_role_adduser.robot: MC - A user shall be able to assign a user role to an org they created
 mc_role_adduser.robot: MC - DeveloperManager shall be able to assign all Developer roles to users
-mc_role_adduser.robot: MC - OperatorManager shall be able to assign all Operator roles to users	
+mc_role_adduser.robot: MC - OperatorManager shall be able to assign all Operator roles to users
 mc_role_adduser.robot: MC - Assign a user role to a user without a token
 mc_role_adduser.robot: MC - Assign a user role to a user with an empty token
 mc_role_adduser.robot: MC - Assign a user role to a user with a bad token
