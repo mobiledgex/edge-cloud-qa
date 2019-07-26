@@ -35,7 +35,9 @@ spec:
           - "--region"
           - "US"
           - "--vaultAddr"
-          - "https://vault.mobiledgex.net"
+          - "https://vault-qa.mobiledgex.net:8200"
+          - "--registryFQDN"
+          - "docker-qa.mobiledgex.net"
           - "--versionTag"
           - "$AUTOMATION_DOCKERTAG"
           - "--tls"
@@ -47,8 +49,8 @@ spec:
           - "-autoUpgrade"
          env:
           - name: VAULT_ROLE_ID
-            value: 0d0ab025-509e-c37d-d5de-c3319f452bd8
+            value: ca6bdaf0-b4c6-98d9-e0bd-b47073541657
           - name: VAULT_SECRET_ID
-            value: 4789ef81-4037-99a2-e966-b0998e677972
+            value: db9c1b53-b77b-fc48-cc4b-bdabc65b921e
        imagePullSecrets:
         - name: mexreg-secret
