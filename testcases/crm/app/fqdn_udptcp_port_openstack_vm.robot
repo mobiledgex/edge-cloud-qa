@@ -30,6 +30,8 @@ ${qcow_openstack_image}  server_ping_threaded_centos7
 
 ${server_ping_threaded_command}  /opt/rh/rh-python36/root/usr/bin/python3 /home/centos/server_ping_threaded.py
 
+${server_ping_threaded_cloudconfig}  http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml
+	
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
@@ -87,6 +89,25 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
+User shall be able to access VM deployment UDP and TCP ports on openstack with cloud-config
+    [Documentation]
+    ...  deploy VM app on openstack with 1 UDP and 1 TCP port with cloud-config
+    ...  verify all ports are accessible via fqdn
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Register Client
