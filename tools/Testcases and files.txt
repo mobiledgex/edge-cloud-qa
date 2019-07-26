@@ -1,307 +1,55 @@
-faceDetection_deploy_detectPassFail.robot: Facedetection server shall recognize faces
-getAppInstList_1app_carrierMismatch.robot: GetAppInstList - request shall return only app that matches carrier
-getAppInstList_1app.robot: GetAppInstList - request shall return 1 app
-getAppInstList_0app.robot: GetAppInstList - request with no app instance shall return 0 app
-getAppInstList_azure.robot: GetAppInstList - request shall return azure app
-getAppInstList_10cloudlet.robot: GetAppInstList - request shall return 10 cloudlets
-getAppInstList_defaultCloudlet.robot: GetAppInstList - request shall not return default cloudlet apps
-getAppInstList_appMultiplePorts.robot: GetAppInstList - request shall return app with mulitple ports
-getAppInstList_gcp.robot: GetAppInstList - request shall return GCP app
-getAppInstList_noGps.robot: GetAppInstList - request shall fail with no GPS coords
-getAppInstList_noPorts.robot: GetAppInstList - request shall return app with no ports
-getAppInstList_cookieError.robot: GetAppInstList - request without cookie should return 'missing cookie'
-getAppInstList_cookieError.robot: GetAppInstList - request with invalid cookie of x should return 'token contains an invalid number of segments'
-getAppInstList_cookieError.robot: GetAppInstList - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-getAppInstList_cookieError.robot: GetAppInstList - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-getAppInstList_cookieError.robot: GetAppInstList - request with expired cookie should return 'token is expired by'
-getLocation_cookieError.robot: #VerifyLocation - request with bad session cookie shall return app not found
-getLocation_cookieError.robot: GetLocation - request without cookie should return 'missing cookie'
-getLocation_cookieError.robot: GetLocation - request with invalid cookie of x should return 'token contains an invalid number of segments'
-getLocation_cookieError.robot: GetLocation - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-getLocation_cookieError.robot: GetLocation - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-getLocation_cookieError.robot: GetLocation - request with expired cookie should return 'token is expired by'
-getLocation.robot: GetLocation - request should return LOC_FOUND
-verifyLocation_carrierNotFound.robot: VerifyLocation - request with carrier not found should pass
-verifyLocation_2km.robot: VerifyLocation - request with same coord shall return LOC_VERIFIED of 2KM
-verifyLocation_2km.robot: VerifyLocation - request within < 2KM shall return LOC_VERIFIED of 2KM
-verifyLocation_cookieError.robot: VerifyLocation - request with bad session cookie shall return app not found
-verifyLocation_cookieError.robot: VerifyLocation - request without cookie should return 'missing cookie'
-verifyLocation_cookieError.robot: VerifyLocation - request with invalid cookie of x should return 'token contains an invalid number of segments'
-verifyLocation_cookieError.robot: VerifyLocation - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-verifyLocation_cookieError.robot: VerifyLocation - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-verifyLocation_cookieError.robot: VerifyLocation - request with expired cookie should return 'token is expired by'
-verifyLocation_missingParms.robot: VerifyLocation - request without lat/long should return 'Missing GpsLocation'
-verifyLocation_missingParms.robot: VerifyLocation - request without carrier should succeed
-verifyLocation_missingParms.robot: VerifyLocation - request without token should return 'verifyloc token required'
-verifyLocation_missingParms.robot: VerifyLocation - request with latitude only should succeed
-verifyLocation_missingParms.robot: VerifyLocation - request with longitude only should succeed
-verifyLocation_10km.robot: VerifyLocation - request with coord barely > 2km and < 10km shall return LOC_VERIFIED of 10km
-verifyLocation_10km.robot: VerifyLocation - request with coord > 2km and < 10km shall return LOC_VERIFIED of 10km
-verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be in neighboring country but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
-verifyLocation_greater100km_roaming_other_country.robot: VerifyLocation - request claiming to be overseas but actually home shall return LOC_ROAMING_COUNTRY_MISMATCH
-verifyLocation_badToken_rest.robot: VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
-verifyLocation_badToken_rest.robot: VerifyLocation REST - request with empty token shall return 'verifyloc token required'
-verifyLocation_badToken.robot: VerifyLocation - request with bad token shall return LOC_ERROR_UNAUTHORIZED
-verifyLocation_badToken.robot: VerifyLocation - request with empty token shall return 'verifyloc token required'
-verifyLocation_100km.robot: VerifyLocation - request with coord barely > 10km and < 100km shall return LOC_VERIFIED of 100km
-verifyLocation_100km.robot: VerifyLocation - request with coord > 10km and < 100km shall return LOC_VERIFIED of 100km
-verifyLocation_greater100km_other_country.robot: VerifyLocation - request claiming to be home but actually in neighboring country shall return LOC_MISMATCH_OTHER_COUNTRY
-verifyLocation_greater100km_other_country.robot: VerifyLocation - request claiming to be home but actually overseas shall return LOC_MISMATCH_OTHER_COUNTRY
-verifyLocation_invalidParms.robot: VerifyLocation - request with invalid low lat should return 'Invalid GpsLocation'
-verifyLocation_invalidParms.robot: VerifyLocation - request with invalid high lat should return 'Invalid GpsLocation'
-verifyLocation_invalidParms.robot: VerifyLocation - request with invalid low long should return 'Invalid GpsLocation'
-verifyLocation_invalidParms.robot: VerifyLocation - request with invalid high long should return 'Invalid GpsLocation'
-verifyLocation_greater100km_roaming_same_country.robot: VerifyLocation - request claiming to be in neighboring country and actually there shall return LOC_ROAMING_COUNTRY_MATCH
-verifyLocation_greater100km_roaming_same_country.robot: VerifyLocation - request claiming to be overseas and actually there shall return LOC_ROAMING_COUNTRY_MATCH
-verifyLocation_greater100km_same_country.robot: VerifyLocation - request with coord barely > 100km and still within country shall return LOC_MISMATCH_SAME_COUNTRY
-verifyLocation_greater100km_same_country.robot: VerifyLocation - request with coord > 100km and within same country shall return LOC_MISMATCH_SAME_COUNTRY
-registerClient_missingParms.robot: RegisterClient - request with app_name only shall return 'DevName cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request with app_version only shall return 'DevName cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request with developer name only shall return 'AppName cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request without developer name shall return 'DevName cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request without app version shall return 'AppVers cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request without app name shall return 'AppName cannot be empty'
-registerClient_missingParms.robot: RegisterClient - request without authtoken for app with token shall return 'No authtoken received'
-registerClient_appNotFound.robot: RegisterClient - request with wrong app_name shall return 'app not found'
-registerClient_appNotFound.robot: RegisterClient - request with wrong app_version shall return 'app not found'
-registerClient_appNotFound.robot: RegisterClient - request with wrong developer_name shall return 'app not found'
-registerClient_appNotFound.robot: RegisterClient - request with wrong app_name,app_version, and developer_name shall return 'app not found'
-registerClient_appNotFound.robot: RegisterClient - request shall succeed after adding app
-registerClient_auth.robot: RegisterClient - request with auth shall return proper JWT
-registerClient_multiple.robot: RegisterClient - register shall work when keep creating/deleting same app instance
-registerClient_traffic_rest.robot: RegisterClient - DME should handle simultaneous register requests
-registerClient_traffic_rest.robot: FindCloudlet - DME should handle simultaneous FindCloudlet requests
-registerClient_traffic_rest.robot: VerifyLocation - DME should handle simultaneous VerifyLocation requests
-registerClient_authFail.robot: RegisterClient - request for app without authpublickey shall return 'No authkey found to validate token'
-registerClient_authFail.robot: RegisterClient - request with invalid version in token shall return 'failed to verify token - token appvers mismatch'
-registerClient_authFail.robot: RegisterClient - request with invalid appname in token shall return 'failed to verify token - token appname mismatch'
-registerClient_authFail.robot: RegisterClient - request with invalid devname in token shall return 'failed to verify token - token developer mismatch'
-registerClient_authFail.robot: RegisterClient - request with invalid token shall return 'failed to verify token - token contains an invalid number of segments'
-registerClient_authFail.robot: RegisterClient - request with expired token shall return 'failed to verify token - token is expired'
-registerClient.robot: RegisterClient - request without auth shall return proper JWT
-getFqdnList_nonplatos.robot: GetFqdnList - request fqdnlist for non-platos app should fail
-getFqdnList_cookieError.robot: GetFqdnList - request without cookie should return 'missing cookie'
-getFqdnList_cookieError.robot: GetFqdnList - request with invalid cookie of x should return 'token contains an invalid number of segments'
-getFqdnList_cookieError.robot: GetFqdnList - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-getFqdnList_cookieError.robot: GetFqdnList - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-getFqdnList_cookieError.robot: GetFqdnList - request with expired cookie should return 'token is expired by'
-getFqdnList_permitMixture.robot: GetFqdnList - request shall only return apps with permits_platform_apps=True
-getFqdnList_1app.robot: GetFqdnList - request shall return 1 app
-getFqdnList_0app.robot: GetFqdnList - request shall return 0 apps
-getFqdnList_10app.robot: GetFqdnList - request shall return 10 apps
-getFqdnList_0appPermitNone.robot: GetFqdnList - request for apps with no permits_platform_apps shall return 0 apps
-getFqdnList_0appPermitFalse.robot: GetFqdnList - request for apps with permits_platform_apps=False shall return 0 apps
-start_dme_fail.robot: DME shall fail to start when cert is not found
-start_dme_fail.robot: DME shall fail to start without cloudlet name
-start_dme_fail.robot: DME shall fail to start without cloudlet operator name
-start_dme_fail.robot: DME shall fail to start without cloudletKey parm
-start_dme_fail.robot: DME shall fail to start with invalid cloudletKey
-start_dme_fail.robot: DME shall fail to start without carrier parm
-start_dme_fail.robot: DME shall fail to start if port is in use
-findCloudlet_invalidParms.robot: FindCloudlet - request with too small latitude should return 'Invalid GpsLocation'
-findCloudlet_invalidParms.robot: FindCloudlet - request with too large latitude should return 'Invalid GpsLocation'
-findCloudlet_invalidParms.robot: FindCloudlet - request with too small longitude should return 'Invalid GpsLocation'
-findCloudlet_invalidParms.robot: FindCloudlet - request with too large longitude should return 'Invalid GpsLocation'
-findCloudlet_invalidParms.robot: FindCloudlet - request with out-of-range latitude/longitude should return 'Invalid GpsLocation'
-findCloudlet_dmuus_azureCloser_noAppinst.robot: FindCloudlet - request shall return dmuus with azure cloudlet closer but no appinst provisioned
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same coord as tmocloud-1
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same coord as tmocloud-2
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-1
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord closer to tmocloud-2
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of max distance
-findCloudlet_dmuus_noGcpNoAzure.robot: FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coord of min distance
-findCloudlet_platos_permitsPlatformAppsFalse.robot: FindCloudlet platos - request shall return error when sending FindCloudlet for app with permits_platform_apps=False
-findCloudlet_timestamp_rest.robot: FindCloudlet REST - request with timestamp shall return dmuus
-findCloudlet_dmuus_dmuusCloserThanGcpAzureGreaterThan100km.robot: FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned and dmuus closer and > 100km from request
-findCloudlet_dmuus_dmuusGcpSameCoord.robot: FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus and gcp same coord
-findCloudlet_platos_missingParms.robot: FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding appname only
-findCloudlet_platos_missingParms.robot: FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding appvers only
-findCloudlet_platos_missingParms.robot: FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding developername only
-findCloudlet_cookieError_rest.robot: FindCloudlet - request without cookie should return 'missing cookie'
-findCloudlet_cookieError_rest.robot: FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
-findCloudlet_cookieError_rest.robot: FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-findCloudlet_cookieError_rest.robot: FindCloudlet - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-findCloudlet_cookieError_rest.robot: FindCloudlet - request with expired cookie should return 'token is expired by'
-findCloudlet_dmuus_dmuusFartherThanGcpLessThan100km.robot: FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus farther but < 100km than gcp
-findCloudlet_dmuus_dmuusCloserThanGcpAzure_largeDistance.robot: FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned and dmuus closer and with large distances
-findCloudlet_platos_azure_azureCloser.robot: FindCloudlet platos - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
-findCloudlet_dmuus_dmuusGcpSameDistance.robot: FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus and gcp same distance away
-findCloudlet_cookieError.robot: FindCloudlet - request without cookie should return 'missing cookie'
-findCloudlet_cookieError.robot: FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
-findCloudlet_cookieError.robot: FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
-findCloudlet_cookieError.robot: FindCloudlet - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
-findCloudlet_cookieError.robot: FindCloudlet - request with expired cookie should return 'token is expired by'
-findCloudlet_dmuus_dmuusAzureSameCoord.robot: FindCloudlet - request shall return dmuus with azure cloudlet provisioned and dmuus and azure same coord
-findCloudlet_gcp_requestGcp.robot: FindCloudlet - request shall return gcp with dmuus and gcp/azure cloudlet provisioned and requesting gcp
-findCloudlet_dmuus_dmuusAzureSameDistance.robot: FindCloudlet shall return dmuus with azure cloudlet provisioned and dmuus and azure same distance
-findCloudlet_dmuus_dmuusGcpAzureSameCoord.robot: FindCloudlet - request shall return dmuus with azure/gcp cloudlet provisioned and dmuus/azure/gcp same coord
-findCloudlet_dmuus_dmuusCloserThanGcpLessThan100km.robot: FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus closer and < 100km from request
-findCloudlet_platos_dmuus_dmuusCloserThanAzureGreaterThan100km.robot: FindCloudlet platos - request shall return dmuus with azure cloudlet provisioned and dmuus closer and > 100km from request
-findCloudlet_dmuus_dmuusCloserThanAzureLessThan100km.robot: FindCloudlet - request shall return dmuus with azure cloudlet provisioned and dmuus closer and < 100km from request
-findCloudlet_dmuus_gcpCloser_noAppinst.robot: FindCloudlet - request shall return dmuus with gcp cloudlet closer but no appinst provisioned
-findCloudlet_platos_gcp_gcpCloser.robot: FindCloudlet platos - request shall return gcp with dmuus farther and > 100km farther than gcp
-findCloudlet_dmuus_dmuusFartherThanGcpAzureLessThan100km.robot: FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned and dmuus farther but < 100km from gcp/azure
-findCloudlet_dmuus_multiple.robot: FindCloudlet - request shall return proper cloudlet when multiple cloudlets exist
-findCloudlet_platos_dmuus_dmuusCloserThanGcpAzureLessThan100km.robot: FindCloudlet platos - request shall return dmuus with gcp/azure cloudlet provisioned and dmuus closer and < 100km from request
-findCloudlet_gcp_gcpCloser.robot: FindCloudlet - request shall return gcp with dmuus farther and > 100km farther than gcp
-findCloudlet_azure_requestAzure.robot: FindCloudlet - request shall return azure with dmuus and gcp/azure cloudlet provisioned and requesting azure
-findCloudlet_missingParms.robot: FindCloudlet - request without lat/long should return 'Missing GpsLocation'
-findCloudlet_missingParms.robot: FindCloudlet - request without carrier name should return 'missing carrierName'
-findCloudlet_missingParms.robot: FindCloudlet - request with latitude only should return 'missing carrierName'
-findCloudlet_missingParms.robot: FindCloudlet - request with longitude only should return 'missing carrierName'
-findCloudlet_missingParms.robot: FindCloudlet - request with carrier_name and latitude only should succeed
-findCloudlet_missingParms.robot: FindCloudlet - request with carrier_name and longitude only should succeed
-findCloudlet_gcp_GcpCloserThanTmusAzure_gcpGreaterThan100km_azureGreaterThan100km.robot: FindCloudlet - request shall return gcp with dmuus and gcp/azure cloudlet provisioned and dmuus farther and > 100km from gcp and azure and gcp closer than azure
-findCloudlet_dmuus_registerFindMismatch.robot: FindCloudlet - request shall return error when FindCloudlet app does not match Registered App
-findCloudlet_azure_azureCloser.robot: FindCloudlet - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
-findCloudlet_dmuus_dmuusFartherThanAzureLessThan100km.robot: FindCloudlet - request shall return dmuus with azure cloudlet provisioned and dmuus farther but < 100km than azure
-findCloudlet_platos_findplatosApp.robot: FindCloudlet platos - request shall return FIND_NOTFOUND when registering platos app and sending findCloudlet without overriding the appname
-findCloudlet_platos_findplatosApp.robot: FindCloudlet platos - request shall return FIND_NOTFOUND when registering platos app and sending findCloudlet overriding the appname with platos app
-findCloudlet_dmuus_dmuusCloserThanGcpAzureLessThan100km.robot: FindCloudlet - request shall return dmuus with gcp/azure cloudlet provisioned and dmuus closer and < 100km from request
-findCloudlet_gcp_gcpCloserThanTmusAzure_gcpGreaterThan100km_azureLessThan100km.robot: FindCloudlet - request shall return gcp with dmuus and gcp/azure cloudlet provisioned and dmuus farther and > 100km than gcp and < 100km than azure and gcp closer than azure
-findCloudlet_platos_permitsPlatformAppsMissing.robot: FindCloudlet platos - request shall return error when sending FindCloudlet for app without permits_platform_apps
-findCloudlet_dmuus_dmuusCloserThanAzureGreaterThan100km.robot: FindCloudlet - request shall return dmuus with azure cloudlet provisioned and dmuus closer and > 100km from request
-findCloudlet_dmuus_dmuusCloserThanGcpGreaterThan100km.robot: FindCloudlet - request shall return dmuus with gcp cloudlet provisioned and dmuus closer and > 100km from request
-findCloudlet_dmuus_cloudletNotFound.robot: FindCloudlet - request shall return FIND_NOT_FOUND when requesting an operator that doesnt exist
-findCloudlet_azure_azureCloserThanTmusGcp_azureGreaterThan100km_gcpLessThan100km.robot: FindCloudlet - request shall return azure with dmuus and gcp/azure cloudlet provisioned and dmuus farther but > 100km than azure and < 100km than gcp and azure closer than gcp
-findCloudlet_azure_azureCloserThanTmusGcp_azureGreaterThan100km_gcpGreaterThan100km.robot: FindCloudlet - request shall return azure with dmuus and gcp/azure cloudlet provisioned and dmuus farther and > 100km than azure and gcp and azure closer than gcp
-findCloudlet_platos_dmuus_dmuusCloserThanGcpLessThan100km.robot: FindCloudlet platos - request shall return dmuus with gcp cloudlet provisioned and dmuus closer and < 100km from request
-createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/K8s and num_masters=1 and num_nodes=1 on openstack
-createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/k8s and num_masters=1 and num_nodes=5 on openstack
-createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/k8s and num_masters=0 and num_nodes=4
-createClusterInstance_openstack_IpAccessDedicated_docker.robot: ClusterInst shall create with IpAccessDedicated/docker on openstack
-createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_nodes=1 on openstack
-createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_nodes=6 on openstack
-createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=0 and num_nodes=4
-create2ClusterInstance_substringName.robot: CRM shall be able to create 2 clusterInst with one name a substring of the other
-createClusterInstance_openstack_flavors.robot: Cluster with flavor less than 20g on openstack shall fail with size too small
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
-createClusterInstance_openstack_flavors.robot: #Cluster shall create with different master and node flavors on openstack
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
-createClusterInstance_openstack_flavors.robot: Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no flavor found
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall not create with IpAccessDedicated and multiple masters
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 nodes
-createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on openstack
-delete_clusterInstance_notExist.robot: CRM shall be able to create 2 clusterInst with one name a substring of the other
-create2ClusterInstanceSameTime.robot: CRM shall be able to Create 2 cluster instances at the same time on openstack
-createClusterInstance_mixedCase.robot: CRM shall be able to create a cluster instances with mixed case clustername for openstack
-createClusterInstance_openstack_numNodes.robot: Cluster shall create with IpAccessShared and num_nodes=4 on openstack
-createClusterInstance_openstack_numNodes.robot: Cluster shall create with IpAccessShared and num_nodes=10 on openstack
-createClusterInstance_openstack_numNodes.robot: Cluster shall not create with IpAccessShared and multiple masters
-createClusterInstance_openstack_numNodes.robot: Cluster shall not create clusterInst with IpAccessShared and 0 masters
-create2ClusterInstanceSameCloudlet.robot: CRM shall be able to Create 2 cluster instances on the same cloudlet for openstack
-createClusterInstance_delete_create_sametime.robot: User shall be able to delete/create an app instance at the same time on openstack
-createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
-createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
-createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
-createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
-createClusterInstance_azure_vmsizes.robot: Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
-createClusterInstance_nameLength.robot: CRM shall be able to create a cluster instances with 64 chars on openstack
-createClusterInstance_nameLength.robot: CRM shall be able to create a cluster instances with long name on openstack
-fqdn_udptcp_port_openstack_volume_mounts.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with volume mounts
-fqdn_udptcp_port_gcp.robot: User shall be able to access 1 UDP port on gcp
-fqdn_udptcp_port_gcp.robot: User shall be able to access 2 UDP ports on azure
-fqdn_udptcp_port_gcp.robot: User shall be able to access 1 TCP port on azure
-fqdn_udptcp_port_gcp.robot: User shall be able to access 2 TCP ports on azure
-fqdn_udptcp_port_gcp.robot: User shall be able to access 2 UDP and 2 TCP ports on azure
-fqdn_udptcp_port_openstack.robot: User shall be able to access 1 UDP port on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access 2 UDP ports on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access 1 TCP port on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access 2 TCP ports on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access HTTP port on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access UDP,TCP and HTTP ports on openstack
-fqdn_udptcp_port_openstack.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
-create_appInst_timings.robot: CreateAppInst on openstack shall create quickly
-fqdn_udptcp_port_azure.robot: User shall be able to access 1 UDP port on azure
-fqdn_udptcp_port_azure.robot: User shall be able to access 2 UDP ports on azure
-fqdn_udptcp_port_azure.robot: User shall be able to access 1 TCP port on azure
-fqdn_udptcp_port_azure.robot: User shall be able to access 2 TCP ports on azure
-fqdn_udptcp_port_azure.robot: User shall be able to access 2 UDP and 2 TCP ports on azure
-create_appInst_delete_create_sametime.robot: User shall be able to delete/create an app instance at the same time on openstack
-create_appInst_reboot.robot: User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
-fqdn_udptcp_port_openstack_reboot.robot: User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
-create_app_dot.robot: User shall be able to create an app instance on openstack with a dot in the app name
-create_app_dot_azure.robot: User shall be able to create an app instance on azure with a dot in the app name
-fqdn_udptcp_port_openstack_autocluster.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
-fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=1
-fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=2
-fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=10
-stats_openstack.robot: User shall be able to access 1 UDP port on openstack
-create_appInst_manifestFail.robot: Controller should cleanup autocluster after CreateAppInst fail
-fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 1 UDP port on openstack with docker
-fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 1 TCP port on openstack with docker
-fqdn_udptcp_port_openstack_IpAccessDedicated_docker.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker
-fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with new image
-fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with existing image
-fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with command
-create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance on openstack with rootlb rest port blocked
-create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance with autocluster on openstack with rootlb rest port blocked
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 1 UDP port on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 UDP ports on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 1 TCP port on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 TCP ports on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access HTTP port on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDedicated
-fqdn_udptcp_port_openstack_IpAccessDedicated_docker_compose.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose
-fqdn_udptcp_port_openstack_IpAccessDedicated_volume_mounts.robot: User shall be able to access UDP and TCP ports on openstack with IpAccessDedicated and volume mounts
-create_appInst_delete_create.robot: User shall be able to create/delete/create an app instance on openstack
-fqdn_udptcp_port_openstack_IpAccessDedicated_autocluster_docker.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and autocluster
-fqdn_udptcp_port_openstack_numMasters1_numNodes0.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with num_masters=1 and num_nodes=0
-create_clusterInst.robot: clustersvc shall create/delete MEXPrometheusAppName and MEXMetricsExporter app and app instance
-create_clusterInst_multiple.robot: clustersvc shall create/delete multiple MEXPrometheusAppName and MEXMetricsExporter app and app instance
-create_clusterInst_openstack.robot: Create clusterInst for clustersvc on openstack
-clusterSvc_influxdb_clusterInst.robot: ClusterInst Stats shall be created on openstack
-clusterSvc_influxdb_clusterInst.robot: Cluster Stats shall be created on azure
-clusterSvc_influxdb_appInst.robot: AppInst and ClusterInst Stats shall be created on openstack
-clusterSvc_influxdb_appInst.robot: Cluster Stats shall be created on azure
-test_developerAdd_nameOnly.pytest_developerDelete_unknown.pytest_deleteDeveloper_beforeApp.pytest_developerUpdate_unknown.pytest_developerAdd_100.pytest_developerUpdate_change.pytest_developerAdd_sameName.pytest_developerAdd_nameOptionalParms.pytest_developerAdd_multiControllers.pytest_developerAdd_noName.pytest_developerDelete.pytest_developerUpdate_add.pytest_developerShow_single.pytest_developerAdd_invalidName.pytest_clusterDelete_nameNotFound.py: def test_DeleteClusterNameNotFound
-test_clusterDelete_nameNotFound.py:     def test_DeleteClusterNameNotFound(self):
-test_clusterAdd_AutoCluster.py: def test_AddAutoCluster
-test_clusterAdd_AutoCluster.py:     def test_AddAutoCluster(self):
-test_clusterAdd_noDefaultFlavor.py: def test_GetCloudlets
-test_clusterAdd_noDefaultFlavor.py:     def test_GetCloudlets(self):
-test_clusterInstUpdate_notSupported.py: def test_UpdateClusterInst
-test_clusterInstUpdate_notSupported.py:     def test_UpdateClusterInst(self):
-test_clusterDelete_beforeApp.py: def test_DeleteClusterBeforeApp
-test_clusterDelete_beforeApp.py:     def test_DeleteClusterBeforeApp(self):
-test_clusterInstDelete.py: def test_DeleteClusterInstanceFlavor
-test_clusterInstDelete.py: def test_DeleteClusterInstanceNoFlavor
-test_clusterInstDelete.py:     def test_DeleteClusterInstanceFlavor(self):
-test_clusterInstDelete.py:     def test_DeleteClusterInstanceNoFlavor(self):
-test_clusterInstAdd_100.py: def test_AddClusterInstance
-test_clusterInstAdd_100.py:     def test_AddClusterInstance(self):
-test_clusterDelete_invalidName.py: def test_DeleteClusterUnderscore
-test_clusterDelete_invalidName.py: def test_DeleteClusterInvalidChars
-test_clusterDelete_invalidName.py:     def test_DeleteClusterUnderscore(self):
-test_clusterDelete_invalidName.py:     def test_DeleteClusterInvalidChars(self):
-test_clusterInstDelete_notFound.py: def test_DeleteClusterNameOnly
-test_clusterInstDelete_notFound.py: def test_DeleteClusterNoFlavor
-test_clusterInstDelete_notFound.py: def test_DeleteClusterNoName
-test_clusterInstDelete_notFound.py:     def test_DeleteClusterNameOnly(self):
-test_clusterInstDelete_notFound.py:     def test_DeleteClusterNoFlavor(self):
-test_clusterInstDelete_notFound.py:     def test_DeleteClusterNoName(self):
-test_clusterInstAdd_noFlavor.py: def test_NoFlavor
-test_clusterInstAdd_noFlavor.py: def test_EmptyFlavor
-test_clusterInstAdd_noFlavor.py:     def test_NoFlavor(self):
-test_clusterInstAdd_noFlavor.py:     def test_EmptyFlavor(self):
-test_clusterDelete_beforeClusterInst.py: def test_DeleteClusterBeforeClusterInstance
-test_clusterDelete_beforeClusterInst.py:     def test_DeleteClusterBeforeClusterInstance(self):
-test_clusterInstAdd_flavorNotExist.py: def test_NoFlavor
-test_clusterInstAdd_flavorNotExist.py:     def test_NoFlavor(self):
-test_clusterAdd_defaultFlavor.py: def test_createClusterDefaultFlavor
-test_clusterAdd_defaultFlavor.py:     def test_createClusterDefaultFlavor(self):
+controller.developer/test_developerAdd_nameOnly.tc.test_createDeveloper_nameOnly
+controller.developer/test_developerAdd_nameOnly.tc.test_createDeveloper_nameEmptyParms
+controller.developer/test_developerDelete_unknown.tc.test_DeleteDeveloperUnknown
+controller.developer/test_deleteDeveloper_beforeApp.tc.test_DeleteDeveloperBeforeApp
+controller.developer/test_developerUpdate_unknown.tc.test_updateDeveloperUnknown
+controller.developer/test_developerAdd_100.tc.test_createDeveloper
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperNameOnly
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperSameParms
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperAllParms
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperEmail
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperAddress
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperUsername
+controller.developer/test_developerUpdate_change.tc.test_updateDeveloperPasshash
+controller.developer/test_developerAdd_sameName.tc.test_createDeveloper_sameName_allOptional
+controller.developer/test_developerAdd_sameName.tc.test_createDeveloper_sameName_nameOnly
+controller.developer/test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameAddress
+controller.developer/test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameEmail
+controller.developer/test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameUsername
+controller.developer/test_developerAdd_nameOptionalParms.tc.test_createDeveloper_namePasshash
+controller.developer/test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameAllOptional
+controller.developer/test_developerAdd_multiControllers.tc.test_createDeveloper
+controller.developer/test_developerAdd_noName.tc.test_createDeveloperEmptyName
+controller.developer/test_developerAdd_noName.tc.test_createDeveloperNoName
+controller.developer/test_developerDelete.tc.test_deleteDeveloper
+controller.developer/test_developerUpdate_add.tc.test_updateDeveloperAddAllParms
+controller.developer/test_developerUpdate_add.tc.test_updateDeveloperAddEmail
+controller.developer/test_developerUpdate_add.tc.test_updateDeveloperAddAddress
+controller.developer/test_developerUpdate_add.tc.test_updateDeveloperAddUsername
+controller.developer/test_developerUpdate_add.tc.test_updateDeveloperAddPasshash
+controller.developer/test_developerShow_single.tc.test_showDeveloper_nameOnly
+controller.developer/test_developerAdd_invalidName.tc.test_createDeveloperStartUnderscore
+controller.developer/test_developerAdd_invalidName.tc.test_createDeveloperParenthesis
+controller.developer/test_developerAdd_invalidName.tc.test_createDeveloperDollarsign
+controller.developer/test_developerAdd_invalidName.tc.test_createDeveloperOtherInvalidChars
+controller.cluster/test_clusterDelete_nameNotFound.tc.test_DeleteClusterNameNotFound
+controller.cluster/test_clusterAdd_AutoCluster.tc.test_AddAutoCluster
+controller.cluster/test_clusterAdd_noDefaultFlavor.tc.test_GetCloudlets
+controller.cluster/test_clusterInstUpdate_notSupported.tc.test_UpdateClusterInst
+controller.cluster/test_clusterDelete_beforeApp.tc.test_DeleteClusterBeforeApp
+controller.cluster/test_clusterInstDelete.tc.test_DeleteClusterInstanceFlavor
+controller.cluster/test_clusterInstDelete.tc.test_DeleteClusterInstanceNoFlavor
+controller.cluster/test_clusterInstAdd_100.tc.test_AddClusterInstance
+controller.cluster/test_clusterDelete_invalidName.tc.test_DeleteClusterUnderscore
+controller.cluster/test_clusterDelete_invalidName.tc.test_DeleteClusterInvalidChars
+controller.cluster/test_clusterInstDelete_notFound.tc.test_DeleteClusterNameOnly
+controller.cluster/test_clusterInstDelete_notFound.tc.test_DeleteClusterNoFlavor
+controller.cluster/test_clusterInstDelete_notFound.tc.test_DeleteClusterNoName
+controller.cluster/test_clusterInstAdd_noFlavor.tc.test_NoFlavor
+controller.cluster/test_clusterInstAdd_noFlavor.tc.test_EmptyFlavor
+controller.cluster/test_clusterDelete_beforeClusterInst.tc.test_DeleteClusterBeforeClusterInstance
+controller.cluster/test_clusterInstAdd_flavorNotExist.tc.test_NoFlavor
+controller.cluster/test_clusterAdd_defaultFlavor.tc.test_createClusterDefaultFlavor
 clusterInstAdd_ipaccess.robot: CreateClusterInst - creating cluster inst with ipaccess=IpAccessUnknown shall set to IpAccessShared
 clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessShared
 clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessDedicated
@@ -317,28 +65,18 @@ clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a gcp clus
 clusterInstAdd_ipaccess.robot: CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessUnknown and deployment=docker
 clusterInstAdd_ipaccess.robot: CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessShared and deployment=docker
 clusterInstAdd_ipaccess.robot: CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
-test_clusterAdd_InvalidClusterName.py: def test_AddClusterUnderscore
-test_clusterAdd_InvalidClusterName.py: def test_AddClusterSpecialChars
-test_clusterAdd_InvalidClusterName.py: def test_AddClusterStartDash
-test_clusterAdd_InvalidClusterName.py:     def test_AddClusterUnderscore(self):
-test_clusterAdd_InvalidClusterName.py:     def test_AddClusterSpecialChars(self):
-test_clusterAdd_InvalidClusterName.py:     def test_AddClusterStartDash(self):
-test_clusterAdd_defaultFlavorNotExist.py: def test_CreateClusterFlavorNotFound
-test_clusterAdd_defaultFlavorNotExist.py:     def test_CreateClusterFlavorNotFound(self):
-test_clusterInstAddMultiControllers.pytest_clusterInstAdd_cloudletInfoNotFound.py: def test_CreateClusterInstCloudletNotFound
-test_clusterInstAdd_cloudletInfoNotFound.py:     def test_CreateClusterInstCloudletNotFound(self):
-test_clusterInstAdd_operatorNotMatchCloudlet.py: def test_OperatorNotMatchCloudlet
-test_clusterInstAdd_operatorNotMatchCloudlet.py:     def test_OperatorNotMatchCloudlet(self):
-test_clusterInstAdd_clusterNotFound.py: def test_CreateClusterInstNoCluster
-test_clusterInstAdd_clusterNotFound.py:     def test_CreateClusterInstNoCluster(self):
-test_clusterInstDelete_beforeAppInst.py: def test_DeleteClusterBeforeApp
-test_clusterInstDelete_beforeAppInst.py:     def test_DeleteClusterBeforeApp(self):
-test_clusterAdd_noName.py: def test_AddClusterWithNoName
-test_clusterAdd_noName.py: def test_AddClusterWithNoNameNoDefaultFlavor
-test_clusterAdd_noName.py:     def test_AddClusterWithNoName(self):
-test_clusterAdd_noName.py:     def test_AddClusterWithNoNameNoDefaultFlavor(self):
-test_clusterInstAdd_liveness1.py: def test_AddClusterInstance
-test_clusterInstAdd_liveness1.py:     def test_AddClusterInstance(self):
+controller.cluster/test_clusterAdd_InvalidClusterName.tc.test_AddClusterUnderscore
+controller.cluster/test_clusterAdd_InvalidClusterName.tc.test_AddClusterSpecialChars
+controller.cluster/test_clusterAdd_InvalidClusterName.tc.test_AddClusterStartDash
+controller.cluster/test_clusterAdd_defaultFlavorNotExist.tc.test_CreateClusterFlavorNotFound
+controller.cluster/test_clusterInstAddMultiControllers.tc.test_AddClusterInstance
+controller.cluster/test_clusterInstAdd_cloudletInfoNotFound.tc.test_CreateClusterInstCloudletNotFound
+controller.cluster/test_clusterInstAdd_operatorNotMatchCloudlet.tc.test_OperatorNotMatchCloudlet
+controller.cluster/test_clusterInstAdd_clusterNotFound.tc.test_CreateClusterInstNoCluster
+controller.cluster/test_clusterInstDelete_beforeAppInst.tc.test_DeleteClusterBeforeApp
+controller.cluster/test_clusterAdd_noName.tc.test_AddClusterWithNoName
+controller.cluster/test_clusterAdd_noName.tc.test_AddClusterWithNoNameNoDefaultFlavor
+controller.cluster/test_clusterInstAdd_liveness1.tc.test_AddClusterInstance
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - create a clusterinst with ipaccess=IpAccessDedicated and no deployment shall default to kubernetes
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall be able to create a clusterinst with ipaccess=IpAccessDedicated and deployment=kubernetes
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - create a clusterinst with ipaccess=IpAccessDedicated and deployment=helm shall default to kubernetes
@@ -351,242 +89,131 @@ clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create wit
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_masters=0 num_nodes=0
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_masters=1 num_nodes=0
 clusterInstAdd_ipaccessDedicated.robot: CreateClusterInst - shall not create with IpAccessDedicated and invalid deployment
-test_clusterInstAdd.py: def test_AddClusterInstance
-test_clusterInstAdd.py:     def test_AddClusterInstance(self):
-test_clusterInstAdd_liveness2.py: def test_AddClusterInstance
-test_clusterInstAdd_liveness2.py:     def test_AddClusterInstance(self):
-test_clusterUpdate_notSupported.py: def test_UpdateCluster
-test_clusterUpdate_notSupported.py:     def test_UpdateCluster(self):
-test_clusterAddMultiControllers.pytest_clusterInstAdd_keyExists.py: def test_CreateClusterTwice
-test_clusterInstAdd_keyExists.py:     def test_CreateClusterTwice(self):
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstFlavorOnly
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstOperatorOnly
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstCloudletNameOnly
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstClusterNameOnly
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstNoParms
-test_clusterInstAdd_missingParms.py: def test_CreateClusterInstNoDeveloper
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstFlavorOnly(self):
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstOperatorOnly(self):
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstCloudletNameOnly(self):
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstClusterNameOnly(self):
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstNoParms(self):
-test_clusterInstAdd_missingParms.py:     def test_CreateClusterInstNoDeveloper(self):
-test_clusterAdd_100.py: def test_AddMultpleClusters
-test_clusterAdd_100.py:     def test_AddMultpleClusters(self):
-test_clusterDelete_noName.py: def test_DeleteClusterNoName
-test_clusterDelete_noName.py:     def test_DeleteClusterNoName(self):
-test_clusterInstAdd_noDefaultFlavor_noFlavor.py: def test_NoFlavor
-test_clusterInstAdd_noDefaultFlavor_noFlavor.py: def test_EmptyFlavor
-test_clusterInstAdd_noDefaultFlavor_noFlavor.py:     def test_NoFlavor(self):
-test_clusterInstAdd_noDefaultFlavor_noFlavor.py:     def test_EmptyFlavor(self):
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_nodata
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_idonly
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_appnameonly
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_versiononly
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_developeronly
-test_appInstAdd_appNotFound.py: def test_CreateAppInstAppNotFound_nameVersionDeveloperonly
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_nodata(self):
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_idonly(self):
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_appnameonly(self):
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_versiononly(self):
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_developeronly(self):
-test_appInstAdd_appNotFound.py:     def test_CreateAppInstAppNotFound_nameVersionDeveloperonly(self):
-test_appAdd_qcow.py: def test_CreateAppQCOWNoImagePath
-test_appAdd_qcow.py: def test_CreateAppQCOWEmptyImagePath
-test_appAdd_qcow.py:     def test_CreateAppQCOWNoImagePath(self):
-test_appAdd_qcow.py:     def test_CreateAppQCOWEmptyImagePath(self):
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedTCP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedTCP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedTCP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedTCPUDPPorts
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedHTTP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedHTTP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedHTTP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedTCPUDPHTTPPorts
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedUDP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedUDP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppDockerIpAccessDedicatedUDP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedTCP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedTCP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedTCP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedTCPUDPPorts
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedHTTP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedHTTP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedHTTP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedTCPUDPHTTPPorts
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedUDP2Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedUDP10Ports
-test_appAdd_IpAccessDedicatedPortMulti.py: def test_CreateAppQCOWIpAccessDedicatedUDP100Ports
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedTCP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedTCP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedTCP100Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedTCPUDPPorts(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedHTTP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedHTTP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedHTTP100Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedTCPUDPHTTPPorts(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedUDP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedUDP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppDockerIpAccessDedicatedUDP100Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedTCP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedTCP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedTCP100Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedTCPUDPPorts(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP100Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedTCPUDPHTTPPorts(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedUDP2Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedUDP10Ports(self):
-test_appAdd_IpAccessDedicatedPortMulti.py:     def test_CreateAppQCOWIpAccessDedicatedUDP100Ports(self):
+controller.cluster/test_clusterInstAdd.tc.test_AddClusterInstance
+controller.cluster/test_clusterInstAdd_liveness2.tc.test_AddClusterInstance
+controller.cluster/test_clusterUpdate_notSupported.tc.test_UpdateCluster
+controller.cluster/test_clusterAddMultiControllers.tc.test_AddClusterInstance
+controller.cluster/test_clusterInstAdd_keyExists.tc.test_CreateClusterTwice
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstFlavorOnly
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstOperatorOnly
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstCloudletNameOnly
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstClusterNameOnly
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstNoParms
+controller.cluster/test_clusterInstAdd_missingParms.tc.test_CreateClusterInstNoDeveloper
+controller.cluster/test_clusterAdd_100.tc.test_AddMultpleClusters
+controller.cluster/test_clusterDelete_noName.tc.test_DeleteClusterNoName
+controller.cluster/test_clusterInstAdd_noDefaultFlavor_noFlavor.tc.test_NoFlavor
+controller.cluster/test_clusterInstAdd_noDefaultFlavor_noFlavor.tc.test_EmptyFlavor
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_nodata
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_idonly
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_appnameonly
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_versiononly
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_developeronly
+controller.app/test_appInstAdd_appNotFound.tc.test_CreateAppInstAppNotFound_nameVersionDeveloperonly
+controller.app/test_appAdd_qcow.tc.test_CreateAppQCOWNoImagePath
+controller.app/test_appAdd_qcow.tc.test_CreateAppQCOWEmptyImagePath
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCP100Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCPUDPPorts
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedHTTP100Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedTCPUDPHTTPPorts
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppDockerIpAccessDedicatedUDP100Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCP100Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCPUDPPorts
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedHTTP100Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedTCPUDPHTTPPorts
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP2Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP10Ports
+controller.app/test_appAdd_IpAccessDedicatedPortMulti.tc.test_CreateAppQCOWIpAccessDedicatedUDP100Ports
 createApp_manifest.robot: CreateApp - error shall be received with ImageTypeQCOW and no manifest md5
 createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 too short
 createApp_manifest.robot: CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 invalid
 createAppInst_developerMismatch.robot: AppInst - User shall not be able to create an AppInst with a developer mismatch with ClusterInst Developer
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedTCP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedTCP065535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedUDP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedUDP065535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedHTTP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppDockerIpAccessSharedHTTP065535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedTCP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedTCP065535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedUDP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedUDP065535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedHTTP65535
-test_appAdd_IpAccessSharedPort65535.py: def test_CreateAppQCOWIpAccessSharedHTTP065535
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedTCP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedTCP065535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedUDP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedUDP065535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedHTTP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppDockerIpAccessSharedHTTP065535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedTCP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedTCP065535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedUDP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedUDP065535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedHTTP65535(self):
-test_appAdd_IpAccessSharedPort65535.py:     def test_CreateAppQCOWIpAccessSharedHTTP065535(self):
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedTCP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedTCP065535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedUDP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedUDP065535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedHTTP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppDockerIpAccessSharedHTTP065535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedTCP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedTCP065535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedUDP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedUDP065535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedHTTP65535
+controller.app/test_appAdd_IpAccessSharedPort65535.tc.test_CreateAppQCOWIpAccessSharedHTTP065535
 createApp_deployementDocker.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker and access_ports=http
 createApp_deployementDocker.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker and access_ports=tcp,udp,http
 createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an AppInst without a ClusterInst
 createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an AppInst with a ClusterInst that doesnt exist
 createAppInst_noClusterInst.robot: AppInst - User shall not be able to create an app instance without cluster developer and no matching cluster instance
-test_appAdd_defaultFlavorNotFound.py: def test_CreateAppDefaultFlavorNotFound_Docker
-test_appAdd_defaultFlavorNotFound.py: def test_CreateAppDefaultFlavorNotFound_QCOW
-test_appAdd_defaultFlavorNotFound.py:     def test_CreateAppDefaultFlavorNotFound_Docker(self):
-test_appAdd_defaultFlavorNotFound.py:     def test_CreateAppDefaultFlavorNotFound_QCOW(self):
-test_appDelete_appInstExists.py: def test_DeleteApp_appInstance_exists
-test_appDelete_appInstExists.py:     def test_DeleteApp_appInstance_exists(self):
+controller.app/test_appAdd_defaultFlavorNotFound.tc.test_CreateAppDefaultFlavorNotFound_Docker
+controller.app/test_appAdd_defaultFlavorNotFound.tc.test_CreateAppDefaultFlavorNotFound_QCOW
+controller.app/test_appDelete_appInstExists.tc.test_DeleteApp_appInstance_exists
 createAppInst_2autocluster.robot: AppInst - Shall be able to create to AppInsts with autocluster on the same app with different developer
-test_appAdd_invalidImageType.py: def test_CreateInvalidImageType
-test_appAdd_invalidImageType.py:     def test_CreateInvalidImageType(self):
-test_appAdd_noIpAccess.py: def test_CreateAppDockerNoAccessLayer
-test_appAdd_noIpAccess.py: def test_CreateAppQCOWNoAccessLayer
-test_appAdd_noIpAccess.py:     def test_CreateAppDockerNoAccessLayer(self):
-test_appAdd_noIpAccess.py:     def test_CreateAppQCOWNoAccessLayer(self):
-test_appAdd_appNameEmpty.py: def test_CreateAppNameEmpty
-test_appAdd_appNameEmpty.py: def test_CreateAppNameMissing
-test_appAdd_appNameEmpty.py:     def test_CreateAppNameEmpty(self):
-test_appAdd_appNameEmpty.py:     def test_CreateAppNameMissing(self):
-test_appAdd_developerNotFound.py: def test_CreateAppDeveloperNotFound_Docker
-test_appAdd_developerNotFound.py: def test_CreateAppDeveloperNotFound_QCOW
-test_appAdd_developerNotFound.py:     def test_CreateAppDeveloperNotFound_Docker(self):
-test_appAdd_developerNotFound.py:     def test_CreateAppDeveloperNotFound_QCOW(self):
-test_appAdd_portOutOfRange.py: def test_CreateAppPortRangeDedicated_1
-test_appAdd_portOutOfRange.py: def test_CreateAppPortRangeDedicated_2
-test_appAdd_portOutOfRange.py: def test_CreateAppPortRangeDedicated_3
-test_appAdd_portOutOfRange.py: def test_CreateAppPortRangeDedicated_4
-test_appAdd_portOutOfRange.py:  def test_CreateAppPortRangeDedicatedShared_1
-test_appAdd_portOutOfRange.py:  def test_CreateAppPortRangeDedicateShared_2
-test_appAdd_portOutOfRange.py:  def test_CreateAppPortRangeDedicatedShared_3
-test_appAdd_portOutOfRange.py:  def test_CreateAppPortRangeDedicatedShared_4
-test_appAdd_portOutOfRange.py:     def test_CreateAppPortRangeDedicated_1(self):
-test_appAdd_portOutOfRange.py:     def test_CreateAppPortRangeDedicated_2(self):
-test_appAdd_portOutOfRange.py:     def test_CreateAppPortRangeDedicated_3(self):
-test_appAdd_portOutOfRange.py:     def test_CreateAppPortRangeDedicated_4(self):
-test_appAdd_portOutOfRange.py: #    def test_CreateAppPortRangeDedicatedShared_1(self):
-test_appAdd_portOutOfRange.py: #    def test_CreateAppPortRangeDedicateShared_2(self):
-test_appAdd_portOutOfRange.py: #    def test_CreateAppPortRangeDedicatedShared_3(self):
-test_appAdd_portOutOfRange.py: #    def test_CreateAppPortRangeDedicatedShared_4(self):
+controller.app/test_appAdd_invalidImageType.tc.test_CreateInvalidImageType
+controller.app/test_appAdd_noIpAccess.tc.test_CreateAppDockerNoAccessLayer
+controller.app/test_appAdd_noIpAccess.tc.test_CreateAppQCOWNoAccessLayer
+controller.app/test_appAdd_appNameEmpty.tc.test_CreateAppNameEmpty
+controller.app/test_appAdd_appNameEmpty.tc.test_CreateAppNameMissing
+controller.app/test_appAdd_developerNotFound.tc.test_CreateAppDeveloperNotFound_Docker
+controller.app/test_appAdd_developerNotFound.tc.test_CreateAppDeveloperNotFound_QCOW
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_1
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_2
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_3
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicated_4
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_1
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicateShared_2
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_3
+controller.app/test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_4
 updateApp_fqdn.robot: CreateAppInst - autocluster shall be created when app instance is created without clustername
 updateApp_fqdn.robot: AppInst - User shall be able to update the app accessports afer appInst delete
-test_appAdd_100.py: def test_CreateApp100
-test_appAdd_100.py:     def test_CreateApp100(self):
-test_appAdd_invalidIpAccess.py: def test_CreateInvalidIpaccess
-test_appAdd_invalidIpAccess.py:     def test_CreateInvalidIpaccess(self):
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedTCP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedTCP01
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedHTTP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedHTTP01
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedUDP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppDockerIpAccessDedicatedUDP01
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedTCP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedTCP01
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedUDP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedUDP01
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedHTTP1
-test_appAdd_IpAccessDedicatedPort1.py: def test_CreateAppQCOWIpAccessDedicatedHTTP01
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedTCP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedTCP01(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedHTTP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedHTTP01(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedUDP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppDockerIpAccessDedicatedUDP01(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedTCP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedTCP01(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedUDP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedUDP01(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP1(self):
-test_appAdd_IpAccessDedicatedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP01(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPPorts
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPHTTPPorts
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPPorts
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports
-test_appAdd_IpAccessDedicatedOrSharedMulti.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPPorts(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPHTTPPorts(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPPorts(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports(self):
-test_appAdd_IpAccessDedicatedOrSharedMulti.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts(self):
-test_appAdd_keyExists.py: def test_CreateAppDockerKeyExists
-test_appAdd_keyExists.py: def test_CreateAppDockerKeyExists_2
-test_appAdd_keyExists.py:     def test_CreateAppDockerKeyExists(self):
-test_appAdd_keyExists.py:     def test_CreateAppDockerKeyExists_2(self):
+controller.app/test_appAdd_100.tc.test_CreateApp100
+controller.app/test_appAdd_invalidIpAccess.tc.test_CreateInvalidIpaccess
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedTCP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedTCP01
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedHTTP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedHTTP01
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedUDP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppDockerIpAccessDedicatedUDP01
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedTCP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedTCP01
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedUDP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedUDP01
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedHTTP1
+controller.app/test_appAdd_IpAccessDedicatedPort1.tc.test_CreateAppQCOWIpAccessDedicatedHTTP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPPorts
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPHTTPPorts
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPPorts
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports
+controller.app/test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts
+controller.app/test_appAdd_keyExists.tc.test_CreateAppDockerKeyExists
+controller.app/test_appAdd_keyExists.tc.test_CreateAppDockerKeyExists_2
 createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add 1 TCP port with same public port
 createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add 10 TCP port with same public port
 createAppInst_publicPort_tcp.robot: AppInst - user shall be able to add TCP and UDP ports with the same port numbers
@@ -603,84 +230,45 @@ createAppInst_publicPort_tcp.robot: AppInst - user shall be to add multiple TCP 
 createAppInst_publicPort_tcp.robot: AppInst - user shall not be able to allocate public port tcp:22
 createAppInst_publicPort_tcp.robot: AppInst - user shall be able to allocate public port tcp:18889
 createAppInst_publicPort_tcp.robot: AppInst - user shall be able to allocate public port tcp:18888
-test_appAdd_emptyCluster.py: def test_CreateAppNoCluster
-test_appAdd_emptyCluster.py: def test_CreateAppEmptyCluster
-test_appAdd_emptyCluster.py:     def test_CreateAppNoCluster(self):
-test_appAdd_emptyCluster.py:     def test_CreateAppEmptyCluster(self):
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedTCP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedTCP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedUDP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedUDP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedHTTP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppDockerIpAccessSharedHTTP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedTCP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedTCP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedUDP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedUDP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedHTTP1
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedHTTP01
-test_appAdd_IpAccessSharedPort1.py: def test_CreateAppQCOWIpAccessSharedHTTPUppercase
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedTCP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedTCP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedUDP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedUDP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedHTTP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppDockerIpAccessSharedHTTP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedTCP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedTCP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedUDP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedUDP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedHTTP1(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedHTTP01(self):
-test_appAdd_IpAccessSharedPort1.py:     def test_CreateAppQCOWIpAccessSharedHTTPUppercase(self):
-test_appAdd_flavorNotFound.py: def test_CreateAppImageTypeOnlyImageTypeUnknown
-test_appAdd_flavorNotFound.py:     def test_CreateAppImageTypeOnlyImageTypeUnknown(self):
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_1
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_2
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_3
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_4
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_5
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_6
-test_appAdd_invalidPortFormat.py: def test_CreateAppInvalidFormatIpAccessDedicated_7
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatlIpAccessShared_1
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessShared_2
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormaIpAccessShared_3
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessShared_4
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessShared_5
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessShared_6
-test_appAdd_invalidPortFormat.py:  def test_CreateAppInvalidFormatIpAccessShared_7
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_1(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_2(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_3(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_4(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_5(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_6(self):
-test_appAdd_invalidPortFormat.py:     def test_CreateAppInvalidFormatIpAccessDedicated_7(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatlIpAccessShared_1(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessShared_2(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormaIpAccessShared_3(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessShared_4(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessShared_5(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessShared_6(self):
-test_appAdd_invalidPortFormat.py: #    def test_CreateAppInvalidFormatIpAccessShared_7(self):
-test_appAdd_config_invalid.py: def test_CreateAppDockerConfig_inlineInvalid
-test_appAdd_config_invalid.py: def test_CreateAppDockerConfig_httpInvalid
-test_appAdd_config_invalid.py:     def test_CreateAppDockerConfig_inlineInvalid(self):
-test_appAdd_config_invalid.py:     def test_CreateAppDockerConfig_httpInvalid(self):
+controller.app/test_appAdd_emptyCluster.tc.test_CreateAppNoCluster
+controller.app/test_appAdd_emptyCluster.tc.test_CreateAppEmptyCluster
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedTCP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedTCP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedUDP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedUDP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedHTTP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppDockerIpAccessSharedHTTP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedTCP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedTCP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedUDP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedUDP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTP1
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTP01
+controller.app/test_appAdd_IpAccessSharedPort1.tc.test_CreateAppQCOWIpAccessSharedHTTPUppercase
+controller.app/test_appAdd_flavorNotFound.tc.test_CreateAppImageTypeOnlyImageTypeUnknown
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_1
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_2
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_3
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_4
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_5
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_6
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicated_7
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatlIpAccessShared_1
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_2
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormaIpAccessShared_3
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_4
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_5
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_6
+controller.app/test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_7
+controller.app/test_appAdd_config_invalid.tc.test_CreateAppDockerConfig_inlineInvalid
+controller.app/test_appAdd_config_invalid.tc.test_CreateAppDockerConfig_httpInvalid
 createAppInst_fqdnprefix.robot: AppInst - user shall be able to add 1 TCP port with same public port
 createAppInst_fqdnprefix.robot: AppInst - user shall be able to add 10 TCP port with same public port
 createAppInst_fqdnprefix.robot: AppInst - user shall be able to add TCP and UDP ports with the same port numbers
@@ -697,77 +285,45 @@ createAppInst_fqdnprefix.robot: AppInst - user shall be to add multiple TCP publ
 createAppInst_fqdnprefix.robot: AppInst - user shall not be able to allocate public port tcp:22
 createAppInst_fqdnprefix.robot: AppInst - user shall be able to allocate public port tcp:18889
 createAppInst_fqdnprefix.robot: AppInst - user shall be able to allocate public port tcp:18888
-test_appAdd_imageTypeOnly.py: def test_CreateAppImageTypeOnlyImageTypeUnknown
-test_appAdd_imageTypeOnly.py: def test_CreateAppImageTypeOnlyImageTypeDocker
-test_appAdd_imageTypeOnly.py: def test_CreateAppImageTypeOnlyImageTypeQCOW
-test_appAdd_imageTypeOnly.py: def test_CreateAppImageTypeOnlyImageTypeWrong
-test_appAdd_imageTypeOnly.py:     def test_CreateAppImageTypeOnlyImageTypeUnknown(self):
-test_appAdd_imageTypeOnly.py:     def test_CreateAppImageTypeOnlyImageTypeDocker(self):
-test_appAdd_imageTypeOnly.py:     def test_CreateAppImageTypeOnlyImageTypeQCOW(self):
-test_appAdd_imageTypeOnly.py:     def test_CreateAppImageTypeOnlyImageTypeWrong(self):
+controller.app/test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeUnknown
+controller.app/test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeDocker
+controller.app/test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeQCOW
+controller.app/test_appAdd_imageTypeOnly.tc.test_CreateAppImageTypeOnlyImageTypeWrong
 createAppInst.robot: AppInst - autocluster shall be created when app instance is created with clustername='autocluster'
 createAppInst.robot: AppInst - autocluster shall be created when app instance is created with clustername='autocluster' and no developer
 createAppInst.robot: AppInst - appinst shall be created when app instance is created without cluster developer
 createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicated
 createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessShared
 createAppInst.robot: AppInst - appinst shall be created when app instance is created with auto-cluster and autoclusteripaccess=IpAccessDedicatedOrShared
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP65535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP065535
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP65535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort65535.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP065535(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedTCP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedUDP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01
-test_appAdd_IpAccessDedicatedOrSharedPort1.py: def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedUDP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppDockerIpAccessDedicatedOrSharedHTTP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedTCP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedUDP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01(self):
-test_appAdd_IpAccessDedicatedOrSharedPort1.py:     def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase(self):
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP65535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP065535
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01
+controller.app/test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase
 updateApp_manifest.robot: UpdateApp - user shall be able to update the manifest
-test_appAdd_appNameInvalid.py: def test_CreateNameAtSymbol
-test_appAdd_appNameInvalid.py: def test_CreateNameStartUnderscore
-test_appAdd_appNameInvalid.py: def test_CreateNameParenthesis
-test_appAdd_appNameInvalid.py:     def test_CreateNameAtSymbol(self):
-test_appAdd_appNameInvalid.py:     def test_CreateNameStartUnderscore(self):
-test_appAdd_appNameInvalid.py:     def test_CreateNameParenthesis(self):
+controller.app/test_appAdd_appNameInvalid.tc.test_CreateNameAtSymbol
+controller.app/test_appAdd_appNameInvalid.tc.test_CreateNameStartUnderscore
+controller.app/test_appAdd_appNameInvalid.tc.test_CreateNameParenthesis
 createAppInst_publicPort_http.robot: AppInst - user shall be able to add 1 HTTP port
 createAppInst_publicPort_http.robot: AppInst - user shall be able to add 10 HTTP ports
 createAppInst_publicPort_http.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall be able to allocate the same HTTP port
@@ -783,46 +339,26 @@ createAppInst_publicPort_http.robot: AppInst - user shall be to add multiple HTT
 createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:22
 createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:18889
 createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:18888
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_nodata
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_idonly
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_appnameonly
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_versiononly
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_developeronly
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_nameVesrsionDeveloperonly
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_cloudletNotFound
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_noCloudlet
-test_appInstAdd_cloudletNotFound.py: def test_CreateAppInstCloudletNotFound_cloudletNameOnly
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_nodata(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_idonly(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_appnameonly(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_versiononly(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_developeronly(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_nameVesrsionDeveloperonly(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_cloudletNotFound(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_noCloudlet(self):
-test_appInstAdd_cloudletNotFound.py:     def test_CreateAppInstCloudletNotFound_cloudletNameOnly(self):
-test_appShow_queryParms.py: def test_QueryAppName
-test_appShow_queryParms.py: def test_QueryDeveloperName
-test_appShow_queryParms.py: def test_QueryAppNameVersion
-test_appShow_queryParms.py:     def test_QueryAppName(self):
-test_appShow_queryParms.py:     def test_QueryDeveloperName(self):
-test_appShow_queryParms.py:     def test_QueryAppNameVersion(self):
-test_appAdd_clusterNotFound.py: def test_CreateAppClusterNotFound_docker
-test_appAdd_clusterNotFound.py: def test_CreateAppClusterNotFound_qcow
-test_appAdd_clusterNotFound.py:     def test_CreateAppClusterNotFound_docker(self):
-test_appAdd_clusterNotFound.py:     def test_CreateAppClusterNotFound_qcow(self):
-test_appAdd_imagePath.py: def test_CreateAppDockerImagePath
-test_appAdd_imagePath.py: def test_CreateAppQCOWImagePath
-test_appAdd_imagePath.py:     def test_CreateAppDockerImagePath(self):
-test_appAdd_imagePath.py:     def test_CreateAppQCOWImagePath(self):
-test_appAdd_config.py: def test_CreateAppDockerConfig_inline
-test_appAdd_config.py: def test_CreateAppQCOWConfig
-test_appAdd_config.py: def test_CreateAppDockerConfig_http
-test_appAdd_config.py: def test_CreateAppQCOWConfig_http
-test_appAdd_config.py:     def test_CreateAppDockerConfig_inline(self):
-test_appAdd_config.py:     def test_CreateAppQCOWConfig(self):
-test_appAdd_config.py:     def test_CreateAppDockerConfig_http(self):
-test_appAdd_config.py:     def test_CreateAppQCOWConfig_http(self):
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_nodata
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_idonly
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_appnameonly
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_versiononly
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_developeronly
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_nameVesrsionDeveloperonly
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_cloudletNotFound
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_noCloudlet
+controller.app/test_appInstAdd_cloudletNotFound.tc.test_CreateAppInstCloudletNotFound_cloudletNameOnly
+controller.app/test_appShow_queryParms.tc.test_QueryAppName
+controller.app/test_appShow_queryParms.tc.test_QueryDeveloperName
+controller.app/test_appShow_queryParms.tc.test_QueryAppNameVersion
+controller.app/test_appAdd_clusterNotFound.tc.test_CreateAppClusterNotFound_docker
+controller.app/test_appAdd_clusterNotFound.tc.test_CreateAppClusterNotFound_qcow
+controller.app/test_appAdd_imagePath.tc.test_CreateAppDockerImagePath
+controller.app/test_appAdd_imagePath.tc.test_CreateAppQCOWImagePath
+controller.app/test_appAdd_config.tc.test_CreateAppDockerConfig_inline
+controller.app/test_appAdd_config.tc.test_CreateAppQCOWConfig
+controller.app/test_appAdd_config.tc.test_CreateAppDockerConfig_http
+controller.app/test_appAdd_config.tc.test_CreateAppQCOWConfig_http
 createAppInst_publicPort_udp.robot: AppInst - user shall be able to add 1 UDP port with same public port
 createAppInst_publicPort_udp.robot: AppInst - user shall be able to add 10 UDP port with same public port
 createAppInst_publicPort_udp.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall not be able to allocate the same public UDP port
@@ -838,68 +374,37 @@ createAppInst_publicPort_udp.robot: AppInst - user shall be to add multiple UDP 
 createAppInst_publicPort_udp.robot: AppInst - user shall not be able to allocate public port udp:22
 createAppInst_publicPort_udp.robot: AppInst - user shall be able to allocate public port udp:18889
 createAppInst_publicPort_udp.robot: AppInst - user shall be able to allocate public port udp:18888
-test_appAdd_dockerCompliant.py: def test_CreateNameSpace
-test_appAdd_dockerCompliant.py: def test_CreateAndSymbol
-test_appAdd_dockerCompliant.py: def test_CreateComma
-test_appAdd_dockerCompliant.py: def test_CreateBang
-test_appAdd_dockerCompliant.py:     def test_CreateNameSpace(self):
-test_appAdd_dockerCompliant.py:     def test_CreateAndSymbol(self):
-test_appAdd_dockerCompliant.py:     def test_CreateComma(self):
-test_appAdd_dockerCompliant.py:     def test_CreateBang(self):
-test_appDelete_keyNotFound.py: def test_DeleteAppUnknown_noKey
-test_appDelete_keyNotFound.py: def test_DeleteAppUnknown_appNameOnly
-test_appDelete_keyNotFound.py: def test_DeleteAppUnknown_wrongVersion
-test_appDelete_keyNotFound.py: def test_DeleteAppUnknown_wrongDeveloperName
-test_appDelete_keyNotFound.py:     def test_DeleteAppUnknown_noKey(self):
-test_appDelete_keyNotFound.py:     def test_DeleteAppUnknown_appNameOnly(self):
-test_appDelete_keyNotFound.py:     def test_DeleteAppUnknown_wrongVersion(self):
-test_appDelete_keyNotFound.py:     def test_DeleteAppUnknown_wrongDeveloperName(self):
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedTCP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedTCP065535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedHTTP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedHTTP065535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedUDP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppDockerIpAccessDedicatedUDP065535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedTCP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedTCP065535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedHTTP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedHTTP065535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedUDP65535
-test_appAdd_IpAccessDedicated65535.py: def test_CreateAppQCOWIpAccessDedicatedUDP065535
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedTCP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedTCP065535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedHTTP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedHTTP065535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedUDP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppDockerIpAccessDedicatedUDP065535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedTCP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedTCP065535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedHTTP065535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedUDP65535(self):
-test_appAdd_IpAccessDedicated65535.py:     def test_CreateAppQCOWIpAccessDedicatedUDP065535(self):
-test_appAdd_portInvalidDigits.py:  def test_CreateAppPortInvalidUnknown
-test_appAdd_portInvalidDigits.py: def test_CreateAppPortInvalidDedicated
-test_appAdd_portInvalidDigits.py:  def test_CreateAppPortInvalidDedicatedShared
-test_appAdd_portInvalidDigits.py:  def test_CreateAppPortInvalidShared
-test_appAdd_portInvalidDigits.py: #    def test_CreateAppPortInvalidUnknown(self):
-test_appAdd_portInvalidDigits.py:     def test_CreateAppPortInvalidDedicated(self):
-test_appAdd_portInvalidDigits.py: #    def test_CreateAppPortInvalidDedicatedShared(self):
-test_appAdd_portInvalidDigits.py: #    def test_CreateAppPortInvalidShared(self):
-test_appAdd_unsupportedPortProtocol.py: def test_CreateAppUnsupportedDedicated
-test_appAdd_unsupportedPortProtocol.py:  def test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared
-test_appAdd_unsupportedPortProtocol.py:  def test_CreateAppUnsupportedProtocolIpAccessShared
-test_appAdd_unsupportedPortProtocol.py:     def test_CreateAppUnsupportedDedicated(self):
-test_appAdd_unsupportedPortProtocol.py: #    def test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared(self):
-test_appAdd_unsupportedPortProtocol.py: #    def test_CreateAppUnsupportedProtocolIpAccessShared(self):
-test_appAdd_defaultFlavorEmpty.py: def test_CreateAppDefaultFlavorEmpty_Docker
-test_appAdd_defaultFlavorEmpty.py: def test_CreateAppDefaultFlavorEmpty_QCOW
-test_appAdd_defaultFlavorEmpty.py: def test_CreateAppDefaultFlavorNotExist_Docker
-test_appAdd_defaultFlavorEmpty.py: def test_CreateAppDefaultFlavorNotExist_QCOW
-test_appAdd_defaultFlavorEmpty.py:     def test_CreateAppDefaultFlavorEmpty_Docker(self):
-test_appAdd_defaultFlavorEmpty.py:     def test_CreateAppDefaultFlavorEmpty_QCOW(self):
-test_appAdd_defaultFlavorEmpty.py:     def test_CreateAppDefaultFlavorNotExist_Docker(self):
-test_appAdd_defaultFlavorEmpty.py:     def test_CreateAppDefaultFlavorNotExist_QCOW(self):
+controller.app/test_appAdd_dockerCompliant.tc.test_CreateNameSpace
+controller.app/test_appAdd_dockerCompliant.tc.test_CreateAndSymbol
+controller.app/test_appAdd_dockerCompliant.tc.test_CreateComma
+controller.app/test_appAdd_dockerCompliant.tc.test_CreateBang
+controller.app/test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_noKey
+controller.app/test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_appNameOnly
+controller.app/test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_wrongVersion
+controller.app/test_appDelete_keyNotFound.tc.test_DeleteAppUnknown_wrongDeveloperName
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedTCP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedTCP065535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedHTTP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedHTTP065535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedUDP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppDockerIpAccessDedicatedUDP065535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedTCP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedTCP065535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedHTTP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedHTTP065535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedUDP65535
+controller.app/test_appAdd_IpAccessDedicated65535.tc.test_CreateAppQCOWIpAccessDedicatedUDP065535
+controller.app/test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidUnknown
+controller.app/test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidDedicated
+controller.app/test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidDedicatedShared
+controller.app/test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidShared
+controller.app/test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedDedicated
+controller.app/test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared
+controller.app/test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedProtocolIpAccessShared
+controller.app/test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorEmpty_Docker
+controller.app/test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorEmpty_QCOW
+controller.app/test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorNotExist_Docker
+controller.app/test_appAdd_defaultFlavorEmpty.tc.test_CreateAppDefaultFlavorNotExist_QCOW
 createApp_imagepath.robot: CreateApp - error shall be received with image_type=ImageTypeDocker deployment=kubernetes image_path=mypath
 createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path of bad domain
 createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and access denied to registry
@@ -915,143 +420,96 @@ createApp_imagepath.robot: CreateApp - error shall be received wih image_type=Im
 createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
 createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid tag
 createApp_imagepath.robot: CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path tag doesnt exist
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedTCP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedTCP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedTCP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedTCPUDPPorts
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedHTTP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedHTTP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedHTTP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedTCPUDPHTTPPorts
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedUDP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedUDP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppDockerIpAccessSharedUDP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedTCP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedTCP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedTCP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedTCPUDPPorts
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedUDP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedUDP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedUDP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedHTTP2Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedHTTP10Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedHTTP100Ports
-test_appAdd_IpAccessSharedMulti.py: def test_CreateAppQCOWIpAccessSharedTCPUDPHTTPPorts
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedTCP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedTCP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedTCP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedTCPUDPPorts(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedHTTP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedHTTP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedHTTP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedTCPUDPHTTPPorts(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedUDP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedUDP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppDockerIpAccessSharedUDP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedTCP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedTCP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedTCP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedTCPUDPPorts(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedUDP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedUDP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedUDP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedHTTP2Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedHTTP10Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedHTTP100Ports(self):
-test_appAdd_IpAccessSharedMulti.py:     def test_CreateAppQCOWIpAccessSharedTCPUDPHTTPPorts(self):
-test_appAdd_noParms.py: def test_CreateAppNoParms
-test_appAdd_noParms.py:     def test_CreateAppNoParms(self):
-test_appAdd_noPorts.py: def test_CreateAppNoPortsDedicated
-test_appAdd_noPorts.py:  def test_CreateAppNoPortsIpAccessDedicatedorShared
-test_appAdd_noPorts.py:  def test_CreateAppNoPortsIpAccessShared
-test_appAdd_noPorts.py:     def test_CreateAppNoPortsDedicated(self):
-test_appAdd_noPorts.py: #    def test_CreateAppNoPortsIpAccessDedicatedorShared(self):
-test_appAdd_noPorts.py: #    def test_CreateAppNoPortsIpAccessShared(self):
-test_appAdd_developerEmpty.py: def test_CreateAppDeveloperEmpty_Docker
-test_appAdd_developerEmpty.py: def test_CreateAppDeveloperEmpty_QCOW
-test_appAdd_developerEmpty.py: def test_CreateAppDeveloperNotExist_Docker
-test_appAdd_developerEmpty.py: def test_CreateAppDeveloperNotExist_QCOW
-test_appAdd_developerEmpty.py:     def test_CreateAppDeveloperEmpty_Docker(self):
-test_appAdd_developerEmpty.py:     def test_CreateAppDeveloperEmpty_QCOW(self):
-test_appAdd_developerEmpty.py:     def test_CreateAppDeveloperNotExist_Docker(self):
-test_appAdd_developerEmpty.py:     def test_CreateAppDeveloperNotExist_QCOW(self):
-test_appAdd_docker.py: def test_CreateAppDockerNoImagePath
-test_appAdd_docker.py: def test_CreateAppDockerEmptyImagePath
-test_appAdd_docker.py:     def test_CreateAppDockerNoImagePath(self):
-test_appAdd_docker.py:     def test_CreateAppDockerEmptyImagePath(self):
-test_operatorAdd_invalidName.pytest_operatorAdd_100.pytest_operatorAdd.pytest_operatorAdd_noName.pytest_operatorDelete_beforeCloudlet.pytest_operatorAdd_nameDeveloper.pytest_operatorAdd_multiControllers.pytest_operatorUpdate.pytest_operatorDelete.pytest_operatorAdd_sameName.pytest_operatorShow_single.pytest_operatorUpdate_unknown.pytest_operatorDelete_unknown.py
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCPUDPPorts
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedHTTP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedTCPUDPHTTPPorts
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppDockerIpAccessSharedUDP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCPUDPPorts
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedUDP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP2Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP10Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedHTTP100Ports
+controller.app/test_appAdd_IpAccessSharedMulti.tc.test_CreateAppQCOWIpAccessSharedTCPUDPHTTPPorts
+controller.app/test_appAdd_noParms.tc.test_CreateAppNoParms
+controller.app/test_appAdd_noPorts.tc.test_CreateAppNoPortsDedicated
+controller.app/test_appAdd_noPorts.tc.test_CreateAppNoPortsIpAccessDedicatedorShared
+controller.app/test_appAdd_noPorts.tc.test_CreateAppNoPortsIpAccessShared
+controller.app/test_appAdd_developerEmpty.tc.test_CreateAppDeveloperEmpty_Docker
+controller.app/test_appAdd_developerEmpty.tc.test_CreateAppDeveloperEmpty_QCOW
+controller.app/test_appAdd_developerEmpty.tc.test_CreateAppDeveloperNotExist_Docker
+controller.app/test_appAdd_developerEmpty.tc.test_CreateAppDeveloperNotExist_QCOW
+controller.app/test_appAdd_docker.tc.test_CreateAppDockerNoImagePath
+controller.app/test_appAdd_docker.tc.test_CreateAppDockerEmptyImagePath
+controller.operators/test_operatorAdd_invalidName.tc.test_createOperatorStartUnderscore
+controller.operators/test_operatorAdd_invalidName.tc.test_createOperatorParenthesis
+controller.operators/test_operatorAdd_invalidName.tc.test_createOperatorDollarsign
+controller.operators/test_operatorAdd_invalidName.tc.test_createOperatorOtherInvalidChars
+controller.operators/test_operatorAdd_100.tc.test_createOperator
+controller.operators/test_operatorAdd.tc.test_createOperator
+controller.operators/test_operatorAdd.tc.test_createOperatorSpace
+controller.operators/test_operatorAdd.tc.test_createOperatorUnderscore
+controller.operators/test_operatorAdd_noName.tc.test_createOperatorEmptyName
+controller.operators/test_operatorAdd_noName.tc.test_createOperatorNoName
+controller.operators/test_operatorDelete_beforeCloudlet.tc.test_DeleteOperatorBeforeCloudlet
+controller.operators/test_operatorAdd_nameDeveloper.tc.test_createOperator
+controller.operators/test_operatorAdd_multiControllers.tc.test_createOperator
+controller.operators/test_operatorUpdate.tc.test_updateOperator
+controller.operators/test_operatorUpdate.tc.test_updateOperatorSpace
+controller.operators/test_operatorDelete.tc.test_deleteOperator
+controller.operators/test_operatorAdd_sameName.tc.test_createOperator
+controller.operators/test_operatorShow_single.tc.test_ShowOperatorSingle
+controller.operators/test_operatorUpdate_unknown.tc.test_updateOperatorUnknown
+controller.operators/test_operatorDelete_unknown.tc.test_DeleteOperatorUnknown
 clusterFlavor.robot~: CreateClusterFlavor without a key name
 clusterFlavor.robot: CreateClusterFlavor without a key name
-test_showController_all.py: def test_showControllersAll
-test_showController_all.py:     def test_showControllersAll(self):
-test_showController_addr.py: def test_showControllersAddr
-test_showController_addr.py:     def test_showControllersAddr(self):
-test_showController_wrongAddr.py: def test_showControllersWrongAddr
-test_showController_wrongAddr.py:     def test_showControllersWrongAddr(self):
-test_flavorAdd_ram0.py: def test_createFlavorRamOnly
-test_flavorAdd_ram0.py: def test_createFlavorRam0OtherParms
-test_flavorAdd_ram0.py:     def test_createFlavorRamOnly(self):
-test_flavorAdd_ram0.py:     def test_createFlavorRam0OtherParms(self):
-test_flavorAdd_vcpus0.py: def test_createFlavorVcpusOnly
-test_flavorAdd_vcpus0.py: def test_createFlavorVcpus0OtherParms
-test_flavorAdd_vcpus0.py:     def test_createFlavorVcpusOnly(self):
-test_flavorAdd_vcpus0.py:     def test_createFlavorVcpus0OtherParms(self):
-test_flavorAdd_nameOnly.py: def test_createFlavorNameOnly
-test_flavorAdd_nameOnly.py:     def test_createFlavorNameOnly(self):
-test_flavorShow_single.py: def test_showFlavor_nameOnly
-test_flavorShow_single.py:     def test_showFlavor_nameOnly(self):
-test_flavorAdd_invalidName.py: def test_createFlavorStartUnderscore
-test_flavorAdd_invalidName.py: def test_createFlavorParenthesis
-test_flavorAdd_invalidName.py: def test_createFlavorDollarsign
-test_flavorAdd_invalidName.py: def test_createFlavorOtherInvalidChars
-test_flavorAdd_invalidName.py:     def test_createFlavorStartUnderscore(self):
-test_flavorAdd_invalidName.py:     def test_createFlavorParenthesis(self):
-test_flavorAdd_invalidName.py:     def test_createFlavorDollarsign(self):
-test_flavorAdd_invalidName.py:     def test_createFlavorOtherInvalidChars(self):
-test_flavorAdd_largerThanMaxValues.py: def test_createFlavorRamTooLarge
-test_flavorAdd_largerThanMaxValues.py: def test_createFlavorVcpusTooLarge
-test_flavorAdd_largerThanMaxValues.py: def test_createFlavorDiskTooLarge
-test_flavorAdd_largerThanMaxValues.py:     def test_createFlavorRamTooLarge(self):
-test_flavorAdd_largerThanMaxValues.py:     def test_createFlavorVcpusTooLarge(self):
-test_flavorAdd_largerThanMaxValues.py:     def test_createFlavorDiskTooLarge(self):
-test_flavorAdd_sameName.py: def test_createFlavorSameName
-test_flavorAdd_sameName.py:     def test_createFlavorSameName(self):
-test_flavorDelete_unknown.py: def test_DeleteDeveloperUnknown
-test_flavorDelete_unknown.py:     def test_DeleteDeveloperUnknown(self):
-test_flavorDelete_beforeClusterFlavor.py: def test_DeleteFlavorBeforeClusterFlavor
-test_flavorDelete_beforeClusterFlavor.py:     def test_DeleteFlavorBeforeClusterFlavor(self):
-test_flavorShow_ramVcupsDisk.py: def test_showFlavor_ram
-test_flavorShow_ramVcupsDisk.py: def test_showFlavor_disk
-test_flavorShow_ramVcupsDisk.py: def test_showFlavor_vcpus
-test_flavorShow_ramVcupsDisk.py:     def test_showFlavor_ram(self):
-test_flavorShow_ramVcupsDisk.py:     def test_showFlavor_disk(self):
-test_flavorShow_ramVcupsDisk.py:     def test_showFlavor_vcpus(self):
-test_flavorUpdate_notSupported.py: def test_updateFlavor
-test_flavorUpdate_notSupported.py:     def test_updateFlavor(self):
-test_flavorAdd_disk0.py: def test_createFlavorDisk0OtherParms
-test_flavorAdd_disk0.py:     def test_createFlavorDisk0OtherParms(self):
-test_flavorAdd_noName.py: def test_createFlavorEmptyName
-test_flavorAdd_noName.py: def test_createFlavorNoName
-test_flavorAdd_noName.py: def test_createFlavorNoNameOtherParms
-test_flavorAdd_noName.py:     def test_createFlavorEmptyName(self):
-test_flavorAdd_noName.py:     def test_createFlavorNoName(self):
-test_flavorAdd_noName.py:     def test_createFlavorNoNameOtherParms(self):
-test_flavorAdd_minValues.py: def test_createFlavorMinValue
-test_flavorAdd_minValues.py:     def test_createFlavorMinValue(self):
-test_flavorDelete_wrongParms.py: def test_createFlavorMinValue
-test_flavorDelete_wrongParms.py:     def test_createFlavorMinValue(self):
-test_flavorDelete_nameOnly.py: def test_deleteFlavorNameOnly
-test_flavorDelete_nameOnly.py:     def test_deleteFlavorNameOnly(self):
-test_flavorAdd_multiControllers.pytest_flavorAdd_maxValues.py: def test_createFlavorMaxValue
-test_flavorAdd_maxValues.py:     def test_createFlavorMaxValue(self):
-test_flavorAdd_invalidParms.py: def test_createFlavorRamInvalid
-test_flavorAdd_invalidParms.py: def test_createFlavorVcpusInvalid
-test_flavorAdd_invalidParms.py: def test_createFlavorDiskInvalid
-test_flavorAdd_invalidParms.py:     def test_createFlavorRamInvalid(self):
-test_flavorAdd_invalidParms.py:     def test_createFlavorVcpusInvalid(self):
-test_flavorAdd_invalidParms.py:     def test_createFlavorDiskInvalid(self):
-test_flavorAdd_100.py: def test_createFlavor
-test_flavorAdd_100.py:     def test_createFlavor(self):
+controller.controller/test_showController_all.tc.test_showControllersAll
+controller.controller/test_showController_addr.tc.test_showControllersAddr
+controller.controller/test_showController_wrongAddr.tc.test_showControllersWrongAddr
+controller.flavor/test_flavorAdd_ram0.tc.test_createFlavorRamOnly
+controller.flavor/test_flavorAdd_ram0.tc.test_createFlavorRam0OtherParms
+controller.flavor/test_flavorAdd_vcpus0.tc.test_createFlavorVcpusOnly
+controller.flavor/test_flavorAdd_vcpus0.tc.test_createFlavorVcpus0OtherParms
+controller.flavor/test_flavorAdd_nameOnly.tc.test_createFlavorNameOnly
+controller.flavor/test_flavorShow_single.tc.test_showFlavor_nameOnly
+controller.flavor/test_flavorAdd_invalidName.tc.test_createFlavorStartUnderscore
+controller.flavor/test_flavorAdd_invalidName.tc.test_createFlavorParenthesis
+controller.flavor/test_flavorAdd_invalidName.tc.test_createFlavorDollarsign
+controller.flavor/test_flavorAdd_invalidName.tc.test_createFlavorOtherInvalidChars
+controller.flavor/test_flavorAdd_largerThanMaxValues.tc.test_createFlavorRamTooLarge
+controller.flavor/test_flavorAdd_largerThanMaxValues.tc.test_createFlavorVcpusTooLarge
+controller.flavor/test_flavorAdd_largerThanMaxValues.tc.test_createFlavorDiskTooLarge
+controller.flavor/test_flavorAdd_sameName.tc.test_createFlavorSameName
+controller.flavor/test_flavorDelete_unknown.tc.test_DeleteDeveloperUnknown
+controller.flavor/test_flavorDelete_beforeClusterFlavor.tc.test_DeleteFlavorBeforeClusterFlavor
+controller.flavor/test_flavorShow_ramVcupsDisk.tc.test_showFlavor_ram
+controller.flavor/test_flavorShow_ramVcupsDisk.tc.test_showFlavor_disk
+controller.flavor/test_flavorShow_ramVcupsDisk.tc.test_showFlavor_vcpus
+controller.flavor/test_flavorUpdate_notSupported.tc.test_updateFlavor
+controller.flavor/test_flavorAdd_disk0.tc.test_createFlavorDisk0OtherParms
+controller.flavor/test_flavorAdd_noName.tc.test_createFlavorEmptyName
+controller.flavor/test_flavorAdd_noName.tc.test_createFlavorNoName
+controller.flavor/test_flavorAdd_noName.tc.test_createFlavorNoNameOtherParms
+controller.flavor/test_flavorAdd_minValues.tc.test_createFlavorMinValue
+controller.flavor/test_flavorDelete_wrongParms.tc.test_createFlavorMinValue
+controller.flavor/test_flavorDelete_nameOnly.tc.test_deleteFlavorNameOnly
+controller.flavor/test_flavorAdd_multiControllers.tc.test_createFlavor
+controller.flavor/test_flavorAdd_maxValues.tc.test_createFlavorMaxValue
+controller.flavor/test_flavorAdd_invalidParms.tc.test_createFlavorRamInvalid
+controller.flavor/test_flavorAdd_invalidParms.tc.test_createFlavorVcpusInvalid
+controller.flavor/test_flavorAdd_invalidParms.tc.test_createFlavorDiskInvalid
+controller.flavor/test_flavorAdd_100.tc.test_createFlavor
 createCloudlet.robot: CreateCloudlet with all parameters
 createCloudlet.robot: CreateCloudlet without the optional parameters
 createCloudlet.robot: CreateCloudlet with required parameters and accessuri
@@ -1120,150 +578,3 @@ createCloudlet_fail.robot: CreateCloudlet with an invalid ipsupport enumeration 
 showCloudlet.robot: ShowCloudlets all
 showCloudlet.robot: ShowCloudlets selected
 showCloudlet.robot: ShowCloudlets invalid
-rootlb_sshAccess.robot: Openstack rootlb ssh access should be protected
-mc_traffic_rest.robot: MC - Login mc requests admin user Traffic
-mc_traffic_rest.robot: MC - Create User requests create different users Traffic
-mc_traffic_rest.robot: MC - Login mc requests different users Traffic
-mc_traffic_rest.robot: MC - Current users mc requests different users Traffic
-mc_traffic_rest.robot: MC - Show Role mc requests admin user Traffic
-mc_traffic_rest.robot: MC - Show Role mc requests different users Traffic
-mc_traffic_rest.robot: MC - Create Org mc requests different users Traffic
-mc_traffic_rest.robot: MC - Show Org mc requests different users Traffic
-mc_traffic_rest.robot: MC - Adduser Role mc requests different users Traffic
-mc_org_delete.robot: MC - Delete an org without an org name
-mc_org_delete.robot: MC - Delete an org that doesn't exist admin token
-mc_org_delete.robot: MC - Delete an org that doesn't exist user token
-mc_org_delete.robot: MC - Delete an org without a token
-mc_org_delete.robot: MC - Delete an org with an empty token
-mc_org_delete.robot: MC - Delete an org with a bad token
-mc_org_delete.robot: MC - Delete an org with an expired token
-mc_org_delete.robot: MC - Delete an org with a user assigned admin token
-mc_org_delete.robot: MC - Delete an org with a user assigned user token
-mc_org_delete.robot: MC - Delete an org created by user1 using user2 token
-mc_login_newuser.robot: MC - New User shall be able to successfully login
-mc_login_newuser.robot: MC - New User shall be able to login with thier email and password
-mc_login_newuser.robot: MC - New User with wrong password shall not be able to login
-mc_login_newuser.robot: MC - New User with wrong username shall not be able to login
-mc_login_newuser.robot: MC - New User with no username shall not be able to login
-mc_login_newuser.robot: MC - New User with no password shall not be able to login
-mc_login_newuser.robot: MC - New User with empty username shall not be able to login
-mc_login_newuser.robot: MC - New User with empty password shall not be able to login
-mc_login_newpass.robot: MC - Admin user shall be able to change the password
-mc_login_newpass.robot: MC - Admin user shall be able to login with the new password
-mc_login_newpass.robot: MC - Admin user shall not be able to login with the old password
-mc_login_newpass.robot: MC - User shall be able to change their password
-mc_login_newpass.robot: MC - User shall be able to change to the same password as another user
-mc_login_newpass.robot: MC - User shall not be able to login with the old password
-mc_login_newpass.robot: MC - User shall not be able to change their password without a token
-mc_login_newpass.robot: MC - User shall not be able to change their password with an empty token
-mc_login_newpass.robot: MC - User shall not be able to change their password with a bad token
-mc_login_newpass.robot: MC - User shall not be able to change their password with an expired token
-mc_createUser.robot: MC - User shall be able to create a new user
-mc_createUser.robot: MC - User shall not be able to create a new user with no username
-mc_createUser.robot: MC - User shall not be able to create a new user with empty username
-mc_createUser.robot: MC - User shall not be able to create a new user with no password
-mc_createUser.robot: MC - User shall not be able to create a new user with empty password
-mc_createUser.robot: MC - User shall not be able to create a new user without an email
-mc_createUser.robot: MC - User shall not be able to create a new user with an empty email
-mc_createUser.robot: MC - User shall not be able to create a new user with :: in the username
-mc_createUser.robot: MC - User shall not be able to create a new user with an invalid email
-mc_createUser.robot: MC - User shall not be able to create a new user with an invalid username characters
-mc_createUser.robot: MC - User shall not be able to create a new user with spaces before the username
-mc_createUser.robot: MC - User shall not be able to create a new user with an invalid password
-mc_createUser.robot: MC - User shall not be able to create the same new user twice same info
-mc_createUser.robot: MC - User shall not be able to create the same new user twice different password
-mc_createUser.robot: MC - User shall not be able to create the same new user twice different email
-mc_createUser.robot: MC - User shall not be able to create the superuser twice same info
-mc_createUser.robot: MC - User shall not be able to create the superuser twice different password
-mc_createUser.robot: MC - User shall not be able to create the superuser twice different email
-mc_role_assignment_show.robot: MC - Admin user shall be able to show role assignments
-mc_role_assignment_show.robot: MC - User shall be able to show role assignments
-mc_role_assignment_show.robot: MC - User shall not be able to show role assignments without a token
-mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with an empty token
-mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with a bad token
-mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with an expired token
-mc_deleteuser.robot: MC - Delete a user without a user name
-mc_deleteuser.robot: MC - Delete a user without a token
-mc_deleteuser.robot: MC - Delete a user with an empty token
-mc_deleteuser.robot: MC - Delete a user with a bad token
-mc_deleteuser.robot: MC - Delete a user with an expired token
-mc_role_show.robot: MC - Admin user shall be able to show roles
-mc_role_show.robot: MC - User shall be able to show roles
-mc_role_show.robot: MC - User shall not be able to show roles without a token
-mc_role_show.robot: MC - User shall not be able to show roles with an empty token
-mc_role_show.robot: MC - User shall not be able to show roles with a bad token
-mc_role_show.robot: MC - User shall not be able to show roles with an expired token
-mc_role_removeuser.robot: MC - Admin remove an AdminManager role from a user
-mc_role_removeuser.robot: MC - Admin remove an AdminCondtributor role from a user
-mc_role_removeuser.robot: MC - Admin remove an AdminViewer role from a user
-mc_role_removeuser.robot: MC - Admin remove an DeveloperManager role from a user
-mc_role_removeuser.robot: MC - Remove a user role from a user with a bad token
-mc_org_create.robot: MC - Show org with admin user no orgs created
-mc_org_create.robot: MC - Add an Admin org with the admin user
-mc_org_create.robot: MC - Add a developer org with the admin user
-mc_org_create.robot: MC - Add a operator org with the admin user
-mc_org_create.robot: MC - Admin user can create multiple organizations
-mc_org_create.robot: MC - New user can create a developer org
-mc_org_create.robot: MC - New user can create a operator org
-mc_org_create.robot: MC - New user can create multiple organizations
-mc_org_create.robot: MC - Admin user can see orgs created by other users
-mc_org_create.robot: MC - Create an org without an org name
-mc_org_create.robot: MC - Create an org without an org type
-mc_org_create.robot: MC - Create an org without an org address
-mc_org_create.robot: MC - Create an org without an org phone
-mc_org_create.robot: MC - Create an org without a token
-mc_org_create.robot: MC - Create an org with an empty token
-mc_org_create.robot: MC - Create an org with a bad token
-mc_org_create.robot: MC - Create an org with an expired token
-mc_role_adduser.robot: MC - Admin user shall be able show role assignments with no assignments
-mc_role_adduser.robot: MC - Admin user shall be able to assign a user role to an org
-mc_role_adduser.robot: MC - Admin user shall be able to assign a manager user role to an org
-mc_role_adduser.robot: MC - Admin user shall be able to assign Developer user roles to a developer org
-mc_role_adduser.robot: MC - Admin user shall be able to assign Operator user roles to a operator org
-mc_role_adduser.robot: MC - Admin user shall be able to assign all user roles to users
-mc_role_adduser.robot: MC - A user shall be able to assign a user role to an org they created
-mc_role_adduser.robot: MC - DeveloperManager shall be able to assign all Developer roles to users
-mc_role_adduser.robot: MC - OperatorManager shall be able to assign all Operator roles to users
-mc_role_adduser.robot: MC - Assign a user role to a user without a token
-mc_role_adduser.robot: MC - Assign a user role to a user with an empty token
-mc_role_adduser.robot: MC - Assign a user role to a user with a bad token
-mc_role_adduser.robot: MC - Assign a user role to a user with an expired token
-mc_login_superuser.robot: MC - Superuser shall be able to successfully login
-mc_login_superuser.robot: MC - Superuser with wrong password shall not be able to login
-mc_login_superuser.robot: MC - Superuser with wrong username shall not be able to login
-mc_login_superuser.robot: MC - Superuser with no username shall not be able to login
-mc_login_superuser.robot: MC - Superuser with no password shall not be able to login
-mc_login_superuser.robot: MC - Superuser with empty username shall not be able to login
-mc_login_superuser.robot: MC - Superuser with empty password shall not be able to login
-mc_login_superuser.robot: MC - User with empty username/password shall not be able to login
-mc_login_superuser.robot: MC - User with no username/password shall not be able to login
-mc_login_superuser.robot: MC - User with invalid json shall not be able to login
-mc_login_superuser.robot: MC - User with wrong parm name shall not be able to login
-mc_currentUser.robot: MC - User shall be able to get the current status of superuser
-mc_currentUser.robot: MC - User shall be able to get the current status of new user
-mc_currentUser.robot: MC - User with no token shall not be able to get current status
-mc_currentUser.robot: MC - User with an empty token shall not be able to get current status
-mc_currentUser.robot: MC - User with bad token1 shall not be able to get current status
-mc_currentUser.robot: MC - User with bad token2 shall not be able to get current status
-mc_currentUser.robot: MC - User with expired token shall not be able to get current status of superuser
-mc_currentUser.robot: MC - User with expired token shall not be able to get current status of newuser
-app_show.robot: Web UI - user shall be able show US apps
-app_show.robot: Web UI - user shall be able show EU flavors
-app_show.robot: Web UI - user shall be able show All flavors
-cloudlet_create.robot: Web UI - user shall be able to create a new EU cloudlet
-cloudlet_create.robot: #Web UI - user shall be able to create a new US flavor
-cloudlet_show.robot: Web UI - user shall be able show US cloudlets
-cloudlet_show.robot: Web UI - user shall be able show EU cloudlets
-cloudlet_show.robot: Web UI - user shall be able show All cloudlets
-cloudlet_sort.robot: Web UI - user shall be able to sort cloudlets by cloudlet name
-cloudlet_sort.robot: Web UI - user shall be able to sort cloudlets by region
-appInst_show.robot: Web UI - user shall be able show US app instances
-appInst_show.robot: Web UI - user shall be able show EU flavors
-appInst_show.robot: Web UI - user shall be able show All flavors
-flavor_show.robot: Web UI - user shall be able show US flavors
-flavor_show.robot: Web UI - user shall be able show EU flavors
-flavor_show.robot: Web UI - user shall be able show All flavors
-loginpy.robot: Login to console
-flavor_create.robot: Web UI - user shall be able to create a new EU flavor
-flavor_create.robot: Web UI - user shall be able to create a new US flavor
-cloudlet_details.robot: Web UI - user shall be able cloudlet details
