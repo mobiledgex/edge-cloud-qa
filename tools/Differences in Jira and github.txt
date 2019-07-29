@@ -1,0 +1,414 @@
+Things not in file 2 (jira): 
+verifyLocation_badToken_rest.robot: VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
+verifyLocation_badToken_rest.robot: VerifyLocation REST - request with empty token shall return 'verifyloc token required'
+registerClient_traffic_rest.robot: RegisterClient - DME should handle simultaneous register requests
+registerClient_traffic_rest.robot: FindCloudlet - DME should handle simultaneous FindCloudlet requests
+registerClient_traffic_rest.robot: VerifyLocation - DME should handle simultaneous VerifyLocation requests
+findCloudlet_cookieError_rest.robot: FindCloudlet - request without cookie should return 'missing cookie'
+findCloudlet_cookieError_rest.robot: FindCloudlet - request with invalid cookie of x should return 'token contains an invalid number of segments'
+findCloudlet_cookieError_rest.robot: FindCloudlet - request with invalid cookie of x.x.x should return 'illegal base64 data at input byte 1' with invalid cookie
+findCloudlet_cookieError_rest.robot: FindCloudlet - request with truncated cookie should return 'VerifyCookie failed: Invalid cookie, no key'
+findCloudlet_cookieError_rest.robot: FindCloudlet - request with expired cookie should return 'token is expired by'
+createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/K8s and num_masters=1 and num_nodes=1 on openstack
+createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/k8s and num_masters=1 and num_nodes=5 on openstack
+createClusterInstance_openstack_IpAccessDedicated_k8s.robot: ClusterInst shall create with IpAccessDedicated/k8s and num_masters=0 and num_nodes=4
+createClusterInstance_openstack_IpAccessDedicated_docker.robot: ClusterInst shall create with IpAccessDedicated/docker on openstack
+createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_nodes=1 on openstack
+createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_nodes=6 on openstack
+createClusterInstance_openstack_IpAccessDedicated_helm.robot: ClusterInst shall create with IpAccessDedicated/helm and num_masters=0 and num_nodes=4
+createClusterInstance_openstack_IpAccessDedicated_numNodes.robot: ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 nodes
+delete_clusterInstance_notExist.robot: CRM shall be able to create 2 clusterInst with one name a substring of the other
+createClusterInstance_openstack_numNodes.robot: Cluster shall not create clusterInst with IpAccessShared and 0 masters
+createClusterInstance_delete_create_sametime.robot: User shall be able to delete/create an app instance at the same time on openstack
+fqdn_udptcp_port_gcp.robot: User shall be able to access 2 UDP ports on azure
+fqdn_udptcp_port_gcp.robot: User shall be able to access 1 TCP port on azure
+fqdn_udptcp_port_gcp.robot: User shall be able to access 2 TCP ports on azure
+fqdn_udptcp_port_gcp.robot: User shall be able to access 2 UDP and 2 TCP ports on azure
+fqdn_udptcp_port_openstack.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
+create_appInst_timings.robot: CreateAppInst on openstack shall create quickly
+create_appInst_delete_create_sametime.robot: User shall be able to delete/create an app instance at the same time on openstack
+create_appInst_reboot.robot: User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes=10
+stats_openstack.robot: User shall be able to access 1 UDP port on openstack
+create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance on openstack with rootlb rest port blocked
+create_appInst_fail_blockRestAccess.robot: CRM shall recover when attempting to create an app instance with autocluster on openstack with rootlb rest port blocked
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 1 UDP port on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 UDP ports on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 1 TCP port on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 TCP ports on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access HTTP port on openstack with IpAccessDedicated
+fqdn_udptcp_port_openstack_IpAccessDedicated.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDedicated
+create_clusterInst.robot: clustersvc shall create/delete MEXPrometheusAppName and MEXMetricsExporter app and app instance
+create_clusterInst_multiple.robot: clustersvc shall create/delete multiple MEXPrometheusAppName and MEXMetricsExporter app and app instance
+clusterSvc_influxdb_clusterInst.robot: ClusterInst Stats shall be created on openstack
+clusterSvc_influxdb_clusterInst.robot: Cluster Stats shall be created on azure
+clusterSvc_influxdb_appInst.robot: AppInst and ClusterInst Stats shall be created on openstack
+clusterSvc_influxdb_appInst.robot: Cluster Stats shall be created on azure
+controller.developer.test_developerAdd_nameOnly.tc.test_createDeveloper_nameEmptyParms
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperSameParms
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperAllParms
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperEmail
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperAddress
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperUsername
+controller.developer.test_developerUpdate_change.tc.test_updateDeveloperPasshash
+controller.developer.test_developerAdd_sameName.tc.test_createDeveloper_sameName_allOptional
+controller.developer.test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameAddress
+controller.developer.test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameEmail
+controller.developer.test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameUsername
+controller.developer.test_developerAdd_nameOptionalParms.tc.test_createDeveloper_namePasshash
+controller.developer.test_developerAdd_nameOptionalParms.tc.test_createDeveloper_nameAllOptional
+controller.developer.test_developerAdd_multiControllers.tc.test_createDeveloper
+controller.developer.test_developerUpdate_add.tc.test_updateDeveloperAddAllParms
+controller.developer.test_developerUpdate_add.tc.test_updateDeveloperAddEmail
+controller.developer.test_developerUpdate_add.tc.test_updateDeveloperAddAddress
+controller.developer.test_developerUpdate_add.tc.test_updateDeveloperAddUsername
+controller.developer.test_developerUpdate_add.tc.test_updateDeveloperAddPasshash
+controller.cluster.test_clusterDelete_nameNotFound.tc.test_DeleteClusterNameNotFound
+controller.cluster.test_clusterAdd_AutoCluster.tc.test_AddAutoCluster
+controller.cluster.test_clusterAdd_noDefaultFlavor.tc.test_GetCloudlets
+controller.cluster.test_clusterDelete_beforeApp.tc.test_DeleteClusterBeforeApp
+controller.cluster.test_clusterInstDelete.tc.test_DeleteClusterInstanceNoFlavor
+controller.cluster.test_clusterDelete_invalidName.tc.test_DeleteClusterUnderscore
+controller.cluster.test_clusterDelete_invalidName.tc.test_DeleteClusterInvalidChars
+controller.cluster.test_clusterDelete_beforeClusterInst.tc.test_DeleteClusterBeforeClusterInstance
+controller.cluster.test_clusterAdd_defaultFlavor.tc.test_createClusterDefaultFlavor
+controller.cluster.test_clusterAdd_InvalidClusterName.tc.test_AddClusterUnderscore
+controller.cluster.test_clusterAdd_InvalidClusterName.tc.test_AddClusterSpecialChars
+controller.cluster.test_clusterAdd_InvalidClusterName.tc.test_AddClusterStartDash
+controller.cluster.test_clusterAdd_defaultFlavorNotExist.tc.test_CreateClusterFlavorNotFound
+controller.cluster.test_clusterInstAddMultiControllers.tc.test_AddClusterInstance
+controller.cluster.test_clusterAdd_noName.tc.test_AddClusterWithNoName
+controller.cluster.test_clusterAdd_noName.tc.test_AddClusterWithNoNameNoDefaultFlavor
+controller.cluster.test_clusterUpdate_notSupported.tc.test_UpdateCluster
+controller.cluster.test_clusterAddMultiControllers.tc.test_AddClusterInstance
+controller.cluster.test_clusterAdd_100.tc.test_AddMultpleClusters
+controller.cluster.test_clusterDelete_noName.tc.test_DeleteClusterNoName
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_1
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicateShared_2
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_3
+controller.app.test_appAdd_portOutOfRange.tc.test_CreateAppPortRangeDedicatedShared_4
+updateApp_fqdn.robot: CreateAppInst - autocluster shall be created when app instance is created without clustername
+controller.app.test_appAdd_invalidIpAccess.tc.test_CreateInvalidIpaccess
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPPorts
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCPUDPHTTPPorts
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPPorts
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports
+controller.app.test_appAdd_IpAccessDedicatedOrSharedMulti.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts
+controller.app.test_appAdd_emptyCluster.tc.test_CreateAppNoCluster
+controller.app.test_appAdd_emptyCluster.tc.test_CreateAppEmptyCluster
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatlIpAccessDedicatedOrShared_1
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_2
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormaIpAccessDedicatedOrShared_3
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_4
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_5
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_6
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessDedicatedOrShared_7
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatlIpAccessShared_1
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_2
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormaIpAccessShared_3
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_4
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_5
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_6
+controller.app.test_appAdd_invalidPortFormat.tc.test_CreateAppInvalidFormatIpAccessShared_7
+controller.app.test_appAdd_config_invalid.tc.test_CreateAppDockerConfig_inlineInvalid
+controller.app.test_appAdd_config_invalid.tc.test_CreateAppDockerConfig_httpInvalid
+createAppInst_fqdnprefix.robot: AppInst - user shall be able to add 1 TCP port with same public port
+createAppInst_fqdnprefix.robot: AppInst - user shall be able to add 10 TCP port with same public port
+createAppInst_fqdnprefix.robot: AppInst - user shall be able to add TCP and UDP ports with the same port numbers
+createAppInst_fqdnprefix.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - 2 appInst on different app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - 2 appInst on same app and different cluster and same cloudlet shall not be able to allocate the same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - 2 appInst on same app and different cluster and different cloudlet shall not be able to allocate the same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - User shall be able to add app/appInst, delete, and readd with same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - User shall be able to add app, udpate app, add /appInst with same public TCP port
+createAppInst_fqdnprefix.robot: AppInst - 3 appInst on different app and different cluster and different cloudlet shall not be able to allocate public TCP port 10000
+createAppInst_fqdnprefix.robot: AppInst - appInst shall not allocate TCP port 10000 if already allocated
+createAppInst_fqdnprefix.robot: AppInst - user shall be to add multiple TCP public ports
+createAppInst_fqdnprefix.robot: AppInst - user shall not be able to allocate public port tcp:22
+createAppInst_fqdnprefix.robot: AppInst - user shall be able to allocate public port tcp:18889
+createAppInst_fqdnprefix.robot: AppInst - user shall be able to allocate public port tcp:18888
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP65535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort65535.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP065535
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedTCP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedUDP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppDockerIpAccessDedicatedOrSharedHTTP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedTCP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedUDP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01
+controller.app.test_appAdd_IpAccessDedicatedOrSharedPort1.tc.test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase
+createAppInst_publicPort_http.robot: AppInst - user shall be able to add 1 HTTP port
+createAppInst_publicPort_http.robot: AppInst - user shall be able to add 10 HTTP ports
+createAppInst_publicPort_http.robot: AppInst - 2 appInst on different app and same cluster and same cloudlet shall be able to allocate the same HTTP port
+createAppInst_publicPort_http.robot: AppInst - 2 appInst on different app and different cluster and same cloudlet shall be able to allocate the same HTTP port
+createAppInst_publicPort_http.robot: AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate the same HTTP port
+createAppInst_publicPort_http.robot: AppInst - 2 appInst on same app and different cluster and same cloudlet shall be able to allocate the same HTTP port
+createAppInst_publicPort_http.robot: AppInst - 2 appInst on same app and different cluster and different cloudlet shall be able to allocate the same public HTTP port
+createAppInst_publicPort_http.robot: AppInst - User shall be able to add app/appInst, delete, and readd with same HTTP port
+createAppInst_publicPort_http.robot: AppInst - User shall be able to add app, udpate app, add appInst with same HTTP port
+createAppInst_publicPort_http.robot: AppInst - 3 appInst on different app and different cluster and different cloudlet shall be able to allocate HTTP port 10000
+createAppInst_publicPort_http.robot: AppInst - appInst shall allocate HTTP port 10000 if already allocated
+createAppInst_publicPort_http.robot: AppInst - user shall be to add multiple HTTP public ports
+createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:22
+createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:18889
+createAppInst_publicPort_http.robot: AppInst - user shall be able to allocate port http:18888
+controller.app.test_appAdd_config.tc.test_CreateAppDockerConfig_inline
+controller.app.test_appAdd_config.tc.test_CreateAppQCOWConfig
+controller.app.test_appAdd_config.tc.test_CreateAppDockerConfig_http
+controller.app.test_appAdd_config.tc.test_CreateAppQCOWConfig_http
+controller.app.test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidUnknown
+controller.app.test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidDedicatedShared
+controller.app.test_appAdd_portInvalidDigits.tc.test_CreateAppPortInvalidShared
+controller.app.test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedProtocolIpAccessDedicatedOrShared
+controller.app.test_appAdd_unsupportedPortProtocol.tc.test_CreateAppUnsupportedProtocolIpAccessShared
+controller.app.test_appAdd_noPorts.tc.test_CreateAppNoPortsIpAccessDedicatedorShared
+controller.app.test_appAdd_noPorts.tc.test_CreateAppNoPortsIpAccessShared
+controller.operators.test_operatorAdd_multiControllers.tc.test_createOperator
+clusterFlavor.robot: CreateClusterFlavor without a key name
+controller.flavor.test_flavorDelete_beforeClusterFlavor.tc.test_DeleteFlavorBeforeClusterFlavor
+controller.flavor.test_flavorAdd_multiControllers.tc.test_createFlavor
+mc_traffic_rest.robot: MC - Login mc requests admin user Traffic
+mc_traffic_rest.robot: MC - Create User requests create different users Traffic
+mc_traffic_rest.robot: MC - Login mc requests different users Traffic
+mc_traffic_rest.robot: MC - Current users mc requests different users Traffic
+mc_traffic_rest.robot: MC - Show Role mc requests admin user Traffic
+mc_traffic_rest.robot: MC - Show Role mc requests different users Traffic
+mc_traffic_rest.robot: MC - Create Org mc requests different users Traffic
+mc_traffic_rest.robot: MC - Show Org mc requests different users Traffic
+mc_traffic_rest.robot: MC - Adduser Role mc requests different users Traffic
+mc_org_delete.robot: MC - Delete an org without an org name
+mc_org_delete.robot: MC - Delete an org that doesn't exist admin token
+mc_org_delete.robot: MC - Delete an org that doesn't exist user token
+mc_org_delete.robot: MC - Delete an org without a token
+mc_org_delete.robot: MC - Delete an org with an empty token
+mc_org_delete.robot: MC - Delete an org with a bad token
+mc_org_delete.robot: MC - Delete an org with an expired token
+mc_org_delete.robot: MC - Delete an org with a user assigned admin token
+mc_org_delete.robot: MC - Delete an org with a user assigned user token
+mc_org_delete.robot: MC - Delete an org created by user1 using user2 token
+mc_login_newuser.robot: MC - New User shall be able to successfully login
+mc_login_newuser.robot: MC - New User shall be able to login with thier email and password
+mc_login_newuser.robot: MC - New User with wrong password shall not be able to login
+mc_login_newuser.robot: MC - New User with wrong username shall not be able to login
+mc_login_newuser.robot: MC - New User with no username shall not be able to login
+mc_login_newuser.robot: MC - New User with no password shall not be able to login
+mc_login_newuser.robot: MC - New User with empty username shall not be able to login
+mc_login_newuser.robot: MC - New User with empty password shall not be able to login
+mc_login_newpass.robot: MC - Admin user shall be able to change the password
+mc_login_newpass.robot: MC - Admin user shall be able to login with the new password
+mc_login_newpass.robot: MC - Admin user shall not be able to login with the old password
+mc_login_newpass.robot: MC - User shall be able to change their password
+mc_login_newpass.robot: MC - User shall be able to change to the same password as another user
+mc_login_newpass.robot: MC - User shall not be able to login with the old password
+mc_login_newpass.robot: MC - User shall not be able to change their password without a token
+mc_login_newpass.robot: MC - User shall not be able to change their password with an empty token
+mc_login_newpass.robot: MC - User shall not be able to change their password with a bad token
+mc_login_newpass.robot: MC - User shall not be able to change their password with an expired token
+mc_createUser.robot: MC - User shall be able to create a new user
+mc_createUser.robot: MC - User shall not be able to create a new user with no username
+mc_createUser.robot: MC - User shall not be able to create a new user with empty username
+mc_createUser.robot: MC - User shall not be able to create a new user with no password
+mc_createUser.robot: MC - User shall not be able to create a new user with empty password
+mc_createUser.robot: MC - User shall not be able to create a new user without an email
+mc_createUser.robot: MC - User shall not be able to create a new user with an empty email
+mc_createUser.robot: MC - User shall not be able to create a new user with :: in the username
+mc_createUser.robot: MC - User shall not be able to create a new user with an invalid email
+mc_createUser.robot: MC - User shall not be able to create a new user with an invalid username characters
+mc_createUser.robot: MC - User shall not be able to create a new user with spaces before the username
+mc_createUser.robot: MC - User shall not be able to create a new user with an invalid password
+mc_createUser.robot: MC - User shall not be able to create the same new user twice same info
+mc_createUser.robot: MC - User shall not be able to create the same new user twice different password
+mc_createUser.robot: MC - User shall not be able to create the same new user twice different email
+mc_createUser.robot: MC - User shall not be able to create the superuser twice same info
+mc_createUser.robot: MC - User shall not be able to create the superuser twice different password
+mc_createUser.robot: MC - User shall not be able to create the superuser twice different email
+mc_role_assignment_show.robot: MC - Admin user shall be able to show role assignments
+mc_role_assignment_show.robot: MC - User shall be able to show role assignments
+mc_role_assignment_show.robot: MC - User shall not be able to show role assignments without a token
+mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with an empty token
+mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with a bad token
+mc_role_assignment_show.robot: MC - User shall not be able to show role assignments with an expired token
+mc_deleteuser.robot: MC - Delete a user without a user name
+mc_deleteuser.robot: MC - Delete a user without a token
+mc_deleteuser.robot: MC - Delete a user with an empty token
+mc_deleteuser.robot: MC - Delete a user with a bad token
+mc_deleteuser.robot: MC - Delete a user with an expired token
+mc_role_show.robot: MC - Admin user shall be able to show roles
+mc_role_show.robot: MC - User shall be able to show roles
+mc_role_show.robot: MC - User shall not be able to show roles without a token
+mc_role_show.robot: MC - User shall not be able to show roles with an empty token
+mc_role_show.robot: MC - User shall not be able to show roles with a bad token
+mc_role_show.robot: MC - User shall not be able to show roles with an expired token
+mc_role_removeuser.robot: MC - Admin remove an DeveloperManager role from a user
+mc_role_removeuser.robot: MC - Remove a user role from a user with a bad token
+mc_org_create.robot: MC - Show org with admin user no orgs created
+mc_org_create.robot: MC - Add an Admin org with the admin user
+mc_org_create.robot: MC - Add a developer org with the admin user
+mc_org_create.robot: MC - Add a operator org with the admin user
+mc_org_create.robot: MC - Admin user can create multiple organizations
+mc_org_create.robot: MC - New user can create a developer org
+mc_org_create.robot: MC - New user can create a operator org
+mc_org_create.robot: MC - New user can create multiple organizations
+mc_org_create.robot: MC - Admin user can see orgs created by other users
+mc_org_create.robot: MC - Create an org without an org name
+mc_org_create.robot: MC - Create an org without an org type
+mc_org_create.robot: MC - Create an org without an org address
+mc_org_create.robot: MC - Create an org without an org phone
+mc_org_create.robot: MC - Create an org with a bad token
+mc_org_create.robot: MC - Create an org with an expired token
+mc_role_adduser.robot: MC - Admin user shall be able show role assignments with no assignments
+mc_role_adduser.robot: MC - Admin user shall be able to assign a user role to an org
+mc_role_adduser.robot: MC - Admin user shall be able to assign a manager user role to an org
+mc_role_adduser.robot: MC - Admin user shall be able to assign Developer user roles to a developer org
+mc_role_adduser.robot: MC - Admin user shall be able to assign Operator user roles to a operator org
+mc_role_adduser.robot: MC - Admin user shall be able to assign all user roles to users
+mc_role_adduser.robot: MC - A user shall be able to assign a user role to an org they created
+mc_role_adduser.robot: MC - DeveloperManager shall be able to assign all Developer roles to users
+mc_role_adduser.robot: MC - OperatorManager shall be able to assign all Operator roles to users
+mc_role_adduser.robot: MC - Assign a user role to a user without a token
+mc_role_adduser.robot: MC - Assign a user role to a user with an empty token
+mc_role_adduser.robot: MC - Assign a user role to a user with a bad token
+mc_role_adduser.robot: MC - Assign a user role to a user with an expired token
+mc_login_superuser.robot: MC - Superuser shall be able to successfully login
+mc_login_superuser.robot: MC - Superuser with wrong password shall not be able to login
+mc_login_superuser.robot: MC - Superuser with wrong username shall not be able to login
+mc_login_superuser.robot: MC - Superuser with no username shall not be able to login
+mc_login_superuser.robot: MC - Superuser with no password shall not be able to login
+mc_login_superuser.robot: MC - Superuser with empty username shall not be able to login
+mc_login_superuser.robot: MC - Superuser with empty password shall not be able to login
+mc_login_superuser.robot: MC - User with empty username/password shall not be able to login
+mc_login_superuser.robot: MC - User with no username/password shall not be able to login
+mc_login_superuser.robot: MC - User with invalid json shall not be able to login
+mc_login_superuser.robot: MC - User with wrong parm name shall not be able to login
+mc_currentUser.robot: MC - User shall be able to get the current status of superuser
+mc_currentUser.robot: MC - User shall be able to get the current status of new user
+mc_currentUser.robot: MC - User with bad token1 shall not be able to get current status
+mc_currentUser.robot: MC - User with bad token2 shall not be able to get current status
+mc_currentUser.robot: MC - User with expired token shall not be able to get current status of superuser
+mc_currentUser.robot: MC - User with expired token shall not be able to get current status of newuser
+app_show.robot: Web UI - user shall be able show US apps
+app_show.robot: Web UI - user shall be able show EU flavors
+app_show.robot: Web UI - user shall be able show All flavors
+cloudlet_create.robot: Web UI - user shall be able to create a new EU cloudlet
+cloudlet_show.robot: Web UI - user shall be able show US cloudlets
+cloudlet_show.robot: Web UI - user shall be able show EU cloudlets
+cloudlet_show.robot: Web UI - user shall be able show All cloudlets
+cloudlet_sort.robot: Web UI - user shall be able to sort cloudlets by cloudlet name
+cloudlet_sort.robot: Web UI - user shall be able to sort cloudlets by region
+appInst_show.robot: Web UI - user shall be able show US app instances
+appInst_show.robot: Web UI - user shall be able show EU flavors
+appInst_show.robot: Web UI - user shall be able show All flavors
+flavor_show.robot: Web UI - user shall be able show US flavors
+flavor_show.robot: Web UI - user shall be able show EU flavors
+flavor_show.robot: Web UI - user shall be able show All flavors
+loginpy.robot: Login to console
+flavor_create.robot: Web UI - user shall be able to create a new EU flavor
+cloudlet_details.robot: Web UI - user shall be able cloudlet details
+
+Things not in file 1 (testcases and files): 
+registerClient/registerClient.sln
+registerClientWrongApp/registerClientWrongApp.sln
+registerClientWrongDevName/registerClientWrongDevName.sln
+registerClientWrongAppVersion/registerClientWrongAppVersion.sln
+registerClientWithAuth/registerClientWithAuth.sln
+registerClientWithAuthWrongAppVer/registerClientWithAuthWrongAppVer.sln
+registerClientWithAuthWrongAppName/registerClientWithAuthWrongAppName.sln
+registerClientWithAuthWrongDevName/registerClientWithAuthWrongDevName.sln
+verifyGPSLocation/verifyGPSLocation.sln
+findCloudletBadSessionCookie/findCloudletBadSessionCookie.sln
+verifyLocationBadCookie/verifyLocationBadCookie.sln
+verifyLocationBadCarrier/verifyLocationBadCarrier.sln
+verifyLocation10KM/verifyLocation10KM.sln
+verifyLocation100KM/verifyLocation100KM.sln
+verifyLocationMisMatchOtherCountry/verifyLocationMisMatchOtherCountry.sln
+VerifyLocationMisMatchSameCountry/VerifyLocationMisMatchSameCountry.sln
+verifyLocationRoamingCountryMisMatch/verifyLocationRoamingCountryMisMatch.sln
+verifyLocationRoamingCountryMatch/verifyLocationRoamingCountryMatch.sln
+findCloudletSuccess/findCloudletSuccess.sln
+findCloudletFail/findCloudletFail.sln
+findCloudletNoCarrier/findCloudletNoCarrier.sln
+findCloudletNoLocation/findCloudletNoLocation.sln
+findCloudletNoSessionCookie/findCloudletNoSessionCookie.sln
+registerClient/registerClient.cpp
+registerClientWrongApp/registerClientWrongApp.cpp
+registerClientWrongDevName/registerClientWrongDevName.cpp
+registerClientWrongAppVersion/registerClientWrongAppVersion.cpp
+registerClientWithAuth/registerClientWithAuth.cpp
+registerClientWithAuthWrongAppVer/registerClientWithAuthWrongAppVer.cpp
+registerClientWithAuthWrongApp/registerClientWithAuthWrongApp.cpp
+registerClientWithAuthWrongDev/registerClientWithAuthWrongDev.cpp
+verifyLocation/verifyLocation.cpp
+verifyLocationBadToken/verifyLocationBadToken.cpp
+verifyLocationBadCookie/verifyLocationBadCookie.cpp
+verifyLocationBadCarrier/verifyLocationBadCarrier.cpp
+verifyLocation10KM/verifyLocation10KM.cpp
+verifyLocation100KM/verifyLocation100KM.cpp
+verifyLocationMisMatchOtherCountry/verifyLocationMisMatchOtherCountry.cpp
+verifyLocationMisMatchSameCountry/verifyLocationMisMatchSameCountry.cpp
+verifyLocationRoamingCountryMisMatch/verifyLocationRoamingCountryMisMatch.cpp
+verifyLocationRoamingCountryMatch/verifyLocationRoamingCountryMatch.cpp
+findCloudletSuccess/findCloudletSuccess.cpp
+findCloudletFail/findCloudletFail.cpp
+findCloudletNoCarrier/findCloudletNoCarrier.cpp
+findCloudletNoLocation/findCloudletNoLocation.cpp
+findCloudletNoSessionCookie/findCloudletNoSessionCookie.cpp
+registerClientRest/registerClientRest.sln
+registerClientWrongAppRest/registerClientWrongAppRest.sln
+registerClientWrongDevNameRest/registerClientWrongDevNameRest.sln
+registerClientWrongAppVerRest/registerClientWrongAppVerRest.sln
+registerClientWithAuthRest/registerClientWithAuthRest.sln
+registerClientWithAuthWrongAppVerRest/registerClientWithAuthWrongAppVerRest.sln
+registerClientWithAuthWrongAppRest/registerClientWithAuthWrongAppRest.sln
+registerClientWithAuthWrongDevRest/registerClientWithAuthWrongDevRest.sln
+verifyLocationRest/verifyLocationRest.sln
+findCloudletBadSessionCookieRest/findCloudletBadSessionCookieRest.sln
+verifyLocationBadCookieRest/verifyLocationBadCookieRest.sln
+verifyLocationBadCarrierRest/verifyLocationBadCarrierRest.sln
+verifyLocation10KMRest/verifyLocation10KMRest.sln
+verifyLocation100KMRest/verifyLocation100KMRest.sln
+verifyLocationMisMatchOtherCountryRest/verifyLocationMisMatchOtherCountryRest.sln
+verifyLocationMisMatchSameCountryRest/verifyLocationMisMatchSameCountryRest.sln
+verifyLocationRoamingCountryMisMatchRest/verifyLocationRoamingCountryMisMatchRest.sln
+verifyLocationRoamingCountryMatchRest/verifyLocationRoamingCountryMatchRest.sln
+findCloudletSuccessRest/findCloudletSuccessRest.sln
+findCloudletFailRest/findCloudletFailRest.sln
+findCloudletNoCarrierRest/findCloudletNoCarrierRest.sln
+findCloudletNoLocationRest/findCloudletNoLocationRest.sln
+findCloudletNoSessionCookieRest/findCloudletNoSessionCookieRest.sln
+fqdn_udptcp_port_openstack_scale.robot: User shall be able to access UDP,TCP and HTTP ports on openstack with scaling and num_nodes
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with cloud-config
+
