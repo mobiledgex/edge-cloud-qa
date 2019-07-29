@@ -16,11 +16,13 @@ import argparse
 
 #Extracts Testcases and filenames from base_directory
 #Change base directory
-BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/controller"
+BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases"
 
 file_dict = {}             # List of files that are .py or .robot
 
 def extract_testcases():
+    count = 0
+    count2 = 0
     for (dirpath, dirnames, filenames) in os.walk(BASE_DIRECTORY):
         for f in filenames:
             if f[0] == ".":
@@ -38,12 +40,13 @@ def extract_testcases():
     #filehandle.write('All Files and Testcase names:\n')
     #print(file_dict)
     for files, typeOfFile in file_dict.items():
+        
         testname= None
         lines_previous = ''
         python_tests = []
         robot_tests = []
         file_name = os.path.basename(files)
-       
+        print(files)
         txtfile = open(files, 'r')
         if typeOfFile == 'python file':
             for lines in txtfile:
@@ -52,13 +55,16 @@ def extract_testcases():
                     testname1 = lines[4:]
                     testname = testname1[0:-8]
                     python_tests.append(testname)
+                    count += 1
         elif typeOfFile =='robot file':
             for lines in txtfile:
                 if '[Documentation]' in lines:
                     testname= lines_previous 
                     robot_tests.append(testname)
                     type_of_file = "robot"
+                    count2 += 1
                 lines_previous = lines
+        newpath = files.replace('/', '.')
         if testname != None:
             if typeOfFile == 'python file':
                 for tests in python_tests:
@@ -66,31 +72,33 @@ def extract_testcases():
                     string2 = ''
                     string2 += 'controller'
                     string2 += '.'
-                    pfiles_name = (files[81:-3])
+                    pfiles_name = (newpath[81:-3])
                     string2 += pfiles_name
                     string2 += '.tc.'
                     string2 += tests.strip()
                     filehandle.write('%s' % string2.rstrip())
                     filehandle.write('\n')
             elif typeOfFile =='robot file':
+                count2 +=1
                 for rtests in robot_tests:
                     testname3 = rtests[0:-1]
                     string1 = ''
                     rfiles_name = file_name
                     string1 += rfiles_name
                     string1 += ': '
-                    string1 += testname3                    
+                    string1 += testname3
                     filehandle.write('%s' % string1.rstrip())
                     filehandle.write('\n')
             else:
                 print('something wrong')
+    print(count +count2)
     filehandle.close()
             #filehandle.write('%s\n' % "File Path: ")
             #filehandle.write('%s:%s' % file_name)
             #filehandle.write('%s\n' % "Testname: ")
             #filehandle.write('%s\n' % list_tests)
             #filehandle.write('\n')
-extract_testcases()
+#extract_testcases()
 
 
 
@@ -201,18 +209,15 @@ def get_testcases_x(z, result):
 
 
 #if __name__ == '__main__':
-#    main()
+    main()
   
 #____________________________________________________________________________________________________________________________________
 # Compares 2 text files returns differences into another .txt file
 
-first_file = "/Users/mexloaner/compare1.txt"  #Change location to file 1
-second_file = "/Users/mexloaner/compare2.txt"  #Change location to file 2
-
 
 f1 = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools/testcases and files.txt"  # Change file to file needed for comparison
 f2 = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools/Jira testcases.txt"  # Change file to file needed for comparison
-difference = "/Users/mexloaner/difference_file.txt"  # Change file to file for the differences
+difference = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/tools/Differences in Jira and github.txt"  # Change file to file for the differences
 
 list_tests1 = []
 list_tests2 = []
@@ -222,30 +227,36 @@ def compare(f1,f2):
     text2 = open(f2).readlines()
     difference_report = open(difference, 'w') 
     difference_report.write('%s\n' % "Things not in file 2 (jira): ")
-    for lines in text1:
-        if '.robot' in lines:
-            lines.strip()
-            list_tests1.append(lines)
-    for lines in text2:
-        if '.robot' in lines:
-            lines.strip()
-            list_tests2.append(lines)
-    for stuff in list_tests1:
-        if stuff =='\n':
-            list_tests1.remove(stuff)
-        if stuff not in list_tests2:
-            difference_report.write(stuff)
-        else:
+    for QA_lines in text1:
+        #if '.robot' in lines:
+        QA_lines.strip()
+        list_tests1.append(QA_lines)
+        #if '.tc.' in lines:
+            #lines.strip()
+            #list_tests1.append(lines)
+    for Jira_lines in text2:
+        #if '.robot' in lines:
+        Jira_lines.strip()
+        list_tests2.append(Jira_lines)
+       # if '.tc.' in lines:
+            #lines.strip()
+            #list_tests2.append(lines)
+    for Jira_testnames in list_tests1:
+        if Jira_testnames =='\n':
+            list_tests1.remove(Jira_testnames)
+        if Jira_testnames in list_tests2:
             pass
+        else:
+            difference_report.write(Jira_testnames)
     difference_report.write('\n')
     difference_report.write('%s\n' % "Things not in file 1 (testcases and files): ")
-    for things in list_tests2:
-        if things == '':
-            list_tests2.remove(things)
-        if things not in list_tests1:
-            difference_report.write(things)
-        else:
+    for QAtestnames in list_tests2:
+        if QAtestnames == '':
+            list_tests2.remove(QAtestnames)
+        if QAtestnames in list_tests1:
             pass
+        else:
+            difference_report.write(QAtestnames)
     #print(list_tests1)
     difference_report.write('\n')
     difference_report.close()
