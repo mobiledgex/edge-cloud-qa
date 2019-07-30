@@ -13,7 +13,6 @@ import time
 import subprocess
 import argparse
 
-
 #Extracts Testcases and filenames from base_directory
 #Change base directory
 BASE_DIRECTORY = "/Users/mexloaner/go/src/github.com/mobiledgex/edge-cloud-qa/testcases"
@@ -40,7 +39,6 @@ def extract_testcases():
     #filehandle.write('All Files and Testcase names:\n')
     #print(file_dict)
     for files, typeOfFile in file_dict.items():
-        
         testname= None
         lines_previous = ''
         python_tests = []
@@ -99,29 +97,21 @@ def extract_testcases():
             #filehandle.write('%s\n' % list_tests)
             #filehandle.write('\n')
 #extract_testcases()
-
-
-
-
 #_____________________________________________________________________________________________________________________
 # Extracts from Jira
 # Not working? Try: export Cycle=Stratus_automation_2019-07-16;export Version=Stratus;export Project=ECQ;export “Components=Automated, Controller, Flavor”;export WORKSPACE=.
-
 
 username = 'andy.anderson@mobiledgex.com'
 jira_token = 'Qoi6yaqSNTvjdyJAhgNz1AE4'
 access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
 secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
 
-
 def main():
-    
     filehandle = open('Jira testcases.txt', 'w')               # change to different text file
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
     args = parser.parse_args()
 
-    #print(os.environ)
     cycle = os.environ['Cycle']
     version = os.environ['Version']
     project = os.environ['Project']
@@ -147,7 +137,6 @@ def main():
             version_id = v['id']
     cycle_id = z.get_cycle_id(name=cycle, project_id=project_id, version_id=version_id)
 
-  
     component_list = component.split(',')
     component_query = ''
     for component in component_list:
@@ -164,7 +153,6 @@ def main():
     tc_list = []
     while (startat + maxresults) < total:
         result = j.search(query=jiraQueryUrl, start_at=startat+maxresults)
-        
         #print(result)
         #sys.exit(1)
         query_content = json.loads(result)
@@ -182,10 +170,7 @@ def main():
     filehandle.close()
     print('lentclist', len(tc_list))
 
-
-       
     test = "test"
-    
     return test
 
 def get_testcases_x(z, result):
@@ -206,7 +191,6 @@ def get_testcases_x(z, result):
             tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
 
     return tc_list
-
 
 #if __name__ == '__main__':
     main()
