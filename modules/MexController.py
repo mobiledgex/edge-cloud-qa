@@ -472,7 +472,7 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, crm_override=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
@@ -485,7 +485,8 @@ class Cloudlet():
         self.ipsupport = ipsupport
         self.staticips = staticips
         self.number_of_dynamic_ips = number_of_dynamic_ips
-
+        self.crm_override = crm_override
+        
         print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
@@ -567,6 +568,9 @@ class Cloudlet():
         if self.staticips is not None:
             cloudlet_dict['static_ips'] = self.staticips
             _fields_list.append(self._cloudlet_staticips_field)
+        if self.crm_override:
+            cloudlet_dict['crm_override'] = self.crm_override  # ignore errors from CRM
+
         print("In the class", cloudlet_dict)
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
@@ -673,7 +677,7 @@ class App():
 
             if self.image_type == 'ImageTypeDocker':
                 if self.image_path is None:
-                    self.image_path='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                    self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     #try:
                     #    new_app_name = self._docker_sanitize(self.app_name)
                     #    if self.developer_name is not None:
@@ -685,7 +689,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
+                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
                 #self.image_type = 2
 
 
@@ -1519,7 +1523,7 @@ class MexController(MexGrpc):
         print("LOG LEVEL = ", logging.getLogger().getEffectiveLevel())
         for c in resp:
             if logging.getLogger().getEffectiveLevel() == 10 or logging.getLogger().getEffectiveLevel() == 0:  # debug level
-                logger.debug('cloudlet list:')
+                logger.debug('cloudlet listxx:')
                 print('\t{}'.format(str(c).replace('\n','\n\t')))
 
         return resp
