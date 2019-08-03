@@ -707,3 +707,5 @@ fqdn_udptcp_port_openstack_volume_mounts.robot: User shall be able to access UDP
 fqdn_udptcp_port_openstack_IpAccessDedicated_volume_mounts.robot: User shall be able to access UDP and TCP ports on openstack with IpAccessDedicated and volume mounts
 fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with new image
 fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with existing image
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with command
+fqdn_udptcp_port_openstack_vm.robot: User shall be able to access VM deployment UDP and TCP ports on openstack with cloud-config
