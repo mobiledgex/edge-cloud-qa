@@ -38,6 +38,10 @@ spec:
           - "https://vault-qa.mobiledgex.net:8200"
           - "--registryFQDN"
           - "docker-qa.mobiledgex.net"
+          - "--artifactoryFQDN"
+          - "https://artifactory-qa.mobiledgex.net/artifactory"
+          - "--cloudletVMImagePath"
+          - "https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v2.0.2.qcow2#md5:51371613a81f7218c2633ce3c1814258"
           - "--versionTag"
           - "$AUTOMATION_DOCKERTAG"
           - "--tls"
@@ -52,5 +56,11 @@ spec:
             value: ca6bdaf0-b4c6-98d9-e0bd-b47073541657
           - name: VAULT_SECRET_ID
             value: db9c1b53-b77b-fc48-cc4b-bdabc65b921e
+          - name: VAULT_CRM_ROLE_ID
+            value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
+          - name: VAULT_CRM_SECRET_ID
+            value: ***REMOVED***
+          - name: artifactory_apikey
+            value: ***REMOVED***
        imagePullSecrets:
         - name: mexreg-secret

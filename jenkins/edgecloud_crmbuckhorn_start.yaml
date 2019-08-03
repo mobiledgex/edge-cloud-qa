@@ -33,9 +33,9 @@ spec:
          - name: MEX_EXT_NETWORK
            value: external-network-shared
          - name: MEXENV_URL
-           value: https://vault.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
+           value: https://vault-qa.mobiledgex.net/v1/secret/data/cloudlet/openstack/mexenv.json
          - name: VAULT_ROLE_ID
-           value: e017fc39-dff7-adc3-364f-bb8e04805454
+           value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
          - name: VAULT_SECRET_ID
            value: ***REMOVED***
         args:
@@ -48,7 +48,7 @@ spec:
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--vaultAddr"
-         - "vault.mobiledgex.net"
+         - "https://vault-qa.mobiledgex.net:8200"
          - "--physicalName"
          - "buckhorn"
          - "--d"
