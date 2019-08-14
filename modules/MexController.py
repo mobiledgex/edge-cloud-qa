@@ -689,7 +689,7 @@ class App():
                 #self.image_type = 1
             elif self.image_type == 'ImageTypeQCOW':
                 if self.image_path is None:
-                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
+                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
 
 
