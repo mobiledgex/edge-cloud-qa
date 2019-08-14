@@ -66,10 +66,11 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                              app_name=app_name,
                                              app_version=app_version,
+                                             deployment='kubernetes',
                                              #cluster_name=cluster_name,
                                              developer_name=developer_name,
                                              ip_access = 'IpAccessShared',
-                                             access_ports = 'tcp:1',
+                                             access_ports = 'TCP:1',
                                              default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
