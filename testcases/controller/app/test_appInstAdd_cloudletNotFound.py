@@ -54,7 +54,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid app name', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -79,7 +80,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid app name', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -104,7 +107,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -129,7 +133,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid app name', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -154,7 +160,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid app name', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -182,7 +190,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid cluster name', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -228,6 +238,7 @@ class tc(unittest.TestCase):
                                                   app_version='1.0',
                                                   developer_name='dev',
                                                   operator_name='DMUUS',
+                                                  cluster_instance_name='mycluster',
                                                   use_defaults=False)
 
         resp = None
@@ -240,7 +251,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"DMUUS" >  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid cloudlet name', 'error details')
+
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"DMUUS" >  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -269,7 +282,9 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<> name:"tmocloud-1"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<> name:"tmocloud-1"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid cluster name', 'error details')
+
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 

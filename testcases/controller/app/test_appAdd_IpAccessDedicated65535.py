@@ -25,7 +25,7 @@ flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
 app_name = 'app' + stamp
 app_version = '1.0'
-qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
+qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-devorg06/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -116,7 +116,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
 
-        port_match = 'ports:\n        - containerPort: 065535\n          protocol: TCP'
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: TCP'
         expect(port_match in resp.deployment_manifest, 'manifest ports')
         expect_equal(found_app, True, 'find app')
         assert_expectations()
@@ -183,7 +183,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
        
-        port_match = 'ports:\n        - containerPort: 065535\n          protocol: TCP'
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: TCP'
         expect(port_match in resp.deployment_manifest, 'manifest ports')
  
         expect_equal(found_app, True, 'find app')
@@ -251,7 +251,7 @@ class tc(unittest.TestCase):
 
         self.controller.delete_app(self.app.app)
        
-        port_match = 'ports:\n        - containerPort: 065535\n          protocol: UDP'
+        port_match = 'ports:\n        - containerPort: 65535\n          protocol: UDP'
         expect(port_match in resp.deployment_manifest, 'manifest ports')
  
         expect_equal(found_app, True, 'find app')
