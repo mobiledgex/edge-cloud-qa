@@ -25,7 +25,7 @@ app_name = 'app' + stamp
 app_version = '1.0'
 access_ports = 'tcp:1'
 docker = 'docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-qcow_image = 'https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded.qcow2#md5:ac10044d053221027c286316aa610ed5'
+qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
