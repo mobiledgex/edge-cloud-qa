@@ -84,7 +84,7 @@ class tc(unittest.TestCase):
 
         # find app in list
         #self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
-        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
+        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
@@ -117,7 +117,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
+        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)

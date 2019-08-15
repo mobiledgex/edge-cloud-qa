@@ -19,7 +19,7 @@ import MexController as mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 stamp = str(time.time())
-developer_name = 'mr. developer' + stamp
+developer_name = 'developer' + stamp
 developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
