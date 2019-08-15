@@ -28,7 +28,7 @@ cluster_name = 'cluster' + stamp
 app_name = 'server_ping_threaded'
 app_version = '5.0'
 access_ports = 'tcp:1'
-docker = 'docker.mobiledgex.net'
+docker = 'docker-qa.mobiledgex.net'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'

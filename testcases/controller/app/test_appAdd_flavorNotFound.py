@@ -20,7 +20,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 stamp = str(int(time.time()))
 #app_name = 'appname' + stamp
 app_name = 'server_ping_threaded'
-app_version = '1.0'
+app_version = '5.0'
 #developer_name = 'developer' + stamp
 developer_name = 'mobiledgex'
 
