@@ -7,7 +7,7 @@ controller = "${controller}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runOperatorTests", "runDeveloperTests", "runFlavorTests", "runControllerControllerTests", "runClusterTests", "runClusterInstTests", "runAppTests", "runCloudletTests", "runAppInstTests"]
+def jobList1Parallel = ["runOperatorTests", "runDeveloperTests", "runFlavorTests", "runControllerControllerTests", "runClusterInstTests", "runAppTests", "runCloudletTests", "runAppInstTests"]
  
 builds1 = [:]
 

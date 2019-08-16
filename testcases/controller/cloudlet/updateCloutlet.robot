@@ -1,5 +1,6 @@
 *** Settings ***
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library         String
 
 Test Teardown	Cleanup provisioning	
 
@@ -14,7 +15,14 @@ UpdateCloudlet accessuri
 	...  The test case updates the default accessuri to a different value
 	...  Expect the test case to pass - accessuri should be updated.
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}  notify_server_address=${port}   
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      accesscredentials=https://support.net/supportme
 	Cloudlet Should Exist  
@@ -24,7 +32,14 @@ UpdateCloudlet staticips
 	...  The test case updates the default staticuri to a different value.
 	...  Expect the test case to pass - staticuri should be updated.
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      staticips=50.50.50.50
 	Cloudlet Should Exist       
@@ -37,7 +52,14 @@ UpdateCloudlet number_of_dynamic_ips
 
 	${dips}     Convert To Integer 	  60
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      number_of_dynamic_ips=${dips}  
 	Cloudlet Should Exist        
@@ -50,7 +72,14 @@ UpdateCloudlet location
 
 	${loc}     Convert To Integer 	  40
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}          latitude=${loc}       longitude=${loc} 
 	Cloudlet Should Exist       
@@ -62,7 +91,14 @@ UpdateCloudlet location lat
 
 	${loc}     Convert To Integer 	  60
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      latitude=${loc}
 	Cloudlet Should Exist           
@@ -74,7 +110,14 @@ UpdateCloudlet location long
 
 	${loc}     Convert To Integer 	  90
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      longitude=${loc}
 	Cloudlet Should Exist       
@@ -88,7 +131,14 @@ UpdateCloudlet optional accessuri
 	${lat}    Convert To Integer    35
 	${long}   Convert To Integer    -96
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    use_defaults=False
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}   notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist	   
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     accesscredentials=https://support.net/supportme     use_defaults=False
 	Cloudlet Should Exist      
@@ -102,7 +152,14 @@ UpdateCloudlet optional staticips
 	${lat}    Convert To Integer    35
 	${long}   Convert To Integer    -96
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    use_defaults=False
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${epochstring}=  Convert To String  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist	  
 	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     staticips=50.50.50.50    use_defaults=False
 	Cloudlet Should Exist      
