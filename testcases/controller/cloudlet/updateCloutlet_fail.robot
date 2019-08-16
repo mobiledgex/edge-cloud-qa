@@ -1,6 +1,6 @@
 *** Settings ***
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-
+Library         String
 
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
@@ -19,7 +19,7 @@ UpdateCloudlet without an operator
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Invalid operator name"
+	Should Contain  ${error_msg}   details = "Key not found"
 
         [Teardown]  Cleanup provisioning
 
@@ -28,7 +28,6 @@ UpdateCloudlet with an invalid operator
 	...  The test case will try and update a Cloudlet with a valid cloudlet name and in invalid operator name.
 	...  A Key not found error is expected
 
-	
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=mci      cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -40,18 +39,16 @@ UpdateCloudlet without a cloudlet name
 	...  The test case will try and update a Cloudlet with only the operator name.
 	...  An Invalid cloudlet name error is expected
 
-
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	    operator_name=${oper}     use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Invalid cloudlet name"
+	Should Contain  ${error_msg}   details = "Key not found"
 
 
 UpdateCloudlet with an invalid cloudlet name
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet name
 	...  The test case will try and update a Cloudlet with an invalid cloudlet name.
 	...  A Key not found error is expected
-
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=TestMe    use_defaults=False
 
@@ -109,12 +106,16 @@ UpdateCloudlet with a ipsupport of -1
 	...  The test case will try and update a Cloudlet with an invalid ipsupport (-1).
 	...  An 'invalid IpSupport' error is expected
 
+        [Setup]   Setup
+
 	${ipsup}    Convert To Integer 	-1
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}      use_defaults=False             
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "invalid IpSupport"
-        
+       
+        [Teardown]  Cleanup provisioning
+ 
 UpdateCloudlet with a ipsupport of -8
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet ipsupport value
 	...  The test case will try and update a Cloudlet with an invalid ipsupport (-8).
@@ -146,12 +147,16 @@ UpdateCloudlet with a location of 100 200
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of 100 200.
 	...  A 'Invalid latitude value' error is expected
 
+        [Setup]  Setup
+
 	${lat}    Convert To Integer 	100
 	${long}    Convert To Integer 	200
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
+
+        [Teardown]  Cleanup provisioning
 
 UpdateCloudlet with a location of 90 200 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
@@ -223,5 +228,17 @@ UpdateCloudlet with staticips of 6
 *** Keywords ***
 Setup
 	${dips}    Convert To Integer     254
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  use_defaults=False 
+
+        Sleep  1s
+        ${epoch}=  Get Time  epoch
+        ${epochstring}=  Convert To String  ${epoch}
+
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
+
+
+	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  notify_server_address=${port}  use_defaults=False 
 	Cloudlet Should Exist
+
+        Set Suite Variable  ${cldlet}
