@@ -114,6 +114,10 @@ FindCloudlet - request shall return gcp with tmus and gcp/azure cloudlet provisi
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}

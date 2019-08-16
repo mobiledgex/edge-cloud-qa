@@ -224,6 +224,18 @@ GetAppInstList - request shall return 10 cloudlets
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${cloudlet_name_3}=  Catenate  SEPARATOR=  ${cloudlet_name_3}  ${epoch}
+    ${cloudlet_name_4}=  Catenate  SEPARATOR=  ${cloudlet_name_4}  ${epoch}
+    ${cloudlet_name_5}=  Catenate  SEPARATOR=  ${cloudlet_name_5}  ${epoch}
+    ${cloudlet_name_6}=  Catenate  SEPARATOR=  ${cloudlet_name_6}  ${epoch}
+    ${cloudlet_name_7}=  Catenate  SEPARATOR=  ${cloudlet_name_7}  ${epoch}
+    ${cloudlet_name_8}=  Catenate  SEPARATOR=  ${cloudlet_name_8}  ${epoch}
+    #${cloudlet_name_9}=  Catenate  SEPARATOR=  ${cloudlet_name_9}  ${epoch}
+    #${cloudlet_name_10}=  Catenate  SEPARATOR=  ${cloudlet_name_10}  ${epoch}
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     Create Developer            
     Create Flavor
     #Create Cluster	

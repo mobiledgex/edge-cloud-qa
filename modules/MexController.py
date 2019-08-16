@@ -49,6 +49,8 @@ logger = logging.getLogger('mex_controller')
 #flavor_name_default = 'flavor' + default_time_stamp
 #cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 
+crm_notify_server_address_port_last = None
+
 class Developer():
     #def __init__(self, developer_name=None, developer_address=None, developer_email=None, developer_passhash=None, developer_username=None, include_fields=False, use_defaults=True):
     def __init__(self, developer_name=None, include_fields=False, use_defaults=True):
@@ -517,7 +519,14 @@ class Cloudlet():
         if staticips is None and use_defaults == True:
             self.staticips = '10.10.10.10'
         if notify_server_address is None and use_defaults == True:
-            self.notify_server_address = shared_variables.crm_notify_server_address
+            global crm_notify_server_address_port_last
+            port = shared_variables.crm_notify_server_address_port
+            if crm_notify_server_address_port_last is None:
+                crm_notify_server_address_port_last = port
+            else:
+                crm_notify_server_address_port_last += 1
+                port = crm_notify_server_address_port_last
+            self.notify_server_address = shared_variables.crm_notify_server_address + ':' + str(port)
             
         if cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -639,7 +648,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
@@ -659,6 +668,7 @@ class App():
         self.deployment = deployment
         self.deployment_manifest = deployment_manifest
         self.scale_with_cluster = scale_with_cluster
+        self.official_fqdn = official_fqdn
         
         #print('*WARN*',app_pb2.App)
         #print('*WARN*','key', vars(app_pb2.App))
@@ -680,7 +690,7 @@ class App():
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
-
+            
             if self.image_type == 'ImageTypeDocker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
@@ -774,6 +784,8 @@ class App():
             _fields_list.append(self._deployment_manifest_field)
         if self.scale_with_cluster:
             app_dict['scale_with_cluster'] = True
+        if self.official_fqdn:
+            app_dict['official_fqdn'] = self.official_fqdn
             
         print(app_dict)
         self.app = app_pb2.App(**app_dict)
@@ -1736,7 +1748,7 @@ class MexController(MexGrpc):
         self.prov_stack.append(lambda:self.delete_app(app_instance))
 
         #resp =  self.show_apps(app_instance)
-        resp = self.show_apps(app_name=app_instance.key.name, use_defaults=False)
+        resp = self.show_apps(app_name=app_instance.key.name, developer_name=app_instance.key.developer_key.name, app_version=app_instance.key.version, use_defaults=False)
 
         if len(resp) == 0:
             return None

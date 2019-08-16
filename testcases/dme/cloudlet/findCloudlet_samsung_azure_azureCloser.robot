@@ -104,9 +104,13 @@ FindCloudlet Samsung - findCloudlet shall return azure with with azure cloudlet 
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     Create Developer            
     Create Flavor
-    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
     #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}
     #Create Cluster
     Create App			access_ports=tcp:1  permits_platform_apps=${True}
