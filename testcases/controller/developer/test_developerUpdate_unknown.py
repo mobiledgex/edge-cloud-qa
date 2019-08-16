@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
 
         # update developer
         error = None
-        self.developer = mex_controller.Developer(developer_name = 'unknown developer')
+        self.developer = mex_controller.Developer(developer_name = 'unknowndeveloper')
         try:
             self.controller.update_developer(self.developer.developer)
         except grpc.RpcError as e:

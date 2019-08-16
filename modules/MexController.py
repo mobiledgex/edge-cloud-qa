@@ -3,6 +3,7 @@ import sys
 import copy
 import os
 import time
+import random
 import logging
 from pprint import pprint
 import controller_pb2
@@ -472,7 +473,7 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, crm_override=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
@@ -486,6 +487,7 @@ class Cloudlet():
         self.staticips = staticips
         self.number_of_dynamic_ips = number_of_dynamic_ips
         self.crm_override = crm_override
+        self.notify_server_address = notify_server_address
         
         print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
@@ -514,6 +516,8 @@ class Cloudlet():
             self.accesscredentials='https://www.edgesupport.com/test'
         if staticips is None and use_defaults == True:
             self.staticips = '10.10.10.10'
+        if notify_server_address is None and use_defaults == True:
+            self.notify_server_address = shared_variables.crm_notify_server_address
             
         if cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -570,7 +574,9 @@ class Cloudlet():
             _fields_list.append(self._cloudlet_staticips_field)
         if self.crm_override:
             cloudlet_dict['crm_override'] = self.crm_override  # ignore errors from CRM
-
+        if self.notify_server_address:
+            cloudlet_dict['notify_srv_addr'] = self.notify_server_address
+            
         print("In the class", cloudlet_dict)
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
