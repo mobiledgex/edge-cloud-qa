@@ -91,6 +91,10 @@ FindCloudlet - request shall return dmuus with gcp cloudlet closer but no appins
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+
+
     #Create Operator             operator_name=${dmuus_operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
     Create Developer            

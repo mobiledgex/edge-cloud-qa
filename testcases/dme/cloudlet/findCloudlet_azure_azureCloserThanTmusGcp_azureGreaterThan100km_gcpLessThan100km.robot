@@ -114,6 +114,10 @@ FindCloudlet - request shall return azure with dmuus and gcp/azure cloudlet prov
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}

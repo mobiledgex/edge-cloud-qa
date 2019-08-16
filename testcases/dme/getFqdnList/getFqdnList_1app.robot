@@ -25,10 +25,10 @@ GetFqdnList - request shall return 1 app
       Register Client	developer_name=${platos_developer_name}  app_name=${platos_app_name}
       ${appfqdns}=  Get Fqdn List
 
-      Should Be Equal             ${appfqdns[0].app_name}  ${dmuus_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].app_vers}  ${dmuus_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].dev_name}  ${dmuus_appinst.key.app_key.developer_key.name}
-      Should Be Equal             ${appfqdns[0].fqdns[0]}     ${dmuus_appinst.uri}
+      Should Be Equal             ${appfqdns[0].app_name}  ${app.key.name}
+      Should Be Equal             ${appfqdns[0].app_vers}  ${app.key.version}
+      Should Be Equal             ${appfqdns[0].dev_name}  ${app.key.developer_key.name}
+      Should Be Equal             ${appfqdns[0].fqdns[0]}  ${app.official_fqdn}
 
       Length Should Be   ${appfqdns}  1
 
@@ -37,13 +37,13 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cluster	
-    Create App			access_ports=tcp:1  permits_platform_apps=${True}
-    ${dmuus_appinst}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+    ${app}=  Create App			access_ports=tcp:1  permits_platform_apps=${True}  official_fqdn=${platos_uri}
+    #${dmuus_appinst}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${platos_developer_name}
-    Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
-    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+    Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  official_fqdn=${platos_uri} 
+    #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
-    Set Suite Variable  ${dmuus_appinst} 
+    Set Suite Variable  ${app} 
 
 

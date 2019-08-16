@@ -20,5 +20,6 @@ access_uri_default = 'https://www.edgesupport.com/test'
 session_cookie_default = ''
 token_default = ''
 token_server_uri_default = ''
-crm_notify_server_address = '127.0.0.1:' + str(random.randint(6000, 7000))
+crm_notify_server_address = '127.0.0.1'
+crm_notify_server_address_port =  random.randint(6000, 7000)
 
