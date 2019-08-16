@@ -132,6 +132,19 @@ Find Cloudlet for tmus closest to latitude ${lat} longitude ${long} should retur
     
     
 Setup
+    ${epoch}=  Get Time  epoch
+    ${t3}=  Catenate  SEPARATOR=  tmocloud-3  ${epoch}
+    ${t4}=  Catenate  SEPARATOR=  tmocloud-4  ${epoch}
+    ${t5}=  Catenate  SEPARATOR=  tmocloud-5  ${epoch}
+    ${t6}=  Catenate  SEPARATOR=  tmocloud-6  ${epoch}
+    ${t7}=  Catenate  SEPARATOR=  tmocloud-7  ${epoch}
+    ${t8}=  Catenate  SEPARATOR=  tmocloud-8  ${epoch}
+    ${t9}=  Catenate  SEPARATOR=  tmocloud-9  ${epoch}
+    ${t10}=  Catenate  SEPARATOR=  tmocloud-10  ${epoch}
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
+
     Create Developer            
     Create Flavor
 
@@ -139,26 +152,26 @@ Setup
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
     #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name1}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude1}  longitude=${tmus_cloudlet_longitude1}
     #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name2}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude2}  longitude=${tmus_cloudlet_longitude2}
-    Create Cloudlet		cloudlet_name=tmocloud-3  operator_name=tmus  latitude=35  longitude=-96
-    Create Cloudlet		cloudlet_name=tmocloud-4  operator_name=tmus  latitude=35  longitude=-97
-    Create Cloudlet		cloudlet_name=tmocloud-5  operator_name=tmus  latitude=35  longitude=-98
-    Create Cloudlet		cloudlet_name=tmocloud-6  operator_name=tmus  latitude=35  longitude=-99
-    Create Cloudlet		cloudlet_name=tmocloud-7  operator_name=tmus  latitude=35  longitude=-100
-    Create Cloudlet		cloudlet_name=tmocloud-8  operator_name=tmus  latitude=35  longitude=-101
-    Create Cloudlet		cloudlet_name=tmocloud-9  operator_name=tmus  latitude=35  longitude=-102
-    Create Cloudlet		cloudlet_name=tmocloud-10  operator_name=tmus  latitude=35  longitude=-103
+    Create Cloudlet		cloudlet_name=${t3}  operator_name=tmus  latitude=35  longitude=-96
+    Create Cloudlet		cloudlet_name=${t4}  operator_name=tmus  latitude=35  longitude=-97
+    Create Cloudlet		cloudlet_name=${t5}  operator_name=tmus  latitude=35  longitude=-98
+    Create Cloudlet		cloudlet_name=${t6}  operator_name=tmus  latitude=35  longitude=-99
+    Create Cloudlet		cloudlet_name=${t7}  operator_name=tmus  latitude=35  longitude=-100
+    Create Cloudlet		cloudlet_name=${t8}  operator_name=tmus  latitude=35  longitude=-101
+    Create Cloudlet		cloudlet_name=${t9}  operator_name=tmus  latitude=35  longitude=-102
+    Create Cloudlet		cloudlet_name=${t10}  operator_name=tmus  latitude=35  longitude=-103
     #Create Cluster		
     Create App			access_ports=tcp:1  
     ${appinst_1}=               Create App Instance		cloudlet_name=${tmus_cloudlet_name1}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
     ${appinst_2}=               Create App Instance		cloudlet_name=${tmus_cloudlet_name2}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_3}=               Create App Instance		cloudlet_name=tmocloud-3  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_4}=               Create App Instance		cloudlet_name=tmocloud-4  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_5}=               Create App Instance		cloudlet_name=tmocloud-5  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_6}=               Create App Instance		cloudlet_name=tmocloud-6  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_7}=               Create App Instance		cloudlet_name=tmocloud-7  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_8}=               Create App Instance		cloudlet_name=tmocloud-8  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_9}=               Create App Instance		cloudlet_name=tmocloud-9  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
-    ${appinst_10}=              Create App Instance		cloudlet_name=tmocloud-10  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_3}=               Create App Instance		cloudlet_name=${t3}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_4}=               Create App Instance		cloudlet_name=${t4}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_5}=               Create App Instance		cloudlet_name=${t5}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_6}=               Create App Instance		cloudlet_name=${t6}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_7}=               Create App Instance		cloudlet_name=${t7}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_8}=               Create App Instance		cloudlet_name=${t8}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_9}=               Create App Instance		cloudlet_name=${t9}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${appinst_10}=              Create App Instance		cloudlet_name=${t10}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
     ${appinst_azure}=           Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
     ${appinst_gcp}=             Create App Instance		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
     Register Client	

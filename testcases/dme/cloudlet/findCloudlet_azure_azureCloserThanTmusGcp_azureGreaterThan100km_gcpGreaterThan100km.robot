@@ -114,6 +114,10 @@ FindCloudlet - request shall return azure with tmus and gcp/azure cloudlet provi
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     #Create Operator             operator_name=${operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
     #Create Operator             operator_name=${azure_operator_name} 

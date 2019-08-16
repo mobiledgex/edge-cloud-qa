@@ -96,6 +96,13 @@ FindCloudlet - request shall return gcp with tmus farther and > 100km farther th
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+
+
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+
     #Create Operator             operator_name=${tmus_operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
     Create Developer            

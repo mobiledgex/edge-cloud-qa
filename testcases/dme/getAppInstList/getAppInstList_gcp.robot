@@ -54,6 +54,9 @@ GetAppInstList - request shall return GCP app
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+
     #Create Operator             operator_name=${tmus_operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
     Create Developer
