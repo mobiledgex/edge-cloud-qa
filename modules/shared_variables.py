@@ -1,4 +1,5 @@
 import time
+import random
 
 #default_time_stamp = str(int(time.time()))
 default_time_stamp = str(time.time()).replace('.', '-')
@@ -19,5 +20,5 @@ access_uri_default = 'https://www.edgesupport.com/test'
 session_cookie_default = ''
 token_default = ''
 token_server_uri_default = ''
-
+crm_notify_server_address = '127.0.0.1:' + str(random.randint(6000, 7000))
 

@@ -16,7 +16,7 @@ DeleteCloudlet without an operator
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Invalid operator name"
+	Should Contain  ${error_msg}   details = "Key not found"
 
 DeleteCloudlet with an invalid operator
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid operator
@@ -34,7 +34,7 @@ DeleteCloudlet without a cloudlet name
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=${oper}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Invalid cloudlet name"
+	Should Contain  ${error_msg}   details = "Key not found"
 
 DeleteCloudlet with an invalid cloudlet name
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid cloudlet name

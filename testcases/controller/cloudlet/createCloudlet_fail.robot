@@ -26,6 +26,9 @@ CreateCloudlet with an invalid operator
 	...  Trys to create a cloudlet with an invalid operator
 	...  Expect the create to fail with the operator not found drror
 
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+
 	Create Cloudlet	cloudlet_name=${cldlet}     operator_name=mci     number_of_dynamic_ips=default      latitude=35.0     longitude=-96.0    use_defaults=False
 
 	[Teardown]	Cleanup provisioning
