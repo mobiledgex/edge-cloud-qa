@@ -57,8 +57,8 @@ Setup
     Create Developer
     Create Flavor
     #Create Cluster
-    Create App                  access_ports=tcp:1  
+    Create App                  access_ports=tcp:1  official_fqdn=http://andy.com 
     ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
-    Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com  cluster_instance_name=autocluster
+    #Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 

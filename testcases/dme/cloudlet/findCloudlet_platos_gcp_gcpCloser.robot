@@ -102,6 +102,10 @@ FindCloudlet platos - request shall return gcp with dmuus farther and > 100km fa
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${gcp_cloudlet_name}=  Catenate  SEPARATOR=  ${gcp_cloudlet_name}  ${epoch}
+
+
     Create Developer            
     Create Flavor
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}

@@ -97,6 +97,9 @@ FindCloudlet - findCloudlet shall return azure with with azure cloudlet provisio
 
 *** Keywords ***
 Setup
+    ${epoch}=  Get Time  epoch
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
     #Create Operator             operator_name=${dmuus_operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
     Create Developer            
