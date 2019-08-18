@@ -25,7 +25,7 @@ ${mobiledgex_domain}  mobiledgex.net
 #${rootlb}          automationhamburgcloudlet.tdg.mobiledgex.net
 
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
-${qcow_image_notrunning}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c
+${qcow_centos_image_notrunning}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c
 ${qcow_centos_openstack_image}  server_ping_threaded_centos7
 
 ${server_ping_threaded_command}  /opt/rh/rh-python36/root/usr/bin/python3 /home/centos/server_ping_threaded.py
@@ -41,12 +41,12 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with n
     ...  deploy VM app with 1 UDP and 1 TCP port
     ...  verify all ports are accessible via fqdn
 
-    Run Keyword and Ignore Error  Delete Openstack Image  ${qcow_openstack_image}
+    Run Keyword and Ignore Error  Delete Openstack Image  ${qcow_centos_openstack_image}
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_image}  access_ports=tcp:2016,udp:2015  #default_flavor_name=${cluster_flavor_name}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Register Client
@@ -88,7 +88,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Register Client
@@ -107,7 +107,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Register Client
