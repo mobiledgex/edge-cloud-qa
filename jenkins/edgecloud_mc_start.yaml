@@ -36,7 +36,7 @@ spec:
           - "--addr"
           - "0.0.0.0:9900"
           - "--vaultAddr"
-          - "https://vault.mobiledgex.net"
+          - "https://vault-qa.mobiledgex.net:8200"
           - "-ldapAddr"
           - "0.0.0.0:9389"
           - "--tls"
@@ -50,17 +50,17 @@ spec:
           - "--gitlabAddr"
           - "https://gitlab-qa.mobiledgex.net"
           - "--artifactoryAddr"
-          - "https://artifactory.mobiledgex.net"
+          - "https://artifactory-qa.mobiledgex.net"
           - "--tag"
           - "qa"
          env:
           - name: VAULT_ROLE_ID
-            value: f4207f0f-c965-ac3e-181c-235de8838ff7
+            value: fe150a80-ab52-322a-3b47-771c0e27b9fb 
           - name: VAULT_SECRET_ID
-            value: 528a3921-5afc-0150-1f9b-9e1fa4a49727
+            value: 556c878d-e617-f3c4-e04d-52aa1ed3fd08 
           - name: gitlab_token
             value: gitlabtesttoken
           - name: artifactory_apikey
-            value: AKCp5cckWfoFRPDGNyyFkm49XtZxrMxLKknawYrT6KTCra3uuiTZtqgLgvbvccTNEXrEQSoyF
+            value: AKCp5dKiKvWomuRq5h4LiSb5CZAUeoYh5w3Nw1K4irdKFEa41n4h4mYmBax6i83ydMjinJtHu 
        imagePullSecrets:
         - name: mexreg-secret
