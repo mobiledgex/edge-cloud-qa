@@ -29,7 +29,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Invalid registry path"
 
-CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and access denied to registry
+CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and no latest
     [Documentation]
     ...  create app image_type=ImageTypeDocker deployment=kubernetes image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded and no credentials for docker-qa
     ...  verify error is received
@@ -37,7 +37,8 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Access denied to registry path"
+    #Should Contain  ${error_msg}   details = "Access denied to registry path"
+    Should Contain  ${error_msg}   details = "Invalid registry tag: latest does not exist"
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and invalid tag
     [Documentation]
@@ -79,7 +80,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Invalid registry path"
 
-CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and access denied to registry
+CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and no latest
     [Documentation]
     ...  create app image_type=ImageTypeDocker deployment=docker image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded and no credentials for docker-qa
     ...  verify error is received
@@ -87,7 +88,9 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Access denied to registry path"
+    #Should Contain  ${error_msg}   details = "Access denied to registry path"
+    Should Contain  ${error_msg}   details = "Invalid registry tag: latest does not exist"
+
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and invalid tag
     [Documentation]
@@ -134,30 +137,30 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ...  create app image_type=ImageTypeQCOW deployment=vm image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded and no credentials for docker-qa
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded#md5:12345678901234567890123456789012
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Access denied to registry path"
 
-CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid tag
+CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and image not found
     [Documentation]
     ...  create app wih image_type=ImageTypeQCOW deployment=vm image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:1:3
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:1:3#md5:12345678901234567890123456789012
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid tag in registry path"
+    Should Contain  ${error_msg}   details = "Invalid image path: Not Found"
 
-CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path tag doesnt exist
+CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid url
     [Documentation]
     ...  create app wih image_type=ImageTypeQCOW deployment=vm image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9#md5:12345678901234567890123456789012
-
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199
+                                                                                                                   
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid registry tag: 99.9 does not exist"
+    Should Contain  ${error_msg}   details = "Invalid image path"
 
 *** Keywords ***
 Setup
