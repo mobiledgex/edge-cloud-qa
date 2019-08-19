@@ -93,7 +93,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Failed to convert port A80 to integer: strconv.ParseInt: parsing "A80": invalid syntax', 'error details')
+        expect_equal(error.details(), 'App ports out of range', 'error details')
+        #expect_equal(error.details(), 'Failed to convert port A80 to integer: strconv.ParseInt: parsing "A80": invalid syntax', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
