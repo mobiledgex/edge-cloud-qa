@@ -106,20 +106,33 @@ CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_m
    ...  create a cluster on openstack with IpAccessDedicated and k8s and num_masters=0 and num_nodes=0
    ...  verify error is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=kubernetes
+   #${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=kubernetes
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   Zero NumNodes not supported yet
+   #Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   #Should Contain  ${error_msg}   Zero NumNodes not supported yet
+
+    ${clusterInst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=kubernetes
+    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
+    Should Be Equal             ${clusterInst.deployment}  kubernetes
+    Should Be Equal As Numbers  ${clusterInst.num_masters}  1 
+    Should Be Equal As Numbers  ${clusterInst.num_nodes}  0 
+ 
 
 CreateClusterInst - shall not create with IpAccessDedicated/kubernetes and num_masters=1 num_nodes=0
    [Documentation]
    ...  create a cluster on openstack with IpAccessDedicated and k8s and num_masters=1 and num_nodes=0
    ...  verify error is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+   #${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   Zero NumNodes not supported yet
+   #Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+   #Should Contain  ${error_msg}   Zero NumNodes not supported yet
+
+    ${clusterInst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  number_nodes=0  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
+    Should Be Equal             ${clusterInst.deployment}  kubernetes
+    Should Be Equal As Numbers  ${clusterInst.num_masters}  1
+    Should Be Equal As Numbers  ${clusterInst.num_nodes}  0
 
 CreateClusterInst - shall not create with IpAccessDedicated and invalid deployment
    [Documentation]
