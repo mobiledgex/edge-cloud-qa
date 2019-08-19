@@ -64,7 +64,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp80', 'error details')
+        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was tcp80', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -94,7 +94,9 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
+        expect_equal(error.details(), 'App ports out of range', 'error details')
+
+        #expect_equal(error.details(), 'tcp80 is not a supported Protocol', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -124,7 +126,9 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
+        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was tcp', 'error details')
+
+        #expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -154,7 +158,9 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), ' is not a supported Protocol', 'error details')
+        expect_equal(error.details(), 'App ports out of range', 'error details')
+
+        #expect_equal(error.details(), ' is not a supported Protocol', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -184,7 +190,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
+        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was <>()!', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -214,7 +220,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp82', 'error details')
+        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was tcp82', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -244,7 +250,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was ', 'error details')
+        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was ', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -275,7 +281,7 @@ class tc(unittest.TestCase):
 #        app_post = self.controller.show_apps()
 #
 #        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was udp80', 'error details')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was udp80', 'error details')
 #        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
 #        assert_expectations()
 #
@@ -335,7 +341,7 @@ class tc(unittest.TestCase):
 #        app_post = self.controller.show_apps()
 #
 #        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was tcp', 'error details')
 #        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
 #        assert_expectations()
 #
@@ -395,7 +401,7 @@ class tc(unittest.TestCase):
 #        app_post = self.controller.show_apps()
 #
 #        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was <>()!', 'error details')
+#        expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was <>()!', 'error details')
 #        #expect_equal(len(app_pre), len(app_post), 'same number of apps')
 #        assert_expectations()
 #
