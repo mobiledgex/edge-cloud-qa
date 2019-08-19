@@ -163,6 +163,9 @@ UpdateCloudlet with a location of 90 200
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of 90 200.
 	...  A 'Invalid longitude value' error is expected
 
+        [Setup]  Setup
+        [Teardown]  Cleanup provisioning
+
 	${lat}    Convert To Integer 	90
 	${long}    Convert To Integer 	200
 
@@ -175,6 +178,9 @@ UpdateCloudlet with a location of -100 -200
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of -100 -200.
 	...  A 'Invalid latitude value' error is expected
 
+        [Setup]  Setup
+        [Teardown]  Cleanup provisioning
+
 	${lat}    Convert To Integer 	-100
 	${long}    Convert To Integer 	-200
 
@@ -186,6 +192,9 @@ UpdateCloudlet with a location of -90 -200
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of -90 -200.
 	...  A 'Invalid longitude value' error is expected
+
+        [Setup]  Setup
+        [Teardown]  Cleanup provisioning
 
 	${lat}    Convert To Integer 	-90
 	${long}    Convert To Integer 	-200
