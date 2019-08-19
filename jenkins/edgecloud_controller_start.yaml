@@ -60,7 +60,5 @@ spec:
             value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
           - name: VAULT_CRM_SECRET_ID
             value: ***REMOVED***
-          - name: artifactory_apikey
-            value: ***REMOVED***
        imagePullSecrets:
         - name: mexreg-secret
