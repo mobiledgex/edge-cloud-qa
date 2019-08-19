@@ -75,6 +75,8 @@ class tc(unittest.TestCase):
         expect_equal(error.details(), 'Invalid developer name', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
+        assert_expectations()
+
     def test_createDeveloperDollarsign(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
@@ -87,13 +89,14 @@ class tc(unittest.TestCase):
         except grpc.RpcError as e:
             logger.info('got exception ' + str(e))
             error = e
-
         # print developers after add
         developer_post = self.controller.show_developers()
-        
+       
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         expect_equal(error.details(), 'Invalid developer name', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
+
+        assert_expectations()
 
     def test_createDeveloperOtherInvalidChars(self):
         # print developers before add
@@ -115,6 +118,7 @@ class tc(unittest.TestCase):
         expect_equal(error.details(), 'Invalid developer name', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
+        assert_expectations()
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
