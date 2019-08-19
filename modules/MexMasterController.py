@@ -7,7 +7,7 @@ import threading
 import requests
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor
+from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance
 
 import shared_variables_mc
 
@@ -77,9 +77,22 @@ class MexMasterController(MexRest):
         self._number_deleteflavor_requests_success = 0
         self._number_deleteflavor_requests_fail = 0
 
+        self._number_showclusterinst_requests = 0
+        self._number_showclusterinst_requests_success = 0
+        self._number_showclusterinst_requests_fail = 0
+        self._number_createclusterinst_requests = 0
+        self._number_createclusterinst_requests_success = 0
+        self._number_createclusterinst_requests_fail = 0
+        self._number_deleteclusterinst_requests = 0
+        self._number_deleteclusterinst_requests_success = 0
+        self._number_deleteclusterinst_requests_fail = 0
+
         self._number_showapp_requests = 0
         self._number_showapp_requests_success = 0
         self._number_showapp_requests_fail = 0
+        self._number_createapp_requests = 0
+        self._number_createapp_requests_success = 0
+        self._number_createapp_requests_fail = 0
         self._number_deleteapp_requests = 0
         self._number_deleteapp_requests_success = 0
         self._number_deleteapp_requests_fail = 0
@@ -91,6 +104,12 @@ class MexMasterController(MexRest):
         self._number_showappinsts_requests = 0
         self._number_showappinsts_requests_success = 0
         self._number_showappinsts_requests_fail = 0
+        self._number_createappinst_requests = 0
+        self._number_createappinst_requests_success = 0
+        self._number_createappinst_requests_fail = 0
+        self._number_deleteappinst_requests = 0
+        self._number_deleteappinst_requests_success = 0
+        self._number_deleteappinst_requests_fail = 0
 
         self._number_showaccount_requests = 0
         self._number_showaccount_requests_success = 0
@@ -465,26 +484,79 @@ class MexMasterController(MexRest):
                 raise Exception("error showing roles. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
 
-    def show_role_assignment(self, token=None, use_defaults=True):
+    def show_role_assignment(self, token=None, json_data=None, use_defaults=True, use_thread=False, sort_field='username', sort_order='ascending'):
         url = self.root_url + '/auth/role/assignment/show'
+
+        payload = None
 
         if use_defaults == True:
             if token == None: token = self.token
 
-        self.post(url=url, bearer=token)
+        if json_data !=  None:
+            payload = json_data
+        else:
+            user_dict = {}
+            #if email is not None:
+            #    user_dict['email'] = email
+            payload = json.dumps(user_dict)
 
-        logger.info('response:\n' + str(self.resp.text))
+        logger.info('show users and roles on mc at {}. \n\t{}'.format(url, payload))
+        #self.post(url=url, bearer=token)
 
-        respText = str(self.resp.text)
+        #logger.info('response:\n' + str(self.resp.text))
+
+        #respText = str(self.resp.text)
         #print('*WARN*', respText)
 
-        if respText != '[]':
-            match = re.search('.*org.*username.*role.*', respText)
+        #if respText != '[]':
+        #    match = re.search('.*org.*username.*role.*', respText)
             # print('*WARN*',match)
-            if not match:
-                raise Exception("error showing role assignments. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+        #    if not match:
+        #        raise Exception("error showing role assignments. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-        return self.decoded_data
+        #return self.decoded_data
+
+        def send_message():
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+
+                logger.info('response:\n' + str(self.resp.text))
+
+                respText = str(self.resp.text)
+
+                if str(self.resp.status_code) != '200':
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                raise Exception("post failed:", e)
+
+            resp_data = self.decoded_data
+            if type(resp_data) is dict:
+                resp_data = [resp_data]
+
+            reverse = True if sort_order == 'descending' else False
+            if sort_field == 'username':
+                logging.info('sorting by username')
+                resp_data = sorted(resp_data, key=lambda x: x['username'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            elif sort_field == 'organization':
+                logging.info('sorting by organization')
+                resp_data = sorted(resp_data, key=lambda x: x['org'].casefold(),reverse=reverse)
+            return resp_data
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = send_message()
+            #if str(self.resp.) != '[]':
+            #    #match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
+            #    # print('*WARN*',match)
+            #    if not match:
+            #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            #return self.decoded_data
+            return resp
 
     def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         orgstamp = str(time.time())
@@ -1138,6 +1210,323 @@ class MexMasterController(MexRest):
             #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             #return self.decoded_data
             return resp
+
+    def show_nodes(self, region=None, token=None, json_data=None, use_defaults=True, sort_field='pod_name', sort_order='ascending'):
+        url = self.root_url + '/auth/ctrl/ShowNode'
+        payload = None
+
+        if use_defaults == True:
+            if token is None: token = self.token
+            if region is None: region = self.region
+            #if password is None: password = self.password
+            #if email is None: email = self.username
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            node_dict = {}
+            if region is not None:
+                node_dict['region'] = region
+
+            payload = json.dumps(node_dict)
+
+        logger.info('shownode on mc at {}. \n\t{}'.format(url, payload))
+
+        self.post(url=url, data=payload, bearer=token)
+
+        logger.info('response:\n' + str(self.resp.text))
+
+        #if str(self.resp.text) != '{"message":"user deleted"}':
+        #    raise Exception("error deleting  user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+        resp_data = self.decoded_data
+        if type(resp_data) is dict:
+            resp_data = [resp_data]
+
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'pod_name':
+            logging.info('sorting by pod name')
+            resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+
+        return resp_data
+
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateClusterInst'
+
+        payload = None
+        clusterInst = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access).cluster_instance
+            cluster_dict = {'clusterinst': clusterInst}
+            if region is not None:
+                cluster_dict['region'] = region
+
+            payload = json.dumps(cluster_dict)
+
+        logger.info('create cluster instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createclusterinst_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createclusterinst_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createclusterinst_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self.prov_stack.append(lambda:self.delete_cluster_instance(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['operator_key']['name'], developer_name=clusterInst['key']['developer']))
+
+            self._number_createclusterinst_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteClusterInst'
+
+        payload = None
+        clusterInst = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access).cluster_instance
+            cluster_dict = {'clusterinst': clusterInst}
+            if region is not None:
+                cluster_dict['region'] = region
+
+            payload = json.dumps(cluster_dict)
+
+        logger.info('delete cluster instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deleteclusterinst_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deleteclusterinst_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_deleteclusterinst_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deleteclusterinst_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+
+
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateApp'
+
+        payload = None
+        app = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn).app
+            app_dict = {'app': app}
+            if region is not None:
+                app_dict['region'] = region
+
+            payload = json.dumps(app_dict)
+
+        logger.info('create app on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createapp_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createapp_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createapp_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self.prov_stack.append(lambda:self.delete_app(region=region, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['developer_key']['name']))
+
+            self._number_createapp_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteApp'
+
+        payload = None
+        app = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn).app
+            app_dict = {'app': app}
+            if region is not None:
+                app_dict['region'] = region
+
+            payload = json.dumps(app_dict)
+
+        logger.info('delete app on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deleteapp_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deleteapp_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_deleteapp_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deleteapp_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateAppInst'
+
+        payload = None
+        appinst = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override).app_instance
+            appinst_dict = {'appinst': appinst}
+            if region is not None:
+                appinst_dict['region'] = region
+
+            payload = json.dumps(appinst_dict)
+
+        logger.info('create app instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createappinst_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createappinst_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createappinst_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self.prov_stack.append(lambda:self.delete_app_instance(region=region, app_name=appinst['key']['app_key']['name'], developer_name=appinst['key']['app_key']['developer_key']['name'], app_version=appinst['key']['app_key']['version'], cluster_instance_name=appinst['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=appinst['key']['cluster_inst_key']['cloudlet_key']['name'], operator_name=appinst['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=appinst['key']['cluster_inst_key']['developer']))
+
+            self._number_createappinst_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteAppInst'
+
+        payload = None
+        appinst = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override).app_instance
+            appinst_dict = {'appinst': appinst}
+            if region is not None:
+                appinst_dict['region'] = region
+
+            payload = json.dumps(appinst_dict)
+
+        logger.info('create app instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deleteappinst_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deleteappinst_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_deleteappinst_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deleteappinst_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
