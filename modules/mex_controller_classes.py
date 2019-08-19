@@ -1,5 +1,35 @@
 import shared_variables
 
+class Organization():
+    organization = None
+
+    def __init__(self, organization_name=None, organization_type=None, phone=None, address=None, use_defaults=True):
+        org_dict = {}
+
+        self.org_name = organization_name
+        self.org_type = organization_type
+        self.phone = phone
+        self.address = address
+
+        if use_defaults:
+            if organization_name is None: self.org_name = shared_variables.organization_name_default
+            if phone is None: self.phone = shared_variables.phone_default
+            if address is None: self.address = shared_variables.address_default
+            if organization_type is None: self.org_type = shared_variables.organization_type_default
+
+        #shared_variables.flavor_name_default = self.flavor_name
+
+        if self.org_name is not None:
+            org_dict['name'] = self.org_name
+        if self.phone is not None:
+            org_dict['phone'] = self.phone
+        if self.address is not None:
+            org_dict['address'] = self.address
+        if self.org_type is not None:
+            org_dict['type'] = self.org_type
+
+        self.organization = org_dict
+
 class Flavor():
     flavor = None
     
@@ -22,7 +52,7 @@ class Flavor():
         #"{\"flavor\":{\"key\":{\"name\":\"uu\"},\"ram\":1,\"vcpus\":1,\"disk\":1}}", "resp": "{}", "took": "85.424786ms"}
         
         if self.flavor_name is not None:
-            flavor_dict['key'] = {'name': flavor_name}
+            flavor_dict['key'] = {'name': self.flavor_name}
         if self.ram is not None:
             flavor_dict['ram'] = int(self.ram)
         if self.vcpus is not None:
@@ -64,19 +94,13 @@ class Cloudlet():
         if self.ip_support == "IpSupportDynamic":
             self.ip_support = 2
 
-        print('*WARN*', 'before key')
         #"{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         cloudlet_dict = {}
         cloudlet_key_dict = {}
         if self.operator_name is not None:
-            print('*WARN*', 'before key op')
             cloudlet_key_dict['operator_key'] = {'name': self.operator_name}
-            print('*WARN*', 'after key op')
         if self.cloudlet_name is not None:
-            print('*WARN*', 'before key cl')
             cloudlet_key_dict['name'] = self.cloudlet_name
-            print('*WARN*', 'after key cl')
-        print('*WARN*', 'after key')
 
         loc_dict = {}
         if self.latitude is not None:
@@ -99,9 +123,7 @@ class Cloudlet():
         #    cloudlet_dict['static_ips'] = self.staticips
         #    _fields_list.append(self._cloudlet_staticips_field)
 
-        print("In the class before", cloudlet_dict)
         self.cloudlet = cloudlet_dict
-        print("In the class after", cloudlet_dict)
 
 class ClusterInstance():
     def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, use_defaults=True):
