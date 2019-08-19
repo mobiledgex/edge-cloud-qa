@@ -736,6 +736,7 @@ class MexMasterController(MexRest):
                 self._number_adduserrole_requests_fail += 1
                 raise Exception("post failed:", e)
 
+            self.prov_stack.append(lambda:self.removeuser_role(orgname, username, role, self.super_token))
             self._number_adduserrole_requests_success += 1
 
         if use_thread is True:
@@ -1111,9 +1112,12 @@ class MexMasterController(MexRest):
             self._number_showcloudlet_requests_success += 1
 
             resp_data = self.decoded_data
+            if type(resp_data) is dict:
+                resp_data = [resp_data]
+
             reverse = True if sort_order == 'descending' else False
             if sort_field == 'app_name':
-                resp_data = sorted(self.decoded_data, key=lambda x: x['data']['key']['app_key']['name'].casefold(),reverse=reverse)
+                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['app_key']['name'].casefold(),reverse=reverse)
 
             return resp_data
 
