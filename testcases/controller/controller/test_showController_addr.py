@@ -10,6 +10,7 @@ import sys
 from delayedassert import expect, expect_equal, assert_expectations
 import logging
 import os
+import re
 
 import MexController as mex_controller
 
@@ -39,12 +40,35 @@ class tc(unittest.TestCase):
         # ... show controller by address
         # ... verify controller is shown
 
+        re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+        re_host = re.compile('^controller-')
+        re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
+
+        resp = self.controller.show_controllers()
+
         # show controllers
-        for addr in controller_address_list:
-            resp = self.controller.show_controllers(address=addr)
+        for controller in resp:
+            resp = self.controller.show_controllers(address=controller.key.addr)
+
+            build_head = resp[0].build_master + '+'
+
+            foundhead = False
+            foundhost = False
+            foundip = False
+
+            if re_master.match(resp[0].build_master):
+               foundhead=True
+            if re_host.match(resp[0].hostname):
+               foundhost=True
+            if re_ip.match(resp[0].key.addr):
+               foundip=True
+
+            expect_equal(foundhead, True, 'buildmaster')
+            expect_equal(foundhost, True, 'host')
+            expect_equal(foundip, True, 'host')
+            expect_equal(resp[0].build_head, build_head, 'buildhead0')
 
             expect_equal(len(resp), 1, 'number of controllers')
-            expect_equal(resp[0].key.addr, addr, 'addr 1')
 
         assert_expectations()
 
