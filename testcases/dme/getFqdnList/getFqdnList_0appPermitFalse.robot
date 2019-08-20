@@ -39,11 +39,11 @@ Setup
     #Create Cluster	
 
     Create Developer         developer_name=${dev_1}
-    Create App               access_ports=tcp:1  permits_platform_apps=${False}  #official_fqdn=${uri_1}
+    Create App               access_ports=tcp:1  #permits_platform_apps=${False}  #official_fqdn=${uri_1}
     #${appinst_1}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_1}  cluster_instance_name=autocluster
 
     Create Developer         developer_name=${dev_2}
-    Create App               access_ports=tcp:1  permits_platform_apps=${False}  #official_fqdn=${uri_2}
+    Create App               access_ports=tcp:1  #permits_platform_apps=${False}  #official_fqdn=${uri_2}
     #${appinst_2}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${uri_2}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${samsung_developer_name}

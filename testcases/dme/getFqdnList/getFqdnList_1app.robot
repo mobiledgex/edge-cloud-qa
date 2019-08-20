@@ -37,7 +37,7 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cluster	
-    ${app}=  Create App			access_ports=tcp:1  permits_platform_apps=${True}  official_fqdn=${samsung_uri}
+    ${app}=  Create App			access_ports=tcp:1  official_fqdn=${samsung_uri}
     #${tmus_appinst}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${samsung_developer_name}
