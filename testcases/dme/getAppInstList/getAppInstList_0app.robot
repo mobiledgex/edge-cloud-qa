@@ -31,6 +31,6 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cluster	
-    Create App			access_ports=tcp:1  permits_platform_apps=${True}
+    Create App			access_ports=tcp:1  #permits_platform_apps=${True}
 
 
