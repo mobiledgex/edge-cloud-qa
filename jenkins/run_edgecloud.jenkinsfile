@@ -49,6 +49,12 @@ node('jenkinsSlave1'){
 	  dir('go/src/github.com/mobiledgex/edge-cloud') {
              sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
           }
+	  dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+          }
+	  dir('go/src/github.com/mobiledgex/edge-proto') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+          }
 
           dir('go/src/github.com/mobiledgex/edge-cloud') {
              git branch: 'master',
@@ -59,6 +65,11 @@ node('jenkinsSlave1'){
              git branch: 'master',
              credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
              url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-proto') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-proto.git'
           }
 
        }
