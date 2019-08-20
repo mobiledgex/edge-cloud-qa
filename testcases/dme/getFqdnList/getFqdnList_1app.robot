@@ -37,7 +37,7 @@ Setup
     Create Developer            
     Create Flavor
     #Create Cluster	
-    ${app}=  Create App			access_ports=tcp:1  permits_platform_apps=${True}  official_fqdn=${platos_uri}
+    ${app}=  Create App			access_ports=tcp:1  official_fqdn=${platos_uri}
     #${dmuus_appinst}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Create Developer            developer_name=${platos_developer_name}
