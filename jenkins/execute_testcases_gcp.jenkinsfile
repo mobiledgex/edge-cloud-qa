@@ -80,7 +80,7 @@ node('jenkinsGcpSlave1'){
 
     stage("build protos") {
       dir('go/src/github.com/mobiledgex/tools') {
-         status = sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/--qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+         status = sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
          println status
          if(status != 0) {
             echo "build_protos.py failed with statuscode=" + status
