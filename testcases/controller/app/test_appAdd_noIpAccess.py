@@ -109,20 +109,31 @@ class tc(unittest.TestCase):
                                       developer_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for AccessLayerL7 since it is not sent in create
-        app_temp = self.app
-        app_temp.ip_access = 3 # IpAccessShared
-        found_app = app_temp.exists(app_post)
+        #app_temp = self.app
+        #app_temp.ip_access = 3 # IpAccessShared
+        #found_app = app_temp.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     @classmethod
     def tearDownClass(self):
