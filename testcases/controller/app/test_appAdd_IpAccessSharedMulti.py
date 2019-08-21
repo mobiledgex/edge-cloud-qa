@@ -681,18 +681,29 @@ class tc(unittest.TestCase):
                                              ip_access = 'IpAccessShared',
                                              access_ports = 'http:655,http:2',
                                              default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     def test_CreateAppQCOWIpAccessSharedHTTP10Ports(self):
         # [Documentation] App - User shall be able to create an app with IpAccessShared/ImageTypeQCOW and 10 http ports
@@ -712,18 +723,29 @@ class tc(unittest.TestCase):
                                              ip_access = 'IpAccessShared',
                                              access_ports = 'http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10',
                                              default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     def test_CreateAppQCOWIpAccessSharedHTTP100Ports(self):
         # [Documentation] App - User shall be able to create an app with IpAccessShared/ImageTypeQCOW and 100 http ports
@@ -746,18 +768,29 @@ class tc(unittest.TestCase):
                                              ip_access = 'IpAccessShared',
                                              access_ports = tcp_list[:-1],
                                              default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     def test_CreateAppQCOWIpAccessSharedTCPUDPHTTPPorts(self):
         # [Documentation] App - User shall be able to create an app with IpAccessShared/ImageTypeQCOW and multiple tcp/udp/http ports
@@ -777,17 +810,28 @@ class tc(unittest.TestCase):
                                              ip_access = 'IpAccessShared',
                                              access_ports = 'http:80,tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3,http:8080',
                                              default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
+        #expect_equal(found_app, True, 'find app')
 
     @classmethod
     def tearDownClass(self):
