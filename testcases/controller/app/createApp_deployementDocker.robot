@@ -17,7 +17,7 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=d
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  access_ports=http:80  image_path=mypath
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Deployment Type Docker and HTTP access ports are incompatable" 
+    Should Contain  ${error_msg}   details = "Deployment Type and HTTP access ports are incompatible" 
 
 CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker and access_ports=tcp,udp,http
     [Documentation]
@@ -27,5 +27,5 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=d
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  access_ports=tcp:1,udp:2,http:80  image_path=mypath
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Deployment Type Docker and HTTP access ports are incompatable"
+    Should Contain  ${error_msg}   details = "Deployment Type and HTTP access ports are incompatible"
 
