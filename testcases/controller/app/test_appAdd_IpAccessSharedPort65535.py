@@ -389,18 +389,29 @@ class tc(unittest.TestCase):
                                       ip_access = 'IpAccessShared',
                                       access_ports = 'http:65535',
                                       default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     def test_CreateAppQCOWIpAccessSharedHTTP065535(self):
         # [Documentation] App - User shall be able to create an app with IpAccessShared/ImageTypeQCOW and port http:065535
@@ -421,18 +432,29 @@ class tc(unittest.TestCase):
                                       ip_access = 'IpAccessShared',
                                       access_ports = 'http:065535',
                                       default_flavor_name=flavor_name)
-        resp = self.controller.create_app(self.app.app)
+        error = None
+        try:
+            resp = self.controller.create_app(self.app.app)
+        except grpc.RpcError as e:
+            logger.info('got exception ' + str(e))
+            error = e
+
+        expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
+        expect_equal(error.details(), 'Deployment Type and HTTP access ports are incompatible', 'error details')
+        assert_expectations()
+
+        #resp = self.controller.create_app(self.app.app)
 
         # print the cluster instances after error
-        app_post = self.controller.show_apps()
+        #app_post = self.controller.show_apps()
 
         # look for app
-        found_app = self.app.exists(app_post)
+        #found_app = self.app.exists(app_post)
 
-        self.controller.delete_app(self.app.app)
+        #self.controller.delete_app(self.app.app)
         
-        expect_equal(found_app, True, 'find app')
-        assert_expectations()
+        #expect_equal(found_app, True, 'find app')
+        #assert_expectations()
 
     @classmethod
     def tearDownClass(self):
