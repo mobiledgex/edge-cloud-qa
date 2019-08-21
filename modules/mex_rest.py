@@ -28,18 +28,32 @@ class MexRest(WebService) :
     def _decode_content(self):
         logging.debug('content=' + self.resp.content.decode("utf-8"))
 
-        datasplit = self.resp.content.decode("utf-8").splitlines()
-        if len(datasplit) == 1:
-            try:
-                self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
-            except:
+        try:
+            self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
+        except:
+            datasplit = self.resp.content.decode("utf-8").splitlines()
+            if len(datasplit) == 1:
                 self.decoded_data = self.resp.content.decode("utf-8")
-        else:
-            data_list = []
-            for data in datasplit:
-                print('*WARN*', data)
-                data_list.append(json.loads(data))
-            self.decoded_data = data_list
+            else:
+                data_list = []
+                for data in datasplit:
+                    print('*WARN*', 'ddddd', data)
+                    data_list.append(json.loads(data))
+                self.decoded_data = data_list
+
+#        datasplit = self.resp.content.decode("utf-8").splitlines()
+#        print('*WARN*', 'datasplit',datasplit)
+#        if len(datasplit) == 1:
+#            try:
+#                self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
+#            except:
+#                self.decoded_data = self.resp.content.decode("utf-8")
+#        else:
+#            data_list = []
+#            for data in datasplit:
+#                print('*WARN*', 'ddddd', data)
+#                data_list.append(json.loads(data))
+#            self.decoded_data = data_list
 
     def response_status_code(self):
         return self.resp.status_code
