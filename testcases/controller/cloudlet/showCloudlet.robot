@@ -47,7 +47,8 @@ Setup
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
         ${epochstring}=  Convert To String  ${epoch}
 
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
+        #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  notify_server_address=${port}
