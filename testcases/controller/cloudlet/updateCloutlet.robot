@@ -18,8 +18,9 @@ UpdateCloudlet accessuri
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}  notify_server_address=${port}   
@@ -35,8 +36,9 @@ UpdateCloudlet staticips
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
@@ -55,8 +57,9 @@ UpdateCloudlet number_of_dynamic_ips
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
@@ -75,8 +78,9 @@ UpdateCloudlet location
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
@@ -94,8 +98,9 @@ UpdateCloudlet location lat
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
@@ -113,8 +118,9 @@ UpdateCloudlet location long
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
@@ -134,8 +140,9 @@ UpdateCloudlet optional accessuri
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}   notify_server_address=${port}  use_defaults=False
@@ -155,8 +162,9 @@ UpdateCloudlet optional staticips
         Sleep  1s
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${epochstring}=  Convert To String  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        #${epochstring}=  Convert To String  ${epoch}
+        #${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    notify_server_address=${port}  use_defaults=False
