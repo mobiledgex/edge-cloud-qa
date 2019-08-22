@@ -109,16 +109,16 @@ Setup
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
     #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     #Create Cluster
-    Create App                  access_ports=tcp:1  permits_platform_apps=${True}
+    Create App                  access_ports=tcp:1  #permits_platform_apps=${True}
     ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=  Get Default App Name
 
-    Create Developer            developer_name=${platos_developer_name}
+    #Create Developer            developer_name=${platos_developer_name}
     Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
-    Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+    #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 
     Set Suite Variable  ${developer_name_default}
