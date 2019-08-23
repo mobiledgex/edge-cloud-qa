@@ -53,6 +53,13 @@ node('jenkinsGcpSlave1'){
 
                 //unstash 'edge-cloud_stash'
         }
+
+        dir('go/src/github.com/mobiledgex/edge-cloud') {
+           sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+        }
+        dir('go/src/github.com/mobiledgex/edge-proto') {
+           sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+        }
         
         dir('go/src/github.com/mobiledgex/edge-cloud') {
             checkout([$class: 'GitSCM',
@@ -74,6 +81,11 @@ node('jenkinsGcpSlave1'){
         dir('go/src/github.com/mobiledgex/edge-cloud') {
            def t = 'git reset --hard ' + commit_version
            def tout  = sh(script: t, returnStdout: true);
+        }
+        dir('go/src/github.com/mobiledgex/edge-proto') {
+           git branch: 'master',
+           credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+           url: 'https://github.com/mobiledgex/edge-proto.git'
         }
 
     }
