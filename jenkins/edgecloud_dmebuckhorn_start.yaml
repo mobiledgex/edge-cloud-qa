@@ -30,7 +30,7 @@ spec:
          - "--httpAddr"
          - "0.0.0.0:38001"
          - "--locverurl"
-         - "http://mextest.locsim.mobiledgex.net:8888/verifyLocation"
+         - "http://mextest.locsim.mobiledgex.net:8889/verifyLocation"
          - "--carrier"
          - "GDDT"
          - "--d"
