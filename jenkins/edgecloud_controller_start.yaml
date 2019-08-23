@@ -32,6 +32,8 @@ spec:
           - "0.0.0.0:55001"
           - "--httpAddr"
           - "0.0.0.0:36001"
+          - "--publicAddr"
+          - "automation.ctrl.mobiledgex.net"
           - "--region"
           - "US"
           - "--vaultAddr"
