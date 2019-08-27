@@ -1,4 +1,5 @@
 #include <grpcpp/grpcpp.h>
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <regex>
@@ -6,7 +7,7 @@
 #include <curl/curl.h>
 
 #include "app-client.grpc.pb.h"
-#include "test_credentials.hpp"
+
 #include "jwt.h"
 
 using namespace std;
@@ -19,16 +20,14 @@ using grpc::ClientContext;
 using grpc::Status;
 
 
-// Test Cert files:
-struct MutualAuthFiles {
-    const string caCrtFile = "../../../certs/mex-ca.crt";
-    const string clientCrtFile = "../../../certs/mex-client.crt";
-    const string clientKeyFile = "../../../certs/mex-client.key";
-} mutualAuthFiles;
 
 class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
+    inline static const string carrierNameDefault = "TDG";
+    inline static const string baseDmeHost = "mobiledgex.net";
+    static const unsigned int defaultDmePort = 50051;
+    unsigned int dmePort = defaultDmePort;
     const string appName = "automation_api_app"; // Your application name
     const string devName = "automation_api"; // Your developer name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
@@ -40,8 +39,16 @@ class MexGrpcClient {
 
     // Retrieve the carrier name of the cellular network interface.
     string getCarrierName() {
-        return string("");
+        return carrierNameDefault;
     }
+
+      static string generateDmeHostPath(string carrierName) {
+        if (carrierName == "") {
+            return carrierNameDefault + "." + baseDmeHost;
+        }
+        return carrierName + "." + baseDmeHost;
+    }
+
 
     // A C++ GPS location provider/binding is needed here.
     //unique_ptr<Loc> location = // make_unique --> C++14...
@@ -91,7 +98,7 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_session_cookie(sessioncookie);
+        request->set_session_cookie(session_cookie);
         request->set_carrier_name(carrierName);
 
         Loc *ownedLocation = gpslocation->New();
@@ -112,7 +119,7 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_session_cookie(sessioncookie);
+        request->set_session_cookie(session_cookie);
         request->set_carrier_name(carrierName);
 
         Loc *ownedLocation = gpslocation->New();
@@ -133,7 +140,7 @@ class MexGrpcClient {
         grpc::Status grpcStatus = stub_->RegisterClient(&context, *request, &reply);
 
         // Save some Mex state info for other calls.
-        this->sessioncookie = reply.session_cookie();
+        this->session_cookie = reply.session_cookie();
         this->tokenserveruri = reply.token_server_uri();
 
         return grpcStatus;
@@ -193,10 +200,10 @@ class MexGrpcClient {
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
 
         // SSL Setup:
-        curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-        curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
+        //curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
+        //curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
         // CA:
-        curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
+        //curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
 
         // verify peer or disconnect
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
@@ -215,7 +222,7 @@ class MexGrpcClient {
     std::unique_ptr<MatchEngineApi::Stub> stub_;
     string token;  // short lived carrier dt-id token.
     string tokenserveruri;
-    string sessioncookie;
+    string session_cookie;
 
     static string parseParameter(const string &queryParameter, const string keyFind) {
         string value;
@@ -326,6 +333,7 @@ class MexGrpcClient {
 };
 
 int main() {
+  
     cout << "FindCloudletNoCarrier Test Case" << endl;
     cout << endl;
     string host = "automationbonn.dme.mobiledgex.net:50051";
@@ -338,21 +346,13 @@ int main() {
     const std::regex regexPat("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$");
     
     // Credentials, Mutual Authentication:
-    unique_ptr<test_credentials> test_creds = unique_ptr<test_credentials>(
-            new test_credentials(
-                mutualAuthFiles.caCrtFile,
-                mutualAuthFiles.clientCrtFile,
-                mutualAuthFiles.clientKeyFile));
 
-    grpc::SslCredentialsOptions credentials;
+    stringstream ssUri;
+    ssUri << host;
+    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions());
+    shared_ptr<Channel> channel = grpc::CreateChannel(ssUri.str(), channel_creds);
 
-    credentials.pem_root_certs = test_creds->caCrt;
-    credentials.pem_cert_chain = test_creds->clientCrt;
-    credentials.pem_private_key = test_creds->clientKey;
-
-    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions(credentials));
-    shared_ptr<Channel> channel = grpc::CreateChannel(host, channel_creds);
-
+    cout << "Url to use: " << ssUri.str() << endl;
     unique_ptr<MexGrpcClient> mexClient = unique_ptr<MexGrpcClient>(new MexGrpcClient(channel));
 
     try {
