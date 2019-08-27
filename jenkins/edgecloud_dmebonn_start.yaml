@@ -44,9 +44,9 @@ spec:
          - "--tls"
          - "/root/tls/mex-server.crt"
          - "--tlsApiCertFile"
-         - "/root/tls/mex-server.crt"
+         - "/tls/tls.crt"
          - "--tlsApiKeyFile"
-         - "/root/tls/mex-server.key"
+         - "/tls/tls.key"
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"TDG\"},\"name\":\"automationBonnCloudlet\"}"
         env:
@@ -58,7 +58,14 @@ spec:
            value: b95e3309-5964-89a2-5647-e86f745f20c7
          - name: VAULT_SECRET_ID
            value: b6c6c629-c99d-25f8-b26d-1afc5bf5d654
+        volumeMounts:
+         - name: tls
+           mountPath: /tls
       imagePullSecrets:
        - name: mexreg-secret 
+      volumes:
+      - name: tls
+        secret:
+          secretName: automation-dme-certs
 
 
