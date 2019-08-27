@@ -26,6 +26,8 @@ import developer_pb2_grpc
 #import clusterflavor_pb2_grpc
 import app_inst_pb2
 import app_inst_pb2_grpc
+import exec_pb2
+import exec_pb2_grpc
 import loc_pb2
 import loc_pb2_grpc
 import threading
@@ -527,7 +529,7 @@ class Cloudlet():
                 crm_notify_server_address_port_last += 1
                 port = crm_notify_server_address_port_last
             self.notify_server_address = shared_variables.crm_notify_server_address + ':' + str(port)
-            
+
         if cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
         if operator_name == 'default':
@@ -593,7 +595,8 @@ class Cloudlet():
             for field in _fields_list:
                 self.cloudlet.fields.append(field)
 
-
+        #print('*WARN*', cloudlet_dict['notify_srv_addr'])
+        
     def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         print ("In Update", staticips)
         
@@ -870,8 +873,9 @@ class AppInstance():
             self.operator_name = shared_variables.operator_name_default
         if self.cloudlet_name == 'default' and self.operator_name != 'developer':  # special case for samsung where they use operator=developer and cloudlet=default
             self.cloudlet_name = shared_variables.cloudlet_name_default
-
+        print('*WARN*', 'sdfn1111')
         if use_defaults:
+            print('*WARN*', 'sdfn')
             if not app_name: self.app_name = shared_variables.app_name_default
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
@@ -961,6 +965,68 @@ class AppInstance():
         print('s',self.app_instance)
         #sys.exit(1)
 
+class RunCommand():
+    def __init__(self, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, use_defaults=True):
+        self.app_name = app_name
+        self.app_version = app_version
+        self.developer_name = developer_name
+        self.cluster_developer_name = cluster_instance_developer_name
+        self.operator_name = operator_name
+        self.cloudlet_name = cloudlet_name
+        self.cluster_name = cluster_instance_name
+
+        if use_defaults:
+            if not app_name: self.app_name = shared_variables.app_name_default
+            if not developer_name: self.developer_name = shared_variables.developer_name_default
+            if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cluster_instance_developer_name: self.cluster_developer_name = shared_variables.developer_name_default
+            if not app_version: self.app_version = shared_variables.app_version_default
+            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if not operator_name: self.operator_name = shared_variables.operator_name_default
+
+        runcommand_dict = {}
+        appinst_key_dict = {}
+        app_key_dict = {}
+        cloudlet_key_dict = {}
+        clusterinst_key_dict = {}
+        cluster_key_dict = {}
+        
+        if self.app_name:
+            app_key_dict['name'] = self.app_name
+        if self.app_version:
+            app_key_dict['version'] = self.app_version
+        if self.developer_name is not None:
+            app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
+
+        if self.cluster_name is not None:
+            cluster_key_dict['name'] = self.cluster_name
+        if self.cloudlet_name is not None:
+            cloudlet_key_dict['name'] = self.cloudlet_name
+        if self.operator_name is not None:
+            cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
+        if cloudlet_key_dict:
+            clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
+        if cluster_key_dict:
+            clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
+        if self.cluster_developer_name is not None:
+            clusterinst_key_dict['developer'] = self.cluster_developer_name
+
+        if app_key_dict:
+            appinst_key_dict['app_key'] = app_pb2.AppKey(**app_key_dict)
+        if clusterinst_key_dict:
+            appinst_key_dict['cluster_inst_key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
+
+        if appinst_key_dict:
+            runcommand_dict['app_inst_key'] = app_inst_pb2.AppInstKey(**appinst_key_dict)
+        
+        if command is not None:
+            runcommand_dict['command'] = command
+
+        runcommand_dict['offer'] = '{\"type\":\"offer\",\"sdp\":\"v=0\\r\\no=- 706214052 1566425306 IN IP4 0.0.0.0\\r\\ns=-\\r\\nt=0 0\\r\\na=fingerprint:sha-256 01:10:D5:D8:54:8F:22:59:9E:29:F8:EE:A7:45:7C:A3:FC:28:DE:3A:32:D6:DC:B1:0D:64:64:2C:3C:3F:20:A6\\r\\na=group:BUNDLE 0\\r\\nm=application 9 DTLS/SCTP 5000\\r\\nc=IN IP4 0.0.0.0\\r\\na=setup:active\\r\\na=mid:0\\r\\na=sendrecv\\r\\na=sctpmap:5000 webrtc-datachannel 1024\\r\\na=ice-ufrag:pADKraYqfCqVzVaZ\\r\\na=ice-pwd:gSUghOVjhtXWiPDkcQFtBtTxqfknNAjS\\r\\na=candidate:foundation 1 udp 2130706431 192.168.1.126 53204 typ host generation 0\\r\\na=candidate:foundation 2 udp 2130706431 192.168.1.126 53204 typ host generation 0\\r\\na=candidate:foundation 1 udp 16777215 40.114.198.180 49168 typ relay raddr 0.0.0.0 rport 63101 generation 0\\r\\na=candidate:foundation 2 udp 16777215 40.114.198.180 49168 typ relay raddr 0.0.0.0 rport 63101 generation 0\\r\\na=end-of-candidates\\r\\na=setup:actpass\\r\\n\"}'
+        
+        print('*WARN*', runcommand_dict)
+        self.run_command = exec_pb2.ExecRequest(**runcommand_dict)
+
 class MexController(MexGrpc):
     """Library for Controller GRPC operations
     
@@ -1032,6 +1098,7 @@ class MexController(MexGrpc):
         self.appinst_stub = app_inst_pb2_grpc.AppInstApiStub(self.grpc_channel)
         self.operator_stub = operator_pb2_grpc.OperatorApiStub(self.grpc_channel)
         self.developer_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
+        self.exec_stub = exec_pb2_grpc.ExecApiStub(self.grpc_channel)
 
         self._init_shared_variables()
 
@@ -1518,8 +1585,12 @@ class MexController(MexGrpc):
 
         logger.info('create cloudlet on {}. \n\t{}'.format(self.address, str(cloudlet_instance).replace('\n','\n\t')))
         resp = self.cloudlet_stub.CreateCloudlet(cloudlet_instance)
+
         for s in resp:
             print(s)
+            if 'Failure' in str(s):
+                logging.error(str(s))
+                raise Exception(str(s))
 
         self.prov_stack.append(lambda:self.delete_cloudlet(cloudlet_instance))
         
@@ -1823,7 +1894,9 @@ class MexController(MexGrpc):
         resp = None
 
         if not app_instance:
+            print('*WARN*', 'noappinst')
             if len(kwargs) != 0:
+                print('*WARN*', 'noappinst2')
                 app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -2189,6 +2262,82 @@ class MexController(MexGrpc):
             raise AssertionError('Developer does exist'.format(str(resp)))
         except:
             logger.info('developer does not exist')
+
+    def run_command(self, run_instance=None, **kwargs):
+        """ Creates an app instance with the specified object, values or all default values
+
+        Equivalent to edgectl CreateAppInst.
+
+        Arguments:
+
+        | =Argument=                      | =Default Value= |
+        | app_name                        | 'app' + epochTime or appname set by previous Create App |
+        | app_version                     | 1.0 |
+        | cloudlet_name                   | 'cloudlet' + epochTime or cloudlet name set by previous Create Cloudlet |
+        | operator_name                   | 'Operator' + epochTime or operator name set by previous Create Operator |
+        | developer_name                  | 'Developer' + epochTime or operator name set by previous Create Developer |
+        | cluster_instance_name           | None |
+        | cluster_instance_developer_name | None |
+        | flavor_name                     | None |
+        | uri                             | None |
+        | appinst_id                      | None |
+        | use_defaults                    | True. Set to True or False for whether or not to use default values |
+        | use_thread    | False. Set to True to run the operation in a thread. Used for parallel executions         |
+
+        Examples:
+
+        | Create App Instance | cloudlet_name=${cloudlet_name} | operator_name=${operator_name} | cluster_instance_name=autocluster 
+        | Create App Instance | cluster_instance_name=autocluster |
+
+        """
+
+        resp = None
+        auto_delete = True
+        use_thread = False
+
+        if not run_instance:
+            if 'use_thread' in kwargs:
+                del kwargs['use_thread']
+                use_thread = True
+            run_instance = RunCommand(**kwargs).run_command
+
+        logger.info('run command on {}. \n\t{}'.format(self.address, str(run_instance).replace('\n','\n\t')))
+
+        resp = None
+        success = False
+
+        def sendMessage():
+            try:
+                print('*WARN*', 'runc')
+                resp = self.exec_stub.RunCommand(run_instance)
+                print('*WARN*', 'runcd')
+            except:
+                print('*WARN*', 'rune')
+                resp = sys.exc_info()[0]
+
+            self.response = resp
+            print('*WARN*', resp)
+            for s in resp:
+                logger.debug(s)
+                if "Created successfully" in str(s):
+                    success = True
+
+            if 'StatusCode.OK' in str(resp):  #check for OK because samsung isnt currently printing Created successfull
+                success = True
+
+            if not success:
+                raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
+
+            return resp[0]
+        
+        if use_thread:
+            t = threading.Thread(target=sendMessage)
+            t.start()
+            return t
+        else:
+            print('sending message')
+            resp = sendMessage()
+            return resp
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
