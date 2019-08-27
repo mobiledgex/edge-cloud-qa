@@ -1077,6 +1077,62 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
+    def show_clusters(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
+        url = self.root_url + '/auth/ctrl/ShowClusterInst'
+
+        payload = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            cluster_dict = {}
+            if region is not None:
+                cluster_dict['region'] = region
+
+            payload = json.dumps(cluster_dict)
+
+        logger.info('show cluster on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_showcluster_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+
+                logger.info('response:\n' + str(self.resp.text))
+
+                respText = str(self.resp.text)
+
+                if str(self.resp.status_code) != '200':
+                    self._number_showcluster_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_showcluster_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_showcluster_requests_success += 1
+
+            resp_data = self.decoded_data
+            if type(resp_data) is dict:
+                resp_data = [resp_data]
+
+            reverse = True if sort_order == 'descending' else False
+            if sort_field == 'cluster_name':
+                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+
+            return resp_data
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return resp
+
     def show_app_instances(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='app_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowAppInst'
 
