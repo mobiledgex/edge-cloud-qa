@@ -7,7 +7,7 @@ import threading
 import requests
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance
+from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand
 
 import shared_variables_mc
 
@@ -114,6 +114,10 @@ class MexMasterController(MexRest):
         self._number_showaccount_requests = 0
         self._number_showaccount_requests_success = 0
         self._number_showaccount_requests_fail = 0
+
+        self._number_runcommand_requests = 0
+        self._number_runcommand_requests_success = 0
+        self._number_runcommand_requests_fail = 0
 
         self.super_token = self.login(self.username, self.password, None, False)
 
@@ -1506,7 +1510,7 @@ class MexMasterController(MexRest):
 
             payload = json.dumps(appinst_dict)
 
-        logger.info('create app instance on mc at {}. \n\t{}'.format(url, payload))
+        logger.info('delete app instance on mc at {}. \n\t{}'.format(url, payload))
 
         def send_message():
             self._number_deleteappinst_requests += 1
@@ -1523,6 +1527,52 @@ class MexMasterController(MexRest):
                 raise Exception("post failed:", e)
 
             self._number_deleteappinst_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, json_data=None, use_defaults=True, use_thread=False):
+        #url = self.root_url + '/auth/ctrl/RunCommand'
+
+        #payload = None
+        #run_command = None
+
+        #if use_defaults == True:
+        #    if token == None: token = self.token
+
+        #if json_data !=  None:
+        #    payload = json_data
+        #else:
+        #    runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name).run_command
+        #    runcommand_dict = {'execrequest': runcommand}
+        #    if region is not None:
+        #        runcommand_dict['region'] = region
+
+        #    payload = json.dumps(runcommand_dict)
+
+        cmd = 'mcctl
+        logger.info('run command on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_runcommand_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_runcommand_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_runcommand_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_runcommand_requests_success += 1
 
         if use_thread is True:
             t = threading.Thread(target=send_message)
