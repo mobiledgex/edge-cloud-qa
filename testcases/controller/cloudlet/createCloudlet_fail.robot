@@ -151,7 +151,7 @@ CreateCloudlet with an invalid ipsupport enumeration 3
 CreateCloudlet - cloudlet should fail if address already in use
     [Documentation]  
         ...            send CreateCloudlet with address that is already in use 
-        ...            verify correctl error is received 
+        ...            verify correct error is received 
 
     #Create Cloudlet  operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default  latitude=35  longitude=-96  accesscredentials=https://support.sup.com/supersupport  ipsupport=IpSupportDynamic  staticips=30.30.30.1
 

@@ -42,25 +42,32 @@ VerifyLocation - request without token should return 'verifyloc token required'
    ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "verifyloc token required"
+   #Should Contain  ${error_msg}   details = "verifyloc token required"
+   Should Contain  ${error_msg}   details = "no VerifyLocToken in request"
 
-VerifyLocation - request with latitude only should succeed
+VerifyLocation - request with latitude only should not succeed
    [Documentation]
    ...  send VerifyLocation with carrier name and latitude only
-   ...  verify no error is received
+   ...  verify error is received
 
    Register Client
    Get Token
-   Verify Location  session_cookie=default  carrier_name=tmus  token=default  latitude=35  longitude=1  use_defaults=${True}  # no error should be received
+   ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  session_cookie=default  carrier_name=tmus  token=default  latitude=35  use_defaults=${True}  # no error should be received
 
-VerifyLocation - request with longitude only should succeed
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+
+VerifyLocation - request with longitude only should not succeed
    [Documentation]
    ...  send VerifyLocation with carrier name and longitude only
-   ...  verify no error is received
+   ...  verify error is received
 
    Register Client
    Get Token
-   Verify Location  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${True}  # no error should be received
+   ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${True}  # no error should be received
+
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 *** Keywords ***
 Setup
