@@ -24,8 +24,9 @@ VerifyLocation REST - request with bad token shall return LOC_ERROR_UNAUTHORIZED
       Register Client
       ${verify_reply}=  Verify Location  token=xx  carrier_name=TDG  latitude=${berlin_lat}  longitude=${berlin_long}
       log to console  ${verify_reply}
-      Should Be Equal As Numbers  ${verify_reply.gps_location_status}  6  #LOC_ERROR_UNAUTHORIZED
-      Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
+
+      Should Be Equal             ${verify_reply['gps_location_status']}  LOC_ERROR_UNAUTHORIZED
+      Should Be Equal As Numbers  ${verify_reply['gps_location_accuracy_km']}  -1
 
 VerifyLocation REST - request with empty token shall return 'verifyloc token required'
     [Documentation]
@@ -34,9 +35,10 @@ VerifyLocation REST - request with empty token shall return 'verifyloc token req
 	
       Register Client
       ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  token=  carrier_name=TDG  latitude=${berlin_lat}  longitude=${berlin_long}
-
-      Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-      Should Contain  ${error_msg}   details = "verifyloc token required"
+      log to console  ${error_msg}
+      Should Contain  ${error_msg}   responseCode = 400 
+      Should Contain  ${error_msg}   "code": 3 
+      Should Contain  ${error_msg}   "message": "no VerifyLocToken in request"
 
 *** Keywords ***
 Setup
