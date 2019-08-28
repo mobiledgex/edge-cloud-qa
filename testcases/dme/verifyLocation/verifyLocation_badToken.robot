@@ -36,7 +36,9 @@ VerifyLocation - request with empty token shall return 'verifyloc token required
       ${error_msg}=  Run Keyword And Expect Error  *  Verify Location  token=  carrier_name=GDDT  latitude=${beacon_lat}  longitude=${beacon_long}
 
       Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-      Should Contain  ${error_msg}   details = "verifyloc token required"
+      #Should Contain  ${error_msg}   details = "verifyloc token required"
+      Should Contain  ${error_msg}   details = "no VerifyLocToken in request"
+
 
 *** Keywords ***
 Setup

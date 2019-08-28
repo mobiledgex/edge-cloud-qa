@@ -129,7 +129,7 @@ class VerifyLocationRequestObject():
         if loc_dict:
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
         if self.token is not None:
-            request_dict['verify_locToken'] = self.token
+            request_dict['verify_loc_token'] = self.token
 
         print(request_dict)
         self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
