@@ -1,12 +1,13 @@
 #include <grpcpp/grpcpp.h>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <string>
 #include <regex>
 
 #include <curl/curl.h>
 
 #include "app-client.grpc.pb.h"
-#include "test_credentials.hpp"
 #include "jwt.h"
 
 using namespace std;
@@ -17,14 +18,6 @@ using distributed_match_engine::MatchEngineApi;
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
-
-
-// Test Cert files:
-struct MutualAuthFiles {
-    const string caCrtFile = "../../../certs/mex-ca.crt";
-    const string clientCrtFile = "../../../certs/mex-client.crt";
-    const string clientKeyFile = "../../../certs/mex-client.key";
-} mutualAuthFiles;
 
 class MexGrpcClient {
   public:
@@ -197,12 +190,6 @@ class MexGrpcClient {
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, &(this->token));
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
 
-        // SSL Setup:
-        curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-        curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
-        // CA:
-        curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
-
         // verify peer or disconnect
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
 
@@ -267,17 +254,6 @@ class MexGrpcClient {
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, wfd);
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
 
-      
-      // Set return pointer (the token), for the header callback.
-      //curl_easy_setopt(curl, CURLOPT_HEADERDATA, &(this->token));
-      //curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
-      
-      // SSL Setup:
-      curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-      curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
-      // CA:
-      curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
-      
       // verify peer or disconnect
       curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
       
