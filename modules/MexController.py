@@ -873,9 +873,8 @@ class AppInstance():
             self.operator_name = shared_variables.operator_name_default
         if self.cloudlet_name == 'default' and self.operator_name != 'developer':  # special case for platos where they use operator=developer and cloudlet=default
             self.cloudlet_name = shared_variables.cloudlet_name_default
-        print('*WARN*', 'sdfn1111')
+
         if use_defaults:
-            print('*WARN*', 'sdfn')
             if not app_name: self.app_name = shared_variables.app_name_default
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
@@ -1894,9 +1893,7 @@ class MexController(MexGrpc):
         resp = None
 
         if not app_instance:
-            print('*WARN*', 'noappinst')
             if len(kwargs) != 0:
-                print('*WARN*', 'noappinst2')
                 app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('show app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
