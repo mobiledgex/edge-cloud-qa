@@ -19,7 +19,8 @@ UpdateCloudlet without an operator
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	#Should Contain  ${error_msg}   details = "Key not found"
+        Should Contain  ${error_msg}   details = "Invalid operator name"
 
         [Teardown]  Cleanup provisioning
 
@@ -42,8 +43,8 @@ UpdateCloudlet without a cloudlet name
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	    operator_name=${oper}     use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
-
+	#Should Contain  ${error_msg}   details = "Key not found"
+        Should Contain  ${error_msg}   details = "Invalid cloudlet name"
 
 UpdateCloudlet with an invalid cloudlet name
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet name
@@ -138,7 +139,7 @@ UpdateCloudlet with a location of 0 0
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Invalid latitude value of 0"
+	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
 	[Teardown]  Cleanup provisioning
 
