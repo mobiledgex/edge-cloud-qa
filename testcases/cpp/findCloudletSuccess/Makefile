@@ -22,10 +22,9 @@ CPPFLAGS += `pkg-config --cflags protobuf grpc`
 CPPFLAGS += -I.
 CPPFLAGS += -I../common
 CPPFLAGS += -I../jwt-cpp
-CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2q/include/
-CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2r/include/
+CPPFLAGS += -I/usr/local/Cellar/openssl/1.0.2s/include/
 CPPFLAGS += -I/usr/include/
-CXXFLAGS += -std=c++11
+CXXFLAGS += -std=c++17
 CXXFLAGS += -fPIC
 ifeq ($(SYSTEM),Darwin)
 LDFLAGS += -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc`\
@@ -43,14 +42,14 @@ GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
 # Run "brew install coreutils" to get "grealpath" for protoc's requirement of absolute paths
-#ABSOLUTEPATH := $(shell grealpath ../../../../edge-cloud/)
-ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/edge-cloud/)
-PROTOS_PATH = $(ABSOLUTEPATH)/d-match-engine/dme-proto
-THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-mvp/third_party
+#ABSOLUTEPATH := $(shell grealpath ../../../../)
+ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/)
+DME_PROTO_PATH = $(ABSOLUTEPATH)/edge-proto/dme
+THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-proto/third_party
 
-PROTO_INCLUDE_DIRECTORIES := $(PROTOS_PATH) $(THIRD_PARTY_PROTOS_PATH)/googleapis
+PROTO_INCLUDE_DIRECTORIES := $(DME_PROTO_PATH) $(THIRD_PARTY_PROTOS_PATH)/googleapis
 
-vpath %.proto $(PROTOS_PATH)
+vpath %.proto $(PROTO_INCLUDE_DIRECTORIES)
 PROTO_INCLUDE_FLAGS += $(addprefix --proto_path ,$(PROTO_INCLUDE_DIRECTORIES))
 
 all: system-check libmexgrpc.so findCloudletSuccess
@@ -67,14 +66,6 @@ libmexgrpc.so: google/api/http.pb.o google/api/http.grpc.pb.o google/api/annotat
 
 .PRECIOUS: %.pb.cc
 %.pb.cc: %.proto
-	$(PROTOC) $(PROTO_INCLUDE_FLAGS) --cpp_out=. $<
-
-.PRECIOUS: google/api/%.grpc.pb.cc
-google/api/%.grpc.pb.cc: $(THIRD_PARTY_PROTOS_PATH)/googleapis/google/api/%.proto
-	$(PROTOC) $(PROTO_INCLUDE_FLAGS) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<
-
-.PRECIOUS: google/api/%.pb.cc
-google/api/%.pb.cc: $(THIRD_PARTY_PROTOS_PATH)/googleapis/google/api/%.proto
 	$(PROTOC) $(PROTO_INCLUDE_FLAGS) --cpp_out=. $<
 
 clean:
@@ -133,3 +124,15 @@ endif
 ifneq ($(SYSTEM_OK),true)
 	@false
 endif
+
+edge-proto-check:
+ifneq ("$(wildcard $(DME_PROTO_PATH)/app-client.proto)", "")
+	@echo "Found a proto in the proto path. Good."
+else
+	@echo "Sanity check: Missing edge-proto repository file!"
+	@echo "Expected edge-proto.git repo clone at DME_PROTO_PATH outside at the same directory level this git repo here: $(DME_PROTO_PATH)"
+endif
+
+test: sample_client
+	@echo "Basic test"
+	echo y | ./sample_client
