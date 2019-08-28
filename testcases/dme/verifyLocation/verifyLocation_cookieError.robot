@@ -31,8 +31,8 @@ VerifyLocation - request with bad session cookie shall return app not found
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=        Get Default App Name
 
-    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
-    Should Contain  ${error_msg}   details = "app not found: {{${developer_name_default}} ${app_name_default} 1.0}"
+    Should Contain  ${error_msg}   status = StatusCode.UNAUTHENTICATED
+    Should Contain  ${error_msg}   details = "app not found -- developer: ${developer_name_default}, app: ${app_name_default}, appvers: 1.0"
 
 
 VerifyLocation - request without cookie should return 'missing cookie'
