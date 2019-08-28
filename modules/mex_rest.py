@@ -19,7 +19,8 @@ class MexRest(WebService) :
         if bearer != None:
             headers['Authorization'] = 'Bearer ' + bearer
 
-        self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
+        #self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
+        self.resp = super().post(url=url, data=data, headers=headers)
         self._decode_content()
 
         if str(self.resp.status_code) != '200':
