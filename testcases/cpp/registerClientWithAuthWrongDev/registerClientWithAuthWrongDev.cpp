@@ -1,5 +1,7 @@
 #include <grpcpp/grpcpp.h>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <string>
 #include <regex>
 #include <stdio.h>     
@@ -8,7 +10,6 @@
 #include <curl/curl.h>
 
 #include "app-client.grpc.pb.h"
-#include "test_credentials.hpp"
 #include "jwt.h"
 
 using namespace std;
@@ -21,12 +22,6 @@ using grpc::ClientContext;
 using grpc::Status;
 
 
-// Test Cert files:
-struct MutualAuthFiles {
-    const string caCrtFile = "../../../certs/mex-ca.crt";
-    const string clientCrtFile = "../../../certs/mex-client.crt";
-    const string clientKeyFile = "../../../certs/mex-client.key";
-} mutualAuthFiles;
 
 class MexGrpcClient {
   public:
@@ -194,12 +189,6 @@ class MexGrpcClient {
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, &(this->token));
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
 
-        // SSL Setup:
-        curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-        curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
-        // CA:
-        curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
-
         // verify peer or disconnect
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
 
@@ -342,20 +331,6 @@ int main() {
     //const string pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
     
     
-    // Credentials, Mutual Authentication:
-    unique_ptr<test_credentials> test_creds = unique_ptr<test_credentials>(
-            new test_credentials(
-                mutualAuthFiles.caCrtFile,
-                mutualAuthFiles.clientCrtFile,
-                mutualAuthFiles.clientKeyFile));
-
-    grpc::SslCredentialsOptions credentials;
-
-    credentials.pem_root_certs = test_creds->caCrt;
-    credentials.pem_cert_chain = test_creds->clientCrt;
-    credentials.pem_private_key = test_creds->clientKey;
-
-    
     //Get the token for the registClient with Auth
     string tstr = "";
     string tokenSTR = "";
@@ -377,10 +352,15 @@ int main() {
 
      //cout << tokenSTR << endl;
  
-    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions(credentials));
-    shared_ptr<Channel> channel = grpc::CreateChannel(host, channel_creds);
+    // Credentials, Mutual Authentication:
+    stringstream ssUri;
+    ssUri << host;
+    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions());
+    shared_ptr<Channel> channel = grpc::CreateChannel(ssUri.str(), channel_creds);
 
+    cout << "Url to use: " << ssUri.str() << endl;
     unique_ptr<MexGrpcClient> mexClient = unique_ptr<MexGrpcClient>(new MexGrpcClient(channel));
+
 
     try {
         shared_ptr<Loc> loc = mexClient->retrieveLocation();
