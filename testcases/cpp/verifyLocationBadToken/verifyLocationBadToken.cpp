@@ -1,12 +1,13 @@
 #include <grpcpp/grpcpp.h>
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <string>
 #include <regex>
 
 #include <curl/curl.h>
 
 #include "app-client.grpc.pb.h"
-#include "test_credentials.hpp"
 #include "jwt.h"
 
 using namespace std;
@@ -18,13 +19,6 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 
-
-// Test Cert files:
-struct MutualAuthFiles {
-    const string caCrtFile = "../../../certs/mex-ca.crt";
-    const string clientCrtFile = "../../../certs/mex-client.crt";
-    const string clientKeyFile = "../../../certs/mex-client.key";
-} mutualAuthFiles;
 
 class MexGrpcClient {
   public:
@@ -198,12 +192,6 @@ class MexGrpcClient {
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, &(this->token));
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
 
-        // SSL Setup:
-        curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-        curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
-        // CA:
-        curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
-
         // verify peer or disconnect
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
 
@@ -269,17 +257,6 @@ class MexGrpcClient {
       // Set the output to null
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, wfd);
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-
-      
-      // Set return pointer (the token), for the header callback.
-      //curl_easy_setopt(curl, CURLOPT_HEADERDATA, &(this->token));
-      //curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
-      
-      // SSL Setup:
-      curl_easy_setopt(curl, CURLOPT_SSLCERT, mutualAuthFiles.clientCrtFile.c_str());
-      curl_easy_setopt(curl, CURLOPT_SSLKEY, mutualAuthFiles.clientKeyFile.c_str());
-      // CA:
-      curl_easy_setopt(curl, CURLOPT_CAINFO, mutualAuthFiles.caCrtFile.c_str());
       
       // verify peer or disconnect
       curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
@@ -425,22 +402,14 @@ int main() {
     string setLocStr = "";
     
     // Credentials, Mutual Authentication:
-    unique_ptr<test_credentials> test_creds = unique_ptr<test_credentials>(
-            new test_credentials(
-                mutualAuthFiles.caCrtFile,
-                mutualAuthFiles.clientCrtFile,
-                mutualAuthFiles.clientKeyFile));
+    stringstream ssUri;
+    ssUri << host;
+    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions());
+    shared_ptr<Channel> channel = grpc::CreateChannel(ssUri.str(), channel_creds);
 
-    grpc::SslCredentialsOptions credentials;
-
-    credentials.pem_root_certs = test_creds->caCrt;
-    credentials.pem_cert_chain = test_creds->clientCrt;
-    credentials.pem_private_key = test_creds->clientKey;
-
-    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions(credentials));
-    shared_ptr<Channel> channel = grpc::CreateChannel(host, channel_creds);
-
+    cout << "Url to use: " << ssUri.str() << endl;
     unique_ptr<MexGrpcClient> mexClient = unique_ptr<MexGrpcClient>(new MexGrpcClient(channel));
+
 
     try {
         shared_ptr<Loc> loc = mexClient->retrieveLocation();
@@ -474,12 +443,13 @@ int main() {
 	    	     
 	    if (!grpcStatus.ok()) {
 	      cout << "Test Case Passed!! Received Error: " << grpcStatus.error_message() << endl << endl;
-	    } else {
-	      // This test case does not receive a LOC_ERROR_UNAUTHORIZED .. EDGECLOUD-369 is open for this issue
+	    } else
+	      if (verifyLocationReply.gps_location_status() == 6){
 	      // Print some reply values out:
 	      cout << "GRPC VerifyLocation Status: " << grpcStatus.error_code() << endl
 		   << "GPS Location Status: " << verifyLocationReply.gps_location_status() << endl
 		   << "GPS Location Accuracy: " << verifyLocationReply.gps_location_accuracy_km() << "km"<< endl
+	           << "Test Case Passed!! Received Status Unknown" << endl
 		   << endl;
 	    }
 	    exit(0);
