@@ -41,7 +41,7 @@ namespace MexGrpcSampleConsoleApp
         Loc location;
 
         string dmeHost = "automationbonn.dme.mobiledgex.net"; // DME server hostname or ip.
-        //string dmeHost = "tdg2.dme.mobiledgex.net"; // DME server hostname or ip.
+        //string dmeHost = "mexdemo.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
         MatchEngineApi.MatchEngineApiClient client;
@@ -51,16 +51,14 @@ namespace MexGrpcSampleConsoleApp
             location = getLocation();
             //string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
             string uri = dmeHost + ":" + dmePort;
-            //string devName = "EmptyMatchEngineApp";
-            //string appName = "EmptyMatchEngineApp";
+            //string devName = "MobiledgeX”;
+            //string appName = "MobiledgeX SDK Demo”;
             string devName = "automation_leon";
             string appName = "automation_api_app";
 
             // Channel:
-            // TODO: Load from file or iostream, securely generate keys, etc.
-            var clientKeyPair = new KeyCertificatePair(Credentials.clientCrt, Credentials.clientKey);
-            var sslCredentials = new SslCredentials(Credentials.caCrt, clientKeyPair);
-            Channel channel = new Channel(uri, sslCredentials);
+            ChannelCredentials channelCredentials = new SslCredentials();
+            Channel channel = new Channel(uri, channelCredentials);
 
             client = new DistributedMatchEngine.MatchEngineApi.MatchEngineApiClient(channel);
 
@@ -75,6 +73,7 @@ namespace MexGrpcSampleConsoleApp
                 if (regReplyError.Status.Detail == "app not found")
                 {
                     Console.WriteLine("Register Client Wrong Dev Name Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("TestCase Passed!!!");
                     Environment.Exit(0);
                 }
                 else
