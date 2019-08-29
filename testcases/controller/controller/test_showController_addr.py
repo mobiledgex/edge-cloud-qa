@@ -52,21 +52,25 @@ class tc(unittest.TestCase):
 
             build_head = resp[0].build_master + '+'
 
+            foundmaster = False
             foundhead = False
             foundhost = False
             foundip = False
+            foundbuild = False
 
             if re_master.match(resp[0].build_master):
-               foundhead=True
+               foundmaster=True
             if re_host.match(resp[0].hostname):
                foundhost=True
             if re_ip.match(resp[0].key.addr):
                foundip=True
+            if resp[0].build_head == build_head or resp[0].build_head == resp[0].build_master:
+               foundhead = True
 
-            expect_equal(foundhead, True, 'buildmaster')
+            expect_equal(foundmaster, True, 'buildmaster')
             expect_equal(foundhost, True, 'host')
             expect_equal(foundip, True, 'host')
-            expect_equal(resp[0].build_head, build_head, 'buildhead0')
+            expect_equal(foundhead, True, 'buildhead')
 
             expect_equal(len(resp), 1, 'number of controllers')
 
