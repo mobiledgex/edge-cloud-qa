@@ -119,7 +119,7 @@ class MexApp(object):
 
         return addr
     
-    def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, wait_time=600):
+    def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_pods=1, wait_time=600):
 
         rb = None
         if root_loadbalancer is not None:
@@ -129,6 +129,7 @@ class MexApp(object):
             rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
 
         self.rootlb = rb
+        pod_count = 0
         
         if pod_name:
             pod_name = pod_name.replace('.', '') #remove any dots
@@ -153,9 +154,14 @@ class MexApp(object):
                 if pod_name in name:
                     if line.split()[2] == 'Running':
                         logging.info('Found running pod:' + line)
-                        return True;
+                        pod_count += 1
+                        if number_of_pods == 1:
+                            return True
             time.sleep(1)
 
+        if pod_count != number_of_pods:
+            raise Exception('All pods not found. expected=' + number_of_pods + ' got=' + pod_count)
+        
         raise Exception('Running k8s pod not found')
 
     def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, wait_time=600):
