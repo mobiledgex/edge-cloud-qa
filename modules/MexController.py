@@ -1437,6 +1437,7 @@ class MexController(MexGrpc):
 
             try:
                 for s in resp:
+                    print(str(s))
                     if "Created successfully" in str(s):
                         success = True
             except:
@@ -1502,6 +1503,7 @@ class MexController(MexGrpc):
 
             self.response = resp
             for s in resp:
+                print(str(s))
                 if "Deleted ClusterInst successfully" in str(s):
                     success = True
             if not success:
