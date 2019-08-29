@@ -114,14 +114,19 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
-   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
+   #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
+   #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
+   Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
+   Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
+
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC 
+   #Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC 
+   Should Be Equal  ${cluster_inst.node_flavor}   m4.large 
+
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -195,14 +200,14 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
-   Should Be Equal   ${server_info[1]['Flavor']}  flavor_ESC_ESC 
+   Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
+   Should Be Equal   ${server_info[1]['Flavor']}  m4.large 
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC
+   Should Be Equal  ${cluster_inst.node_flavor}   m4.large 
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
