@@ -399,7 +399,7 @@ int main() {
     
     // Credentials, Mutual Authentication:
     stringstream ssUri;
-    ssUri << host << ":" << MexGrpcClient::defaultDmePort;
+    ssUri << host;
     auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions());
     shared_ptr<Channel> channel = grpc::CreateChannel(ssUri.str(), channel_creds);
 
