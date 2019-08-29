@@ -68,21 +68,27 @@ FindCloudlet - request with longitude only should return 'missing carrierName'
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Missing carrierName"
 
-FindCloudlet - request with carrier_name and latitude only should succeed
+FindCloudlet - request with carrier_name and latitude only should fail
    [Documentation]
    ...  send FindCloudlet with carrier name and latitude only
-   ...  verify no error is received
+   ...  verify error is received
 
    Register Client
-   Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  latitude=35  use_defaults=${False}  # no error should be received
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  latitude=35  use_defaults=${False}  # no error should be received
 
-FindCloudlet - request with carrier_name and longitude only should succeed
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+
+FindCloudlet - request with carrier_name and longitude only should fail
    [Documentation]
    ...  send FindCloudlet with carrier name and longitude only
-   ...  verify no error is received
+   ...  verify error is received
 
    Register Client
-   Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${False}  # no error should be received
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${False}  # no error should be received
+
+   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 *** Keywords ***
 Setup
