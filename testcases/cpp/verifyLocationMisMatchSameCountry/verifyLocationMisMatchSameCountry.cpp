@@ -398,21 +398,12 @@ int main() {
     string setLocStr = "";
     
     // Credentials, Mutual Authentication:
-    unique_ptr<test_credentials> test_creds = unique_ptr<test_credentials>(
-            new test_credentials(
-                mutualAuthFiles.caCrtFile,
-                mutualAuthFiles.clientCrtFile,
-                mutualAuthFiles.clientKeyFile));
+    stringstream ssUri;
+    ssUri << host;
+    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions());
+    shared_ptr<Channel> channel = grpc::CreateChannel(ssUri.str(), channel_creds);
 
-    grpc::SslCredentialsOptions credentials;
-
-    credentials.pem_root_certs = test_creds->caCrt;
-    credentials.pem_cert_chain = test_creds->clientCrt;
-    credentials.pem_private_key = test_creds->clientKey;
-
-    auto channel_creds = grpc::SslCredentials(grpc::SslCredentialsOptions(credentials));
-    shared_ptr<Channel> channel = grpc::CreateChannel(host, channel_creds);
-
+    cout << "Url to use: " << ssUri.str() << endl;
     unique_ptr<MexGrpcClient> mexClient = unique_ptr<MexGrpcClient>(new MexGrpcClient(channel));
 
     try {
