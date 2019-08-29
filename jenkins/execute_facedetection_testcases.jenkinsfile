@@ -4,6 +4,8 @@ cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
 dme = "dmeunset"
+commit_version = "${CommitVersion}"
+
 if (env.dme) {
     dme = "${DME}"
 }
