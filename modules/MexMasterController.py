@@ -1211,6 +1211,29 @@ class MexMasterController(MexRest):
 
         return allregion
 
+
+    def show_all_clusters(self, sort_field='cluster_name', sort_order='ascending'):
+        # should enhance by querying for the regions. But hardcode for now
+
+        usregion = self.show_clusters(region='US')
+        euregion = self.show_clusters(region='EU')
+
+        for region in usregion:
+            region['data']['region'] = 'US'
+
+        for region in euregion:
+            region['data']['region'] = 'EU'
+
+        allregion = usregion + euregion
+
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'cluster_name':
+            allregion = sorted(allregion, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
+        elif sort_field == 'region':
+            allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
+
+        return allregion
+
     def show_accounts(self, token=None, email=None, json_data=None, use_defaults=True, use_thread=False, sort_field='username', sort_order='ascending'):
         url = self.root_url + '/auth/user/show'
 
