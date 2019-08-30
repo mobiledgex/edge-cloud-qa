@@ -1733,21 +1733,29 @@ class MexMasterController(MexRest):
                                 if 'mcctl user verifyemail token=' in line:
                                     #label, link = line.split('Click to verify:')
                                     self._verify_link = line.rstrip()
-                                    cmd = line + f'--addr https://{self.mc_address} --skipverify'
+
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+                                    logging.info('login with:' + cmd)
+                                    self._run_command(cmd)
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 {line} --addr https://{self.mc_address} --skipverify '
                                     logging.info('verifying email with:' + cmd)
-                                    try:
-                                        process = subprocess.Popen(shlex.split(cmd),
-                                                                   stdout=subprocess.PIPE,
-                                                                   stderr=subprocess.PIPE,
-                                        )
-                                        stdout, stderr = process.communicate()
-                                        logging.info('verify returned:',stdout, stderr)
-                                        if stderr:
-                                            raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
-                                    except subprocess.CalledProcessError as e:
-                                        raise Exception("runCommanddd failed:", e)
-                                    except Exception as e:
-                                        raise Exception("runCommanddd failed:", e)
+                                    self._run_command(cmd)
+
+                                    #cmd = line + f'--addr https://{self.mc_address} --skipverify'
+                                    #logging.info('verifying email with:' + cmd)
+                                    #try:
+                                    #    process = subprocess.Popen(shlex.split(cmd),
+                                    #                               stdout=subprocess.PIPE,
+                                    #                               stderr=subprocess.PIPE,
+                                    #    )
+                                    #    stdout, stderr = process.communicate()
+                                    #    logging.info('verify returned:',stdout, stderr)
+                                    #    if stderr:
+                                    #        raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+                                    #except subprocess.CalledProcessError as e:
+                                    #    raise Exception("runCommanddd failed:", e)
+                                    #except Exception as e:
+                                    #    raise Exception("runCommanddd failed:", e)
 
 
                                     break
@@ -1763,6 +1771,22 @@ class MexMasterController(MexRest):
             time.sleep(1)
 
         raise Exception('verification email not found')
+
+    def _run_command(self, cmd):
+        try:
+            process = subprocess.Popen(shlex.split(cmd),
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE,
+                                       )
+            stdout, stderr = process.communicate()
+            logging.info('verify returned:',stdout, stderr)
+            print('*WARN*',stdout, stderr)
+            if stderr:
+                raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+        except subprocess.CalledProcessError as e:
+            raise Exception("runCommanddd failed:", e)
+        except Exception as e:
+            raise Exception("runCommanddd failed:", e)
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
