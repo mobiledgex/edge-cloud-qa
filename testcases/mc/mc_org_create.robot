@@ -272,8 +272,9 @@ MC - Create an org without a token
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	
-	Should Be Equal As Numbers   ${status_code}  401	
-	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+	Should Be Equal As Numbers   ${status_code}  400	
+	#Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
+        Should Be Equal              ${body}  {"message":"no bearer token found"}
 
 MC - Create an org with an empty token	
 	[Documentation]
@@ -285,7 +286,7 @@ MC - Create an org with an empty token
 	${body}=         Response Body
 	
 	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"no token found"}
+	Should Be Equal              ${body}         {"message":"no bearer token found"}
 
 MC - Create an org with a bad token	
 	[Documentation]
@@ -314,10 +315,11 @@ MC - Create an org with an expired token
 *** Keywords ***
 Setup
 	${adminToken}=   Login
-	Create User   username=myuser   password=${password}   email=xy@xy.com
-	${userToken}=  Login  username=myuser  password=${password}   
-	Create User   username=youruser   password=${password}    email=xyz@xyz.com
-	${user2Token}=  Login  username=youruser  password=${password} 
+	#Create User   username=myuser   password=${password}   email=xy@xy.com
+        #Unlock User
+	#${userToken}=  Login  username=myuser  password=${password}   
+	#Create User   username=youruser   password=${password}    email=xyz@xyz.com
+	#${user2Token}=  Login  username=youruser  password=${password} 
         Set Suite Variable  ${adminToken}
-	Set Suite Variable  ${userToken}
-	Set Suite Variable  ${user2Token}
+	#Set Suite Variable  ${userToken}
+	#Set Suite Variable  ${user2Token}
