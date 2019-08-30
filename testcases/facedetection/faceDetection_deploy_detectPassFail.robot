@@ -9,7 +9,7 @@ Library  OperatingSystem
 Library  String
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout  30 minutes
 	
