@@ -12,7 +12,7 @@ import imaplib
 import email
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand
+from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet
 
 import shared_variables_mc
 
@@ -109,6 +109,12 @@ class MexMasterController(MexRest):
         self._number_showcloudlet_requests = 0
         self._number_showcloudlet_requests_success = 0
         self._number_showcloudlet_requests_fail = 0
+        self._number_createcloudlet_requests = 0
+        self._number_createcloudlet_requests_success = 0
+        self._number_createcloudlet_requests_fail = 0
+        self._number_deletecloudlet_requests = 0
+        self._number_deletecloudlet_requests_success = 0
+        self._number_deletecloudlet_requests_fail = 0
 
         self._number_showappinsts_requests = 0
         self._number_showappinsts_requests_success = 0
@@ -1787,6 +1793,98 @@ class MexMasterController(MexRest):
             raise Exception("runCommanddd failed:", e)
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
+
+    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateCloudlet'
+
+        payload = None
+        cloudlet = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
+            cloudlet_dict = {'cloudlet': cloudlet}
+            if region is not None:
+                cloudlet_dict['region'] = region
+
+            payload = json.dumps(cloudlet_dict)
+
+        logger.info('create cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createcloudlet_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createcloudlet_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_createcloudlet_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            #self.prov_stack.append(lambda:self.delete_cloudlet(region=region, cloudlet_name=cloudlet['key']['cloudlet_key']['name'], operator_name=cloudlet['key']['cloudlet_key']['operator_key']['name']))
+
+            self._number_createcloudlet_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteCloudlet'
+
+        payload = None
+        clusterInst = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
+            cloudlet_dict = {'cloudlet': cloudlet}
+            if region is not None:
+                cloudlet_dict['region'] = region
+
+            payload = json.dumps(cloudlet_dict)
+
+        logger.info('delete cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deletecloudlet_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deletecloudlet_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except Exception as e:
+                self._number_deletecloudlet_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deletecloudlet_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
