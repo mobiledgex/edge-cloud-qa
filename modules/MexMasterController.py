@@ -1228,7 +1228,7 @@ class MexMasterController(MexRest):
 
         reverse = True if sort_order == 'descending' else False
         if sort_field == 'cloudlet_name':
-            allregion = sorted(allregion, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+            allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['cluster_key']['name'].casefold()),reverse=reverse)
         elif sort_field == 'region':
             allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
 
