@@ -13,11 +13,12 @@ Library	 MexAzure
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout  15 minutes
-	
+Test Timeout     ${test_timeout_crm}
+
 *** Variables ***
 ${cloudlet_name_azure}  automationAzureCentralCloudlet
 ${operator_name}        azure
+${test_timeout_crm}  15 min
 	
 *** Test Cases ***
 Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
@@ -37,6 +38,8 @@ Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
 	
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS1_v2
 
+   Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
+
 Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=2048  vcpus=2  disk=2
@@ -54,6 +57,8 @@ Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
 	
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS2_v2
 
+   Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
+
 Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
    [Documentation]
    ...  create a cluster on azure with flavor of ram=4096  vcpus=4  disk=4
@@ -70,6 +75,8 @@ Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
    Should Be Equal As Numbers  ${cluster_info['properties']['agentPoolProfiles'][0]['count']}   1
 	
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS3_v2
+
+   Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
 	
 Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    [Documentation]
@@ -88,6 +95,8 @@ Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
 
    Log to console   ${cluster_inst} 
    Should Be Equal  ${cluster_inst.node_flavor}     Standard_DS1_v2
+
+   Sleep  1m  #because of EDGECLOUD-574.  helm fails to create on azure so cleanup tries to delete prometheus if we cleanup too quickly
 	
 Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
    [Documentation]
