@@ -5,6 +5,11 @@ import time
 import re
 import threading
 import requests
+import subprocess
+import shlex
+import os
+import imaplib
+import email
 
 from mex_rest import MexRest
 from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand
@@ -28,7 +33,8 @@ class MexMasterController(MexRest):
         super().__init__(address=mc_address, root_cert=self.root_cert)
         #print('*WARN*', 'mcinit')
         self.root_url = f'https://{mc_address}/api/v1'
-
+        self.mc_address = mc_address
+        
         self.token = None
         self.prov_stack = []
 
@@ -41,7 +47,10 @@ class MexMasterController(MexRest):
         self.orgtype = None
         self.address = None
         self.phone = None
-
+        self.email_address = None
+        
+        self._mail = None
+        
         self._number_login_requests = 0
         self._number_login_requests_success = 0
         self._number_login_requests_fail = 0
@@ -270,7 +279,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.token
 
-    def create_user(self, username=None, password=None, email=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, server='imap.gmail.com', json_data=None, use_defaults=True, use_thread=False):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -278,11 +287,12 @@ class MexMasterController(MexRest):
         if use_defaults == True:
             if username == None: username = 'name' + namestamp
             if password == None: password = 'password' + timestamp
-            if email == None: email = username + '@email.com'
+            if email_address == None: email_address = username + '@email.com'
 
         shared_variables_mc.username_default = username
         shared_variables_mc.password_default = password
-
+        self.emal = email_address
+        
         if json_data != None:
             payload = json_data
         else:
@@ -291,12 +301,25 @@ class MexMasterController(MexRest):
                 user_dict['name'] = username
             if password is not None:
                 user_dict['passhash'] = password
-            if email is not None:
-                user_dict['email'] = email
+            if email_address is not None:
+                user_dict['email'] = email_address
 
             payload = json.dumps(user_dict)
 
         logger.info('usercreate on mc at {}. \n\t{}'.format(url, payload))
+
+        logging.info(f'checking email with email={email_address} password={password}')
+        mail = imaplib.IMAP4_SSL(server)
+        mail.login(email_address, password)
+        mail.select('inbox')
+        self._mail = mail
+        logging.info('login successful')
+
+        status, email_list_pre = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
+        mail_ids_pre = email_list_pre[0].split()
+        num_emails_pre = len(mail_ids_pre)
+        self._mail_count = num_emails_pre
+        logging.info(f'number of emails pre is {num_emails_pre}')
 
         def send_message():
             self._number_createuser_requests += 1
@@ -318,7 +341,7 @@ class MexMasterController(MexRest):
 
         self.username = username
         self.password = password
-        self.email = email
+        self.email_address = email_address
 
         self._number_createuser_requests_success += 1
 
@@ -1634,22 +1657,52 @@ class MexMasterController(MexRest):
 
         #    payload = json.dumps(runcommand_dict)
 
-        cmd = 'mcctl
-        logger.info('run command on mc at {}. \n\t{}'.format(url, payload))
+        cmd_login = f'mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+        #cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
+        cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
+        cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
+        cmd = cmd_run + ';>/tmp/a'
+        logger.info('run {} on mc.'.format(cmd))
 
         def send_message():
             self._number_runcommand_requests += 1
 
             try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
+                #c = shlex.split(cmd)
+                print('*WARN*',cmd)
+                #out = subprocess.check_output(cmd, shell=True)
+                #print('*WARN*', out)
+                process = subprocess.Popen(cmd,
+                                           stdout=subprocess.PIPE,
+                                           #stderr=subprocess.PIPE,
+                                           shell=True
+                )                
+                #process = subprocess.Popen(shlex.split(cmd_run),
+                #                           stdout=subprocess.PIPE,
+                #                           stderr=subprocess.PIPE,
+                                           #stdout=open(log_file, 'w'),
+                                           #shell=True,
+                                           #env=env_dict,
+                                           #preexec_fn=os.setpgrp
+                #)
+                stdout = process.stdout.readline()
+                #stderr = process.stderr.readline()
+                #stdout, stderr = process.communicate()
+                print('*WARN*', 'std', stdout, stderr)
+                if stderr:
+                    raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+                
+                #self.post(url=url, bearer=token, data=payload)
+                #logger.info('response:\n' + str(self.resp.text))
 
-                if str(self.resp.status_code) != '200':
-                    self._number_runcommand_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                #if str(self.resp.status_code) != '200':
+                #    self._number_runcommand_requests_fail += 1
+                #    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            except subprocess.CalledProcessError as e:
+                print('*WARN*','cpe',e)
             except Exception as e:
-                self._number_runcommand_requests_fail += 1
-                raise Exception("post failed:", e)
+                #self._number_runcommand_requests_fail += 1
+                raise Exception("runCommanddd failed:", e)
 
             self._number_runcommand_requests_success += 1
 
@@ -1660,6 +1713,103 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
+        if username is None: username = self.username
+        if password is None: password = self.password
+        if email_address is None: email_address = self.email_address
+
+        mail = self._mail
+        num_emails_pre = self._mail_count
+        for attempt in range(wait):
+            mail.recent()
+            status, email_list = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
+            mail_ids = email_list[0].split()
+            num_emails = len(mail_ids)
+            logging.info(f'number of emails found is {num_emails}')
+            if num_emails > num_emails_pre:
+                logging.info('new email found')
+                mail_id = email_list[0].split()
+                typ, data = mail.fetch(mail_id[-1], '(RFC822)')
+                for response_part in data:
+                    if isinstance(response_part, tuple):
+                        msg = email.message_from_string(response_part[1].decode('utf-8'))
+                        email_subject = msg['subject']
+                        email_from = msg['from']
+                        date_received = msg['date']
+                        payload = msg.get_payload(decode=True).decode('utf-8')
+                        logging.info(payload)
+
+                        if f'Hi {username},' in payload:
+                            logging.info('greetings found')
+                        else:
+                            raise Exception('Greetings not found')
+
+                        if 'Thanks for creating a MobiledgeX account! You are now one step away from utilizing the power of the edge. Please verify this email account by clicking on the link below. Then you\'ll be able to login and get started.' in payload:
+                            logging.info('body1 found')
+                        else:
+                            raise Exception('Body1 not found')
+
+                        #if f'Click to verify: {self.console_url}/verify?token=' in payload:
+                        if f'Copy and paste to verify your email:' in payload:
+                            for line in payload.split('\n'):
+                                if 'mcctl user verifyemail token=' in line:
+                                    #label, link = line.split('Click to verify:')
+                                    self._verify_link = line.rstrip()
+
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+                                    logging.info('login with:' + cmd)
+                                    self._run_command(cmd)
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 {line} --addr https://{self.mc_address} --skipverify '
+                                    logging.info('verifying email with:' + cmd)
+                                    self._run_command(cmd)
+
+                                    #cmd = line + f'--addr https://{self.mc_address} --skipverify'
+                                    #logging.info('verifying email with:' + cmd)
+                                    #try:
+                                    #    process = subprocess.Popen(shlex.split(cmd),
+                                    #                               stdout=subprocess.PIPE,
+                                    #                               stderr=subprocess.PIPE,
+                                    #    )
+                                    #    stdout, stderr = process.communicate()
+                                    #    logging.info('verify returned:',stdout, stderr)
+                                    #    if stderr:
+                                    #        raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+                                    #except subprocess.CalledProcessError as e:
+                                    #    raise Exception("runCommanddd failed:", e)
+                                    #except Exception as e:
+                                    #    raise Exception("runCommanddd failed:", e)
+
+
+                                    break
+                            logging.info('verify link found')
+                        else:
+                            raise Exception('Verify link not found')
+
+                        if f'For security, this request was received for {email_address} from' in payload and 'If you are not expecting this email, please ignore this email or contact MobiledgeX support for assistance.' in payload and 'Thanks!' in payload and 'MobiledgeX Team' in payload:
+                            logging.info('body2 link found')
+                        else:
+                            raise Exception('Body2 not found')
+                        return True
+            time.sleep(1)
+
+        raise Exception('verification email not found')
+
+    def _run_command(self, cmd):
+        try:
+            process = subprocess.Popen(shlex.split(cmd),
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE,
+                                       )
+            stdout, stderr = process.communicate()
+            logging.info('verify returned:',stdout, stderr)
+            print('*WARN*',stdout, stderr)
+            if stderr:
+                raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+        except subprocess.CalledProcessError as e:
+            raise Exception("runCommanddd failed:", e)
+        except Exception as e:
+            raise Exception("runCommanddd failed:", e)
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
