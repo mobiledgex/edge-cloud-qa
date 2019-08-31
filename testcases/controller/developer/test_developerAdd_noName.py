@@ -50,7 +50,8 @@ class tc(unittest.TestCase):
         developer_post = self.controller.show_developers()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid developer name', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name', 'error details')
+        expect_equal(error.details(), 'Developer invalid characters in Name', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')  #remove since causes problem with paralllel execution
 
         assert_expectations()
