@@ -72,7 +72,8 @@ class tc(unittest.TestCase):
         developer_post = self.controller.show_developers()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid developer name', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name', 'error details')
+        expect_equal(error.details(), 'Developer name can only contain letters, digits, _ . -', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
         assert_expectations()
@@ -93,7 +94,8 @@ class tc(unittest.TestCase):
         developer_post = self.controller.show_developers()
        
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid developer name', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name', 'error details')
+        expect_equal(error.details(), 'Developer name can only contain letters, digits, _ . -', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
         assert_expectations()
@@ -115,7 +117,8 @@ class tc(unittest.TestCase):
         developer_post = self.controller.show_developers()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid developer name', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name', 'error details')
+        expect_equal(error.details(), 'Developer name can only contain letters, digits, _ . -', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
         assert_expectations()

@@ -27,6 +27,7 @@ ${mobiledgex_domain}  mobiledgex.net
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 ${qcow_centos_image_notrunning}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c
 ${qcow_centos_openstack_image}  server_ping_threaded_centos7
+${qcow_windows_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
 ${server_ping_threaded_command}  /opt/rh/rh-python36/root/usr/bin/python3 /home/centos/server_ping_threaded.py
 
@@ -135,6 +136,32 @@ User shall be able to access VM deployment UDP and TCP ports on openstack withou
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
+User shall be able to access windows VM deployment UDP and TCP ports on openstack
+    [Documentation]
+    ...  deploy VM app on openstack with 1 UDP and 1 TCP port without clustername
+    ...  verify all ports are accessible via fqdn
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_version_default}=  Get Default App Version
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_windows_image}  access_ports=tcp:2016,udp:2015  
+    Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  use_defaults=${False}
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    #TCP Port Should Be Alive  developer1567283863-034891app1567283863-03489110.automationhawkinscloudlet.gddt.mobiledgex.net  2016 
+    #UDP Port Should Be Alive  developer1567283399-468097app1567283399-46809710.automationhawkinscloudlet.gddt.mobiledgex.net  2015
+
+    Sleep  1m
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
