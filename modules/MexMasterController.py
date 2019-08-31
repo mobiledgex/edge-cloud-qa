@@ -1234,7 +1234,30 @@ class MexMasterController(MexRest):
 
         reverse = True if sort_order == 'descending' else False
         if sort_field == 'cloudlet_name':
-            allregion = sorted(allregion, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+            allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['cluster_key']['name'].casefold()),reverse=reverse)
+        elif sort_field == 'region':
+            allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
+
+        return allregion
+
+
+    def show_all_clusters(self, sort_field='cluster_name', sort_order='ascending'):
+        # should enhance by querying for the regions. But hardcode for now
+
+        usregion = self.show_clusters(region='US')
+        euregion = self.show_clusters(region='EU')
+
+        for region in usregion:
+            region['data']['region'] = 'US'
+
+        for region in euregion:
+            region['data']['region'] = 'EU'
+
+        allregion = usregion + euregion
+
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'cluster_name':
+            allregion = sorted(allregion, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
         elif sort_field == 'region':
             allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
 
