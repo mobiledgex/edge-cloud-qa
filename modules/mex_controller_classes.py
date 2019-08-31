@@ -421,7 +421,7 @@ class AppInstance():
             app_key_dict['version'] = self.app_version
         if self.developer_name is not None:
             app_key_dict['developer_key'] = {'name': self.developer_name}
-
+        print('*WARN*', 'apdict', app_key_dict)
         if self.cluster_name is not None:
             #clusterinst_key_dict['cluster_key'] = clusterinst_pb2.ClusterInstKey(name = self.cluster_name)
             cluster_key_dict['name'] = self.cluster_name
@@ -468,3 +468,61 @@ class AppInstance():
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
             
         self.app_instance = appinst_dict
+
+class RunCommand():
+    def __init__(self, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, use_defaults=True):
+        self.app_name = app_name
+        self.app_version = app_version
+        self.developer_name = developer_name
+        self.cluster_developer_name = cluster_instance_developer_name
+        self.operator_name = operator_name
+        self.cloudlet_name = cloudlet_name
+
+        if use_defaults:
+            if not app_name: self.app_name = shared_variables.app_name_default
+            if not developer_name: self.developer_name = shared_variables.developer_name_default
+            if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cluster_instance_developer_name: self.cluster_developer_name = shared_variables.developer_name_default
+            if not app_version: self.app_version = shared_variables.app_version_default
+            if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
+            if not operator_name: self.operator_name = shared_variables.operator_name_default
+
+        runcommand_dict = {}
+        appinst_key_dict = {}
+        app_key_dict = {}
+        cloudlet_key_dict = {}
+        clusterinst_key_dict = {}
+        cluster_key_dict = {}
+        
+        if self.app_name:
+            app_key_dict['name'] = self.app_name
+        if self.app_version:
+            app_key_dict['version'] = self.app_version
+        if self.developer_name is not None:
+            app_key_dict['developerkey'] = {'name': self.developer_name}
+
+        if self.cluster_name is not None:
+            cluster_key_dict['name'] = self.cluster_name
+        if self.cloudlet_name is not None:
+            cloudlet_key_dict['name'] = self.cloudlet_name
+        if self.operator_name is not None:
+            cloudlet_key_dict['operatorkey'] = {'name': self.operator_name}
+        if cloudlet_key_dict:
+            clusterinst_key_dict['cloudletkey'] = cloudlet_key_dict
+        if cluster_key_dict:
+            clusterinst_key_dict['clusterkey'] = cluster_key_dict
+        if self.cluster_developer_name is not None:
+            clusterinst_key_dict['developer'] = self.cluster_developer_name
+
+        if app_key_dict:
+            appinst_key_dict['appkey'] = app_key_dict
+        if clusterinst_key_dict:
+            appinst_key_dict['clusterinstkey'] = clusterinst_key_dict
+
+        if appinst_key_dict:
+            runcommand_dict['appinstkey'] = appinst_key_dict
+        
+        if command is not None:
+            runcommand_dict['command'] = command
+
+        self.run_command = runcommand_dict
