@@ -320,7 +320,7 @@ node('jenkinsSlave1'){
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle creation in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Aborting"'
           status = sh(script: s, returnStatus: true);
        }
        error('Aborting the build')

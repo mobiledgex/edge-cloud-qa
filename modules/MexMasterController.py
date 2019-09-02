@@ -1843,11 +1843,15 @@ class MexMasterController(MexRest):
 
             try:
                 self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
 
                 if str(self.resp.status_code) != '200':
                     self._number_createcloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                if 'Cloudlet created successfully' not in str(self.resp.text):
+                    raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
+                    
             except Exception as e:
                 self._number_createcloudlet_requests_fail += 1
                 raise Exception("post failed:", e)
@@ -1856,6 +1860,7 @@ class MexMasterController(MexRest):
 
             self._number_createcloudlet_requests_success += 1
 
+            
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
@@ -1890,11 +1895,14 @@ class MexMasterController(MexRest):
 
             try:
                 self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
 
                 if str(self.resp.status_code) != '200':
                     self._number_deletecloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                if 'Deleted Cloudlet successfully' not in str(self.resp.text):
+                    raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
+
             except Exception as e:
                 self._number_deletecloudlet_requests_fail += 1
                 raise Exception("post failed:", e)
