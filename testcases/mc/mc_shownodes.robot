@@ -4,16 +4,12 @@ Documentation   MasterController user/current superuser
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
 	
-#Test Setup	Setup
-#Test Teardown	Cleanup Provisioning
-
 *** Variables ***
 
 *** Test Cases ***
-MC - User shall be able to get the current status of superuser
+MC - User shall be able to show nodes 
     [Documentation]
-    ...  login to mc as superuser
-    ...  get user/current info
+    ...  run ShowNode on system
     ...  verify info is correct
 
    Login
