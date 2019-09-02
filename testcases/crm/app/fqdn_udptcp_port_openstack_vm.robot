@@ -142,7 +142,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack withou
 
 User shall be able to access windows VM deployment UDP and TCP ports on openstack
     [Documentation]
-    ...  deploy VM app on openstack with 1 UDP and 1 TCP port without clustername
+    ...  deploy windows VM app on openstack with 1 UDP and 1 TCP port without clustername
     ...  verify all ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
