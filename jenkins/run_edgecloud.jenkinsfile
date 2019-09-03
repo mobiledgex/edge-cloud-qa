@@ -310,6 +310,8 @@ node('jenkinsSlave1'){
           dir('go/src/github.com/mobiledgex/jenkins') {
              build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
 
+             sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
+	     
              sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
