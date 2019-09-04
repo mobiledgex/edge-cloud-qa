@@ -1,0 +1,20 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./mex-server.crt:/etc/nginx/ssl/mex-server.crt
+      - ./mex-server.key:/etc/nginx/ssl/mex-server.key
+    network_mode: host
+    #    ports:
+    #  - 14268:14268
+  jaeger:
+    image: jaegertracing/all-in-one:1.13
+    container_name: jaeger
+    network_mode: host
+    #expose:
+    #  - "14268"
+    #  - "16686"
+
