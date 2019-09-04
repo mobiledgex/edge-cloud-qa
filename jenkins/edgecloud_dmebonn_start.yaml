@@ -14,6 +14,10 @@ spec:
       labels:
         app: dme
     spec:
+      hostAliases:
+      - ip: "40.122.108.233"
+        hostnames:
+        - "automationjaeger.mobiledgex.net"
       containers:
       - name: dme
         image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
@@ -58,6 +62,8 @@ spec:
            value: b95e3309-5964-89a2-5647-e86f745f20c7
          - name: VAULT_SECRET_ID
            value: b6c6c629-c99d-25f8-b26d-1afc5bf5d654
+         - name: JAEGER_ENDPOINT
+           value: https://automationjaeger.mobiledgex.net:14270/api/traces
         volumeMounts:
          - name: tls
            mountPath: /tls
