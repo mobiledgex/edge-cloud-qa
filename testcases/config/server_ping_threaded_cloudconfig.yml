@@ -1,0 +1,9 @@
+#cloud-config
+users:
+  - name: demo
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+runcmd:
+  - /opt/rh/rh-python36/root/usr/bin/python3 /home/centos/server_ping_threaded.py
+
