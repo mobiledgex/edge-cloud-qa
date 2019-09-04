@@ -1,0 +1,9 @@
+version: '3'
+services:
+  simap:
+    image: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0"
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+
