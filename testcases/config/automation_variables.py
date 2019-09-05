@@ -6,3 +6,5 @@ qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledge
 qcow_centos_image_notrunning = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
 qcow_windows_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_windows2012.qcow2#md5:42171406daca80298098ac314200634a'
 qcow_centos_openstack_image = 'server_ping_threaded_centos7'
+vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
+
