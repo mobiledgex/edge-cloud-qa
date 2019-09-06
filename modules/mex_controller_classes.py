@@ -263,7 +263,7 @@ class App():
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
             
-            if self.image_type == 'ImageTypeDocker':
+            if deployment == 'Docker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     #try:
@@ -275,11 +275,15 @@ class App():
                     #except:
                     #    self.image_path = 'failed_to_set'
                 #self.image_type = 1
-            elif self.image_type == 'ImageTypeQCOW':
+            if deployment == 'Kubernetes':
+                if self.image_path is None:
+                    self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                    
+            elif deployment == 'VM':
                 if self.image_path is None:
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
-
+                
 
         if self.image_type == 'ImageTypeDocker':
             self.image_type = 1
