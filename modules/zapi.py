@@ -646,7 +646,8 @@ class Zapi(WebService):
         data_hash['result'] = result
         data_fields_json = json.dumps(data_hash)
 
-        resp = super().post(url, data = data_fields_json, headers = self.headers)
+        #resp = super().post(url, data = data_fields_json, headers = self.headers)
+        resp = post(url, data = data_fields_json, headers = self.headers)
         self.decoded_data = json.loads(resp.content.decode("utf-8"))
 
     def get_server_info(self):
@@ -695,3 +696,30 @@ class Zapi(WebService):
         self.headers['Authorization'] = 'JWT ' + token
         
         return token
+
+    def get(self, url, headers, retries=10):
+        for x in range(retries):
+            super().get(url, headers=headers)
+            if str(self.resp.status_code) != '200':
+                logging.warning(f'get {url} returned {self.resp.status_code}. Try again')
+                time.sleep(10)
+            else:
+                return
+
+    def post(self, url, headers, data=None, files=None, retries=10):
+        for x in range(retries):
+            super().post(url, headers=headers, data=data,files=files)
+            if str(self.resp.status_code) != '200':
+                logging.warning(f'post {url} returned {self.resp.status_code}. Try again')
+                time.sleep(10)
+            else:
+                return
+
+    def put(self, url, headers, data, retries=10):
+        for x in range(retries):
+            super().put(url, headers=headers, data=data)
+            if str(self.resp.status_code) != '200':
+                logging.warning(f'put {url} returned {self.resp.status_code}. Try again')
+                time.sleep(10)
+            else:
+                return

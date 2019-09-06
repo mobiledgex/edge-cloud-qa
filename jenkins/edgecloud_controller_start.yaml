@@ -14,6 +14,10 @@ spec:
       labels:
         app: controller
     spec:
+       hostAliases:
+       - ip: "40.122.108.233"
+         hostnames:
+         - "automationjaeger.mobiledgex.net"
        containers:
        - name: controller
          image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
@@ -62,5 +66,7 @@ spec:
             value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
           - name: VAULT_CRM_SECRET_ID
             value: ***REMOVED***
+          - name: JAEGER_ENDPOINT
+            value: https://automationjaeger.mobiledgex.net:14270/api/traces
        imagePullSecrets:
         - name: mexreg-secret
