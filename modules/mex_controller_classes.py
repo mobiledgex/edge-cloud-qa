@@ -484,7 +484,8 @@ class RunCommand():
         self.cluster_developer_name = cluster_instance_developer_name
         self.operator_name = operator_name
         self.cloudlet_name = cloudlet_name
-
+        self.cluster_name = cluster_instance_name
+        
         if use_defaults:
             if not app_name: self.app_name = shared_variables.app_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
@@ -501,35 +502,35 @@ class RunCommand():
         clusterinst_key_dict = {}
         cluster_key_dict = {}
         
-        if self.app_name:
-            app_key_dict['name'] = self.app_name
-        if self.app_version:
-            app_key_dict['version'] = self.app_version
-        if self.developer_name is not None:
-            app_key_dict['developerkey'] = {'name': self.developer_name}
+        #if self.app_name:
+        #    app_key_dict['name'] = self.app_name
+        #if self.app_version:
+        #    app_key_dict['version'] = self.app_version
+        #if self.developer_name is not None:
+        #    app_key_dict['developerkey'] = {'name': self.developer_name}
 
-        if self.cluster_name is not None:
-            cluster_key_dict['name'] = self.cluster_name
-        if self.cloudlet_name is not None:
-            cloudlet_key_dict['name'] = self.cloudlet_name
-        if self.operator_name is not None:
-            cloudlet_key_dict['operatorkey'] = {'name': self.operator_name}
+        #if self.cluster_name is not None:
+        #    cluster_key_dict['name'] = self.cluster_name
+        #if self.cloudlet_name is not None:
+        #    cloudlet_key_dict['name'] = self.cloudlet_name
+        #if self.operator_name is not None:
+        #    cloudlet_key_dict['operatorkey'] = {'name': self.operator_name}
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudletkey'] = cloudlet_key_dict
-        if cluster_key_dict:
-            clusterinst_key_dict['clusterkey'] = cluster_key_dict
-        if self.cluster_developer_name is not None:
-            clusterinst_key_dict['developer'] = self.cluster_developer_name
+        #if cluster_key_dict:
+        #    clusterinst_key_dict['clusterkey'] = cluster_key_dict
+        #if self.cluster_developer_name is not None:
+        #    clusterinst_key_dict['developer'] = self.cluster_developer_name
 
-        if app_key_dict:
-            appinst_key_dict['appkey'] = app_key_dict
-        if clusterinst_key_dict:
-            appinst_key_dict['clusterinstkey'] = clusterinst_key_dict
+        #if app_key_dict:
+        #    appinst_key_dict['appkey'] = app_key_dict
+        #if clusterinst_key_dict:
+        #    appinst_key_dict['clusterinstkey'] = clusterinst_key_dict
 
-        if appinst_key_dict:
-            runcommand_dict['appinstkey'] = appinst_key_dict
+        #if appinst_key_dict:
+        #    runcommand_dict['appinstkey'] = appinst_key_dict
         
         if command is not None:
             runcommand_dict['command'] = command
-
+            runcommand_dict['cloudlet_loc'] = {}
         self.run_command = runcommand_dict
