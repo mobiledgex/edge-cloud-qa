@@ -21,6 +21,9 @@ spec:
         - ip: "35.238.36.211"
           hostnames:
           - "automationeu.ctrl.mobiledgex.net"
+        - ip: "40.122.108.233"
+          hostnames:
+          - "automationjaeger.mobiledgex.net"
        containers:
        - name: mc
          image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
@@ -51,6 +54,8 @@ spec:
           - "https://gitlab-qa.mobiledgex.net"
           - "--artifactoryAddr"
           - "https://artifactory-qa.mobiledgex.net"
+          - "--jaegerAddr"
+          - "https://automationjaeger.mobiledgex.net:16686"
          env:
           - name: VAULT_ROLE_ID
             value: fe150a80-ab52-322a-3b47-771c0e27b9fb 
@@ -60,5 +65,7 @@ spec:
             value: gitlabtesttoken
           - name: artifactory_apikey
             value: ***REMOVED*** 
+          - name: JAEGER_ENDPOINT
+            value: https://automationjaeger.mobiledgex.net:14270/api/traces
        imagePullSecrets:
         - name: mexreg-secret
