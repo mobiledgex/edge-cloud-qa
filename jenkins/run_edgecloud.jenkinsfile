@@ -198,6 +198,8 @@ node('jenkinsSlave1'){
     try {
        stage('deploy processes in k8s') {
           dir('go/src/github.com/mobiledgex/jenkins') {
+             sh 'docker system prune -af'  //remove all docker stuff without prompting
+	     
 	     // delete the bonnlb so it is recreated when starting the crm
 	     //sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
      	     //sh 'source /home/jenkins/openrc.bonn;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
@@ -306,7 +308,9 @@ node('jenkinsSlave1'){
              sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_mc_start.yaml'
              sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_mc_start.yaml'
 
-             sh 'docker system prune -af'  //remove all docker stuff without prompting
+             //sh 'docker system prune -af'  //remove all docker stuff without prompting
+
+             sleep 60  // wait for all pods to come up
 	  }
        }
     } catch(e) {
