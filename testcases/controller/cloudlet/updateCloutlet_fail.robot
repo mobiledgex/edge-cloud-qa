@@ -239,14 +239,15 @@ UpdateCloudlet with staticips of 6
 Setup
 	${dips}    Convert To Integer     254
 
-        Sleep  1s
         ${epoch}=  Get Time  epoch
         ${epochstring}=  Convert To String  ${epoch}
 
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
-        ${portnum}=  Get Substring  ${epochstring}  -5
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
+        #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
+        Sleep  1s
 
 	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  notify_server_address=${port}  use_defaults=False 
 	Cloudlet Should Exist
