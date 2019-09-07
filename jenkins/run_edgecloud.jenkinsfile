@@ -350,7 +350,7 @@ node('jenkinsSlave1'){
                  currentBuild.result = 'FAILURE'
               }
 	  }
-
+       }
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
