@@ -38,6 +38,8 @@ spec:
            value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
          - name: VAULT_SECRET_ID
            value: 52baef16-b4ea-7b85-aca8-df3fa5eb9d41
+         - name: FLAVOR_MATCH_PATTERN
+           value: m4
         args:
          - "--cloudletKey"
          - "{\"operator_key\":{\"name\":\"TDG\"},\"name\":\"automationBonnCloudlet\"}"
