@@ -162,7 +162,7 @@ node('jenkinsSlave1'){
                   println "copyTestsToRelease.py failed"
                   currentBuild.result = 'FAILURE'
               }
-
+          }
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
