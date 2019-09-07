@@ -27,7 +27,8 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=docker.registry.com/app
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid registry path"
+    #Should Contain  ${error_msg}   details = "Invalid registry path"
+    Should Contain  ${error_msg}  details = "Get https://docker.registry.com/v2/app/tags/list: remote error: tls: internal error"
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and no latest
     [Documentation]
@@ -78,7 +79,8 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=docker.registry.com/app
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid registry path"
+    #Should Contain  ${error_msg}   details = "Invalid registry path"
+    Should Contain  ${error_msg}  details = "Get https://docker.registry.com/v2/app/tags/list: remote error: tls: internal error"
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and no latest
     [Documentation]
@@ -120,7 +122,8 @@ CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm 
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath#md5:12345678901234567890123456789012	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "imagepath should be full registry URL: <domain-name>/<registry-path>"
+#    Should Contain  ${error_msg}   details = "imagepath should be full registry URL: <domain-name>/<registry-path>"
+    Should Contain  ${error_msg}  details = "Get mypath#md5:12345678901234567890123456789012: unsupported protocol scheme """
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path of bad domain
     [Documentation]
@@ -130,7 +133,8 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker.registry.com/app#md5:12345678901234567890123456789012
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid registry path"
+    #Should Contain  ${error_msg}   details = "Invalid registry path"
+    Should Contain  ${error_msg}  details = "Get docker.registry.com/app#md5:12345678901234567890123456789012: unsupported protocol scheme """
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
     [Documentation]
@@ -140,7 +144,8 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Access denied to registry path"
+    #Should Contain  ${error_msg}   details = "Access denied to registry path"
+    Should Contain  ${error_msg}  details = "unable to find bearer token"
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and image not found
     [Documentation]
@@ -160,7 +165,8 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199
                                                                                                                    
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid image path"
+    #Should Contain  ${error_msg}   details = "Invalid image path"
+    Should Contain  ${error_msg}  details = "Get htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199: unsupported protocol scheme "htt""
 
 *** Keywords ***
 Setup
