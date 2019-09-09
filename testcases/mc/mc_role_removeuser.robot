@@ -117,10 +117,14 @@ MC - Remove a user role from a user with a bad token
 
 *** Keywords ***
 Setup
+        ${epoch}=  Get Time  epoch
+        ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+        ${username}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
 	${adminToken}=   Login
-	Create User  username=${username}   password=${password}   email_address=${email}
+	Create User  username=${username}   password=${password}   email_address=${emailepoch}
         Unlock User
-        Verify Email
+        Verify Email  email_address=${email}
 	${userToken}=  Login  username=${username}  password=${password}
         Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}
