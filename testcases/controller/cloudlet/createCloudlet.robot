@@ -87,3 +87,14 @@ CreateCloudlet with required parameters and staticips
 	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=${port}   use_defaults=False
 	Cloudlet Should Exist   
 
+CreateCloudlet without physicalname 
+        [Documentation]   
+        ...  send CreateCloudlet without physical name 
+        ...  verify physical name is set to cloudlet name 
+
+        ${epoch}=  Get Time  epoch
+        ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+
+        ${resp}=  Run Keyword and Expect Error  *  Create Cloudlet  operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=5000  platform_type=PlatformTypeOpenstack  use_defaults=False
+
+        Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
