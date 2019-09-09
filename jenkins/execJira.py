@@ -75,7 +75,7 @@ def main():
     logging.info("cycle=%s version=%s project=%s component=%s workspace=%s" % (cycle, version, project, component, workspace))
         
     #z = zapi.Zapi(username = username, password = password)
-    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
 
     project_info = j.get_project(project)
