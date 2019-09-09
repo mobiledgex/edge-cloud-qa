@@ -67,6 +67,6 @@ spec:
           - name: VAULT_CRM_SECRET_ID
             value: ***REMOVED***
           - name: JAEGER_ENDPOINT
-            value: https://automationjaeger.mobiledgex.net:14270/api/traces
+            value: https://jaeger-qa.mobiledgex.net:14268/api/traces
        imagePullSecrets:
         - name: mexreg-secret
