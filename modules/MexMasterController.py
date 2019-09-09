@@ -1162,7 +1162,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_app_instances(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='app_name', sort_order='ascending'):
+    def show_app_instances(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='app_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowAppInst'
 
         payload = None
@@ -1174,6 +1174,10 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             appinst_dict = {}
+            if app_name or app_version or cloudlet_name or operator_name or developer_name or cluster_instance_name or cluster_instance_developer_name:
+                appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, use_defaults=False).app_instance
+                appinst_dict = {'appinst': appinst}
+
             if region is not None:
                 appinst_dict['region'] = region
 
@@ -1366,7 +1370,7 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateClusterInst'
 
         payload = None
@@ -1378,7 +1382,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -1591,13 +1595,17 @@ class MexMasterController(MexRest):
 
             self._number_createappinst_requests_success += 1
 
+            resp =  self.show_app_instances(region=region, app_name=appinst['key']['app_key']['name'], developer_name=appinst['key']['app_key']['developer_key']['name'], app_version=appinst['key']['app_key']['version'], cluster_instance_name=appinst['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=appinst['key']['cluster_inst_key']['cloudlet_key']['name'], operator_name=appinst['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=appinst['key']['cluster_inst_key']['developer'])
+
+            return resp
+        
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
             return t
         else:
             resp = send_message()
-            return self.decoded_data
+            return resp
 
     def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/DeleteAppInst'
@@ -1657,17 +1665,18 @@ class MexMasterController(MexRest):
         #    payload = json_data
         #else:
         #    runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name).run_command
-        #    runcommand_dict = {'execrequest': runcommand}
-        #    if region is not None:
-        #        runcommand_dict['region'] = region
+        #    runcommand_dict = {'Execrequest': runcommand}
+        #    #if region is not None:
+        #    #    runcommand_dict['region'] = region
 
         #    payload = json.dumps(runcommand_dict)
 
-        cmd_login = f'mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+        cmd_docker = 'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+        cmd_login = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
         #cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
-        cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
-        cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
-        cmd = cmd_run + ';>/tmp/a'
+        cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
+        #cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
+        cmd = cmd_docker + ' ' + cmd_run
         logger.info('run {} on mc.'.format(cmd))
 
         def send_message():
@@ -1680,7 +1689,7 @@ class MexMasterController(MexRest):
                 #print('*WARN*', out)
                 process = subprocess.Popen(cmd,
                                            stdout=subprocess.PIPE,
-                                           #stderr=subprocess.PIPE,
+                                           stderr=subprocess.PIPE,
                                            shell=True
                 )                
                 #process = subprocess.Popen(shlex.split(cmd_run),
@@ -1692,14 +1701,14 @@ class MexMasterController(MexRest):
                                            #preexec_fn=os.setpgrp
                 #)
                 stdout = process.stdout.readline()
-                #stderr = process.stderr.readline()
+                stderr = process.stderr.readline()
                 #stdout, stderr = process.communicate()
                 print('*WARN*', 'std', stdout, stderr)
                 if stderr:
-                    raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+                    raise Exception('runCommand failed with stderr:' + stderr.decode('utf-8'))
                 
-                #self.post(url=url, bearer=token, data=payload)
-                #logger.info('response:\n' + str(self.resp.text))
+               # self.post(url=url, bearer=token, data=payload)
+               # logger.info('response:\n' + str(self.resp.text))
 
                 #if str(self.resp.status_code) != '200':
                 #    self._number_runcommand_requests_fail += 1
@@ -1707,18 +1716,19 @@ class MexMasterController(MexRest):
             except subprocess.CalledProcessError as e:
                 print('*WARN*','cpe',e)
             except Exception as e:
-                #self._number_runcommand_requests_fail += 1
+                self._number_runcommand_requests_fail += 1
                 raise Exception("runCommanddd failed:", e)
 
             self._number_runcommand_requests_success += 1
-
+            return stdout
+        
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
             return t
         else:
             resp = send_message()
-            return self.decoded_data
+            return resp.decode('utf-8')
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
         if username is None: username = self.username
