@@ -477,7 +477,7 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, platform_type=None, physical_name=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
@@ -492,6 +492,8 @@ class Cloudlet():
         self.number_of_dynamic_ips = number_of_dynamic_ips
         self.crm_override = crm_override
         self.notify_server_address = notify_server_address
+        self.platform_type = platform_type
+        self.physical_name = physical_name
         
         print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
@@ -548,6 +550,9 @@ class Cloudlet():
         if self.ipsupport == "IpSupportDynamic":
             self.ipsupport = 2
 
+        if self.platform_type == 'PlatformTypeOpenstack':
+            self.platform_type = 2
+            
         cloudlet_key_dict = {}
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
@@ -587,7 +592,11 @@ class Cloudlet():
             cloudlet_dict['crm_override'] = self.crm_override  # ignore errors from CRM
         if self.notify_server_address:
             cloudlet_dict['notify_srv_addr'] = self.notify_server_address
-            
+        if self.physical_name is not None:
+            cloudlet_dict['physical_name'] = self.physical_name
+        if self.platform_type is not None:
+            cloudlet_dict['platform_type'] = self.platform_type
+
         print("In the class", cloudlet_dict)
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
@@ -1052,6 +1061,7 @@ class MexController(MexGrpc):
         self.prov_stack = []
         self.ctlcloudlet = None
         self._queue_obj = None
+        self.last_stream = ''
         
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
@@ -1589,7 +1599,8 @@ class MexController(MexGrpc):
 
         for s in resp:
             print(s)
-            if 'Failure' in str(s):
+            self.last_stream += str(s)
+            if 'Failure' in str(s) or 'failed' in str(s):
                 logging.error(str(s))
                 raise Exception(str(s))
 
@@ -2368,6 +2379,9 @@ class MexController(MexGrpc):
                 return candidate
         raise Error('cant find file {}'.format(path))
 
+    def get_last_stream(self):
+        return self.last_stream
+    
     def _init_shared_variables(self):
         default_time_stamp = str(time.time()).replace('.', '-')
         shared_variables.cloudlet_name_default = 'cloudlet' + default_time_stamp
