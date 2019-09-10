@@ -37,7 +37,7 @@ def main():
     parser.add_argument('--version_from_load', action='store_true')
     args = parser.parse_args()
 
-    num_executors = 5
+    #num_executors = 5
     
     print(os.environ)
     cycle = os.environ['Cycle']
@@ -49,7 +49,8 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
-
+    num_executors = os.environ['NumberParallelExecutions']
+    
     #print(httpTrace)
     #if httpTrace == 'true':
     #    httpTrace = 1
