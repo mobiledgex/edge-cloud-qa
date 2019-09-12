@@ -49,7 +49,7 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
-    num_executors = os.environ['NumberParallelExecutions']
+    num_executors = int(os.environ['NumberParallelExecutions'])
     
     #print(httpTrace)
     #if httpTrace == 'true':
