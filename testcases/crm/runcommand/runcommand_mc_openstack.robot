@@ -35,11 +35,17 @@ RunCommand - k8s shared shall return command result on openstack
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
-	
-    log to console   ${stdout}
+    ${stdout_noid}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
 
-    Should Be Equal  ${stdout}  root\r\n
+    ${stdout_id}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst[0]['data']['runtime_info']['container_ids'][0]} command=whoami
+
+    ${error}=  Run Keyword and Expect Error  *  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
+	
+    log to console   ${stdout_noid}
+
+    Should Be Equal  ${stdout_noid}  root\r\n
+    Should Be Equal  ${stdout_id}  root\r\n
+    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 RunCommand - k8s dedicated shall return command result on openstack
     [Documentation]
@@ -56,11 +62,17 @@ RunCommand - k8s dedicated shall return command result on openstack
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
 
-    log to console   ${stdout}
+    ${stdout_id}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst[0]['data']['runtime_info']['container_ids'][0]} command=whoami
 
-    Should Be Equal  ${stdout}  root\r\n
+    ${error}=  Run Keyword and Expect Error  *  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
+
+    log to console   ${stdout_noid}
+
+    Should Be Equal  ${stdout_noid}  root\r\n
+    Should Be Equal  ${stdout_id}  root\r\n
+    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 RunCommand - docker shall return command result on openstack
     [Documentation]
@@ -77,11 +89,17 @@ RunCommand - docker shall return command result on openstack
     log to console  ${app_inst}
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
+    ${stdout_noid}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
 
-    log to console   ${stdout}
+    ${stdout_id}=  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst[0]['data']['runtime_info']['container_ids'][0]} command=whoami
 
-    Should Be Equal  ${stdout}  root\r\n
+    ${error}=  Run Keyword and Expect Error  *  Run Command  region=US  app_name=${app_inst[0]['data']['key']['app_key']['name']}  app_version=${app_inst[0]['data']['key']['app_key']['version']}  developer_name=${app_inst[0]['data']['key']['app_key']['developer_key']['name']}  cluster_instance_name=${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}  cloudlet_name=${app_inst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
+
+    log to console   ${stdout_noid}
+
+    Should Be Equal  ${stdout_noid}  root\r\n
+    Should Be Equal  ${stdout_id}  root\r\n
+    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 *** Keywords ***
 Setup
