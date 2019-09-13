@@ -1652,14 +1652,16 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, json_data=None, use_defaults=True, use_thread=False):
+    def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, json_data=None, use_defaults=True, use_thread=False):
         #url = self.root_url + '/auth/ctrl/RunCommand'
 
         #payload = None
         #run_command = None
 
-        #if use_defaults == True:
-        #    if token == None: token = self.token
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, developer_name=developer_name, container_id=container_id).run_command
 
         #if json_data !=  None:
         #    payload = json_data
@@ -1672,11 +1674,14 @@ class MexMasterController(MexRest):
         #    payload = json.dumps(runcommand_dict)
 
         cmd_docker = 'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
-        cmd_login = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
-        #cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
-        cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
-        #cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
-        cmd = cmd_docker + ' ' + cmd_run
+        cmd = f'{cmd_docker} mcctl --addr https://{self.mc_address} region RunCommand region={region} {runcommand} --token {token}'
+        #cmd_login = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+        ##cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
+        #cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
+        #if container_id:
+        #    cmd_run += f' containerid={container_id}'
+        ##cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
+        #cmd = cmd_docker + ' ' + cmd_run
         logger.info('run {} on mc.'.format(cmd))
 
         def send_message():
@@ -1706,6 +1711,8 @@ class MexMasterController(MexRest):
                 print('*WARN*', 'std', stdout, stderr)
                 if stderr:
                     raise Exception('runCommand failed with stderr:' + stderr.decode('utf-8'))
+                if 'Error' in stdout.decode('utf-8'):
+                    raise Exception('runCommand failed with error:' + stdout.decode('utf-8'))
                 
                # self.post(url=url, bearer=token, data=payload)
                # logger.info('response:\n' + str(self.resp.text))
