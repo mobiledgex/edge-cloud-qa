@@ -59,7 +59,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack after reboot
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
     Reboot Rootlb  root_loadbalancer=${rootlb}
-    Sleep  20s
+    Sleep  60s
  
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
