@@ -2,9 +2,9 @@
 Documentation  use FQDN to access app on openstack
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
-Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
-Library  MexApp
-Library  String
+#Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+#Library  MexApp
+#Library  String
 
 #Test Setup      Setup
 #Test Teardown   Cleanup provisioning
@@ -117,4 +117,3 @@ RunCommand - shall return error without token
     log to console  ${error}
 
     Should Contain  ${error}  Error: Unauthorized, invalid or expired jwt
-

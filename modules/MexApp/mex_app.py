@@ -123,6 +123,7 @@ class MexApp(object):
 
         rb = None
         if root_loadbalancer is not None:
+            print('*WARN*', 'rootlb')
             #rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.mobiledgex.net.kubeconfig' )
             rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
         else:
@@ -141,7 +142,8 @@ class MexApp(object):
 
         #kubectl_cmd = 'export KUBECONFIG={};kubectl get pods'.format(kubeconfig_file)
         #logging.info(kubectl_cmd)
-
+        
+        found_pod_dict = {}
         for t in range(wait_time):
             #kubectl_return = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             #kubectl_out = kubectl_return.stdout.decode('utf-8')
@@ -154,13 +156,17 @@ class MexApp(object):
                 if pod_name in name:
                     if line.split()[2] == 'Running':
                         logging.info('Found running pod:' + line)
-                        pod_count += 1
-                        if number_of_pods == 1:
-                            return True
+                        if name in found_pod_dict:
+                            logging.info(f'already found {name}')
+                        else:
+                            found_pod_dict[name] = True
+                            pod_count += 1
+                            if pod_count == number_of_pods:
+                                return True
             time.sleep(1)
 
         if pod_count != number_of_pods:
-            raise Exception('All pods not found. expected=' + number_of_pods + ' got=' + pod_count)
+            raise Exception('All pods not found. expected=' + str(number_of_pods) + ' got=' + str(pod_count))
         
         raise Exception('Running k8s pod not found')
 
