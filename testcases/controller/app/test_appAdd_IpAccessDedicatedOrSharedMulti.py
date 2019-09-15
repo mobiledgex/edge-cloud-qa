@@ -679,7 +679,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP2Ports(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW and 2 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=QCOW, and 2 http ports
         # ... verify app is created
@@ -711,7 +711,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP10Ports(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW and 10 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=QCOW, and 10 http ports
         # ... verify app is created
@@ -743,7 +743,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP100Ports(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW and 100 http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=QCOW, and 100 http ports
         # ... verify app is created
@@ -778,7 +778,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedTCPUDPHTTPPorts(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW and multiple tcp/udp/http ports
         # ... create app with ip_access=IpAccessDedicatedOrShared, type=QCOW, and tcp/udp/http ports
         # ... verify app is created
