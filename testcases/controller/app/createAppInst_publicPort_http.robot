@@ -253,48 +253,49 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
     Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
     Length Should Be   ${appInst_2.mapped_ports}  1
 
-AppInst - 2 appInst on same app and different cluster and different cloudlet shall be able to allocate the same public HTTP port
-    [Documentation]
-    ...  create an app1 and appInst1 on cluster1 cloudlet1 with http:1
-    ...  create an app1 and appInst2 on cluster2 cloudlet2 with http:1
-    ...  verify app1 public port is 443 and public_path is correct
-    ...  verify app2 public port is 443 and public_path is correct
-
-    # create app1 and appIns 1
-    Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
-
-
-    ${app_default_1}=  Get Default App Name
-    ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
-
-    Register Client  app_name=${app_default_1}
-    ${cloudlet_1}=  Find Cloudlet	latitude=31  longitude=-91
-
-    # create app2 and appInst on the same port
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
-
-    ${cloudlet_2}=  Find Cloudlet	latitude=35  longitude=-95
-
-    ${fqdn}=    Catenate  SEPARATOR=.  ${cloudlet_name}    ${operator_name}  mobiledgex.net
-    ${fqdn_2}=  Catenate  SEPARATOR=.  ${cloudlet_name_2}  ${operator_name}  mobiledgex.net
-    
-    Should Be Equal              ${cloudlet_1.fqdn}  ${fqdn}
-    Should Be Equal              ${cloudlet_2.fqdn}  ${fqdn_2}
-	
-    # verify app1 uses port 443
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
-    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
-    Length Should Be   ${appInst_1.mapped_ports}  1
-
-    # verify app2 uses port 443
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
-    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
-    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
-    Length Should Be   ${appInst_2.mapped_ports}  1
+# removed from stratus
+#AppInst - 2 appInst on same app and different cluster and different cloudlet shall be able to allocate the same public HTTP port
+#    [Documentation]
+#    ...  create an app1 and appInst1 on cluster1 cloudlet1 with http:1
+#    ...  create an app1 and appInst2 on cluster2 cloudlet2 with http:1
+#    ...  verify app1 public port is 443 and public_path is correct
+#    ...  verify app2 public port is 443 and public_path is correct
+#
+#    # create app1 and appIns 1
+#    Create App  access_ports=http:1
+#    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+#
+#
+#    ${app_default_1}=  Get Default App Name
+#    ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
+#
+#    Register Client  app_name=${app_default_1}
+#    ${cloudlet_1}=  Find Cloudlet	latitude=31  longitude=-91
+#
+#    # create app2 and appInst on the same port
+#    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
+#
+#    ${cloudlet_2}=  Find Cloudlet	latitude=35  longitude=-95
+#
+#    ${fqdn}=    Catenate  SEPARATOR=.  ${cloudlet_name}    ${operator_name}  mobiledgex.net
+#    ${fqdn_2}=  Catenate  SEPARATOR=.  ${cloudlet_name_2}  ${operator_name}  mobiledgex.net
+#    
+#    Should Be Equal              ${cloudlet_1.fqdn}  ${fqdn}
+#    Should Be Equal              ${cloudlet_2.fqdn}  ${fqdn_2}
+#	
+#    # verify app1 uses port 443
+#    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
+#    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    443
+#    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          3  #LProtoHTTP
+#    Should Be Equal              ${appInst_1.mapped_ports[0].path_prefix}    ${public_path_1}
+#    Length Should Be   ${appInst_1.mapped_ports}  1
+#
+#    # verify app2 uses port 443
+#    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
+#    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    443
+#    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          3  #LProtoHTTP
+#    Should Be Equal              ${appInst_2.mapped_ports[0].path_prefix}    ${public_path_1}
+#    Length Should Be   ${appInst_2.mapped_ports}  1
 
 AppInst - User shall be able to add app/appInst, delete, and readd with same HTTP port
     [Documentation]

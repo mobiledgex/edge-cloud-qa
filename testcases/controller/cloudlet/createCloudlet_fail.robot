@@ -28,8 +28,10 @@ CreateCloudlet with an invalid operator
 
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
+        ${portnum}=    Evaluate    random.randint(49152, 65500)   random
+        ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet	cloudlet_name=${cldlet}     operator_name=mci     number_of_dynamic_ips=default      latitude=35.0     longitude=-96.0    use_defaults=False
+	Create Cloudlet	cloudlet_name=${cldlet}     operator_name=mci     number_of_dynamic_ips=default      latitude=35.0     longitude=-96.0    notify_server_address=${port}  use_defaults=False
 
 	[Teardown]	Cleanup provisioning
 	
