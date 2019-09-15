@@ -93,7 +93,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, False, 'find app')
         assert_expectations()
 
-    def test_CreateAppDockerConfig_httpInvalid(self):
+    def unsupported_test_CreateAppDockerConfig_httpInvalid(self):
         # [Documentation] App - User shall not be able to create an app with invalid http config
         # ... create an app with invalid http config
         # ... verify proper error is received
