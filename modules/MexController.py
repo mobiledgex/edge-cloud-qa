@@ -350,8 +350,9 @@ class ClusterInstance():
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
-            if number_masters is None: self.number_masters = 1
-            if number_nodes is None: self.number_nodes = 1
+            if deployment == 'kubernetes':
+                if number_masters is None: self.number_masters = 1
+                if number_nodes is None: self.number_nodes = 1
 
         if self.liveness == 'LivenessStatic':
             self.liveness = 1
@@ -681,7 +682,10 @@ class App():
         self.deployment_manifest = deployment_manifest
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
-        
+
+        if self.image_type:
+            self.image_type = self.image_type.casefold()
+            
         #print('*WARN*',app_pb2.App)
         #print('*WARN*','key', vars(app_pb2.App))
         #print('*WARN*','fields', app_pb2.App._fields, dir(app_pb2.App))
@@ -703,7 +707,7 @@ class App():
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
             
-            if self.image_type == 'ImageTypeDocker':
+            if self.image_type == 'imagetypedocker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     #try:
@@ -715,17 +719,17 @@ class App():
                     #except:
                     #    self.image_path = 'failed_to_set'
                 #self.image_type = 1
-            elif self.image_type == 'ImageTypeQCOW':
+            elif self.image_type == 'imagetypeqcow':
                 if self.image_path is None:
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
 
 
-        if self.image_type == 'ImageTypeDocker':
+        if self.image_type == 'imagetypedocker':
             self.image_type = 1
-        elif self.image_type == 'ImageTypeQCOW':
+        elif self.image_type == 'imagetypeqcow':
             self.image_type = 2
-        elif self.image_type == 'ImageTypeUnknown':
+        elif self.image_type == 'imagetypeunknown':
             self.image_type = 0
 
         #self.ip_access = 3 # default to shared

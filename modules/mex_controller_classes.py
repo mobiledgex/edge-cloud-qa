@@ -66,7 +66,7 @@ class Flavor():
 class Cloudlet():
     cloudlet = None
     
-    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, use_defaults=True):
 
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
@@ -78,6 +78,7 @@ class Cloudlet():
         self.number_dynamic_ips = number_dynamic_ips
         self.platform_type = platform_type
         self.physical_name = physical_name
+        self.env_vars = env_vars
         
         if use_defaults:
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -129,7 +130,9 @@ class Cloudlet():
             cloudlet_dict['physical_name'] = self.physical_name
         if self.platform_type is not None:
             cloudlet_dict['platform_type'] = self.platform_type
-
+        if self.env_vars is not None:
+            cloudlet_dict['envvars'] = self.env_vars
+            
         self.cloudlet = cloudlet_dict
 
 class ClusterInstance():
