@@ -1834,7 +1834,7 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateCloudlet'
 
         payload = None
@@ -1846,7 +1846,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
+            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars).cloudlet
             cloudlet_dict = {'cloudlet': cloudlet}
             if region is not None:
                 cloudlet_dict['region'] = region
