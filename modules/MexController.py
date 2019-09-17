@@ -701,7 +701,7 @@ class App():
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
-            if image_type is None: self.image_type = 'ImageTypeDocker'
+            if image_type is None: self.image_type = 'imagetypedocker'
             #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
@@ -724,7 +724,7 @@ class App():
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
 
-
+        print('*WARN*', self.image_type)
         if self.image_type == 'imagetypedocker':
             self.image_type = 1
         elif self.image_type == 'imagetypeqcow':

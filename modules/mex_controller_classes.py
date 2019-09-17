@@ -130,8 +130,12 @@ class Cloudlet():
             cloudlet_dict['physical_name'] = self.physical_name
         if self.platform_type is not None:
             cloudlet_dict['platform_type'] = self.platform_type
+
+        env_dict = {}
         if self.env_vars is not None:
-            cloudlet_dict['envvars'] = self.env_vars
+            key,value = self.env_vars.split('=')
+            env_dict[key] = value
+            cloudlet_dict['env_var'] = env_dict
             
         self.cloudlet = cloudlet_dict
 
