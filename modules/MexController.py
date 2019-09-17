@@ -683,7 +683,7 @@ class App():
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
 
-        if self.image_type:
+        if self.image_type and isinstance(self.image_type, str):
             self.image_type = self.image_type.casefold()
             
         #print('*WARN*',app_pb2.App)
