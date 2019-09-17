@@ -175,7 +175,7 @@ node('jenkinsSlave1'){
     try {    
        stage("delete CRMs") {
           dir('go/src/github.com/mobiledgex/jenkins') {
-//             build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
 
              //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
 
@@ -183,6 +183,11 @@ node('jenkinsSlave1'){
              status = sh(script: s1, returnStatus: true);
              def s2 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationHamburgCloudlet.TDG.pf;openstack stack delete automationHamburgCloudlet.TDG.pf'
              status = sh(script: s2, returnStatus: true);
+
+             def s3 = 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
+             status = sh(script: s3, returnStatus: true);
+             def s4 = 'source /home/jenkins/openrc.bonn;openstack server delete automationBonnCloudlet.TDG.pf;openstack stack delete automationBonnCloudlet.TDG.pf'
+             status = sh(script: s4, returnStatus: true);
 
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
@@ -279,8 +284,8 @@ node('jenkinsSlave1'){
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
 
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
 
 	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhamburg_start.yaml'
 	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhamburg_start.yaml'  
@@ -403,7 +408,7 @@ node('jenkinsSlave1'){
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
-//             build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
 
 	  }
        }
