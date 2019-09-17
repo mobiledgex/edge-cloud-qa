@@ -1,0 +1,67 @@
+*** Settings ***
+Documentation   FindCloudlet - request shall return error when sending FindCloudlet for app with permits_platform_apps=False
+
+Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+#Variables       shared_variables.py
+
+Test Setup	Setup
+Test Teardown	Cleanup provisioning
+
+*** Variables ***
+${azure_operator_name}  azure
+${dmuus_operator_name}  dmuus
+${dmuus_cloudlet_name}  tmocloud-2  #has to match crm process startup parms
+${azure_cloudlet_name}  azurecloud-1  #has to match crm process startup parms
+${platos_app_name}  platosEnablingLayer
+${platos_developer_name}  platos
+${platos_cloudlet_name}  default
+${platos_operator_name}  developer
+${platos_uri}  automation.platos.com
+${app_version}  1.0
+
+${azure_cloudlet_latitude}	  35
+${azure_cloudlet longitude}	  -95
+${dmuus_cloudlet_latitude}	  35
+${dmuus_cloudlet longitude}	  -95
+
+*** Test Cases ***
+FindCloudlet platos - request shall return error when sending FindCloudlet for app with permits_platform_apps=False
+    [Documentation]
+    ...  send FindCloudlet for app with permits_platform_apps=False
+    ...  verify Access to requested app not allowed error is received
+
+      Register Client	developer_name=${platos_developer_name}  app_name=${platos_app_name}
+       ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  carrier_name=${dmuus_operator_name}  latitude=36  longitude=-95
+
+      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+      Should Contain  ${error_msg}  details = "Access to requested app: Devname: ${developer_name_default} Appname: ${app_name_default} AppVers: 1.0 not allowed for the registered app: Devname: platos Appname: platosEnablingLayer Appvers: 1.0" 
+
+*** Keywords ***
+Setup
+    ${epoch}=  Get Time  epoch
+
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
+    Create Developer            
+    Create Flavor
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
+    #Create Cluster	
+    Create Cluster Instance	
+    Create App			access_ports=tcp:1  #permits_platform_apps=${False}
+    ${dmuus_appinst}=            Create App Instance		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_name_default}=        Get Default App Name
+
+    #Create Developer            developer_name=${platos_developer_name}
+    Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
+    #${platos_appinst}=         Create App Instance  app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+
+    Set Suite Variable  ${dmuus_appinst} 
+    #Set Suite Variable  ${platos_appinst} 
+    Set Suite Variable  ${developer_name_default}
+    Set Suite Variable  ${app_name_default}
+
