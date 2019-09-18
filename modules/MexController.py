@@ -350,7 +350,7 @@ class ClusterInstance():
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
-            if deployment == 'kubernetes':
+            if self.deployment is None or self.deployment == 'kubernetes':
                 if number_masters is None: self.number_masters = 1
                 if number_nodes is None: self.number_nodes = 1
 
