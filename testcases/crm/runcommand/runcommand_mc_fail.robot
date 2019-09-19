@@ -113,7 +113,7 @@ RunCommand - shall return error without token
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=dmuus  cloudlet_name=tmocloud-1  command=ls
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=dmuus  cloudlet_name=tmocloud-1  command=ls  use_defaults=${False}
     log to console  ${error}
 
     Should Contain  ${error}  Error: Unauthorized, invalid or expired jwt
