@@ -99,7 +99,7 @@ RunCommand - docker shall return command result on openstack
 
     Should Be Equal  ${stdout_noid}  root\r\n
     Should Be Equal  ${stdout_id}  root\r\n
-    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
+    Should Contain   ${error}  Error: No such container: notfound 
 
 *** Keywords ***
 Setup
