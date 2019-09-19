@@ -1401,6 +1401,9 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createclusterinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                if 'Created successfully' not in str(self.resp.text):
+                    raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
+
             except Exception as e:
                 self._number_createclusterinst_requests_fail += 1
                 raise Exception("post failed:", e)
@@ -1448,6 +1451,8 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_deleteclusterinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                if 'Deleted ClusterInst successfully' not in str(self.resp.text):
+                    raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
             except Exception as e:
                 self._number_deleteclusterinst_requests_fail += 1
                 raise Exception("post failed:", e)
@@ -1587,6 +1592,8 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createappinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                if 'Created successfully' not in str(self.resp.text):
+                    raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
             except Exception as e:
                 self._number_createappinst_requests_fail += 1
                 raise Exception("post failed:", e)
