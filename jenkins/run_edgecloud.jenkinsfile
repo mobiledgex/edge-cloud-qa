@@ -121,6 +121,9 @@ node('jenkinsSlave1'){
 
     try {
        stage('Pull Image') {
+          sh 'docker system prune -af'  //remove all docker stuff without prompting
+	  sh 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+	  
           def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
           def index  = sh(script: s, returnStdout: true);
           (commit_version, image_name) = index.split(',')
@@ -231,7 +234,7 @@ node('jenkinsSlave1'){
     try {
        stage('deploy processes in k8s') {
           dir('go/src/github.com/mobiledgex/jenkins') {
-             sh 'docker system prune -af'  //remove all docker stuff without prompting
+//             sh 'docker system prune -af'  //remove all docker stuff without prompting
 	     
 	     // delete the bonnlb so it is recreated when starting the crm
 	     //sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
