@@ -41,6 +41,8 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
+    Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
 MC - User shall be able to create a and upload docker image in different user roles as Developer Contributor
 	[Documentation] 
 	...  create a new user 
@@ -61,6 +63,8 @@ MC - User shall be able to create a and upload docker image in different user ro
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperContributor
 
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
+    Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
 MC - User shall be able to create a and upload docker image in different user roles as Developer Viewer
 	[Documentation] 
@@ -85,6 +89,10 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
+    Should Contain  ${pullerror}  not found: manifest unknown: manifest unknown
+
 MC - User shall be able to create a and upload docker image in different user roles as Operator Manager
 	[Documentation] 
 	...  create a new user 
@@ -107,6 +115,10 @@ MC - User shall be able to create a and upload docker image in different user ro
     ${error}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
     Should Contain  ${error}  denied: requested access to the resource is denied
+
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
+    Should Contain  ${pullerror}  denied: requested access to the resource is denied
 
 MC - User shall be able to create a and upload docker image in different user roles as Operator Contributor
 	[Documentation] 
@@ -131,6 +143,10 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
+    Should Contain  ${pullerror}  denied: requested access to the resource is denied
+
 MC - User shall be able to create a and upload docker image in different user roles as Operator Viewer
 	[Documentation] 
 	...  create a new user 
@@ -154,6 +170,9 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+
+    Should Contain  ${pullerror}  denied: requested access to the resource is denied
 
 *** Keywords ***
 
