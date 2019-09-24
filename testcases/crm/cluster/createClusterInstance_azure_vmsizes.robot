@@ -86,7 +86,7 @@ Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    Create Flavor          ram=1024  vcpus=1  disk=1
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}
+   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  number_masters=1  number_nodes=4
    Log to Console  DONE creating cluster instance
 
    ${cluster_info}=  Get Azure Cluster Info  cloudlet=${cloudlet_name_azure}  cluster=${cluster_name}
