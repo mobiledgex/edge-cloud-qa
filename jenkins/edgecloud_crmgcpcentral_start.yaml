@@ -46,7 +46,7 @@ spec:
          - "--platform"
          - "PLATFORM_TYPE_GCP"
          - "--vaultAddr"
-         - "https://vault-qa.mobiledgex.net:8200"
+         - "vault-qa.mobiledgex.net:8200"
          - "--physicalName"
          - "gcp"
          - "--d"
