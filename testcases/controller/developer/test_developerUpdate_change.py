@@ -59,7 +59,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperSameParms(self):
+    def unsupported_test_updateDeveloperSameParms(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -84,7 +84,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperAllParms(self):
+    def unsupported_test_updateDeveloperAllParms(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -116,7 +116,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperEmail(self):
+    def unsupported_test_updateDeveloperEmail(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -149,7 +149,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperAddress(self):
+    def unsupported_test_updateDeveloperAddress(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -182,7 +182,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperUsername(self):
+    def unsupported_test_updateDeveloperUsername(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -215,7 +215,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_updateDeveloperPasshash(self):
+    def unsupported_test_updateDeveloperPasshash(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 

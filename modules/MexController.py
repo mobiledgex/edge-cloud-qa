@@ -351,8 +351,9 @@ class ClusterInstance():
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
-            if number_masters is None: self.number_masters = 1
-            if number_nodes is None: self.number_nodes = 1
+            if self.deployment is None or self.deployment == 'kubernetes':
+                if number_masters is None: self.number_masters = 1
+                if number_nodes is None: self.number_nodes = 1
 
         if self.liveness == 'LivenessStatic':
             self.liveness = 1
@@ -479,7 +480,7 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, platform_type=None, physical_name=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
@@ -494,6 +495,8 @@ class Cloudlet():
         self.number_of_dynamic_ips = number_of_dynamic_ips
         self.crm_override = crm_override
         self.notify_server_address = notify_server_address
+        self.platform_type = platform_type
+        self.physical_name = physical_name
         
         print(vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
@@ -550,6 +553,9 @@ class Cloudlet():
         if self.ipsupport == "IpSupportDynamic":
             self.ipsupport = 2
 
+        if self.platform_type == 'PlatformTypeOpenstack':
+            self.platform_type = 2
+            
         cloudlet_key_dict = {}
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
@@ -589,7 +595,11 @@ class Cloudlet():
             cloudlet_dict['crm_override'] = self.crm_override  # ignore errors from CRM
         if self.notify_server_address:
             cloudlet_dict['notify_srv_addr'] = self.notify_server_address
-            
+        if self.physical_name is not None:
+            cloudlet_dict['physical_name'] = self.physical_name
+        if self.platform_type is not None:
+            cloudlet_dict['platform_type'] = self.platform_type
+
         print("In the class", cloudlet_dict)
         self.cloudlet = cloudlet_pb2.Cloudlet(**cloudlet_dict)
 
@@ -674,7 +684,10 @@ class App():
         self.deployment_manifest = deployment_manifest
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
-        
+
+        if self.image_type and isinstance(self.image_type, str):
+            self.image_type = self.image_type.casefold()
+            
         #print('*WARN*',app_pb2.App)
         #print('*WARN*','key', vars(app_pb2.App))
         #print('*WARN*','fields', app_pb2.App._fields, dir(app_pb2.App))
@@ -690,13 +703,13 @@ class App():
             if app_name is None: self.app_name = shared_variables.app_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
-            if image_type is None: self.image_type = 'ImageTypeDocker'
+            if image_type is None: self.image_type = 'imagetypedocker'
             #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
             
-            if self.image_type == 'ImageTypeDocker':
+            if self.image_type == 'imagetypedocker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     #try:
@@ -708,17 +721,17 @@ class App():
                     #except:
                     #    self.image_path = 'failed_to_set'
                 #self.image_type = 1
-            elif self.image_type == 'ImageTypeQCOW':
+            elif self.image_type == 'imagetypeqcow':
                 if self.image_path is None:
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
 
-
-        if self.image_type == 'ImageTypeDocker':
+        print('*WARN*', self.image_type)
+        if self.image_type == 'imagetypedocker':
             self.image_type = 1
-        elif self.image_type == 'ImageTypeQCOW':
+        elif self.image_type == 'imagetypeqcow':
             self.image_type = 2
-        elif self.image_type == 'ImageTypeUnknown':
+        elif self.image_type == 'imagetypeunknown':
             self.image_type = 0
 
         #self.ip_access = 3 # default to shared
@@ -1055,6 +1068,7 @@ class MexController(MexGrpc):
         self.ctlcloudlet = None
         self._queue_obj = None
         self.thread_dict = {}
+        self.last_stream = ''
         
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
@@ -1626,7 +1640,8 @@ class MexController(MexGrpc):
 
         for s in resp:
             print(s)
-            if 'Failure' in str(s):
+            self.last_stream += str(s)
+            if 'Failure' in str(s) or 'failed' in str(s):
                 logging.error(str(s))
                 raise Exception(str(s))
 
@@ -2446,6 +2461,9 @@ class MexController(MexGrpc):
                 return candidate
         raise Error('cant find file {}'.format(path))
 
+    def get_last_stream(self):
+        return self.last_stream
+    
     def _init_shared_variables(self):
         default_time_stamp = str(time.time()).replace('.', '-')
         shared_variables.cloudlet_name_default = 'cloudlet' + default_time_stamp

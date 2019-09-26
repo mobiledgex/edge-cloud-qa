@@ -47,7 +47,7 @@ spec:
           - "--artifactoryFQDN"
           - "https://artifactory-qa.mobiledgex.net/artifactory"
           - "--cloudletVMImagePath"
-          - "https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v2.0.2.qcow2#md5:51371613a81f7218c2633ce3c1814258"
+          - "https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v2.0.3.qcow2#md5:fc13f750dd69c389dc7641ff8e6619ce"
           - "--versionTag"
           - "$AUTOMATION_DOCKERTAG"
           - "--tls"
@@ -67,6 +67,6 @@ spec:
           - name: VAULT_CRM_SECRET_ID
             value: ***REMOVED***
           - name: JAEGER_ENDPOINT
-            value: https://automationjaeger.mobiledgex.net:14270/api/traces
+            value: https://jaeger-qa.mobiledgex.net:14268/api/traces
        imagePullSecrets:
         - name: mexreg-secret

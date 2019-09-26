@@ -54,7 +54,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_createDeveloper_nameEmptyParms(self):
+    def unsupported_test_createDeveloper_nameEmptyParms(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
