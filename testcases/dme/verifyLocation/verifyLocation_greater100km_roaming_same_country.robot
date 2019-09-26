@@ -37,6 +37,7 @@ VerifyLocation - request claiming to be in neighboring country and actually ther
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  4  #LOC_ROAMING_COUNTRY_MISMATCH
       Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
+      Sleep  2s  #added delay since running the suite cause failure on next test because of some delay in update location
 
 VerifyLocation - request claiming to be overseas and actually there shall return LOC_ROAMING_COUNTRY_MATCH
     [Documentation]
@@ -53,6 +54,7 @@ VerifyLocation - request claiming to be overseas and actually there shall return
 
       Should Be Equal As Numbers  ${verify_reply.gps_location_status}  4  #LOC_ROAMING_COUNTRY_MATCH
       Should Be Equal As Numbers  ${verify_reply.gps_location_accuracy_km}  -1
+      Sleep  2s
 
 *** Keywords ***
 Setup
@@ -61,5 +63,4 @@ Setup
     #Create Cluster
     Create App             access_ports=${access_ports} 
     Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
-
 

@@ -120,7 +120,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppDockerConfig_http(self):
+    def unsupported_test_CreateAppDockerConfig_http(self):
         # [Documentation] App - User shall be able to create an app with http config and type Docker
         # ... create an app with http config and type Docker
         # ... verify app is created

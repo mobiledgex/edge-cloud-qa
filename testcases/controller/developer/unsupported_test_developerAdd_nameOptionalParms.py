@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-    def test_createDeveloper_nameAddress(self):
+    def unsupported_test_createDeveloper_nameAddress(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -57,7 +57,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_createDeveloper_nameEmail(self):
+    def unsupported_test_createDeveloper_nameEmail(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -76,7 +76,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_createDeveloper_nameUsername(self):
+    def unsupported_test_createDeveloper_nameUsername(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -95,7 +95,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_createDeveloper_namePasshash(self):
+    def unsupported_test_createDeveloper_namePasshash(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
@@ -114,7 +114,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         assert_expectations()
 
-    def test_createDeveloper_nameAllOptional(self):
+    def unsupported_test_createDeveloper_nameAllOptional(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 

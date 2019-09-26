@@ -390,7 +390,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP1(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW/http:1
         # ... create app with ip_access=IpAccessDedicatedOrShared with http:1 and with QCOW
         # ... verify app is created
@@ -422,7 +422,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTP01(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW/http:01
         # ... create app with ip_access=IpAccessDedicatedOrShared with http:01 and with QCOW
         # ... verify app is created
@@ -454,7 +454,7 @@ class tc(unittest.TestCase):
         expect_equal(found_app, True, 'find app')
         assert_expectations()
 
-    def test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase(self):
+    def unsupported_test_CreateAppQCOWIpAccessDedicatedOrSharedHTTPUppercase(self):
         # [Documentation] App - User shall be able to create an app with IpAccessDedicatedOrShared/ImageTypeQCOW/HTTP:01
         # ... create app with ip_access=IpAccessDedicatedOrShared with uppercase HTTP:01 and with QCOW
         # ... verify app is created

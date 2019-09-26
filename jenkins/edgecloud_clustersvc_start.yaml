@@ -28,5 +28,8 @@ spec:
          - "mexos,notify"
          - "--tls"
          - "/root/tls/mex-server.crt"
+        env:
+         - name: JAEGER_ENDPOINT
+           value: https://jaeger-qa.mobiledgex.net:14268/api/traces
       imagePullSecrets:
        - name: mexreg-secret

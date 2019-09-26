@@ -105,7 +105,7 @@ class tc(unittest.TestCase):
 
         assert_expectations()
 
-    def test_DeleteClusterInstanceNoFlavor(self):
+    def unsupported_test_DeleteClusterInstanceNoFlavor(self):
         # [Documentation] ClusterInst - User shall be able to delete a cluster instance with no flavor name
         # ... create a cluster instance with no flavor_name
         # ... delete the cluster instance
