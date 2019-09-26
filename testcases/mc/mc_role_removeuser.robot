@@ -8,6 +8,8 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
+${username_admin}=  mexadmin
+${password_admin}=  mexadmin123
 ${username}=   mextester06
 ${password}=   mextester06123
 ${email}=      mextester06@gmail.com
@@ -86,16 +88,20 @@ MC - Admin remove an DeveloperManager role from a user
 	...  verify the message returned 
 
         Create Org       orgname=${orgname}      
-        Adduser Role     orgname=${orgname}      username=myuser         role=DeveloperManager        token=${adminToken}        use_defaults=${False}
+        Adduser Role     orgname=${orgname}      username=${username}         role=DeveloperManager        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
+
+        FOR  ${role}  IN  @{showadmin}
+        \  Log to console  ${role['username']}  ${username}
+        \  Run Keyword if  '${role['username']}' == '${username}'  Role Should Be Equal  ${role}  ${username}  ${orgname}  DeveloperManager 
 	
-	Should Be Empty                ${showadmin[0]['org']}             ${EMPTY}
-	Should Be Equal As Strings     ${showadmin[0]['username']}        mexadmin 
-	Should Be Equal As Strings     ${showadmin[0]['role']}            AdminManager
-	Should Be Equal As Strings     ${showadmin[1]['org']}             ${orgname}
-	Should Be Equal As Strings     ${showadmin[1]['username']}        myuser 
-	Should Be Equal As Strings     ${showadmin[1]['role']}            DeveloperManager
+	#Should Be Empty                ${showadmin[0]['org']}             ${EMPTY}
+	#Should Be Equal As Strings     ${showadmin[0]['username']}        mexadmin 
+	#Should Be Equal As Strings     ${showadmin[0]['role']}            AdminManager
+	#Should Be Equal As Strings     ${showadmin[1]['org']}             ${orgname}
+	#Should Be Equal As Strings     ${showadmin[1]['username']}        myuser 
+	#Should Be Equal As Strings     ${showadmin[1]['role']}            DeveloperManager
 	
 	Should Be Equal As Strings     ${admin}        {"message":"Role removed from user"}
 
@@ -117,13 +123,17 @@ MC - Remove a user role from a user with a bad token
 
 *** Keywords ***
 Setup
-	${adminToken}=   Login
-	Create User  username=${username}   password=${password}   email_address=${email}
+        ${epoch}=  Get Time  epoch
+        ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+        ${username}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+	${adminToken}=   Login  username=${username_admin}  password=${password_admin}
+	Create User  username=${username}   password=${password}   email_address=${emailepoch}
         Unlock User
-        Verify Email
-	${userToken}=  Login  username=${username}  password=${password}
+        #Verify Email  email_address=${email}
+	#${userToken}=  Login  username=${username}  password=${password}
         Set Suite Variable  ${adminToken}
-	Set Suite Variable  ${userToken}
+	#Set Suite Variable  ${userToken}
 
 Role Should Be Equal
    [Arguments]  ${role_data}  ${username}  ${org}  ${role}

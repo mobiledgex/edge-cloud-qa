@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-    def test_createDeveloper_sameName_allOptional(self):
+    def unsupported_test_createDeveloper_sameName_allOptional(self):
         # print developers before add
         developer_pre = self.controller.show_developers()
 
