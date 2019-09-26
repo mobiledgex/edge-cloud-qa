@@ -51,6 +51,7 @@ logger = logging.getLogger('mex_controller')
 #flavor_name_default = 'flavor' + default_time_stamp
 #cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 
+
 crm_notify_server_address_port_last = None
 
 class Developer():
@@ -377,6 +378,7 @@ class ClusterInstance():
         shared_variables.cluster_name_default = self.cluster_name
         shared_variables.cloudlet_name_default = self.cloudlet_name
         shared_variables.operator_name_default = self.operator_name
+
 
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
@@ -1065,6 +1067,7 @@ class MexController(MexGrpc):
         self.prov_stack = []
         self.ctlcloudlet = None
         self._queue_obj = None
+        self.thread_dict = {}
         self.last_stream = ''
         
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
@@ -1412,6 +1415,7 @@ class MexController(MexGrpc):
         | ip_access     | None                                                                        |
         | use_defaults  | True. Set to True or False for whether or not to use default values         |
         | use_thread    | False. Set to True to run the operation in a thread. Used for parallel executions         |
+        | del_thread    | False, Set to True to auto delete in a thread. Used for parallel executions         | 
 
         Examples:
 
@@ -1424,6 +1428,7 @@ class MexController(MexGrpc):
         resp = None
         auto_delete = True
         use_thread = False
+        del_thread = False
         
         if not cluster_instance:
             if 'no_auto_delete' in kwargs:
@@ -1432,14 +1437,19 @@ class MexController(MexGrpc):
             if 'use_thread' in kwargs:
                 del kwargs['use_thread']
                 use_thread = True
+            if 'del_thread' in kwargs:
+                del kwargs['del_thread']
+                del_thread = True
             cluster_instance = ClusterInstance(**kwargs).cluster_instance
 
         logger.info('create cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
 
         resp = None
 
-        def sendMessage():
+        def sendMessage(thread_name='Thread'):
             success = False
+            time1 = time.time()
+            print("*WARN*", "thread_time1", time.time())
 
             try:
                 resp = self.clusterinst_stub.CreateClusterInst(cluster_instance)
@@ -1448,7 +1458,6 @@ class MexController(MexGrpc):
                 resp = sys.exc_info()[0]
 
             self.response = resp
-
             try:
                 for s in resp:
                     print(str(s))
@@ -1459,11 +1468,21 @@ class MexController(MexGrpc):
                     self._queue_obj.put(sys.exc_info())
                 else:
                     raise Exception(sys.exc_info())
+                
+            time2 = time.time()
+            print("*WARN*", "thread_time2", time.time())
+            threadtime = time2 - time1
+            self.thread_dict[thread_name]=(time1, time2, threadtime)
+            threadtime = 0
+            
             if not success:
                 raise Exception('Error creating cluster instance:{}'.format(str(resp)))
 
             if auto_delete:
-                self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
+                if del_thread:
+                    self.prov_stack.append(lambda:self.delete_cluster_instance(use_thread=True, **kwargs))
+                else:
+                    self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
 
             resp =  self.show_cluster_instances(cluster_name=cluster_instance.key.cluster_key.name, operator_name=cluster_instance.key.cloudlet_key.operator_key.name, cloudlet_name=cluster_instance.key.cloudlet_key.name, use_defaults=False)
 
@@ -1473,7 +1492,8 @@ class MexController(MexGrpc):
 
         if use_thread:
             self._queue_obj = queue.Queue()
-            t = threading.Thread(target=sendMessage)
+            thread_name = "Thread-" + str(time.time())
+            t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
             return t
         else:
@@ -1491,11 +1511,16 @@ class MexController(MexGrpc):
             raise Exception(exec)
         except queue.Empty:
             pass
+
+    def get_thread_dict(self):
+        return self.thread_dict
+
+    def clear_thread_dict(self):
+        self.thread_dict = {}
                     
     def delete_cluster_instance(self, cluster_instance=None, **kwargs):
         #resp = None
         use_thread = False
-
         if cluster_instance is None:
             if 'cluster_name' not in kwargs:
                 kwargs['cluster_name'] = shared_variables.cluster_name_default
@@ -1508,8 +1533,11 @@ class MexController(MexGrpc):
 
         logger.info('delete cluster instance on {}. \n\t{}'.format(self.address, str(cluster_instance).replace('\n','\n\t')))
 
-        def sendMessage():
+        def sendMessage(thread_name='Thread'):
             success = False
+            time1 = time.time()
+            print("*WARN*", "thread_time1", time.time())
+
             try:
                 resp = self.clusterinst_stub.DeleteClusterInst(cluster_instance)
             except:
@@ -1520,13 +1548,22 @@ class MexController(MexGrpc):
                 print(str(s))
                 if "Deleted ClusterInst successfully" in str(s):
                     success = True
+                    
+            time2 = time.time()
+            print("*WARN*", "thread_time2", time.time())
+            threadtime = time2 - time1
+            self.thread_dict[thread_name]=(time1, time2, threadtime)
+            #print("*WARN*", "Thread Dict", self.thread_dict)
+            threadtime = 0
+            
             if not success:
                 raise Exception('Error deleting cluster instance:{}'.format(str(resp)))
 
             return resp
         
         if use_thread:
-            t = threading.Thread(target=sendMessage)
+            thread_name = "Thread-" + str(time.time())
+            t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
             return t
         else:
@@ -1959,6 +1996,10 @@ class MexController(MexGrpc):
         resp = None
         auto_delete = True
         use_thread = False
+        del_thread = False
+
+        #print("*WARN*", "APP KWARGS ", kwargs)
+
 
         if not app_instance:
             if 'no_auto_delete' in kwargs:
@@ -1967,6 +2008,9 @@ class MexController(MexGrpc):
             if 'use_thread' in kwargs:
                 del kwargs['use_thread']
                 use_thread = True
+            if 'del_thread' in kwargs:
+                del kwargs['del_thread']
+                del_thread = True
             app_instance = AppInstance(**kwargs).app_instance
 
         logger.info('create app instance on {}. \n\t{}'.format(self.address, str(app_instance).replace('\n','\n\t')))
@@ -1974,7 +2018,10 @@ class MexController(MexGrpc):
         resp = None
         success = False
 
-        def sendMessage():
+        def sendMessage(thread_name='Thread'):
+            time1 = time.time()
+            print("*WARN*", "thread_time1", time.time())
+
             try:
                 resp = self.appinst_stub.CreateAppInst(app_instance)
             except:
@@ -1990,11 +2037,20 @@ class MexController(MexGrpc):
             if 'StatusCode.OK' in str(resp):  #check for OK because platos isnt currently printing Created successfull
                 success = True
 
+            time2 = time.time()
+            print("*WARN*", "thread_time2", time.time())
+            threadtime = time2 - time1
+            self.thread_dict[thread_name]=(time1, time2, threadtime)
+            threadtime = 0
+                
             if not success:
                 raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
 
             if auto_delete:
-                self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
+                if del_thread:
+                    self.prov_stack.append(lambda:self.delete_app_instance(use_thread=True, **kwargs))
+                else:
+                    self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
             #resp =  self.show_app_instances(app_instance)
             resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_name=app_instance.key.cluster_inst_key.cloudlet_key.operator_key.name, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
@@ -2002,7 +2058,8 @@ class MexController(MexGrpc):
             return resp[0]
         
         if use_thread:
-            t = threading.Thread(target=sendMessage)
+            thread_name = "Thread-" + str(time.time())
+            t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
             return t
         else:
@@ -2058,8 +2115,11 @@ class MexController(MexGrpc):
 
         resp = None
 
-        def sendMessage():
+        def sendMessage(thread_name='Thread'):
             success = False
+            time1 = time.time()
+            print("*WARN*", "thread_time1", time.time())
+
             try:
                 resp = self.appinst_stub.DeleteAppInst(app_instance)
             except:
@@ -2070,12 +2130,22 @@ class MexController(MexGrpc):
             for s in resp:
                 print(s)
                 if "Deleted AppInst successfully" in str(s):
-                    success = True            
+                    success = True
+
+            time2 = time.time()
+            print("*WARN*", "thread_time2", time.time())
+            threadtime = time2 - time1
+            self.thread_dict[thread_name]=(time1, time2, threadtime)
+            print("*WARN*", "Thread Dict", self.thread_dict)
+            threadtime = 0
+
+                    
             if not success:
                 raise Exception('Error deleting app instance:{}'.format(str(resp)))
 
         if use_thread:
-            t = threading.Thread(target=sendMessage)
+            thread_name = "Thread-" + str(time.time())
+            t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
             return t
         else:
@@ -2359,10 +2429,18 @@ class MexController(MexGrpc):
         #temp_prov_stack = self.prov_stack
         temp_prov_stack = list(self.prov_stack)
         temp_prov_stack.reverse()
+        thread_stack = []
+        thread_wait = False
         for obj in temp_prov_stack:
             logging.debug('deleting obj' + str(obj))
-            obj()
+            t = obj()
+            if (type(t) is threading.Thread):
+                thread_stack.append(t)
+                thread_wait = True
             del self.prov_stack[-1]
+        if thread_wait:
+            self.wait_for_replies(*thread_stack)
+            
 
     def _build_cluster(self, operator_name, cluster_name, cloud_name, flavor_name):
         operator_key = operator_pb2.OperatorKey(name = operator_name)
