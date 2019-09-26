@@ -37,7 +37,7 @@ def main():
     parser.add_argument('--version_from_load', action='store_true')
     args = parser.parse_args()
 
-    num_executors = 5
+    num_executors = 1
     
     print(os.environ)
     cycle = os.environ['Cycle']
@@ -49,7 +49,9 @@ def main():
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
-
+    if 'NumberParallelExecutions' in os.environ:
+        num_executors = int(os.environ['NumberParallelExecutions'])
+    
     #print(httpTrace)
     #if httpTrace == 'true':
     #    httpTrace = 1
@@ -82,7 +84,7 @@ def main():
     logging.info("cycle=%s version=%s project=%s component=%s workspace=%s" % (cycle, version, project, component, workspace))
         
     #z = zapi.Zapi(username = username, password = password)
-    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
 
     project_info = j.get_project(project)
@@ -316,7 +318,7 @@ def exec_testcases_parallel(z, l, num_executors):
     for t in range(0, len(l), num_executors):
         print('t',t)
         plist = l[t:t+num_executors]
-        logging.info('adding this may testcases:' + str(len(plist)))
+        logging.info('adding this many testcases:' + str(len(plist)))
         for p in plist:
             logging.info('adding thread for tc=' + p['tc'])
             thread = threading.Thread(target=exec_testcase, args=(z,p))

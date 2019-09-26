@@ -121,6 +121,9 @@ node('jenkinsSlave1'){
 
     try {
        stage('Pull Image') {
+          sh 'docker system prune -af'  //remove all docker stuff without prompting
+	  sh 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+	  
           def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
           def index  = sh(script: s, returnStdout: true);
           (commit_version, image_name) = index.split(',')
@@ -184,6 +187,11 @@ node('jenkinsSlave1'){
              def s2 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationHamburgCloudlet.TDG.pf;openstack stack delete automationHamburgCloudlet.TDG.pf'
              status = sh(script: s2, returnStatus: true);
 
+             def s3 = 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
+             status = sh(script: s3, returnStatus: true);
+             def s4 = 'source /home/jenkins/openrc.bonn;openstack server delete automationBonnCloudlet.TDG.pf;openstack stack delete automationBonnCloudlet.TDG.pf'
+             status = sh(script: s4, returnStatus: true);
+
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
@@ -200,10 +208,33 @@ node('jenkinsSlave1'){
        error('Aborting the build')
     }
 
+//    try {    
+//       stage("cleanup DNS") {
+//          dir('go/src/github.com/mobiledgex/jenkins') {
+//             def s1 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
+//             status = sh(script: s1, returnStatus: true);
+//             def s2 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationHamburgCloudlet.TDG.pf;openstack stack delete automationHamburgCloudlet.TDG.pf'
+//             status = sh(script: s2, returnStatus: true);
+
+//             //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
+//             //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
+
+//             //build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+
+//	  }
+//       }
+//    } catch(e) {
+//       dir('go/src/github.com/mobiledgex/jenkins') {
+//          def status = -1
+//          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Aborting"'
+//          status = sh(script: s, returnStatus: true);
+//       }
+//       error('Aborting the build')
+
     try {
        stage('deploy processes in k8s') {
           dir('go/src/github.com/mobiledgex/jenkins') {
-             sh 'docker system prune -af'  //remove all docker stuff without prompting
+//             sh 'docker system prune -af'  //remove all docker stuff without prompting
 	     
 	     // delete the bonnlb so it is recreated when starting the crm
 	     //sh 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net'
@@ -256,8 +287,8 @@ node('jenkinsSlave1'){
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebonn_start.yaml'
 	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebonn_start.yaml'
 
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
-	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbonn_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbonn_start.yaml'  
 
 	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhamburg_start.yaml'
 	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhamburg_start.yaml'  

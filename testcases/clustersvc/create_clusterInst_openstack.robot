@@ -2,7 +2,7 @@
 Documentation  use FQDN to access app on openstack
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+#Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
 
@@ -40,7 +40,7 @@ Create clusterInst for clustersvc on openstack
 
     # check that apps are created
     App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
-    App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
+    #App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
 
     # check that pods are running
     : FOR  ${pod}  IN  @{clustersvc_pods}
@@ -48,7 +48,7 @@ Create clusterInst for clustersvc on openstack
 
     # check that app instances are created
     App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
-    App Instance Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    #App Instance Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
 
 
 *** Keywords ***
@@ -67,6 +67,6 @@ Teardown
     Cleanup provisioning
 
     App Instance Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
-    App Instance Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    #App Instance Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
     App Should Not Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=helm
-    App Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes
+    #App Should Not Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  cluster_name=default  ip_access=IpAccessShared  deployment=kubernetes

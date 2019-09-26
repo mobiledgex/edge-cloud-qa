@@ -60,7 +60,24 @@ class MexOpenstack():
         
         #return json.loads(o_out)
 
+    def get_openstack_limits(self):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
 
+        logging.debug(f'getting limits with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+
+        limit_dict = {}
+        for name in json.loads(o_out):
+            limit_dict[name['Name']] = name['Value']
+            
+        return limit_dict
     
     def _findFile(self, path):
         for dirname in sys.path:

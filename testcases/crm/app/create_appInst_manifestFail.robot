@@ -20,6 +20,8 @@ ${operator_name_openstack}  TDG
 ${docker_image}    docker.mobiledgex.net/mobiledgex/server_ping_threaded:4.0
 ${docker_command}  ./server_ping_threaded.py
 
+${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_badimage.yml
+
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
@@ -36,11 +38,11 @@ Controller should cleanup autocluster after CreateAppInst fail
     ${cluster_name}=    Catenate  SEPARATOR=  autocluster  ${epoch_time}
 
     Log To Console  Creating App and App Instance
-    Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=xxxx  default_flavor_name=${cluster_flavor_name}
+    Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=${manifest_url}  default_flavor_name=${cluster_flavor_name}
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Encountered failures: Create App Inst failed: invalid kubernetes deployment yaml
+    Should Contain  ${error_msg}   details = "Encountered failures: Create App Inst failed
 
     App Instance Should Not Exist  app_name=${app_name}
 

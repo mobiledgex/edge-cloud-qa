@@ -66,7 +66,7 @@ class Flavor():
 class Cloudlet():
     cloudlet = None
     
-    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, use_defaults=True):
 
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
@@ -78,6 +78,7 @@ class Cloudlet():
         self.number_dynamic_ips = number_dynamic_ips
         self.platform_type = platform_type
         self.physical_name = physical_name
+        self.env_vars = env_vars
         
         if use_defaults:
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -130,6 +131,12 @@ class Cloudlet():
         if self.platform_type is not None:
             cloudlet_dict['platform_type'] = self.platform_type
 
+        env_dict = {}
+        if self.env_vars is not None:
+            key,value = self.env_vars.split('=')
+            env_dict[key] = value
+            cloudlet_dict['env_var'] = env_dict
+            
         self.cloudlet = cloudlet_dict
 
 class ClusterInstance():
@@ -165,8 +172,9 @@ class ClusterInstance():
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
-            if number_masters is None: self.number_masters = 1
-            if number_nodes is None: self.number_nodes = 1
+            if deployment == 'kubernetes':
+                if number_masters is None: self.number_masters = 1
+                if number_nodes is None: self.number_nodes = 1
 
         if self.liveness == 'LivenessStatic':
             self.liveness = 1
@@ -481,7 +489,7 @@ class AppInstance():
         self.app_instance = appinst_dict
 
 class RunCommand():
-    def __init__(self, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, use_defaults=True):
+    def __init__(self, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, use_defaults=True):
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -499,12 +507,19 @@ class RunCommand():
             if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_name: self.operator_name = shared_variables.operator_name_default
 
-        runcommand_dict = {}
-        appinst_key_dict = {}
-        app_key_dict = {}
-        cloudlet_key_dict = {}
-        clusterinst_key_dict = {}
-        cluster_key_dict = {}
+        #cmd_docker = 'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+        #cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
+        cmd_run = f'appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
+        if container_id:
+            cmd_run += f' containerid={container_id}'
+        self.run_command = cmd_run
+
+        #runcommand_dict = {}
+        #appinst_key_dict = {}
+        #app_key_dict = {}
+        #cloudlet_key_dict = {}
+        #clusterinst_key_dict = {}
+        #cluster_key_dict = {}
         
         #if self.app_name:
         #    app_key_dict['name'] = self.app_name
@@ -519,8 +534,8 @@ class RunCommand():
         #    cloudlet_key_dict['name'] = self.cloudlet_name
         #if self.operator_name is not None:
         #    cloudlet_key_dict['operatorkey'] = {'name': self.operator_name}
-        if cloudlet_key_dict:
-            clusterinst_key_dict['cloudletkey'] = cloudlet_key_dict
+        #if cloudlet_key_dict:
+        #    clusterinst_key_dict['cloudletkey'] = cloudlet_key_dict
         #if cluster_key_dict:
         #    clusterinst_key_dict['clusterkey'] = cluster_key_dict
         #if self.cluster_developer_name is not None:
@@ -534,7 +549,7 @@ class RunCommand():
         #if appinst_key_dict:
         #    runcommand_dict['appinstkey'] = appinst_key_dict
         
-        if command is not None:
-            runcommand_dict['command'] = command
-            runcommand_dict['cloudlet_loc'] = {}
-        self.run_command = runcommand_dict
+        #if command is not None:
+        #    runcommand_dict['command'] = command
+        #    runcommand_dict['cloudlet_loc'] = {}
+        #self.run_command = runcommand_dict
