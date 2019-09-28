@@ -35,7 +35,7 @@ node('jenkinsWindowsSelenium'){
 
                 //unstash 'edge-cloud_stash'
         }
-
+    }
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
          status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONSOLE_ADDRESS=' + console + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mc_cert + ';./execJira.py', returnStatus: true);
