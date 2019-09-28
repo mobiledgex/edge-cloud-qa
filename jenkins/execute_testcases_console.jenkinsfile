@@ -1,33 +1,17 @@
 cycle = "${cycle}"
 //components = "${components}"
-console = "${console}"
-mc="${mc}"
-mc_cert = "${mccert}"
-
-//if (env.dme) {
-//    dme = "${DME}"
-//}
-//if (env.kubeconfig) {
-//    kubeconfig = "${KUBECONFIG}"
-//}
-//if (env.crmazurepodname) {
-//    crm_azure_pod_name = "${CRMAzurePodName}"
-//}
-//if (env.crmgcppodname) {
-//    crm_gcp_pod_name = "${CRMGcpPodName}"
-//}
-//if (env.openstackenv) {
-//    openstack_env = "${OpenStackEnv}"
-//}
-
-
-//echo dme
-//echo cycle
-//echo controller
+controller = "${controller}"
+console_address = ${console}
+//dme = "dmeunset"
+//kubeconfig="kubeconfigunset"
+//crm_azure_pod_name = "crmazurepodnameunset"
+//crm_gcp_pod_name = "crmgcppodnameunset"
+//openstack_env = "openstackenvunset"
+//commit_version = "${CommitVersion}"
 
 currentBuild.displayName = cycle
 
-node('jenkinsSlaveConsole'){
+node('jenkinsWindowsSelenium'){
     stage('Checkout') {
         dir('go/src/github.com/mobiledgex') {
             checkout([$class: 'GitSCM',
@@ -49,46 +33,10 @@ node('jenkinsSlaveConsole'){
 
                 //unstash 'edge-cloud_stash'
         }
-        
-//        dir('go/src/github.com/mobiledgex/edge-cloud') {
-//            checkout([$class: 'GitSCM',
-//                branches: [[name: 'master']],
-//                doGenerateSubmoduleConfigurations: false,
-//                extensions: [
-//                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-//                        [$class:'SparseCheckoutPath', path:'edgeproto/*'],
-//                        [$class:'SparseCheckoutPath', path:'d-match-engine/dme-proto/*'],
-//                        [$class:'SparseCheckoutPath', path:'protoc-gen-cmd/protocmd/*'],
-//                        [$class:'SparseCheckoutPath', path:'protogen/*']
-//                    ]]
-//                ],
-//                submoduleCfg: [],
-//                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-//                url: 'https://github.com/mobiledgex/edge-cloud.git']]])
-//        }
-//
-//        dir('go/src/github.com/mobiledgex/edge-cloud') {
-//           def t = 'git reset --hard ' + commit_version
-//           def tout  = sh(script: t, returnStdout: true);
-//        }
-//
-//    }
-
-//    stage("build protos") {
-//      dir('go/src/github.com/mobiledgex/tools') {
-//         status = sh(script:'/usr/bin/python3 ./build_protos.py --sourcedir $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
-//         println status
-//         if(status != 0) {
-//            echo "build_protos.py failed with statuscode=" + status
-//            currentBuild.result = 'FAILURE'
-//         }
-//      }
-
-    }
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONSOLE_ADDRESS=' + console + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mc_cert + ';./execJira.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_CONSOLE_ADDRESS=' + console_address + ';./execJira.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
