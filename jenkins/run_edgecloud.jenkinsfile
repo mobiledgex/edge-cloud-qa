@@ -40,7 +40,7 @@ node('jenkinsSlave1'){
                 branches: [[name: 'master']],
                 doGenerateSubmoduleConfigurations: false,
                 extensions: [
-                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*']]]
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*']]]
                 ],
                 submoduleCfg: [],
                 userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
