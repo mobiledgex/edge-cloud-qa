@@ -22,16 +22,28 @@ node('jenkinsWindowsSelenium'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
-                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        //[$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
-                        [$class:'SparseCheckoutPath', path:'protos/*'],
-                        [$class:'SparseCheckoutPath', path:'tools/*'],
+                        //[$class:'SparseCheckoutPath', path:'protos/*'],
+                        //[$class:'SparseCheckoutPath', path:'tools/*'],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
                 submoduleCfg: [],
                 userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa-ui.git']]])
+
+            checkout([$class: 'GitSCM',
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
 
                 //unstash 'edge-cloud_stash'
         }
