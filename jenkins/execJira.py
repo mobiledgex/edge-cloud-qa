@@ -25,7 +25,7 @@ jira_token = '***REMOVED***'
 access_key = '***REMOVED***';
 secret_key = '***REMOVED***'
 
-python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases::$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
+#python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases::$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
 
 def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
@@ -312,8 +312,10 @@ def exec_testcases(z, l):
         
     if linux_os:
         tmpdir = '/tmp/'
+        python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases::$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
     elif windows_os:
         tmpdir = os.environ['TMP'] + '\\'
+        python_path = '%WORKSPACE%/go/src/github.com/mobiledgex/protos;%WORKSPACE%/go/src/github.com/mobiledgex/modules;%WORKSPACE%/go/src/github.com/mobiledgex/certs;%WORKSPACE%/go/src/github.com/mobiledgex/testcases;$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
         
     for t in l:
         #print('t',t)
@@ -400,7 +402,7 @@ def exec_testcases(z, l):
                 if linux_os:
                     exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
                 elif windows_os:
-                    exec_cmd = f'set PYTHONPATH={python_path} & robot --loglevel TRACE {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
+                    exec_cmd = f'set PYTHONPATH={python_path} & robot --loglevel INFO {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
