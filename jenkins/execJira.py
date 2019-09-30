@@ -303,12 +303,17 @@ def update_single_defect(z, t):
 def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
-    os_name = os.name
+    linux_os = windows_os = False
     
-    if os_name == 'posix':
+    if os.name == 'posix':
+        linux_os = True
+    elif os.name == 'nt':
+        windows_os = True
+        
+    if linux_os:
         tmpdir = '/tmp/'
-    elif os_name == 'nt':
-        tmpdir = '%TMPDIR%'
+    elif windows_os:
+        tmpdir = os.environ['TMP'] + '\\'
         
     for t in l:
         #print('t',t)
@@ -374,7 +379,10 @@ def exec_testcases(z, l):
         logging.info("deleting " + file_delete)
         #subprocess.run(delete_cmd, shell=True, check=True)
         for f in glob.glob(file_delete):
-            os.remove(f)
+            try:
+                os.remove(f)
+            except Exception as e:
+                logging.info('remove failed:' + e)
 
         #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         if tc_type == 'robot':
@@ -389,7 +397,10 @@ def exec_testcases(z, l):
                 variable_file_full = find(variable_file, os.environ['WORKSPACE'])
                 var_cmd = f'--variablefile {variable_file_full}'
             if robot_tcname:
-                exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
+                if linux_os:
+                    exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
+                elif windows_os:
+                    exec_cmd = f'set PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
@@ -434,10 +445,12 @@ def exec_testcases(z, l):
             logging.info("moving " + file_output + " to " + file_output_done)
             #r = subprocess.run(mv_cmd, shell=True, check=True)
             os.rename(file_output, file_output_done)
-        except subprocess.CalledProcessError as err:
-            logging.info("mv cmd failed. return code=: " + str(err.returncode))
-            logging.info("mv cmd failed. stdout=: " + str(err.stdout))
-            logging.info("mv cmd failed. stderr=: " + str(err.stderr))
+        except Exception as e:
+            logging.info('move failed:' + e)
+            #except subprocess.CalledProcessError as err:
+        #    logging.info("mv cmd failed. return code=: " + str(err.returncode))
+        #    logging.info("mv cmd failed. stdout=: " + str(err.stdout))
+        #    logging.info("mv cmd failed. stderr=: " + str(err.stderr))
 
         # zip output
         #try:
@@ -462,10 +475,12 @@ def exec_testcases(z, l):
             logging.info("moving " + file_output_done + " to " + file_output_done + "." +  last_status)
             #r = subprocess.run(mv_cmd, shell=True, check=True)
             os.rename(file_output_done, file_output_done + '.' + last_status)
-        except subprocess.CalledProcessError as err:
-            logging.info("mv cmd failed. return code=: " + str(err.returncode))
-            logging.info("mv cmd failed. stdout=: " + str(err.stdout))
-            logging.info("mv cmd failed. stderr=: " + str(err.stderr))
+        except Exception as e:
+            logging.info('move failed:' + e)
+            #except subprocess.CalledProcessError as err:
+        #    logging.info("mv cmd failed. return code=: " + str(err.returncode))
+        #    logging.info("mv cmd failed. stdout=: " + str(err.stdout))
+        #    logging.info("mv cmd failed. stderr=: " + str(err.stderr))
 
         # add output file to jira
         #z.add_attachment(id=t['id'], file=file_output_done)
