@@ -1,6 +1,6 @@
 cycle = "${cycle}"
 //components = "${components}"
-console = ${console}
+console = "${console}"
 mc="${mc}"
 mc_cert = "${mccert}"
 
@@ -22,7 +22,7 @@ node('jenkinsWindowsSelenium'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
-                        //[$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         //[$class:'SparseCheckoutPath', path:'protos/*'],
                         //[$class:'SparseCheckoutPath', path:'tools/*'],
@@ -33,24 +33,12 @@ node('jenkinsWindowsSelenium'){
                 userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
                 url: 'https://github.com/mobiledgex/edge-cloud-qa-ui.git']]])
 
-            checkout([$class: 'GitSCM',
-                branches: [[name: 'master']],
-                doGenerateSubmoduleConfigurations: false,
-                extensions: [
-                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
-                        [$class:'SparseCheckoutPath', path:'jenkins/*']
-                    ]]
-                ],
-                submoduleCfg: [],
-                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
-                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
-
                 //unstash 'edge-cloud_stash'
         }
     }
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONSOLE_ADDRESS=' + console + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mc_cert + ';./execJira.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE\\\\go\\\\src\\\\github.com\\\\mobiledgex\\\\modules;export PATH=$PATH:$WORKSPACE\\\\go\\\\src\\\\github.com\\\\mobiledgex\\\\tools;export AUTOMATION_CONSOLE_ADDRESS=' + console + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mc_cert + ';python ./execJira.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
