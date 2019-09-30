@@ -2,6 +2,7 @@
 
 import sys
 import os
+import glob
 #print(sys.path)
 
 import zapi
@@ -302,6 +303,13 @@ def update_single_defect(z, t):
 def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
+    os_name = os.name
+    
+    if os_name == 'posix':
+        tmpdir = '/tmp/'
+    elif os_name == 'nt':
+        tmpdir = '%TMPDIR%'
+        
     for t in l:
         #print('t',t)
         #sys.exit(1)
@@ -310,7 +318,7 @@ def exec_testcases(z, l):
             found_failure = 1  # consider it a failure if the teststep is missing 
             continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         
-        logging.info("executing " + t['issue_key'])
+        logging.info("executing " + t['issue_key'] + " on os=" + os_name)
         print('xxxxxx',t['project_id'])
         status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         query_content = json.loads(status)
@@ -354,7 +362,7 @@ def exec_testcases(z, l):
         
         #os.environ['AUTOMATION_IP'] = rhc
         #tmpdir = os.environ['TMPDIR']
-        tmpdir = '/tmp/'
+        #tmpdir = '/tmp/'
         tc_replace = tc.replace('/','')  # remove slash from filename
         #file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
         file_delete = tmpdir + "*" + t['issue_key'] + "*"
@@ -362,9 +370,11 @@ def exec_testcases(z, l):
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
-        delete_cmd = "rm -f " + file_delete
-        logging.info("deleting " + delete_cmd)
-        subprocess.run(delete_cmd, shell=True, check=True)
+        #delete_cmd = "rm -f " + file_delete
+        logging.info("deleting " + file_delete)
+        #subprocess.run(delete_cmd, shell=True, check=True)
+        for f in glob.glob(file_delete):
+            os.remove(f)
 
         #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         if tc_type == 'robot':
@@ -420,9 +430,10 @@ def exec_testcases(z, l):
         try:
             file_output_done = file_output + '_' + str(int(time.time())) + file_extension
             # add ending timestamp to file
-            mv_cmd = 'mv {} {}'.format(file_output, file_output_done)
-            logging.info("moving " + mv_cmd)
-            r = subprocess.run(mv_cmd, shell=True, check=True)
+            #mv_cmd = 'mv {} {}'.format(file_output, file_output_done)
+            logging.info("moving " + file_output + " to " + file_output_done)
+            #r = subprocess.run(mv_cmd, shell=True, check=True)
+            os.rename(file_output, file_output_done)
         except subprocess.CalledProcessError as err:
             logging.info("mv cmd failed. return code=: " + str(err.returncode))
             logging.info("mv cmd failed. stdout=: " + str(err.stdout))
@@ -447,9 +458,10 @@ def exec_testcases(z, l):
             
         #rename trace file to pass or fail for easier debugging
         try:
-            mv_cmd = 'mv {} {}.{}'.format(file_output_done, file_output_done, last_status)
-            logging.info("moving " + mv_cmd)
-            r = subprocess.run(mv_cmd, shell=True, check=True)
+            #mv_cmd = 'mv {} {}.{}'.format(file_output_done, file_output_done, last_status)
+            logging.info("moving " + file_output_done + " to " + file_output_done + "." +  last_status)
+            #r = subprocess.run(mv_cmd, shell=True, check=True)
+            os.rename(file_output_done, file_output_done + '.' + last_status)
         except subprocess.CalledProcessError as err:
             logging.info("mv cmd failed. return code=: " + str(err.returncode))
             logging.info("mv cmd failed. stdout=: " + str(err.stdout))
