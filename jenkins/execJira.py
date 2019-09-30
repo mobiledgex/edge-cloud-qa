@@ -323,7 +323,7 @@ def exec_testcases(z, l):
             found_failure = 1  # consider it a failure if the teststep is missing 
             continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         
-        logging.info("executing " + t['issue_key'] + " on os=" + os_name)
+        logging.info("executing " + t['issue_key'] + " on os=" + os.name)
         print('xxxxxx',t['project_id'])
         status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         query_content = json.loads(status)
