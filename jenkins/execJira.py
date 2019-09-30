@@ -382,7 +382,7 @@ def exec_testcases(z, l):
             try:
                 os.remove(f)
             except Exception as e:
-                logging.info('remove failed:' + e)
+                logging.info(f'remove failed:{e}')
 
         #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
         if tc_type == 'robot':
@@ -400,7 +400,7 @@ def exec_testcases(z, l):
                 if linux_os:
                     exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
                 elif windows_os:
-                    exec_cmd = f'set PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
+                    exec_cmd = f'set PYTHONPATH={python_path} & robot --loglevel TRACE {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
             else:
                 exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
             #file_output = '/tmp/log.html'
@@ -446,7 +446,7 @@ def exec_testcases(z, l):
             #r = subprocess.run(mv_cmd, shell=True, check=True)
             os.rename(file_output, file_output_done)
         except Exception as e:
-            logging.info('move failed:' + e)
+            logging.info(f'move failed:{e}')
             #except subprocess.CalledProcessError as err:
         #    logging.info("mv cmd failed. return code=: " + str(err.returncode))
         #    logging.info("mv cmd failed. stdout=: " + str(err.stdout))
@@ -476,7 +476,7 @@ def exec_testcases(z, l):
             #r = subprocess.run(mv_cmd, shell=True, check=True)
             os.rename(file_output_done, file_output_done + '.' + last_status)
         except Exception as e:
-            logging.info('move failed:' + e)
+            logging.info(f'move failed:{e}')
             #except subprocess.CalledProcessError as err:
         #    logging.info("mv cmd failed. return code=: " + str(err.returncode))
         #    logging.info("mv cmd failed. stdout=: " + str(err.stdout))
