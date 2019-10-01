@@ -285,7 +285,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.token
 
-    def create_user(self, username=None, password=None, email_address=None, server='imap.gmail.com', json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, server='imap.gmail.com', email_check=True, json_data=None, use_defaults=True, use_thread=False):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -314,18 +314,19 @@ class MexMasterController(MexRest):
 
         logger.info('usercreate on mc at {}. \n\t{}'.format(url, payload))
 
-        logging.info(f'checking email with email={email_address} password={password}')
-        mail = imaplib.IMAP4_SSL(server)
-        mail.login(email_address, password)
-        mail.select('inbox')
-        self._mail = mail
-        logging.info('login successful')
-
-        status, email_list_pre = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
-        mail_ids_pre = email_list_pre[0].split()
-        num_emails_pre = len(mail_ids_pre)
-        self._mail_count = num_emails_pre
-        logging.info(f'number of emails pre is {num_emails_pre}')
+        if email_check:
+            logging.info(f'checking email with email={email_address} password={password}')
+            mail = imaplib.IMAP4_SSL(server)
+            mail.login(email_address, password)
+            mail.select('inbox')
+            self._mail = mail
+            logging.info('login successful')
+            
+            status, email_list_pre = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
+            mail_ids_pre = email_list_pre[0].split()
+            num_emails_pre = len(mail_ids_pre)
+            self._mail_count = num_emails_pre
+            logging.info(f'number of emails pre is {num_emails_pre}')
 
         def send_message():
             self._number_createuser_requests += 1
