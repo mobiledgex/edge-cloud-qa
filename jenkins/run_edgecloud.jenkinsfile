@@ -178,7 +178,7 @@ node('jenkinsSlave1'){
     try {    
        stage("delete CRMs") {
           dir('go/src/github.com/mobiledgex/tools') {
-             status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;/usr/bin/python3 ./clean_cluster_automation.py --address automation.ctrl.mobiledgex.net:55001', returnStatus: true);
+             status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;$WORKSPACE/go/src/github.com/mobiledgex/protos;/usr/bin/python3 ./clean_cluster_automation.py --address automation.ctrl.mobiledgex.net:55001', returnStatus: true);
              println status
           }
 
