@@ -55,6 +55,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on bonn openstack
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_bonn}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_bonn}   cloudlet_name=${cloudlet_name_openstack_bonn}
 
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
