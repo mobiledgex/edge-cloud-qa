@@ -177,11 +177,6 @@ node('jenkinsSlave1'){
 
     try {    
        stage("delete CRMs") {
-          dir('go/src/github.com/mobiledgex/tools') {
-             status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;$WORKSPACE/go/src/github.com/mobiledgex/protos;/usr/bin/python3 ./clean_cluster_automation.py --address automation.ctrl.mobiledgex.net:55001', returnStatus: true);
-             println status
-          }
-
           dir('go/src/github.com/mobiledgex/jenkins') {
              build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
 
