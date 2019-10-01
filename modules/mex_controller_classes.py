@@ -232,7 +232,7 @@ class ClusterInstance():
             clusterinst_dict['num_nodes'] = int(self.number_nodes)
 
         if self.crm_override:
-            appinst_dict['crm_override'] = 1  # ignore errors from CRM
+            clusterinst_dict['crm_override'] = 1  # ignore errors from CRM
 
         if self.deployment is not None:
             clusterinst_dict['deployment'] = self.deployment

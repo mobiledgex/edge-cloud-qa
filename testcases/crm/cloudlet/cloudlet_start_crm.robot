@@ -55,6 +55,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on buckhorn openstack
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_buckhorn}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_buckhorn}   cloudlet_name=${cloudlet_name_openstack_buckhorn}
 
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Beacon

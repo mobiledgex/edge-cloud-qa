@@ -1106,7 +1106,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_clusters(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
+    def show_cluster_instances(self, token=None, region=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowClusterInst'
 
         payload = None
@@ -1118,15 +1118,19 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             cluster_dict = {}
+            if cloudlet_name:
+                clusterinst = ClusterInstance(cloudlet_name=cloudlet_name, use_defaults=False).cluster_instance
+                cluster_dict = {'clusterinst': clusterinst}
+
             if region is not None:
                 cluster_dict['region'] = region
 
             payload = json.dumps(cluster_dict)
 
-        logger.info('show cluster on mc at {}. \n\t{}'.format(url, payload))
+        logger.info('show clusterinst on mc at {}. \n\t{}'.format(url, payload))
 
         def send_message():
-            self._number_showcluster_requests += 1
+            self._number_showclusterinst_requests += 1
 
             try:
                 self.post(url=url, bearer=token, data=payload)
@@ -1136,13 +1140,13 @@ class MexMasterController(MexRest):
                 respText = str(self.resp.text)
 
                 if str(self.resp.status_code) != '200':
-                    self._number_showcluster_requests_fail += 1
+                    self._number_showclusterinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
-                self._number_showcluster_requests_fail += 1
+                self._number_showclusterinst_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self._number_showcluster_requests_success += 1
+            self._number_showclusterinst_requests_success += 1
 
             resp_data = self.decoded_data
             if type(resp_data) is dict:
@@ -1150,7 +1154,7 @@ class MexMasterController(MexRest):
 
             reverse = True if sort_order == 'descending' else False
             if sort_field == 'cluster_name':
-                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
 
             return resp_data
 
@@ -1420,7 +1424,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, json_data=None, use_defaults=True, use_thread=False):
+    def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/DeleteClusterInst'
 
         payload = None
@@ -1432,7 +1436,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -1467,7 +1471,11 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
-
+    def delete_all_cluster_instances(self, region, cloudlet_name):
+        clusterinstances = self.show_cluster_instances(region=region, cloudlet_name=cloudlet_name)
+        for cluster in clusterinstances:
+            logging.info(f'deleting {cluster}')
+            self.delete_cluster_instance(region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_name=cluster['data']['key']['developer'], cloudlet_name=cloudlet_name, operator_name=cluster['data']['key']['cloudlet_key']['operator_key']['name'], crm_override=1)
 
     def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateApp'
@@ -1658,6 +1666,12 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def delete_all_app_instances(self, region, cloudlet_name):
+        appinstances = self.show_app_instances(region=region, cloudlet_name=cloudlet_name)
+        for app in appinstances:
+            logging.info(f'deleting {app}')
+            self.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_name=app['data']['key']['app_key']['developer_key']['name'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=app['data']['key']['cluster_inst_key']['developer'])
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, json_data=None, use_defaults=True, use_thread=False):
         #url = self.root_url + '/auth/ctrl/RunCommand'
@@ -1932,6 +1946,64 @@ class MexMasterController(MexRest):
                 raise Exception("post failed:", e)
 
             self._number_deletecloudlet_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/metrics/cloudlet'
+
+        payload = None
+        metric_dict = {}
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).cloudlet
+            print('*WARN*', cloudlet)
+            if 'key' in cloudlet:
+                metric_dict = {'cloudlet': cloudlet['key']}
+            print('*WARN*', 'after cloudlet')
+            if region is not None:
+                metric_dict['region'] = region
+            if selector is not None:
+                metric_dict['selector'] = selector
+            if last is not None:
+                metric_dict['last'] = int(last)
+            if start_time is not None:
+                metric_dict['starttime'] = start_time
+            if end_time is not None:
+                metric_dict['endtime'] = end_time
+                
+
+            payload = json.dumps(metric_dict)
+
+        logger.info('get cloudlet metrics on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            #self._number_deletecloudlet_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    #self._number_deletecloudlet_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+            except Exception as e:
+                #self._number_deletecloudlet_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            #self._number_deletecloudlet_requests_success += 1
 
         if use_thread is True:
             t = threading.Thread(target=send_message)
