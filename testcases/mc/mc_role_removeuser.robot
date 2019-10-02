@@ -22,7 +22,7 @@ MC - Admin remove an AdminManager role from a user
 	...  admin remove an adminmanager role from a user  
 	...  verify the message returned 
 
-        Adduser Role     username=${username}         role=AdminManager        token=${adminToken}        use_defaults=${False}
+        Adduser Role     username=${epochusername}         role=AdminManager        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
 
@@ -44,7 +44,7 @@ MC - Admin remove an AdminContributor role from a user
 	...  admin remove an admincontributor role from a user  
 	...  verify the message returned 
 
-        Adduser Role     username=${username}         role=AdminContributor        token=${adminToken}        use_defaults=${False}
+        Adduser Role     username=${epochusername}         role=AdminContributor        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
 
@@ -66,7 +66,7 @@ MC - Admin remove an AdminViewer role from a user
 	...  admin remove an adminviewer role from a user  
 	...  verify the message returned 
 
-        Adduser Role     username=${username}         role=AdminViewer        token=${adminToken}        use_defaults=${False}
+        Adduser Role     username=${epochusername}         role=AdminViewer        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
 
@@ -88,7 +88,7 @@ MC - Admin remove an DeveloperManager role from a user
 	...  verify the message returned 
 
         Create Org       orgname=${orgname}      
-        Adduser Role     orgname=${orgname}      username=${username}         role=DeveloperManager        token=${adminToken}        use_defaults=${False}
+        Adduser Role     orgname=${orgname}      username=${epochusername}         role=DeveloperManager        token=${adminToken}        use_defaults=${False}
 	${showadmin}=    Show Role Assignment    token=${adminToken}
 	${admin}=        Removeuser Role         token=${adminToken}
 
@@ -125,15 +125,16 @@ MC - Remove a user role from a user with a bad token
 Setup
         ${epoch}=  Get Time  epoch
         ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-        ${username}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+        ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
 	${adminToken}=   Login  username=${username_admin}  password=${password_admin}
-	Create User  username=${username}   password=${password}   email_address=${emailepoch}
+	Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
         Unlock User
         #Verify Email  email_address=${email}
 	#${userToken}=  Login  username=${username}  password=${password}
         Set Suite Variable  ${adminToken}
 	#Set Suite Variable  ${userToken}
+        Set Suite Variable  ${epochusername} 
 
 Role Should Be Equal
    [Arguments]  ${role_data}  ${username}  ${org}  ${role}
