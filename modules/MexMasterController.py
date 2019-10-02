@@ -290,6 +290,9 @@ class MexMasterController(MexRest):
         url = self.root_url + '/usercreate'
         payload = None
 
+        if not email_password:
+            email_password = password
+            
         if use_defaults == True:
             if username == None: username = 'name' + namestamp
             if password == None: password = 'password' + timestamp
