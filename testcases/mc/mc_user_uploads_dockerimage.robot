@@ -11,6 +11,7 @@ Test Teardown    Teardown
 ${username}          mextester99
 ${password}          mextester99123
 ${email}             mextester99@gmail.com
+${mextester99_gmail_password}  rfbixqomqidobmcb
 ${server}            docker-qa.mobiledgex.net
 ${app_name}          server_ping_threaded
 ${app_version}       5.0
@@ -32,7 +33,7 @@ MC - User shall be able to upload docker image as Developer Manager
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -69,7 +70,7 @@ MC - User shall be able to upload docker image as Developer Contributor
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -105,7 +106,7 @@ MC - User shall not be able to upload docker image as Developer Viewer
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -146,7 +147,7 @@ MC - User shall not be able to upload docker image as Operator Manager
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -187,7 +188,7 @@ MC - User shall not be able to upload docker image as Operator Contributor
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -228,7 +229,7 @@ MC - User shall not be able to upload docker image as Operator Viewer
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
-    Create user  username=${username1}  password=${password}  email_address=${email1}
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -259,6 +260,9 @@ MC - User shall not be able to upload docker image as Operator Viewer
     Should Contain  ${pullerror}  pull access denied
 
 *** Keywords ***
+Setup
+    Pull Image From Docker  username=root  password=sandhill  server=${server}  org_name=mobiledgex  app_name=${app_name}  app_version=${app_version}
+    Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 
 Teardown
     Cleanup Provisioning

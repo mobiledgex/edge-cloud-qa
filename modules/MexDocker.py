@@ -63,5 +63,28 @@ class MexDocker():
         print('*WARN*', 'return code=' ,process.returncode)
         
         if process.returncode != 0:
-            raise Exception(f'docker push failed:  {stderr} {stdout}')
+            raise Exception(f'docker pull failed:  {stderr} {stdout}')
 
+    def tag_image(self, username, password, server, source_name, app_name=None, target_name=None):
+        cmd = f'docker login -u {username} -p {password} {server} && docker tag {source_name}'
+        if target_name:
+           cmd += f' {target_name}'
+        else:
+           cmd += f' {app_name}'
+        logging.info(cmd)
+
+        process = subprocess.Popen(cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=True
+                )
+        stdout = process.stdout.readlines()
+        stderr = process.stderr.readlines()
+        process.wait()
+
+        print('*WARN*', 'std', stdout)
+        print('*WARN*', 'stderr=' ,stderr)
+        print('*WARN*', 'return code=' ,process.returncode)
+
+        if process.returncode != 0:
+            raise Exception(f'docker tag failed:  {stderr} {stdout}')
