@@ -1802,10 +1802,10 @@ class MexMasterController(MexRest):
                                     #label, link = line.split('Click to verify:')
                                     self._verify_link = line.rstrip()
 
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
                                     logging.info('login with:' + cmd)
                                     self._run_command(cmd)
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:2019-08-30 {line} --addr https://{self.mc_address} --skipverify '
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
                                     logging.info('verifying email with:' + cmd)
                                     self._run_command(cmd)
 
