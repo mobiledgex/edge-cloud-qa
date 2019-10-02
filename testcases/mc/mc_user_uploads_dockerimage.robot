@@ -107,7 +107,19 @@ MC - User shall not be able to upload docker image as Developer Viewer
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
+
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
     Verify Email
 	
@@ -136,7 +148,19 @@ MC - User shall not be able to upload docker image as Operator Manager
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
+
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
     Verify Email
 	
@@ -165,7 +189,19 @@ MC - User shall not be able to upload docker image as Operator Contributor
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
+
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
     Verify Email
 
@@ -194,7 +230,19 @@ MC - User shall not be able to upload docker image as Operator Viewer
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
+
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
     Verify Email
 	
