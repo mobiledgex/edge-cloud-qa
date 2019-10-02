@@ -13,3 +13,6 @@ qcow_centos_openstack_image = 'server_ping_threaded_centos7'
 #vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
 vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
 
+mextester99_gmail_password = 'rfbixqomqidobmcb'
+
+

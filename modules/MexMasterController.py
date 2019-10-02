@@ -40,7 +40,7 @@ class MexMasterController(MexRest):
 
         self.username = 'mexadmin'
         self.password = 'mexadmin123'
-
+        
         self.super_token = None
         self._decoded_token = None
         self.orgname = None
@@ -285,7 +285,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.token
 
-    def create_user(self, username=None, password=None, email_address=None, server='imap.gmail.com', email_check=True, json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=True, json_data=None, use_defaults=True, use_thread=False):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -317,7 +317,7 @@ class MexMasterController(MexRest):
         if email_check:
             logging.info(f'checking email with email={email_address} password={password}')
             mail = imaplib.IMAP4_SSL(server)
-            mail.login(email_address, password)
+            mail.login(email_address, email_password)
             mail.select('inbox')
             self._mail = mail
             logging.info('login successful')
