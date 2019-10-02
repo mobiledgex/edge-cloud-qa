@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   MasterController user/current superuser
+Documentation   Docker push/pull with different roles
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library     MexDocker
@@ -20,59 +20,87 @@ ${i}                 1
 	
 *** Test Cases ***
 
-MC - User shall be able to create a and upload docker image in different user roles as Developer Manager
-	[Documentation] 
-	...  create a new user 
-	...  create a new developer org
+MC - User shall be able to upload docker image as Developer Manager
+    [Documentation] 
+    ...  create a new user 
+    ...  verify docker push/pull doesnt work if locked and unverified
+    ...  create a new developer org
     ...  add user to org as Developer Manager
-	...  upload docker image 
-	...  delete the user
+    ...  upload docker image 
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
 
+    # docker push/pull should fail since user is NOT verified
+    ${pusherror2}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror2}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
+
+    Verify Email
+	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperManager
 
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
-
     Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-MC - User shall be able to create a and upload docker image in different user roles as Developer Contributor
-	[Documentation] 
-	...  create a new user 
-	...  create a new developer org
+MC - User shall be able to upload docker image as Developer Contributor
+    [Documentation] 
+    ...  create a new user 
+    ...  verify docker push/pull doesnt work if locked and unverified
+    ...  create a new developer org
     ...  add user to org as Developer Contributor
-	...  upload docker image 
-	...  delete the user
+    ...  upload docker image 
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
+    # docker push/pull should fail since user is locked
+    ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror1}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
+
     Unlock User  username=${username1}
 
+    # docker push/pull should fail since user is NOT verified
+    ${pusherror2}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror2}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
+    Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
+
+    Verify Email
+	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperContributor
 
     Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
-
     Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-MC - User shall be able to create a and upload docker image in different user roles as Developer Viewer
-	[Documentation] 
-	...  create a new user 
-	...  create a new developer org
+MC - User shall not be able to upload docker image as Developer Viewer
+    [Documentation] 
+    ...  create a new user 
+    ...  create a new developer org
     ...  add user to org as Developer Viewer
-	...  upload docker image 
-	...  delete the user
+    ...  verify cant upload docker image 
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -81,6 +109,8 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Unlock User  username=${username1}
 
+    Verify Email
+	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperViewer
@@ -91,15 +121,15 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-    Should Contain  ${pullerror}  not found: manifest unknown: manifest unknown
+    Should Contain  ${pullerror}  not found
 
-MC - User shall be able to create a and upload docker image in different user roles as Operator Manager
-	[Documentation] 
-	...  create a new user 
-	...  create a new operator org
+MC - User shall not be able to upload docker image as Operator Manager
+    [Documentation] 
+    ...  create a new user 
+    ...  create a new operator org
     ...  add user to org as Operator Manager
-	...  upload docker image 
-	...  delete the user
+    ...  verify cant upload docker image 
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -108,6 +138,8 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Unlock User  username=${username1}
 
+    Verify Email
+	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorManager
@@ -118,15 +150,15 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-    Should Contain  ${pullerror}  denied: requested access to the resource is denied
+    Should Contain  ${pullerror}  pull access denied
 
-MC - User shall be able to create a and upload docker image in different user roles as Operator Contributor
-	[Documentation] 
-	...  create a new user 
-	...  create a new Operator org
+MC - User shall not be able to upload docker image as Operator Contributor
+    [Documentation] 
+    ...  create a new user 
+    ...  create a new Operator org
     ...  add user to org as Operator Contributor
-	...  upload docker image 
-	...  delete the user
+    ...  verify cant upload docker image
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -134,6 +166,8 @@ MC - User shall be able to create a and upload docker image in different user ro
     Create user  username=${username1}  password=${password}  email_address=${email1}
 
     Unlock User  username=${username1}
+
+    Verify Email
 
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -145,15 +179,15 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-    Should Contain  ${pullerror}  denied: requested access to the resource is denied
+    Should Contain  ${pullerror}  pull access denied
 
-MC - User shall be able to create a and upload docker image in different user roles as Operator Viewer
-	[Documentation] 
-	...  create a new user 
-	...  create a new Operator org
+MC - User shall not be able to upload docker image as Operator Viewer
+    [Documentation] 
+    ...  create a new user 
+    ...  create a new Operator org
     ...  add user to org as Operator Viewer
-	...  upload docker image 
-	...  delete the user
+    ...  verify cant upload docker image
+    ...  delete the user
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -162,6 +196,8 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     Unlock User  username=${username1}
 
+    Verify Email
+	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorViewer
@@ -172,7 +208,7 @@ MC - User shall be able to create a and upload docker image in different user ro
 
     ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
 
-    Should Contain  ${pullerror}  denied: requested access to the resource is denied
+    Should Contain  ${pullerror}  pull access denied
 
 *** Keywords ***
 
