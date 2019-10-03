@@ -4,7 +4,7 @@ Documentation   Docker push/pull with different roles
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library     MexDocker
 	
-#Test Setup	 Setup
+Test Setup	 Setup
 Test Teardown    Teardown
 
 *** Variables ***
