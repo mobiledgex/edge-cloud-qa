@@ -21,8 +21,8 @@ mex_cert = 'localserver.crt'
 mex_key = 'localserver.key'
 
 
-appinst_delete = [{'cloudlet_name':'automationBuckhornCloudlet'}]
-clusterinst_delete = [{'cloudlet_name':'automationBuckhornCloudlet'}]
+appinst_delete = [{'cloudlet_name':'automationBuckhornCloudlet'},{'cloudlet_name':'automationSunnydaleCloudlet'}]
+clusterinst_delete = [{'cloudlet_name':'automationBuckhornCloudlet'},{'cloudlet_name':'automationSunnydaleCloudlet'}]
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

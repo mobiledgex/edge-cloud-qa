@@ -70,5 +70,8 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Sunnydale
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on sunnydale openstack 
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_sunnydale}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_sunnydale}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}
 
