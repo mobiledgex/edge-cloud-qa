@@ -35,4 +35,12 @@ Get Servers
     #Should Be Equal As Integers  ${limits['maxTotalVolumeGigabytes']}  5000                  # disk size
     #Should Be Equal As Integers  ${limits['totalGigabytesUsed']}       100                 # disk used
     #Should Be Equal As Integers  ${limits['maxTotalRAMSize']}          1024                 # ram size
-	
+
+Get Flavor list
+    [Documentation]
+    ...  get flavors
+
+    ${flavors}=  Get Flavor List
+    #Log to console  ${flavors}	
+
+    Flavor Should Exist  flavors=${flavors}  ram=40960  disk=80  cpu=16 
