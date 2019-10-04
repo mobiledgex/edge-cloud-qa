@@ -78,6 +78,35 @@ class MexOpenstack():
             limit_dict[name['Name']] = name['Value']
             
         return limit_dict
+
+    def get_flavor_list(self):
+        cmd = f'source {self.env_file};openstack flavor list -f json'
+
+        logging.debug(f'getting flavor list with cmd = {cmd}')
+        output = self._execute_cmd(cmd)
+        
+        return json.loads(output)
+
+    def flavor_should_exist(self, flavors, ram, disk, cpu):
+        for flavor in flavors:
+            print('*WARN*', flavor['RAM'], flavor['Disk'], flavor['VCPUs'], ram, disk, cpu)
+            if int(flavor['RAM']) == int(ram) and int(flavor['Disk']) == int(disk) and int(flavor['VCPUs']) == int(cpu):
+                logging.info('found matching flavor', flavor)
+                return True
+
+        raise Exception(f'No flavor found matching ram={ram}, disk={disk}, cpu={cpu}')
+    
+    def _execute_cmd(self, cmd):
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+
+        return o_out
     
     def _findFile(self, path):
         for dirname in sys.path:
