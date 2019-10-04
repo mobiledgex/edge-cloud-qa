@@ -192,6 +192,11 @@ node('jenkinsSlave1'){
              def s4 = 'source /home/jenkins/openrc.bonn;openstack server delete automationBonnCloudlet.TDG.pf;openstack stack delete automationBonnCloudlet.TDG.pf'
              status = sh(script: s4, returnStatus: true);
 
+             def s3 = 'source /home/jenkins/openrc.munich;openstack server delete automationmunichcloudlet.tdg.mobiledgex.net;openstack stack delete automationmunichcloudlet.tdg.mobiledgex.net'
+             status = sh(script: s3, returnStatus: true);
+             def s4 = 'source /home/jenkins/openrc.munich;openstack server delete automationMunichCloudlet.TDG.pf;openstack stack delete automationMunichCloudlet.TDG.pf'
+             status = sh(script: s4, returnStatus: true);
+
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
