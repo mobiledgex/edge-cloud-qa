@@ -70,5 +70,8 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Munich
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on munich openstack 
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_munich}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_munich}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}
 
