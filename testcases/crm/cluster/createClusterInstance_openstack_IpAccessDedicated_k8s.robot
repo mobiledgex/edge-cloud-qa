@@ -17,7 +17,7 @@ Test Teardown   Cleanup provisioning
 Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT 
 ${mobiledgex_domain}  mobiledgex.net
 #${cluster_name}=  cluster1556727500-74324
@@ -39,7 +39,7 @@ ClusterInst shall create with IpAccessDedicated/K8s and num_masters=1 and num_no
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -89,7 +89,7 @@ ClusterInst shall create with IpAccessDedicated/k8s and num_masters=1 and num_no
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=5  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=5  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -156,7 +156,7 @@ ClusterInst shall create with IpAccessDedicated/k8s and num_masters=0 and num_no
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -206,11 +206,11 @@ ClusterInst shall create with IpAccessDedicated/k8s and num_masters=0 and num_no
 *** Keywords ***
 Setup
     ${epoch_time}=  Get Time  epoch
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}

@@ -7,7 +7,7 @@ Test Timeout    ${test_timeout_crm}
 	
 *** Variables ***
 #${crm_api_address}  127.0.0.1:65100
-${cloudlet_name_openstack}  automationHawkinsCloudlet   #has to match crm process startup parms
+${cloudlet_name_openstack_shared}  automationHawkinsCloudlet   #has to match crm process startup parms
 ${operator_name_openstack}  GDDT
 #${latitude}	  32
 #${longitude}	  -90
@@ -26,7 +26,7 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
     ...  Delete both
     ...  Verify both are deleted
 
-    Delete Cluster Instance	cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_name=xxxx  flavor_name=${flavor_name}
+    Delete Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=xxxx  flavor_name=${flavor_name}
 
 	
 *** Keywords ***
