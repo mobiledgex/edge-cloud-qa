@@ -11,7 +11,7 @@ Test Teardown   Cleanup provisioning
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_shared}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 
 ${mobiledgex_domain}  mobiledgex.net
@@ -29,11 +29,11 @@ User shall be able to delete/create an app instance at the same time on openstac
     ...  verify app instance is created and other deleted successfully
 
     Log To Console  Creating Cluster Instance
-    ${handle1}=  Create Cluster Instance  cluster_name=${cluster_name_2}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  use_thread=${True}
+    ${handle1}=  Create Cluster Instance  cluster_name=${cluster_name_2}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  use_thread=${True}
     Log To Console  Done Creating Cluster Instance
 
     # delete the cluster instance in thread
-    ${handle2}=  Delete Cluster Instance  cluster_name=${cluster_name_1}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  use_thread=${True}
+    ${handle2}=  Delete Cluster Instance  cluster_name=${cluster_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  use_thread=${True}
 
     # wait for them to finish
     Log To Console  Waiting for threads
@@ -49,7 +49,7 @@ Setup
     ${cluster_name_2}=  Catenate  SEPARATOR=.  ${cluster_name_1}  2
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cluster_name=${cluster_name_1}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  no_auto_delete=${True}
+    Create Cluster Instance  cluster_name=${cluster_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  no_auto_delete=${True}
     Log To Console  Done Creating Cluster Instance
 
     Set Suite Variable  ${cluster_name_1}

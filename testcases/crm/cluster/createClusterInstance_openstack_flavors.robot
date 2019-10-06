@@ -22,7 +22,7 @@ Test Teardown   Cleanup provisioning
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_shared}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT 
 #${cluster_name}=  cluster1556727500-74324
 
@@ -39,7 +39,7 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
 
    ${cluster_name}=  Get Default Cluster Name
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   details = "Encountered failures: Create failed: Insufficient disk size, please specify a flavor with at least 20gb"
@@ -56,7 +56,7 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -83,7 +83,7 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -110,7 +110,7 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -142,7 +142,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -169,7 +169,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -196,7 +196,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -223,7 +223,7 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Openstack Server List  name=${cluster_name}
@@ -291,7 +291,7 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
@@ -311,7 +311,7 @@ Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
@@ -331,7 +331,7 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
