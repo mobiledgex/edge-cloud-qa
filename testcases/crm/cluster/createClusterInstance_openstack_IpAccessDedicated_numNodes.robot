@@ -17,7 +17,7 @@ Test Teardown   Cleanup provisioning
 Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationBonnCloudlet
+${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 ${operator_name_openstack}  TDG 
 ${mobiledgex_domain}  mobiledgex.net
 #${cluster_name}=  cluster1556727500-74324
@@ -39,7 +39,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -90,7 +90,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=3  number_masters=1  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=3  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -149,7 +149,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=12  number_masters=1  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=12  number_masters=1  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
@@ -242,7 +242,7 @@ ClusterInst shall not create with IpAccessDedicated and multiple masters
 
    Log to Console  START creating cluster instance
    #${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2  ip_access=IpAccessDedicated
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -285,7 +285,7 @@ ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -327,7 +327,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
 	 
    Log to Console  START creating cluster instance
    #${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    #Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -362,11 +362,11 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
 *** Keywords ***
 Setup
     ${epoch_time}=  Get Time  epoch
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
