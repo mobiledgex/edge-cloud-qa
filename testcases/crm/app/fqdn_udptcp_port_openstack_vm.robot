@@ -15,7 +15,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationBonnCloudlet
+${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -49,7 +49,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with n
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -74,7 +74,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12} 
     #Should Match Regexp  https://hamedgecloud.telekom.de:6080/vnc_auto.html?token=a7a0df63-709e-4c21-b5ec-a718dc9df900  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
@@ -96,7 +96,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -117,7 +117,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  cluster_instance_name=dummycluster
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -140,7 +140,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack withou
     ${app_version_default}=  Get Default App Version
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  use_defaults=${False}
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  use_defaults=${False}
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -163,7 +163,7 @@ User shall be able to access windows VM deployment UDP and TCP ports on openstac
     ${app_version_default}=  Get Default App Version
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_windows_image}  access_ports=tcp:2016,udp:2015  
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  use_defaults=${False}
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_name=${operator_name_openstack}  use_defaults=${False}
 
     Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 

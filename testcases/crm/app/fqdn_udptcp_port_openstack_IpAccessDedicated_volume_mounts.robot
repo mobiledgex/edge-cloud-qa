@@ -15,7 +15,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationBonnCloudlet
+${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -44,7 +44,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  default_flavor_name=${cluster_flavor_name}  deployment_manifest=${manifest_url}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
@@ -68,16 +68,16 @@ Setup
     Create Developer
     Create Flavor
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name
     ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
 
     Set Suite Variable  ${cloudlet_lowercase}
 
