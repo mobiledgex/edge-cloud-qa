@@ -14,7 +14,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -40,7 +40,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     ${app_name_default}=  Get Default App Name
 
     Create App  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0 
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_name=mobiledgex  cluster_instance_developer_name=mobiledgex
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_name=mobiledgex  cluster_instance_developer_name=mobiledgex
 
     Register Client  developer_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -64,10 +64,10 @@ Setup
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_name=mobiledgex
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_name=mobiledgex
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     ${cluster_name}=  Get Default Cluster Name

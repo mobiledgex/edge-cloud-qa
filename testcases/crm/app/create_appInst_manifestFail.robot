@@ -14,7 +14,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationHawkinsCloudlet
+${cloudlet_name_openstack_shared}  automationHawkinsCloudlet
 ${operator_name_openstack}  GDDT
 
 ${docker_image}    docker.mobiledgex.net/mobiledgex/server_ping_threaded:4.0
@@ -39,7 +39,7 @@ Controller should cleanup autocluster after CreateAppInst fail
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=${manifest_url}  default_flavor_name=${cluster_flavor_name}
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Encountered failures: Create App Inst failed
