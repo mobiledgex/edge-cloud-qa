@@ -183,6 +183,6 @@ User shall be able to access windows VM deployment UDP and TCP ports on openstac
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor  disk=80
 	
