@@ -14,7 +14,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationHawkinsCloudlet
+${cloudlet_name_openstack_shared}  automationHawkinsCloudlet
 ${operator_name_openstack}  GDDT
 
 #${rootlb}          automationhawkinscloudlet.gddt.mobiledgex.net
@@ -42,18 +42,18 @@ User shall be able to create/delete/create an app instance on openstack
     # create the app and app instance
     Log To Console  Creating App and App Instance
     Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name} 
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}  no_auto_delete=${True}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}  no_auto_delete=${True}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     # delete the app instance
-    Delete App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
+    Delete App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
     App Instance Should Not Exist
 
     # create the app instance again	
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
@@ -67,10 +67,10 @@ Setup
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}

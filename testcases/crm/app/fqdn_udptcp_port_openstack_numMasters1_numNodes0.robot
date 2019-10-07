@@ -8,14 +8,15 @@ Library  String
 #Variables       shared_variables.py
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_dedicated}  automationBuckhornCloudlet
+${cloudlet_name_openstack_shared}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -34,16 +35,20 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-User shall be able to access UDP,TCP and HTTP ports on openstack with num_masters=1 and num_nodes=0
+User shall be able to access UDP,TCP and HTTP ports on dedicated openstack with num_masters=1 and num_nodes=0
     [Documentation]
     ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on openstack with num_masters=1 and num_nodes=0
     ...  verify all ports are accessible via fqdn
+
+    Log To Console  Creating Cluster Instance
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
+    Log To Console  Done Creating Cluster Instance
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -51,7 +56,35 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with num_master
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
+    Wait for k8s pod to be running  root_loadbalancer=${rootlb_dedicated}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
+
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+
+User shall be able to access UDP,TCP and HTTP ports on shared openstack with num_masters=1 and num_nodes=0
+    [Documentation]
+    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports on openstack with num_masters=1 and num_nodes=0
+    ...  verify all ports are accessible via fqdn
+
+    Log To Console  Creating Cluster Instance
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
+    Log To Console  Done Creating Cluster Instance
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+
+    Wait for k8s pod to be running  root_loadbalancer=${rootlb_shared}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -64,11 +97,14 @@ Setup
     Create Flavor
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
-    Log To Console  Done Creating Cluster Instance
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb}=  Convert To Lowercase  ${rootlb}
+    ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb_dedicated}=  Convert To Lowercase  ${rootlb_dedicated}
 
-    Set Suite Variable  ${rootlb}
+    ${rootlb_shared}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb_shared}=  Convert To Lowercase  ${rootlb_shared}
+
+
+    Set Suite Variable  ${rootlb_dedicated}
+    Set Suite Variable  ${rootlb_shared}
+

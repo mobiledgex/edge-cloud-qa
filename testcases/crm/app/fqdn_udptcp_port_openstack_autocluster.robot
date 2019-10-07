@@ -14,7 +14,7 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationBuckhornCloudlet
+${cloudlet_name_openstack_shared}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -38,7 +38,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
     ${cluster_name_default}=  Catenate  SEPARATOR=  autocluster  ${cluster_name_default}
 	
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=kubernetes
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
@@ -60,7 +60,7 @@ Setup
     Create Developer
     Create Flavor
 
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
