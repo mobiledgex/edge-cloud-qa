@@ -1,8 +1,9 @@
-import logging
-import subprocess
 import json
+import logging
 import os
+import subprocess
 import sys
+
 
 class MexOpenstack():
     def __init__(self, environment_file):
@@ -114,3 +115,95 @@ class MexOpenstack():
             if os.path.isfile(candidate):
                 return candidate
         raise Exception('cant find file {}'.format(path))
+
+
+    def get_openstack_network_list(self,name=None):
+        cmd = f'source {self.env_file};openstack network list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting network server list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
+
+    def get_openstack_subnet_list(self,name=None):
+        cmd = f'source {self.env_file};openstack subnet list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting flavour subnet list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
+  
+    def get_openstack_router_list(self,name=None):
+        cmd = f'source {self.env_file};openstack router list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting router router list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
+
+    def get_openstack_flavour_list(self,name=None):
+        cmd = f'source {self.env_file};openstack flavor list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting router flavor list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
+
+
+    def get_openstack_security_list(self,name=None):
+        cmd = f'source {self.env_file};openstack security group list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting security security group  list with cmd = {cmd}')
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+        
+        return json.loads(o_out)
