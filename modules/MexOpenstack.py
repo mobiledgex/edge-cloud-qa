@@ -9,6 +9,28 @@ class MexOpenstack():
     def __init__(self, environment_file):
         self.env_file = self._findFile(environment_file)
 
+#global helpers functions on the head of class
+
+    def _execute_cmd(self, cmd):
+        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
+        o_out = o_return.stdout.decode('utf-8')
+        o_err = o_return.stderr.decode('utf-8')
+
+        if o_err:
+            raise Exception(o_err)
+
+        logging.debug(o_out)
+
+        return o_out
+    
+    def _findFile(self, path):
+        for dirname in sys.path:
+            candidate = os.path.join(dirname, path)
+            if os.path.isfile(candidate):
+                return candidate
+        raise Exception('cant find file {}'.format(path))
+
+
     def get_openstack_server_list(self, name=None):
         cmd = f'source {self.env_file};openstack server list -f json'
 
@@ -61,23 +83,54 @@ class MexOpenstack():
         
         #return json.loads(o_out)
 
-    def get_openstack_limits(self):
+    def _json2hash(self,data):
+        outJson={}
+        for x in data: 
+            outJson[x["Name"]]=x["Value"]
+
+        return outJson
+
+    def get_openstack_limits(self,limit_dict):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
 
-        logging.debug(f'getting limits with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
+        o_out=self._execute_cmd(cmd)
+      #  limit_dict = {}
+     #   for name in json.loads(o_out):
+     #       limit_dict[name['Name']] = name['Value']
+#        print('********')
+#        print (limit_dict)
+#        print('********')
+#        print(o_out)
+#        print('********')
 
-        if o_err:
-            raise Exception(o_err)
+        
 
-        logging.debug(o_out)
+        data = self._json2hash(json.loads(o_out))
+        print(json.dumps(data))
+        print('********')
+        print(json.dumps(limit_dict))
+        print('********')
 
-        limit_dict = {}
-        for name in json.loads(o_out):
-            limit_dict[name['Name']] = name['Value']
-            
+        for x in limit_dict:
+            print(x,":",limit_dict[x])
+
+        for param in limit_dict:
+            min=limit_dict[param]['min']
+            max=limit_dict[param]['max']
+# //TODO: what if param does not exist in openstack limits show output ?
+            value=data[param]
+            if value < min or value > max:
+                print("*Warn* ",param," out of limits")
+
+#        for x in data:
+#            print(x,":",data[x])
+
+
+
+       # print(data["maxTotalInstances"])
+
+  
+
         return limit_dict
 
     def get_flavor_list(self):
@@ -97,24 +150,6 @@ class MexOpenstack():
 
         raise Exception(f'No flavor found matching ram={ram}, disk={disk}, cpu={cpu}')
     
-    def _execute_cmd(self, cmd):
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-
-        return o_out
-    
-    def _findFile(self, path):
-        for dirname in sys.path:
-            candidate = os.path.join(dirname, path)
-            if os.path.isfile(candidate):
-                return candidate
-        raise Exception('cant find file {}'.format(path))
 
 
     def get_openstack_network_list(self,name=None):
