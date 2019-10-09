@@ -97,10 +97,10 @@ class MexOpenstack():
         ifmin=False
         if 'max' in dict:
             ifmax=True
-            min=dict['min']
+            max=dict['max']
         if 'min' in dict:
             ifmin=True
-            max=dict['max']
+            min=dict['min']
 
         if ifmax and ifmin:
             if (min <= value) and (max>=value):
