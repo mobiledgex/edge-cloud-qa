@@ -4,6 +4,7 @@ Documentation   Create cluster instances with mixed case clustername on openstac
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
 
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 Test Timeout     ${test_timeout_crm} 
@@ -26,6 +27,10 @@ CRM shall be able to create a cluster instances with mixed case clustername for 
     ${cluster_name_1}=  Catenate  SEPARATOR=  MyCluster  ${epoch_time}  
 
     #Create Cluster		cluster_name=${cluster_name_1}  default_flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_1}  flavor_name=${flavor_name}
+    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_1}  #flavor_name=${flavor_name}
 
     #sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
+
+*** Keywords ***
+Setup
+   Create Flavor
