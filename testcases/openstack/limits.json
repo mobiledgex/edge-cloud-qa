@@ -1,5 +1,14 @@
 {
-    "maxTotalInstances" :{"min":20, "max":30},
-    "maxImageMeta" :{"min":200, "max":3000000},
-    "maxPersonalitySize" :{}
+    "maxTotalInstances"    :{"min":100},
+    "maxTotalRAMSize"      :{"min":512000},    
+    "maxSecurityGroups"    :{"min":10},    
+    "maxTotalCores"        :{"min":20},       
+    "maxTotalFloatingIps"  :{"min":10},     
+    "maxTotalVolumeGigabytes" :{"min":5000},
+    "maxTotalVolumes"         :{"min":100},
+    
+    "maxPersonalitySize"      :{"key": "this is to show error when min or max keys do not exist"}
 }
+
+
+
