@@ -41,7 +41,7 @@ User shall be able to create/delete/create an app instance on openstack
 
     # create the app and app instance
     Log To Console  Creating App and App Instance
-    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name} 
+    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name} 
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}  no_auto_delete=${True}
     App Instance Should Exist
 
@@ -62,12 +62,12 @@ User shall be able to create/delete/create an app instance on openstack
 *** Keywords ***
 Setup
     #Create Developer
-    #Create Flavor
+    Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}

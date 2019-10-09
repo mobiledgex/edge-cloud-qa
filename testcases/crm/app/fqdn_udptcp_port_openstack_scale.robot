@@ -44,7 +44,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
 
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=1
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  scale_with_cluster=${True}
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -69,7 +69,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
 
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=2
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  scale_with_cluster=${True}
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -95,7 +95,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
 
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=${num_nodes}
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  scale_with_cluster=${True}
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client

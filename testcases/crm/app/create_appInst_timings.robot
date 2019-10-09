@@ -38,15 +38,16 @@ CreateAppInst on openstack shall create quickly
 Setup
 
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
+    Create Flavor
 
     Log To Console  Creating Cluster Instance
     ${clusterInst_start_epoch_time}=  Get Time  epoch
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
     ${clusterInst_end_epoch_time}=  Get Time  epoch
     Log To Console  Done Creating Cluster Instance
 
     Log To Console  Creating App and App Instance
-    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name} 
+    Create App           image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name} 
     ${cluster_name_default}=  Get Default Cluster Name
     ${appInst_start_epoch_time}=  Get Time  epoch
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}

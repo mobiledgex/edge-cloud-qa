@@ -87,7 +87,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-
+#     TCP Port Should Be Alive  developer1570561247-819531app1570561247-81953110.automationmunichcloudlet.tdg.mobiledgex.net  2016
 User shall be able to access VM deployment UDP and TCP ports on openstack with command
     [Documentation]
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with command
