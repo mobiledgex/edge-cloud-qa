@@ -1,5 +1,5 @@
 {
     "maxTotalInstances" :{"min":20, "max":30},
     "maxImageMeta" :{"min":200, "max":3000000},
-    "maxPersonalitySize" :{"min":0, "max":3000}
+    "maxPersonalitySize" :{}
 }
