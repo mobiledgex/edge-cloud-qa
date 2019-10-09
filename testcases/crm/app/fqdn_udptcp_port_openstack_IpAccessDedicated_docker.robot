@@ -37,7 +37,7 @@ User shall be able to access 1 UDP port on openstack with docker
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
+    Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 	
     Log To Console  Registering Client and Finding Cloudlet
@@ -60,7 +60,7 @@ User shall be able to access 1 TCP port on openstack with docker
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
+    Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
@@ -81,7 +81,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
+    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client

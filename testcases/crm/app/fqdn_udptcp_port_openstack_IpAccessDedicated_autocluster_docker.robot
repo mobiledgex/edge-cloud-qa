@@ -33,7 +33,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and 
     ...  deploy app with 2 UDP and 2 TCP ports with docker and autocluster
     ...  verify all ports are accessible via fqdn
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker
+    Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
     Register Client

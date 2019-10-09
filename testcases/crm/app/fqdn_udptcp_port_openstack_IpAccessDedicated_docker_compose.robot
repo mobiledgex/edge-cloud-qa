@@ -39,7 +39,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  default_flavor_name=${cluster_flavor_name}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0 
+    Create App  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0 
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_name=mobiledgex  cluster_instance_developer_name=mobiledgex
 
     Register Client  developer_name=mobiledgex
