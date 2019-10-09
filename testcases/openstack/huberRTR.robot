@@ -20,8 +20,8 @@ Get limits
     ${data_as_string} =    Get File    limits.json
     ${data_as_json} =    json.loads    ${data_as_string}
 #    log to console  ${data_as_json}
-    ${limits}=  Get Openstack Limits  ${data_as_json} 
-#    log to console  ${limits}
+    ${results}=  Get Openstack Limits  ${data_as_json} 
+    log to console  ${results}
 #Get Servers
     #[Documentation]
     #...  get servers
