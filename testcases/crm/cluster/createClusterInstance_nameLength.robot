@@ -25,7 +25,7 @@ CRM shall be able to create a cluster instances with 64 chars on openstack
     ...  Verify created successfully
 
     #Create Cluster              cluster_name=${cluster_name}  default_flavor_name=${flavor_name}
-    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name}  flavor_name=${flavor_name}
+    Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name}  #flavor_name=${flavor_name}
 
     #Sleep  120 s
 
@@ -35,12 +35,13 @@ CRM shall be able to create a cluster instances with long name on openstack
     ...  Verify created successfully
 
     #Create Cluster              cluster_name=${cluster_name_long}  default_flavor_name=${flavor_name}
-    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  flavor_name=${flavor_name}
+    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  #flavor_name=${flavor_name}
 
     #Sleep  120 s
 
 *** Keywords ***
 Setup
+    Create Flavor
     ${k8s_length}=  Get Length  ${k8s_name}
     ${k8s_cloudlet_name}=  Catenate  SEPARATOR=  ${cloudlet_name_openstack_shared}  -
     ${cloudlet_length}=  Get Length  ${k8s_cloudlet_name}
