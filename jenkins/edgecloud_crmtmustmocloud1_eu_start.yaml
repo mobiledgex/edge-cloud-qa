@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crmtmocloud1eu
+  labels:
+    app: crmtmocloud1eu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crmtmocloud1eu
+  template:
+    metadata:
+      labels:
+        app: crmtmocloud1eu
+    spec:
+      containers:
+      - name: crmtmocloud1eu
+        image: registry.mobiledgex.net:5000/mobiledgex/edge-cloud:$AUTOMATION_DOCKERTAG
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 10m
+        command:
+         - crmserver
+        args:
+         - "--cloudletKey"
+         - "{\"operator_key\":{\"name\":\"tmus\"},\"name\":\"tmocloudeu-1\"}"
+         - "--notifyAddrs"
+         - "automationeu.ctrl.mobiledgex.net:37002"
+         - "--tls"
+         - "/root/tls/mex-server.crt"
+         - "--platform"
+         - "PLATFORM_TYPE_FAKE"
+         - "--d"
+         - "api,notify,mexos"
+      imagePullSecrets:
+       - name: mexreg-secret
+
