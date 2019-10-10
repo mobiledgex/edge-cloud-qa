@@ -270,6 +270,11 @@ node('jenkinsSlave1'){
              sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud9_start.yaml > $HOME/edgecloud_crmtmustmocloud9_start.yaml'
              sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud10_start.yaml > $HOME/edgecloud_crmtmustmocloud10_start.yaml'
              sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmattattcloud1_start.yaml > $HOME/edgecloud_crmattattcloud1_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud1_eu_start.yaml > $HOME/edgecloud_crmtmustmocloud1_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud2_eu_start.yaml > $HOME/edgecloud_crmtmustmocloud2_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud3_eu_start.yaml > $HOME/edgecloud_crmtmustmocloud3_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud4_eu_start.yaml > $HOME/edgecloud_crmtmustmocloud4_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmtmustmocloud5_eu_start.yaml > $HOME/edgecloud_crmtmustmocloud5_eu_start.yaml'
 
        	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecloud1_start.yaml > $HOME/edgecloud_crmazurecloud1_start.yaml'
        	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecentral_start.yaml > $HOME/edgecloud_crmazurecentral_start.yaml'
@@ -348,6 +353,21 @@ node('jenkinsSlave1'){
 
              sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_mc_start.yaml'
              sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_mc_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud1_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud1_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud2_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud2_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud3_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud3_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud4_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud4_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmtmustmocloud5_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmtmustmocloud5_eu_start.yaml'
 
              //sh 'docker system prune -af'  //remove all docker stuff without prompting
 

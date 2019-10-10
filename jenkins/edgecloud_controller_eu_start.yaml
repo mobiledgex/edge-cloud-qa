@@ -39,7 +39,7 @@ spec:
           - "--region"
           - "EU"
           - "--vaultAddr"
-          - "https://vault.mobiledgex.net"
+          - "https://vault-qa.mobiledgex.net:8200"
           - "--versionTag"
           - "$AUTOMATION_DOCKERTAG"
           - "--tls"
@@ -51,10 +51,14 @@ spec:
           - "-autoUpgrade"
          env:
           - name: VAULT_ROLE_ID
-            value: 1c2a5271-31af-96e9-da03-b3f63d7fd628
+            value: 18a54dd0-b89b-17dd-3fa4-83dfc2ef3d9c
           - name: VAULT_SECRET_ID
-            value: ed7f877a-1528-78e2-3610-f007606601ae
+            value: f53d7e38-9568-be39-7d03-9ad3eb973d29
+          - name: VAULT_CRM_ROLE_ID
+            value: ca425b55-53a4-6fcd-fc27-9f0bd1ee2e92
+          - name: VAULT_CRM_SECRET_ID
+            value: 52baef16-b4ea-7b85-aca8-df3fa5eb9d41
           - name: JAEGER_ENDPOINT
-            value: https://automationjaeger.mobiledgex.net:14270/api/traces
+            value: https://jaeger-qa.mobiledgex.net:14268/api/traces
        imagePullSecrets:
         - name: mexreg-secret
