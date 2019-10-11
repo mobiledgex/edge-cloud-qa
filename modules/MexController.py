@@ -555,7 +555,11 @@ class Cloudlet():
 
         if self.platform_type == 'PlatformTypeOpenstack':
             self.platform_type = 2
-            
+        elif self.platform_type == 'PlatformTypeAzure':
+            self.platform_type = 3
+        elif self.platform_type == 'PlatformTypeGcp':
+            self.platform_type = 4
+        
         cloudlet_key_dict = {}
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
