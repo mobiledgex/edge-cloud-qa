@@ -83,94 +83,6 @@ class MexOpenstack():
         
         #return json.loads(o_out)
 
-    def _json2hash(self,data):
-        outJson={}
-        for x in data: 
-            outJson[x["Name"]]=x["Value"]
-        return outJson
-
-#//TODO could be better
-#//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
-    def _checkConditions(self,dict,value):
-        result={}
-        ifmax=False
-        ifmin=False
-        if 'max' in dict:
-            ifmax=True
-            max=dict['max']
-        if 'min' in dict:
-            ifmin=True
-            min=dict['min']
-
-        if ifmax and ifmin:
-            if (min <= value) and (max>=value):
-                result['result']='PASS'
-            else:
-                result['result']='FAILED'
-            return result
-        if ifmax and not ifmin:
-            if  max>=value:
-                result['result']='PASS'
-            else:
-                result['result']='FAILED'
-            return result
-        if not ifmax and ifmin:
-            if min <= value :
-                result['result']='PASS'
-            else:
-                result['result']='FAILED'
-            return result
-#and weird case
-#        if not ifmax and not ifmin:
-#            if min <= value :
-#                result['result']=1
-#            else:
-#                result['result']=0
-#            return result
-        result['result']='UNDEFINED'
-        result['comment']='There is no valid condition to check'
-        return result
-
-
-    def get_openstack_limits(self,limit_dict):
-        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
-
-        o_out=self._execute_cmd(cmd)
-      #  limit_dict = {}
-     #   for name in json.loads(o_out):
-     #       limit_dict[name['Name']] = name['Value']
-#        print('********')
-#        print (limit_dict)
-#        print('********')
-#        print(o_out)
-#        print('********')
-        data = self._json2hash(json.loads(o_out))
-#        print(json.dumps(data))
-#        print('********')
-#        print(json.dumps(limit_dict))
-#        print('********')
-
-#        for x in limit_dict:
-#            print(x,":",limit_dict[x])
-
-        outcome={}
-        for param in limit_dict:
-            if param not in data:
-                print("*Warn* ",param," not found in the opestack environment")
-#//TODO: generic error when param not found
-                #outcome[param]= kinda error
-                continue
-            outcome[param]=self._checkConditions(limit_dict[param],data[param])
-
-#        for x in data:
-#            print(x,":",data[x])
-       # print(data["maxTotalInstances"])
-
-        for x in outcome:
-            print(x,":",outcome[x])
-
-        return outcome
-
     def get_flavor_list(self):
         cmd = f'source {self.env_file};openstack flavor list -f json'
 
@@ -280,3 +192,119 @@ class MexOpenstack():
         logging.debug(o_out)
         
         return json.loads(o_out)
+
+#------------------done functions
+
+    def _json2hash(self,data):
+        outJson={}
+        for x in data: 
+            outJson[x["Name"]]=x["Value"]
+        return outJson
+
+#//TODO could be better
+#//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
+    def _checkConditions(self,param,dict,value):
+        result={}
+        ifmax=False
+        ifmin=False
+        if 'max' in dict:
+            ifmax=True
+            max=dict['max']
+        if 'min' in dict:
+            ifmin=True
+            min=dict['min']
+
+        if ifmax and ifmin:
+            if (min <= value) and (max>=value):
+                result['result']='PASS'
+                result['comment']=""
+            else:
+                result['result']='FAILED'
+                result['comment']=""
+            return result
+        if ifmax and not ifmin:
+            if  max>=value:
+                result['result']='PASS'
+                result['comment']=""
+            else:
+                result['result']='FAILED'
+                result['comment']=""
+            return result
+        if not ifmax and ifmin:
+            if min <= value :
+                result['result']='PASS'
+                result['comment']=""
+            else:
+                result['result']='FAILED'
+                result['comment']=""
+            return result
+#and weird case
+#        if not ifmax and not ifmin:
+#            if min <= value :
+#                result['result']=1
+#            else:
+#                result['result']=0
+#            return result
+        result['result']='UNDEFINED'
+        result['comment']='There is no valid condition to check parameter: '+param
+        return result
+
+    def get_openstack_limits(self,limit_dict):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+        o_out=self._execute_cmd(cmd)
+        data = self._json2hash(json.loads(o_out))
+        outcome={}
+        for param in limit_dict:
+            if param not in data:
+                print("*Warn* ",param," not found in the openstack environment")
+                result={}
+                result['result']='ERROR'
+                result['comment']="Parameter ["+param+"] not found in the openstack environment"
+                outcome[param]=result
+                continue
+            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+ #       for x in outcome:
+ #           print(x,":",outcome[x])
+        return outcome
+
+
+    
+#------------------------- backup functions
+    def get_openstack_limitsBCK(self,limit_dict):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+
+        o_out=self._execute_cmd(cmd)
+      #  limit_dict = {}
+     #   for name in json.loads(o_out):
+     #       limit_dict[name['Name']] = name['Value']
+#        print('********')
+#        print (limit_dict)
+#        print('********')
+#        print(o_out)
+#        print('********')
+        data = self._json2hash(json.loads(o_out))
+#        print(json.dumps(data))
+#        print('********')
+#        print(json.dumps(limit_dict))
+#        print('********')
+
+#        for x in limit_dict:
+#            print(x,":",limit_dict[x])
+
+        outcome={}
+        for param in limit_dict:
+            if param not in data:
+                print("*Warn* ",param," not found in the opestack environment")
+#//TODO: generic error when param not found
+                #outcome[param]= kinda error
+                continue
+            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+
+#        for x in data:
+#            print(x,":",data[x])
+       # print(data["maxTotalInstances"])
+
+        for x in outcome:
+            print(x,":",outcome[x])
+
+        return outcome
