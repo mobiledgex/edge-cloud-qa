@@ -287,23 +287,29 @@ def update_single_defect(z, t):
         print(previous_exec_defects)
         d_list = []
         for ped in previous_exec_defects:
-            #print(ped['key'], ped['status'])
-            print('status',ped['inwardIssue']['fields']['status']['name'])
-            if ped['inwardIssue']['fields']['status']['name'] != 'Closed':
-                print(ped['inwardIssue']['key'])
-                d_list.append(ped['inwardIssue']['id'])
+            if 'inwardIssue' in ped:
+                #print(ped['key'], ped['status'])
+                print('status',ped['inwardIssue']['fields']['status']['name'])
+                if ped['inwardIssue']['fields']['status']['name'] != 'Closed':
+                    print(ped['inwardIssue']['key'])
+                    d_list.append(ped['inwardIssue']['id'])
                 
-                print(d_list)
-                    
-        logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
-        #elist = z.get_execution_list(execution_id = t['issue_id'])
-        #elist_string = json.loads(elist)
-        #print(elist_string)
-        #execList = elist_string['executions']
+                    print(d_list)
+            else:
+                logging.info('not updating issue since no inwardIssue')
+            
+        if d_list:        
+            logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
+            #elist = z.get_execution_list(execution_id = t['issue_id'])
+            #elist_string = json.loads(elist)
+            #print(elist_string)
+            #execList = elist_string['executions']
         
-        z.update_execution_details(execution_id=t['execution_id'], project_id=t['project_id'], issue_id=t['issue_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], defect_list = d_list)
-        #time.sleep(5)
-        #sys.exit(1)
+            z.update_execution_details(execution_id=t['execution_id'], project_id=t['project_id'], issue_id=t['issue_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], defect_list = d_list)
+            #time.sleep(5)
+            #sys.exit(1)
+        else:
+            logging.info('no defects to update, defect list is empty')
     else:
         logging.info('no defects found')
 
