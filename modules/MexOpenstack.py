@@ -30,25 +30,6 @@ class MexOpenstack():
                 return candidate
         raise Exception('cant find file {}'.format(path))
 
-
-    def get_openstack_server_list(self, name=None):
-        cmd = f'source {self.env_file};openstack server list -f json'
-
-        if name:
-            cmd += f' --name {name}'
-
-        logging.debug(f'getting openstack server list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        return json.loads(o_out)
-
     def get_openstack_image_list(self, name=None):
         cmd = f'source {self.env_file};openstack image list -f json'
 
@@ -195,11 +176,6 @@ class MexOpenstack():
 
 #------------------done functions
 
-    def _json2hash(self,data):
-        outJson={}
-        for x in data: 
-            outJson[x["Name"]]=x["Value"]
-        return outJson
 
 #//TODO could be better
 #//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
@@ -248,12 +224,20 @@ class MexOpenstack():
         result['result']='UNDEFINED'
         result['comment']='There is no valid condition to check parameter: '+param
         return result
+    
+    def _json2hash(self,data):
+        outJson={}
+        for x in data: 
+            outJson[x["Name"]]=x["Value"]
+        return outJson
 
-    def get_openstack_limits(self,limit_dict):
+    def get_openstack_limits(self,limit_dict_global):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+        logging.debug(f'getting openstack limits show with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
         data = self._json2hash(json.loads(o_out))
         outcome={}
+        limit_dict=limit_dict_global["get_openstack_limits"]
         for param in limit_dict:
             if param not in data:
                 print("*Warn* ",param," not found in the openstack environment")
@@ -268,6 +252,67 @@ class MexOpenstack():
         return outcome
 
 
+
+#design assumptions:
+#in openstack server list -f json we have the following list of fields
+# | ID  | Name     | Status | Networks   | Image     | Flavor      |
+#it looks that only ID and Name can be unique
+
+    def get_openstack_server_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack server list -f json'
+        logging.debug(f'getting openstack server list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        IDs={}
+        idx=0
+        for x in rawJson: 
+            IDs[x["ID"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_server_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            result['result']='ERROR'
+            #we are looking if ID exist in openstack output
+            if test["ID"] not in IDs:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[IDs[test["ID"]]]
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Status"]!=rec["Status"]:
+                result['comment']="Status ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Image"]!=rec["Image"]:
+                result['comment']="Image ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Flavor"]!=rec["Flavor"]:
+                result['comment']="Flavor ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Networks"]!=rec["Networks"]:
+                result['comment']="Networks ["+test["ID"]+"] not found in the openstack server list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
     
 #------------------------- backup functions
     def get_openstack_limitsBCK(self,limit_dict):
