@@ -1,4 +1,6 @@
+
 {
+"get_openstack_limits": {
     "maxTotalInstances"    :{"min":100},
     "maxTotalRAMSize"      :{"min":512000},    
     "maxSecurityGroups"    :{"min":10},    
@@ -7,8 +9,253 @@
     "maxTotalVolumeGigabytes" :{"min":5000},
     "maxTotalVolumes"         :{"min":100},
     
-    "maxPersonalitySize"      :{"key": "this is to show error when min or max keys do not exist"}
+    "maxPersonalitySize"      :{"key": "this is to show error when min or max keys do not exist"},
+    "Parameternottobefound"      :{"key": "this is to show error when parameter is not found in API"}
+},
+
+"get_openstack_server_list":
+[
+    {
+        "testID":"testFailed",
+        "test":{
+        "Status": "ACTIVE", 
+        "Name": "Name will be not found", 
+        "Image": "mobiledgex-v2.0.3", 
+        "ID": "NOTfdffdaf4-7648-4ad9-86da-308046b219fb", 
+        "Flavor": "m4.small", 
+        "Networks": "mex-k8s-net-1=10.101.5.101"
+        }
+      }, 
+      {
+        "testID":"one",
+        "test":{
+        "Status": "ACTIVE", 
+        "Name": "mex-k8s-node-1-automationbonncloudlet-cluster1570804034-094558-developer1570804034-094558", 
+        "Image": "mobiledgex-v2.0.3", 
+        "ID": "fdffdaf4-7648-4ad9-86da-308046b219fb", 
+        "Flavor": "m4.small", 
+        "Networks": "mex-k8s-net-1=10.101.5.101"
+        }
+      }, 
+          {
+    "testID":"two",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-automationbonncloudlet-cluster1570804034-094558-developer1570804034-094558", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "f01bc977-c181-4bac-a3d6-c332c8faf93d", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.5.10"
+  }
+},
+{
+    "testID":"two A",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-automationbonncloudlet-autocluster1570798882-developer1570798881-908776", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "05693fe6-0d99-4b16-83d0-ce77fb4e814f", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.4.101"
 }
-
-
-
+}, 
+  {
+    "testID":"0001",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-automationbonncloudlet-autocluster1570798882-developer1570798881-908776", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "7de2aec8-02fd-4770-ad5d-4c9c1b26c911", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.4.10"
+}
+}, 
+  {
+    "testID":"0002",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-automationbonncloudlet-autocluster1570778759-developer1570778759-3050168", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "45d39bfb-167d-426b-8685-fd8cb9847d49", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.2.101"
+  }
+},
+{
+    "testID":"007",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-automationbonncloudlet-autocluster1570778759-developer1570778759-3050168", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "603fa9b7-2c22-4069-a32b-2d1cd752d834", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.2.10"
+  }
+},
+{
+    "testID":"1",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "automationbonncloudlet.tdg.mobiledgex.net", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "ae877776-74fc-48f9-b31a-4e75bc8195b5", 
+    "Flavor": "m4.medium", 
+    "Networks": "external-network-shared=37.50.143.118"
+  }
+},
+{
+    "testID":"2",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "automationBonnCloudlet.TDG.pf", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "a05de240-4a3a-46e9-8739-f31c04036f92", 
+    "Flavor": "flavor_vBond_vBond", 
+    "Networks": "external-network-shared=37.50.143.102"
+  }
+},
+{
+    "testID":"3",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-automationbonncloudlet-autocluster1570690342-developer1570690342-5976791", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "67a559c4-2e5f-4aee-8fa4-c06a0dea8341", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.1.101"
+  }
+},
+{
+    "testID":"4",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-automationbonncloudlet-autocluster1570690342-developer1570690342-5976791", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "3318fff8-e700-43b3-9c9f-2d282a51d1c0", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.1.10"
+  }
+},
+{
+    "testID":"5",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-automationbonncloudlet-autocluster1570638023-developer1570638023-518905", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "5f6826a3-6d8a-4f7f-aaf2-2bb7249c1b40", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.0.101"
+    }
+},
+{
+    "testID":"6",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-automationbonncloudlet-autocluster1570638023-developer1570638023-518905", 
+    "Image": "mobiledgex-v2.0.3", 
+    "ID": "8e83c937-a191-4129-8829-c9d3bb6a6295", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.0.10"
+  } 
+}, 
+{
+    "testID":"7",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mexplat-stage-bonn-cloudlet.tdg.mobiledgex.net", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "f1b42f8e-2914-4c8e-9cc5-18f016c3052b", 
+    "Flavor": "flavor.nc.osh-master", 
+    "Networks": "external-network-shared=37.50.143.103"
+  }
+}, 
+{
+    "testID":"8",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "lev-test-bonn.tdg.mobiledgex.net", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "0890f1e8-acb0-42af-a5dc-5eb48260bb16", 
+    "Flavor": "m4.medium", 
+    "Networks": "external-network-shared=37.50.143.119"
+  }
+}, 
+{
+    "testID":"9",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-mexplat-stage-bonn-cloudlet-mmmm-mobiledgex", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "a47ffe7b-2294-443a-9ea7-b9435b52a9f4", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.13.101"
+  }
+}, 
+{
+    "testID":"10",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-mexplat-stage-bonn-cloudlet-mmmm-mobiledgex", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "9216bff9-3143-4421-b138-f904c7bfe13f", 
+    "Flavor": "m4.small", 
+    "Networks": "mex-k8s-net-1=10.101.13.2"
+  }
+}, 
+{
+    "testID":"11",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-mexplat-stage-bonn-cloudlet-autoclusterfacedetectiondemo-mobiledgex", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "ba242458-c75b-4de3-9271-60ba0a804ffc", 
+    "Flavor": "flavor_cNSO_cNSO", 
+    "Networks": "mex-k8s-net-1=10.101.11.2"
+  }
+}, 
+{
+    "testID":"12",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "popvue-cluster-2.bonn-mexdemo.tdg.mobiledgex.net", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "a768732c-849e-4a7d-8532-0729f69999c7", 
+    "Flavor": "flavor_ESC_ESC", 
+    "Networks": "external-network-shared=37.50.143.112"
+  }
+}, 
+{
+    "testID":"13",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-node-1-bonn-mexdemo-popvue-cluster-popvue", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "e77fadc9-58ef-45d4-a7b6-befb1b6e6ed2", 
+    "Flavor": "flavor_ESC_ESC", 
+    "Networks": "mex-k8s-net-1=10.101.3.101"
+  }
+}, 
+{
+    "testID":"14",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "mex-k8s-master-bonn-mexdemo-popvue-cluster-popvue", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "a7fc269c-a8c6-4414-b10d-875e7ff8c19b", 
+    "Flavor": "flavor_ESC_ESC", 
+    "Networks": "mex-k8s-net-1=10.101.3.2"
+  } 
+}, 
+{
+    "testID":"15",
+    "test":{
+        "Status": "ACTIVE", 
+    "Name": "smartlabs-bonn", 
+    "Image": "mobiledgex-v2.0.2", 
+    "ID": "3c083ebe-05db-4716-a9a0-c8f1f28bf05b", 
+    "Flavor": "m4.xxlarge24", 
+    "Networks": "external-network-shared=37.50.143.116"
+  }
+}
+]
+}
