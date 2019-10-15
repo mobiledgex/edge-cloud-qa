@@ -37,7 +37,7 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
 
 #    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
-#*** Keywords ***
+*** Keywords ***
 Setup
     Create Flavor
     #Create Developer

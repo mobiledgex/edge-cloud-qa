@@ -49,7 +49,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
-    ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
+    ${server_info_node}=    Get Server List  name=${openstack_node_name}
    
     Write File to Node  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  #root_loadbalancer=${rootlb} 
 	
