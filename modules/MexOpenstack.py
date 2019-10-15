@@ -30,25 +30,6 @@ class MexOpenstack():
                 return candidate
         raise Exception('cant find file {}'.format(path))
 
-    def get_openstack_image_list(self, name=None):
-        cmd = f'source {self.env_file};openstack image list -f json'
-
-        if name:
-            cmd += f' --name {name}'
-
-        logging.debug(f'getting openstack image list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        return json.loads(o_out)
-
-
     def delete_openstack_image(self, name=None):
         cmd = f'source {self.env_file};openstack image delete {name}'
 
@@ -176,7 +157,7 @@ class MexOpenstack():
 
 #------------------done functions
 
-
+#//TODO sanity checking for input json
 #//TODO could be better
 #//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
     def _checkConditions(self,param,dict,value):
@@ -276,6 +257,7 @@ class MexOpenstack():
         for testEntry in limit_dict:
             test=testEntry["test"]
             result={}
+            #generic assumption
             result['result']='ERROR'
             #we are looking if ID exist in openstack output
             if test["ID"] not in IDs:
@@ -313,7 +295,59 @@ class MexOpenstack():
             outcome[testEntry["testID"]]=result
 
         return outcome
+
+
+#design assumptions:
+#in openstack server list -f json we have the following list of fields
+#ID  | Name  | Status
+#it looks that only ID and Name can be unique
+
+    def get_openstack_image_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack image list -f json'
+        logging.debug(f'getting openstack image list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_image_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack image list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack image list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Status"]!=rec["Status"]:
+                result['comment']="Status ["+test["Status"]+"] not found in the openstack image list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack image list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
     
+
 #------------------------- backup functions
     def get_openstack_limitsBCK(self,limit_dict):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
