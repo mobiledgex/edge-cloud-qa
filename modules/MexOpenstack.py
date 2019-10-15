@@ -30,22 +30,24 @@ class MexOpenstack():
                 return candidate
         raise Exception('cant find file {}'.format(path))
 
-    def delete_openstack_image(self, name=None):
+    def delete_image(self, name=None):
         cmd = f'source {self.env_file};openstack image delete {name}'
 
         logging.debug(f'deleting openstack image with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
+        self._execute_cmd(cmd)
 
-        if o_err:
-            raise Exception(o_err)
+    def get_server_list(self, name=None):
+        cmd = f'source {self.env_file};openstack server list -f json'
 
-        logging.debug(o_out)
+        if name:
+            cmd += f' --name {name}'
+
+        logging.debug(f'getting openstack server list with cmd = {cmd}')
+        o_out = self._execute_cmd(cmd)
         
-        #return json.loads(o_out)
+        return json.loads(o_out)
 
-    def delete_openstack_stack(self, name=None):
+    def delete_stack(self, name=None):
         cmd = f'source {self.env_file};openstack stack delete {name} -y'
         logging.debug(f'deleting openstack stack with cmd = {cmd}')
 

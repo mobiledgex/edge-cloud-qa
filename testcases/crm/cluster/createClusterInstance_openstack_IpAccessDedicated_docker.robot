@@ -38,9 +38,9 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
-   ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
-   ${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
-   ${server_info_lb}=      Get Openstack Server List  name=${clusterlb}
+   ${server_info_node}=    Get Server List  name=${openstack_node_name}
+   ${server_info_master}=  Get Server List  name=${openstack_node_master}
+   ${server_info_lb}=      Get Server List  name=${clusterlb}
 
    Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
