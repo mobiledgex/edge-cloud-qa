@@ -13,7 +13,7 @@ ${password}          mextester99123
 ${email}             mextester99@gmail.com
 ${mextester99_gmail_password}  rfbixqomqidobmcb
 ${server}            artifactory-qa.mobiledgex.net
-${image_name}        mc_user_uploads_artifactory.robot 
+${artifactory_dummy_image_name}        mc_user_uploads_artifactory.robot 
 ${OPorgname}         oporgtester01
 ${DEVorgname}        jdevorg
 ${i}                 1
@@ -35,13 +35,13 @@ MC - User shall be able to curl artifactory image as Developer Manager
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden 
 
     Unlock User  username=${username1}
 
     # curl should fail since user is NOT verified
-    ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror2}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden 
 
     Verify Email
@@ -50,7 +50,7 @@ MC - User shall be able to curl artifactory image as Developer Manager
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperManager
 
-    Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}  
+    Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}  
 
 MC - User shall be able to curl artifactory image as Developer Contributor
     [Documentation] 
@@ -67,13 +67,13 @@ MC - User shall be able to curl artifactory image as Developer Contributor
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name} 
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name} 
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Unlock User  username=${username1}
 
     # curl should fail since user is NOT verified
-    ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Verify Email
@@ -82,7 +82,7 @@ MC - User shall be able to curl artifactory image as Developer Contributor
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperContributor
 
-    Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name} 
+    Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name} 
 
 MC - User shall not be able to curl artifactory image as Developer Viewer
     [Documentation] 
@@ -98,13 +98,13 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Unlock User  username=${username1}
 
     # docker push/pull should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Verify Email
@@ -113,7 +113,7 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     
     Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperViewer
 
-    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
 MC - User shall not be able to curl artifactory image as Operator Manager
@@ -130,13 +130,13 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Unlock User  username=${username1}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Verify Email
@@ -145,7 +145,7 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorManager
 
-    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
 MC - User shall not be able to curl artifactory image as Operator Contributor
@@ -162,13 +162,13 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Unlock User  username=${username1}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Verify Email
@@ -177,7 +177,7 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorContributor
 
-    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
 MC - User shall not be able to curl artifactory image as Operator Viewer
@@ -194,13 +194,13 @@ MC - User shall not be able to curl artifactory image as Operator Viewer
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
     Unlock User  username=${username1}
 
     # curl should fail since user is locked
-    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${image_name}
+    ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
     
     Verify Email
@@ -209,7 +209,7 @@ MC - User shall not be able to curl artifactory image as Operator Viewer
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorViewer
 
-    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${OPorgname}  image_name=${image_name}
+    ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${OPorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
 *** Keywords ***
