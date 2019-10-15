@@ -451,5 +451,75 @@
       "Name": "xenial-server"
     }
   }
+],
+
+"get_openstack_network_list": [
+  {
+    "testID": "007",
+    "test": {
+      "Subnets": "NOT-A-SUBNET-389d762b-0e9a-4fe2-a208-813a78ba362b",
+      "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+      "Name": "external-network-shared"
+    }
+  },
+  {
+    "testID": "007a",
+    "test": {
+      "Subnets": "SHALL-NO-PASS-389d762b-0e9a-4fe2-a208-813a78ba362b, YET-ANOTHER-not-EXIST",
+      "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+      "Name": "external-network-shared"
+    }
+  },
+  {
+    "testID": "a",
+    "test": {
+      "Subnets": "389d762b-0e9a-4fe2-a208-813a78ba362b",
+      "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+      "Name": "external-network-shared"
+    }
+  },
+  {
+    "testID": "b",
+    "test": {
+      "Subnets": "37a8df63-4582-4ba0-964a-9c9ef626478c",
+      "ID": "0a1890cd-ab1b-48a2-8ff1-8a809ac506b6",
+      "Name": "external-tdinterref-shared"
+    }
+  },
+  {
+    "testID": "c",
+    "test": {
+      "Subnets": "00b70242-d5fa-4a62-bcba-6a5b32ac4afd, 22f8ea69-4708-463c-b1ed-c49bcff02f3f, 54849dec-cbad-4f88-8c94-54c1269a7bb0, 5fabfa5f-a0c3-4db3-9d68-c54abd424f78, 666d1be1-e285-42ce-9144-57eb963808cd, 78740955-1c18-48c8-8ced-5915e401003a, 83fbe308-1e1d-41f8-99ee-3f5fce652900, 85e0cb71-d378-4823-8088-2aa3e212e9c2, b46e2e33-62ac-4d36-98f1-4178b7dbd57f, f0371074-c5b5-428e-bd56-f76ca7db44fb",
+      "ID": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+      "Name": "mex-k8s-net-1"
+    }
+  },
+  {
+    "testID": "d",
+    "test": {
+      "Subnets": "39fb3755-e5d4-40ef-8e9c-39a4435b1501",
+      "ID": "5bc32340-a7dc-4fc9-b2ae-27b72fab9b1e",
+      "Name": "external-network-02"
+    }
+  },
+  {
+    "testID": "e",
+    "test": {
+      "Subnets": "55836d40-dccb-4fb7-a160-338472c67ebd",
+      "ID": "c320fa58-269f-4e9a-8e39-92bb784cba6f",
+      "Name": "touchstone_shared"
+    }
+  },
+  {
+    "testID": "f",
+    "test": {
+      "Subnets": "4f97257a-d031-4c72-ae87-7b2c961ef95a",
+      "ID": "da49a106-e6f6-424a-8f3c-3390b69fec7f",
+      "Name": "externalIPv6-network-shared"
+    }
+  }
 ]
+
+
+
 }
