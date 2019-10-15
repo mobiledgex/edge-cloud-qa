@@ -1981,7 +1981,10 @@ class MexMasterController(MexRest):
             if selector is not None:
                 metric_dict['selector'] = selector
             if last is not None:
-                metric_dict['last'] = int(last)
+                try:
+                    metric_dict['last'] = int(last)
+                except:
+                    metric_dict['last'] = last
             if start_time is not None:
                 metric_dict['starttime'] = start_time
             if end_time is not None:
