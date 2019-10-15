@@ -83,6 +83,12 @@ class MexOpenstack():
         
         #return json.loads(o_out)
 
+    def delete_openstack_stack(self, name=None):
+        cmd = f'source {self.env_file};openstack stack delete {name} -y'
+        logging.debug(f'deleting openstack stack with cmd = {cmd}')
+
+        self._execute_cmd(cmd)
+
     def get_flavor_list(self):
         cmd = f'source {self.env_file};openstack flavor list -f json'
 
