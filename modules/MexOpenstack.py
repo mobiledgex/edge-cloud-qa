@@ -47,7 +47,7 @@ class MexOpenstack():
 
         raise Exception(f'No flavor found matching ram={ram}, disk={disk}, cpu={cpu}')
     
-    def get_openstack_flavour_list(self,name=None):
+    def get_openstack_flavour_list_oryg(self,name=None):
         cmd = f'source {self.env_file};openstack flavor list -f json'
 
         if name:
@@ -457,6 +457,75 @@ class MexOpenstack():
 
         return outcome
     
+
+
+#design assumptions:
+#in openstack flavor list -f json we have the following list of fields
+#ID  | Name  | RAM| Ephemeral | VCPUs | Is Public |Disk
+#it looks that only ID and Name can be unique
+
+    def get_openstack_flavor_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack flavor list -f json'
+        logging.debug(f'getting openstack flavor list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_flavor_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["RAM"]!=rec["RAM"]:
+                result['comment']="RAM ["+test["RAM"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Ephemeral"]!=rec["Ephemeral"]:
+                result['comment']="Ephemeral ["+test["Ephemeral"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["VCPUs"]!=rec["VCPUs"]:
+                result['comment']="VCPUs ["+test["VCPUs"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Is Public"]!=rec["Is Public"]:
+                result['comment']="Is Public ["+test["Is Public"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Disk"]!=rec["Disk"]:
+                result['comment']="Disk ["+test["Disk"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack flavor list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+    
+
 
 #------------------------- backup functions
     def get_openstack_limitsBCK(self,limit_dict):

@@ -700,5 +700,453 @@
       "Name": "mex-k8s-router-1"
     }
   }
+],
+
+
+"get_openstack_flavor_list": [
+  {
+    "testID": "ffa007",
+    "test": {
+      "Name": "NOTflavor_vManage_vManage",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": false,
+      "Disk": 30,
+      "ID": "0a39f736-c89c-492d-9e8d-610d9d1a489f"
+    }
+  },
+  {
+    "testID": "ffa",
+    "test": {
+      "Name": "flavor_vManage_vManage",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "0a39f736-c89c-492d-9e8d-610d9d1a489f"
+    }
+  },
+  {
+    "testID": "ffb",
+    "test": {
+      "Name": "flavor.nc.vrouter_vcp",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "16ae71be-1022-4847-8cbe-b8a1c9ac4cdb"
+    }
+  },
+  {
+    "testID": "ffc",
+    "test": {
+      "Name": "flavor.nc.vdoc",
+      "RAM": 12288,
+      "Ephemeral": 0,
+      "VCPUs": 6,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "17f91d92-2216-4269-8f34-4d9fab0ade59"
+    }
+  },
+  {
+    "testID": "ffd",
+    "test": {
+      "Name": "flavor.nc.mon",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 6,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "1b385442-b605-4a27-8e91-b754b84be254"
+    }
+  },
+  {
+    "testID": "ffe",
+    "test": {
+      "Name": "m4.medium",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "2569f37a-6b5a-47ef-9117-661ee7f8f427"
+    }
+  },
+  {
+    "testID": "fff",
+    "test": {
+      "Name": "m4.tiny",
+      "RAM": 512,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "3047d375-1677-4c21-9200-7ca8180919b1"
+    }
+  },
+  {
+    "testID": "ff0",
+    "test": {
+      "Name": "cNSO_IntraSelect_default",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "33a5cc85-1e6e-4859-994a-d37363979d16"
+    }
+  },
+  {
+    "testID": "ff1",
+    "test": {
+      "Name": "touchstone-flavor-micro",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "3808af0e-08c6-4722-82ec-3c1d4d9fcd26"
+    }
+  },
+  {
+    "testID": "ff6",
+    "test": {
+      "Name": "flavor.nc.log",
+      "RAM": 12288,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "385c24ca-77a3-48f2-987e-03246c637f7f"
+    }
+  },
+  {
+    "testID": "ff2",
+    "test": {
+      "Name": "flavor_ESC_ESC",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "3a90c9fa-27ff-4cd8-a3ba-18f41f6ca5a8"
+    }
+  },
+  {
+    "testID": "ff3",
+    "test": {
+      "Name": "ram64",
+      "RAM": 64,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "3d9bf69b-79f9-455d-822d-24c43b63209a"
+    }
+  },
+  {
+    "testID": "ff4",
+    "test": {
+      "Name": "flavor_vSmart_vSmart",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 16,
+      "ID": "40140697-a2fa-4479-b2fd-ca6d39a51434"
+    }
+  },
+  {
+    "testID": "ff7",
+    "test": {
+      "Name": "touchstone-flavor-small",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "434b309c-e523-4c11-bd39-eabfdf01acbb"
+    }
+  },
+  {
+    "testID": "ff8",
+    "test": {
+      "Name": "CSRv_minimal",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 8,
+      "ID": "454bb0a1-2fea-4679-8af0-0ebd36f31cb6"
+    }
+  },
+  {
+    "testID": "ff9",
+    "test": {
+      "Name": "touchstone-flavor-large",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "4bf5f519-6210-4e0c-9fc9-70ae6312fbca"
+    }
+  },
+  {
+    "testID": "ffx1",
+    "test": {
+      "Name": "touchstone-flavor-xlarge",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 32,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "515fab70-e385-40eb-bdce-7c8d3afc2930"
+    }
+  },
+  {
+    "testID": "ffx2",
+    "test": {
+      "Name": "flavor.nc.osh-master",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "5b3b7db6-2c0b-4162-babc-511da9bd51a6"
+    }
+  },
+  {
+    "testID": "ffx3",
+    "test": {
+      "Name": "touchstone-flavor-tiny",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "5d66e1ef-c0d6-42d1-90b8-0d9fec88f541"
+    }
+  },
+  {
+    "testID": "ffx4",
+    "test": {
+      "Name": "touchstone-flavor-dpdk",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "5dd7e3af-aab4-4adc-9002-d5cb8678574e"
+    }
+  },
+  {
+    "testID": "ffx5",
+    "test": {
+      "Name": "touchstone-flavor-large-dpdk",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "646c66fb-4e2a-4482-a4ad-be3ff130089b"
+    }
+  },
+  {
+    "testID": "ffx6",
+    "test": {
+      "Name": "flavor.nc.dvm",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 160,
+      "ID": "6b382d15-6302-41e2-be1e-a5b4b95af729"
+    }
+  },
+  {
+    "testID": "ffx7",
+    "test": {
+      "Name": "flavor.nc.jump",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "6ef9f639-f638-4eed-a2bf-e33958e7d6a0"
+    }
+  },
+  {
+    "testID": "ffx8",
+    "test": {
+      "Name": "m4.xlarge",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 160,
+      "ID": "714418df-9bda-46d6-9e2f-96a79b985624"
+    }
+  },
+  {
+    "testID": "ffx9",
+    "test": {
+      "Name": "flavor.nc.vrouter_vfp",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 3,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "7be7566e-8d72-4e3e-b91c-35e527c1030d"
+    }
+  },
+  {
+    "testID": "ffx0",
+    "test": {
+      "Name": "touchstone-flavor-small-dpdk",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "8aca397e-e380-4eca-bd53-30ca9b30e9ce"
+    }
+  },
+  {
+    "testID": "ffxa",
+    "test": {
+      "Name": "flavor.nc.osh-node",
+      "RAM": 40960,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "8bbe13b6-1136-467f-b24a-073827e1ef9e"
+    }
+  },
+  {
+    "testID": "ffxb",
+    "test": {
+      "Name": "flavor_cNSO_cNSO",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 150,
+      "ID": "9130e67c-abd5-4c99-b56f-ed03977bc5e7"
+    }
+  },
+  {
+    "testID": "ff",
+    "test": {
+      "Name": "m4.large",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "920ee054-626b-482c-9b55-e136abd58576"
+    }
+  },
+  {
+    "testID": "ffxc",
+    "test": {
+      "Name": "touchstone-flavor-xlarge-dpdk",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 32,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "a275106e-7599-4011-9f3b-cd92d3c0dd57"
+    }
+  },
+  {
+    "testID": "ffxd",
+    "test": {
+      "Name": "m4.xxlarge24",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 24,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "b490f467-5247-4efe-bf66-3b45d4d2fb47"
+    }
+  },
+  {
+    "testID": "ffxe",
+    "test": {
+      "Name": "flavor_vBond_vBond",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "cbd034d7-997b-41cc-9d01-29e3d37d17f3"
+    }
+  },
+  {
+    "testID": "ffxf",
+    "test": {
+      "Name": "touchstone-flavor",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "d9366708-d11a-463e-b8ff-f7c1e6c98231"
+    }
+  },
+  {
+    "testID": "ffx00",
+    "test": {
+      "Name": "m4.xxlarge16",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "e4c543d1-f040-43e1-a6d6-ea1b3b1b8f48"
+    }
+  },
+  {
+    "testID": "ffx01",
+    "test": {
+      "Name": "m4.small",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "e66f2e7a-a82e-4e60-a6e9-75ab523131fe"
+    }
+  },
+  {
+    "testID": "ffx02",
+    "test": {
+      "Name": "touchstone-flavor-medium",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "ee738f9a-d161-482c-add5-c1458bb9ab7c"
+    }
+  },
+  {
+    "testID": "ffx03",
+    "test": {
+      "Name": "flavor.nc.storage",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "f88d4970-7edf-4c33-b513-95706f9a43e5"
+    }
+  }
 ]
 }
