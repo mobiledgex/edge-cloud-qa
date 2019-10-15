@@ -677,5 +677,28 @@
         "Name": "mex-k8s-subnet-mexplat-stage-bonn-cloudlet-autoclusterfacedetectiondemo-mobiledgex"
       }
     }
-  ]
+  ],
+
+"get_openstack_router_list": [
+  {
+    "testID": "0x007",
+    "test": {
+      "Status": "ACTIVE",
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "State": "UP",
+      "ID": "76fe16bf-213d-4fd0-9769-61dbae30be3e",
+      "Name": "NOT-mex-k8s-router-1"
+    }
+  },
+  {
+    "testID": "ff",
+    "test": {
+      "Status": "ACTIVE",
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "State": "UP",
+      "ID": "76fe16bf-213d-4fd0-9769-61dbae30be3e",
+      "Name": "mex-k8s-router-1"
+    }
+  }
+]
 }
