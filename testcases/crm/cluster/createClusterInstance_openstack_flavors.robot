@@ -59,7 +59,7 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.small
    Should Be Equal   ${server_info[1]['Flavor']}  m4.small 
 
@@ -86,7 +86,7 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.small
    Should Be Equal   ${server_info[1]['Flavor']}  m4.small
 
@@ -113,7 +113,7 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
    #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
    Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
@@ -145,7 +145,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.large
    Should Be Equal   ${server_info[1]['Flavor']}  m4.large 
 
@@ -172,7 +172,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.xlarge
    Should Be Equal   ${server_info[1]['Flavor']}  m4.xlarge 
 
@@ -199,7 +199,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
    Should Be Equal   ${server_info[1]['Flavor']}  m4.large 
 
@@ -226,7 +226,7 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
-   ${server_info}=  Get Openstack Server List  name=${cluster_name}
+   ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.xlarge
    Should Be Equal   ${server_info[1]['Flavor']}  m4.xlarge 
 

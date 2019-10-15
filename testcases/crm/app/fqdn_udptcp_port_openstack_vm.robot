@@ -43,7 +43,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with n
     ...  deploy VM app with 1 UDP and 1 TCP port
     ...  verify all ports are accessible via fqdn
 
-    Run Keyword and Ignore Error  Delete Openstack Image  ${qcow_centos_openstack_image}
+    Run Keyword and Ignore Error  Delete Image  ${qcow_centos_openstack_image}
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -67,7 +67,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with existing image
     ...  verify all ports are accessible via fqdn
 
-    ${image_list}=  Get Openstack Image List  ${qcow_centos_openstack_image}
+    ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Status']}   active 
 
