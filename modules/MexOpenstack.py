@@ -30,21 +30,6 @@ class MexOpenstack():
                 return candidate
         raise Exception('cant find file {}'.format(path))
 
-    def delete_openstack_image(self, name=None):
-        cmd = f'source {self.env_file};openstack image delete {name}'
-
-        logging.debug(f'deleting openstack image with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        #return json.loads(o_out)
-
     def get_flavor_list(self):
         cmd = f'source {self.env_file};openstack flavor list -f json'
 
@@ -62,26 +47,6 @@ class MexOpenstack():
 
         raise Exception(f'No flavor found matching ram={ram}, disk={disk}, cpu={cpu}')
     
-
-
-    def get_openstack_network_list(self,name=None):
-        cmd = f'source {self.env_file};openstack network list -f json'
-
-        if name:
-            cmd += f' --name {name}'
-
-        logging.debug(f'getting network server list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        return json.loads(o_out)
-
     def get_openstack_subnet_list(self,name=None):
         cmd = f'source {self.env_file};openstack subnet list -f json'
 
@@ -158,6 +123,7 @@ class MexOpenstack():
 #------------------done functions
 
 #//TODO sanity checking for input json
+#//TODO logic issue: outcome is hashmap propbably it shall be simple list
 #//TODO could be better
 #//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
     def _checkConditions(self,param,dict,value):
@@ -298,7 +264,7 @@ class MexOpenstack():
 
 
 #design assumptions:
-#in openstack server list -f json we have the following list of fields
+#in openstack image list -f json we have the following list of fields
 #ID  | Name  | Status
 #it looks that only ID and Name can be unique
 
@@ -348,6 +314,71 @@ class MexOpenstack():
         return outcome
     
 
+#warning: format for subnets field is string of subnets, not array or list
+    def _check_subnets(self,testInput,openstackInput):
+        jsonTestInput=testInput.replace(' ','').split(',')
+        jsonOpenstackInput=openstackInput.replace(' ','').split(',')
+        outcome=[]
+        hashMap={}
+        for x in jsonOpenstackInput:
+            hashMap[x]=0
+        for x in jsonTestInput:
+            if x not in hashMap:
+                outcome.append(x)
+        return outcome
+
+#design assumptions:
+#in openstack network list -f json we have the following list of fields
+#ID  | Name  | Subnets
+#it looks that only ID and Name can be unique
+
+    def get_openstack_network_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack network list -f json'
+        logging.debug(f'getting openstack network list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_network_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack network list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack network list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack network list"
+                outcome[testEntry["testID"]]=result
+                continue
+            checkRes=self._check_subnets(test["Subnets"],rec["Subnets"])
+            if len(checkRes)>0:
+                result['comment']="The following subnets "+json.dumps(checkRes)+" not found in the openstack network list"
+                outcome[testEntry["testID"]]=result
+                continue
+
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+    
 #------------------------- backup functions
     def get_openstack_limitsBCK(self,limit_dict):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
