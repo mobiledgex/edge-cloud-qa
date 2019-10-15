@@ -47,24 +47,6 @@ class MexOpenstack():
 
         raise Exception(f'No flavor found matching ram={ram}, disk={disk}, cpu={cpu}')
     
-    def get_openstack_subnet_list(self,name=None):
-        cmd = f'source {self.env_file};openstack subnet list -f json'
-
-        if name:
-            cmd += f' --name {name}'
-
-        logging.debug(f'getting flavour subnet list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        return json.loads(o_out)
-  
     def get_openstack_router_list(self,name=None):
         cmd = f'source {self.env_file};openstack router list -f json'
 
@@ -372,6 +354,61 @@ class MexOpenstack():
                 outcome[testEntry["testID"]]=result
                 continue
 
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+
+
+#design assumptions:
+#in openstack subnet list -f json we have the following list of fields
+#ID  | Name  | Status| Network
+#it looks that only ID and Name can be unique
+
+    def get_openstack_subnet_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack subnet list -f json'
+        logging.debug(f'getting openstack subnet list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_subnet_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack subnet list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack subnet list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Subnet"]!=rec["Subnet"]:
+                result['comment']="Subnet ["+test["Subnet"]+"] not found in the openstack subnet list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Network"]!=rec["Network"]:
+                result['comment']="Network ["+test["Network"]+"] not found in the openstack subnet list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack subnet list"
+                outcome[testEntry["testID"]]=result
+                continue
             result={}
             result['result']='PASS'
             result['comment']=""
