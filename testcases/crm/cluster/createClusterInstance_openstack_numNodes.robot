@@ -42,8 +42,8 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
-   ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
-   ${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
+   ${server_info_node}=    Get Server List  name=${openstack_node_name}
+   ${server_info_master}=  Get Server List  name=${openstack_node_master}
    Should Be Equal   ${server_info_node[0]['Flavor']}    m4.small
    Should Be Equal   ${server_info_node[1]['Flavor']}    m4.small
    Should Be Equal   ${server_info_node[2]['Flavor']}    m4.small
@@ -78,8 +78,8 @@ Cluster shall create with IpAccessShared and num_nodes=10 on openstack
    ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
-   ${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
-   ${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
+   ${server_info_node}=    Get Server List  name=${openstack_node_name}
+   ${server_info_master}=  Get Server List  name=${openstack_node_master}
    Should Be Equal   ${server_info_node[0]['Flavor']}    m4.large
    Should Be Equal   ${server_info_node[1]['Flavor']}    m4.large
    Should Be Equal   ${server_info_node[2]['Flavor']}    m4.large
@@ -125,8 +125,8 @@ Cluster shall not create with IpAccessShared and multiple masters
    #${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    #${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
 
-   #${server_info_node}=    Get Openstack Server List  name=${openstack_node_name}
-   #${server_info_master}=  Get Openstack Server List  name=${openstack_node_master}
+   #${server_info_node}=    Get Server List  name=${openstack_node_name}
+   #${server_info_master}=  Get Server List  name=${openstack_node_master}
    #Should Be Equal   ${server_info_node[0]['Flavor']}    m4.small
    #Should Be Equal   ${server_info_node[1]['Flavor']}    m4.small
    #Should Be Equal   ${server_info_node[2]['Flavor']}    m4.small
