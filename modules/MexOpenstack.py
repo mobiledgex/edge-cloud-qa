@@ -634,6 +634,71 @@ class MexOpenstack():
         return outcome
     
 
+#design assumptions:
+#in openstack flavor list -f json we have the following list of fields
+# ID  | Remote Security Group       | IP Protocol  | Port Range | Security Group |IP Range
+# TGS are not taken into account here
+#it looks that only ID and Name can be unique
+
+
+    def get_openstack_security_group_rule_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack security group rule list -f json'
+        logging.debug(f'getting openstack security group rule list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        IDs={}
+        idx=0
+        for x in rawJson: 
+            IDs[x["ID"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_security_group_rule_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            print(test["ID"])
+            #we are looking if Name exist in openstack output
+            if test["ID"] not in IDs:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[IDs[test["ID"]]]
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Remote Security Group"]!=rec["Remote Security Group"]:
+                result['comment']="Remote Security Group ["+test["Remote Security Group"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["IP Protocol"]!=rec["IP Protocol"]:
+                result['comment']="IP Protocol ["+test["IP Protocol"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Port Range"]!=rec["Port Range"]:
+                result['comment']="Port Range ["+test["Port Range"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Security Group"]!=rec["Security Group"]:
+                result['comment']="Security Group ["+test["Security Group"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["IP Range"]!=rec["IP Range"]:
+                result['comment']="IP Range ["+test["IP Range"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+    
 
 
 #------------------------- backup functions
