@@ -1418,6 +1418,964 @@
       "Name": "andyvm-sg"
     }
   }
+],
+"get_openstack_security_group_rule_list": [
+  {
+    "testID": "abcd-0",
+    "test": {
+      "IP Range": null,
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "014d53f6-9105-4b22-a986-23a613cfd601"
+    }
+  },
+  {
+    "testID": "abcd-1",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "2015:2015",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "04233e35-4099-4a3f-8297-557c3fc22032"
+    }
+  },
+  {
+    "testID": "abcd-2",
+    "test": {
+      "IP Range": "35.222.155.38/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0505ad97-fa4c-40c1-9d13-3ed810530d50"
+    }
+  },
+  {
+    "testID": "abcd-3",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10002:10002",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "05c70af5-a3cd-4b0a-b951-2dbbb0028dc1"
+    }
+  },
+  {
+    "testID": "abcd-4",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "80:80",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "09aece9e-9796-4f19-aed5-4b3c45b0c41d"
+    }
+  },
+  {
+    "testID": "abcd-5",
+    "test": {
+      "IP Range": "35.226.64.48/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0b7c10fd-1f13-4cab-a747-a348e205fc96"
+    }
+  },
+  {
+    "testID": "abcd-6",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0fa9a939-9fda-43a7-84ab-6af4b0f05542"
+    }
+  },
+  {
+    "testID": "abcd-7",
+    "test": {
+      "IP Range": "37.50.143.112/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "116a7e6a-5bb4-4b72-9bd5-a84aa698b915"
+    }
+  },
+  {
+    "testID": "abcd-8",
+    "test": {
+      "IP Range": "37.50.143.100/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "119c22cc-d369-4e10-87d6-281220f2b19b"
+    }
+  },
+  {
+    "testID": "abcd-9",
+    "test": {
+      "IP Range": "40.122.108.233/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1a8752e8-7363-4cbc-bff6-9f16426bb0ec"
+    }
+  },
+  {
+    "testID": "abcd-10",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10001:10001",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1b8d34d1-905a-4f48-a12f-0bdc0b66b8f2"
+    }
+  },
+  {
+    "testID": "abcd-11",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10004:10004",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1ddf625d-e894-4b53-9551-3d73afd49fbd"
+    }
+  },
+  {
+    "testID": "abcd-12",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10000:10000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "1e3ffebc-36a0-405b-8011-c90ee2b8b731"
+    }
+  },
+  {
+    "testID": "abcd-13",
+    "test": {
+      "IP Range": "104.43.169.238/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "23d54924-427e-4a10-988a-9ec85621cc12"
+    }
+  },
+  {
+    "testID": "abcd-14",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "12001:12001",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "2749e404-c56b-4d9e-a60c-70a19acb62e7"
+    }
+  },
+  {
+    "testID": "abcd-15",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "8008:8008",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "296d15ab-0c4d-49ad-bf47-1778af79bf05"
+    }
+  },
+  {
+    "testID": "abcd-16",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "2a94877b-9e8a-4ea8-ab28-d7f8e95dca80"
+    }
+  },
+  {
+    "testID": "abcd-17",
+    "test": {
+      "IP Range": "104.3.7.54/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "2fcea33d-95a9-48a0-87a3-8f1705731dd0"
+    }
+  },
+  {
+    "testID": "abcd-18",
+    "test": {
+      "IP Range": "35.236.51.167/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "304a0154-590c-4ab4-9bc2-5bcb04c75ba5"
+    }
+  },
+  {
+    "testID": "abcd-19",
+    "test": {
+      "IP Range": "106.51.64.0/18",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3076c5a7-e89c-48eb-a950-782ca51ff46d"
+    }
+  },
+  {
+    "testID": "abcd-20",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "31992a8f-bcd9-47dc-bd29-082c5feb452e"
+    }
+  },
+  {
+    "testID": "abcd-21",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "1234:1234",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3319c3e8-6f7c-4a5e-8183-178093377ec4"
+    }
+  },
+  {
+    "testID": "abcd-22",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "65432:65432",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "338e61d4-5675-4a32-a6c8-a920c574bd70"
+    }
+  },
+  {
+    "testID": "abcd-23",
+    "test": {
+      "IP Range": "34.94.19.254/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3778f23a-51ae-42e1-a0aa-8a456f04ac3f"
+    }
+  },
+  {
+    "testID": "abcd-24",
+    "test": {
+      "IP Range": "37.50.143.110/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "38844ea8-891c-41cb-aa26-4a736191afc0"
+    }
+  },
+  {
+    "testID": "abcd-25",
+    "test": {
+      "IP Range": "50.207.0.0/16",
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3df70434-adbb-4b31-8158-383e4a4485a2"
+    }
+  },
+  {
+    "testID": "abcd-26",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmpv6",
+      "Remote Security Group": null,
+      "ID": "410ebca5-c3e0-4dc6-ab44-4ea13cf4a797"
+    }
+  },
+  {
+    "testID": "abcd-27",
+    "test": {
+      "IP Range": null,
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "463ae050-2299-4805-8880-0b876d61344e"
+    }
+  },
+  {
+    "testID": "abcd-28",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "111:111",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "46501148-fe47-4fff-aa9c-c1a0cdf6bc4e"
+    }
+  },
+  {
+    "testID": "abcd-29",
+    "test": {
+      "IP Range": "37.50.143.109/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "483842b0-d65b-47f0-89b8-4506a7887dfc"
+    }
+  },
+  {
+    "testID": "abcd-30",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "49d0ff1f-7b3f-40cc-841e-9b85474b50e8"
+    }
+  },
+  {
+    "testID": "abcd-31",
+    "test": {
+      "IP Range": "37.50.143.102/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "4e516060-ba3b-4c21-ba3a-10c352372393"
+    }
+  },
+  {
+    "testID": "abcd-32",
+    "test": {
+      "IP Range": "47.186.0.0/16",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "4fcbae4d-bb59-4f10-95af-7bdd84a43c3e"
+    }
+  },
+  {
+    "testID": "abcd-33",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "6666:6666",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "55b3fe8a-292e-41a2-bd5a-ede363da55ed"
+    }
+  },
+  {
+    "testID": "abcd-34",
+    "test": {
+      "IP Range": "40.114.198.180/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "5a0802c3-d7f7-4af9-ac81-39b35e1f6369"
+    }
+  },
+  {
+    "testID": "abcd-35",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10000:10000",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "5a46f3a0-c568-47d0-843f-971a7bd6c8da"
+    }
+  },
+  {
+    "testID": "abcd-36",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "5be241ca-8fa8-492b-a74d-81415c90571e"
+    }
+  },
+  {
+    "testID": "abcd-37",
+    "test": {
+      "IP Range": "67.180.126.44/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "625450d3-72d0-4b31-8804-8c721a5b2b42"
+    }
+  },
+  {
+    "testID": "abcd-38",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3389:3389",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "66f250ff-adfe-4597-8fd1-5376e92d43a6"
+    }
+  },
+  {
+    "testID": "abcd-39",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmp",
+      "Remote Security Group": null,
+      "ID": "674cbe62-14a8-4a10-bf3b-9087e1b00d3b"
+    }
+  },
+  {
+    "testID": "abcd-40",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "1:65535",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "6800bcb0-1aa2-40e3-aa05-ff0f770b158e"
+    }
+  },
+  {
+    "testID": "abcd-41",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10005:10005",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "6d7de669-7cf6-468d-9cf7-0947f7b51a3a"
+    }
+  },
+  {
+    "testID": "abcd-42",
+    "test": {
+      "IP Range": "35.226.74.80/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "6eb79bb9-8b6e-497c-9fb4-e29a717acde1"
+    }
+  },
+  {
+    "testID": "abcd-43",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2016:2016",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "6f1d4180-d45f-44a1-aa83-4fefac400014"
+    }
+  },
+  {
+    "testID": "abcd-44",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "112:112",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "76704f6b-cb46-47ac-a49b-fa74f4b322f9"
+    }
+  },
+  {
+    "testID": "abcd-45",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10002:10002",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "79987f3a-b16a-4520-8f75-795da481246a"
+    }
+  },
+  {
+    "testID": "abcd-46",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10003:10003",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "7b68464e-83ec-48b5-bc5c-0633a6f21c43"
+    }
+  },
+  {
+    "testID": "abcd-47",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "15000:59000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "80e23cc1-88e3-4489-b855-e05a6ccb85e4"
+    }
+  },
+  {
+    "testID": "abcd-48",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "7777:7777",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "8446bd10-2398-4410-b83d-eef1ea20d2b1"
+    }
+  },
+  {
+    "testID": "abcd-49",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "9000:9006",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "87882817-b9c8-4b6b-a9f5-4545ffb31455"
+    }
+  },
+  {
+    "testID": "abcd-50",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "897f342d-5d1c-4b90-8d21-a73d1629aa5f"
+    }
+  },
+  {
+    "testID": "abcd-51",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "8bccd623-af80-455b-9728-45416ea2f1cc"
+    }
+  },
+  {
+    "testID": "abcd-52",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "12345:12345",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "8d700468-5734-4c38-bdcc-39f2dd9d87c7"
+    }
+  },
+  {
+    "testID": "abcd-53",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "9090:9090",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "8f8d68f9-3ff0-4a68-8452-b7c465adedf0"
+    }
+  },
+  {
+    "testID": "abcd-54",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3389:3389",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "979e03a0-93ea-4df2-bd3a-4239d1f46444"
+    }
+  },
+  {
+    "testID": "abcd-55",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2015:2015",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "98cef2ab-4c5a-4f05-b873-391e67d71ba5"
+    }
+  },
+  {
+    "testID": "abcd-56",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2015:2015",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "9e07dc35-5aec-483b-beee-a8b8126d4472"
+    }
+  },
+  {
+    "testID": "abcd-57",
+    "test": {
+      "IP Range": "217.92.0.0/16",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "9f8541c3-bea6-48cc-969b-3a586a9cac66"
+    }
+  },
+  {
+    "testID": "abcd-58",
+    "test": {
+      "IP Range": "37.50.143.118/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "a96630fa-7555-4380-96a8-21a7805ff5b8"
+    }
+  },
+  {
+    "testID": "abcd-59",
+    "test": {
+      "IP Range": "4.78.242.50/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b09b4726-1d57-4036-aeff-3b4b289d239e"
+    }
+  },
+  {
+    "testID": "abcd-60",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2016:2016",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b60c1705-b3fd-421d-90e4-c324983ceb59"
+    }
+  },
+  {
+    "testID": "abcd-61",
+    "test": {
+      "IP Range": "36.91.58.93/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b77e7538-f496-42d2-8831-7474500bbf2c"
+    }
+  },
+  {
+    "testID": "abcd-62",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "ID": "b87c7167-acda-4655-9539-f663b0f167eb"
+    }
+  },
+  {
+    "testID": "abcd-63",
+    "test": {
+      "IP Range": "47.186.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "ba24708a-e13f-4f7f-8372-5334e68930a1"
+    }
+  },
+  {
+    "testID": "abcd-64",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "4000:4000",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "beb6ffde-bf90-4529-86bc-74f656485c2f"
+    }
+  },
+  {
+    "testID": "abcd-65",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "443:443",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "bf72add6-2c89-454c-9c4b-93ad25127425"
+    }
+  },
+  {
+    "testID": "abcd-66",
+    "test": {
+      "IP Range": "47.186.64.97/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "bfda75ad-dba7-4975-846f-08fef3fb97cb"
+    }
+  },
+  {
+    "testID": "abcd-67",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmpv6",
+      "Remote Security Group": null,
+      "ID": "c1f129ca-f020-4c6e-94ba-66deee65a5be"
+    }
+  },
+  {
+    "testID": "abcd-68",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "7777:7777",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "c289ecac-311b-415c-a438-9666b6758260"
+    }
+  },
+  {
+    "testID": "abcd-69",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "c5ef5828-114c-45b1-b52b-056a88c3029c"
+    }
+  },
+  {
+    "testID": "abcd-70",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "65432:65432",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "cc0c9398-e995-4445-8886-3e0af31eaa36"
+    }
+  },
+  {
+    "testID": "abcd-71",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3333:3333",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d532c9b1-36ef-4bd1-be72-6449f8ab9ebb"
+    }
+  },
+  {
+    "testID": "abcd-72",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "5445:5445",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "d673b460-1f46-40eb-a9d1-ae265b0825b6"
+    }
+  },
+  {
+    "testID": "abcd-73",
+    "test": {
+      "IP Range": "37.50.143.119/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d6bb09a2-abd5-422a-adc3-d068f33c26e5"
+    }
+  },
+  {
+    "testID": "abcd-74",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "d9e5bfcf-2713-4839-9950-99a62f6c8478"
+    }
+  },
+  {
+    "testID": "abcd-75",
+    "test": {
+      "IP Range": "104.154.61.254/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d9eaa66e-4fa2-4638-9c56-d0fad62990b3"
+    }
+  },
+  {
+    "testID": "abcd-76",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10003:10003",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "da67dfc1-849f-4ed5-be1e-bdafcfb9eab4"
+    }
+  },
+  {
+    "testID": "abcd-78",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10001:10001",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "dd1d2ea5-d2a7-4939-9734-3bec48b7ecfb"
+    }
+  },
+  {
+    "testID": "abcd-80",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmp",
+      "Remote Security Group": null,
+      "ID": "ddedb89c-9ea8-4e41-9d66-e38e004d4f10"
+    }
+  },
+  {
+    "testID": "abcd-82",
+    "test": {
+      "IP Range": "37.50.143.117/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "e72f402d-9625-49fb-a16e-242e692e012d"
+    }
+  },
+  {
+    "testID": "abcd-83",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "8011:8011",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "e9949db6-a347-405d-8230-7795e22a02dc"
+    }
+  },
+  {
+    "testID": "abcd-84",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "15000:59000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "ecca89c3-3a40-471b-b043-5812600b57c2"
+    }
+  },
+  {
+    "testID": "abcd-85",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "edf49159-5835-4671-8c2f-99f5e0144f5f"
+    }
+  },
+  {
+    "testID": "abcd-86",
+    "test": {
+      "IP Range": "37.50.143.115/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "f54c1d1f-6c9e-45ab-9da1-7ec5436dd561"
+    }
+  },
+  {
+    "testID": "abcd-87",
+    "test": {
+      "IP Range": "50.207.175.42/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "f6bd8715-750a-462d-80ac-fa438886591b"
+    }
+  },
+  {
+    "testID": "abcd-88",
+    "test": {
+      "IP Range": "10.101.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "1:65535",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "fc09ce73-cdb4-44d6-a3ea-46a9c4572d9d"
+    }
+  },
+  {
+    "testID": "abcd-89",
+    "test": {
+      "IP Range": "12.15.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "ffbd0dff-9b0f-447b-b4e4-b2a4319cabde"
+    }
+  }
 ]
-
 }
