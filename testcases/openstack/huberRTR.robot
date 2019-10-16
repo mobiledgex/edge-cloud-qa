@@ -126,13 +126,27 @@ ${qcow_centos_openstack_image}  server_ping_threaded_centos7
 
 #placeholder for Check Flavor List
 
-Get Security List
+#Get Security List
+#   [Documentation]
+#  ...  get Security List
+#    ${data_as_string} =    Get File    limits.json
+#    ${data_as_json} =    json.loads    ${data_as_string}
+# 
+#    ${results}=  Get Openstack Security List  ${data_as_json}
+##    log to console  ${server_list}
+#    :FOR   ${key}   IN  @{results.keys()}
+#        Log  ${key}
+#        ${subResult}=  Get Variable Value  ${results["${key}"]}
+#        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
+#    END
+
+Get Security Rule List
    [Documentation]
-   ...  get Security List
+   ...  get Security Rule List
     ${data_as_string} =    Get File    limits.json
     ${data_as_json} =    json.loads    ${data_as_string}
  
-    ${results}=  Get Openstack Security List  ${data_as_json}
+    ${results}=  Get Openstack Security Group Rule List  ${data_as_json}
 #    log to console  ${server_list}
     :FOR   ${key}   IN  @{results.keys()}
         Log  ${key}
