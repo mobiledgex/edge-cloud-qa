@@ -1,5 +1,5 @@
 {
-  "get_openstack_limits": {
+  "check_openstack_limits": {
     "maxTotalInstances": {
       "min": 100
     },
@@ -28,6 +28,213 @@
       "key": "this is to show error when parameter is not found in API"
     }
   },
+
+  "get_openstack_limits": [
+    {
+      "testID": "ffx030",
+      "test": {
+        "Name": "maxServerMeta",
+        "Value": 12800
+      }
+    },
+    {
+      "testID": "ffx031",
+      "test": {
+        "Name": "maxTotalInstances",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx032",
+      "test": {
+        "Name": "maxPersonality",
+        "Value": 50
+      }
+    },
+    {
+      "testID": "ffx033",
+      "test": {
+        "Name": "totalServerGroupsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx034",
+      "test": {
+        "Name": "maxImageMeta",
+        "Value": 1280
+      }
+    },
+    {
+      "testID": "ffx035",
+      "test": {
+        "Name": "maxPersonalitySize",
+        "Value": 655360
+      }
+    },
+    {
+      "testID": "ffx036",
+      "test": {
+        "Name": "maxTotalRAMSize",
+        "Value": 512000
+      }
+    },
+    {
+      "testID": "ffx037",
+      "test": {
+        "Name": "maxServerGroups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx038",
+      "test": {
+        "Name": "maxSecurityGroupRules",
+        "Value": 20
+      }
+    },
+    {
+      "testID": "ffx039",
+      "test": {
+        "Name": "maxTotalKeypairs",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx03a",
+      "test": {
+        "Name": "totalCoresUsed",
+        "Value": 78
+      }
+    },
+    {
+      "testID": "ffx03b",
+      "test": {
+        "Name": "totalRAMUsed",
+        "Value": 114688
+      }
+    },
+    {
+      "testID": "ffx03c",
+      "test": {
+        "Name": "maxSecurityGroups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx03d",
+      "test": {
+        "Name": "totalFloatingIpsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx03e",
+      "test": {
+        "Name": "totalInstancesUsed",
+        "Value": 22
+      }
+    },
+    {
+      "testID": "ffx03",
+      "test": {
+        "Name": "maxServerGroupMembers",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx03f",
+      "test": {
+        "Name": "maxTotalFloatingIps",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx0301",
+      "test": {
+        "Name": "totalSecurityGroupsUsed",
+        "Value": 1
+      }
+    },
+    {
+      "testID": "ffx0302",
+      "test": {
+        "Name": "maxTotalCores",
+        "Value": 200
+      }
+    },
+    {
+      "testID": "ffx0303",
+      "test": {
+        "Name": "totalSnapshotsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx0304",
+      "test": {
+        "Name": "maxTotalBackups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx0305",
+      "test": {
+        "Name": "maxTotalVolumeGigabytes",
+        "Value": 5000
+      }
+    },
+    {
+      "testID": "ffx0306",
+      "test": {
+        "Name": "maxTotalSnapshots",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx0307",
+      "test": {
+        "Name": "maxTotalBackupGigabytes",
+        "Value": 1000
+      }
+    },
+    {
+      "testID": "ffx0308",
+      "test": {
+        "Name": "totalBackupGigabytesUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx0309",
+      "test": {
+        "Name": "maxTotalVolumes",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx030a",
+      "test": {
+        "Name": "totalVolumesUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx030b",
+      "test": {
+        "Name": "totalBackupsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx030c",
+      "test": {
+        "Name": "totalGigabytesUsed",
+        "Value": 0
+      }
+    }
+  ],
+
   "get_openstack_server_list": [
     {
       "testID": "testFailed",
