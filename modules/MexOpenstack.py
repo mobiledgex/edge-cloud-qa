@@ -113,7 +113,7 @@ class MexOpenstack():
 #//TODO logic issue: outcome is hashmap propbably it shall be simple list
 #//TODO could be better
 #//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
-    def _checkConditions(self,param,dict,value):
+    def _checkLimitsConditions(self,param,dict,value):
         result={}
         ifmax=False
         ifmin=False
@@ -164,14 +164,60 @@ class MexOpenstack():
         for x in data: 
             outJson[x["Name"]]=x["Value"]
         return outJson
+#design assumptions:
+#in openstack server list -f json we have the following list of fields
+#   | Name      | Value      |
+#it looks that only  Name can be unique
 
     def get_openstack_limits(self,limit_dict_global):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
         logging.debug(f'getting openstack limits show with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
-        data = self._json2hash(json.loads(o_out))
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
         outcome={}
         limit_dict=limit_dict_global["get_openstack_limits"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Value"]!=rec["Value"]:
+                result['comment']="Value ["+str(test["Value"])+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+
+    def check_openstack_limits(self,limit_dict_global):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+        logging.debug(f'getting openstack limits show with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        data = self._json2hash(json.loads(o_out))
+        outcome={}
+        limit_dict=limit_dict_global["check_openstack_limits"]
         for param in limit_dict:
             if param not in data:
                 print("*Warn* ",param," not found in the openstack environment")
@@ -180,11 +226,10 @@ class MexOpenstack():
                 result['comment']="Parameter ["+param+"] not found in the openstack environment"
                 outcome[param]=result
                 continue
-            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
  #       for x in outcome:
  #           print(x,":",outcome[x])
         return outcome
-
 
 
 #design assumptions:
@@ -579,7 +624,7 @@ class MexOpenstack():
 #//TODO: generic error when param not found
                 #outcome[param]= kinda error
                 continue
-            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
 
 #        for x in data:
 #            print(x,":",data[x])
