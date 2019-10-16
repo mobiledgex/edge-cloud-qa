@@ -1355,5 +1355,69 @@
       "ID": "f88d4970-7edf-4c33-b513-95706f9a43e5"
     }
   }
+],
+
+"get_openstack_security_list": [
+  {
+    "testID": "abc-007",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "smartlabs",
+      "Tags": [],
+      "ID": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Name": "NOTTOBEsmartlabs"
+    }
+  },
+  {
+    "testID": "abc-1",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "smartlabs",
+      "Tags": [],
+      "ID": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Name": "smartlabs"
+    }
+  },
+  {
+    "testID": "abc-2",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "",
+      "Tags": [],
+      "ID": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Name": "bonn-main.TDG.pf-sg"
+    }
+  },
+  {
+    "testID": "abc-3",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "Default security group",
+      "Tags": [],
+      "ID": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Name": "default"
+    }
+  },
+  {
+    "testID": "abc-4",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "mextest",
+      "Tags": [],
+      "ID": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Name": "mextest"
+    }
+  },
+  {
+    "testID": "abc-5",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "",
+      "Tags": [],
+      "ID": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Name": "andyvm-sg"
+    }
+  }
 ]
+
 }
