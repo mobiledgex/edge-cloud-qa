@@ -146,6 +146,85 @@ class MexOpenstack():
         for x in data: 
             outJson[x["Name"]]=x["Value"]
         return outJson
+
+
+
+    def check_openstack_limits(self,limit_dict_global):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+        logging.debug(f'getting openstack limits show with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        data = self._json2hash(json.loads(o_out))
+        outcome={}
+        limit_dict=limit_dict_global["check_openstack_limits"]
+        for param in limit_dict:
+            if param not in data:
+                print("*Warn* ",param," not found in the openstack environment")
+                result={}
+                result['result']='ERROR'
+                result['comment']="Parameter ["+param+"] not found in the openstack environment"
+                outcome[param]=result
+                continue
+            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
+ #       for x in outcome:
+ #           print(x,":",outcome[x])
+        return outcome
+
+
+#//TODO: is public not done
+    def _findNearestFlavour(self,param,rec,flavourList):
+        out=[]
+        for x in flavourList:
+            checkResult=0
+#//TODO: squeeze this error checking 
+            if (x["RAM"]<rec["RAM"]["min"]):
+                checkResult+=1
+            if (x["RAM"]>rec["RAM"]["max"]):
+                checkResult+=1
+            if (x["Disk"]<rec["Disk"]["min"]):
+                checkResult+=1
+            if (x["Disk"]>rec["Disk"]["max"]):
+                checkResult+=1
+            if (x["Ephemeral"]<rec["Ephemeral"]["min"]):
+                checkResult+=1
+            if (x["Ephemeral"]>rec["Ephemeral"]["max"]):
+                checkResult+=1
+            if (x["VCPUs"]<rec["VCPUs"]["min"]):
+                checkResult+=1
+            if (x["VCPUs"]>rec["VCPUs"]["max"]):
+                checkResult+=1
+
+            if checkResult==0:
+                # this one fits our requirements
+                print("----aded")
+                print(x)
+                print(rec)
+                print("#########")
+                out.append(x)
+        return out
+        
+    def check_openstack_flavor_list(self,limit_dict_global):
+        cmd = f'source {self.env_file};openstack flavor list -f json'
+        logging.debug(f'getting openstack flavor list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson = json.loads(o_out)
+
+        outcome={}
+        result={}
+        limit_dict=limit_dict_global["check_openstack_flavor_list"]
+        for param in limit_dict:
+            dupa=self._findNearestFlavour(param,limit_dict[param],rawJson)
+            result={}
+            result["matchedFlavors"]=dupa
+            result["result"]="PASS"
+            result["comment"]=""
+            if len(result["matchedFlavors"])==0:
+                result['result']="ERROR"
+                result['comment']="no matching flavors for: "+param
+            outcome[param]=result
+
+        return outcome
+
+
 #design assumptions:
 #in openstack server list -f json we have the following list of fields
 #   | Name      | Value      |
@@ -193,26 +272,8 @@ class MexOpenstack():
 
         return outcome
 
-    def check_openstack_limits(self,limit_dict_global):
-        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
-        logging.debug(f'getting openstack limits show with cmd = {cmd}')
-        o_out=self._execute_cmd(cmd)
-        data = self._json2hash(json.loads(o_out))
-        outcome={}
-        limit_dict=limit_dict_global["check_openstack_limits"]
-        for param in limit_dict:
-            if param not in data:
-                print("*Warn* ",param," not found in the openstack environment")
-                result={}
-                result['result']='ERROR'
-                result['comment']="Parameter ["+param+"] not found in the openstack environment"
-                outcome[param]=result
-                continue
-            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
- #       for x in outcome:
- #           print(x,":",outcome[x])
-        return outcome
 
+#//TODO: methods get_openstack_.... are overblown, check if is it  possible to do template, probably yes
 
 #design assumptions:
 #in openstack server list -f json we have the following list of fields
@@ -575,9 +636,6 @@ class MexOpenstack():
 
         return outcome
     
-#//TODO: here is to implement  check openstack flavor list
-
-
 #design assumptions:
 #in openstack flavor list -f json we have the following list of fields
 # ID        | Name  | Description      | Project  | Tags |
