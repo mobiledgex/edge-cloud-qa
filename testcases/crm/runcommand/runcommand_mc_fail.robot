@@ -13,6 +13,10 @@ Test Timeout    ${test_timeout_crm}
 	
 *** Variables ***
 ${test_timeout_crm}  15 min
+
+${username}=   mextester06
+${password}=   mextester06123
+#${email}=      mextester06@gmail.com
 	
 *** Test Cases ***
 RunCommand - shall return error with appname not found
@@ -117,3 +121,4 @@ RunCommand - shall return error without token
     log to console  ${error}
 
     Should Contain  ${error}  Error: Unauthorized, invalid or expired jwt
+
