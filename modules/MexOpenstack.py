@@ -89,31 +89,13 @@ class MexOpenstack():
         return json.loads(o_out)
 
 
-    def get_openstack_security_list(self,name=None):
-        cmd = f'source {self.env_file};openstack security group list -f json'
-
-        if name:
-            cmd += f' --name {name}'
-
-        logging.debug(f'getting security security group  list with cmd = {cmd}')
-        o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
-        o_out = o_return.stdout.decode('utf-8')
-        o_err = o_return.stderr.decode('utf-8')
-
-        if o_err:
-            raise Exception(o_err)
-
-        logging.debug(o_out)
-        
-        return json.loads(o_out)
-
 #------------------done functions
 
 #//TODO sanity checking for input json
 #//TODO logic issue: outcome is hashmap propbably it shall be simple list
 #//TODO could be better
 #//TOOD values min, max could be empty,null,string, non numeric and numeric (the only last is valid)
-    def _checkConditions(self,param,dict,value):
+    def _checkLimitsConditions(self,param,dict,value):
         result={}
         ifmax=False
         ifmin=False
@@ -165,13 +147,15 @@ class MexOpenstack():
             outJson[x["Name"]]=x["Value"]
         return outJson
 
-    def get_openstack_limits(self,limit_dict_global):
+
+
+    def check_openstack_limits(self,limit_dict_global):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
         logging.debug(f'getting openstack limits show with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
         data = self._json2hash(json.loads(o_out))
         outcome={}
-        limit_dict=limit_dict_global["get_openstack_limits"]
+        limit_dict=limit_dict_global["check_openstack_limits"]
         for param in limit_dict:
             if param not in data:
                 print("*Warn* ",param," not found in the openstack environment")
@@ -180,12 +164,116 @@ class MexOpenstack():
                 result['comment']="Parameter ["+param+"] not found in the openstack environment"
                 outcome[param]=result
                 continue
-            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
  #       for x in outcome:
  #           print(x,":",outcome[x])
         return outcome
 
 
+#//TODO: is public not done
+    def _findNearestFlavour(self,param,rec,flavourList):
+        out=[]
+        for x in flavourList:
+            checkResult=0
+#//TODO: squeeze this error checking 
+            if (x["RAM"]<rec["RAM"]["min"]):
+                checkResult+=1
+            if (x["RAM"]>rec["RAM"]["max"]):
+                checkResult+=1
+            if (x["Disk"]<rec["Disk"]["min"]):
+                checkResult+=1
+            if (x["Disk"]>rec["Disk"]["max"]):
+                checkResult+=1
+            if (x["Ephemeral"]<rec["Ephemeral"]["min"]):
+                checkResult+=1
+            if (x["Ephemeral"]>rec["Ephemeral"]["max"]):
+                checkResult+=1
+            if (x["VCPUs"]<rec["VCPUs"]["min"]):
+                checkResult+=1
+            if (x["VCPUs"]>rec["VCPUs"]["max"]):
+                checkResult+=1
+
+            if checkResult==0:
+                # this one fits our requirements
+                print("----aded")
+                print(x)
+                print(rec)
+                print("#########")
+                out.append(x)
+        return out
+        
+    def check_openstack_flavor_list(self,limit_dict_global):
+        cmd = f'source {self.env_file};openstack flavor list -f json'
+        logging.debug(f'getting openstack flavor list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson = json.loads(o_out)
+
+        outcome={}
+        result={}
+        limit_dict=limit_dict_global["check_openstack_flavor_list"]
+        for param in limit_dict:
+            dupa=self._findNearestFlavour(param,limit_dict[param],rawJson)
+            result={}
+            result["matchedFlavors"]=dupa
+            result["result"]="PASS"
+            result["comment"]=""
+            if len(result["matchedFlavors"])==0:
+                result['result']="ERROR"
+                result['comment']="no matching flavors for: "+param
+            outcome[param]=result
+
+        return outcome
+
+
+#design assumptions:
+#in openstack server list -f json we have the following list of fields
+#   | Name      | Value      |
+#it looks that only  Name can be unique
+
+    def get_openstack_limits(self,limit_dict_global):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+        logging.debug(f'getting openstack limits show with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_limits"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Value"]!=rec["Value"]:
+                result['comment']="Value ["+str(test["Value"])+"] not found in the openstack limits show"
+                outcome[testEntry["testID"]]=result
+                continue
+
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+
+
+#//TODO: methods get_openstack_.... are overblown, check if is it  possible to do template, probably yes
 
 #design assumptions:
 #in openstack server list -f json we have the following list of fields
@@ -548,6 +636,127 @@ class MexOpenstack():
 
         return outcome
     
+#design assumptions:
+#in openstack flavor list -f json we have the following list of fields
+# ID        | Name  | Description      | Project  | Tags |
+# TGS are not taken into account here
+#it looks that only ID and Name can be unique
+
+    def get_openstack_security_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack security group list -f json'
+        logging.debug(f'getting openstack security group list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        Names={}
+        idx=0
+        for x in rawJson: 
+            Names[x["Name"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_security_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            #we are looking if Name exist in openstack output
+            if test["Name"] not in Names:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[Names[test["Name"]]]
+            if test["Name"]!=rec["Name"]:
+                result['comment']="Name ["+test["Name"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Description"]!=rec["Description"]:
+                result['comment']="Description ["+test["Description"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Project"]!=rec["Project"]:
+                result['comment']="Project ["+test["Project"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+    
+
+#design assumptions:
+#in openstack flavor list -f json we have the following list of fields
+# ID  | Remote Security Group       | IP Protocol  | Port Range | Security Group |IP Range
+# TGS are not taken into account here
+#it looks that only ID and Name can be unique
+
+
+    def get_openstack_security_group_rule_list(self, limit_dict_global):
+        cmd = f'source {self.env_file};openstack security group rule list -f json'
+        logging.debug(f'getting openstack security group rule list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+        rawJson=json.loads(o_out)
+
+#structures for faster access
+        IDs={}
+        idx=0
+        for x in rawJson: 
+            IDs[x["ID"]]=idx
+            idx+=1
+        
+        outcome={}
+        limit_dict=limit_dict_global["get_openstack_security_group_rule_list"]
+        for testEntry in limit_dict:
+            test=testEntry["test"]
+            result={}
+            #generic assumption
+            result['result']='ERROR'
+            print(test["ID"])
+            #we are looking if Name exist in openstack output
+            if test["ID"] not in IDs:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack security group list"
+                outcome[testEntry["testID"]]=result
+                continue
+            rec=rawJson[IDs[test["ID"]]]
+            if test["ID"]!=rec["ID"]:
+                result['comment']="ID ["+test["ID"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Remote Security Group"]!=rec["Remote Security Group"]:
+                result['comment']="Remote Security Group ["+test["Remote Security Group"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["IP Protocol"]!=rec["IP Protocol"]:
+                result['comment']="IP Protocol ["+test["IP Protocol"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Port Range"]!=rec["Port Range"]:
+                result['comment']="Port Range ["+test["Port Range"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["Security Group"]!=rec["Security Group"]:
+                result['comment']="Security Group ["+test["Security Group"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            if test["IP Range"]!=rec["IP Range"]:
+                result['comment']="IP Range ["+test["IP Range"]+"] not found in the openstack security group rule list"
+                outcome[testEntry["testID"]]=result
+                continue
+            result={}
+            result['result']='PASS'
+            result['comment']=""
+            outcome[testEntry["testID"]]=result
+
+        return outcome
+    
 
 
 #------------------------- backup functions
@@ -579,7 +788,7 @@ class MexOpenstack():
 #//TODO: generic error when param not found
                 #outcome[param]= kinda error
                 continue
-            outcome[param]=self._checkConditions(param,limit_dict[param],data[param])
+            outcome[param]=self._checkLimitsConditions(param,limit_dict[param],data[param])
 
 #        for x in data:
 #            print(x,":",data[x])
