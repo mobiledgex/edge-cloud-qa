@@ -29,6 +29,85 @@
     }
   },
 
+  "check_openstack_flavor_list": {
+    "tiny-FAIL": {
+      "RAM": {
+        "min": 2,
+        "max": 3
+      },
+      "Disk": {
+        "min": 5,
+        "max": 15
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 1,
+        "max": 2
+      },
+      "Is Public": "True"
+    },
+    "medium": {
+      "RAM": {
+        "min": 3192,
+        "max": 5125
+      },
+      "Disk": {
+        "min": 25,
+        "max": 50
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 2,
+        "max": 3
+      },
+      "Is Public": "True"
+    },
+    "large": {
+      "RAM": {
+        "min": 7912,
+        "max": 9125
+      },
+      "Disk": {
+        "min": 65,
+        "max": 99
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 4,
+        "max": 6
+      },
+      "Is Public": "True"
+    },
+    "xlarge": {
+      "RAM": {
+        "min": 16384,
+        "max": 16384
+      },
+      "Disk": {
+        "min": 120,
+        "max": 190
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 7,
+        "max": 10
+      },
+      "Is Public": "True"
+    }
+  },
+
   "get_openstack_limits": [
     {
       "testID": "ffx030",
