@@ -12,9 +12,10 @@ import imaplib
 import email
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet
+from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet, Organization
 
 import shared_variables_mc
+import shared_variables
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_mastercontroller rest')
@@ -48,7 +49,7 @@ class MexMasterController(MexRest):
         self.address = None
         self.phone = None
         self.email_address = None
-        
+        self.organization_name = None
         self._mail = None
         
         self._number_login_requests = 0
@@ -418,7 +419,7 @@ class MexMasterController(MexRest):
 
             payload = json.dumps(user_dict)
 
-        logger.info('delete/user on mc at {}. \n\t{}'.format(url, payload))
+        logger.info('delete user on mc at {}. \n\t{}'.format(url, payload))
 
         self.post(url=url, data=payload, bearer=token)
 
@@ -596,29 +597,31 @@ class MexMasterController(MexRest):
             return resp
 
     def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
-        orgstamp = str(time.time())
+        #orgstamp = str(time.time())
         url = self.root_url + '/auth/org/create'
         payload = None
-
+        
         if use_defaults == True:
             if token == None: token = self.token
-            if orgname == None: orgname = 'orgname' + orgstamp
-            if orgtype == None: orgtype = 'developer'
-            if address == None: address = '111 somewhere dr'
-            if phone == None: phone = '123-456-7777'
+            #if orgname == None: orgname = 'orgname' + orgstamp
+            #if orgtype == None: orgtype = 'developer'
+            #if address == None: address = '111 somewhere dr'
+            #if phone == None: phone = '123-456-7777'
 
         if json_data !=  None:
             payload = json_data
         else:
-            org_dict = {}
-            if orgname is not None:
-                org_dict['name'] = orgname
-            if orgtype is not None:
-                org_dict['type'] = orgtype
-            if address is not None:
-                org_dict['address'] = address
-            if phone is not None:
-                org_dict['phone'] = phone
+            org_dict = Organization(organization_name=orgname, organization_type=orgtype, phone=phone, address=address).organization
+            self.organization_name = org_dict['name']
+            #org_dict = {}
+            #if orgname is not None:
+            #    org_dict['name'] = orgname
+            #if orgtype is not None:
+            #    org_dict['type'] = orgtype
+            #if address is not None:
+            #    org_dict['address'] = address
+            #if phone is not None:
+            #    org_dict['phone'] = phone
 
             payload = json.dumps(org_dict)
 
@@ -638,7 +641,7 @@ class MexMasterController(MexRest):
                     self._number_createorg_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-                self.prov_stack.append(lambda:self.delete_org(orgname, self.super_token))
+                self.prov_stack.append(lambda:self.delete_org(orgname=org_dict['name'], token=self.super_token))
 
             except Exception as e:
                 self._number_createorg_requests_fail += 1
@@ -659,10 +662,11 @@ class MexMasterController(MexRest):
         else:
             print('sending message')
             resp = send_message()
-            if str(self.resp.text) != '{"message":Organization created","name":"' + orgname + '"}':
-                if str(self.resp.text) == '{"message":"Organization type must be developer, or operator"}':
-                    raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            return orgname
+            if str(self.resp.text) != '{"message":"Organization created"}':
+                #if str(self.resp.text) == '{"message":"Organization type must be developer, or operator"}':
+                #    raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            return self.orgname
 
     def show_organizations(self, token=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/org/show'
@@ -698,7 +702,7 @@ class MexMasterController(MexRest):
             print('sending message')
             resp = send_message()
             if str(self.resp.text) != '[]':
-                match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
+                match = re.search('.*Name.*Type.*Address.*Phone.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
                 # print('*WARN*',match)
                 if not match:
                     raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
@@ -737,7 +741,8 @@ class MexMasterController(MexRest):
 
         if use_defaults == True:
             if token is None: token = self.token
-            if orgname is None: orgname = self.orgname
+            #if orgname is None: orgname = self.orgname
+            if orgname is None: orgname = shared_variables.organization_name_default
             if username is None: username = self.username
             if role is None: role = self.get_roletype()
 
@@ -941,7 +946,7 @@ class MexMasterController(MexRest):
                 self._number_createflavor_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_flavor(region=region, flavor_name=flavor['key']['name'], ram=flavor['ram'], disk=flavor['disk'], vcpus=flavor['vcpus']))
+            self.prov_stack.append(lambda:self.delete_flavor(region=region, token=self.super_token, flavor_name=flavor['key']['name'], ram=flavor['ram'], disk=flavor['disk'], vcpus=flavor['vcpus']))
 
             self._number_createflavor_requests_success += 1
 
@@ -960,6 +965,7 @@ class MexMasterController(MexRest):
 
         if use_defaults == True:
             if token == None: token = self.token
+            if region == None: region = shared_variables_mc.region_default
 
         if json_data !=  None:
             payload = json_data
@@ -1110,7 +1116,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_cluster_instances(self, token=None, region=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
+    def show_cluster_instances(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowClusterInst'
 
         payload = None
@@ -1122,8 +1128,8 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             cluster_dict = {}
-            if cloudlet_name:
-                clusterinst = ClusterInstance(cloudlet_name=cloudlet_name, use_defaults=False).cluster_instance
+            if cluster_name or cloudlet_name:
+                clusterinst = ClusterInstance(cluster_name=cluster_name, cloudlet_name=cloudlet_name, use_defaults=False).cluster_instance
                 cluster_dict = {'clusterinst': clusterinst}
 
             if region is not None:
@@ -1230,6 +1236,30 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
+    def show_all_flavors(self, sort_field='flavor_name', sort_order='ascending'):
+        # should enhance by querying for the regions. But hardcode for now
+
+        usregion = self.show_flavors(region='US')
+        euregion = self.show_flavors(region='EU')
+
+        for region in usregion:
+            region['data']['region'] = 'US'
+
+        for region in euregion:
+            region['data']['region'] = 'EU'
+
+        allregion = usregion + euregion
+        print('*WARN*', 'pre', allregion)
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'flavor_name':
+            #allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['name'].casefold()),reverse=reverse)
+            allregion = sorted(allregion, key=lambda x: (x['data']['key']['name'].casefold()),reverse=reverse)
+            print('*WARN*', 'post', allregion)
+        elif sort_field == 'region':
+            allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
+
+        return allregion
+
     def show_all_cloudlets(self, sort_field='cloudlet_name', sort_order='ascending'):
         # should enhance by querying for the regions. But hardcode for now
 
@@ -1270,6 +1300,28 @@ class MexMasterController(MexRest):
         reverse = True if sort_order == 'descending' else False
         if sort_field == 'cluster_name':
             allregion = sorted(allregion, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
+        elif sort_field == 'region':
+            allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
+
+        return allregion
+
+    def show_all_apps(self, sort_field='app_name', sort_order='ascending'):
+        # should enhance by querying for the regions. But hardcode for now
+
+        usregion = self.show_apps(region='US')
+        euregion = self.show_apps(region='EU')
+
+        for region in usregion:
+            region['data']['region'] = 'US'
+
+        for region in euregion:
+            region['data']['region'] = 'EU'
+
+        allregion = usregion + euregion
+
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'app_name':
+            allregion = sorted(allregion, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
         elif sort_field == 'region':
             allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
 
@@ -1321,6 +1373,9 @@ class MexMasterController(MexRest):
             if sort_field == 'username':
                 logging.info('sorting by username')
                 resp_data = sorted(resp_data, key=lambda x: x['Name'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+            elif  sort_field == 'email':
+                logging.info('sorting by email')
+                resp_data = sorted(resp_data, key=lambda x: x['Email'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
 
             return resp_data
 
@@ -1390,6 +1445,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
+            if self.organization_name: developer_name = self.organization_name
             clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
@@ -1416,9 +1472,13 @@ class MexMasterController(MexRest):
                 self._number_createclusterinst_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_cluster_instance(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['operator_key']['name'], developer_name=clusterInst['key']['developer']))
+            self.prov_stack.append(lambda:self.delete_cluster_instance(region=region, token=self.super_token, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['operator_key']['name'], developer_name=clusterInst['key']['developer']))
 
             self._number_createclusterinst_requests_success += 1
+
+            resp =  self.show_cluster_instances(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'])
+
+            return resp
 
         if use_thread is True:
             t = threading.Thread(target=send_message)
@@ -1481,7 +1541,7 @@ class MexMasterController(MexRest):
             logging.info(f'deleting {cluster}')
             self.delete_cluster_instance(region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_name=cluster['data']['key']['developer'], cloudlet_name=cloudlet_name, operator_name=cluster['data']['key']['cloudlet_key']['operator_key']['name'], crm_override=1)
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateApp'
 
         payload = None
@@ -1493,7 +1553,8 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn).app
+            if self.organization_name: developer_name = self.organization_name
+            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations).app
             app_dict = {'app': app}
             if region is not None:
                 app_dict['region'] = region
@@ -1516,7 +1577,7 @@ class MexMasterController(MexRest):
                 self._number_createapp_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_app(region=region, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['developer_key']['name']))
+            self.prov_stack.append(lambda:self.delete_app(region=region, token=self.super_token, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['developer_key']['name']))
 
             self._number_createapp_requests_success += 1
 
@@ -1585,6 +1646,9 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
+            if self.organization_name:
+                developer_name = self.organization_name
+                cluster_instance_developer_name = self.organization_name
             appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override).app_instance
             appinst_dict = {'appinst': appinst}
             if region is not None:
@@ -1610,7 +1674,7 @@ class MexMasterController(MexRest):
                 self._number_createappinst_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_app_instance(region=region, app_name=appinst['key']['app_key']['name'], developer_name=appinst['key']['app_key']['developer_key']['name'], app_version=appinst['key']['app_key']['version'], cluster_instance_name=appinst['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=appinst['key']['cluster_inst_key']['cloudlet_key']['name'], operator_name=appinst['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=appinst['key']['cluster_inst_key']['developer']))
+            self.prov_stack.append(lambda:self.delete_app_instance(region=region, token=self.super_token, app_name=appinst['key']['app_key']['name'], developer_name=appinst['key']['app_key']['developer_key']['name'], app_version=appinst['key']['app_key']['version'], cluster_instance_name=appinst['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=appinst['key']['cluster_inst_key']['cloudlet_key']['name'], operator_name=appinst['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=appinst['key']['cluster_inst_key']['developer']))
 
             self._number_createappinst_requests_success += 1
 
@@ -1686,6 +1750,7 @@ class MexMasterController(MexRest):
         if use_defaults == True:
             if token == None: token = self.token
 
+        if self.organization_name: developer_name = self.organization_name
         runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, developer_name=developer_name, container_id=container_id).run_command
 
         #if json_data !=  None:
@@ -1994,6 +2059,63 @@ class MexMasterController(MexRest):
             payload = json.dumps(metric_dict)
 
         logger.info('get cloudlet metrics on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            #self._number_deletecloudlet_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    #self._number_deletecloudlet_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+            except Exception as e:
+                #self._number_deletecloudlet_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            #self._number_deletecloudlet_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def get_cluster_metrics(self, token=None, region=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, developer_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/metrics/cluster'
+
+        payload = None
+        metric_dict = {}
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            cluster = ClusterInstance(cluster_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, use_defaults=False).cluster_instance
+            print('*WARN*', cluster)
+            if 'key' in cluster:
+                metric_dict = {'clusterinst': cluster['key']}
+            if region is not None:
+                metric_dict['region'] = region
+            if selector is not None:
+                metric_dict['selector'] = selector
+            if last is not None:
+                metric_dict['last'] = int(last)
+            if start_time is not None:
+                metric_dict['starttime'] = start_time
+            if end_time is not None:
+                metric_dict['endtime'] = end_time
+                
+
+            payload = json.dumps(metric_dict)
+
+        logger.info('get cluster metrics on mc at {}. \n\t{}'.format(url, payload))
 
         def send_message():
             #self._number_deletecloudlet_requests += 1
