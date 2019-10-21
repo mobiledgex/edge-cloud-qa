@@ -57,7 +57,7 @@ spec:
           - "--influxAddr"
           - "http://35.202.161.23:8086"
           - "-d"
-          - "etcd,api,notify"
+          - "etcd,api,notify,mexos"
           - "-autoUpgrade"
          env:
           - name: VAULT_ROLE_ID
