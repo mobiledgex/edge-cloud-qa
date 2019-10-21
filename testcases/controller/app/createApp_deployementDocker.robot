@@ -28,14 +28,3 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Deployment Type and HTTP access ports are incompatible"
-
-CreateApp - error shall be received with image_type=ImageTypeDocker deployment=helm 
-    [Documentation]
-    ...  create app with image_type=ImageTypeDocker deployment=helm
-    ...  verify error is received
-
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=helm  access_ports=tcp:1,udp:2,http:80  image_path=mypath
-
-    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "deployment is not valid for image type"
-
