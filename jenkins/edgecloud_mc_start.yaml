@@ -55,7 +55,7 @@ spec:
           - "--artifactoryAddr"
           - "https://artifactory-qa.mobiledgex.net"
           - "--jaegerAddr"
-          - "https://jaeger-qa.mobiledgex.net:16686"
+          - "jaeger-qa.mobiledgex.net:16686"
          env:
           - name: VAULT_ROLE_ID
             value: fe150a80-ab52-322a-3b47-771c0e27b9fb 
