@@ -1276,7 +1276,8 @@ class MexMasterController(MexRest):
 
         reverse = True if sort_order == 'descending' else False
         if sort_field == 'cloudlet_name':
-            allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['cluster_key']['name'].casefold()),reverse=reverse)
+            #allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['name'].casefold()),reverse=reverse)
+            allregion = sorted(allregion, key=lambda x: (x['data']['key']['name'].casefold()),reverse=reverse)
         elif sort_field == 'region':
             allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
 
@@ -1688,7 +1689,7 @@ class MexMasterController(MexRest):
             return t
         else:
             resp = send_message()
-            return resp
+            return self.decoded_data
 
     def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/DeleteAppInst'
@@ -1924,7 +1925,7 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateCloudlet'
 
         payload = None
@@ -1936,7 +1937,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars).cloudlet
+            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override).cloudlet
             cloudlet_dict = {'cloudlet': cloudlet}
             if region is not None:
                 cloudlet_dict['region'] = region
@@ -1963,7 +1964,7 @@ class MexMasterController(MexRest):
                 self._number_createcloudlet_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            #self.prov_stack.append(lambda:self.delete_cloudlet(region=region, cloudlet_name=cloudlet['key']['cloudlet_key']['name'], operator_name=cloudlet['key']['cloudlet_key']['operator_key']['name']))
+            self.prov_stack.append(lambda:self.delete_cloudlet(region=region, token=self.super_token, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['operator_key']['name']))
 
             self._number_createcloudlet_requests_success += 1
 

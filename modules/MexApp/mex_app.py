@@ -5,6 +5,7 @@ import os
 import subprocess
 import time
 import requests
+import re
 
 import rootlb
 import kubernetes
@@ -190,6 +191,45 @@ class MexApp(object):
             time.sleep(1)
 
         raise Exception('Running docker container not found')
+
+    def wait_for_helm_app_to_be_deployed(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, app_name=None, chart_name=None, number_of_apps=1, wait_time=600):
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+        else:
+            rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
+
+        self.rootlb = rb
+        app_count = 0
+        
+        if app_name:
+            app_name = app_name.replace('.', '') #remove any dots
+
+        found_app_dict = {}
+        for t in range(wait_time):
+            kubectl_out = rb.helm_list()
+            logging.debug(kubectl_out)
+
+            for line in kubectl_out:
+                name, revision, updated, status, chart, version, namespace = [x.strip() for x in line.split('\t')]
+                logging.debug(f'{name} {revision} {updated} {status} {chart} {version} {namespace}')
+                if app_name in name:
+                    if line.split('\t')[3].strip() == 'DEPLOYED' and line.split('\t')[4].strip() == chart_name:
+                        logging.info('Found deployed app ' + line)
+                        if name in found_app_dict:
+                            logging.info(f'already found {name}')
+                        else:
+                            found_app_dict[name] = True
+                            app_count += 1
+                            if app_count == number_of_apps:
+                                return True
+            time.sleep(1)
+
+        if app_count != number_of_apps:
+            raise Exception('All apps not found. expected=' + str(number_of_apps) + ' got=' + str(app_count))
+        
+        raise Exception('Deployed helm app not found')
 
     def block_rootlb_port(self, root_loadbalancer, port, target):
         rb = rootlb.Rootlb(host=root_loadbalancer)

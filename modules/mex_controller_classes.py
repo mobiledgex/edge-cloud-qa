@@ -1,4 +1,5 @@
 import shared_variables
+import shared_variables_mc
 
 class Organization():
     organization = None
@@ -13,9 +14,9 @@ class Organization():
 
         if use_defaults:
             if organization_name is None: self.org_name = shared_variables.organization_name_default
-            if phone is None: self.phone = shared_variables.phone_default
-            if address is None: self.address = shared_variables.address_default
-            if organization_type is None: self.org_type = shared_variables.organization_type_default
+            if phone is None: self.phone = shared_variables_mc.phone_default
+            if address is None: self.address = shared_variables_mc.address_default
+            if organization_type is None: self.org_type = shared_variables_mc.organization_type_default
 
         #shared_variables.flavor_name_default = self.flavor_name
 
@@ -66,8 +67,8 @@ class Flavor():
 class Cloudlet():
     cloudlet = None
     
-    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, use_defaults=True):
-
+    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, use_defaults=True):
+        print('*WARN*', 'nsa' , notify_server_address)
         self.cloudlet_name = cloudlet_name
         self.operator_name = operator_name
         self.access_uri = access_uri
@@ -79,6 +80,8 @@ class Cloudlet():
         self.platform_type = platform_type
         self.physical_name = physical_name
         self.env_vars = env_vars
+        self.crm_override = crm_override
+        self.notify_server_address=notify_server_address
         
         if use_defaults:
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -96,7 +99,7 @@ class Cloudlet():
             self.ip_support = 1
         if self.ip_support == "IpSupportDynamic":
             self.ip_support = 2
-
+        
         #"{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         cloudlet_dict = {}
         cloudlet_key_dict = {}
@@ -131,6 +134,15 @@ class Cloudlet():
         if self.platform_type is not None:
             cloudlet_dict['platform_type'] = self.platform_type
 
+        if self.crm_override is not None:
+            if self.crm_override.lower() == "ignorecrm":
+                self.crm_override = 2
+            cloudlet_dict['crm_override'] = self.crm_override  # ignore errors from CRM
+
+        if self.notify_server_address is not None:
+            cloudlet_dict['notify_srv_addr'] = self.notify_server_address
+
+            
         env_dict = {}
         if self.env_vars is not None:
             key,value = self.env_vars.split('=')
@@ -176,6 +188,11 @@ class ClusterInstance():
                 if number_masters is None: self.number_masters = 1
                 if number_nodes is None: self.number_nodes = 1
 
+            shared_variables.cluster_name_default = self.cluster_name
+            shared_variables.cloudlet_name_default = self.cloudlet_name
+            shared_variables.operator_name_default = self.operator_name
+            shared_variables.flavor_name_default = self.flavor_name
+
         if self.liveness == 'LivenessStatic':
             self.liveness = 1
         elif self.liveness == 'LivenessDynamic':
@@ -196,11 +213,7 @@ class ClusterInstance():
         cloudlet_key_dict = {}
         #cluster_key_dict = {}
 
-        shared_variables.cluster_name_default = self.cluster_name
-        shared_variables.cloudlet_name_default = self.cloudlet_name
-        shared_variables.operator_name_default = self.operator_name
-        shared_variables.flavor_name_default = self.flavor_name
-
+        print('*WARN*','clusterf', flavor_name, self.flavor_name, shared_variables.flavor_name_default)
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = {'name': self.operator_name}
         if self.cloudlet_name:
@@ -217,6 +230,7 @@ class ClusterInstance():
             clusterinst_dict['key'] = clusterinst_key_dict
             
         if self.flavor_name is not None:
+            print('*WARN*','clusterf2', flavor_name, self.flavor_name, shared_variables.flavor_name_default)
             clusterinst_dict['flavor'] = {'name': self.flavor_name}
 
         if self.liveness is not None:
@@ -242,10 +256,10 @@ class ClusterInstance():
         self.cluster_instance = clusterinst_dict
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
-
+        print('*WARN*', 'dfn=', default_flavor_name)
         self.app_name = app_name
         self.app_version = app_version
         self.developer_name = developer_name
@@ -263,7 +277,8 @@ class App():
         self.deployment_manifest = deployment_manifest
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
-        
+        self.annotations = annotations
+        print('*WARN*', 'selfdfn=', self.default_flavor_name)
         # used for UpdateApp - hardcoded from proto
         #self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
         #self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
@@ -273,12 +288,13 @@ class App():
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
             if image_type is None: self.image_type = 'ImageTypeDocker'
+            if deployment is None: self.deployment = 'kubernetes'
             #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if default_flavor_name is None: self.default_flavor_name = shared_variables.flavor_name_default
             #if ip_access is None: self.ip_access = 3 # default to shared
             if access_ports is None: self.access_ports = 'tcp:1234'
             
-            if deployment == 'Docker':
+            if self.deployment.lower() == 'docker':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     #try:
@@ -290,15 +306,15 @@ class App():
                     #except:
                     #    self.image_path = 'failed_to_set'
                 #self.image_type = 1
-            if deployment == 'Kubernetes':
+            if self.deployment.lower() == 'kubernetes':
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     
-            elif deployment == 'VM':
+            elif self.deployment == 'VM':
                 if self.image_path is None:
                     self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
                 #self.image_type = 2
-                
+            print('*WARN*', 'selfdfn2=', self.default_flavor_name,shared_variables.flavor_name_default)
 
         if self.image_type == 'ImageTypeDocker':
             self.image_type = 1
@@ -364,8 +380,10 @@ class App():
             app_dict['scale_with_cluster'] = True
         if self.official_fqdn:
             app_dict['official_fqdn'] = self.official_fqdn
+        if self.annotations:
+            app_dict['annotations'] = self.annotations
             
-        print(app_dict)
+        print('*WARN*','app_dict',app_dict)
         self.app = app_dict
 
         shared_variables.app_name_default = self.app_name
@@ -496,12 +514,12 @@ class RunCommand():
         self.cluster_developer_name = cluster_instance_developer_name
         self.operator_name = operator_name
         self.cloudlet_name = cloudlet_name
-        self.cluster_name = cluster_instance_name
+        self.cluster_instance_name = cluster_instance_name
         
         if use_defaults:
             if not app_name: self.app_name = shared_variables.app_name_default
             if not developer_name: self.developer_name = shared_variables.developer_name_default
-            if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
+            if not cluster_instance_name: self.cluster_instance_name = shared_variables.cluster_name_default
             if not cluster_instance_developer_name: self.cluster_developer_name = shared_variables.developer_name_default
             if not app_version: self.app_version = shared_variables.app_version_default
             if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
@@ -509,7 +527,7 @@ class RunCommand():
 
         #cmd_docker = 'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         #cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
-        cmd_run = f'appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
+        cmd_run = f'appname={self.app_name} appvers={self.app_version} developer={self.developer_name} cluster={self.cluster_instance_name} operator={self.operator_name} cloudlet={self.cloudlet_name} command={command} --skipverify'
         if container_id:
             cmd_run += f' containerid={container_id}'
         self.run_command = cmd_run
