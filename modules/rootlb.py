@@ -43,6 +43,17 @@ class Rootlb(Linux):
 
         raise Exception(f'pod with name={pod_name} not found')
 
+    def helm_list(self):
+        cmd = f'KUBECONFIG={self.kubeconfig} helm list'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
     def get_docker_container_id(self):
         cmd = 'docker ps --format "{{.ID}}"'
         logging.info('executing ' + cmd)

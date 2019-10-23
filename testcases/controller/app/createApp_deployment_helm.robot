@@ -21,7 +21,7 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=h
 
 CreateApp - error shall be received with image_type=ImageTypeQcow deployment=helm 
     [Documentation]
-    ...  create app with image_type=ImageTypeDocker deployment=helm
+    ...  create app with image_type=ImageTypeQcow deployment=helm
     ...  verify error is received
 
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQcow  deployment=helm  access_ports=tcp:1,udp:2,http:80  image_path=mypath
