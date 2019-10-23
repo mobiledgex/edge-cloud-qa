@@ -39,7 +39,7 @@ spec:
           - "--region"
           - "EU"
           - "--vaultAddr"
-          - "https://vault-qa.mobiledgex.net:8200
+          - "https://vault-qa.mobiledgex.net:8200"
           - "--registryFQDN"
           - "docker-qa.mobiledgex.net"
           - "--artifactoryFQDN"
