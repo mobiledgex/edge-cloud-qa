@@ -47,6 +47,18 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
+    def get_limits(self):
+        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+
+        logging.debug(f'getting openstack limits show with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+
+        limit_dict = {}
+        for name in json.loads(o_out):
+            limit_dict[name['Name']] = name['Value']
+
+        return limit_dict
+
     def delete_stack(self, name=None):
         cmd = f'source {self.env_file};openstack stack delete {name} -y'
         logging.debug(f'deleting openstack stack with cmd = {cmd}')
