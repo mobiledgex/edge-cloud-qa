@@ -1,4 +1,33 @@
 {
+
+  "simpleDeplyment":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  1, "network","create huber-mex-net02","-f json"],
+      [  2, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/2","-f json"],
+      [  3, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
+      [  4, "router","create huber.mex.rtr01","-f json"],
+      [  5, "router","add subnet huber.mex.rtr01 huber-mex-subnet01",""],
+      [  6, "router","add subnet huber.mex.rtr01 huber-mex-subnet02",""]
+    ]
+   ,
+    "delete":[
+      [0,"router","remove subnet huber.mex.rtr01 huber-mex-subnet01"],
+      [1,"router","remove subnet huber.mex.rtr01 huber-mex-subnet02"],
+      [2,"router","delete huber.mex.rtr01" ],
+      [3,"network","delete huber-mex-net01"],
+      [4,"network","delete huber-mex-net02"]
+      ]
+  },
+
+ 
+    
+  
+  
+
+  
+
+
   "check_openstack_limits": {
     "maxTotalInstances": {
       "min": 100
