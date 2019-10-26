@@ -6,8 +6,10 @@ image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
 def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runConsoleTests"]
 def jobListGcp = ["runCrmTests"]
+def jobList2Parallel = ["runConsoleTests"]
 
 builds1 = [:]
+builds2 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
@@ -470,6 +472,21 @@ node('jenkinsSlave1'){
 	  
           try {
             parallel builds1
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobList2Parallel.size(); ++i) {
+             def jobName = jobList2Parallel[i];
+             echo "i1=" + jobName
+             builds2[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+	     }
+	  }
+	  
+          try {
+            parallel builds2
           } catch(err) {
               echo "caugh exec running tests error: ${err}"
               currentBuild.result = 'FAILURE'
