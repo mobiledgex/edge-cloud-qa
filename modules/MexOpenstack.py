@@ -4,12 +4,92 @@ import os
 import subprocess
 import sys
 
+from linux import Linux
+
 
 class MexOpenstack():
     def __init__(self, environment_file):
         self.env_file = self._findFile(environment_file)
 
 #global helpers functions on the head of class
+
+    def deploy_test_infrastructure(self,limit_dict_global):
+        todo=limit_dict_global["simpleDeplyment"]
+    #    l= Linux(host="37.50.143.102",  username="ubuntu",  key_file="/Users/hubertjanczak/.ssh/id_rsa",  verbose=True)
+ 
+        #this is needed to delete created objects when exception occures
+        createdID={}
+        exceptionOccured=False
+        #sorting by sequence
+        create=sorted(todo["create"],key=lambda cx: cx[0])
+
+        createOutcome=[]
+
+        for item in create:
+            result={}
+            cmd="openstack "+item[1]+" "+item[2]+" "+item[3]
+            result['cmd']=cmd
+            logging.debug(f'Executing cmd = {cmd}')
+            try:
+                o_out=self._execute_cmd(cmd)
+            except:
+                result['result']='EXCEPION'
+                createOutcome.append(result)
+                exceptionOccured=True
+                break
+            
+            # if json output is not supported then we can not evaluate output from command
+            if item[3]=="":
+                result['result']="PASS"
+            else:
+                rawJson=json.loads(o_out)
+                if "id" in rawJson:
+                    #assumption is when we have id then object is created succesfully
+                    createdID[rawJson["id"]]=item
+                    result['result']='PASS'
+                else:
+                    result['result']='FAIL'
+                    exceptionOccured=True
+
+            createOutcome.append(result)
+
+        deleteOutcome=[]
+        delete=sorted(todo["delete"],key=lambda cx: cx[0])
+        for item in delete:
+            result={}
+            cmd="openstack "+item[1]+" "+item[2]
+            result['cmd']=cmd
+            result['result']='PASS'
+            logging.debug(f'Executing cmd = {cmd}')            
+            try:
+                o_out=self._execute_cmd(cmd)
+            except:
+                logging.debug(f'Ignored exception ')
+                exceptionOccured=True
+                result['result']='EXCEPTION'
+            deleteOutcome.append(result)
+
+#when we have exception then special cleanup operation needs to be executed, otherwise we will leave mess
+        if exceptionOccured:
+            while len(createdID)>0:
+                rem=[]
+                #logging.debug(f'ID len = {str(len(createdID))}')
+                for item in createdID:
+                    v= createdID[item]
+                    cmd="openstack "+v[1]+" delete "+item
+                    logging.debug(f'Forced delete cmd = {cmd}')            
+                    try:
+                        o_out=self._execute_cmd(cmd)
+                    except:
+                        rem.append(item)
+                for x in rem:
+                    del createdID[x]
+            
+        outcome={}
+        outcome['create']=createOutcome
+        outcome['delete']=deleteOutcome
+        return outcome
+
 
     def _execute_cmd(self, cmd):
         o_return = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, executable='/bin/bash')
