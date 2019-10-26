@@ -15,6 +15,27 @@ ${qcow_centos_openstack_image}  server_ping_threaded_centos7
 
 *** Test Cases ***
 
+
+Deploy Test Infrastructure
+   [Documentation]
+    ...  Deploy and delete test infrastructure
+    ${data_as_string} =    Get File    limits.json
+    ${data_as_json} =    json.loads    ${data_as_string}
+    ${results}=  Deploy Test Infrastructure  ${data_as_json}
+    Log  ${results}
+
+    ${outcome}=  Get Variable Value  ${results["create"]}
+    :FOR   ${item}   IN  @{outcome}
+      Log  ${item}
+       Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${item["result"]}"  ${item["cmd"]}
+    END
+
+    ${outcome}=  Get Variable Value  ${results["delete"]}
+    :FOR   ${item}   IN  @{outcome}
+      Log  ${item}
+       Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${item["result"]}"  ${item["cmd"]}
+    END
+
 #Get limits
 #   [Documentation]
 #    ...  get limits
@@ -41,16 +62,16 @@ ${qcow_centos_openstack_image}  server_ping_threaded_centos7
 
 
 #Get Server
-#    [Documentation]
+#   [Documentation]
 #    ...  get server
 #    ${data_as_string} =    Get File    limits.json
 #    ${data_as_json} =    json.loads    ${data_as_string}
 # 
 #    ${results}=  Get Openstack Server List  ${data_as_json}
-#    :FOR   ${key}   IN  @{results.keys()}
+#   :FOR   ${key}   IN  @{results.keys()}
 #       Log  ${key}
-#       ${subResult}=  Get Variable Value  ${results["${key}"]}
-#        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
+#      ${subResult}=  Get Variable Value  ${results["${key}"]}
+#       Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
 #   END
 
 
@@ -124,33 +145,33 @@ ${qcow_centos_openstack_image}  server_ping_threaded_centos7
 #        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
 #    END
 
-Check FlavorList
-   [Documentation]
-   ...  check FlavorList
-    ${data_as_string} =    Get File    limits.json
-    ${data_as_json} =    json.loads    ${data_as_string}
- 
-    ${results}=  Check Openstack Flavor List  ${data_as_json}
-#    log to console  ${results}
-    :FOR   ${key}   IN  @{results.keys()}
-        Log  ${key}
-        ${subResult}=  Get Variable Value  ${results["${key}"]}
-        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
-    END
+#Check FlavorList
+#  [Documentation]
+#  ...  check FlavorList
+#   ${data_as_string} =    Get File    limits.json
+#   ${data_as_json} =    json.loads    ${data_as_string}
+#
+#    ${results}=  Check Openstack Flavor List  ${data_as_json}
+##    log to console  ${results}
+#    :FOR   ${key}   IN  @{results.keys()}
+#       Log  ${key}
+#        ${subResult}=  Get Variable Value  ${results["${key}"]}
+#        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
+#   END
 
 #Get Security List
 #   [Documentation]
 #  ...  get Security List
 #    ${data_as_string} =    Get File    limits.json
 #    ${data_as_json} =    json.loads    ${data_as_string}
-# 
+#
 #    ${results}=  Get Openstack Security List  ${data_as_json}
-##    log to console  ${server_list}
-#    :FOR   ${key}   IN  @{results.keys()}
-#        Log  ${key}
-#        ${subResult}=  Get Variable Value  ${results["${key}"]}
-#        Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
-#    END
+#    log to console  ${server_list}
+#   :FOR   ${key}   IN  @{results.keys()}
+##        Log  ${key}
+#       ${subResult}=  Get Variable Value  ${results["${key}"]}
+#       Run keyword And Continue On Failure  Should Be Equal As Strings  "PASS"  "${subResult["result"]}"  ${subResult["comment"]}
+#   END
 
 #Get Security Rule List
 #   [Documentation]
