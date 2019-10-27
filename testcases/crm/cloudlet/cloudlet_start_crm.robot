@@ -48,7 +48,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Sunnydale
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on sunnydale openstack 
 
-        Create Cloudlet  region=US  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_sunnydale}  number_dynamic_ips=254  latitude=48.1351253 longitude=11.5819806
+        Create Cloudlet  region=US  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_sunnydale}  number_dynamic_ips=254  latitude=48.1351253  longitude=11.5819806
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Fairview 
         [Documentation]
