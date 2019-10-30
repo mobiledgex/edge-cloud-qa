@@ -1,10 +1,36 @@
 {
 
+
+  "stressServer" :{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  1, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"]
+    ],
+    "server":{
+        "repeat":3,
+        "definition":{
+          "image" :"mobiledgex-v2.0.3",
+          "flavor": "m4.small",
+          "nic": "net-id=huber-mex-net01",
+          "wait": "yes",
+          "config-drive": "True",
+          "property": "skipk8s=yes",
+          "prefiks-name": "hubert.02.bonn.test"
+      }
+    },
+    "delete":[
+      [0,"subnet","delete huber-mex-subnet01" ],
+      [1,"network","delete huber-mex-net01"]
+      ]
+
+  },
+
+
   "simpleDeplyment":{
     "create":[
       [  0, "network","create huber-mex-net01","-f json"],
       [  1, "network","create huber-mex-net02","-f json"],
-      [  2, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/2","-f json"],
+      [  2, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
       [  3, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
       [  4, "router","create huber.mex.rtr01","-f json"],
       [  5, "router","add subnet huber.mex.rtr01 huber-mex-subnet01",""],
@@ -19,14 +45,6 @@
       [4,"network","delete huber-mex-net02"]
       ]
   },
-
- 
-    
-  
-  
-
-  
-
 
   "check_openstack_limits": {
     "maxTotalInstances": {
