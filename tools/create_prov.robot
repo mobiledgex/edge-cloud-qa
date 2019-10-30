@@ -16,7 +16,7 @@ Create Developer
 
 Create Flavor
    Create Flavor  flavor_name=x1.medium  ram=4096  vcpus=4  disk=4
-   Create Flavor  flavor_name=automation_api_flavor  ram=4096  vcpus=4  disk=4
+   Create Flavor  flavor_name=automation_api_flavor  ram=1024  vcpus=1  disk=1
 
 #Create Cluster Flavor
 #   Create Cluster Flavor  cluster_flavor_name=x1.medium  node_flavor_name=x1.medium  master_flavor_name=x1.medium  number_nodes=3  max_nodes=4  number_masters=1
@@ -31,6 +31,8 @@ Create Cloudlet
    Create Cloudlet  cloudlet_name=automationBonnCloudlet  operator_name=TDG  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationBerlinCloudlet  operator_name=TDG  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationHamburgCloudlet  operator_name=TDG  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
+   Create Cloudlet  cloudlet_name=automationFrankfurtCloudlet  operator_name=TDG  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
+   Create Cloudlet  cloudlet_name=automationBerlinCloudlet  operator_name=TDG  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=attcloud-1  operator_name=att  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationProdHamburgCloudlet  operator_name=att  number_of_dynamic_ips=254  latitude=35  longitude=-95  ipsupport=IpSupportDynamic
    Create Cloudlet  cloudlet_name=automationAzureCentralCloudlet  operator_name=azure  number_of_dynamic_ips=254  latitude=32.7767  longitude=-96.797  ipsupport=IpSupportDynamic
