@@ -1,11 +1,15 @@
 test_timeout_crm = '32 min'
 
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
+cloudlet_name_gcp = 'automationGcpCentralCloudlet'
 #cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack = 'automationBonnCloudlet'
 cloudlet_name_openstack_shared = 'automationBonnCloudlet'
 cloudlet_name_openstack_dedicated = 'automationMunichCloudlet'
 cloudlet_name_openstack_vm = 'automationMunichCloudlet'
+
+operator_name_azure = 'azure'
+operator_name_gcp = 'gcp'
 
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 
