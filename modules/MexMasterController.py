@@ -1434,7 +1434,7 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateClusterInst'
 
         payload = None
@@ -1447,7 +1447,7 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             if self.organization_name: developer_name = self.organization_name
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -1554,7 +1554,8 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            if self.organization_name: developer_name = self.organization_name
+            if developer_name is None:
+                if self.organization_name: developer_name = self.organization_name
             app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations).app
             app_dict = {'app': app}
             if region is not None:
@@ -1647,9 +1648,10 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            if self.organization_name:
-                developer_name = self.organization_name
-                cluster_instance_developer_name = self.organization_name
+            if developer_name is None:
+                if self.organization_name:
+                    developer_name = self.organization_name
+                    cluster_instance_developer_name = self.organization_name
             appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override).app_instance
             appinst_dict = {'appinst': appinst}
             if region is not None:
