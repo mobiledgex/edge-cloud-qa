@@ -191,4 +191,18 @@ CloudletMetrics - get with cloudlet not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
 
+CloudletMetrics - get without region shall return error
+   [Documentation]
+   ...  get cloudlet metrics without region 
+   ...  verify error
+
+   ${token}=  Get Token
+
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  token=${token}  use_defaults=${False}
+
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"no region specified"}
 
