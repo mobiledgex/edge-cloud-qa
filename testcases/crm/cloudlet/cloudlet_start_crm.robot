@@ -66,6 +66,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hawkins
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on hawkins openstack 
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_hawkins}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_hawkins}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}
 
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
@@ -80,6 +83,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Buckhorn
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Beacon
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on beacon openstack 
+
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_beacon}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_beacon}
 
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_beacon}  cloudlet_name=${cloudlet_name_openstack_beacon}
 
