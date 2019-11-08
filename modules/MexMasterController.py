@@ -1959,7 +1959,7 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createcloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                if 'Cloudlet created successfully' not in str(self.resp.text):
+                if 'Created Cloudlet successfully' not in str(self.resp.text):
                     raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
                     
             except Exception as e:
