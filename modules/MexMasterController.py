@@ -1284,11 +1284,11 @@ class MexMasterController(MexRest):
         return allregion
 
 
-    def show_all_clusters(self, sort_field='cluster_name', sort_order='ascending'):
+    def show_all_cluster_instances(self, sort_field='cluster_name', sort_order='ascending'):
         # should enhance by querying for the regions. But hardcode for now
 
-        usregion = self.show_clusters(region='US')
-        euregion = self.show_clusters(region='EU')
+        usregion = self.show_cluster_instances(region='US')
+        euregion = self.show_cluster_instances(region='EU')
 
         for region in usregion:
             region['data']['region'] = 'US'
@@ -1466,7 +1466,7 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createclusterinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                if 'Created successfully' not in str(self.resp.text):
+                if 'Created ClusterInst successfully' not in str(self.resp.text):
                     raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
 
             except Exception as e:
