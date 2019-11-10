@@ -1,4 +1,4 @@
-test_timeout_crm = '32 min'
+test_timeout_crm = '60 min'
 
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
@@ -7,6 +7,7 @@ cloudlet_name_openstack = 'automationBonnCloudlet'
 cloudlet_name_openstack_shared = 'automationBonnCloudlet'
 cloudlet_name_openstack_dedicated = 'automationMunichCloudlet'
 cloudlet_name_openstack_vm = 'automationMunichCloudlet'
+cloudlet_name_openstack_metrics = 'automationBonnCloudlet'
 
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'
