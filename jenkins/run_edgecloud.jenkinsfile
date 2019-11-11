@@ -204,6 +204,11 @@ node('jenkinsSlave1'){
              def s8 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_frankfurt.mex;openstack server delete automationFrankfurtCloudlet.TDG.pf;openstack stack delete automationFrankfurtCloudlet.TDG.pf'
              status = sh(script: s8, returnStatus: true);
 
+             def s9 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_berlin.mex;openstack server delete automationberlincloudlet.tdg.mobiledgex.net;openstack stack delete automationberlincloudlet.tdg.mobiledgex.net'
+             status = sh(script: s9, returnStatus: true);
+             def s10 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_berlin.mex;openstack server delete automationBerlinCloudlet.TDG.pf;openstack stack delete automationBerlinCloudlet.TDG.pf'
+             status = sh(script: s10, returnStatus: true);
+
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
 
