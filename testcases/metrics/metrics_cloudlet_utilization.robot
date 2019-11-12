@@ -9,12 +9,19 @@ Library  String
 Library  Collections
 		      
 Test Setup       Setup
-#Test Teardown    Cleanup provisioning
+Test Teardown    Cleanup provisioning
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
 ${operator}=                       TDG
-	
+
+${username_admin}=  mexadmin
+${password_admin}=  mexadmin123
+
+${username}=  mextester06
+${password}=  mextester06123
+${orgname}=   metricsorg
+
 *** Test Cases ***
 Metrics - Shall be able to get the last cloudlet utilization metric on openstack
    [Documentation]
@@ -452,6 +459,126 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    log to console  ${num_readings}
 
    Metrics Should Match Openstack  ${metrics}  #reverse=${True}
+
+Metrics - OperatorManager shall be able to get cloudlet utilization metrics
+   [Documentation]
+   ...  request the cloudlet utilization metrics as OperatorManager
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   #Create Org  orgname=${orgname}  orgtype=operator
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Metrics Should Match Openstack  ${metrics}
+
+Metrics - OperatorViewer shall be able to get cloudlet utilization metrics
+   [Documentation]
+   ...  request the cloudlet utilization metrics as OperatorViewer
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   #Create Org  orgname=${orgname}  orgtype=operator
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorViewer   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Metrics Should Match Openstack  ${metrics}
+
+Metrics - OperatorContributor shall be able to get cloudlet utilization metrics
+   [Documentation]
+   ...  request the cloudlet utilization metrics as OperatorContributor
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   #Create Org  orgname=${orgname}  orgtype=operator
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorContributor   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Metrics Should Match Openstack  ${metrics}
 
 *** Keywords ***
 Setup
