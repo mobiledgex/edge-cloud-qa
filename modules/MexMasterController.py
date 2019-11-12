@@ -1671,7 +1671,7 @@ class MexMasterController(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_createappinst_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                if 'Created successfully' not in str(self.resp.text):
+                if 'Created AppInst successfully' not in str(self.resp.text):
                     raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
             except Exception as e:
                 self._number_createappinst_requests_fail += 1
@@ -2119,6 +2119,67 @@ class MexMasterController(MexRest):
             payload = json.dumps(metric_dict)
 
         logger.info('get cluster metrics on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            #self._number_deletecloudlet_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    #self._number_deletecloudlet_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+            except Exception as e:
+                #self._number_deletecloudlet_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            #self._number_deletecloudlet_requests_success += 1
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def get_app_metrics(self, token=None, region=None, app_name=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/metrics/app'
+
+        payload = None
+        metric_dict = {}
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            print('*WARN*', 'xxxx', developer_name)
+            app = AppInstance(app_name=app_name, cluster_instance_name=cluster_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).app_instance
+            print('*WARN*', 'app',app)
+            if 'key' in app:
+                metric_dict = {'appinst': app['key']}
+            if region is not None:
+                metric_dict['region'] = region
+            if selector is not None:
+                metric_dict['selector'] = selector
+            if last is not None:
+                try:
+                    metric_dict['last'] = int(last)
+                except:
+                    metric_dict['last'] = last
+            if start_time is not None:
+                metric_dict['starttime'] = start_time
+            if end_time is not None:
+                metric_dict['endtime'] = end_time
+                
+
+            payload = json.dumps(metric_dict)
+
+        logger.info('get app metrics on mc at {}. \n\t{}'.format(url, payload))
 
         def send_message():
             #self._number_deletecloudlet_requests += 1
