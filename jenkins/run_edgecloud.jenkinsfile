@@ -182,7 +182,7 @@ node('jenkinsSlave1'){
           dir('go/src/github.com/mobiledgex/jenkins') {
 	     try {
                 build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
-             } catch(e)
+             } catch(e) {
 	        echo('deleteCrms job failed. continuing')
 	     }
              //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
