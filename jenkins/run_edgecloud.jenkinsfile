@@ -219,10 +219,12 @@ node('jenkinsSlave1'){
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Continue anyway"'
           status = sh(script: s, returnStatus: true);
        }
-       error('Aborting the build')
+       echo('Delete CRM failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
+
     }
 
 //    try {    
@@ -455,10 +457,11 @@ node('jenkinsSlave1'){
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Continue anyway"'
           status = sh(script: s, returnStatus: true);
        }
-       error('Aborting the build')
+       echo('CRM create failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
     }
 
     if(currentBuild.result != 'FAILURE') {
