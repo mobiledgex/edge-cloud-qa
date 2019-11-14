@@ -180,8 +180,11 @@ node('jenkinsSlave1'){
     try {    
        stage("delete CRMs") {
           dir('go/src/github.com/mobiledgex/jenkins') {
-             build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
-
+	     try {
+                build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             } catch(e)
+	        echo('deleteCrms job failed. continuing')
+	     }
              //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
 
              def s1 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_hamburg.mex;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
