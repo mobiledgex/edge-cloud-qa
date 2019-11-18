@@ -129,7 +129,7 @@ Flavor - error shall be recieved when deleting flavor used by appinst
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor  flavor_name=${flavor_name_new}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   Flavor in use by App Instance
+    Should Contain  ${error_msg}   Flavor in use by AppInst
 
 *** Keywords ***
 Setup
