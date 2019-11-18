@@ -111,7 +111,7 @@ Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   Operation results in exceeding quota limits of Core
+   Should Contain  ${error_msg}   The operation couldn't be completed as it results in exceeding quota limit of Core
 
 *** Keywords ***
 Setup
