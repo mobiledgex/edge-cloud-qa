@@ -54,7 +54,7 @@ class tc(unittest.TestCase):
         flavor_post = self.controller.show_flavors()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Update flavor not supported', 'error details')
+        expect_equal(error.details(), 'Update Flavor not supported', 'error details')
         #expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
 
         assert_expectations()

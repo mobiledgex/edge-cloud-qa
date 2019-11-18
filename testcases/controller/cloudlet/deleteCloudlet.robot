@@ -56,7 +56,7 @@ DeleteCloudlet with a static app assigned
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet in use by static Application Instance"
+	Should Contain  ${error_msg}   details = "Cloudlet in use by static AppInst"
 
 	[Teardown]  Cleanup Provisioning
 
@@ -70,7 +70,7 @@ DeleteCloudlet with a static cluster instance assigned
 
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet in use by static Cluster Instance"
+	Should Contain  ${error_msg}   details = "Cloudlet in use by static ClusterInst"
 
 	[Teardown]  Cleanup Provisioning
 
