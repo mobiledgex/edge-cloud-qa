@@ -278,7 +278,7 @@ class App():
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
         self.annotations = annotations
-        print('*WARN*', 'selfdfn=', self.default_flavor_name)
+        print('*WARN*', 'selfdfn=', self.developer_name)
         # used for UpdateApp - hardcoded from proto
         #self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
         #self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
@@ -320,6 +320,8 @@ class App():
             self.image_type = 1
         elif self.image_type == 'ImageTypeQCOW':
             self.image_type = 2
+        elif self.image_type == 'ImageTypeHelm':
+            self.image_type = 3            
         elif self.image_type == 'ImageTypeUnknown':
             self.image_type = 0
 

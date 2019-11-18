@@ -1465,7 +1465,7 @@ class MexController(MexGrpc):
             try:
                 for s in resp:
                     print(str(s))
-                    if "Created successfully" in str(s):
+                    if "Created ClusterInst successfully" in str(s):
                         success = True
             except:
                 if self._queue_obj:

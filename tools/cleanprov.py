@@ -31,7 +31,7 @@ app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_
 clusterinst_keep = []
 cluster_keep = [{'cluster_name':'automationapicluster'}]
 #clusterflavor_keep = [{'cluster_flavor_name':'automation_api_cluster_flavor'},{'cluster_flavor_name':'x1.medium'}]
-cloudlet_keep = [{'cloudlet_name': 'automationBuckhornCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationBeaconCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'attcloud-1', 'operator_name': 'att'},{'cloudlet_name': 'tmocloud-1', 'operator_name': 'dmuus'},{'cloudlet_name': 'tmocloud-2', 'operator_name': 'dmuus'},{'cloudlet_name': 'automationProdHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationAzureCentralCloudlet', 'operator_name': 'azure'},{'cloudlet_name': 'automationGcpCentralCloudlet', 'operator_name': 'gcp'}]
+cloudlet_keep = [{'cloudlet_name': 'automationSunnydaleCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationBuckhornCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationBeaconCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationFairviewCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'attcloud-1', 'operator_name': 'att'},{'cloudlet_name': 'tmocloud-1', 'operator_name': 'dmuus'},{'cloudlet_name': 'tmocloud-2', 'operator_name': 'dmuus'},{'cloudlet_name': 'automationProdHawkinsCloudlet', 'operator_name': 'GDDT'},{'cloudlet_name': 'automationAzureCentralCloudlet', 'operator_name': 'azure'},{'cloudlet_name': 'automationGcpCentralCloudlet', 'operator_name': 'gcp'}]
 flavor_keep = [{'flavor_name':'x1.medium'},{'flavor_name':'automation_api_flavor'}]
 developer_keep = [{'developer_name':'automation_api'},{'developer_name':'mexinfradev_'}]
 operator_keep = [{'operator_name': 'GDDT'},{'operator_name': 'gcp'},{'operator_name': 'dmuus'},{'operator_name': 'att'},{'operator_name': 'azure'}]
@@ -240,7 +240,7 @@ def in_operator_list(app):
 clean_appinst()
 clean_app()
 clean_clusterinst()
-clean_cluster()
+#clean_cluster()
 #clean_clusterflavor()
 clean_flavor()
 clean_cloudlet()
