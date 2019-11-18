@@ -13,7 +13,7 @@ Documentation  Cluster size for openstack
 ...  master and node different flavor
 		
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
 Library  String
 	
 Test Setup      Setup

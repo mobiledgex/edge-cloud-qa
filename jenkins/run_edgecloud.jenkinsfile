@@ -4,7 +4,7 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
-def jobList1Parallel = ["runControllerTests", "runMasterControllerTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runConsoleTests"]
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runOrganizationTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runConsoleTests"]
 
@@ -42,7 +42,7 @@ node('jenkinsSlave1'){
                 branches: [[name: 'master']],
                 doGenerateSubmoduleConfigurations: false,
                 extensions: [
-                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*']]]
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*'],[$class:'SparseCheckoutPath', path:'testcases/config/*']]]
                 ],
                 submoduleCfg: [],
                 userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
@@ -180,24 +180,37 @@ node('jenkinsSlave1'){
     try {    
        stage("delete CRMs") {
           dir('go/src/github.com/mobiledgex/jenkins') {
-             build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
-
+	     try {
+                build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             } catch(e) {
+	        echo('deleteCrms job failed. continuing')
+	     }
              //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
 
-             def s1 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
+             def s1 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_hamburg.mex;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
              status = sh(script: s1, returnStatus: true);
-             def s2 = 'source /home/jenkins/openrc.hamburg;openstack server delete automationHamburgCloudlet.TDG.pf;openstack stack delete automationHamburgCloudlet.TDG.pf'
+             def s2 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_hamburg.mex;openstack server delete automationHamburgCloudlet.TDG.pf;openstack stack delete automationHamburgCloudlet.TDG.pf'
              status = sh(script: s2, returnStatus: true);
 
-             def s3 = 'source /home/jenkins/openrc.bonn;openstack server delete automationbonncloudlet.tdg.mobiledgex.net;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
+             def s3 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_bonn.mex;openstack server delete automationbonncloudlet.tdg.mobiledgex.net;openstack stack delete automationbonncloudlet.tdg.mobiledgex.net'
              status = sh(script: s3, returnStatus: true);
-             def s4 = 'source /home/jenkins/openrc.bonn;openstack server delete automationBonnCloudlet.TDG.pf;openstack stack delete automationBonnCloudlet.TDG.pf'
+             def s4 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_bonn.mex;openstack server delete automationBonnCloudlet.TDG.pf;openstack stack delete automationBonnCloudlet.TDG.pf'
              status = sh(script: s4, returnStatus: true);
 
-             def s5 = 'source /home/jenkins/openrc.munich;openstack server delete automationmunichcloudlet.tdg.mobiledgex.net;openstack stack delete automationmunichcloudlet.tdg.mobiledgex.net'
+             def s5 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_munich.mex;openstack server delete automationmunichcloudlet.tdg.mobiledgex.net;openstack stack delete automationmunichcloudlet.tdg.mobiledgex.net'
              status = sh(script: s5, returnStatus: true);
-             def s6 = 'source /home/jenkins/openrc.munich;openstack server delete automationMunichCloudlet.TDG.pf;openstack stack delete automationMunichCloudlet.TDG.pf'
+             def s6 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_munich.mex;openstack server delete automationMunichCloudlet.TDG.pf;openstack stack delete automationMunichCloudlet.TDG.pf'
              status = sh(script: s6, returnStatus: true);
+
+             def s7 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_frankfurt.mex;openstack server delete automationfrankfurtcloudlet.tdg.mobiledgex.net;openstack stack delete automationfrankfurtcloudlet.tdg.mobiledgex.net'
+             status = sh(script: s7, returnStatus: true);
+             def s8 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_frankfurt.mex;openstack server delete automationFrankfurtCloudlet.TDG.pf;openstack stack delete automationFrankfurtCloudlet.TDG.pf'
+             status = sh(script: s8, returnStatus: true);
+
+             def s9 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_berlin.mex;openstack server delete automationberlincloudlet.tdg.mobiledgex.net;openstack stack delete automationberlincloudlet.tdg.mobiledgex.net'
+             status = sh(script: s9, returnStatus: true);
+             def s10 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_berlin.mex;openstack server delete automationBerlinCloudlet.TDG.pf;openstack stack delete automationBerlinCloudlet.TDG.pf'
+             status = sh(script: s10, returnStatus: true);
 
              //sh 'source /home/jenkins/openrc.hamburg;openstack server delete automationhamburgcloudlet.tdg.mobiledgex.net'
              //sh 'source /home/jenkins/openrc.hamburg;openstack stack delete automationhamburgcloudlet.tdg.mobiledgex.net'
@@ -209,10 +222,12 @@ node('jenkinsSlave1'){
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Continue anyway"'
           status = sh(script: s, returnStatus: true);
        }
-       error('Aborting the build')
+       echo('Delete CRM failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
+
     }
 
 //    try {    
@@ -445,10 +460,11 @@ node('jenkinsSlave1'){
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Continue anyway"'
           status = sh(script: s, returnStatus: true);
        }
-       error('Aborting the build')
+       echo('CRM create failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
     }
 
     if(currentBuild.result != 'FAILURE') {

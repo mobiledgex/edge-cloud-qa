@@ -23,7 +23,7 @@ ${cloudlet_name_openstack_packet}  automationPacketOrd2Cloudlet
 ${operator_name_openstack_packet}  TDG
 ${physical_name_openstack_packet}  packet-ord2 
 
-${test_timeout_crm}  15 min
+${test_timeout_crm}  60 min
 
 *** Test Cases ***
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Hamburg 
@@ -66,6 +66,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hamburg
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on hamburg openstack 
 
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_hamburg}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_hamburg}
+
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}
 
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
@@ -80,6 +83,9 @@ DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Bonn
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Berlin
         [Documentation]
         ...  do DeleteCloudlet to delete a CRM on berlin openstack 
+
+        Delete All App Instances      region=US  cloudlet_name=${cloudlet_name_openstack_berlin}
+        Delete All Cluster Instances  region=US  cloudlet_name=${cloudlet_name_openstack_berlin}
 
         Delete Cloudlet  region=US  operator_name=${operator_name_openstack_berlin}  cloudlet_name=${cloudlet_name_openstack_berlin}
 

@@ -37,7 +37,7 @@ AppInst - autocluster shall be created when app instance is created with cluster
     Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
-#    sleep  5s
+    #sleep  5s
 AppInst - autocluster shall be created when app instance is created with clustername='autocluster' and no developer
     [Documentation]
     ...  create an app instance with cluster name of 'autocluster' and no developer
