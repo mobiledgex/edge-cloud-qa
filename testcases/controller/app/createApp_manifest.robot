@@ -40,10 +40,12 @@ CreateApp - error shall be received wih ImageTypeQCOW and manifest md5 invalid
     ...  create QCOW app with md5 in manifest is invalid
     ...  verify error is received
 
+    # EDGECLOUD-1571 - error message for invalid md5 checksum should be capitalized
+
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath#md5:12345678901234567890123456checksum
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid md5 checksum"
+    Should Contain  ${error_msg}   details = "Invalid md5 checksum"
 
 CreateApp - error shall be received wih ImageTypeQCOW and manifest and command 
     [Documentation]
@@ -53,7 +55,7 @@ CreateApp - error shall be received wih ImageTypeQCOW and manifest and command
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  deployment_manifest=xx  command=zz
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, both deploymentmanifest and command cannot be used together for VM based deployment"
+    Should Contain  ${error_msg}   details = "Invalid argument, command is not supported for VM based deployments"
 
 CreateApp - error shall be received wih deployment=kubernetes and invalid manifest
     [Documentation]
@@ -63,7 +65,7 @@ CreateApp - error shall be received wih deployment=kubernetes and invalid manife
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  deployment_manifest=xx
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, parse kubernetes deployment yaml failed, couldn't get version/kind; json parse error
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, parse kubernetes deployment yaml failed, couldn't get version/kind; json parse error
 
 CreateApp - error shall be received wih deployment=kubernetes and tcp accessport/manifest mismatch
     [Documentation]
@@ -73,7 +75,7 @@ CreateApp - error shall be received wih deployment=kubernetes and tcp accessport
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 
 CreateApp - error shall be received wih deployment=kubernetes and udp accessport/manifest mismatch
@@ -84,7 +86,7 @@ CreateApp - error shall be received wih deployment=kubernetes and udp accessport
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and tcp/udp accessport/manifest mismatch
     [Documentation]
@@ -94,7 +96,7 @@ CreateApp - error shall be received wih deployment=kubernetes and tcp/udp access
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2,udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:2,udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2,udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and tcp and udp accessport/manifest mismatch
     [Documentation]
@@ -104,7 +106,7 @@ CreateApp - error shall be received wih deployment=kubernetes and tcp and udp ac
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and udp and tcp accessport/manifest mismatch
     [Documentation]
@@ -114,7 +116,7 @@ CreateApp - error shall be received wih deployment=kubernetes and udp and tcp ac
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:2015,tcp:1  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:1 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and udp range accessport/manifest mismatch
     [Documentation]
@@ -124,7 +126,7 @@ CreateApp - error shall be received wih deployment=kubernetes and udp range acce
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=udp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and tcp range accessport/manifest mismatch
     [Documentation]
@@ -134,7 +136,7 @@ CreateApp - error shall be received wih deployment=kubernetes and tcp range acce
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and tcp/udp range accessport/manifest mismatch
     [Documentation]
@@ -144,7 +146,7 @@ CreateApp - error shall be received wih deployment=kubernetes and tcp/udp range 
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018,udp:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018,udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018,udp:2014,udp:2016,udp:2017,udp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and http accessport/manifest mismatch
     [Documentation]
@@ -154,7 +156,7 @@ CreateApp - error shall be received wih deployment=kubernetes and http accesspor
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2015  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:2015 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2015 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - error shall be received wih deployment=kubernetes and http range accessport/manifest mismatch
     [Documentation]
@@ -164,7 +166,7 @@ CreateApp - error shall be received wih deployment=kubernetes and http range acc
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
 
 CreateApp - http shall map to tcp wih deployment=kubernetes and manifest
     [Documentation]

@@ -153,7 +153,7 @@ class tc(unittest.TestCase):
 
         # create the app with no parms
         error = None
-        app = mex_controller.App(image_type=3,
+        app = mex_controller.App(image_type=9,
                                  developer_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,

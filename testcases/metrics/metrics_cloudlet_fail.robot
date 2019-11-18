@@ -8,20 +8,21 @@ ${cloudlet_name_openstack_shared}=   automationBuckhornCloudlet
 ${operator}=                       GDDT
 	
 *** Test Cases ***
-CloudletMetrics - get with no cloudlet name shall return error
-   [Documentation]
-   ...  get cloudlet metrics with no cloudlet name
-   ...  verify error
-
-   ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  operator_name=${operator}  selector=utilization  last=1  token=${token}  use_defaults=${False}
-
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-
-   Should Be Equal As Integers  ${status_code}  400
-   Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
+# this works now
+#CloudletMetrics - get with no cloudlet name shall return error
+#   [Documentation]
+#   ...  get cloudlet metrics with no cloudlet name
+#   ...  verify error
+#
+#   ${token}=  Get Token
+#	
+#   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  operator_name=${operator}  selector=utilization  last=1  token=${token}  use_defaults=${False}
+#
+#   ${status_code}=  Response Status Code
+#   ${body} =        Response Body
+#
+#   Should Be Equal As Integers  ${status_code}  400
+#   Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
 CloudletMetrics - get with no operator name shall return error
    [Documentation]
@@ -81,7 +82,7 @@ CloudletMetrics - get with no selector name shall return error
    ${body} =        Response Body
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Be Equal              ${body}         {"message":"Invalid selector in a request"}
+   Should Be Equal              ${body}         {"message":"Invalid cloudlet selector: "}
 
 CloudletMetrics - get with invalid selector name shall return error
    [Documentation]
@@ -96,7 +97,7 @@ CloudletMetrics - get with invalid selector name shall return error
    ${body} =        Response Body
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Be Equal              ${body}         {"message":"Invalid selector in a request"}
+   Should Be Equal              ${body}         {"message":"Invalid cloudlet selector: xx"}
 
 CloudletMetrics - get with invalid start time shall return error
    [Documentation]
@@ -111,9 +112,10 @@ CloudletMetrics - get with invalid start time shall return error
    ${body} =        Response Body
 
    # EDGECLOUD-1332
+   # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":"Invalid XXX data: code=400, message=parsing time 
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \"\"2019-09-26T04:01:01\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"\"\" as \"Z07:00\""} 
 
 CloudletMetrics - get with invalid end time shall return error
    [Documentation]
@@ -128,9 +130,10 @@ CloudletMetrics - get with invalid end time shall return error
    ${body} =        Response Body
 
    # EDGECLOUD-1332
+   # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":"Invalid XXX data: code=400, message=parsing time
+   Should Contain               ${body}         {"message":""Invalid POST data: code=400, message=parsing time \"\"2019-09\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"\"\" as \"-\""}
 
 CloudletMetrics - get with invalid start/end time shall return error
    [Documentation]
@@ -145,9 +148,10 @@ CloudletMetrics - get with invalid start/end time shall return error
    ${body} =        Response Body
 
    # EDGECLOUD-1332
+   # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":"Invalid XXX data: code=400, message=parsing time
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \"\"x\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"x\"\" as \"2006\""}
 
 CloudletMetrics - get with invalid last shall return error
    [Documentation]
@@ -164,7 +168,7 @@ CloudletMetrics - get with invalid last shall return error
    # EDGECLOUD-1332
 
    Should Be Equal As Integers  ${status_code}  400
-   Should Be Equal              ${body}         {"message":"Invalid xxxx data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=136"} 
+   Should Be Equal              ${body}         {"message":"Invalid POST data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=136"} 
 
 CloudletMetrics - get with operator not found shall return an empty list
    [Documentation]
@@ -191,4 +195,18 @@ CloudletMetrics - get with cloudlet not found shall return an empty list
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
 
+CloudletMetrics - get without region shall return error
+   [Documentation]
+   ...  get cloudlet metrics without region 
+   ...  verify error
+
+   ${token}=  Get Token
+
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  token=${token}  use_defaults=${False}
+
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"no region specified"}
 

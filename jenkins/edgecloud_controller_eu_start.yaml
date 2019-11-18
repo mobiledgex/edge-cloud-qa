@@ -47,7 +47,7 @@ spec:
           - "--cloudletRegistryPath"
           - "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
           - "--cloudletVMImagePath"
-          - "https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v2.0.3.qcow2#md5:fc13f750dd69c389dc7641ff8e6619ce"
+          - "https://artifactory-qa.mobiledgex.net/artifactory/baseimages/mobiledgex-v2.0.4.qcow2#md5:a8fd6e667ae0e3ab8d898cc45d1effd3"
           - "--versionTag"
           - "$AUTOMATION_DOCKERTAG"
           - "--tls"

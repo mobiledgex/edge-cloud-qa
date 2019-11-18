@@ -34,7 +34,7 @@ CRM shall be able to Create 2 cluster instances on the same cloudlet for opensta
 
 #    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	
-#*** Keywords ***
+*** Keywords ***
 Setup
     Create Flavor
     #Create Developer
