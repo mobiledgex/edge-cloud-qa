@@ -8,7 +8,7 @@ Documentation  Cluster size for openstack
 ...  1024  20    error exceeding quota
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
 Library  String
 	
 Test Setup      Setup

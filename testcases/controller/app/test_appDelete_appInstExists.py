@@ -98,7 +98,7 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(apps_post)
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Application in use by static Application Instance', 'error details')
+        expect_equal(error.details(), 'Application in use by static AppInst', 'error details')
         expect_equal(found_app, True, 'find app')
 
         assert_expectations()
