@@ -4,7 +4,7 @@ Documentation   Cloudlet Metrics
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 *** Variables ***
-${cloudlet_name_openstack_shared}=   automationBuckhornCloudlet
+${cloudlet_name_openstack_shared}=   automationSunnydaleCloudletStage
 ${operator}=                       GDDT
 	
 *** Test Cases ***
@@ -30,12 +30,18 @@ CloudletMetrics - get with no operator name shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_shared}  selector=utilization  last=1  token=${token}  use_defaults=${False}
 
+   # utilization	
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_shared}  selector=utilization  last=1  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_shared}  selector=ipusage  last=1  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
@@ -45,12 +51,18 @@ CloudletMetrics - get with no cloudlet/operator name shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  selector=utilization  last=1  token=${token}  use_defaults=${False}
 
+   # utilization	
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  selector=utilization  last=1  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  region=US  selector=ipusage  last=1  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"Cloudlet details must be present"}
 
@@ -60,12 +72,18 @@ CloudletMetrics - get with no token name shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  region=US  selector=utilization  last=1  use_defaults=${False}
 
+   # utilization
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  region=US  selector=utilization  last=1  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"no bearer token found"}
 
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  region=US  selector=ipusage  last=1  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"no bearer token found"}
 
@@ -75,12 +93,10 @@ CloudletMetrics - get with no selector name shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  region=US  token=${token}  use_defaults=${False}
 
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  region=US  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"Invalid cloudlet selector: "}
 
@@ -90,12 +106,10 @@ CloudletMetrics - get with invalid selector name shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=xx  region=US  token=${token}  use_defaults=${False}
 
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=xx  region=US  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"Invalid cloudlet selector: xx"}
 
@@ -105,17 +119,22 @@ CloudletMetrics - get with invalid start time shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
 
+   # utilization
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
-
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \"\"2019-09-26T04:01:01\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"\"\" as \"Z07:00\""} 
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"2019-09-26T04:01:01\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""} 
+
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=ipusage  region=US  start_time=2019-09-26T04:01:01  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"2019-09-26T04:01:01\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""}
 
 CloudletMetrics - get with invalid end time shall return error
    [Documentation]
@@ -123,17 +142,22 @@ CloudletMetrics - get with invalid end time shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
 
+   # utilization
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
-
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":""Invalid POST data: code=400, message=parsing time \"\"2019-09\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"\"\" as \"-\""}
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"2019-09\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""}
+
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=ipusage  region=US  end_time=2019-09  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"2019-09\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""}
 
 CloudletMetrics - get with invalid start/end time shall return error
    [Documentation]
@@ -141,17 +165,22 @@ CloudletMetrics - get with invalid start/end time shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
 
+   # utilization
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    # EDGECLOUD-1332
    # EDGECLOUD-1569 metrics with invalid start/end time give strange date in error message
-
    Should Be Equal As Integers  ${status_code}  400
-   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \"\"x\"\" as \"\"2006-01-02T15:04:05Z07:00\"\": cannot parse \"x\"\" as \"2006\""}
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"x\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""}
+
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=ipusage  region=US  start_time=x  end_time=2019-09  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Contain               ${body}         {"message":"Invalid POST data: code=400, message=parsing time \\"\\"x\\"\\" into RFC3339 format failed. Example: \\"2006-01-02T15:04:05Z07:00\\""}
 
 CloudletMetrics - get with invalid last shall return error
    [Documentation]
@@ -159,16 +188,21 @@ CloudletMetrics - get with invalid last shall return error
    ...  verify error
 
    ${token}=  Get Token
-	
-   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  last=x  token=${token}  use_defaults=${False}
 
+   # utilization
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  region=US  last=x  token=${token}  use_defaults=${False}
    ${status_code}=  Response Status Code
    ${body} =        Response Body
-
    # EDGECLOUD-1332
-
    Should Be Equal As Integers  ${status_code}  400
-   Should Be Equal              ${body}         {"message":"Invalid POST data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=136"} 
+   Should Contain              ${body}         {"message":"Invalid POST data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset= 
+
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=ipusage  region=US  last=x  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Contain              ${body}         {"message":"Invalid POST data: code=400, message=Unmarshal type error: expected=int, got=string, field=Last, offset=
 
 CloudletMetrics - get with operator not found shall return an empty list
    [Documentation]
@@ -176,9 +210,14 @@ CloudletMetrics - get with operator not found shall return an empty list
    ...  verify empty list is returned
 
    ${token}=  Get Token
-	
+
+   # utilization
    ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=xx  selector=utilization  region=US  token=${token}  use_defaults=${False}
-	
+   Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
+
+   # ipusage
+   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=xx  selector=ipusage  region=US  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
@@ -188,12 +227,16 @@ CloudletMetrics - get with cloudlet not found shall return an empty list
    ...  verify empty list is returned
 
    ${token}=  Get Token
-	
-   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=xx  operator_name=${operator}  selector=utilization  region=US  last=1  token=${token}  use_defaults=${False}
 
+   # utilization
+   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=xx  operator_name=${operator}  selector=utilization  region=US  last=1  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
+   # ipusage
+   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=xx  operator_name=${operator}  selector=ipusage  region=US  last=1  token=${token}  use_defaults=${False}
+   Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
 CloudletMetrics - get without region shall return error
    [Documentation]
@@ -202,11 +245,17 @@ CloudletMetrics - get without region shall return error
 
    ${token}=  Get Token
 
+   # utilization
    Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=utilization  token=${token}  use_defaults=${False}
-
    ${status_code}=  Response Status Code
    ${body} =        Response Body
+   Should Be Equal As Integers  ${status_code}  400
+   Should Be Equal              ${body}         {"message":"no region specified"}
 
+   # ipusage
+   Run Keyword and Expect Error  *  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator}  selector=ipusage  token=${token}  use_defaults=${False}
+   ${status_code}=  Response Status Code
+   ${body} =        Response Body
    Should Be Equal As Integers  ${status_code}  400
    Should Be Equal              ${body}         {"message":"no region specified"}
 
