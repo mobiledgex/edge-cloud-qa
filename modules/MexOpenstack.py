@@ -254,6 +254,14 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
+    def get_subnet_details(self, name=None):
+        cmd = f'source {self.env_file};openstack subnet show {name} -f json'
+
+        logging.debug(f'getting openstack subnet show with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+
+        return json.loads(o_out)
+        
     def get_limits(self):
         cmd = f'source {self.env_file};openstack limits show -f json --absolute'
 
