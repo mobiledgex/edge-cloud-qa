@@ -12,7 +12,7 @@ Test Setup       Setup
 Test Teardown    Cleanup provisioning
 
 *** Variables ***
-${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
+${cloudlet_name_openstack_metrics}=   automationMunichCloudletStage
 ${operator}=                       TDG
 
 ${username_admin}=  mexadmin
@@ -32,7 +32,7 @@ Metrics - Shall be able to get the last cloudlet utilization metric on openstack
    ${lastdb}=  Evaluate  ${last} + 1
 	
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=${last}
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT ${lastdb}  # last record
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}
 
@@ -55,7 +55,7 @@ Metrics - Shall be able to get the last 5 cloudlet utilization metrics on openst
    ...  verify info is correct
 
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -79,7 +79,7 @@ Metrics - Shall be able to get the last 100 cloudlet utilization metrics on open
    ...  request the last 100 cloudlet utilization metrics
    ...  verify info is correct
 
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 100
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 100
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=100
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -102,8 +102,8 @@ Metrics - Shall be able to get all cloudlet utilization metrics on openstack
    ...  request all cloudlet utilization metrics
    ...  verify info is correct
 
-    EDGECLOUD-1339  Metrics - shepherd should be able to handle erroneous data	
-    EDGECLOUD-1337  Metrics - cloudlet metrics return old data from previous versions of the cloudlet
+    EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data	
+    EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
    ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization
 
@@ -123,8 +123,8 @@ Metrics - Shall be able to request more utilization metrics than exist on openst
    ...  request more cloudlet utilization metrics than exist by using last=<greater than total metrics>
    ...  verify info is correct
 
-    EDGECLOUD-1339  Metrics - shepherd should be able to handle erroneous data
-    EDGECLOUD-1337  Metrics - cloudlet metrics return old data from previous versions of the cloudlet
+    EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data
+    EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
    ${metricsall}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
@@ -187,13 +187,13 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime o
 	
    Metrics Should Match Openstack  ${metrics}  #reverse=${True}
 
-Metrics - Shall be able to get the network metrics with endtime on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with endtime on openstack
    [Documentation]
    ...  request cloudlet utilization metrics with endtime on openstack
    ...  verify info is correct
 
-    EDGECLOUD-1339  Metrics - shepherd should be able to handle erroneous data
-    EDGECLOUD-1337  Metrics - cloudlet metrics return old data from previous versions of the cloudlet
+    EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data
+    EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
    # get last metric and set endtime = 1 hour earlier
    ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
@@ -220,22 +220,16 @@ Metrics - Shall be able to get the network metrics with endtime on openstack
 
    Metrics Should Match Openstack  ${metrics}  reverse=${True}
 
-Metrics - Shall be able to get the network metrics with starttime=lastrecord on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with starttime=lastrecord on openstack
    [Documentation]
    ...  request cloudlet utilization metrics with starttime=lastrecord on openstack
    ...  verify info is correct
 
-   #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 2  # last record
 	
    # get last metric
    ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
-   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
-   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   #log to console  ${epochpre}
-   #${start}=  Evaluate  ${epochpre} - 3600
-   #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
-   #log to console  ${start_date}
 
    # get readings and 1st and last timestamp
    ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
@@ -245,11 +239,7 @@ Metrics - Shall be able to get the network metrics with starttime=lastrecord on 
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
 
-   log to console  ${epochpre}
-   log to console  ${epoch_first}
-   log to console  ${epoch_last}
-   Should Be True  (${epoch_last} - ${epoch_first}) > 3500  # difference between 1st and last time should be about 1hr
-   Should Be True  ${epoch_last} >= ${epochpre} 
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -257,11 +247,13 @@ Metrics - Shall be able to get the network metrics with starttime=lastrecord on 
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 	
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
    log to console  ${num_readings}
 	
-   Metrics Should Match Openstack  ${metrics}  reverse=${True}
+   Metrics Should Match Openstack  ${metrics} 
 
-Metrics - Shall be able to get the network metrics with starttime > lastrecord on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with starttime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
@@ -280,13 +272,12 @@ Metrics - Shall be able to get the network metrics with starttime > lastrecord o
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
-Metrics - Shall be able to get the network metrics with endtime=lastrecord on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with endtime=lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime=lastrecord 
    ...  verify only last record is received
 
-   edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
-    EDGECLOUD-1337  Metrics - cloudlet metrics return old data from previous versions of the cloudlet
+    EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 	
    # get last metric
    ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
@@ -322,7 +313,7 @@ Metrics - Shall be able to get the network metrics with endtime=lastrecord on op
 	
    Metrics Should Match Openstack  ${metrics}  reverse=${True}
 
-Metrics - Shall be able to get the network metrics with endtime = firstrecord on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with endtime = firstrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime = firstrecord
    ...  verify empty list is returned
@@ -341,7 +332,7 @@ Metrics - Shall be able to get the network metrics with endtime = firstrecord on
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
-Metrics - Shall be able to get the network metrics with starttime > endtime on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
@@ -356,7 +347,7 @@ Metrics - Shall be able to get the network metrics with starttime > endtime on o
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
-Metrics - Shall be able to get the network metrics with starttime and endtime > lastrecord on openstack
+Metrics - Shall be able to get the cloudlet utilization metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime and endtime > lastrecord 
    ...  verify empty list is returned
@@ -481,7 +472,7 @@ Metrics - OperatorManager shall be able to get cloudlet utilization metrics
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -521,7 +512,7 @@ Metrics - OperatorViewer shall be able to get cloudlet utilization metrics
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorViewer   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -561,7 +552,7 @@ Metrics - OperatorContributor shall be able to get cloudlet utilization metrics
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorContributor   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
-   ${metrics_influx}=  MexInfluxDB.Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -579,6 +570,32 @@ Metrics - OperatorContributor shall be able to get cloudlet utilization metrics
    Should Be Equal As Integers  ${num_readings}  5
 
    Metrics Should Match Openstack  ${metrics}
+
+Metrics - Shall be able to get the cloudlet utilization metrics without cloudlet name on openstack
+   [Documentation]
+   ...  request the utilization metric without cloudlet name
+   ...  verify info is correct
+
+   ${last}=  Set Variable  10
+   ${lastdb}=  Evaluate  ${last} + 1
+
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  operator_name=${operator}  selector=utilization  last=${last}
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  operator_name=${operator}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
+   log to console  ${metrics['data'][0]['Series']}
+   log to console  ${metrics_influx}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  10
+
+   Metrics Should Match Openstack With Different Cloudlet Names  ${metrics}
 
 *** Keywords ***
 Setup
@@ -627,6 +644,43 @@ Metrics Should Match Openstack
    \  Should Be Equal As Integers  ${reading[7]}  ${limits['maxTotalCores']}                                                     # number of cpus
    \  Should Be True               ${reading[8]} < ${limits['maxTotalCores']}                                                    # cpus used
    \  ${epochlast}=  Set Variable  ${epoch}
+
+Metrics Should Match Openstack With Different Cloudlet Names
+   [Arguments]  ${metrics}  ${reverse}=${False}
+
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+   Run Keyword If  ${reverse}  Reverse List  ${values}
+
+   @{datesplit}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   log to console  @{datesplit}
+   ${epochlast}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   ${found_own_cloudlet}=  Set Variable  ${False}
+   ${found_other_cloudlet}=  Set Variable  ${False}
+
+   # verify values
+   : FOR  ${reading}  IN  @{values}
+   \  @{datesplit}=  Split String  ${reading[0]}  .
+   \  log to console  ${reading[0]}
+   \  ${epoch}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   \  Should Be True               ${epoch} <= ${epochlast}
+   \  Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
+   \  ${found_own_cloudlet}=  Run Keyword If  '${reading[1]}' == '${cloudlet_name_openstack_metrics}'   Set Variable  ${True}
+   \  ...                                 ELSE  Set Variable  ${found_own_cloudlet}
+   \  ${found_other_cloudlet}=  Run Keyword If  '${reading[1]}' != '${cloudlet_name_openstack_metrics}'   Set Variable  ${True} 
+   \  ...                                 ELSE  Set Variable  ${found_other_cloudlet}
+   #\  Should Be Equal              ${reading[1]}  ${cloudlet_name_openstack_metrics}                        #cloudlet name
+   \  Should Be Equal As Integers  ${reading[2]}  ${limits['maxTotalVolumeGigabytes']}                                                   # disk size
+   \  Should Be Equal As Integers  ${reading[3]}  ${limits['totalGigabytesUsed']}                                                  # disk used
+   \  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalRAMSize']}                                                  # ram size
+   \  Should Be True               ${reading[5]}  ${limits['totalRAMUsed']}                                                 # ram used
+   \  Should Be Equal              ${reading[6]}  ${operator}                                            # operator name
+   \  Should Be Equal As Integers  ${reading[7]}  ${limits['maxTotalCores']}                                                     # number of cpus
+   \  Should Be True               ${reading[8]} < ${limits['maxTotalCores']}                                                    # cpus used
+   \  ${epochlast}=  Set Variable  ${epoch}
+
+   Should Be True  ${found_own_cloudlet}
+   Should Be True  ${found_other_cloudlet}
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
