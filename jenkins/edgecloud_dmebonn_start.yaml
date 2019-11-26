@@ -63,7 +63,7 @@ spec:
          - name: VAULT_SECRET_ID
            value: b6c6c629-c99d-25f8-b26d-1afc5bf5d654
          - name: JAEGER_ENDPOINT
-           value: https://automationjaeger.mobiledgex.net:14270/api/traces
+           value: https://jaeger-qa.mobiledgex.net:14268/api/traces
         volumeMounts:
          - name: tls
            mountPath: /tls
