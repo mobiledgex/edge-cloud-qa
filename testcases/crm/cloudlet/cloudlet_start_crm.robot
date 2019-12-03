@@ -66,8 +66,8 @@ CreateCloudlet - User shall be able to create a fake cloudlet
         [Documentation]
         ...  do CreateCloudlet to start a fake CRM 
 
-        Create Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
-        Create Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-2  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-95
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-2  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-95
 
         Create App Instance  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autoclusterAutomation  cluster_instance_developer_name=automation_api  cloudlet_name=tmocloud-1  operator_name=tmus  flavor_name=automation_api_flavor
 
@@ -129,14 +129,17 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         [Documentation]
         ...  do DeleteCloudlet to delete a fake CRM 
 
-        Delete All App Instances      region=US  cloudlet_name=tmocloud-1
-        Delete All Cluster Instances  region=US  cloudlet_name=tmocloud-1
+        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-1
+        Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-1
 
-        Delete Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-1
+        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-2
+        Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-2
 
-        Delete All App Instances      region=US  cloudlet_name=tmocloud-2
-        Delete All Cluster Instances  region=US  cloudlet_name=tmocloud-2
-
-        Delete Cloudlet  region=US  operator_name=tmus  cloudlet_name=tmocloud-2
+*** Keywords ***
+Cleanup Clusters and Apps
+   [Arguments]  ${region}  ${cloudlet_name}
+  
+   Run Keyword and Continue on Failure  Delete All App Instances      region=${region}  cloudlet_name=${cloudlet_name}
+   Run Keyword and Continue on Failure  Delete All Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name}
 
 
