@@ -142,8 +142,6 @@ class MexOpenstack():
 
     def deploy_test_infrastructure(self,limit_dict_global):
         todo=limit_dict_global["simpleDeplyment"]
-    #    l= Linux(host="37.50.143.102",  username="ubuntu",  key_file="/Users/hubertjanczak/.ssh/id_rsa",  verbose=True)
- 
         #this is needed to delete created objects when exception occures
         createdID={}
         exceptionOccured=False
@@ -216,6 +214,112 @@ class MexOpenstack():
         outcome['create']=createOutcome
         outcome['delete']=deleteOutcome
         return outcome
+
+
+    def ping_test(self,limit_dict_global):
+        todo=limit_dict_global["pingTest"]
+
+        #this is needed to delete created objects when exception occures
+        createdID={}
+        exceptionOccured=False
+        #sorting by sequence
+        create=sorted(todo["create"],key=lambda cx: cx[0])
+
+        createOutcome=[]
+
+        for item in create:
+            result={}
+            cmd="openstack "+item[1]+" "+item[2]+" "+item[3]
+            result['cmd']=cmd
+            logging.debug(f'Executing cmd = {cmd}')
+            try:
+                o_out=self._execute_cmd(cmd)
+            except:
+                result['result']='EXCEPION'
+                createOutcome.append(result)
+                exceptionOccured=True
+                break
+            
+            # if json output is not supported then we can not evaluate output from command
+            if item[3]=="":
+                result['result']="PASS"
+            else:
+                rawJson=json.loads(o_out)
+                if "id" in rawJson:
+                    #assumption is when we have id then object is created succesfully
+                    createdID[rawJson["id"]]=item
+                    result['result']='PASS'
+                else:
+                    result['result']='FAIL'
+                    exceptionOccured=True
+
+            createOutcome.append(result)
+
+        # WARNING: it could be needed to delete ~/.ssh/known_hosts
+        #l= Linux(host="37.50.143.102",  username="ubuntu",  key_file="/Users/hubertjanczak/.ssh/id_rsa",  verbose=True)
+      
+#        try:
+#            os.remove("/Users/hubertjanczak/.ssh/known_hosts")
+#        except OSError:
+#            pass
+        l= Linux(host="37.50.143.100",  username="ubuntu",  key_file="/Users/hubertjanczak/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/openstack/id_rsa_mex",  verbose=True)
+ 
+#        l.get_processes()
+        exitData=l.command("ping -c 5 192.168.13.15")
+      
+        print("1:"+str(exitData[0][8]))
+        pp=exitData[0][8][0:55]
+        print("pp:[]"+str(pp)+"]")
+        result={}
+        result['cmd']='ping'
+        result['result']='FAIL'
+        if "5 packets transmitted, 5 received, 0% packet loss, time"==pp:
+            result['result']='PASS'
+        commandOutcome=[]
+        commandOutcome.append(result)
+
+#        print("QQ- "+json.dumps(exitData))
+
+
+
+        deleteOutcome=[]
+        delete=sorted(todo["delete"],key=lambda cx: cx[0])
+        for item in delete:
+            result={}
+            cmd="openstack "+item[1]+" "+item[2]
+            result['cmd']=cmd
+            result['result']='PASS'
+            logging.debug(f'Executing cmd = {cmd}')            
+            try:
+                o_out=self._execute_cmd(cmd)
+            except:
+                logging.debug(f'Ignored exception ')
+                exceptionOccured=True
+                result['result']='EXCEPTION'
+            deleteOutcome.append(result)
+
+#when we have exception then special cleanup operation needs to be executed, otherwise we will leave mess
+        if exceptionOccured:
+            while len(createdID)>0:
+                rem=[]
+                #logging.debug(f'ID len = {str(len(createdID))}')
+                for item in createdID:
+                    v= createdID[item]
+                    cmd="openstack "+v[1]+" delete "+item
+                    logging.debug(f'Forced delete cmd = {cmd}')            
+                    try:
+                        o_out=self._execute_cmd(cmd)
+                    except:
+                        rem.append(item)
+                for x in rem:
+                    del createdID[x]
+            
+        outcome={}
+        outcome['create']=createOutcome
+        outcome['command']=commandOutcome
+        outcome['delete']=deleteOutcome
+        return outcome
+
 
 
     def _execute_cmd(self, cmd):
