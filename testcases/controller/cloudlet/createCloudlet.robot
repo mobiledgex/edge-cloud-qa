@@ -97,4 +97,5 @@ CreateCloudlet without physicalname
 
         ${resp}=  Run Keyword and Expect Error  *  Create Cloudlet  operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=5000  platform_type=PlatformTypeOpenstack  use_defaults=False
 
-        Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
+        #Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
+        Should Contain  ${resp}  Failed to source platform variables as physicalname '${cldlet}' is invalid
