@@ -147,6 +147,15 @@ class MexMasterController(MexRest):
         if self.orgtype == 'developer': return 'DeveloperContributor'
         else: return 'OperatorContributor'
 
+    def get_default_developer_name(self):
+        return shared_variables.developer_name_default
+
+    def get_default_cluster_name(self):
+        return shared_variables.cluster_name_default
+
+    def get_default_time_stamp(self):
+        return shared_variables.time_stamp_default
+    
     def number_of_login_requests(self):
         return self._number_login_requests
 
@@ -611,8 +620,9 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            org_dict = Organization(organization_name=orgname, organization_type=orgtype, phone=phone, address=address).organization
-            self.organization_name = org_dict['name']
+            org_dict = Organization(organization_name=orgname, organization_type=orgtype, phone=phone, address=address, use_defaults=use_defaults).organization
+            if 'name' in org_dict:
+                self.organization_name = org_dict['name']
             #org_dict = {}
             #if orgname is not None:
             #    org_dict['name'] = orgname
@@ -2109,7 +2119,10 @@ class MexMasterController(MexRest):
             if selector is not None:
                 metric_dict['selector'] = selector
             if last is not None:
-                metric_dict['last'] = int(last)
+                try:
+                    metric_dict['last'] = int(last)
+                except:
+                    metric_dict['last'] = last
             if start_time is not None:
                 metric_dict['starttime'] = start_time
             if end_time is not None:
