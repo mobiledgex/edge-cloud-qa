@@ -46,6 +46,27 @@
       ]
   },
 
+
+  "pingTest":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"]
+    ]
+   ,
+    "delete":[
+      [3,"network","delete huber-mex-net01"]
+      ]
+  },
+
+  "pingTest2":{
+    "create":[
+      [  0, "server","create --image mobiledgex-v2.0.3 --flavor m4.small --nic net-id=huber-mex-netX,v4-fixed-ip=192.168.13.15  --wait  hubert.01.bonn.test","-f json"]
+    ]
+   ,
+    "delete":[
+      [0,"server","delete  hubert.01.bonn.test"]
+      ]
+  },
+
   "check_openstack_limits": {
     "maxTotalInstances": {
       "min": 100
