@@ -7,7 +7,7 @@ Library         String
 Test Timeout     ${test_timeout_crm}
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 	
 *** Variables ***
 ${k8s_name}       mex-k8s-node-1-
