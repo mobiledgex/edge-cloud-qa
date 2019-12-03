@@ -10,7 +10,7 @@ class MexRest(WebService) :
     def __init__(self, address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
         super().__init__()
 
-        self.root_cert = self._findFile(root_cert)
+        #self.root_cert = self._findFile(root_cert)
 
     def post(self, url, data=None, bearer=None):
         logging.debug(f'url={url} data={data} cert={self.root_cert}')
