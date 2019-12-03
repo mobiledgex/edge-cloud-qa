@@ -1122,7 +1122,10 @@ class MexController(MexGrpc):
 
         self._init_shared_variables()
 
-        #print('*WARN*', 'INIT', shared_variables.developer_name_default)
+        print('*WARN*', 'INIT', shared_variables.developer_name_default)
+
+    def get_default_time_stamp(self):
+        return shared_variables.time_stamp_default
 
     def get_default_developer_name(self):
         return shared_variables.developer_name_default
@@ -2470,6 +2473,7 @@ class MexController(MexGrpc):
     
     def _init_shared_variables(self):
         default_time_stamp = str(time.time()).replace('.', '-')
+        shared_variables.time_stamp_default = default_time_stamp
         shared_variables.cloudlet_name_default = 'cloudlet' + default_time_stamp
         shared_variables.operator_name_default = 'operator' + default_time_stamp
         shared_variables.cluster_name_default = 'cluster' + default_time_stamp
