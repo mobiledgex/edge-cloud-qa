@@ -1,0 +1,79 @@
+import java.text.SimpleDateFormat
+
+cycle = "${cycle}"
+//components = "${components}"
+controller = "${controller}"
+mc = "mcunset"
+mccert = "mccertunset"
+dme = "dmeunset"
+dmerest = "dmerestunset"
+dmerestcert = "dmerestcertunset"
+if (env.dme) {
+    dme = "${DME}"
+}
+if (env.dmerest) {
+    dmerest = "${DMERest}"
+    dmerestcert = "${DMERestCert}"
+}
+if (env.mastercontroller) {
+    mc = "${MasterController}"
+    mccert = "${MasterControllerCert}"
+}
+
+echo dme
+echo cycle
+echo controller
+
+date = new Date()
+sdate = new SimpleDateFormat("MM-dd-yyy")
+dateValue = sdate.format(date)
+
+currentBuild.displayName = dateValue
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'testcases/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'protos/*'],
+                        [$class:'SparseCheckoutPath', path:'tools/*'],
+                        [$class:'SparseCheckoutPath', path:'certs/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+
+    stage("build protos") {
+      dir('go/src/github.com/mobiledgex/tools') {
+         status = sh(script:'python3 ./build_protos.py --sourcedir /home/jenkins/workspace/runEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto /home/jenkins/workspace/runEdgecloud/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+         println status
+         if(status != 0) {
+            echo "build_protos.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+    }
+
+    stage("execute tests") {
+      dir('go/src/github.com/mobiledgex/testcases/crm/cluster') {
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/certs:PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/protos;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';robot --loglevel TRACE -v cloudlet_name_openstack:automationBonnCloudlet timeCreateClusterInst_Openstack_IpAccessShared_k8s.robot', returnStatus: true);
+         println status
+         if(status != 0) {
+            echo "execJira.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+    }
+    archiveArtifacts artifacts: '**/*.timings', fingerprint: true
+}
