@@ -19,7 +19,7 @@ ${cloudlet_name_openstack}   automationBuckhornCloudlet
 #${cloudlet_name_openstack}   automationBeaconCloudlet
 #${cloudlet_name_openstack}   automationGcpCentralCloudlet
 #${cloudlet_name_openstack}   automationAzureCentralCloudlet
-#${cloudlet_name_openstack}   automationSunnydaleCloudlet
+#${cloudlet_name_openstack}   automationSunnydaleCloudletStage
 #${cloudlet_name_openstack}   automationFairviewCloudlet
 #${cloudlet_name_openstack}   tmocloud-1
 #${operator_name_openstack}   gcp 
@@ -203,12 +203,16 @@ ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
 
 
 *** Keywords ***
-Setup   ${testdate}=    Get Time  epoch
+Setup   
+	${testdate}=    Get Time  epoch
 	${testdate}=    Convert Date    ${testdate}       result_format=%d-%m-%Y
+	${testdate}=     Catenate  SEPARATOR=      -      ${testdate}
 	${flavor_name}=   Set Variable   automation_api_flavor
 	${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
 	${FileName}=    Catenate  SEPARATOR=    ${cloudlet_name_openstack}   OpenstackTimingsK8sShared 
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
+	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
+	
 	${x}=  Evaluate    random.randint(2,20000)   random
 	${x}=  Convert To String  ${x}
 	${cluster_name}=  Catenate  SEPARATOR=  timecl  ${x}
