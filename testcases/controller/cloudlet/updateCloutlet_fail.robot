@@ -32,7 +32,7 @@ UpdateCloudlet with an invalid operator
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=mci      cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"mci"},"name":"${cldlet}"} not found" 
 
 
 UpdateCloudlet without a cloudlet name
@@ -54,7 +54,7 @@ UpdateCloudlet with an invalid cloudlet name
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=TestMe    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"${oper}"},"name":"TestMe"} not found" 
 
 
 UpdateCloudlet with a numdynamicips 0
