@@ -2,7 +2,6 @@
 Documentation  Cluster size for openstack with IpAccessShared and Kubernetes
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  String
 Library  OperatingSystem
 Library  Collections
@@ -19,7 +18,7 @@ ${cloudlet_name_openstack}   automationBonnCloudlet
 #${cloudlet_name_openstack}   automationBerlinCloudlet
 #${cloudlet_name_openstack}   automationGcpCentralCloudlet
 #${cloudlet_name_openstack}   automationAzureCentralCloudlet
-#${cloudlet_name_openstack}   automationMunichCloudlet
+#${cloudlet_name_openstack}   automationMunichCloudletStage
 #${cloudlet_name_openstack}   automationFrankfurtCloudlet
 #${cloudlet_name_openstack}   tmocloud-1
 #${operator_name_openstack}   gcp 
@@ -203,12 +202,16 @@ ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
 
 
 *** Keywords ***
-Setup   ${testdate}=    Get Time  epoch
+Setup   
+	${testdate}=    Get Time  epoch
 	${testdate}=    Convert Date    ${testdate}       result_format=%d-%m-%Y
+	${testdate}=     Catenate  SEPARATOR=      -      ${testdate}
 	${flavor_name}=   Set Variable   automation_api_flavor
 	${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
 	${FileName}=    Catenate  SEPARATOR=    ${cloudlet_name_openstack}   OpenstackTimingsK8sShared 
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
+	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
+	
 	${x}=  Evaluate    random.randint(2,20000)   random
 	${x}=  Convert To String  ${x}
 	${cluster_name}=  Catenate  SEPARATOR=  timecl  ${x}
@@ -252,6 +255,10 @@ Write Data
 
 Failed Data
 	Cleanup provisioning
+	: FOR  ${INDEX}  IN RANGE  0  10
+	\  ${y}=   Convert To String   ${INDEX}
+	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
+        \  Run Keyword And Ignore Error   Delete Cluster Instance    cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}   developer_name=${developer_name_openstack}
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
