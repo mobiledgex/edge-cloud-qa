@@ -76,4 +76,6 @@ node('jenkinsSlave1'){
 
     }
     archiveArtifacts artifacts: '**/*.timings', fingerprint: true
+    archiveArtifacts artifacts: '**/*.html', fingerprint: true
+
 }
