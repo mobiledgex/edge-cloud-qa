@@ -2,7 +2,6 @@
 Documentation  Cluster size for openstack with IpAccessShared and Kubernetes
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  String
 Library  OperatingSystem
 Library  Collections
