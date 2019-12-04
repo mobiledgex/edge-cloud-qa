@@ -8,8 +8,10 @@ from linux import Linux
 
 
 class MexOpenstack():
-    def __init__(self, environment_file):
-        self.env_file = self._findFile(environment_file)
+    def __init__(self, environment_file=None):
+        self.env_file = None
+        if environment_file:
+            self.env_file = self._findFile(environment_file)
 
 #global helpers functions on the head of class
     def stress_server(self,limit_dict_global):
@@ -347,8 +349,13 @@ class MexOpenstack():
         logging.debug(f'deleting openstack image with cmd = {cmd}')
         self._execute_cmd(cmd)
 
-    def get_server_list(self, name=None):
-        cmd = f'source {self.env_file};openstack server list -f json'
+    def get_server_list(self, name=None, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+
+        cmd = f'{cmd};openstack server list -f json'
 
         if name:
             cmd += f' --name {name}'
@@ -358,16 +365,26 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
-    def get_subnet_details(self, name=None):
-        cmd = f'source {self.env_file};openstack subnet show {name} -f json'
+    def get_subnet_details(self, name=None, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+
+        cmd = f'{cmd};openstack subnet show {name} -f json'
 
         logging.debug(f'getting openstack subnet show with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
 
         return json.loads(o_out)
         
-    def get_limits(self):
-        cmd = f'source {self.env_file};openstack limits show -f json --absolute'
+    def get_limits(self, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+           
+        cmd = f'{cmd};openstack limits show -f json --absolute'
 
         logging.debug(f'getting openstack limits show with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)

@@ -16,7 +16,7 @@ DeleteCloudlet without an operator
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{},"name":"tmocloud-4"} not found" 
 
 DeleteCloudlet with an invalid operator
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid operator
@@ -25,7 +25,7 @@ DeleteCloudlet with an invalid operator
 	 
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=mci      cloudlet_name=${cldlet}      use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"mci"},"name":"tmocloud-4"} not found" 
 
 DeleteCloudlet without a cloudlet name
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet without a cloudlet name
@@ -34,7 +34,7 @@ DeleteCloudlet without a cloudlet name
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=${oper}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"tmus"}} not found" 
 
 DeleteCloudlet with an invalid cloudlet name
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid cloudlet name
@@ -43,7 +43,7 @@ DeleteCloudlet with an invalid cloudlet name
 
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=${oper}   cloudlet_name=Test     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Key not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"tmus"},"name":"Test"} not found"
 
 DeleteCloudlet with a static app assigned
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with a static appinst assigned
