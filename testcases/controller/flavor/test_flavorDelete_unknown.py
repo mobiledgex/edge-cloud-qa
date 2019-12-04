@@ -56,7 +56,7 @@ class tc(unittest.TestCase):
         flavor_post = self.controller.show_flavors()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {"name":"dummyFlavor"} not found', 'error details')
         #expect_equal(len(flavor_post), len(flavor_pre), 'num flavor')
 
         assert_expectations()
