@@ -256,6 +256,10 @@ Write Data
 
 Failed Data
 	Cleanup provisioning
+	: FOR  ${INDEX}  IN RANGE  0  10
+	\  ${y}=   Convert To String   ${INDEX}
+	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
+        \  Run Keyword And Ignore Error   Delete Cluster Instance    cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}   developer_name=${developer_name_openstack}
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
