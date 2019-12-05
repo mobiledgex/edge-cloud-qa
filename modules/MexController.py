@@ -1499,7 +1499,7 @@ class MexController(MexGrpc):
 
         if use_thread:
             self._queue_obj = queue.Queue()
-            thread_name = "Thread-" + str(time.time())
+            thread_name = f'Thread-{cluster_instance.key.cluster_key.name}-{str(time.time())}'
             t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
             return t
@@ -1513,11 +1513,12 @@ class MexController(MexGrpc):
             x.join()
         print('*WARN*', 'queue', self._queue_obj)
         try:
-            exec = self._queue_obj.get(block=False)
-            print('*WARN*', 'waitforreplies exception')
-            raise Exception(exec)
-        except queue.Empty:
-            pass
+            try:
+                exec = self._queue_obj.get(block=False)
+                print('*WARN*', 'waitforreplies exception', exec)
+                #raise Exception(exec)
+            except queue.Empty:
+                pass
 
     def get_thread_dict(self):
         return self.thread_dict
