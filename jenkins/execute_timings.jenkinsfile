@@ -75,7 +75,7 @@ node('jenkinsSlave1'){
       }
 
     }
-    archiveArtifacts artifacts: '**/*.timings', fingerprint: true
-    archiveArtifacts artifacts: '**/*.html', fingerprint: true
+    archiveArtifacts artifacts: 'go/src/github.com/mobiledgex/testcases/crm/cluster/*.timings', fingerprint: true
+    archiveArtifacts artifacts: 'go/src/github.com/mobiledgex/testcases/crm/cluster/*.html', fingerprint: true
 
 }
