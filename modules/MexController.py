@@ -1513,12 +1513,11 @@ class MexController(MexGrpc):
             x.join()
         print('*WARN*', 'queue', self._queue_obj)
         try:
-            try:
-                exec = self._queue_obj.get(block=False)
-                print('*WARN*', 'waitforreplies exception', exec)
-                #raise Exception(exec)
-            except queue.Empty:
-                pass
+            exec = self._queue_obj.get(block=False)
+            print('*WARN*', 'waitforreplies exception', exec)
+            #raise Exception(exec)
+        except queue.Empty:
+            pass
 
     def get_thread_dict(self):
         return self.thread_dict
