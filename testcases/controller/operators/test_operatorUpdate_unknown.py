@@ -50,7 +50,7 @@ class tc(unittest.TestCase):
         operator_post = self.controller.show_operators()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'key {"name":"unknown operator"} not found', 'error details')
         expect_equal(len(operator_post), len(operator_pre), 'num operator')
 
         assert_expectations()
