@@ -6,7 +6,9 @@ Library  String
 Library  OperatingSystem
 Library  Collections
 Library  DateTime
-	
+Library  Process
+
+Suite Teardown  WriteHTML
 Test Setup      Setup
 Test Teardown   Teardown
 
@@ -14,8 +16,8 @@ Test Timeout     ${test_timeout_crm}
 	
 *** Variables ***
 #${cloudlet_name_openstack}   automationHawkinsCloudlet
-${cloudlet_name_openstack}   automationBuckhornCloudlet
-#${cloudlet_name_openstack}   automationBeaconCloudlet
+#${cloudlet_name_openstack}   automationBuckhornCloudlet
+${cloudlet_name_openstack}   automationBeaconCloudlet
 #${cloudlet_name_openstack}   automationGcpCentralCloudlet
 #${cloudlet_name_openstack}   automationAzureCentralCloudlet
 #${cloudlet_name_openstack}   automationSunnydaleCloudletStage
@@ -67,7 +69,6 @@ ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   2
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  2
@@ -96,7 +97,6 @@ ClusterInst shall create 3 with IpAccessShared/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   3
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  3
@@ -125,7 +125,6 @@ ClusterInst shall create 4 with IpAccessShared/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   4
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  4
@@ -154,7 +153,6 @@ ClusterInst shall create 5 with IpAccessShared/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   5
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  5
@@ -183,7 +181,6 @@ ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   6
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  10
@@ -252,6 +249,7 @@ Write Data
 	\  ${thread_data}=   Set Variable   Cluster ${count} Start: ${thread_list['${ITEM}'][0]} End: ${thread_list['${ITEM}'][1]} Total: ${thread_list['${ITEM}'][2]}\n 
 	\  Append To File    ${EXECDIR}/${FileName}   ${thread_data}  
 	\  ${count}=    Evaluate   ${count}+1
+	
 
 Failed Data
 	Cleanup provisioning
@@ -262,3 +260,5 @@ Failed Data
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
+WriteHTML
+	Run Process   ./writeTimings.py   ${EXECDIR}/${FileName}
