@@ -69,7 +69,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         #expect_equal(len(developer_post), len(developer_pre)+1, 'num developer')
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key already exists', 'error details')
+        expect_equal(error.details(), 'key {"name":"' + developer_name + '"} already exists', 'error details')
 
         assert_expectations()
 
@@ -103,7 +103,7 @@ class tc(unittest.TestCase):
         expect_equal(found_developer, True, 'find developer')
         #expect_equal(len(developer_post), len(developer_pre)+1, 'num developer')
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key already exists', 'error details')
+        expect_equal(error.details(), 'key {"name":"' + developer_name + '"} already exists', 'error details')
 
         assert_expectations()
 
