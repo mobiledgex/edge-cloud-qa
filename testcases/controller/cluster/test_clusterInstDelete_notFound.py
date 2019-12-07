@@ -100,7 +100,7 @@ class tc(unittest.TestCase):
         clusterinst_after_add = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Key not found', 'error details')
+        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"operator_key":{"name":"' + operator_name + '"},"name":"' + cloud_name + '"}} not found', 'error details')
 
         #expect_equal(len(clusterinst_after_add), len(clusterinst_before), 'count after add')
 
