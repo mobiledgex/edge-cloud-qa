@@ -50,7 +50,7 @@ class tc(unittest.TestCase):
         developer_post = self.controller.show_developers()
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'key {"name":"unknowndeveloper"}', 'error details')
+        expect_equal(error.details(), 'key {"name":"unknowndeveloper"} not found', 'error details')
         #expect_equal(len(developer_post), len(developer_pre), 'num developer')
 
         assert_expectations()
