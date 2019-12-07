@@ -13,7 +13,8 @@ class MexRest(WebService) :
         #self.root_cert = self._findFile(root_cert)
 
     def post(self, url, data=None, bearer=None):
-        logging.debug(f'url={url} data={data} cert={self.root_cert}')
+        #logging.debug(f'url={url} data={data} cert={self.root_cert}')
+        logging.debug(f'url={url} data={data}')
 
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
         if bearer != None:
