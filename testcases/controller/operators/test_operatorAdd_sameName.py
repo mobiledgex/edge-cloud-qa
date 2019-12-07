@@ -63,7 +63,7 @@ class tc(unittest.TestCase):
         expect_equal(found_operator, True, 'find operator')
         expect_equal(len(operator_post), len(operator_pre)+1, 'num operator')
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key already exists', 'error details')
+        expect_equal(error.details(), 'key {"name":"' + operator_name + '"} already exists', 'error details')
 
         assert_expectations()
 
