@@ -68,6 +68,7 @@ CreateCloudlet - User shall be able to create a fake cloudlet
 
         Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_name=dmuus  cloudlet_name=tmocloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
         Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_name=dmuus  cloudlet_name=tmocloud-2  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-95
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_name=att  cloudlet_name=attcloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-96
 
         Create App Instance  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autoclusterAutomation  cluster_instance_developer_name=automation_api  cloudlet_name=tmocloud-1  operator_name=dmuus  flavor_name=automation_api_flavor
 
@@ -134,6 +135,9 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
 
         Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-2
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=dmuus  cloudlet_name=tmocloud-2
+
+        Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1
+        Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=att  cloudlet_name=attcloud-1
 
 *** Keywords ***
 Cleanup Clusters and Apps
