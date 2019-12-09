@@ -410,7 +410,9 @@ def exec_testcases(z, l):
                 elif windows_os:
                     exec_cmd = f'set PYTHONPATH={python_path} & robot --loglevel INFO {var_cmd} --outputdir {tmpdir} --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
             else:
-                exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
+                #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
+                exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' ' + robot_file
+
             #file_output = '/tmp/log.html'
             file_extension = '.html'
         elif tc_type == 'python':

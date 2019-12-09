@@ -17,7 +17,7 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=k
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=mypath	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "imagepath should be full registry URL: <domain-name>/<registry-path>"
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.io/mypath, Unauthorized"
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path of bad domain
     [Documentation]
@@ -70,7 +70,7 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=d
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=mypath	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "imagepath should be full registry URL: <domain-name>/<registry-path>"
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.io/mypath, Unauthorized"
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path of bad domain
     [Documentation]
