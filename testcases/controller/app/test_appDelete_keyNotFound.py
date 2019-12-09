@@ -93,7 +93,7 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'App key {"developer_key":{}} not found', 'error details')
         #expect_equal(len(apps_post), len(apps_pre)+1, 'num developer')
         expect_equal(found_app, True, 'find app')
 
@@ -137,7 +137,7 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'App key {"developer_key":{},"name":"' + app_name + '"} not found', 'error details')
         #expect_equal(len(apps_post), len(apps_pre)+1, 'num developer')
         expect_equal(found_app, True, 'find app')
 
@@ -185,7 +185,7 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"1.1"} not found', 'error details')
         #expect_equal(len(apps_post), len(apps_pre)+1, 'num developer')
         expect_equal(found_app, True, 'find app')
 
@@ -232,7 +232,7 @@ class tc(unittest.TestCase):
         self.controller.delete_app(self.app.app)
         
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Key not found', 'error details')
+        expect_equal(error.details(), 'App key {"developer_key":{"name":"' + developer_name + 'wrong"},"name":"' + app_name + '","version":"1.0"} not found', 'error details')
         #expect_equal(len(apps_post), len(apps_pre)+1, 'num developer')
         expect_equal(found_app, True, 'find app')
 
