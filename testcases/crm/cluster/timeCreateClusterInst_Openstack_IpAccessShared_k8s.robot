@@ -261,4 +261,4 @@ Failed Data
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
 WriteHTML
-	Run Process   ./writeTimings.py   ${EXECDIR}/${FileName}
+	Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
