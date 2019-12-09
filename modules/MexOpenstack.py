@@ -365,6 +365,18 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
+    def get_image_list(self, name=None):
+        cmd = f'source {self.env_file};openstack image list -f json'
+
+        if name:
+            cmd += f' --name {name}'
+            
+        logging.debug(f'getting openstack image list with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+
+        return json.loads(o_out)
+
+            
     def get_subnet_details(self, name=None, env_file=None):
         if env_file:
             cmd = f'source {env_file}'
@@ -1146,3 +1158,5 @@ class MexOpenstack():
             print(x,":",outcome[x])
 
         return outcome
+
+    
