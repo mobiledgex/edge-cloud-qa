@@ -28,16 +28,17 @@ class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         stamp = str(time.time())
-        cluster_name = 'cluster' + stamp
-        operator_name = 'dmuus'
-        cloud_name = 'tmocloud-1'
-        flavor_name = 'c1.small' + stamp
+        self.cluster_name = 'cluster' + stamp
+        self.operator_name = 'dmuus'
+        self.cloud_name = 'tmocloud-1'
+        self.flavor_name = 'c1.small' + stamp
+        self.developer_name = 'developer' + stamp
 
-        self.operator = mex_controller.Operator(operator_name = operator_name)        
-        self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+        self.operator = mex_controller.Operator(operator_name = self.operator_name)        
+        self.cloudlet = mex_controller.Cloudlet(cloudlet_name = self.cloud_name,
+                                                operator_name = self.operator_name,
                                                 number_of_dynamic_ips = 254)
-        self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
+        self.flavor = mex_controller.Flavor(flavor_name=self.flavor_name, ram=1024, vcpus=1, disk=1)
         self.controller = mex_controller.MexController(controller_address = controller_address,
                                                     root_cert = mex_root_cert,
                                                     key = mex_key,
@@ -46,10 +47,11 @@ class tc(unittest.TestCase):
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                      default_flavor_name=flavor_name)
 
-        self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
-                                                             cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
-                                                             flavor_name=flavor_name)
+        self.cluster_instance = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
+                                                             cloudlet_name=self.cloud_name,
+                                                             operator_name=self.operator_name,
+                                                             developer_name=self.developer_name,
+                                                             flavor_name=self.flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
         #self.controller.create_operator(self.operator.operator)
@@ -77,7 +79,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Key already exists', 'error details')
+        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"operator_key":{"name":"' + self.operator_name + '"},"name":"' + self.cloud_name + '"},"developer":"' + self.developer_name + '"} already exists', 'error details')
         expect_equal(len(clusterinst_pre)+1, len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
