@@ -1073,6 +1073,8 @@ class MexController(MexGrpc):
         self._queue_obj = None
         self.thread_dict = {}
         self.last_stream = ''
+
+        self._queue_obj = queue.Queue()
         
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
@@ -1472,7 +1474,8 @@ class MexController(MexGrpc):
                         success = True
             except:
                 if self._queue_obj:
-                    self._queue_obj.put(sys.exc_info())
+                    print('**WARN**', 'XXXXXXXXXXXXXXXX')
+                    self._queue_obj.put({thread_name:sys.exc_info()})
                 else:
                     raise Exception(sys.exc_info())
                 
@@ -1498,7 +1501,7 @@ class MexController(MexGrpc):
             #return resp
 
         if use_thread:
-            self._queue_obj = queue.Queue()
+            #self._queue_obj = queue.Queue()
             thread_name = f'Thread-{cluster_instance.key.cluster_key.name}-{str(time.time())}'
             t = threading.Thread(target=sendMessage, name=thread_name, args=(thread_name,))
             t.start()
@@ -1509,16 +1512,30 @@ class MexController(MexGrpc):
             return resp
 
     def wait_for_replies(self, *args):
+        logging.info(f'waiting on {len(args)} threads')
+        failed_thread_list = []
+        
         for x in args:
             x.join()
-        print('*WARN*', 'queue', self._queue_obj)
-        try:
-            exec = self._queue_obj.get(block=False)
-            print('*WARN*', 'waitforreplies exception', exec)
-            #raise Exception(exec)
-        except queue.Empty:
-            pass
+            
+        print('*WARN*', 'queue', self._queue_obj.qsize())
+        while not self._queue_obj.empty():
+            try:
+                exec = self._queue_obj.get(block=False)
+                print('*WARN*', 'zzzzzz', list(exec)[0])
+                logging.error(f'thread {list(exec)[0]} failed with {exec[list(exec)[0]]}')
+                failed_thread_list.append(exec)
+                #raise Exception(exec)
+            except queue.Empty:
+                pass
 
+        logging.info(f'number of failed threads:{len(failed_thread_list)}')
+        #print('*WARN*', 'threadlist',len(failed_thread_list))
+        #print('*WARN*','listdone')
+
+        if failed_thread_list:
+            raise Exception(f'{len(failed_thread_list)} threads failed:', failed_thread_list)
+        
     def get_thread_dict(self):
         return self.thread_dict
 
