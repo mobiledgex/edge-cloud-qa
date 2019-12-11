@@ -20,7 +20,13 @@ class MexInfluxDB(WebService) :
     cluster_disk_table = 'cluster-disk'
     cluster_memory_table = 'cluster-mem'
     cluster_network_table = 'cluster-network'
+    cluster_tcp_table = 'cluster-tcp'
+    cluster_udp_table = 'cluster-udp'
     appinst_cpu_table = 'appinst-cpu'
+    appinst_disk_table = 'appinst-disk'
+    appinst_memory_table = 'appinst-mem'
+    appinst_network_table = 'appinst-network'
+    appinst_connections_table = 'appinst-connections'
 
     metrics_db = 'metrics'
     cloudlet_utilization_table = 'cloudlet-utilization'
@@ -70,7 +76,7 @@ class MexInfluxDB(WebService) :
         #return self.decoded_data['results'][0]['series'][0]['columns'], self.decoded_data['results'][0]['series'][0]['values']
         return value_list
 
-    def get_appinst_metrics(self, table, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+    def get_influx_app_metrics(self, table, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
         query = f'select * from \"{table}\"'
         
         if cluster_instance_name:
@@ -99,9 +105,21 @@ class MexInfluxDB(WebService) :
 
         return value_list
 
-    def get_appinst_cpu_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
-        return self.get_appinst_metrics(table=self.appinst_cpu_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
-        
+    def get_influx_app_cpu_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_cpu_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
+
+    def get_influx_app_disk_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_disk_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
+
+    def get_influx_app_mem_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_memory_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
+
+    def get_influx_app_network_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_network_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
+
+    def get_influx_app_connections_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_name=None, operator_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_connections_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_name=developer_name, operator_name=operator_name, condition=condition)
+    
     def get_influx_cloudlet_metrics(self, selector=None, cloudlet_name=None, operator_name=None, condition=None):
         query = f'select * from '
         if selector == 'utilization':
@@ -149,6 +167,10 @@ class MexInfluxDB(WebService) :
             query += f'\"{self.cluster_memory_table}\"'
         elif selector == 'network':
             query += f'\"{self.cluster_network_table}\"'
+        elif selector == 'tcp':
+            query += f'\"{self.cluster_tcp_table}\"'
+        elif selector == 'udp':
+            query += f'\"{self.cluster_udp_table}\"'
             
             
         if cluster_instance_name:
@@ -202,6 +224,12 @@ class MexInfluxDB(WebService) :
 
     def get_influx_cluster_network_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
         return self.get_influx_cluster_metrics(selector='network', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, condition=condition)
+
+    def get_influx_cluster_tcp_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
+        return self.get_influx_cluster_metrics(selector='tcp', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, condition=condition)
+
+    def get_influx_cluster_udp_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
+        return self.get_influx_cluster_metrics(selector='udp', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, condition=condition)
 
     
     def _decode_content(self):
