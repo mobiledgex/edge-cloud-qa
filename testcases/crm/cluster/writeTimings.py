@@ -56,10 +56,6 @@ ul, #myUL {
 <li><span class="caret">Cluster Instance Timings</span><ul class="nested">
 '''
 bottom_html = '''     </ul>
-  <li><span class="caret">App Instance Timings</span>
-    <ul class="nested">    
-    </ul>
-  </li>
 </ul>
 <script>
 var toggler = document.getElementsByClassName("caret");
@@ -79,26 +75,30 @@ for (i = 0; i < toggler.length; i++) {
 ulClose_html = '</ul></li>\n'
 create_html = '<li><span class="caret">Create Times</span><ul class="nested">\n'
 delete_html = '<li><span class="caret">Delete Times</span><ul class="nested">\n'
-whileflag = True
-
-def get_test_head(filename, position):
-    with open(filename, 'r') as infile:
-        infile.seek(position,0)
-        test_head = infile.readline()
-        position = infile.tell()
-    return (position, test_head)
-
-
-def get_numlines(test_text):
-    #print("getNumlines: " + test_text)
-    if not test_text.startswith('Cluster'):
-        numlines = test_text.split('Openstack')
-        numlines = numlines[0]
-        numlines = int(numlines)
-        #print ('returned number: ' + str(numlines))
-    else:
-        numlines = 11
-    return numlines
+firsttest_html = ''
+secondtest_html = ''
+thirdtest_html = ''
+fourthtest_html = ''
+fifthtest_html = ''
+sixthtest_html = ''
+firstthreads_html = ''
+secondthreads_html = ''
+thirdthreads_html = ''
+fourththreads_html = ''
+fifththreads_html = ''
+sixththreads_html = ''
+firstdelete_html = ''
+seconddelete_html = ''
+thirddelete_html = ''
+fourthdelete_html = ''
+fifthdelete_html = ''
+sixthdelete_html = ''
+firstthread = ''
+secondthreads = ''
+thirdthreads = ''
+fourththreads = ''
+fifththreads = ''
+sixththreads = ''
 
 
 def get_test_threads(filename, threadnum, position):
@@ -115,7 +115,6 @@ def get_test_threads(filename, threadnum, position):
                 i = i + 1
             else:
                 i = 15
-                
             #print(test_thread)
     if i == 15:
         test_thread = ''
@@ -125,6 +124,7 @@ def get_test_threads(filename, threadnum, position):
 tfilename = sys.argv[1]
 tname = sys.argv[1]
 ttype = sys.argv[1]
+#print(sys.argv[1])
 tname = tname.split('Cloudlet')
 tname = tname[0]
 tname = tname.split('automation')
@@ -132,6 +132,7 @@ tname = tname[1]
 ttype = ttype.split('Timings')
 #print(ttype)
 ttype = ttype[1].split('-')
+#print(ttype)
 ttype = ttype[0]
 #print(ttype)
 out_html = tname + ttype + ".html"
@@ -147,75 +148,93 @@ out_html = tdate + out_html
 date_html = '<li><span class="caret">' + tdate + '</span><ul class="nested">\n'
 name_html = '<li><span class="caret">' + tname + ' ' + ttype +'</span><ul class="nested">\n'
 
-rposition, firsttest = get_test_head(tfilename, rposition)
-#print('1 Test Head:' + firsttest)
-if not firsttest.startswith('Test'):
-    firsttest_html = '<li><span class="caret">' + firsttest + '</span><ul class="nested">'
-    numlines = get_numlines(firsttest)
-    rposition, firstthreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, firstdelete = get_test_head(tfilename, rposition)
-    firstdelete_html = '<li><span class="caret">' + firstdelete + '</span><ul class="nested">'
-    rposition, firstthreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    firsttest_html = '<li>' + firsttest + '</li>'
-    
-rposition, secondtest = get_test_head(tfilename, rposition)
-#print('2 Test Head:' + secondtest)
-if not secondtest.startswith('Test'):
-    secondtest_html = '<li><span class="caret">' + secondtest + '</span><ul class="nested">'
-    numlines = get_numlines(secondtest)
-    rposition, secondthreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, seconddelete = get_test_head(tfilename, rposition)
-    seconddelete_html = '<li><span class="caret">' + seconddelete + '</span><ul class="nested">'
-    rposition, secondthreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    secondtest_html = '<li>' + secondtest + '</li>'
-    
-rposition, thirdtest = get_test_head(tfilename, rposition)
-#print('3 Test Head:' + thirdtest)
-if not thirdtest.startswith('Test'):
-    thirdtest_html = '<li><span class="caret">' + thirdtest + '</span><ul class="nested">'
-    #print(thirdtest)
-    numlines = get_numlines(thirdtest)
-    rposition, thirdthreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, thirddelete = get_test_head(tfilename, rposition)
-    thirddelete_html = '<li><span class="caret">' + thirddelete + '</span><ul class="nested">'
-    rposition, thirdthreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    thirdtest_html = '<li>' + thirdtest + '</li>'
-    
-rposition, fourthtest = get_test_head(tfilename, rposition)
-if not fourthtest.startswith('Test'):
-    fourthtest_html = '<li><span class="caret">' + fourthtest + '</span><ul class="nested">'
-    numlines = get_numlines(fourthtest)
-    rposition, fourththreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, fourthdelete = get_test_head(tfilename, rposition)
-    fourthdelete_html = '<li><span class="caret">' + fourthdelete + '</span><ul class="nested">'
-    rposition, fourththreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    fourthtest_html = '<li>' + fourthtest + '</li>'
-    
-rposition, fifthtest = get_test_head(tfilename, rposition)
-if not fifthtest.startswith('Test'):
-    fifthtest_html = '<li><span class="caret">' + fifthtest + '</span><ul class="nested">'
-    numlines = get_numlines(fifthtest)
-    rposition, fifththreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, fifthdelete = get_test_head(tfilename, rposition)
-    fifthdelete_html = '<li><span class="caret">' + fifthdelete + '</span><ul class="nested">'
-    rposition, fifththreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    fifthtest_html = '<li>' + fifthtest + '</li>'
-    
-rposition, sixthtest = get_test_head(tfilename, rposition)
-if not sixthtest.startswith('Test'):
-    sixthtest_html = '<li><span class="caret">' + sixthtest + '</span><ul class="nested">'
-    numlines = get_numlines(sixthtest)
-    rposition, sixththreads_html = get_test_threads(tfilename, numlines, rposition)
-    rposition, sixthdelete = get_test_head(tfilename, rposition)
-    sixthdelete_html = '<li><span class="caret">' + sixthdelete + '</span><ul class="nested">'
-    rposition, sixththreads = get_test_threads(tfilename, numlines, rposition)
-else:
-    sixthtest_html = '<li>' + sixthtest + '</li>'
+with open(tfilename, 'r') as infile:
+    infile.seek(rposition,0)
+    inLine = infile.readline()
+    rposition = infile.tell()
+
+while inLine != '' :
+    if inLine[0].isdigit():
+        if inLine[1].isdigit():
+            ten = inLine[0] + inLine[1]
+            numlines = int(ten)
+        else:
+            numlines = int(inLine[0])
+        if numlines == 1:
+            firsttest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, firstthread_html = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 2:
+            secondtest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, secondthreads_html = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 3:
+            thirdtest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, thirdthreads_html = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 4:
+            fourthtest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, fourththreads_html = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 5:
+            fifthtest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, fifththreads_html = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 10:
+            sixthtest_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, sixththreads_html = get_test_threads(tfilename, numlines, rposition)
+            
+    if inLine.startswith('Test'):
+        if inLine[5].isdigit():
+            if inLine[6].isdigit():
+                two = inLine[5] + inLine[6]
+                failedline = int(two)
+            else:                
+                failedline = int(inLine[5])
+        if failedline == 1:
+            firsttest_html = '<li>' + inLine + '</li>'
+            firstdelete_html = '<li>' + inLine + '</li>'
+        if failedline == 2:
+            secondtest_html = '<li>' + inLine + '</li>'
+            seconddelete_html = '<li>' + inLine + '</li>'
+        if failedline == 3:
+            thirdtest_html = '<li>' + inLine + '</li>'
+            thirddelete_html = '<li>' + inLine + '</li>'
+        if failedline == 4:
+            fourthtest_html = '<li>' + inLine + '</li>'
+            fourthdelete_html = '<li>' + inLine + '</li>'
+        if failedline == 5:
+            fifthtest_html = '<li>' + inLine + '</li>'
+            fifthdelete_html = '<li>' + inLine + '</li>'
+        if failedline == 10:
+            sixthtest_html = '<li>' + inLine + '</li>'
+            sixthdelete_html = '<li>' + inLine + '</li>'
+
+    if inLine.startswith('Delete'):
+        if inLine[7].isdigit():
+            if inLine[8].isdigit():
+                do = inLine[7] + inLine[8]
+                numlines = int(do)
+            else:
+                numlines = int(inLine[7])
+        if numlines == 1:
+            firstdelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, firstthread = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 2:
+            seconddelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, secondthreads = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 3:
+            thirddelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, thirdthreads = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 4:
+            fourthdelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, fourththreads = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 5:
+            fifthdelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, fifththreads = get_test_threads(tfilename, numlines, rposition)
+        if numlines == 10:
+            sixthdelete_html = '<li><span class="caret">' + inLine + '</span><ul class="nested">'
+            rposition, sixththreads = get_test_threads(tfilename, numlines, rposition)
+   
+    with open(tfilename, 'r') as infile:
+        infile.seek(rposition,0)
+        inLine = infile.readline()
+        rposition = infile.tell()
     
     
 with open(out_html, 'w') as outfile:
@@ -224,27 +243,27 @@ with open(out_html, 'w') as outfile:
     outfile.write(name_html)
     outfile.write(create_html)
     outfile.write(firsttest_html)
-    if not firsttest.startswith('Test'):
-        outfile.write(firstthreads_html)
+    if not firsttest_html.startswith('<li>Test'):
+        outfile.write(firstthread_html)
         outfile.write(ulClose_html)
     outfile.write(secondtest_html)
-    if not secondtest.startswith('Test'):
+    if not secondtest_html.startswith('<li>Test'):
         outfile.write(secondthreads_html)
         outfile.write(ulClose_html)
     outfile.write(thirdtest_html)
-    if not thirdtest.startswith('Test'):
+    if not thirdtest_html.startswith('<li>Test'):
         outfile.write(thirdthreads_html)
         outfile.write(ulClose_html)
     outfile.write(fourthtest_html)
-    if not fourthtest.startswith('Test'):
+    if not fourthtest_html.startswith('<li>Test'):
         outfile.write(fourththreads_html)
         outfile.write(ulClose_html)
     outfile.write(fifthtest_html)
-    if not fifthtest.startswith('Test'):
+    if not fifthtest_html.startswith('<li>Test'):
         outfile.write(fifththreads_html)
         outfile.write(ulClose_html)
     outfile.write(sixthtest_html)
-    if not sixthtest.startswith('Test'):
+    if not sixthtest_html.startswith('<li>Test'):
         outfile.write(sixththreads_html)
         outfile.write(ulClose_html)
         
@@ -252,37 +271,37 @@ with open(out_html, 'w') as outfile:
 
 
     outfile.write(delete_html)
-    if firsttest.startswith('Test'):
+    if firsttest_html.startswith('<li>Test'):
         outfile.write(firsttest_html)
     else:
         outfile.write(firstdelete_html)
-        outfile.write(firstthreads)
+        outfile.write(firstthread)
         outfile.write(ulClose_html)
-    if secondtest.startswith('Test'):
+    if secondtest_html.startswith('<li>Test'):
         outfile.write(secondtest_html)
     else:
         outfile.write(seconddelete_html)
         outfile.write(secondthreads)
         outfile.write(ulClose_html)
-    if thirdtest.startswith('Test'):
+    if thirdtest_html.startswith('<li>Test'):
         outfile.write(thirdtest_html)
     else:
         outfile.write(thirddelete_html)
         outfile.write(thirdthreads)
         outfile.write(ulClose_html)
-    if fourthtest.startswith('Test'):
+    if fourthtest_html.startswith('<li>Test'):
         outfile.write(fourthtest_html)
     else:
         outfile.write(fourthdelete_html)
         outfile.write(fourththreads)
         outfile.write(ulClose_html)
-    if fifthtest.startswith('Test'):
+    if fifthtest_html.startswith('<li>Test'):
         outfile.write(fifthtest_html)
     else:
         outfile.write(fifthdelete_html)
         outfile.write(fifththreads)
         outfile.write(ulClose_html)
-    if sixthtest.startswith('Test'):
+    if sixthtest_html.startswith('<li>Test'):
         outfile.write(sixthtest_html)
     else:
         outfile.write(sixthdelete_html)
