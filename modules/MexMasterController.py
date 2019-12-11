@@ -10,6 +10,8 @@ import shlex
 import os
 import imaplib
 import email
+import queue
+import sys
 
 from mex_rest import MexRest
 from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet, Organization
@@ -51,7 +53,9 @@ class MexMasterController(MexRest):
         self.email_address = None
         self.organization_name = None
         self._mail = None
-        
+
+        self._queue_obj = queue.Queue()
+
         self._number_login_requests = 0
         self._number_login_requests_success = 0
         self._number_login_requests_fail = 0
@@ -117,6 +121,16 @@ class MexMasterController(MexRest):
         self._number_deletecloudlet_requests_success = 0
         self._number_deletecloudlet_requests_fail = 0
 
+        self._number_showautoclusterpolicy_requests = 0
+        self._number_showautoclusterpolicy_requests_success = 0
+        self._number_showautoclusterpolicy_requests_fail = 0
+        self._number_createautoclustepolicy_requests = 0
+        self._number_createutoclustepolicy_requests_success = 0
+        self._number_createutoclustepolicy_requests_fail = 0
+        self._number_deleteutoclustepolicy_requests = 0
+        self._number_deleteutoclustepolicy_requests_success = 0
+        self._number_deleteutoclustepolicy_requests_fail = 0
+
         self._number_showappinsts_requests = 0
         self._number_showappinsts_requests_success = 0
         self._number_showappinsts_requests_fail = 0
@@ -152,6 +166,12 @@ class MexMasterController(MexRest):
 
     def get_default_cluster_name(self):
         return shared_variables.cluster_name_default
+
+    def get_default_app_name(self):
+        return shared_variables.app_name_default
+
+    def get_default_flavor_name(self):
+        return shared_variables.flavor_name_default
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
@@ -1671,7 +1691,7 @@ class MexMasterController(MexRest):
 
         logger.info('create app instance on mc at {}. \n\t{}'.format(url, payload))
 
-        def send_message():
+        def send_message(thread_name='Thread'):
             self._number_createappinst_requests += 1
 
             try:
@@ -1685,6 +1705,7 @@ class MexMasterController(MexRest):
                     raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
             except Exception as e:
                 self._number_createappinst_requests_fail += 1
+                self._queue_obj.put({thread_name:sys.exc_info()})
                 raise Exception("post failed:", e)
 
             self.prov_stack.append(lambda:self.delete_app_instance(region=region, token=self.super_token, app_name=appinst['key']['app_key']['name'], developer_name=appinst['key']['app_key']['developer_key']['name'], app_version=appinst['key']['app_key']['version'], cluster_instance_name=appinst['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=appinst['key']['cluster_inst_key']['cloudlet_key']['name'], operator_name=appinst['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=appinst['key']['cluster_inst_key']['developer']))
@@ -1696,7 +1717,8 @@ class MexMasterController(MexRest):
             return resp
         
         if use_thread is True:
-            t = threading.Thread(target=send_message)
+            thread_name = f'Thread-{appinst["key"]["app_key"]["name"]}-{str(time.time())}'
+            t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
             t.start()
             return t
         else:
@@ -2219,6 +2241,56 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
+    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/CreateAutoScalePolicy'
+
+        payload = None
+        policy = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time).cloudlet
+            policy_dict = {'autoscalepolicy': policy}
+            if region is not None:
+                policy_dict['region'] = region
+
+            payload = json.dumps(policy_dict)
+
+        logger.info('create autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_createautoscalepolicy_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_createautoscalepolicy_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                    
+            except Exception as e:
+                self._number_createautoscalepolicy_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self.prov_stack.append(lambda:self.delete_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['operator_key']['name']))
+
+            self._number_createautoscalepolicy_requests_success += 1
+
+            
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)
@@ -2232,9 +2304,24 @@ class MexMasterController(MexRest):
 
 
     def wait_for_replies(self, *args):
+        logging.info(f'waiting on {len(args)} threads')
+        failed_thread_list = []
+
         for x in args:
             if isinstance(x, list):
                 for x2 in x:
                     x.join()
             x.join()
-           
+
+            
+        while not self._queue_obj.empty():
+            try:
+                exec = self._queue_obj.get(block=False)
+                logging.error(f'thread {list(exec)[0]} failed with {exec[list(exec)[0]]}')
+                failed_thread_list.append(exec)
+            except queue.Empty:
+                pass
+
+        logging.info(f'number of failed threads:{len(failed_thread_list)}')
+        if failed_thread_list:
+            raise Exception(f'{len(failed_thread_list)} threads failed:', failed_thread_list)
