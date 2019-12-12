@@ -32,6 +32,7 @@ class MexApp(object):
             logging.debug(f'waiting for {exp_return_data}')
             (return_data, addr) = client_socket.recvfrom(data_size)
             logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
+            #client_socket.shutdown(socket.SHUT_RDWR)
             client_socket.close()
         except Exception as e:
             client_socket.close()
@@ -40,7 +41,7 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def ping_tcp_port(self, host, port):
+    def ping_tcp_port(self, host, port, wait_time=0):
         data = 'ping'
         exp_return_data = 'pong'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
@@ -54,6 +55,8 @@ class MexApp(object):
             client_socket.sendall(bytes(data, encoding='utf-8'))
             return_data = client_socket.recv(data_size)
             logging.debug('data recevied back:' + return_data.decode('utf-8'))
+            logging.info(f'holding port for {wait_time}s')
+            time.sleep(wait_time)
             client_socket.close()
         except Exception as e:
             print('caught exception')
@@ -89,12 +92,12 @@ class MexApp(object):
         self.ping_udp_port(host, int(port))
         return True
 
-    def tcp_port_should_be_alive(self, host, port):
+    def tcp_port_should_be_alive(self, host, port, wait_time=0):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
         
-        self.ping_tcp_port(host, port)
+        self.ping_tcp_port(host, port, wait_time)
         return True
 
     def http_port_should_be_alive(self, host, port, page):
