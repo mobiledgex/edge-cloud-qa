@@ -2,12 +2,12 @@
 Documentation  Cluster size for openstack with IpAccessDed and Kubernetes
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  String
 Library  OperatingSystem
 Library  Collections
 Library  DateTime
 		
+Suite Teardown  WriteHTML
 Test Setup      Setup
 Test Teardown   Teardown
 
@@ -258,3 +258,7 @@ Failed Data
 	Cleanup provisioning
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
+
+
+WriteHTML
+	Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
