@@ -211,6 +211,8 @@ Setup
 	${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
 	${FileName}=    Catenate  SEPARATOR=    ${cloudlet_name_openstack}   OpenstackTimingsDockerDedicated
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}	
+	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
+	
 	${x}=  Evaluate    random.randint(2,20000)   random
 	${x}=  Convert To String  ${x}
 	${cluster_name}=  Catenate  SEPARATOR=  timecl  ${x}
