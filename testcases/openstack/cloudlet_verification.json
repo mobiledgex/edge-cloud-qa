@@ -1,0 +1,2528 @@
+{
+
+
+  "stressServer" :{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  1, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"]
+    ],
+    "server":{
+        "repeat":3,
+        "definition":{
+          "image" :"mobiledgex-v2.0.3",
+          "flavor": "m4.small",
+          "nic": "net-id=huber-mex-net01",
+          "wait": "yes",
+          "config-drive": "True",
+          "property": "skipk8s=yes",
+          "prefiks-name": "hubert.02.buckhorn.test"
+      }
+    },
+    "delete":[
+      [0,"subnet","delete huber-mex-subnet01" ],
+      [1,"network","delete huber-mex-net01"]
+      ]
+
+  },
+
+
+  "simpleDeplyment":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  1, "network","create huber-mex-net02","-f json"],
+      [  2, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+      [  3, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
+      [  4, "router","create huber.mex.rtr01","-f json"],
+      [  5, "router","add subnet huber.mex.rtr01 huber-mex-subnet01",""],
+      [  6, "router","add subnet huber.mex.rtr01 huber-mex-subnet02",""]
+    ]
+   ,
+    "delete":[
+      [0,"router","remove subnet huber.mex.rtr01 huber-mex-subnet01"],
+      [1,"router","remove subnet huber.mex.rtr01 huber-mex-subnet02"],
+      [2,"router","delete huber.mex.rtr01" ],
+      [3,"network","delete huber-mex-net01"],
+      [4,"network","delete huber-mex-net02"]
+      ]
+  },
+
+
+  "pingTest":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"]
+    ]
+   ,
+    "delete":[
+      [3,"network","delete huber-mex-net01"]
+      ]
+  },
+
+  "pingTest2":{
+    "create":[
+      [  0, "server","create --image mobiledgex-v2.0.3 --flavor m4.small --nic net-id=huber-mex-netX,v4-fixed-ip=192.168.13.15  --wait  hubert.01.buckhorn.test","-f json"]
+    ]
+   ,
+    "delete":[
+      [0,"server","delete  hubert.01.buckhorn.test"]
+      ]
+  },
+
+  "check_openstack_limits": {
+    "maxTotalInstances": {
+      "min": 100
+    },
+    "maxTotalRAMSize": {
+      "min": 512000
+    },
+    "maxSecurityGroups": {
+      "min": 10
+    },
+    "maxTotalCores": {
+      "min": 20
+    },
+    "maxTotalFloatingIps": {
+      "min": 10
+    },
+    "maxTotalVolumeGigabytes": {
+      "min": 5000
+    },
+    "maxTotalVolumes": {
+      "min": 100
+    },
+    "maxPersonalitySize": {
+      "key": "this is to show error when min or max keys do not exist"
+    },
+    "Parameternottobefound": {
+      "key": "this is to show error when parameter is not found in API"
+    }
+  },
+
+  "check_openstack_flavor_list": {
+    "tiny-FAIL": {
+      "RAM": {
+        "min": 2,
+        "max": 3
+      },
+      "Disk": {
+        "min": 5,
+        "max": 15
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 1,
+        "max": 2
+      },
+      "Is Public": "True"
+    },
+    "medium": {
+      "RAM": {
+        "min": 3192,
+        "max": 5125
+      },
+      "Disk": {
+        "min": 25,
+        "max": 50
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 2,
+        "max": 3
+      },
+      "Is Public": "True"
+    },
+    "large": {
+      "RAM": {
+        "min": 7912,
+        "max": 9125
+      },
+      "Disk": {
+        "min": 65,
+        "max": 99
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 4,
+        "max": 6
+      },
+      "Is Public": "True"
+    },
+    "xlarge": {
+      "RAM": {
+        "min": 16384,
+        "max": 16384
+      },
+      "Disk": {
+        "min": 120,
+        "max": 190
+      },
+      "Ephemeral": {
+        "min": 0,
+        "max": 0
+      },
+      "VCPUs": {
+        "min": 7,
+        "max": 10
+      },
+      "Is Public": "True"
+    }
+  },
+
+  "get_openstack_limits": [
+    {
+      "testID": "ffx030",
+      "test": {
+        "Name": "maxServerMeta",
+        "Value": 12800
+      }
+    },
+    {
+      "testID": "ffx031",
+      "test": {
+        "Name": "maxTotalInstances",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx032",
+      "test": {
+        "Name": "maxPersonality",
+        "Value": 50
+      }
+    },
+    {
+      "testID": "ffx033",
+      "test": {
+        "Name": "totalServerGroupsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx034",
+      "test": {
+        "Name": "maxImageMeta",
+        "Value": 1280
+      }
+    },
+    {
+      "testID": "ffx035",
+      "test": {
+        "Name": "maxPersonalitySize",
+        "Value": 655360
+      }
+    },
+    {
+      "testID": "ffx036",
+      "test": {
+        "Name": "maxTotalRAMSize",
+        "Value": 512000
+      }
+    },
+    {
+      "testID": "ffx037",
+      "test": {
+        "Name": "maxServerGroups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx038",
+      "test": {
+        "Name": "maxSecurityGroupRules",
+        "Value": 20
+      }
+    },
+    {
+      "testID": "ffx039",
+      "test": {
+        "Name": "maxTotalKeypairs",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx03a",
+      "test": {
+        "Name": "totalCoresUsed",
+        "Value": 78
+      }
+    },
+    {
+      "testID": "ffx03b",
+      "test": {
+        "Name": "totalRAMUsed",
+        "Value": 114688
+      }
+    },
+    {
+      "testID": "ffx03c",
+      "test": {
+        "Name": "maxSecurityGroups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx03d",
+      "test": {
+        "Name": "totalFloatingIpsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx03e",
+      "test": {
+        "Name": "totalInstancesUsed",
+        "Value": 22
+      }
+    },
+    {
+      "testID": "ffx03",
+      "test": {
+        "Name": "maxServerGroupMembers",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx03f",
+      "test": {
+        "Name": "maxTotalFloatingIps",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx0301",
+      "test": {
+        "Name": "totalSecurityGroupsUsed",
+        "Value": 1
+      }
+    },
+    {
+      "testID": "ffx0302",
+      "test": {
+        "Name": "maxTotalCores",
+        "Value": 200
+      }
+    },
+    {
+      "testID": "ffx0303",
+      "test": {
+        "Name": "totalSnapshotsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx0304",
+      "test": {
+        "Name": "maxTotalBackups",
+        "Value": 10
+      }
+    },
+    {
+      "testID": "ffx0305",
+      "test": {
+        "Name": "maxTotalVolumeGigabytes",
+        "Value": 5000
+      }
+    },
+    {
+      "testID": "ffx0306",
+      "test": {
+        "Name": "maxTotalSnapshots",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx0307",
+      "test": {
+        "Name": "maxTotalBackupGigabytes",
+        "Value": 1000
+      }
+    },
+    {
+      "testID": "ffx0308",
+      "test": {
+        "Name": "totalBackupGigabytesUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx0309",
+      "test": {
+        "Name": "maxTotalVolumes",
+        "Value": 100
+      }
+    },
+    {
+      "testID": "ffx030a",
+      "test": {
+        "Name": "totalVolumesUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx030b",
+      "test": {
+        "Name": "totalBackupsUsed",
+        "Value": 0
+      }
+    },
+    {
+      "testID": "ffx030c",
+      "test": {
+        "Name": "totalGigabytesUsed",
+        "Value": 0
+      }
+    }
+  ],
+
+  "get_openstack_server_list": [
+    {
+      "testID": "testFailed",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "Name will be not found",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "NOTfdffdaf4-7648-4ad9-86da-308046b219fb",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.5.101"
+      }
+    },
+    {
+      "testID": "one",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-automationbuckhorncloudlet-cluster1570804034-094558-developer1570804034-094558",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "fdffdaf4-7648-4ad9-86da-308046b219fb",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.5.101"
+      }
+    },
+    {
+      "testID": "two",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-automationbuckhorncloudlet-cluster1570804034-094558-developer1570804034-094558",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "f01bc977-c181-4bac-a3d6-c332c8faf93d",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.5.10"
+      }
+    },
+    {
+      "testID": "two A",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-automationbuckhorncloudlet-autocluster1570798882-developer1570798881-908776",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "05693fe6-0d99-4b16-83d0-ce77fb4e814f",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.4.101"
+      }
+    },
+    {
+      "testID": "0001",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-automationbuckhorncloudlet-autocluster1570798882-developer1570798881-908776",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "7de2aec8-02fd-4770-ad5d-4c9c1b26c911",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.4.10"
+      }
+    },
+    {
+      "testID": "0002",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-automationbuckhorncloudlet-autocluster1570778759-developer1570778759-3050168",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "45d39bfb-167d-426b-8685-fd8cb9847d49",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.2.101"
+      }
+    },
+    {
+      "testID": "007",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-automationbuckhorncloudlet-autocluster1570778759-developer1570778759-3050168",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "603fa9b7-2c22-4069-a32b-2d1cd752d834",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.2.10"
+      }
+    },
+    {
+      "testID": "1",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "automationbuckhorncloudlet.gddt.mobiledgex.net",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "ae877776-74fc-48f9-b31a-4e75bc8195b5",
+        "Flavor": "m4.medium",
+        "Networks": "external-network-shared=37.50.143.118"
+      }
+    },
+    {
+      "testID": "2",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "automationBuckhornCloudlet.GDDT.pf",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "a05de240-4a3a-46e9-8739-f31c04036f92",
+        "Flavor": "flavor_vBond_vBond",
+        "Networks": "external-network-shared=37.50.143.102"
+      }
+    },
+    {
+      "testID": "3",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-automationbuckhorncloudlet-autocluster1570690342-developer1570690342-5976791",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "67a559c4-2e5f-4aee-8fa4-c06a0dea8341",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.1.101"
+      }
+    },
+    {
+      "testID": "4",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-automationbuckhorncloudlet-autocluster1570690342-developer1570690342-5976791",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "3318fff8-e700-43b3-9c9f-2d282a51d1c0",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.1.10"
+      }
+    },
+    {
+      "testID": "5",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-automationbuckhorncloudlet-autocluster1570638023-developer1570638023-518905",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "5f6826a3-6d8a-4f7f-aaf2-2bb7249c1b40",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.0.101"
+      }
+    },
+    {
+      "testID": "6",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-automationbuckhorncloudlet-autocluster1570638023-developer1570638023-518905",
+        "Image": "mobiledgex-v2.0.3",
+        "ID": "8e83c937-a191-4129-8829-c9d3bb6a6295",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.0.10"
+      }
+    },
+    {
+      "testID": "7",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mexplat-stage-buckhorn-cloudlet.gddt.mobiledgex.net",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "f1b42f8e-2914-4c8e-9cc5-18f016c3052b",
+        "Flavor": "flavor.nc.osh-master",
+        "Networks": "external-network-shared=37.50.143.103"
+      }
+    },
+    {
+      "testID": "8",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "lev-test-buckhorn.gddt.mobiledgex.net",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "0890f1e8-acb0-42af-a5dc-5eb48260bb16",
+        "Flavor": "m4.medium",
+        "Networks": "external-network-shared=37.50.143.119"
+      }
+    },
+    {
+      "testID": "9",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-mexplat-stage-buckhorn-cloudlet-mmmm-mobiledgex",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "a47ffe7b-2294-443a-9ea7-b9435b52a9f4",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.13.101"
+      }
+    },
+    {
+      "testID": "10",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-mexplat-stage-buckhorn-cloudlet-mmmm-mobiledgex",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "9216bff9-3143-4421-b138-f904c7bfe13f",
+        "Flavor": "m4.small",
+        "Networks": "mex-k8s-net-1=10.101.13.2"
+      }
+    },
+    {
+      "testID": "11",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-mexplat-stage-buckhorn-cloudlet-autoclusterfacedetectiondemo-mobiledgex",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "ba242458-c75b-4de3-9271-60ba0a804ffc",
+        "Flavor": "flavor_cNSO_cNSO",
+        "Networks": "mex-k8s-net-1=10.101.11.2"
+      }
+    },
+    {
+      "testID": "12",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "popvue-cluster-2.buckhorn-mexdemo.gddt.mobiledgex.net",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "a768732c-849e-4a7d-8532-0729f69999c7",
+        "Flavor": "flavor_ESC_ESC",
+        "Networks": "external-network-shared=37.50.143.112"
+      }
+    },
+    {
+      "testID": "13",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-node-1-buckhorn-mexdemo-popvue-cluster-popvue",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "e77fadc9-58ef-45d4-a7b6-befb1b6e6ed2",
+        "Flavor": "flavor_ESC_ESC",
+        "Networks": "mex-k8s-net-1=10.101.3.101"
+      }
+    },
+    {
+      "testID": "14",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "mex-k8s-master-buckhorn-mexdemo-popvue-cluster-popvue",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "a7fc269c-a8c6-4414-b10d-875e7ff8c19b",
+        "Flavor": "flavor_ESC_ESC",
+        "Networks": "mex-k8s-net-1=10.101.3.2"
+      }
+    },
+    {
+      "testID": "15",
+      "test": {
+        "Status": "ACTIVE",
+        "Name": "smartlabs-buckhorn",
+        "Image": "mobiledgex-v2.0.2",
+        "ID": "3c083ebe-05db-4716-a9a0-c8f1f28bf05b",
+        "Flavor": "m4.xxlarge24",
+        "Networks": "external-network-shared=37.50.143.116"
+      }
+    }
+  ],
+  "get_openstack_image_list": [
+    {
+      "testID": "willBeFailed",
+      "test": {
+        "Status": "notfound",
+        "ID": "notcabfe9c0-9e6d-490f-84d6-9f2dd20c7c9c",
+        "Name": "DrDOS"
+      }
+    },
+    {
+      "testID": "1",
+      "test": {
+        "Status": "active",
+        "ID": "cabfe9c0-9e6d-490f-84d6-9f2dd20c7c9c",
+        "Name": "CentOS-7-x86_64-GenericCloud"
+      }
+    },
+    {
+      "testID": "2",
+      "test": {
+        "Status": "active",
+        "ID": "3b206780-4048-462f-9cab-c1ddd56529e8",
+        "Name": "Magenta-Server"
+      }
+    },
+    {
+      "testID": "3",
+      "test": {
+        "Status": "active",
+        "ID": "26da7ac7-f775-46af-9acc-5f00d0a90fbb",
+        "Name": "Magenta-Server-2"
+      }
+    },
+    {
+      "testID": "4",
+      "test": {
+        "Status": "active",
+        "ID": "28545a53-4cb0-4827-8201-a76212ddc207",
+        "Name": "alt_cirros"
+      }
+    },
+    {
+      "testID": "5",
+      "test": {
+        "Status": "active",
+        "ID": "e54e6ee4-87bf-4e07-92aa-cb686f715760",
+        "Name": "andy_windows2"
+      }
+    },
+    {
+      "testID": "6",
+      "test": {
+        "Status": "active",
+        "ID": "690402e7-8eb6-44ab-b7e9-1ed5a1f73c27",
+        "Name": "andyimage"
+      }
+    },
+    {
+      "testID": "7",
+      "test": {
+        "Status": "active",
+        "ID": "8a9d6b07-4e23-4b2f-bca6-6b71dd61e9db",
+        "Name": "andyupload_centos7"
+      }
+    },
+    {
+      "testID": "8",
+      "test": {
+        "Status": "active",
+        "ID": "1625042f-2244-47ff-b867-d96c6abe122f",
+        "Name": "artupload_centos7"
+      }
+    },
+    {
+      "testID": "9",
+      "test": {
+        "Status": "active",
+        "ID": "c2b946f7-1ef6-4276-a680-583cd6cd3050",
+        "Name": "cirros"
+      }
+    },
+    {
+      "testID": "a",
+      "test": {
+        "Status": "active",
+        "ID": "baba3c67-001f-4aeb-9851-a76039d65513",
+        "Name": "cirros-0.4.0"
+      }
+    },
+    {
+      "testID": "b",
+      "test": {
+        "Status": "active",
+        "ID": "60d1d122-786a-4c8f-9d07-da7e88877e27",
+        "Name": "mobiledgex-v2.0.2"
+      }
+    },
+    {
+      "testID": "c",
+      "test": {
+        "Status": "active",
+        "ID": "27474d49-e6bf-45cb-8d0b-9f69a277161f",
+        "Name": "mobiledgex-v2.0.2-ntt"
+      }
+    },
+    {
+      "testID": "d",
+      "test": {
+        "Status": "active",
+        "ID": "b83efa80-c978-4c19-8d90-60e66083120e",
+        "Name": "mobiledgex-v2.0.3"
+      }
+    },
+    {
+      "testID": "e",
+      "test": {
+        "Status": "active",
+        "ID": "f89e3a86-0a83-45f4-983d-6f174dec853f",
+        "Name": "server_ping_threaded"
+      }
+    },
+    {
+      "testID": "f",
+      "test": {
+        "Status": "active",
+        "ID": "f7764ff0-e66c-4b7d-b0ef-4a662c485624",
+        "Name": "server_ping_threaded_centos7"
+      }
+    },
+    {
+      "testID": "10",
+      "test": {
+        "Status": "active",
+        "ID": "a84d5669-442e-41a7-85d6-b76b22ae6356",
+        "Name": "server_ping_threaded_notrunning_centos7"
+      }
+    },
+    {
+      "testID": "11",
+      "test": {
+        "Status": "active",
+        "ID": "1f1e3bc4-e1c9-48d0-b549-b4df93916ee6",
+        "Name": "server_ping_threaded_windows"
+      }
+    },
+    {
+      "testID": "12",
+      "test": {
+        "Status": "active",
+        "ID": "9364157f-495d-4528-9fd6-95027df58eaa",
+        "Name": "server_ping_threaded_windows2012"
+      }
+    },
+    {
+      "testID": "13",
+      "test": {
+        "Status": "active",
+        "ID": "c0d0ddf7-0694-40da-8a74-e4659f3b7d96",
+        "Name": "touchstone-server"
+      }
+    },
+    {
+      "testID": "14",
+      "test": {
+        "Status": "active",
+        "ID": "7bfd03e5-0515-4a57-93e7-221b885d7895",
+        "Name": "touchstone-server-mq"
+      }
+    },
+    {
+      "testID": "15",
+      "test": {
+        "Status": "active",
+        "ID": "ea0ad502-041f-46db-b4cc-46a4fdf2e1c9",
+        "Name": "ubuntu-16.04.1-server-amd64"
+      }
+    },
+    {
+      "testID": "16",
+      "test": {
+        "Status": "active",
+        "ID": "e47261b6-65ea-4fb7-b568-71d53cf4de0f",
+        "Name": "ws2016"
+      }
+    },
+    {
+      "testID": "17",
+      "test": {
+        "Status": "active",
+        "ID": "f322b71d-63dc-43f4-b531-e515b132de85",
+        "Name": "xenial-server"
+      }
+    }
+  ],
+  "get_openstack_network_list": [
+    {
+      "testID": "007",
+      "test": {
+        "Subnets": "NOT-A-SUBNET-389d762b-0e9a-4fe2-a208-813a78ba362b",
+        "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+        "Name": "external-network-shared"
+      }
+    },
+    {
+      "testID": "007a",
+      "test": {
+        "Subnets": "SHALL-NO-PASS-389d762b-0e9a-4fe2-a208-813a78ba362b, YET-ANOTHER-not-EXIST",
+        "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+        "Name": "external-network-shared"
+      }
+    },
+    {
+      "testID": "a",
+      "test": {
+        "Subnets": "389d762b-0e9a-4fe2-a208-813a78ba362b",
+        "ID": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+        "Name": "external-network-shared"
+      }
+    },
+    {
+      "testID": "b",
+      "test": {
+        "Subnets": "37a8df63-4582-4ba0-964a-9c9ef626478c",
+        "ID": "0a1890cd-ab1b-48a2-8ff1-8a809ac506b6",
+        "Name": "external-tdinterref-shared"
+      }
+    },
+    {
+      "testID": "c",
+      "test": {
+        "Subnets": "00b70242-d5fa-4a62-bcba-6a5b32ac4afd, 22f8ea69-4708-463c-b1ed-c49bcff02f3f, 54849dec-cbad-4f88-8c94-54c1269a7bb0, 5fabfa5f-a0c3-4db3-9d68-c54abd424f78, 666d1be1-e285-42ce-9144-57eb963808cd, 78740955-1c18-48c8-8ced-5915e401003a, 83fbe308-1e1d-41f8-99ee-3f5fce652900, 85e0cb71-d378-4823-8088-2aa3e212e9c2, b46e2e33-62ac-4d36-98f1-4178b7dbd57f, f0371074-c5b5-428e-bd56-f76ca7db44fb",
+        "ID": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Name": "mex-k8s-net-1"
+      }
+    },
+    {
+      "testID": "d",
+      "test": {
+        "Subnets": "39fb3755-e5d4-40ef-8e9c-39a4435b1501",
+        "ID": "5bc32340-a7dc-4fc9-b2ae-27b72fab9b1e",
+        "Name": "external-network-02"
+      }
+    },
+    {
+      "testID": "e",
+      "test": {
+        "Subnets": "55836d40-dccb-4fb7-a160-338472c67ebd",
+        "ID": "c320fa58-269f-4e9a-8e39-92bb784cba6f",
+        "Name": "touchstone_shared"
+      }
+    },
+    {
+      "testID": "f",
+      "test": {
+        "Subnets": "4f97257a-d031-4c72-ae87-7b2c961ef95a",
+        "ID": "da49a106-e6f6-424a-8f3c-3390b69fec7f",
+        "Name": "externalIPv6-network-shared"
+      }
+    }
+  ],
+  "get_openstack_subnet_list": [
+    {
+      "testID": "f007",
+      "test": {
+        "Network": "NOT-135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.0.0/24",
+        "ID": "NOT-00b70242-d5fa-4a62-bcba-6a5b32ac4afd",
+        "Name": "NOT-mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570638023-developer1570638023-518905"
+      }
+    },
+    {
+      "testID": "f1",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.0.0/24",
+        "ID": "00b70242-d5fa-4a62-bcba-6a5b32ac4afd",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570638023-developer1570638023-518905"
+      }
+    },
+    {
+      "testID": "f2",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.6.0/24",
+        "ID": "22f8ea69-4708-463c-b1ed-c49bcff02f3f",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570952193-developer1570952193-1250827"
+      }
+    },
+    {
+      "testID": "f3",
+      "test": {
+        "Network": "0a1890cd-ab1b-48a2-8ff1-8a809ac506b6",
+        "Subnet": "10.108.90.160/28",
+        "ID": "37a8df63-4582-4ba0-964a-9c9ef626478c",
+        "Name": "external-tdinterref-shared-subnet"
+      }
+    },
+    {
+      "testID": "f4",
+      "test": {
+        "Network": "0806bac0-3a19-4da9-9a21-c681ce5140ad",
+        "Subnet": "37.50.143.96/27",
+        "ID": "389d762b-0e9a-4fe2-a208-813a78ba362b",
+        "Name": "external-subnet"
+      }
+    },
+    {
+      "testID": "f5",
+      "test": {
+        "Network": "5bc32340-a7dc-4fc9-b2ae-27b72fab9b1e",
+        "Subnet": "37.50.148.192/26",
+        "ID": "39fb3755-e5d4-40ef-8e9c-39a4435b1501",
+        "Name": "external-subnet-02"
+      }
+    },
+    {
+      "testID": "f6",
+      "test": {
+        "Network": "da49a106-e6f6-424a-8f3c-3390b69fec7f",
+        "Subnet": "2a01:598:4:4011::/64",
+        "ID": "4f97257a-d031-4c72-ae87-7b2c961ef95a",
+        "Name": "externalIPv6-subnet"
+      }
+    },
+    {
+      "testID": "f7",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.3.0/24",
+        "ID": "54849dec-cbad-4f88-8c94-54c1269a7bb0",
+        "Name": "mex-k8s-subnet-buckhorn-mexdemo-popvue-cluster-popvue"
+      }
+    },
+    {
+      "testID": "f8",
+      "test": {
+        "Network": "c320fa58-269f-4e9a-8e39-92bb784cba6f",
+        "Subnet": "192.168.255.0/24",
+        "ID": "55836d40-dccb-4fb7-a160-338472c67ebd",
+        "Name": "touchstone_shared_sub"
+      }
+    },
+    {
+      "testID": "f9",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.1.0/24",
+        "ID": "5fabfa5f-a0c3-4db3-9d68-c54abd424f78",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570690342-developer1570690342-5976791"
+      }
+    },
+    {
+      "testID": "fa",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.5.0/24",
+        "ID": "666d1be1-e285-42ce-9144-57eb963808cd",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570863916-developer1570863915-9944637"
+      }
+    },
+    {
+      "testID": "fb",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.2.0/24",
+        "ID": "78740955-1c18-48c8-8ced-5915e401003a",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570778759-developer1570778759-3050168"
+      }
+    },
+    {
+      "testID": "fc",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.7.0/24",
+        "ID": "839971eb-f280-411a-a49a-ac1f4bbe9ed8",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-cluster1571135967-6182833-developer1571135967-6182833"
+      }
+    },
+    {
+      "testID": "fd",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.13.0/24",
+        "ID": "85e0cb71-d378-4823-8088-2aa3e212e9c2",
+        "Name": "mex-k8s-subnet-mexplat-stage-buckhorn-cloudlet-mmmm-mobiledgex"
+      }
+    },
+    {
+      "testID": "fe",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.4.0/24",
+        "ID": "b46e2e33-62ac-4d36-98f1-4178b7dbd57f",
+        "Name": "mex-k8s-subnet-automationbuckhorncloudlet-autocluster1570798882-developer1570798881-908776"
+      }
+    },
+    {
+      "testID": "ff",
+      "test": {
+        "Network": "135e2a80-f4ff-4f50-8618-2cc82de88c7f",
+        "Subnet": "10.101.11.0/24",
+        "ID": "f0371074-c5b5-428e-bd56-f76ca7db44fb",
+        "Name": "mex-k8s-subnet-mexplat-stage-buckhorn-cloudlet-autoclusterfacedetectiondemo-mobiledgex"
+      }
+    }
+  ],
+
+"get_openstack_router_list": [
+  {
+    "testID": "0x007",
+    "test": {
+      "Status": "ACTIVE",
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "State": "UP",
+      "ID": "76fe16bf-213d-4fd0-9769-61dbae30be3e",
+      "Name": "NOT-mex-k8s-router-1"
+    }
+  },
+  {
+    "testID": "ff",
+    "test": {
+      "Status": "ACTIVE",
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "State": "UP",
+      "ID": "76fe16bf-213d-4fd0-9769-61dbae30be3e",
+      "Name": "mex-k8s-router-1"
+    }
+  }
+],
+
+
+"get_openstack_flavor_list": [
+  {
+    "testID": "ffa007",
+    "test": {
+      "Name": "NOTflavor_vManage_vManage",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": false,
+      "Disk": 30,
+      "ID": "0a39f736-c89c-492d-9e8d-610d9d1a489f"
+    }
+  },
+  {
+    "testID": "ffa",
+    "test": {
+      "Name": "flavor_vManage_vManage",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "0a39f736-c89c-492d-9e8d-610d9d1a489f"
+    }
+  },
+  {
+    "testID": "ffb",
+    "test": {
+      "Name": "flavor.nc.vrouter_vcp",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "16ae71be-1022-4847-8cbe-b8a1c9ac4cdb"
+    }
+  },
+  {
+    "testID": "ffc",
+    "test": {
+      "Name": "flavor.nc.vdoc",
+      "RAM": 12288,
+      "Ephemeral": 0,
+      "VCPUs": 6,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "17f91d92-2216-4269-8f34-4d9fab0ade59"
+    }
+  },
+  {
+    "testID": "ffd",
+    "test": {
+      "Name": "flavor.nc.mon",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 6,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "1b385442-b605-4a27-8e91-b754b84be254"
+    }
+  },
+  {
+    "testID": "ffe",
+    "test": {
+      "Name": "m4.medium",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "2569f37a-6b5a-47ef-9117-661ee7f8f427"
+    }
+  },
+  {
+    "testID": "fff",
+    "test": {
+      "Name": "m4.tiny",
+      "RAM": 512,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "3047d375-1677-4c21-9200-7ca8180919b1"
+    }
+  },
+  {
+    "testID": "ff0",
+    "test": {
+      "Name": "cNSO_IntraSelect_default",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "33a5cc85-1e6e-4859-994a-d37363979d16"
+    }
+  },
+  {
+    "testID": "ff1",
+    "test": {
+      "Name": "touchstone-flavor-micro",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "3808af0e-08c6-4722-82ec-3c1d4d9fcd26"
+    }
+  },
+  {
+    "testID": "ff6",
+    "test": {
+      "Name": "flavor.nc.log",
+      "RAM": 12288,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "385c24ca-77a3-48f2-987e-03246c637f7f"
+    }
+  },
+  {
+    "testID": "ff2",
+    "test": {
+      "Name": "flavor_ESC_ESC",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 30,
+      "ID": "3a90c9fa-27ff-4cd8-a3ba-18f41f6ca5a8"
+    }
+  },
+  {
+    "testID": "ff3",
+    "test": {
+      "Name": "ram64",
+      "RAM": 64,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "3d9bf69b-79f9-455d-822d-24c43b63209a"
+    }
+  },
+  {
+    "testID": "ff4",
+    "test": {
+      "Name": "flavor_vSmart_vSmart",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 16,
+      "ID": "40140697-a2fa-4479-b2fd-ca6d39a51434"
+    }
+  },
+  {
+    "testID": "ff7",
+    "test": {
+      "Name": "touchstone-flavor-small",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "434b309c-e523-4c11-bd39-eabfdf01acbb"
+    }
+  },
+  {
+    "testID": "ff8",
+    "test": {
+      "Name": "CSRv_minimal",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 8,
+      "ID": "454bb0a1-2fea-4679-8af0-0ebd36f31cb6"
+    }
+  },
+  {
+    "testID": "ff9",
+    "test": {
+      "Name": "touchstone-flavor-large",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "4bf5f519-6210-4e0c-9fc9-70ae6312fbca"
+    }
+  },
+  {
+    "testID": "ffx1",
+    "test": {
+      "Name": "touchstone-flavor-xlarge",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 32,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "515fab70-e385-40eb-bdce-7c8d3afc2930"
+    }
+  },
+  {
+    "testID": "ffx2",
+    "test": {
+      "Name": "flavor.nc.osh-master",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "5b3b7db6-2c0b-4162-babc-511da9bd51a6"
+    }
+  },
+  {
+    "testID": "ffx3",
+    "test": {
+      "Name": "touchstone-flavor-tiny",
+      "RAM": 1024,
+      "Ephemeral": 0,
+      "VCPUs": 1,
+      "Is Public": true,
+      "Disk": 1,
+      "ID": "5d66e1ef-c0d6-42d1-90b8-0d9fec88f541"
+    }
+  },
+  {
+    "testID": "ffx4",
+    "test": {
+      "Name": "touchstone-flavor-dpdk",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "5dd7e3af-aab4-4adc-9002-d5cb8678574e"
+    }
+  },
+  {
+    "testID": "ffx5",
+    "test": {
+      "Name": "touchstone-flavor-large-dpdk",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "646c66fb-4e2a-4482-a4ad-be3ff130089b"
+    }
+  },
+  {
+    "testID": "ffx6",
+    "test": {
+      "Name": "flavor.nc.dvm",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 160,
+      "ID": "6b382d15-6302-41e2-be1e-a5b4b95af729"
+    }
+  },
+  {
+    "testID": "ffx7",
+    "test": {
+      "Name": "flavor.nc.jump",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "6ef9f639-f638-4eed-a2bf-e33958e7d6a0"
+    }
+  },
+  {
+    "testID": "ffx8",
+    "test": {
+      "Name": "m4.xlarge",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 160,
+      "ID": "714418df-9bda-46d6-9e2f-96a79b985624"
+    }
+  },
+  {
+    "testID": "ffx9",
+    "test": {
+      "Name": "flavor.nc.vrouter_vfp",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 3,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "7be7566e-8d72-4e3e-b91c-35e527c1030d"
+    }
+  },
+  {
+    "testID": "ffx0",
+    "test": {
+      "Name": "touchstone-flavor-small-dpdk",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 10,
+      "ID": "8aca397e-e380-4eca-bd53-30ca9b30e9ce"
+    }
+  },
+  {
+    "testID": "ffxa",
+    "test": {
+      "Name": "flavor.nc.osh-node",
+      "RAM": 40960,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "8bbe13b6-1136-467f-b24a-073827e1ef9e"
+    }
+  },
+  {
+    "testID": "ffxb",
+    "test": {
+      "Name": "flavor_cNSO_cNSO",
+      "RAM": 16384,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 150,
+      "ID": "9130e67c-abd5-4c99-b56f-ed03977bc5e7"
+    }
+  },
+  {
+    "testID": "ff",
+    "test": {
+      "Name": "m4.large",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "920ee054-626b-482c-9b55-e136abd58576"
+    }
+  },
+  {
+    "testID": "ffxc",
+    "test": {
+      "Name": "touchstone-flavor-xlarge-dpdk",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 32,
+      "Is Public": true,
+      "Disk": 60,
+      "ID": "a275106e-7599-4011-9f3b-cd92d3c0dd57"
+    }
+  },
+  {
+    "testID": "ffxd",
+    "test": {
+      "Name": "m4.xxlarge24",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 24,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "b490f467-5247-4efe-bf66-3b45d4d2fb47"
+    }
+  },
+  {
+    "testID": "ffxe",
+    "test": {
+      "Name": "flavor_vBond_vBond",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "cbd034d7-997b-41cc-9d01-29e3d37d17f3"
+    }
+  },
+  {
+    "testID": "ffxf",
+    "test": {
+      "Name": "touchstone-flavor",
+      "RAM": 4096,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "d9366708-d11a-463e-b8ff-f7c1e6c98231"
+    }
+  },
+  {
+    "testID": "ffx00",
+    "test": {
+      "Name": "m4.xxlarge16",
+      "RAM": 32768,
+      "Ephemeral": 0,
+      "VCPUs": 16,
+      "Is Public": true,
+      "Disk": 80,
+      "ID": "e4c543d1-f040-43e1-a6d6-ea1b3b1b8f48"
+    }
+  },
+  {
+    "testID": "ffx01",
+    "test": {
+      "Name": "m4.small",
+      "RAM": 2048,
+      "Ephemeral": 0,
+      "VCPUs": 2,
+      "Is Public": true,
+      "Disk": 20,
+      "ID": "e66f2e7a-a82e-4e60-a6e9-75ab523131fe"
+    }
+  },
+  {
+    "testID": "ffx02",
+    "test": {
+      "Name": "touchstone-flavor-medium",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 8,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "ee738f9a-d161-482c-add5-c1458bb9ab7c"
+    }
+  },
+  {
+    "testID": "ffx03",
+    "test": {
+      "Name": "flavor.nc.storage",
+      "RAM": 8192,
+      "Ephemeral": 0,
+      "VCPUs": 4,
+      "Is Public": true,
+      "Disk": 40,
+      "ID": "f88d4970-7edf-4c33-b513-95706f9a43e5"
+    }
+  }
+],
+
+"get_openstack_security_list": [
+  {
+    "testID": "abc-007",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "smartlabs",
+      "Tags": [],
+      "ID": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Name": "NOTTOBEsmartlabs"
+    }
+  },
+  {
+    "testID": "abc-1",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "smartlabs",
+      "Tags": [],
+      "ID": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Name": "smartlabs"
+    }
+  },
+  {
+    "testID": "abc-2",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "",
+      "Tags": [],
+      "ID": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Name": "buckhorn-main.GDDT.pf-sg"
+    }
+  },
+  {
+    "testID": "abc-3",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "Default security group",
+      "Tags": [],
+      "ID": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Name": "default"
+    }
+  },
+  {
+    "testID": "abc-4",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "mextest",
+      "Tags": [],
+      "ID": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Name": "mextest"
+    }
+  },
+  {
+    "testID": "abc-5",
+    "test": {
+      "Project": "b6b6b3a1e35b449383be5e35a1913ccf",
+      "Description": "",
+      "Tags": [],
+      "ID": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Name": "andyvm-sg"
+    }
+  }
+],
+"get_openstack_security_group_rule_list": [
+  {
+    "testID": "abcd-0",
+    "test": {
+      "IP Range": null,
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "014d53f6-9105-4b22-a986-23a613cfd601"
+    }
+  },
+  {
+    "testID": "abcd-1",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "2015:2015",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "04233e35-4099-4a3f-8297-557c3fc22032"
+    }
+  },
+  {
+    "testID": "abcd-2",
+    "test": {
+      "IP Range": "35.222.155.38/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0505ad97-fa4c-40c1-9d13-3ed810530d50"
+    }
+  },
+  {
+    "testID": "abcd-3",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10002:10002",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "05c70af5-a3cd-4b0a-b951-2dbbb0028dc1"
+    }
+  },
+  {
+    "testID": "abcd-4",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "80:80",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "09aece9e-9796-4f19-aed5-4b3c45b0c41d"
+    }
+  },
+  {
+    "testID": "abcd-5",
+    "test": {
+      "IP Range": "35.226.64.48/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0b7c10fd-1f13-4cab-a747-a348e205fc96"
+    }
+  },
+  {
+    "testID": "abcd-6",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "0fa9a939-9fda-43a7-84ab-6af4b0f05542"
+    }
+  },
+  {
+    "testID": "abcd-7",
+    "test": {
+      "IP Range": "37.50.143.112/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "116a7e6a-5bb4-4b72-9bd5-a84aa698b915"
+    }
+  },
+  {
+    "testID": "abcd-8",
+    "test": {
+      "IP Range": "37.50.143.100/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "119c22cc-d369-4e10-87d6-281220f2b19b"
+    }
+  },
+  {
+    "testID": "abcd-9",
+    "test": {
+      "IP Range": "40.122.108.233/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1a8752e8-7363-4cbc-bff6-9f16426bb0ec"
+    }
+  },
+  {
+    "testID": "abcd-10",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10001:10001",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1b8d34d1-905a-4f48-a12f-0bdc0b66b8f2"
+    }
+  },
+  {
+    "testID": "abcd-11",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10004:10004",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "1ddf625d-e894-4b53-9551-3d73afd49fbd"
+    }
+  },
+  {
+    "testID": "abcd-12",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10000:10000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "1e3ffebc-36a0-405b-8011-c90ee2b8b731"
+    }
+  },
+  {
+    "testID": "abcd-13",
+    "test": {
+      "IP Range": "104.43.169.238/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "23d54924-427e-4a10-988a-9ec85621cc12"
+    }
+  },
+  {
+    "testID": "abcd-14",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "12001:12001",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "2749e404-c56b-4d9e-a60c-70a19acb62e7"
+    }
+  },
+  {
+    "testID": "abcd-15",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "8008:8008",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "296d15ab-0c4d-49ad-bf47-1778af79bf05"
+    }
+  },
+  {
+    "testID": "abcd-16",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "2a94877b-9e8a-4ea8-ab28-d7f8e95dca80"
+    }
+  },
+  {
+    "testID": "abcd-17",
+    "test": {
+      "IP Range": "104.3.7.54/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "2fcea33d-95a9-48a0-87a3-8f1705731dd0"
+    }
+  },
+  {
+    "testID": "abcd-18",
+    "test": {
+      "IP Range": "35.236.51.167/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "304a0154-590c-4ab4-9bc2-5bcb04c75ba5"
+    }
+  },
+  {
+    "testID": "abcd-19",
+    "test": {
+      "IP Range": "106.51.64.0/18",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3076c5a7-e89c-48eb-a950-782ca51ff46d"
+    }
+  },
+  {
+    "testID": "abcd-20",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "31992a8f-bcd9-47dc-bd29-082c5feb452e"
+    }
+  },
+  {
+    "testID": "abcd-21",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "1234:1234",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3319c3e8-6f7c-4a5e-8183-178093377ec4"
+    }
+  },
+  {
+    "testID": "abcd-22",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "65432:65432",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "338e61d4-5675-4a32-a6c8-a920c574bd70"
+    }
+  },
+  {
+    "testID": "abcd-23",
+    "test": {
+      "IP Range": "34.94.19.254/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3778f23a-51ae-42e1-a0aa-8a456f04ac3f"
+    }
+  },
+  {
+    "testID": "abcd-24",
+    "test": {
+      "IP Range": "37.50.143.110/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "38844ea8-891c-41cb-aa26-4a736191afc0"
+    }
+  },
+  {
+    "testID": "abcd-25",
+    "test": {
+      "IP Range": "50.207.0.0/16",
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "3df70434-adbb-4b31-8158-383e4a4485a2"
+    }
+  },
+  {
+    "testID": "abcd-26",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmpv6",
+      "Remote Security Group": null,
+      "ID": "410ebca5-c3e0-4dc6-ab44-4ea13cf4a797"
+    }
+  },
+  {
+    "testID": "abcd-27",
+    "test": {
+      "IP Range": null,
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "463ae050-2299-4805-8880-0b876d61344e"
+    }
+  },
+  {
+    "testID": "abcd-28",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "111:111",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "46501148-fe47-4fff-aa9c-c1a0cdf6bc4e"
+    }
+  },
+  {
+    "testID": "abcd-29",
+    "test": {
+      "IP Range": "37.50.143.109/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "483842b0-d65b-47f0-89b8-4506a7887dfc"
+    }
+  },
+  {
+    "testID": "abcd-30",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "49d0ff1f-7b3f-40cc-841e-9b85474b50e8"
+    }
+  },
+  {
+    "testID": "abcd-31",
+    "test": {
+      "IP Range": "37.50.143.102/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "4e516060-ba3b-4c21-ba3a-10c352372393"
+    }
+  },
+  {
+    "testID": "abcd-32",
+    "test": {
+      "IP Range": "47.186.0.0/16",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "4fcbae4d-bb59-4f10-95af-7bdd84a43c3e"
+    }
+  },
+  {
+    "testID": "abcd-33",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "6666:6666",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "55b3fe8a-292e-41a2-bd5a-ede363da55ed"
+    }
+  },
+  {
+    "testID": "abcd-34",
+    "test": {
+      "IP Range": "40.114.198.180/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "5a0802c3-d7f7-4af9-ac81-39b35e1f6369"
+    }
+  },
+  {
+    "testID": "abcd-35",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10000:10000",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "5a46f3a0-c568-47d0-843f-971a7bd6c8da"
+    }
+  },
+  {
+    "testID": "abcd-36",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "5be241ca-8fa8-492b-a74d-81415c90571e"
+    }
+  },
+  {
+    "testID": "abcd-37",
+    "test": {
+      "IP Range": "67.180.126.44/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "625450d3-72d0-4b31-8804-8c721a5b2b42"
+    }
+  },
+  {
+    "testID": "abcd-38",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3389:3389",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "66f250ff-adfe-4597-8fd1-5376e92d43a6"
+    }
+  },
+  {
+    "testID": "abcd-39",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmp",
+      "Remote Security Group": null,
+      "ID": "674cbe62-14a8-4a10-bf3b-9087e1b00d3b"
+    }
+  },
+  {
+    "testID": "abcd-40",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "1:65535",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "6800bcb0-1aa2-40e3-aa05-ff0f770b158e"
+    }
+  },
+  {
+    "testID": "abcd-41",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10005:10005",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "6d7de669-7cf6-468d-9cf7-0947f7b51a3a"
+    }
+  },
+  {
+    "testID": "abcd-42",
+    "test": {
+      "IP Range": "35.226.74.80/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "6eb79bb9-8b6e-497c-9fb4-e29a717acde1"
+    }
+  },
+  {
+    "testID": "abcd-43",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2016:2016",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "6f1d4180-d45f-44a1-aa83-4fefac400014"
+    }
+  },
+  {
+    "testID": "abcd-44",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "112:112",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "76704f6b-cb46-47ac-a49b-fa74f4b322f9"
+    }
+  },
+  {
+    "testID": "abcd-45",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10002:10002",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "79987f3a-b16a-4520-8f75-795da481246a"
+    }
+  },
+  {
+    "testID": "abcd-46",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10003:10003",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "7b68464e-83ec-48b5-bc5c-0633a6f21c43"
+    }
+  },
+  {
+    "testID": "abcd-47",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "15000:59000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "80e23cc1-88e3-4489-b855-e05a6ccb85e4"
+    }
+  },
+  {
+    "testID": "abcd-48",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "7777:7777",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "8446bd10-2398-4410-b83d-eef1ea20d2b1"
+    }
+  },
+  {
+    "testID": "abcd-49",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "9000:9006",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "87882817-b9c8-4b6b-a9f5-4545ffb31455"
+    }
+  },
+  {
+    "testID": "abcd-50",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "897f342d-5d1c-4b90-8d21-a73d1629aa5f"
+    }
+  },
+  {
+    "testID": "abcd-51",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "8bccd623-af80-455b-9728-45416ea2f1cc"
+    }
+  },
+  {
+    "testID": "abcd-52",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "12345:12345",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "8d700468-5734-4c38-bdcc-39f2dd9d87c7"
+    }
+  },
+  {
+    "testID": "abcd-53",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "9090:9090",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "8f8d68f9-3ff0-4a68-8452-b7c465adedf0"
+    }
+  },
+  {
+    "testID": "abcd-54",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3389:3389",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "979e03a0-93ea-4df2-bd3a-4239d1f46444"
+    }
+  },
+  {
+    "testID": "abcd-55",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2015:2015",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "98cef2ab-4c5a-4f05-b873-391e67d71ba5"
+    }
+  },
+  {
+    "testID": "abcd-56",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2015:2015",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "9e07dc35-5aec-483b-beee-a8b8126d4472"
+    }
+  },
+  {
+    "testID": "abcd-57",
+    "test": {
+      "IP Range": "217.92.0.0/16",
+      "Security Group": "29dea744-f921-4342-9e3d-d627b552149a",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "9f8541c3-bea6-48cc-969b-3a586a9cac66"
+    }
+  },
+  {
+    "testID": "abcd-58",
+    "test": {
+      "IP Range": "37.50.143.118/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "a96630fa-7555-4380-96a8-21a7805ff5b8"
+    }
+  },
+  {
+    "testID": "abcd-59",
+    "test": {
+      "IP Range": "4.78.242.50/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b09b4726-1d57-4036-aeff-3b4b289d239e"
+    }
+  },
+  {
+    "testID": "abcd-60",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "2016:2016",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b60c1705-b3fd-421d-90e4-c324983ceb59"
+    }
+  },
+  {
+    "testID": "abcd-61",
+    "test": {
+      "IP Range": "36.91.58.93/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "b77e7538-f496-42d2-8831-7474500bbf2c"
+    }
+  },
+  {
+    "testID": "abcd-62",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "ID": "b87c7167-acda-4655-9539-f663b0f167eb"
+    }
+  },
+  {
+    "testID": "abcd-63",
+    "test": {
+      "IP Range": "47.186.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "ba24708a-e13f-4f7f-8372-5334e68930a1"
+    }
+  },
+  {
+    "testID": "abcd-64",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "4000:4000",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "beb6ffde-bf90-4529-86bc-74f656485c2f"
+    }
+  },
+  {
+    "testID": "abcd-65",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "443:443",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "bf72add6-2c89-454c-9c4b-93ad25127425"
+    }
+  },
+  {
+    "testID": "abcd-66",
+    "test": {
+      "IP Range": "47.186.64.97/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "bfda75ad-dba7-4975-846f-08fef3fb97cb"
+    }
+  },
+  {
+    "testID": "abcd-67",
+    "test": {
+      "IP Range": "::/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmpv6",
+      "Remote Security Group": null,
+      "ID": "c1f129ca-f020-4c6e-94ba-66deee65a5be"
+    }
+  },
+  {
+    "testID": "abcd-68",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "7777:7777",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "c289ecac-311b-415c-a438-9666b6758260"
+    }
+  },
+  {
+    "testID": "abcd-69",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "c5ef5828-114c-45b1-b52b-056a88c3029c"
+    }
+  },
+  {
+    "testID": "abcd-70",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "65432:65432",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "cc0c9398-e995-4445-8886-3e0af31eaa36"
+    }
+  },
+  {
+    "testID": "abcd-71",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "3333:3333",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d532c9b1-36ef-4bd1-be72-6449f8ab9ebb"
+    }
+  },
+  {
+    "testID": "abcd-72",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "5445:5445",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "d673b460-1f46-40eb-a9d1-ae265b0825b6"
+    }
+  },
+  {
+    "testID": "abcd-73",
+    "test": {
+      "IP Range": "37.50.143.119/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d6bb09a2-abd5-422a-adc3-d068f33c26e5"
+    }
+  },
+  {
+    "testID": "abcd-74",
+    "test": {
+      "IP Range": null,
+      "Security Group": "8c247a14-5053-4349-942f-a4f6b0599ee5",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "d9e5bfcf-2713-4839-9950-99a62f6c8478"
+    }
+  },
+  {
+    "testID": "abcd-75",
+    "test": {
+      "IP Range": "104.154.61.254/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "d9eaa66e-4fa2-4638-9c56-d0fad62990b3"
+    }
+  },
+  {
+    "testID": "abcd-76",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10003:10003",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "da67dfc1-849f-4ed5-be1e-bdafcfb9eab4"
+    }
+  },
+  {
+    "testID": "abcd-78",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "10001:10001",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "dd1d2ea5-d2a7-4939-9734-3bec48b7ecfb"
+    }
+  },
+  {
+    "testID": "abcd-80",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "",
+      "IP Protocol": "icmp",
+      "Remote Security Group": null,
+      "ID": "ddedb89c-9ea8-4e41-9d66-e38e004d4f10"
+    }
+  },
+  {
+    "testID": "abcd-82",
+    "test": {
+      "IP Range": "37.50.143.117/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "e72f402d-9625-49fb-a16e-242e692e012d"
+    }
+  },
+  {
+    "testID": "abcd-83",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "8011:8011",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "e9949db6-a347-405d-8230-7795e22a02dc"
+    }
+  },
+  {
+    "testID": "abcd-84",
+    "test": {
+      "IP Range": "0.0.0.0/0",
+      "Security Group": "8aee7912-1446-45d6-8af5-48a3f31dfcb7",
+      "Port Range": "15000:59000",
+      "IP Protocol": "udp",
+      "Remote Security Group": null,
+      "ID": "ecca89c3-3a40-471b-b043-5812600b57c2"
+    }
+  },
+  {
+    "testID": "abcd-85",
+    "test": {
+      "IP Range": null,
+      "Security Group": "6ddd6753-e531-4be8-b6e8-3986fa214ea1",
+      "Port Range": "",
+      "IP Protocol": null,
+      "Remote Security Group": null,
+      "ID": "edf49159-5835-4671-8c2f-99f5e0144f5f"
+    }
+  },
+  {
+    "testID": "abcd-86",
+    "test": {
+      "IP Range": "37.50.143.115/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "f54c1d1f-6c9e-45ab-9da1-7ec5436dd561"
+    }
+  },
+  {
+    "testID": "abcd-87",
+    "test": {
+      "IP Range": "50.207.175.42/32",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "f6bd8715-750a-462d-80ac-fa438886591b"
+    }
+  },
+  {
+    "testID": "abcd-88",
+    "test": {
+      "IP Range": "10.101.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "1:65535",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "fc09ce73-cdb4-44d6-a3ea-46a9c4572d9d"
+    }
+  },
+  {
+    "testID": "abcd-89",
+    "test": {
+      "IP Range": "12.15.0.0/16",
+      "Security Group": "6fbe4df2-a71b-48b1-b6f9-bf5e4d87077d",
+      "Port Range": "22:22",
+      "IP Protocol": "tcp",
+      "Remote Security Group": null,
+      "ID": "ffbd0dff-9b0f-447b-b4e4-b2a4319cabde"
+    }
+  }
+]
+}
