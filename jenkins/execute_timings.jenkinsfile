@@ -1,6 +1,6 @@
 import java.text.SimpleDateFormat
 
-cycle = "${cycle}"
+//cycle = "${cycle}"
 //components = "${components}"
 controller = "${controller}"
 mc = "mcunset"
@@ -20,8 +20,8 @@ if (env.mastercontroller) {
     mccert = "${MasterControllerCert}"
 }
 
-echo dme
-echo cycle
+//echo dme
+//echo cycle
 echo controller
 
 date = new Date()
