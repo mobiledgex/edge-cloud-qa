@@ -6,6 +6,7 @@ Library  String
 Library  OperatingSystem
 Library  Collections
 Library  DateTime
+Library  Process
 		
 Suite Teardown  WriteHTML
 Test Setup      Setup
