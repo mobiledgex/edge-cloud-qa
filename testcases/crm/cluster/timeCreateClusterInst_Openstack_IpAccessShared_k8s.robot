@@ -261,4 +261,7 @@ Failed Data
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
 WriteHTML
-	Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
+	${result}=   Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
+        log    ${result.stdout}
+	log    ${result.stderr}
+	Should Be Equal As Intergers    ${result.rc}    0
