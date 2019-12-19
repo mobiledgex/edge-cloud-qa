@@ -131,10 +131,7 @@ tname = tname.split('automation')
 tname = tname[1]
 ttype = ttype.split('Timings')
 #print(ttype)
-if ttype[0] == '/home/jenkins/workspace/run':
-    ttype = ttype[2].split('-')
-else:
-    ttype = ttype[1].split('-')
+ttype = ttype[len(ttype)-1].split('-')
 #print(ttype)
 ttype = ttype[0]
 #print(ttype)
