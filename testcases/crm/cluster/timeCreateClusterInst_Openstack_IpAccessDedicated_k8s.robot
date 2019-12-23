@@ -2,12 +2,13 @@
 Documentation  Cluster size for openstack with IpAccessDed and Kubernetes
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  String
 Library  OperatingSystem
 Library  Collections
 Library  DateTime
+Library  Process
 		
+Suite Teardown  WriteHTML
 Test Setup      Setup
 Test Teardown   Teardown
 
@@ -212,6 +213,7 @@ Setup
 	${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
 	${FileName}=    Catenate  SEPARATOR=    ${cloudlet_name_openstack}   OpenstackTimingsK8sDedicated
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
+	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
 
 	${x}=  Evaluate    random.randint(2,20000)   random
 	${x}=  Convert To String  ${x}
@@ -258,3 +260,10 @@ Failed Data
 	Cleanup provisioning
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
+
+
+WriteHTML
+	${result}=   Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
+        log    ${result.stdout}
+	log    ${result.stderr}
+	Should Be Equal As Integers    ${result.rc}    0
