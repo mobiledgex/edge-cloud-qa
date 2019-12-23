@@ -1,0 +1,544 @@
+import java.text.SimpleDateFormat
+
+dateParm = "${BuildDate}"
+commit_version = "notset"
+image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
+
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runOrganizationTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
+def jobListGcp = ["runCrmTests"]
+def jobList2Parallel = ["runConsoleTests"]
+
+builds1 = [:]
+builds2 = [:]
+
+node('jenkinsSlave1'){
+    date = new Date()
+    sdate = new SimpleDateFormat("yyy-MM-dd")
+    Calendar cal = Calendar.getInstance()
+
+    dateValue = "notset"
+    if(dateParm == "today") {
+       dateValue = sdate.format(date)
+       //cal = Calendar.getInstance()
+       //cal.add(Calendar.DATE, -1)
+       //dateValue = sdate.format(cal.getTime())
+    } else {
+       dateValue = dateParm
+    }
+    //year = date[Calendar.YEAR]
+    //month = date[Calendar.MONTH] + 1
+    //date = date.getAt(Calendar.DATE)
+    //tag = Version + '_automation_' + year + month + date
+    cycle = Version + '_automation_' + dateValue
+    tag = dateValue
+    project = "${project}"
+    
+    currentBuild.displayName = cycle
+
+    try {
+       stage('Checkout') {
+          dir('go/src/github.com/mobiledgex') {
+             checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*'],[$class:'SparseCheckoutPath', path:'testcases/config/*']]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+	  }
+	  dir('go/src/github.com/mobiledgex/edge-cloud') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+          }
+	  dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+          }
+	  dir('go/src/github.com/mobiledgex/edge-proto') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+          }
+
+          dir('go/src/github.com/mobiledgex/edge-cloud') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-proto') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-proto.git'
+          }
+
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "checkout of edge-cloud-qa failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {
+       stage('Check Load Exists') {
+          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+          def index  = sh(script: s, returnStdout: true);
+	  int indexnum = index as Integer
+          if(indexnum < 1) {
+             println "${s} failed"
+             currentBuild.result = 'FAILURE'
+          }
+
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+//    error('andy quit')
+//    try {
+//       stage('make test') {
+//          dir('go/src/github.com/mobiledgex/edge-cloud') {
+//             sh 'export ANSIBLE_DIR=$WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/setup-env/ansible;export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin:$WORKSPACE/go/bin;export GOROOT=/usr/local/go;export GOPATH=$WORKSPACE/go;make test'
+//          }
+//       }
+//    } catch (e) {
+//       currentBuild.result = 'UNSTABLE'
+//       result = "FAIL" // make sure other exceptions are recorded as failure too
+//       dir('go/src/github.com/mobiledgex/jenkins') {
+//          def status = -1
+//          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "make test for Build ' + tag + ' failed. Continuing execution anyways"'
+//          status = sh(script: s, returnStatus: true);
+//       }
+//    }
+
+    try {
+       stage('Pull Image') {
+          sh 'docker system prune -af'  //remove all docker stuff without prompting
+	  sh 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+	  
+          def s = 'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:' + tag + ' version'
+          def index  = sh(script: s, returnStdout: true);
+          (commit_version, image_name) = index.split(',')
+  	  dir('go/src/github.com/mobiledgex/edge-cloud') {
+             def t = 'git reset --hard ' + commit_version
+             def tout  = sh(script: t, returnStdout: true);
+	     //stash name:'edge-cloud_stash', includes:'edge-cloud/**'
+          }
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "Error pulling image load=' + tag + '. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    // do this temp until deletecloudlet after controller restart is fixed
+    try {    
+       stage("create cycle") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+             def status = -1
+             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "${s} failed"
+                 currentBuild.result = 'FAILURE'
+             }
+	  }
+       }
+
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              def status = -1
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+              status = sh(script: s, returnStatus: true);
+              println status
+              if(status != 0) {
+                  println "copyTestsToRelease.py failed"
+                  currentBuild.result = 'FAILURE'
+              }
+          }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle creation in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {    
+       stage("delete CRMs") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+	     try {
+                build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             } catch(e) {
+	        echo('deleteCrms job failed. continuing')
+	     }
+             //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
+
+             def s1 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_hawkins.mex;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+             status = sh(script: s1, returnStatus: true);
+             def s2 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_hawkins.mex;openstack server delete automationHawkinsCloudlet.GDDT.pf;openstack stack delete automationHawkinsCloudlet.GDDT.pf'
+             status = sh(script: s2, returnStatus: true);
+
+             def s3 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_buckhorn.mex;openstack server delete automationbuckhorncloudlet.gddt.mobiledgex.net;openstack stack delete automationbuckhorncloudlet.gddt.mobiledgex.net'
+             status = sh(script: s3, returnStatus: true);
+             def s4 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_buckhorn.mex;openstack server delete automationBuckhornCloudlet.GDDT.pf;openstack stack delete automationBuckhornCloudlet.GDDT.pf'
+             status = sh(script: s4, returnStatus: true);
+
+             def s5 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_sunnydale.mex;openstack server delete automationsunnydalecloudlet.gddt.mobiledgex.net;openstack stack delete automationsunnydalecloudlet.gddt.mobiledgex.net'
+             status = sh(script: s5, returnStatus: true);
+             def s6 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_sunnydale.mex;openstack server delete automationSunnydaleCloudlet.GDDT.pf;openstack stack delete automationSunnydaleCloudlet.GDDT.pf'
+             status = sh(script: s6, returnStatus: true);
+
+             def s7 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_fairview.mex;openstack server delete automationfairviewcloudlet.gddt.mobiledgex.net;openstack stack delete automationfairviewcloudlet.gddt.mobiledgex.net'
+             status = sh(script: s7, returnStatus: true);
+             def s8 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_fairview.mex;openstack server delete automationFairviewCloudlet.GDDT.pf;openstack stack delete automationFairviewCloudlet.GDDT.pf'
+             status = sh(script: s8, returnStatus: true);
+
+             def s9 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_beacon.mex;openstack server delete automationbeaconcloudlet.gddt.mobiledgex.net;openstack stack delete automationbeaconcloudlet.gddt.mobiledgex.net'
+             status = sh(script: s9, returnStatus: true);
+             def s10 = 'source $WORKSPACE/go/src/github.com/mobiledgex/testcases/config/openrc_beacon.mex;openstack server delete automationBeaconCloudlet.GDDT.pf;openstack stack delete automationBeaconCloudlet.GDDT.pf'
+             status = sh(script: s10, returnStatus: true);
+
+             //sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
+             //sh 'source /home/jenkins/openrc.hawkins;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+
+             //build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Continue anyway"'
+          status = sh(script: s, returnStatus: true);
+       }
+       echo('Delete CRM failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
+
+    }
+
+//    try {    
+//       stage("cleanup DNS") {
+//          dir('go/src/github.com/mobiledgex/jenkins') {
+//             def s1 = 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+//             status = sh(script: s1, returnStatus: true);
+//             def s2 = 'source /home/jenkins/openrc.hawkins;openstack server delete automationHawkinsCloudlet.GDDT.pf;openstack stack delete automationHawkinsCloudlet.GDDT.pf'
+//             status = sh(script: s2, returnStatus: true);
+
+//             //sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
+//             //sh 'source /home/jenkins/openrc.hawkins;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+
+//             //build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+
+//	  }
+//       }
+//    } catch(e) {
+//       dir('go/src/github.com/mobiledgex/jenkins') {
+//          def status = -1
+//          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deleting CRMs for Build ' + tag + ' failed. Aborting"'
+//          status = sh(script: s, returnStatus: true);
+//       }
+//       error('Aborting the build')
+
+    try {
+       stage('deploy processes in k8s') {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+//             sh 'docker system prune -af'  //remove all docker stuff without prompting
+	     
+	     // delete the buckhornlb so it is recreated when starting the crm
+	     //sh 'source /home/jenkins/openrc.buckhorn;openstack server delete automationbuckhorncloudlet.gddt.mobiledgex.net'
+     	     //sh 'source /home/jenkins/openrc.buckhorn;openstack stack delete automationbuckhorncloudlet.gddt.mobiledgex.net'
+
+	     // delete the hawkins lb so it is recreated when starting the crm
+	     //sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
+             //sh 'source /home/jenkins/openrc.hawkins;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+
+             // fix known_hosts file since recreating the server causes a mismatch in the file
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbuckhorncloudlet.gddt.mobiledgex.net"'
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhawkinscloudlet.gddt.mobiledgex.net"'
+	     
+             //sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_start_var.yaml > $HOME/edgecloud_start.yaml;export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_start.yaml;kubectl create -f $HOME/edgecloud_start.yaml'
+	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_start.yaml > $HOME/edgecloud_controller_start.yaml'
+     	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_controller_eu_start.yaml > $HOME/edgecloud_controller_eu_start.yaml'
+	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmbuckhorn_start.yaml > $HOME/edgecloud_crmbuckhorn_start.yaml'
+     	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmhawkins_start.yaml > $HOME/edgecloud_crmhawkins_start.yaml'
+	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_dmebuckhorn_start.yaml > $HOME/edgecloud_dmebuckhorn_start.yaml'
+      	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud1_start.yaml > $HOME/edgecloud_crmdmuustmocloud1_start.yaml'
+    	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud2_start.yaml > $HOME/edgecloud_crmdmuustmocloud2_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud3_start.yaml > $HOME/edgecloud_crmdmuustmocloud3_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud4_start.yaml > $HOME/edgecloud_crmdmuustmocloud4_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud5_start.yaml > $HOME/edgecloud_crmdmuustmocloud5_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud6_start.yaml > $HOME/edgecloud_crmdmuustmocloud6_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud7_start.yaml > $HOME/edgecloud_crmdmuustmocloud7_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud8_start.yaml > $HOME/edgecloud_crmdmuustmocloud8_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud9_start.yaml > $HOME/edgecloud_crmdmuustmocloud9_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud10_start.yaml > $HOME/edgecloud_crmdmuustmocloud10_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmattattcloud1_start.yaml > $HOME/edgecloud_crmattattcloud1_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud1_eu_start.yaml > $HOME/edgecloud_crmdmuustmocloud1_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud2_eu_start.yaml > $HOME/edgecloud_crmdmuustmocloud2_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud3_eu_start.yaml > $HOME/edgecloud_crmdmuustmocloud3_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud4_eu_start.yaml > $HOME/edgecloud_crmdmuustmocloud4_eu_start.yaml'
+             sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmdmuustmocloud5_eu_start.yaml > $HOME/edgecloud_crmdmuustmocloud5_eu_start.yaml'
+
+       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecloud1_start.yaml > $HOME/edgecloud_crmazurecloud1_start.yaml'
+       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmazurecentral_start.yaml > $HOME/edgecloud_crmazurecentral_start.yaml'
+
+    	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmgcpcloud1_start.yaml > $HOME/edgecloud_crmgcpcloud1_start.yaml'
+       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_crmgcpcentral_start.yaml > $HOME/edgecloud_crmgcpcentral_start.yaml'
+	     
+       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_clustersvc_start.yaml > $HOME/edgecloud_clustersvc_start.yaml'
+
+       	     sh 'sed \'s/\$AUTOMATION_DOCKERTAG/'+ tag + '/\' ./edgecloud_mc_start.yaml > $HOME/edgecloud_mc_start.yaml'
+	     
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl --record deployment.v1.apps/controllereu set image deployment.v1.apps/controllereu controllereu=' + image + ':' + tag
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_controller_eu_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_controller_eu_start.yaml'
+	     
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_dmebuckhorn_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_dmebuckhorn_start.yaml'
+
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmbuckhorn_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmbuckhorn_start.yaml'  
+
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmhawkins_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmhawkins_start.yaml'  
+
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmgcpcloud1_start.yaml'
+
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmgcpcentral_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmgcpcentral_start.yaml'
+
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud1_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud1_start.yaml'
+
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud2_start.yaml'
+	     //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud2_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud3_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud3_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud4_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud4_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud5_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud5_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud6_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud6_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud7_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud7_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud8_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud8_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud9_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud9_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud10_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud10_start.yaml'
+
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmazurecloud1_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmazurecloud1_start.yaml'
+
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmazurecentral_start.yaml'
+	     sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmazurecentral_start.yaml'
+
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmattattcloud1_start.yaml'
+             //sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmattattcloud1_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_clustersvc_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_clustersvc_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_mc_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_mc_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud1_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud1_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud2_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud2_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud3_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud3_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud4_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud4_eu_start.yaml'
+
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl delete -f $HOME/edgecloud_crmdmuustmocloud5_eu_start.yaml'
+             sh 'export KUBECONFIG=$HOME/edgecloud_start.kubeconfig;kubectl create -f $HOME/edgecloud_crmdmuustmocloud5_eu_start.yaml'
+
+             //sh 'docker system prune -af'  //remove all docker stuff without prompting
+
+             sleep 60  // wait for all pods to come up
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deploy to k8s for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+
+    try {    
+       stage("create cycle") {
+//          dir('go/src/github.com/mobiledgex/jenkins') {
+//             def status = -1
+//             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle
+//             status = sh(script: s, returnStatus: true);
+//             if(status != 0) {
+//                 println "${s} failed"
+ //                currentBuild.result = 'FAILURE'
+ //            }
+//	  }
+//       }
+
+          dir('go/src/github.com/mobiledgex/jenkins') {
+ //             def status = -1
+ //             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+ //             status = sh(script: s, returnStatus: true);
+ //             println status
+ //             if(status != 0) {
+ //                 println "copyTestsToRelease.py failed"
+ //                 currentBuild.result = 'FAILURE'
+ //             }
+
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
+              status2 = sh(script: s2, returnStatus: true);
+              println status2
+              if(status2 != 0) {
+                 println "updateCycleJira.py startdate failed"
+                 currentBuild.result = 'FAILURE'
+              }
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle creation in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+
+    try {    
+       stage("start CRMs") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+             //build job: 'deleteCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+
+             //sleep 60  // wait for cleanup to finish since startcrm sometimes fails that stack is still there
+	     
+             //sh 'source /home/jenkins/openrc.hawkins;openstack server delete automationhawkinscloudlet.gddt.mobiledgex.net'
+             //sh 'source /home/jenkins/openrc.hawkins;openstack stack delete automationhawkinscloudlet.gddt.mobiledgex.net'
+
+             build job: 'startCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "creating CRMs for Build ' + tag + ' failed. Continue anyway"'
+          status = sh(script: s, returnStatus: true);
+       }
+       echo('CRM create failed. Continue anyway')
+       currentBuild.result = 'UNSTABLE'
+    }
+
+    if(currentBuild.result != 'FAILURE') {
+       stage('run tests') {
+          echo "running tests"
+          for(int i=0; i < jobListGcp.size(); ++i) {
+             def jobName = jobListGcp[i];
+             echo "i1=" + jobName
+             builds1[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle), string(name: 'CommitVersion', value: commit_version)]
+	     }
+	  }
+
+          for(int i=0; i < jobList1Parallel.size(); ++i) {
+             def jobName = jobList1Parallel[i];
+             echo "i1=" + jobName
+             builds1[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+	     }
+	  }
+	  
+          try {
+            parallel builds1
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobList2Parallel.size(); ++i) {
+             def jobName = jobList2Parallel[i];
+             echo "i1=" + jobName
+             builds2[jobName] = {
+                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+	     }
+	  }
+	  
+          try {
+            parallel builds2
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+              status3 = sh(script: s3, returnStatus: true);
+              println status3
+              if(status3 != 0) {
+                  println "updateCycleJira.py endate failed"
+                  currentBuild.result = 'FAILURE'
+              }
+          }
+       }
+       stage('slack report') {
+          echo "slack report"
+          //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
+	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
+       }
+   } else {
+       echo "build was failure so not running any tests"
+   }
+
+   post {
+      failure {
+         dir('go/src/github.com/mobiledgex/jenkins') {
+            def status = -1
+            def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Build ' + cycle + ' failed"'
+            status = sh(script: s, returnStatus: true);
+            if(status != 0) {
+               println "${s} failed"
+               currentBuild.result = 'FAILURE'
+            }
+         }
+      }
+   }
+
+}
