@@ -131,7 +131,7 @@ tname = tname.split('automation')
 tname = tname[1]
 ttype = ttype.split('Timings')
 #print(ttype)
-ttype = ttype[1].split('-')
+ttype = ttype[len(ttype)-1].split('-')
 #print(ttype)
 ttype = ttype[0]
 #print(ttype)
