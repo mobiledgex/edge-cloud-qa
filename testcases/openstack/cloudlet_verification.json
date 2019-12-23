@@ -9,7 +9,7 @@
     "server":{
         "repeat":3,
         "definition":{
-          "image" :"mobiledgex-v2.0.3",
+          "image" :"mobiledgex-v3.0.0",
           "flavor": "m4.small",
           "nic": "net-id=huber-mex-net01",
           "wait": "yes",
@@ -59,7 +59,7 @@
 
   "pingTest2":{
     "create":[
-      [  0, "server","create --image mobiledgex-v2.0.3 --flavor m4.small --nic net-id=huber-mex-netX,v4-fixed-ip=192.168.13.15  --wait  hubert.01.bonn.test","-f json"]
+      [  0, "server","create --image mobiledgex-v3.0.0 --flavor m4.small --nic net-id=huber-mex-netX,v4-fixed-ip=192.168.13.15  --wait  hubert.01.bonn.test","-f json"]
     ]
    ,
     "delete":[
