@@ -10,7 +10,7 @@ Suite Teardown  Cleanup Provisioning
 CreateCloudletPool - shall be able to create with long pool name 
    [Documentation]
    ...  send CreateCloudletPool with long pool name 
-   ...  verify proper error is received
+   ...  verify pool is created 
 
    ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=dfafafasfasfasfasfafasfafasfafasfsafasfffafafasfasfasfafasfafasffasfdsa  use_defaults=False
    log to console  xxx ${pool_return}
@@ -20,7 +20,7 @@ CreateCloudletPool - shall be able to create with long pool name
 CreateCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
    ...  send CreateCloudletPool with numbers in pool name
-   ...  verify proper error is received
+   ...  verify pool is created 
 
    ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=123  use_defaults=False
    log to console  xxx ${pool_return}
