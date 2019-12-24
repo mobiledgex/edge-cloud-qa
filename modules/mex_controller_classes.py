@@ -573,3 +573,81 @@ class RunCommand():
         #    runcommand_dict['command'] = command
         #    runcommand_dict['cloudlet_loc'] = {}
         #self.run_command = runcommand_dict
+
+class AutoScalePolicy():
+    def __init__(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
+
+        self.policy = None
+
+        self.policy_name = policy_name
+        self.developer_name = developer_name
+        self.min_nodes = min_nodes
+        self.max_nodes = max_nodes
+        self.scale_up_cpu_threshold = scale_up_cpu_threshold
+        self.scale_down_cpu_threshold = scale_down_cpu_threshold
+        self.trigger_time = trigger_time
+
+        _fields_list = []
+        _developer_field_number = "2.1"
+        _name_field_number = "2.2"
+        _min_nodes_field_number = "3"
+        _max_nodes_field_number = "4"
+        _scale_up_cpu_threshold_field_number = "5"
+        _scale_down_cpu_threshold_field_number = "6"
+        _trigger_time_field_number = "7"
+                
+        if policy_name == 'default':
+            self.policy_name = shared_variables.autoscalepolicy_name_default
+            
+        if use_defaults:
+            if policy_name is None: self.policy_name = shared_variables.autoscalepolicy_name_default
+            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if min_nodes is None: self.min_nodes = 1
+            if max_nodes is None: self.max_nodes = 2
+            if scale_up_cpu_threshold is None: self.scale_up_cpu_threshold = 50
+            if scale_down_cpu_threshold is None: self.scale_down_cpu_threshold = 40
+            if trigger_time is None: self.trigger_time = 30
+
+        policy_dict = {}
+        policy_key_dict = {}
+        if self.policy_name is not None:
+            policy_key_dict['name'] = self.policy_name
+            _fields_list.append(_name_field_number)
+
+        if self.developer_name:
+            policy_key_dict['developer'] = self.developer_name
+            _fields_list.append(_developer_field_number)
+                        
+        if policy_key_dict:
+            policy_dict['key'] = policy_key_dict
+            
+        if self.min_nodes is not None:
+            policy_dict['min_nodes'] = int(self.min_nodes)
+            _fields_list.append(_min_nodes_field_number)
+            
+        if self.max_nodes is not None:
+            policy_dict['max_nodes'] = int(self.max_nodes)
+            _fields_list.append(_max_nodes_field_number)
+            
+        if self.scale_up_cpu_threshold is not None:
+            policy_dict['scale_up_cpu_thresh'] = int(self.scale_up_cpu_threshold)
+            _fields_list.append(_scale_up_cpu_threshold_field_number)
+            
+        if self.scale_down_cpu_threshold is not None:
+            policy_dict['scale_down_cpu_thresh'] = int(self.scale_down_cpu_threshold)
+            _fields_list.append(_scale_down_cpu_threshold_field_number)
+            
+        if self.trigger_time is not None:
+            policy_dict['trigger_time_sec'] = int(self.trigger_time)
+            _fields_list.append(_trigger_time_field_number)
+        
+        if include_fields and _fields_list:
+            policy_dict['fields'] = []
+            for field in _fields_list:
+                policy_dict['fields'].append(field)
+
+        self.policy = policy_dict
+
+
+
+
