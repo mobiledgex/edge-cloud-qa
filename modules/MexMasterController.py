@@ -14,7 +14,13 @@ import queue
 import sys
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet, Organization
+from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet, Organization, AutoScalePolicy
+
+from mex_master_controller.OrgCloudletPool import OrgCloudletPool
+from mex_master_controller.OrgCloudlet import OrgCloudlet
+from mex_master_controller.CloudletPool import CloudletPool
+from mex_master_controller.CloudletPoolMember import CloudletPoolMember
+from mex_master_controller.Cloudlet import Cloudlet
 
 import shared_variables_mc
 import shared_variables
@@ -34,6 +40,7 @@ class MexMasterController(MexRest):
             self.root_cert = self._findFile(root_cert)
 
         super().__init__(address=mc_address, root_cert=self.root_cert)
+        
         #print('*WARN*', 'mcinit')
         self.root_url = f'https://{mc_address}/api/v1'
         self.mc_address = mc_address
@@ -121,15 +128,18 @@ class MexMasterController(MexRest):
         self._number_deletecloudlet_requests_success = 0
         self._number_deletecloudlet_requests_fail = 0
 
-        self._number_showautoclusterpolicy_requests = 0
-        self._number_showautoclusterpolicy_requests_success = 0
-        self._number_showautoclusterpolicy_requests_fail = 0
-        self._number_createautoclustepolicy_requests = 0
-        self._number_createutoclustepolicy_requests_success = 0
-        self._number_createutoclustepolicy_requests_fail = 0
-        self._number_deleteutoclustepolicy_requests = 0
-        self._number_deleteutoclustepolicy_requests_success = 0
-        self._number_deleteutoclustepolicy_requests_fail = 0
+        self._number_showautoscalepolicy_requests = 0
+        self._number_showautoscalepolicy_requests_success = 0
+        self._number_showautoscalepolicy_requests_fail = 0
+        self._number_createautoscalepolicy_requests = 0
+        self._number_createautoscalepolicy_requests_success = 0
+        self._number_createautoscalepolicy_requests_fail = 0
+        self._number_deleteautoscalepolicy_requests = 0
+        self._number_deleteautoscalepolicy_requests_success = 0
+        self._number_deleteautoscalepolicy_requests_fail = 0
+        self._number_updateautoscalepolicy_requests = 0
+        self._number_updateautoscalepolicy_requests_success = 0
+        self._number_updateautoscalepolicy_requests_fail = 0
 
         self._number_showappinsts_requests = 0
         self._number_showappinsts_requests_success = 0
@@ -151,8 +161,14 @@ class MexMasterController(MexRest):
 
         self.super_token = self.login(self.username, self.password, None, False)
 
+        self.cloudlet = Cloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.cloudlet_pool = CloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        
     def get_supertoken(self):
-        return self.supe_token
+        return self.super_token
 
     def get_token(self):
         return self.token
@@ -172,6 +188,15 @@ class MexMasterController(MexRest):
 
     def get_default_flavor_name(self):
         return shared_variables.flavor_name_default
+
+    def get_default_autoscale_policy_name(self):
+        return shared_variables.autoscalepolicy_name_default
+
+    def get_default_cloudlet_pool_name(self):
+        return shared_variables.cloudletpool_name_default
+
+    def get_default_organization_name(self):
+        return shared_variables.organization_name_default
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
@@ -462,7 +487,7 @@ class MexMasterController(MexRest):
         payload = None
 
         if use_defaults == True:
-            if token is None: token = self.token
+            if token is None: token = self.super_token
             if username is None: username = self.username
 
         if json_data !=  None:
@@ -680,7 +705,7 @@ class MexMasterController(MexRest):
             self._number_createorg_requests_success += 1
 
 
-        self.orgname = orgname
+        self.orgname = org_dict['name']
         self.orgtype = orgtype
         self.address = address
         self.phone = phone
@@ -746,24 +771,27 @@ class MexMasterController(MexRest):
         if use_defaults == True:
             if token is None: token = self.token
             if orgname is None: orgname = self.orgname
-
+        print('*WARN*','org',orgname)
         if json_data !=  None:
             payload = json_data
         else:
             org_dict = {}
             if orgname is not None:
                 org_dict['name'] = orgname
-
+                
             payload = json.dumps(org_dict)
 
         logger.info('delete org on mc at {}. \n\t{}'.format(url, payload))
 
-        self.post(url=url, data=payload, bearer=token)
+        try:
+            self.post(url=url, data=payload, bearer=token)
 
-        logger.info('response:\n' + str(self.resp.text))
+            logger.info('response:\n' + str(self.resp.text))
 
-        if str(self.resp.text) != '{"message":"Organization deleted"}':
-            raise Exception("error deleting org. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            if str(self.resp.text) != '{"message":"Organization deleted"}':
+                raise Exception("error deleting org. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+        except Exception as e:
+            raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
     def adduser_role(self, orgname= None, username=None, role=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/role/adduser'
@@ -806,7 +834,7 @@ class MexMasterController(MexRest):
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
                 self._number_adduserrole_requests_fail += 1
-                raise Exception("post failed:", e)
+                raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
             self.prov_stack.append(lambda:self.removeuser_role(orgname, username, role, self.super_token))
             self._number_adduserrole_requests_success += 1
@@ -953,7 +981,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk).flavor
+            flavor = Flavor(flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, use_defaults=use_defaults).flavor
             flavor_dict = {'flavor': flavor}
             if region is not None:
                 flavor_dict['region'] = region
@@ -1477,7 +1505,7 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             if self.organization_name: developer_name = self.organization_name
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, use_defaults=use_defaults).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -1586,7 +1614,7 @@ class MexMasterController(MexRest):
         else:
             if developer_name is None:
                 if self.organization_name: developer_name = self.organization_name
-            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations).app
+            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults).app
             app_dict = {'app': app}
             if region is not None:
                 app_dict['region'] = region
@@ -1682,7 +1710,7 @@ class MexMasterController(MexRest):
                 if self.organization_name:
                     developer_name = self.organization_name
                     cluster_instance_developer_name = self.organization_name
-            appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override).app_instance
+            appinst = AppInstance(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults).app_instance
             appinst_dict = {'appinst': appinst}
             if region is not None:
                 appinst_dict['region'] = region
@@ -2059,6 +2087,9 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
+    def update_cloudlet(self, token=None, region=None,  operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, version=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, version=version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/metrics/cloudlet'
 
@@ -2253,7 +2284,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time).cloudlet
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
             policy_dict = {'autoscalepolicy': policy}
             if region is not None:
                 policy_dict['region'] = region
@@ -2278,9 +2309,60 @@ class MexMasterController(MexRest):
                 self._number_createautoscalepolicy_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['operator_key']['name']))
+            self.prov_stack.append(lambda:self.delete_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['developer']))
 
             self._number_createautoscalepolicy_requests_success += 1
+
+            resp = self.show_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['developer'], use_defaults=False)
+
+            return resp
+            
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def delete_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/DeleteAutoScalePolicy'
+
+        payload = None
+        policy = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
+            policy_dict = {'autoscalepolicy': policy}
+            if region is not None:
+                policy_dict['region'] = region
+
+            payload = json.dumps(policy_dict)
+
+        logger.info('delete autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_deleteautoscalepolicy_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_deleteautoscalepolicy_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                    
+            except Exception as e:
+                self._number_deleteautoscalepolicy_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_deleteautoscalepolicy_requests_success += 1
 
             
         if use_thread is True:
@@ -2291,6 +2373,134 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
+    def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
+        url = self.root_url + '/auth/ctrl/UpdateAutoScalePolicy'
+
+        payload = None
+        policy = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults, include_fields=True).policy
+            policy_dict = {'autoscalepolicy': policy}
+            if region is not None:
+                policy_dict['region'] = region
+
+            payload = json.dumps(policy_dict)
+
+        logger.info('update autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_updateautoscalepolicy_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_updateautoscalepolicy_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                    
+            except Exception as e:
+                self._number_updateautoscalepolicy_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_updateautoscalepolicy_requests_success += 1
+
+            resp =  self.show_autoscale_policy(region=region, token=self.super_token, policy_name=policy['key']['name'], developer_name=policy['key']['developer'], use_defaults=False)
+
+            return resp
+
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
+        url = self.root_url + '/auth/ctrl/ShowAutoScalePolicy'
+
+        payload = None
+        policy = None
+
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        if json_data !=  None:
+            payload = json_data
+        else:
+            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
+            policy_dict = {'autoscalepolicy': policy}
+            if region is not None:
+                policy_dict['region'] = region
+
+            payload = json.dumps(policy_dict)
+
+        logger.info('show autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_showautoscalepolicy_requests += 1
+
+            try:
+                self.post(url=url, bearer=token, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+
+                if str(self.resp.status_code) != '200':
+                    self._number_showautoscalepolicy_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+                    
+            except Exception as e:
+                self._number_showautoscalepolicy_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_showautoscalepolicy_requests_success += 1
+            
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return self.decoded_data
+
+    def create_cloudlet_pool_member(self, token=None, region=None, cloudlet_pool_name=None, operator_name=None, cloudlet_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool_member.create_cloudlet_pool_member(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_name=operator_name, cloudlet_name=cloudlet_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_cloudlet_pool_member(self, token=None, region=None, cloudlet_pool_name=None, operator_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool_member.delete_cloudlet_pool_member(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_name=operator_name, cloudlet_name=cloudlet_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_cloudlet_pool_member(self, token=None, region=None, cloudlet_pool_name=None, operator_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool_member.show_cloudlet_pool_member(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_name=operator_name, cloudlet_name=cloudlet_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool.show_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet_pool.delete_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.org_cloudlet_pool.create_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet_pool.show_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet_pool.delete_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+        
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)
