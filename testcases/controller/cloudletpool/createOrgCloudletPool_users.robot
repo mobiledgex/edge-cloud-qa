@@ -13,7 +13,7 @@ ${password}=  mextester06123
 *** Test Cases ***
 ShowOrgCloudletPool - users shall get empty list 
    [Documentation]
-   ...  send ShowOrgCloudletPoolMember with user token 
+   ...  send ShowOrgCloudletPool with user token 
    ...  verify empty list is received 
 
    ${pool_return}=  Show Org Cloudlet Pool  region=US  token=${userToken}
