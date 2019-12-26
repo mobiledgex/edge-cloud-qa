@@ -1,0 +1,55 @@
+project = "${project}"
+version = "${version}"
+cycle = "${cycle}"
+controller = "${controller}"
+
+//jobName = "${components}"
+
+currentBuild.displayName = cycle
+
+def jobList1Parallel = ["runCloudletPoolTests", "runCloudletPoolMemberTests", "runOrgCloudletTests", "runOrgCloudletPoolTests""]
+ 
+builds1 = [:]
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+    
+   if(currentBuild.result != 'FAILURE') {
+      stage('run WS tests parallel batch 1') {
+         for(int i=0; i < jobList1Parallel.size(); ++i) {
+            def jobName = jobList1Parallel[i];
+            echo "i1=" + jobName
+            builds1[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller)]
+            }
+         }
+
+         try {
+            parallel builds1
+         } catch(err) {
+            echo "Caught in run parallel batch 1: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+   } else {
+      echo "error: not running ws tests since currentBuild=Failure. copy tests to release failed"
+   }
+
+}
+
+    
