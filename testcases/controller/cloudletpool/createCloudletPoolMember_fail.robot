@@ -27,7 +27,7 @@ CreateCloudletPoolMember - create without parameters shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid operator name"}
 
-CreateCloudletPoolMember - create with invalid pool name shall fails 
+CreateCloudletPoolMember - create with invalid pool name shall return error 
    [Documentation]
    ...  send CreateCloudletPoolMember with invalid name
    ...  verify proper error is received 
