@@ -14,13 +14,14 @@ import queue
 import sys
 
 from mex_rest import MexRest
-from mex_controller_classes import Flavor, ClusterInstance, App, AppInstance, RunCommand, Cloudlet, Organization
+from mex_controller_classes import Flavor, ClusterInstance, AppInstance, RunCommand, Cloudlet, Organization
 
 from mex_master_controller.OrgCloudletPool import OrgCloudletPool
 from mex_master_controller.OrgCloudlet import OrgCloudlet
 from mex_master_controller.CloudletPool import CloudletPool
 from mex_master_controller.CloudletPoolMember import CloudletPoolMember
 from mex_master_controller.Cloudlet import Cloudlet
+from mex_master_controller.App import App
 from mex_master_controller.AutoScalePolicy import AutoScalePolicy
 
 import shared_variables_mc
@@ -109,16 +110,6 @@ class MexMasterController(MexRest):
         self._number_deleteclusterinst_requests_success = 0
         self._number_deleteclusterinst_requests_fail = 0
 
-        self._number_showapp_requests = 0
-        self._number_showapp_requests_success = 0
-        self._number_showapp_requests_fail = 0
-        self._number_createapp_requests = 0
-        self._number_createapp_requests_success = 0
-        self._number_createapp_requests_fail = 0
-        self._number_deleteapp_requests = 0
-        self._number_deleteapp_requests_success = 0
-        self._number_deleteapp_requests_fail = 0
-
         self._number_showcloudlet_requests = 0
         self._number_showcloudlet_requests_success = 0
         self._number_showcloudlet_requests_fail = 0
@@ -150,7 +141,8 @@ class MexMasterController(MexRest):
         self.super_token = self.login(self.username, self.password, None, False)
 
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
-        
+
+        self.app = App(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.cloudlet = Cloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.cloudlet_pool = CloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
@@ -1591,98 +1583,13 @@ class MexMasterController(MexRest):
             self.delete_cluster_instance(region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_name=cluster['data']['key']['developer'], cloudlet_name=cloudlet_name, operator_name=cluster['data']['key']['cloudlet_key']['operator_key']['name'], crm_override=1)
 
     def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/ctrl/CreateApp'
-
-        payload = None
-        app = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            if developer_name is None:
-                if self.organization_name: developer_name = self.organization_name
-            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults).app
-            app_dict = {'app': app}
-            if region is not None:
-                app_dict['region'] = region
-
-            payload = json.dumps(app_dict)
-
-        logger.info('create app on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_createapp_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_createapp_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_createapp_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self.prov_stack.append(lambda:self.delete_app(region=region, token=self.super_token, app_name=app['key']['name'], app_version=app['key']['version'], developer_name=app['key']['developer_key']['name']))
-
-            self._number_createapp_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
     def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/ctrl/DeleteApp'
+        return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
-        payload = None
-        app = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            app = App(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn).app
-            app_dict = {'app': app}
-            if region is not None:
-                app_dict['region'] = region
-
-            payload = json.dumps(app_dict)
-
-        logger.info('delete app on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_deleteapp_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_deleteapp_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_deleteapp_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_deleteapp_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateAppInst'
