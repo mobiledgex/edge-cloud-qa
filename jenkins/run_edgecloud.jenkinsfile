@@ -6,7 +6,7 @@ image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
 def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runOrganizationTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests"]
 def jobListGcp = ["runCrmTests"]
-def jobList2Parallel = ["runConsoleTests"]
+def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests"]
 
 builds1 = [:]
 builds2 = [:]
@@ -205,7 +205,7 @@ node('jenkinsSlave1'){
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbonncloudlet.tdg.mobiledgex.net"'
              sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhamburgcloudlet.tdg.mobiledgex.net"'
 	     
-             sh 'deploy.sh -V ' + tag + ' qa'
+             sh 'export ANSIBLE_VAULT_PASSWORD_FILE=$HOME/.mobiledgex/ansible-mex-vault.pass;./deploy.sh -V ' + tag + ' qa'
 
              //sh 'docker system prune -af'  //remove all docker stuff without prompting
 
