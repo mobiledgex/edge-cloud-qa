@@ -62,7 +62,7 @@ class tc(unittest.TestCase):
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
 
         build_head0 = resp[0].build_master + '+'
-        build_head1 = resp[1].build_master + '+'
+#        build_head1 = resp[1].build_master + '+'
  
         foundmaster0 = False
         foundhead0 = False
@@ -82,25 +82,26 @@ class tc(unittest.TestCase):
         if resp[0].build_head == build_head0 or resp[0].build_head == resp[0].build_master:
            foundhead0 = True
 
-        if re_master.match(resp[1].build_master):
-           foundmaster1=True
-        if re_host.match(resp[1].hostname):
-           foundhost1=True
-        if re_ip.match(resp[1].key.addr):
-           foundip1=True
-        if resp[1].build_head == build_head1 or resp[1].build_head == resp[1].build_master:
-           foundhead1 = True
+# only have 1 controller now
+#        if re_master.match(resp[1].build_master):
+#           foundmaster1=True
+#        if re_host.match(resp[1].hostname):
+#           foundhost1=True
+#        if re_ip.match(resp[1].key.addr):
+#           foundip1=True
+#        if resp[1].build_head == build_head1 or resp[1].build_head == resp[1].build_master:
+#           foundhead1 = True
  
-        expect_equal(len(resp), 2, 'number of controllers')
+        expect_equal(len(resp), 1, 'number of controllers')
         expect_equal(foundmaster0, True, 'buildmaster')
         expect_equal(foundhost0, True, 'host')
         expect_equal(foundip0, True, 'host')
         expect_equal(foundhead0, True, 'buildhead0')
 
-        expect_equal(foundmaster1, True, 'buildmaster')
-        expect_equal(foundhost1, True, 'host')
-        expect_equal(foundip1, True, 'host')
-        expect_equal(foundhead1, True, 'buildhead1')
+#        expect_equal(foundmaster1, True, 'buildmaster')
+#        expect_equal(foundhost1, True, 'host')
+#        expect_equal(foundip1, True, 'host')
+#        expect_equal(foundhead1, True, 'buildhead1')
 
         #expect_equal(len(resp), 1, 'number of controllers')
         #expect_equal(resp[0].key.addr, controller1_address, 'addr 1')
