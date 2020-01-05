@@ -498,11 +498,11 @@ class Cloudlet():
         self.platform_type = platform_type
         self.physical_name = physical_name
         
-        print(vars(loc_pb2.Loc))
+        print('*WARN*', vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
         self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
-        self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
+        #self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
         self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
         self._cloudlet_longitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LONGITUDE_FIELD_NUMBER)
         self._cloudlet_ipsupport_field = str(cloudlet_pb2.Cloudlet.IP_SUPPORT_FIELD_NUMBER)
@@ -521,8 +521,8 @@ class Cloudlet():
             self.number_of_dynamic_ips = 254
         if ipsupport is None and use_defaults == True:
             self.ipsupport=2
-        if accesscredentials is None and use_defaults == True:
-            self.accesscredentials='https://www.edgesupport.com/test'
+        #if accesscredentials is None and use_defaults == True:
+        #    self.accesscredentials='https://www.edgesupport.com/test'
         if staticips is None and use_defaults == True:
             self.staticips = '10.10.10.10'
         if notify_server_address is None and use_defaults == True:
@@ -553,6 +553,8 @@ class Cloudlet():
         if self.ipsupport == "IpSupportDynamic":
             self.ipsupport = 2
 
+        if self.platform_type == 'PlatformTypeFake':
+            self.platform_type = 0
         if self.platform_type == 'PlatformTypeOpenstack':
             self.platform_type = 2
         elif self.platform_type == 'PlatformTypeAzure':
