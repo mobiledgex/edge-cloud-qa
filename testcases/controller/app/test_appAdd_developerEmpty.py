@@ -77,7 +77,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Developer invalid characters in Name', 'error details')
+        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -119,7 +119,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Developer invalid characters in Name', 'error details')
+        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -160,7 +160,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Developer invalid characters in Name', 'error details')
+        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -202,7 +202,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Developer invalid characters in Name', 'error details')
+        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
