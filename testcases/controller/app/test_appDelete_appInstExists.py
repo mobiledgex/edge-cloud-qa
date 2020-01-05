@@ -60,7 +60,7 @@ class tc(unittest.TestCase):
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
-                                      image_path='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0',
+                                      image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0',
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
                                       #ip_access='IpAccessShared',

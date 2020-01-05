@@ -60,7 +60,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Invalid registry tag: 99.9 does not exist" 
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Not Found" 
 
 CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker image_path=mypath
     [Documentation]
@@ -113,7 +113,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Invalid registry tag: 99.9 does not exist" 
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Not Found" 
 
 CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm image_path=mypath
     [Documentation]
@@ -146,7 +146,8 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Access denied to registry path"
-    Should Contain  ${error_msg}  details = "unable to find bearer token"
+    #Should Contain  ${error_msg}  details = "unable to find bearer token"
+    Should Contain  ${error_msg}  details = "failed to validate VM registry image, path https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Invalid URL: https://artifactory.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Not Found
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and image not found
     [Documentation]
@@ -156,7 +157,7 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Invalid image path: Not Found" 
+    Should Contain  ${error_msg}   details = "failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Invalid URL: https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/erver_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d, Not Found" 
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and invalid url
     [Documentation]
