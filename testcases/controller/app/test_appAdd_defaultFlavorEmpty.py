@@ -24,7 +24,7 @@ developer_email = 'dev@dev.com'
 app_name = 'app' + stamp
 app_version = '1.0'
 access_ports = 'tcp:1'
-docker = 'docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+docker = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
 mex_root_cert = 'mex-ca.crt'
@@ -76,7 +76,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -109,7 +109,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -143,7 +143,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -178,7 +178,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
