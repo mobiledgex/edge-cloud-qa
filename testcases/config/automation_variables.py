@@ -7,7 +7,7 @@ cloudlet_name_openstack = 'automationBonnCloudlet'
 cloudlet_name_openstack_shared = 'automationBonnCloudlet'
 cloudlet_name_openstack_dedicated = 'automationMunichCloudlet'
 cloudlet_name_openstack_vm = 'automationMunichCloudlet'
-cloudlet_name_openstack_metrics = 'automationBonnCloudlet'
+cloudlet_name_openstack_metrics = 'automationBerlinCloudlet'
 
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'
@@ -26,4 +26,4 @@ vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
 
 mextester99_gmail_password = 'rfbixqomqidobmcb'
 
-
+token_server_url = 'http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc'
