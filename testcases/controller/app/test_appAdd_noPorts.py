@@ -25,7 +25,7 @@ developer_address = 'allen tx'
 developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
-docker_image = 'docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
