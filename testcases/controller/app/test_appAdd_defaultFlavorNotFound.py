@@ -76,7 +76,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {"name":"notfound"} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
@@ -109,7 +109,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Specified flavor not found', 'error details')
+        expect_equal(error.details(), 'Flavor key {"name":"notfound"} not found', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
