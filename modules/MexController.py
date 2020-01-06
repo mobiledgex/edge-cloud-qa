@@ -764,7 +764,7 @@ class App():
         if self.default_flavor_name == 'default':
             self.default_flavor_name = shared_variables.flavor_name_default
         if self.image_path == 'default':
-            self.image_path='docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+            self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
             
         app_dict = {}
         app_key_dict = {}
