@@ -17,6 +17,9 @@ ${cloudlet_name}  tmocloud-1
 ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
+
+${docker_image}=  image
+${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
 RunCommand - OperatorManager shall not be able to do RunCommand
@@ -26,15 +29,17 @@ RunCommand - OperatorManager shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"
 
-    Adduser Role  username=${username_epoch}  role=OperatorManager
+    Adduser Role  username=${username_epoch}  role=OperatorManager  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
+    Should Contain  ${error}  error=Error: Forbidden, code=403, message=Forbidden
+
+    #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
 RunCommand - OperatorContributor shall not be able to do RunCommand
     [Documentation]
@@ -43,15 +48,17 @@ RunCommand - OperatorContributor shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"
 
-    Adduser Role  username=${username_epoch}  role=OperatorContributor
+    Adduser Role  username=${username_epoch}  role=OperatorContributor  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
+    Should Contain  ${error}  error=Error: Forbidden, code=403, message=Forbidden
+
+    #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
 RunCommand - OperatorViewer shall not be able to do RunCommand
     [Documentation]
@@ -60,24 +67,26 @@ RunCommand - OperatorViewer shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=OperatorViewer
+    Adduser Role  username=${username_epoch}  role=OperatorViewer  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
+    Should Contain  ${error}  error=Error: Forbidden, code=403, message=Forbidden
+
+    #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
 *** Keywords ***
 Setup
     Create Org  orgtype=operator
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    Create App  region=US 
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}
+    Create App  region=US  developer_name=${docker_image_developer} 
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}  cluster_instance_developer_name=${docker_image_developer}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}

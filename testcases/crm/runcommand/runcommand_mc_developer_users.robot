@@ -17,6 +17,9 @@ ${cloudlet_name}  tmocloud-1
 ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
+
+${docker_image}=  image
+${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
 RunCommand - DeveloperManager shall be able to do RunCommand
@@ -24,11 +27,11 @@ RunCommand - DeveloperManager shall be able to do RunCommand
     ...  execute Run Command as DeveloperManager
     ...  verify RunCommand is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperManager
+    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami
+    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     Should Be Equal  ${stdout}  root\r\n
 
@@ -37,11 +40,11 @@ RunCommand - DeveloperContributor shall be able to do RunCommand
     ...  execute Run Command as DeveloperContributor
     ...  verify RunCommand is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor
+    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami
+    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     Should Be Equal  ${stdout}  root\r\n
 
@@ -52,24 +55,24 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=DeveloperViewer
+    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
+    Should Contain  ${error}  error=Error: Forbidden, code=403, message=Forbidden 
 
 *** Keywords ***
 Setup
-    Create Org  orgtype=developer
+    #Create Org  orgtype=developer
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
-    Create App  region=US 
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}
+    Create App  region=US   image_path=${docker_image}  developer_name=${docker_image_developer}
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}  cluster_instance_developer_name=${docker_image_developer}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
