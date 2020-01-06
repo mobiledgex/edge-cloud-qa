@@ -1,8 +1,8 @@
 cycle = "${cycle}"
 //components = "${components}"
-controller = "${controller}"
+controller = "controllerunset"
 mc = "mcunset"
-mccert = "mccertunset"
+mccert = ""
 dme = "dmeunset"
 dmerest = "dmerestunset"
 dmerestcert = "dmerestcertunset"
@@ -15,12 +15,18 @@ if (env.dmerest) {
 }
 if (env.mastercontroller) {
     mc = "${MasterController}"
+    //mccert = "${MasterControllerCert}"
+}
+if (env.mastercontrollercert) {
     mccert = "${MasterControllerCert}"
+}
+if (env.controller) {
+    mc = "${controller}"
 }
 
 echo dme
 echo cycle
-echo controller
+//echo controller
 
 currentBuild.displayName = cycle
 
