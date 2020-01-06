@@ -30,7 +30,7 @@ RunCommand - shall return error with appname not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_ap  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_api"},"name":"automation_api_ap","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"automation_api"}} not found 
 
 RunCommand - shall return error with app version not found
     [Documentation]
@@ -42,65 +42,60 @@ RunCommand - shall return error with app version not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.1  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_api"},"name":"automation_api_app","version":"1.1"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"automation_api"}} not found 
 
 RunCommand - shall return error with developer not found
     [Documentation]
     ...  execute Run Command with app developer not found
     ...  verify error is received
 
-
     ${token}=  Login
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_ap  cluster_instance_name=autocluster  operator_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_ap"},"name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"automation_ap"}} not found 
 
 RunCommand - shall return error with cluster not found
     [Documentation]
     ...  execute Run Command with cluster not found
     ...  verify error is received
 
-
     ${token}=  Login
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluste  operator_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_api"},"name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluste"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"automation_api"}} not found 
 
 RunCommand - shall return error with operator not found
     [Documentation]
     ...  execute Run Command with operator not found
     ...  verify error is received
 
-
     ${token}=  Login
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=tmu  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_api"},"name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmu"},"name":"tmocloud-1"},"developer":"automation_api"}} not found 
 
 RunCommand - shall return error with cloudlet not found
     [Documentation]
     ...  execute Run Command with cloudlet not found
     ...  verify error is received
 
-
     ${token}=  Login
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  operator_name=tmus  cloudlet_name=tmocloud-  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, Specified app instance not found
+    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"developer_key":{"name":"automation_api"},"name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-"},"developer":"automation_api"}} not found 
 
 RunCommand - shall return error with bad token 
     [Documentation]
     ...  execute Run Command with token=xx
     ...  verify error is received
-
 
     ${token}=  Login
 
