@@ -19,6 +19,9 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 stamp = str(time.time())
 cloud_name = 'tmocloud-1'
 operator_name = 'dmuus'
+app_name = 'app' + stamp
+developer_name = 'developer' + stamp
+version = '1.0'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -51,7 +54,11 @@ class tc(unittest.TestCase):
            
         # create the app instance
         app_instance = mex_controller.AppInstance(cloudlet_name=cloud_name,
+                                                  app_name=app_name,
+                                                  developer_name=developer_name,
+                                                  app_version=version,
                                                   cluster_instance_name='autocluster',
+                                                  cluster_instance_developer_name=developer_name,
                                                   operator_name=operator_name)
 
         resp = None
@@ -64,7 +71,7 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"' + version + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -78,6 +85,10 @@ class tc(unittest.TestCase):
 
         # create the app instance
         app_instance = mex_controller.AppInstance(appinst_id=1,
+                                                  app_name=app_name,
+                                                  developer_name=developer_name,
+                                                  app_version=version,
+                                                  cluster_instance_developer_name=developer_name,
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
@@ -92,7 +103,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"' + version + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -106,7 +118,10 @@ class tc(unittest.TestCase):
 
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='smeApplication',
+                                                  developer_name=developer_name,
+                                                  app_version=version,
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_developer_name=developer_name,
                                                   cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
@@ -120,7 +135,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + 'smeApplication' + '","version":"' + version + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -134,7 +150,10 @@ class tc(unittest.TestCase):
 
         # create the app instance
         app_instance = mex_controller.AppInstance(app_version='1.0',
+                                                  app_name=app_name,
+                                                  developer_name=developer_name,
                                                   cloudlet_name=cloud_name,
+                                                  cluster_instance_developer_name=developer_name,
                                                   cluster_instance_name='autocluster',
                                                   operator_name=operator_name)
 
@@ -148,7 +167,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"' + '1.0' + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -162,6 +182,8 @@ class tc(unittest.TestCase):
 
         # create the app instance
         app_instance = mex_controller.AppInstance(developer_name='dev',
+                                                  app_name=app_name,
+                                                  app_version=version,
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
                                                   cluster_instance_developer_name='dev',
@@ -177,7 +199,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + 'dev' + '"},"name":"' + app_name + '","version":"' + version + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
@@ -208,7 +231,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Specified app not found', 'error details')
+        expect_equal(self.controller.response.details(), 'App key {"developer_key":{"name":"' + 'dev' + '"},"name":"' + 'smeApplication' + '","version":"' + '1.0' + '"} not found', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
