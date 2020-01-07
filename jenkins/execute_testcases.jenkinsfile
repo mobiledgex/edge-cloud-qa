@@ -21,7 +21,7 @@ if (env.mastercontrollercert) {
     mccert = "${MasterControllerCert}"
 }
 if (env.controller) {
-    mc = "${controller}"
+    controller = "${controller}"
 }
 
 echo dme
