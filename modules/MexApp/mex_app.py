@@ -117,9 +117,13 @@ class MexApp(object):
                 addr = socket.gethostbyname(dns)
                 logging.info('dns is ready at ' + addr)
                 return
-            except:
-                logging.debug('dns not ready yet')
+            except OSError as err:
+                logging.debug(f'dns not ready yet:{err}')
                 time.sleep(1)
+            except:
+                logging.debug(f'dns not ready yet:{sys.exc_info()[0]}')
+                time.sleep(1)
+
 
         return addr
     
