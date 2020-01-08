@@ -1,7 +1,10 @@
 *** Settings ***
-Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  OperatingSystem
 
 Test Timeout    ${test_timeout_crm}
+
+Test Setup  Setup
 
 *** Variables ***
 ${cloudlet_name_openstack_hamburg}  automationHamburgCloudlet
@@ -25,6 +28,8 @@ ${physical_name_openstack_packet}  packet-ord2
 ${cloudlet_name_openstack_dusseldorf}  automationDusseldorfCloudlet
 ${operator_name_openstack_dusseldorf}  TDG
 ${physical_name_openstack_dusseldorf}  dusseldorf 
+
+${version}  version
 
 ${test_timeout_crm}  60 min
 
@@ -157,7 +162,41 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=att  cloudlet_name=attcloud-1
 
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Bonn
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on bonn openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_bonn}  cloudlet_name=${cloudlet_name_openstack_bonn}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Munich 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on munich openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Hamburg 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on hamburg openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Frankfurt 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on frankfurt openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Dusseldorf
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on dusseldorf openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  version=${version}  use_defaults=${False}
+
 *** Keywords ***
+Setup
+   ${version}=  Get Environment Variable  AUTOMATION_VERSION  version_not_set
+   Set Suite Variable  ${version}
+
 Cleanup Clusters and Apps
    [Arguments]  ${region}  ${cloudlet_name}
   

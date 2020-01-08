@@ -163,7 +163,7 @@ class AppInstance(MexOperation):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
-        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
     
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cellid=None, json_data=None, use_defaults=True, use_thread=False):

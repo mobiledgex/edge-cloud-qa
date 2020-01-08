@@ -14,7 +14,7 @@ import queue
 import sys
 
 from mex_rest import MexRest
-from mex_controller_classes import ClusterInstance, RunCommand, Cloudlet, Organization
+from mex_controller_classes import ClusterInstance, RunCommand, Organization
 
 from mex_master_controller.OrgCloudletPool import OrgCloudletPool
 from mex_master_controller.OrgCloudlet import OrgCloudlet
@@ -103,15 +103,15 @@ class MexMasterController(MexRest):
         self._number_deleteclusterinst_requests_success = 0
         self._number_deleteclusterinst_requests_fail = 0
 
-        self._number_showcloudlet_requests = 0
-        self._number_showcloudlet_requests_success = 0
-        self._number_showcloudlet_requests_fail = 0
-        self._number_createcloudlet_requests = 0
-        self._number_createcloudlet_requests_success = 0
-        self._number_createcloudlet_requests_fail = 0
-        self._number_deletecloudlet_requests = 0
-        self._number_deletecloudlet_requests_success = 0
-        self._number_deletecloudlet_requests_fail = 0
+#        self._number_showcloudlet_requests = 0
+#        self._number_showcloudlet_requests_success = 0
+#        self._number_showcloudlet_requests_fail = 0
+#        self._number_createcloudlet_requests = 0
+#        self._number_createcloudlet_requests_success = 0
+#        self._number_createcloudlet_requests_fail = 0
+#        self._number_deletecloudlet_requests = 0
+#        self._number_deletecloudlet_requests_success = 0
+#        self._number_deletecloudlet_requests_fail = 0
 
         self._number_showaccount_requests = 0
         self._number_showaccount_requests_success = 0
@@ -1119,7 +1119,7 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_app_instances(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='app_name', sort_order='ascending'):
+    def show_app_instances(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='app_name', sort_order='ascending'):
         if app_name or app_version or cloudlet_name or operator_name or developer_name or cluster_instance_name or cluster_instance_developer_name:
             resp_data = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, use_defaults=use_defaults, use_thread=use_thread)
             if type(resp_data) is dict:
@@ -1437,8 +1437,8 @@ class MexMasterController(MexRest):
             logging.info(f'deleting {cluster}')
             self.delete_cluster_instance(region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_name=cluster['data']['key']['developer'], cloudlet_name=cloudlet_name, operator_name=cluster['data']['key']['cloudlet_key']['operator_key']['name'], crm_override=1)
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
@@ -1446,12 +1446,12 @@ class MexMasterController(MexRest):
     def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
-    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         if developer_name is None:
             if self.organization_name:
                 developer_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
-        return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+        return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/DeleteAppInst'
@@ -1502,7 +1502,7 @@ class MexMasterController(MexRest):
         appinstances = self.show_app_instances(region=region, cloudlet_name=cloudlet_name)
         for app in appinstances:
             logging.info(f'deleting {app}')
-            self.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_name=app['data']['key']['app_key']['developer_key']['name'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=app['data']['key']['cluster_inst_key']['developer'])
+            self.app_instance.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_name=app['data']['key']['app_key']['developer_key']['name'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=app['data']['key']['cluster_inst_key']['developer'])
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, json_data=None, use_defaults=True, use_thread=False):
         #url = self.root_url + '/auth/ctrl/RunCommand'
@@ -1689,105 +1689,108 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/ctrl/CreateCloudlet'
+    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+#        url = self.root_url + '/auth/ctrl/CreateCloudlet'
+#
+#        payload = None
+#        cloudlet = None
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override).cloudlet
+#            cloudlet_dict = {'cloudlet': cloudlet}
+#            if region is not None:
+#                cloudlet_dict['region'] = region
+#
+#            payload = json.dumps(cloudlet_dict)
+#
+#        logger.info('create cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+ #           self._number_createcloudlet_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#                
+#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    self._number_createcloudlet_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#                if 'Created Cloudlet successfully' not in str(self.resp.text):
+#                    raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
+#                    
+#            except Exception as e:
+#                self._number_createcloudlet_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            self.prov_stack.append(lambda:self.delete_cloudlet(region=region, token=self.super_token, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['operator_key']['name']))
+#
+#            self._number_createcloudlet_requests_success += 1
+#
+#            
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
-        payload = None
-        cloudlet = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override).cloudlet
-            cloudlet_dict = {'cloudlet': cloudlet}
-            if region is not None:
-                cloudlet_dict['region'] = region
-
-            payload = json.dumps(cloudlet_dict)
-
-        logger.info('create cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_createcloudlet_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_createcloudlet_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                if 'Created Cloudlet successfully' not in str(self.resp.text):
-                    raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
-                    
-            except Exception as e:
-                self._number_createcloudlet_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self.prov_stack.append(lambda:self.delete_cloudlet(region=region, token=self.super_token, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['operator_key']['name']))
-
-            self._number_createcloudlet_requests_success += 1
-
-            
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
-
-    def delete_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/ctrl/DeleteCloudlet'
-
-        payload = None
-        clusterInst = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
-            cloudlet_dict = {'cloudlet': cloudlet}
-            if region is not None:
-                cloudlet_dict['region'] = region
-
-            payload = json.dumps(cloudlet_dict)
-
-        logger.info('delete cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_deletecloudlet_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_deletecloudlet_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                if 'Deleted Cloudlet successfully' not in str(self.resp.text):
-                    raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
-
-            except Exception as e:
-                self._number_deletecloudlet_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_deletecloudlet_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+    def delete_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.delete_cloudlet(token=token, region=region, operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+#
+#        url = self.root_url + '/auth/ctrl/DeleteCloudlet'
+#
+#        payload = None
+#        clusterInst = None
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
+#            cloudlet_dict = {'cloudlet': cloudlet}
+#            if region is not None:
+#                cloudlet_dict['region'] = region
+#
+#            payload = json.dumps(cloudlet_dict)
+#
+#        logger.info('delete cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+#            self._number_deletecloudlet_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    self._number_deletecloudlet_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#                if 'Deleted Cloudlet successfully' not in str(self.resp.text):
+#                    raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
+#
+#            except Exception as e:
+#                self._number_deletecloudlet_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            self._number_deletecloudlet_requests_success += 1
+#
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
     def update_cloudlet(self, token=None, region=None,  operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, version=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, version=version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
