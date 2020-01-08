@@ -1,7 +1,10 @@
 *** Settings ***
-Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  OperatingSystem
 
 Test Timeout    ${test_timeout_crm}
+
+Test Setup  Setup
 
 *** Variables ***
 ${cloudlet_name_openstack_hawkins}  automationHawkinsCloudlet
@@ -25,6 +28,8 @@ ${physical_name_openstack_packet}  packet-ord2
 ${cloudlet_name_openstack_paradise}  automationParadiseCloudlet
 ${operator_name_openstack_paradise}  GDDT
 ${physical_name_openstack_paradise}  paradise 
+
+${version}  version
 
 ${test_timeout_crm}  60 min
 
@@ -157,7 +162,41 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=att  cloudlet_name=attcloud-1
 
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Buckhorn
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on buckhorn openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Sunnydale 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on sunnydale openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Hawkins 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on hawkins openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Fairview 
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on fairview openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  version=${version}  use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Paradise
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on paradise openstack
+
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  version=${version}  use_defaults=${False}
+
 *** Keywords ***
+Setup
+   ${version}=  Get Environment Variable  AUTOMATION_VERSION  version_not_set
+   Set Suite Variable  ${version}
+
 Cleanup Clusters and Apps
    [Arguments]  ${region}  ${cloudlet_name}
   
