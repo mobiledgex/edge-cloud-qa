@@ -36,10 +36,11 @@ class AppInstance(MexOperation):
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_name: developer_name = shared_variables.developer_name_default
             if not cluster_instance_name: cluster_instance_name = shared_variables.cluster_name_default
-            if not cluster_instance_developer_name: cluster_instance_developer_name = shared_variables.developer_name_default
+            if not cluster_instance_developer_name: cluster_instance_developer_name = developer_name
             if not app_version: app_version = shared_variables.app_version_default
             if not cloudlet_name: cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_name: operator_name = shared_variables.operator_name_default
+
 
         if cluster_instance_name == 'default':
             cluster_instance_name = shared_variables.cluster_name_default

@@ -591,9 +591,9 @@ class Cloudlet():
         if self.ipsupport is not None:
             cloudlet_dict['ip_support'] = self.ipsupport
             _fields_list.append(self._cloudlet_ipsupport_field)
-        if self.accesscredentials is not None:
-            cloudlet_dict['access_credentials'] = self.accesscredentials
-            _fields_list.append(self._cloudlet_accesscredentials_field)
+        #if self.accesscredentials is not None:
+        #    cloudlet_dict['access_credentials'] = self.accesscredentials
+        #    #_fields_list.append(self._cloudlet_accesscredentials_field)
         if self.staticips is not None:
             cloudlet_dict['static_ips'] = self.staticips
             _fields_list.append(self._cloudlet_staticips_field)
@@ -624,9 +624,9 @@ class Cloudlet():
         if longitude is not None:
             print("Long Changed")
             self.longitude = float(longitude)
-        if accesscredentials is not None:
-            print("Acc Changed")
-            self.accesscredentials = accesscredentials
+        #if accesscredentials is not None:
+        #    print("Acc Changed")
+        #    self.accesscredentials = accesscredentials
         if ipsupport is not None:
             print("Sup Changed")
             self.ipsupport = ipsupport
@@ -642,13 +642,13 @@ class Cloudlet():
     def __eq__(self, c):
         if self.ipsupport is None:
             self.ipsupport = 2
-        if self.accesscredentials is None:
-            self.accesscredentials=""
+        #if self.accesscredentials is None:
+        #    self.accesscredentials=""
         if self.staticips is None:
             self.staticips=""
-        print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
+        #print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.access_credentials == self.accesscredentials and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
             return True
         else:
             return False
