@@ -268,7 +268,7 @@ node('jenkinsSlave1'){
        stage("upgrade CRMs") {
           dir('go/src/github.com/mobiledgex/jenkins') {
              try {
-                build job: 'upgradeCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+                build job: 'upgradeCrms', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle), string(name: 'CRMVersion', value: tag)]
              } catch(e) {
                 echo('deleteCrms job failed. continuing')
              }
