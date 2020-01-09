@@ -19,7 +19,9 @@ CreateCloudlet with all parameters
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch} 
 		
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport   ipsupport=IpSupportDynamic    staticips=30.30.30.1   
+	#Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport   ipsupport=IpSupportDynamic    staticips=30.30.30.1   
+        Create Cloudlet         operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96  ipsupport=IpSupportDynamic    staticips=30.30.30.1
+
 	Cloudlet Should Exist   
 
 CreateCloudlet without the optional parameters
@@ -98,4 +100,5 @@ CreateCloudlet without physicalname
         ${resp}=  Run Keyword and Expect Error  *  Create Cloudlet  operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=5000  platform_type=PlatformTypeOpenstack  use_defaults=False
 
         #Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
-        Should Contain  ${resp}  Failed to source platform variables as physicalname '${cldlet}' is invalid
+        #Should Contain  ${resp}  Failed to source platform variables as physicalname '${cldlet}' is invalid
+        Should Contain  ${resp}   Failed to source access variables as '${oper}/${cldlet}' does not exist in secure secrets storage (Vault)"

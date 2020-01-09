@@ -8,7 +8,7 @@ Test Setup	Setup
 Test Teardown   Cleanup Provisioning	
 
 *** Variables ***
-${operator_name}  TDG 
+${operator_name}   TDG 
 ${cloudlet_name}   automationMunichCloudlet 
 ${mobile_latitude}  1
 ${mobile_longitude}  1
