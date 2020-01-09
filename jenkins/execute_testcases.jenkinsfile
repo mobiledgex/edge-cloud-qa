@@ -23,7 +23,7 @@ if (env.mastercontrollercert) {
     mccert = "${MasterControllerCert}"
 }
 if (env.controller) {
-    controller = "${controller}"
+    controller = "${Controller}"
 }
 if (env.crmversion) {
     crmversion = "${CRMVersion}"
