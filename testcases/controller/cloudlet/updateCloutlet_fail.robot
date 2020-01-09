@@ -216,6 +216,9 @@ UpdateCloudlet with accessuri of 6
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet accessuri value
 	...  The test case will try and update a Cloudlet with an invalid accessuri of 6.
 	...  A 'TypeError: 6 has type int, but expected one of: bytes, unicode' error is expected
+  
+        [Setup]  Setup
+        [Teardown]  Cleanup provisioning
 
 	${accessuri}    Convert To Integer 	6
 
