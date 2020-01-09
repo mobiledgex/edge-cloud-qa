@@ -78,7 +78,7 @@ class MexOperation(MexRest):
                 if 'CreateAppInst' in url:
                     if 'Created AppInst successfully' not in str(self.resp.text):
                         raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
-                elif 'CreateCloudlet' in url:
+                elif url.endswith('CreateCloudlet'):
                     if 'Created Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
                 elif 'DeleteCloudlet' in url:
@@ -89,10 +89,11 @@ class MexOperation(MexRest):
                         raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
                 
             except Exception as e:
+                logging.info('operation failed:' + str(sys.exc_info()))
                 self.counter_dict[message_type]['req_fail'] += 1
-                logging.info(f'adding {thread_name} to thread_queue')
 
                 if self.thread_queue:
+                    logging.info(f'adding {thread_name} to thread_queue')
                     self.thread_queue.put({thread_name:sys.exc_info()})
                     
                 raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
