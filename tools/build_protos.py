@@ -9,6 +9,7 @@ import glob
 import subprocess
 import os
 import argparse
+import sys
 
 parser = argparse.ArgumentParser(description='create proto files for testcases')
 parser.add_argument('--sourcedir', default=os.environ['HOME'] + '/go/src/github.com/mobiledgex/edge-cloud/', help='dir where go source dir exists')
@@ -47,7 +48,7 @@ protos_src_list = (#edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/ap
 protos_dest = edgecloud_qa_dir + '/protos'
 
 #file_skip_convert_list = ('annotations.proto')
-import_proto_skip_convert_list = ('descriptor.proto')  # dont remove path from this since it causes a warning to print
+import_proto_skip_convert_list = ['descriptor.proto', 'protoc-gen-swagger/options/annotations.proto']  # dont remove path from this since it causes a warning to print
 
 generate_proto_cmd = 'python3 -m grpc_tools.protoc -I{} --python_out={} --grpc_python_out={} '.format(protos_dest, protos_dest, protos_dest)
 
@@ -71,10 +72,11 @@ for proto in protos_src_list:
                 if line.startswith('import') and '/' in line: # remove path from import statement
                     #print('found',line)
                     lsplit = line.split('"')
-                    if os.path.basename(lsplit[1]) not in import_proto_skip_convert_list:
+                    #print(os.path.basename(lsplit[1]), import_proto_skip_convert_list)
+                    if os.path.basename(lsplit[1]) not in import_proto_skip_convert_list and lsplit[1] not in import_proto_skip_convert_list:
                         line = lsplit[0] + '"' + os.path.basename(lsplit[1]) + '"' + lsplit[2]
                     else:
-                        print('skipping convert of', os.path.basename(lsplit[1]))    
+                        print('skipping convert of', os.path.basename(lsplit[1]))
                 write_file.write(line)
                 line = read_file.readline()
 
