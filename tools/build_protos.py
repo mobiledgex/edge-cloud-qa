@@ -48,7 +48,8 @@ protos_src_list = (#edgecloud_dir + 'vendor/github.com/gogo/googleapis/google/ap
 protos_dest = edgecloud_qa_dir + '/protos'
 
 #file_skip_convert_list = ('annotations.proto')
-import_proto_skip_convert_list = ['descriptor.proto', 'protoc-gen-swagger/options/annotations.proto']  # dont remove path from this since it causes a warning to print
+import_proto_skip_convert_list = ['descriptor.proto']  # dont remove path from this since it causes a warning to print
+proto_mapping = {'protoc-gen-swagger/options/annotations.proto': 'swagger_annotations.proto'}
 
 generate_proto_cmd = 'python3 -m grpc_tools.protoc -I{} --python_out={} --grpc_python_out={} '.format(protos_dest, protos_dest, protos_dest)
 
@@ -73,10 +74,12 @@ for proto in protos_src_list:
                     #print('found',line)
                     lsplit = line.split('"')
                     #print(os.path.basename(lsplit[1]), import_proto_skip_convert_list)
-                    if os.path.basename(lsplit[1]) not in import_proto_skip_convert_list and lsplit[1] not in import_proto_skip_convert_list:
+                    if os.path.basename(lsplit[1]) not in import_proto_skip_convert_list and lsplit[1] not in proto_mapping.keys():
                         line = lsplit[0] + '"' + os.path.basename(lsplit[1]) + '"' + lsplit[2]
                     else:
                         print('skipping convert of', os.path.basename(lsplit[1]))
+                    if lsplit[1] in proto_mapping.keys():
+                        line = lsplit[0] + '"' + proto_mapping[lsplit[1]] + '"' + lsplit[2]
                 write_file.write(line)
                 line = read_file.readline()
 
