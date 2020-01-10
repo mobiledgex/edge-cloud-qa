@@ -60,7 +60,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Not Found" 
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Invalid registry tag: 99.9 does not exist" 
 
 CreateApp - error shall be received with image_type=ImageTypeDocker deployment=docker image_path=mypath
     [Documentation]
@@ -113,7 +113,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Not Found" 
+    Should Contain  ${error_msg}   details = "failed to validate docker registry image, path docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9, Invalid registry tag: 99.9 does not exist" 
 
 CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm image_path=mypath
     [Documentation]
