@@ -153,13 +153,13 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         [Documentation]
         ...  do DeleteCloudlet to delete a fake CRM 
 
-        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-1
+        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-1  crm_override=IgnoreCrmAndTransientState
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=dmuus  cloudlet_name=tmocloud-1
 
-        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-2
+        Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-2  crm_override=IgnoreCrmAndTransientState
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=dmuus  cloudlet_name=tmocloud-2
 
-        Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1
+        Cleanup Clusters and Apps  region=US  cloudlet_name=attcloud-1  crm_override=IgnoreCrmAndTransientState
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_name=att  cloudlet_name=attcloud-1
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Buckhorn
@@ -198,9 +198,9 @@ Setup
    Set Suite Variable  ${version}
 
 Cleanup Clusters and Apps
-   [Arguments]  ${region}  ${cloudlet_name}
+   [Arguments]  ${region}  ${cloudlet_name}  ${crm_override}=${None}
   
-   Run Keyword and Ignore Error  Delete All App Instances      region=${region}  cloudlet_name=${cloudlet_name}
-   Run Keyword and Ignore Error  Delete All Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name}
+   Run Keyword and Ignore Error  Delete All App Instances      region=${region}  cloudlet_name=${cloudlet_name}  crm_override=${crm_override}
+   Run Keyword and Ignore Error  Delete All Cluster Instances  region=${region}  cloudlet_name=${cloudlet_name}  crm_override=${crm_override}
 
 

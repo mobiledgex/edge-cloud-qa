@@ -106,7 +106,11 @@ class AppInstance(MexOperation):
             appinst_dict['auto_cluster_ip_access'] = autocluster_ip_access 
 
         if crm_override:
-            appinst_dict['crm_override'] = 1  # ignore errors from CRM
+            if crm_override.lower() == "ignorecrm":
+                crm_override = 2
+            elif crm_override.lower() == "IgnoreCrmAndTransientState":
+                crm_override = 4
+            appinst_dict['crm_override'] = crm_override  # ignore errors from CRM
             
         return appinst_dict
 
