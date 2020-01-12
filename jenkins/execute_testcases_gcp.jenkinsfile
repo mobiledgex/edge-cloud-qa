@@ -45,6 +45,11 @@ currentBuild.displayName = cycle
 
 node('jenkinsGcpSlave1'){
     stage('Checkout') {
+        // delete old protos before git and build
+        dir('go/src/github.com/mobiledgex/protos') {
+           sh 'rm -rf *'
+        }
+
         dir('go/src/github.com/mobiledgex') {
             checkout([$class: 'GitSCM',
                 branches: [[name: 'master']],
