@@ -3,7 +3,7 @@ Documentation   Cloudlet IPUsage Metrics
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
-LIbrary  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  DateTime
 Library  String
 Library  Collections
@@ -14,6 +14,8 @@ Test Teardown    Cleanup provisioning
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationMunichCloudletStage
 ${operator}=                       TDG
+
+${region}=  EU
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
@@ -31,7 +33,7 @@ Metrics - Shall be able to get the last cloudlet ipusage metric on openstack
    ${last}=  Set Variable  1
    ${lastdb}=  Evaluate  ${last} + 1
 	
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=${last}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=${last}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT ${lastdb}  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}
@@ -56,7 +58,7 @@ Metrics - Shall be able to get the last 5 cloudlet ipusage metrics on openstack
    ...  request the last 5 cloudlet ipusage metrics
    ...  verify info is correct
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -82,7 +84,7 @@ Metrics - Shall be able to get the last 100 cloudlet ipusage metrics on openstac
    ...  verify info is correct
 
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 100
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=100
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=100
    log to console  ${metrics}
    log to console  ${metrics_influx}
 
@@ -106,7 +108,7 @@ Metrics - Shall be able to get all cloudlet ipusage metrics on openstack
 
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage
 
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    Log To Console  ${num_readings}
@@ -126,11 +128,11 @@ Metrics - Shall be able to request more ipusage metrics than exist on openstack
 
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
-   ${metricsall}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage
+   ${metricsall}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
 
    ${more_readings}=  Evaluate  ${num_readings_all} + 100
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=${more_readings}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=${more_readings}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -152,7 +154,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime on op
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -162,7 +164,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime on op
    log to console  ${start_date}
 
    # get readings with starttime 
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
    log to console  ${metrics['data'][0]}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -195,7 +197,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with endtime on open
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
    # get last metric and set endtime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -204,7 +206,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with endtime on open
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
    log to console  ${end_date}
 	
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  end_time=${end_date}
    log to console  ${metrics['data'][0]}
 
    Metrics Headings Should Be Correct  ${metrics}
@@ -227,10 +229,10 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime=lastr
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 2  # last record
 	
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
 
    # get readings and 1st and last timestamp
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
    log to console  ${metrics}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -257,14 +259,14 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime > las
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -278,7 +280,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with endtime=lastrec
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 	
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
    #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -288,7 +290,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with endtime=lastrec
    #log to console  ${start_date}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
    log to console  ${metrics}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -317,14 +319,14 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with endtime = first
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -339,7 +341,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime > end
    ${end_date}=  Set Variable  2019-09-01T01:01:01Z
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -351,7 +353,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
@@ -360,7 +362,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -372,7 +374,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -385,7 +387,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -413,7 +415,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -426,7 +428,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics with starttime and e
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}  last=5
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  start_time=${start_date}  end_time=${end_date}  last=5
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -469,7 +471,7 @@ Metrics - OperatorManager shall be able to get cloudlet ipusage metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -509,7 +511,7 @@ Metrics - OperatorViewer shall be able to get cloudlet ipusage metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorViewer   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -549,7 +551,7 @@ Metrics - OperatorContributor shall be able to get cloudlet ipusage metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorContributor   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -577,7 +579,7 @@ Metrics - Shall be able to get the cloudlet ipusage metrics without cloudlet nam
    ${last}=  Set Variable  10
    ${lastdb}=  Evaluate  ${last} + 1
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=US  operator_name=${operator}  selector=ipusage  last=${last}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  operator_name=${operator}  selector=ipusage  last=${last}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet IPUsage Metrics  operator_name=${operator}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}

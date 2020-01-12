@@ -1799,65 +1799,67 @@ class MexMasterController(MexRest):
         return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, version=version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/metrics/cloudlet'
+        return self.cloudlet.get_cloudlet_metrics(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-        payload = None
-        metric_dict = {}
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).cloudlet
-            print('*WARN*', cloudlet)
-            if 'key' in cloudlet:
-                metric_dict = {'cloudlet': cloudlet['key']}
-            print('*WARN*', 'after cloudlet')
-            if region is not None:
-                metric_dict['region'] = region
-            if selector is not None:
-                metric_dict['selector'] = selector
-            if last is not None:
-                try:
-                    metric_dict['last'] = int(last)
-                except:
-                    metric_dict['last'] = last
-            if start_time is not None:
-                metric_dict['starttime'] = start_time
-            if end_time is not None:
-                metric_dict['endtime'] = end_time
-                
-
-            payload = json.dumps(metric_dict)
-
-        logger.info('get cloudlet metrics on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            #self._number_deletecloudlet_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    #self._number_deletecloudlet_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-
-            except Exception as e:
-                #self._number_deletecloudlet_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            #self._number_deletecloudlet_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+#        url = self.root_url + '/auth/metrics/cloudlet'
+#
+#        payload = None
+#        metric_dict = {}
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).cloudlet
+#            print('*WARN*', cloudlet)
+#            if 'key' in cloudlet:
+#                metric_dict = {'cloudlet': cloudlet['key']}
+#            print('*WARN*', 'after cloudlet')
+#            if region is not None:
+#                metric_dict['region'] = region
+#            if selector is not None:
+#                metric_dict['selector'] = selector
+#            if last is not None:
+#                try:
+#                    metric_dict['last'] = int(last)
+#                except:
+#                    metric_dict['last'] = last
+#            if start_time is not None:
+#                metric_dict['starttime'] = start_time
+#            if end_time is not None:
+#                metric_dict['endtime'] = end_time
+#                
+#
+#            payload = json.dumps(metric_dict)
+#
+#        logger.info('get cloudlet metrics on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+#            #self._number_deletecloudlet_requests += 1#
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    #self._number_deletecloudlet_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#
+#            except Exception as e:
+#                #self._number_deletecloudlet_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            #self._number_deletecloudlet_requests_success += 1
+#
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
     def get_cluster_metrics(self, token=None, region=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, developer_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/metrics/cluster'
