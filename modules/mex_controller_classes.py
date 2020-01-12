@@ -213,7 +213,7 @@ class ClusterInstance():
         cloudlet_key_dict = {}
         #cluster_key_dict = {}
 
-        print('*WARN*','clusterf', flavor_name, self.flavor_name, shared_variables.flavor_name_default)
+        print('*WARN*','clusterf', flavor_name, self.flavor_name, shared_variables.flavor_name_default, self.developer_name)
         if self.operator_name is not None:
             cloudlet_key_dict['operator_key'] = {'name': self.operator_name}
         if self.cloudlet_name:
@@ -246,7 +246,11 @@ class ClusterInstance():
             clusterinst_dict['num_nodes'] = int(self.number_nodes)
 
         if self.crm_override:
-            clusterinst_dict['crm_override'] = 1  # ignore errors from CRM
+            if self.crm_override.lower() == "ignorecrm":
+                self.crm_override = 2
+            elif self.crm_override.lower() == "ignorecrmandtransientstate":
+                self.crm_override = 4
+            clusterinst_dict['crm_override'] = self.crm_override  # ignore errors from CRM
 
         if self.deployment is not None:
             clusterinst_dict['deployment'] = self.deployment
