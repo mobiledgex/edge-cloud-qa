@@ -16,6 +16,7 @@ class Cloudlet(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteCloudlet'
         self.show_url = '/auth/ctrl/ShowCloudlet'
         self.update_url = '/auth/ctrl/UpdateCloudlet'
+        self.metrics_url = '/auth/metrics/cloudlet'
 
     def _build(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
@@ -102,6 +103,24 @@ class Cloudlet(MexOperation):
 
         return cloudlet_dict
 
+    def _build_metrics(self, type_dict=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
+        metric_dict = {}
+        if type_dict is not None:
+            metric_dict.update(type_dict)
+        if selector is not None:
+            metric_dict['selector'] = selector
+        if last is not None:
+            try:
+                metric_dict['last'] = int(last)
+            except:
+                metric_dict['last'] = last
+        if start_time is not None:
+            metric_dict['starttime'] = start_time
+        if end_time is not None:
+            metric_dict['endtime'] = end_time
+
+        return metric_dict
+
     def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
@@ -136,3 +155,14 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudlet': msg}
 
         return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+
+    def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
+
+        metric_dict = msg
+        metric_dict['cloudlet'] = msg['key']
+        del metric_dict['key']
+
+        msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, last=last, start_time=start_time, end_time=end_time)
+
+        return self.show(token=token, url=self.metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
