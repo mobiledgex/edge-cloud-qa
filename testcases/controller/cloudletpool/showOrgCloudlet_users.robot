@@ -345,8 +345,8 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
    ...  send ShowOrgCloudlet for each org
    ...  verify proper cloudlets are returned
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  auto_delete=${False} 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  auto_delete=${False}
+   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  #auto_delete=${False} 
+   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  #auto_delete=${False}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -382,7 +382,7 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
    ...  send ShowOrgCloudlet for each user 
    ...  verify proper cloudlets are returned
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  auto_delete=${False}
+   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  #auto_delete=${False}
 
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
