@@ -167,7 +167,7 @@ node('jenkinsGcpSlave1'){
 
        stage('run tests') {
          dir('go/src/github.com/mobiledgex/jenkins') {
-             status = sh(script:'export Cycle=' + cycle + 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';./execJira.py', returnStatus: true);
+             status = sh(script:'export Cycle=' + cycle + ';export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';./execJira.py', returnStatus: true);
              println status
              if(status != 0) {
              echo "execJira.py failed with statuscode=" + status
