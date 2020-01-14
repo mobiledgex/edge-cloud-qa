@@ -38,7 +38,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
     ${cluster_name_default}=  Catenate  SEPARATOR=  autocluster  ${cluster_name_default}
 	
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  image_type=ImageTypeDocker  deployment=kubernetes
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
@@ -58,7 +58,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
 *** Keywords ***
 Setup
     Create Developer
-    Create Flavor
+    Create Flavor      disk=20
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
