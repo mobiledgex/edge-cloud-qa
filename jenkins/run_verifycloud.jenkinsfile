@@ -1,0 +1,184 @@
+import java.text.SimpleDateFormat
+
+dateParm = "${BuildDate}"
+commit_version = "notset"
+image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
+
+controller = "controllerunset"
+mc = "mcunset"
+mccert = ""
+dme = "dmeunset"
+
+if (env.dme) {
+    dme = "${DME}"
+}
+if (env.mastercontroller) {
+    mc = "${MasterController}"
+    //mccert = "${MasterControllerCert}"
+}
+if (env.mastercontrollercert) {
+    mccert = "${MasterControllerCert}"
+}
+if (env.controller) {
+    controller = "${Controller}"
+}
+
+node('jenkinsGcpSlave1'){
+    date = new Date()
+    sdate = new SimpleDateFormat("yyy-MM-dd")
+    Calendar cal = Calendar.getInstance()
+
+    dateValue = "notset"
+    if(dateParm == "today") {
+       dateValue = sdate.format(date)
+    } else {
+       dateValue = dateParm
+    }
+    cycle = Version + '_' + CloudletName + '_' + dateValue
+    tag = dateValue
+    project = "${project}"
+    
+    currentBuild.displayName = cycle
+
+    try {
+       stage('Checkout') {
+          dir('go/src/github.com/mobiledgex') {
+             checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[[$class:'SparseCheckoutPath', path:'jenkins/*'],[$class:'SparseCheckoutPath', path:'modules/*'],[$class:'SparseCheckoutPath', path:'tools/*'],[$class:'SparseCheckoutPath', path:'testcases/config/*']]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+	  }
+	  dir('go/src/github.com/mobiledgex/edge-cloud') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud/*'
+          }
+	  dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-cloud-infra/*'
+          }
+	  dir('go/src/github.com/mobiledgex/edge-proto') {
+             sh 'rm -rf $WORKSPACE/go/src/github.com/mobiledgex/edge-proto/*'
+          }
+
+          dir('go/src/github.com/mobiledgex/edge-cloud') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-cloud-infra.git'
+          }
+          dir('go/src/github.com/mobiledgex/edge-proto') {
+             git branch: 'master',
+             credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+             url: 'https://github.com/mobiledgex/edge-proto.git'
+          }
+
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "checkout of edge-cloud-qa failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {    
+       stage("create cycle") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+             def status = -1
+             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "${s} failed"
+                 currentBuild.result = 'FAILURE'
+             }
+	  }
+       }
+
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              def status = -1
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --component ${Components}'
+              status = sh(script: s, returnStatus: true);
+              println status
+              if(status != 0) {
+                  println "copyTestsToRelease.py failed"
+                  currentBuild.result = 'FAILURE'
+              }
+          }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle creation in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {    
+       stage("Update cycle") {
+          dir('go/src/github.com/mobiledgex/jenkins') {
+
+              def s2 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --startdate'
+              status2 = sh(script: s2, returnStatus: true);
+              println status2
+              if(status2 != 0) {
+                 println "updateCycleJira.py startdate failed"
+                 currentBuild.result = 'FAILURE'
+              }
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "cycle update in Jira/Zephyr for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    if(currentBuild.result != 'FAILURE') {
+
+      stage("build protos") {
+        dir('go/src/github.com/mobiledgex/tools') {
+            status = sh(script:'python3 ./build_protos.py --sourcedir /home/jenkins/workspace/runEdgecloud/go/src/github.com/mobiledgex/edge-cloud/ --sourcedir_proto /home/jenkins/workspace/runEdgecloud/go/src/github.com/mobiledgex/edge-proto/ --qadir $WORKSPACE/go/src/github.com/mobiledgex', returnStatus: true);
+            println status
+            if(status != 0) {
+            echo "build_protos.py failed with statuscode=" + status
+            currentBuild.result = 'FAILURE'
+            }
+         }
+       }
+
+
+       stage('run tests') {
+         dir('go/src/github.com/mobiledgex/jenkins') {
+             status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_VERSION=' + crmversion + ';./execJira.py', returnStatus: true);
+             println status
+             if(status != 0) {
+             echo "execJira.py failed with statuscode=" + status
+             currentBuild.result = 'FAILURE'
+             }
+          }
+          dir('go/src/github.com/mobiledgex/jenkins') {
+              def s3 = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./updateCycleJira.py  --project ' + project + ' --version ' + version + ' --cycle ' + cycle + ' --enddate'
+              status3 = sh(script: s3, returnStatus: true);
+              println status3
+              if(status3 != 0) {
+                  println "updateCycleJira.py endate failed"
+                  currentBuild.result = 'FAILURE'
+              }
+          }
+       }
+   } else {
+       echo "build was failure so not running any tests"
+   }
+
+
+}
