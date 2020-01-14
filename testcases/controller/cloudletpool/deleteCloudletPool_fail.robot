@@ -48,7 +48,7 @@ DeleteCloudletPool - delete when assinged to an org shall return error
    ...  send DeleteCloudletPool
    ...  verify proper error is received
 
-   EDGECLOUD-1728 able to do DeleteCloudletPool when the pool is assigned to an org
+   #EDGECLOUD-1728 able to do DeleteCloudletPool when the pool is assigned to an org
 
    ${pool_name}=  Get Default Cloudlet Pool Name
    ${org_name}=   Get Default Organization Name
