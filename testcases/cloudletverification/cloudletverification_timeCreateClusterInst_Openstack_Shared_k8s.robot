@@ -34,7 +34,7 @@ ${developer_name_openstack}     automation_api
 ${test_timeout_crm}  32 min
 	
 *** Test Cases ***
-ClusterInst shall create single with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create single with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the cluster and write it to a file
@@ -59,7 +59,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create 2 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 2 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -87,7 +87,7 @@ ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 3 with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create 3 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 3 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -115,7 +115,7 @@ ClusterInst shall create 3 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 4 with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create 4 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 4 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -143,7 +143,7 @@ ClusterInst shall create 4 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 5 with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create 5 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 5 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -171,7 +171,7 @@ ClusterInst shall create 5 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
+ClusterInst Timing shall create 10 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 10 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file

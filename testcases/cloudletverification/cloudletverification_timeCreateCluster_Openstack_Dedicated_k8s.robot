@@ -33,7 +33,7 @@ ${developer_name_openstack}     automation_api
 ${test_timeout_crm}   32 min
 	
 *** Test Cases ***
-ClusterInst shall create single with IpAccessDed/kubernetes on openstack
+ClusterInst Timing shall create single with IpAccessDed/kubernetes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessDed and deployment type=kubernetes
    ...  collect the time it takes to create the cluster and write it to a file
@@ -58,7 +58,7 @@ ClusterInst shall create single with IpAccessDed/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 2 with IpAccessDed/kubernetes on openstack
+ClusterInst Timing shall create 2 with IpAccessDed/kubernetes on openstack
    [Documentation]
    ...  create 2 clusters on openstack with IpAccessDed and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -87,7 +87,7 @@ ClusterInst shall create 2 with IpAccessDed/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 3 with IpAccessDedicated/kubernetes on openstack
+ClusterInst Timing shall create 3 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 3 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -116,7 +116,7 @@ ClusterInst shall create 3 with IpAccessDedicated/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 4 with IpAccessDedicated/kubernetes on openstack
+ClusterInst Timing shall create 4 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 4 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -145,7 +145,7 @@ ClusterInst shall create 4 with IpAccessDedicated/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 5 with IpAccessDedicated/kubernetes on openstack
+ClusterInst Timing shall create 5 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 5 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
@@ -174,7 +174,7 @@ ClusterInst shall create 5 with IpAccessDedicated/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 10 with IpAccessDedicated/kubernetes on openstack
+ClusterInst Timing shall create 10 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 10 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
