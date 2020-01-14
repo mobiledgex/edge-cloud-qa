@@ -8,7 +8,7 @@ Library  Collections
 Library  DateTime
 Library  Process
 
-Suite Teardown  WriteHTML
+
 Test Setup      Setup
 Test Teardown   Teardown
 
@@ -50,7 +50,7 @@ ClusterInst Timing shall create single with IpAccessShared/kubernetes on opensta
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}     developer_name=${developer_name_openstack}     flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}     developer_name=${developer_name_openstack}      number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -75,7 +75,7 @@ ClusterInst Timing shall create 2 with IpAccessShared/kubernetes on openstack
 	: FOR  ${INDEX}  IN RANGE  0  2
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}   flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
 	\  Append To List   ${handle_list}   ${handle}
 	MexController.Wait For Replies    @{handle_list}
 	${epoch_end_time}=     Get Time  epoch
@@ -103,7 +103,7 @@ ClusterInst Timing shall create 3 with IpAccessShared/kubernetes on openstack
 	: FOR  ${INDEX}  IN RANGE  0  3
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}    flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}     number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
 	\  Append To List   ${handle_list}   ${handle}
 	MexController.Wait For Replies    @{handle_list}
 	${epoch_end_time}=     Get Time  epoch
@@ -131,7 +131,7 @@ ClusterInst Timing shall create 4 with IpAccessShared/kubernetes on openstack
 	: FOR  ${INDEX}  IN RANGE  0  4
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}     flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      developer_name=${developer_name_openstack}      number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
 	\  Append To List   ${handle_list}   ${handle}
 	MexController.Wait For Replies    @{handle_list}
 	${epoch_end_time}=     Get Time  epoch
@@ -159,7 +159,7 @@ ClusterInst Timing shall create 5 with IpAccessShared/kubernetes on openstack
 	: FOR  ${INDEX}  IN RANGE  0  5
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}     flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}      number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
 	\  Append To List   ${handle_list}   ${handle}
 	MexController.Wait For Replies    @{handle_list}
 	${epoch_end_time}=     Get Time  epoch
@@ -187,7 +187,7 @@ ClusterInst Timing shall create 10 with IpAccessShared/kubernetes on openstack
 	: FOR  ${INDEX}  IN RANGE  0  10
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}     number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}    del_thread=${True}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}     number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}    del_thread=${True}
 	\  Append To List   ${handle_list}   ${handle}
 	MexController.Wait For Replies    @{handle_list}
 	${epoch_end_time}=     Get Time  epoch
@@ -204,7 +204,7 @@ Setup
 	${testdate}=    Get Time  epoch
 	${testdate}=    Convert Date    ${testdate}       result_format=%d-%m-%Y
 	${testdate}=     Catenate  SEPARATOR=      -      ${testdate}
-	${flavor_name}=   Set Variable   automation_api_flavor
+	Create Flavor     disk=20
 	${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack}
 	${FileName}=    Catenate  SEPARATOR=    ${cloudlet_name_openstack}   OpenstackTimingsK8sShared 
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
@@ -261,8 +261,3 @@ Failed Data
         ${failedData}=   Set Variable    Test ${testnum} Failed\n
 	Append To File    ${EXECDIR}/${FileName}    ${failedData}
 
-WriteHTML
-	${result}=   Run Process   python3  ${EXECDIR}/writeTimings.py   ${EXECDIR}/${FileName}
-        log    ${result.stdout}
-	log    ${result.stderr}
-	Should Be Equal As Integers    ${result.rc}    0

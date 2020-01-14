@@ -31,7 +31,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
 
 	${flavor_name}=   Set Variable    flavor${x}
 
-	Create Flavor       flavor_name=${flavor_name}   ram=1024  vcpus=1  disk=1
+	Create Flavor       flavor_name=${flavor_name}   ram=1024  vcpus=1  disk=20
 	
 	${cluster_name}=  Get Default Cluster Name
 
@@ -84,7 +84,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
 	${x}   Catenate  SEPARATOR=   ${x}   1
 	${flavor_name}=   Set Variable    flavor${x}
 
-	Create Flavor       flavor_name=${flavor_name}   ram=1024  vcpus=1  disk=1
+	Create Flavor       flavor_name=${flavor_name}   ram=1024  vcpus=1  disk=20
 
 	${cluster_name}=  Get Default Cluster Name
 
