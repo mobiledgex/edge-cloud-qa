@@ -28,7 +28,7 @@ Cluster shall create with IpAccessShared and num_nodes=1 on openstack
    ...  create a cluster on openstack with num_nodes=1
    ...  verify it 1 node and 1 master
 
-   Create Flavor          ram=1024  vcpus=1  disk=1
+   Create Flavor          ram=1024  vcpus=1  disk=20
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -63,7 +63,7 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    ...  create a cluster on openstack with num_nodes=4
    ...  verify it 4 nodes and 1 master
 
-   Create Flavor          ram=1024  vcpus=1  disk=1
+   Create Flavor          ram=1024  vcpus=1  disk=20
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name

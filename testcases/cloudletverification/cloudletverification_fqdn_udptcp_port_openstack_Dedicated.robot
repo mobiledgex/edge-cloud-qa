@@ -126,7 +126,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDe
 *** Keywords ***
 Setup
     Create Developer
-    Create Flavor
+    Create Flavor    disk=20
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
