@@ -63,7 +63,7 @@ DeleteCloudletPool - delete when assinged to an org shall return error
    ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"Cannot delete CloudletPool region US name ${pool_name} because it is in use by OrgCloudletPool org ${org_name}"}
+   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region US name ${pool_name} because it is in use by OrgCloudletPool org ${org_name}"}
 
 *** Keywords ***
 Setup
