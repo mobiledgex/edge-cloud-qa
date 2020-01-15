@@ -189,15 +189,18 @@ CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessS
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
    Should Contain  ${error_msg}   IpAccess must be dedicated for deployment type docker
 
-CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
+CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
     [Documentation]
     ...  create a cluster instance with ipaccess=IpAccessDedicatedOrShared and deployment=docker
-    ...  verify  error is received
+    ...  verify ipaccess is set to IpAccessDedicated
+ 
+    [Setup]  Setup
+    [Teardown]  Cleanup Provisioning
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicatedOrShared  deployment=docker  number_masters=0  number_nodes=0
+    ${clusterInst}=  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicatedOrShared  deployment=docker  number_masters=0  number_nodes=0
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   IpAccess must be dedicated for deployment type docker
+    # should be set to Dedicated
+    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
 *** Keywords ***
 Setup
