@@ -15,7 +15,7 @@ ${cloudlet_name_openstack}  automationBonnCloudlet
 ${operator_name_openstack}  TDG 
 ${mobiledgex_domain}  mobiledgex.net
 
-${test_timeout_crm}  15 min
+${test_timeout_crm}  32 min
 	
 *** Test Cases ***
 ClusterInst shall create with IpAccessDedicated/docker on openstack
@@ -23,7 +23,7 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates lb only
 
-   Create Flavor          ram=1024  vcpus=1  disk=1
+   Create Flavor          ram=1024  vcpus=1  disk=20
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
