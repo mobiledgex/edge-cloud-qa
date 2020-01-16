@@ -53,7 +53,6 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    #Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   0
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     0
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated

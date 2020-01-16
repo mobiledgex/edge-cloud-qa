@@ -54,7 +54,6 @@ Cluster shall create with IpAccessShared and num_nodes=1 on openstack
    #Should Be Equal As Numbers  ${num_servers_master}  1   # 1 master
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.small
 
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -89,7 +88,6 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    #Should Be Equal As Numbers  ${num_servers_master}  1   # 1 master
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.small
 
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 

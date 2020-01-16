@@ -69,7 +69,6 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
 	#Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
 	#Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-	Should Be Equal             ${cluster_inst.node_flavor}   m4.small
 	Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
 	Should Be Equal As Numbers  ${cluster_inst.num_nodes}     1
 	Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
@@ -129,7 +128,6 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
 	#Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
 	#Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-	Should Be Equal             ${cluster_inst.node_flavor}   m4.small
 	Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
 	Should Be Equal As Numbers  ${cluster_inst.num_nodes}     3
 	Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
