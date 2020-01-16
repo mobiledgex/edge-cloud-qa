@@ -67,7 +67,6 @@ ClusterInst shall create with IpAccessShared/K8s and num_masters=1 and num_nodes
    #Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     1
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     3  #IpAccessShared
@@ -132,7 +131,6 @@ ClusterInst shall create with IpAccessShared/k8s and num_masters=1 and num_nodes
    #Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     5
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     3  #IpAccessShared
