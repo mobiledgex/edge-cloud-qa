@@ -57,10 +57,10 @@ Cluster shall create with IpAccessShared and num_nodes=1 on openstack
 
    Sleep  120 seconds  #wait for metrics apps to build before can delete
 
-Cluster shall create with IpAccessShared and num_nodes=4 on openstack
+Cluster shall create with IpAccessShared and num_nodes=2 on openstack
    [Documentation]
-   ...  create a cluster on openstack with num_nodes=4
-   ...  verify it 4 nodes and 1 master
+   ...  create a cluster on openstack with num_nodes=2
+   ...  verify it 2 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=20
 
@@ -68,7 +68,7 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=1  ip_access=IpAccessShared
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=2  number_masters=1  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    #${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
