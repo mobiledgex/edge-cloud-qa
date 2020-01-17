@@ -72,10 +72,10 @@ ClusterInst shall create with IpAccessShared/K8s and num_masters=1 and num_nodes
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     3  #IpAccessShared
    Should Be Equal             ${cluster_inst.deployment}    kubernetes
 
-ClusterInst shall create with IpAccessShared/k8s and num_masters=1 and num_nodes=5 on openstack
+ClusterInst shall create with IpAccessShared/k8s and num_masters=1 and num_nodes=2 on openstack
    [Documentation]
-   ...  create a cluster on openstack with IpAccessShared and kubernetes and masters=1 and num_nodes=5
-   ...  verify it creates 1 lb and 5 nodes and 1 master
+   ...  create a cluster on openstack with IpAccessShared and kubernetes and masters=1 and num_nodes=2
+   ...  verify it creates 1 lb and 2 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=20
 
@@ -85,7 +85,7 @@ ClusterInst shall create with IpAccessShared/k8s and num_masters=1 and num_nodes
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=5  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=2  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes
    Log to Console  DONE creating cluster instance
 
    #${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -132,7 +132,7 @@ ClusterInst shall create with IpAccessShared/k8s and num_masters=1 and num_nodes
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
-   Should Be Equal As Numbers  ${cluster_inst.num_nodes}     5
+   Should Be Equal As Numbers  ${cluster_inst.num_nodes}     2
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     3  #IpAccessShared
    Should Be Equal             ${cluster_inst.deployment}    kubernetes
 
