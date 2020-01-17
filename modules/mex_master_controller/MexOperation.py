@@ -81,7 +81,7 @@ class MexOperation(MexRest):
                 elif url.endswith('CreateCloudlet'):
                     if 'Created Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
-                elif 'DeleteCloudlet' in url:
+                elif url.endswith('DeleteCloudlet'):
                     if 'Deleted Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
                 elif 'UpdateCloudlet' in url:
