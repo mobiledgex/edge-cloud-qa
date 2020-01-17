@@ -42,14 +42,18 @@ RegisterClient - request with auth shall return proper JWT for deployment=docker
 #   ...  ELSE  Should Be Equal  ${token_server}  ${token_server_url}
 
    Should Be Equal  ${token_server}  ${token_server_url}
+
+   ${uuid_length}=  Get Length  ${decoded_cookie['key']['uniqueid']}
 	
    ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip} 	
-   Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal  ${decoded_cookie['key']['devname']}  ${developer_name_default}	
-   Should Be Equal  ${decoded_cookie['key']['appname']}  ${app_name_default}	
-   Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version}	
+   Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
+   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}	
+   Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}	
+   Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}	
+   Should Be Equal As Numbers  ${uuid_length}  27
+   Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  dme-ksuid
 
 RegisterClient - request with auth shall return proper JWT for deployment=kubernetes
    [Documentation]
@@ -67,15 +71,19 @@ RegisterClient - request with auth shall return proper JWT for deployment=kubern
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
+   ${uuid_length}=  Get Length  ${decoded_cookie['key']['uniqueid']}
+
    Should Be Equal  ${token_server}  ${token_server_url}
 
    ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip}
-   Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal  ${decoded_cookie['key']['devname']}  ${developer_name_default}
-   Should Be Equal  ${decoded_cookie['key']['appname']}  ${app_name_default}
-   Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version}
+   Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
+   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}
+   Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}
+   Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}
+   Should Be Equal As Numbers  ${uuid_length}  27
+   Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  dme-ksuid
 
 RegisterClient - request with auth shall return proper JWT for deployment=vm
    [Documentation]
@@ -93,15 +101,19 @@ RegisterClient - request with auth shall return proper JWT for deployment=vm
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
+   ${uuid_length}=  Get Length  ${decoded_cookie['key']['uniqueid']}
+
    Should Be Equal  ${token_server}  ${token_server_url}
 
    ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip}
-   Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal  ${decoded_cookie['key']['devname']}  ${developer_name_default}
-   Should Be Equal  ${decoded_cookie['key']['appname']}  ${app_name_default}
-   Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version}
+   Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
+   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}
+   Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}
+   Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}
+   Should Be Equal As Numbers  ${uuid_length}  27
+   Should Be Equal             ${decoded_cookie['key']['uniqueidtype']}  dme-ksuid
 
 *** Keywords ***
 Setup
