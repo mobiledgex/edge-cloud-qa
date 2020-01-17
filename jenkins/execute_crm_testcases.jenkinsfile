@@ -2,6 +2,7 @@ project = "${project}"
 version = "${version}"
 cycle = "${cycle}"
 controller = "${controller}"
+mastercontroller = "${mastercontroller}
 dme = "${dme}"
 commit_version = "${CommitVersion}"
 
@@ -70,7 +71,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'CommitVersion', value: commit_version)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dme), string(name: 'CommitVersion', value: commit_version)]
 	    }
          }
 
