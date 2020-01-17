@@ -21,7 +21,7 @@ ${cloudlet_name_openstack}  automationFrankfurtCloudlet
 ${operator_name_openstack}  TDG 
 ${mobiledgex_domain}  mobiledgex.net
 
-${test_timeout_crm}  15 min
+${test_timeout_crm}  32 min
 	
 *** Test Cases ***
 ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
@@ -78,7 +78,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
 ClusterInst shall create with IpAccessDedicated and num_nodes=2 on openstack
 	[Documentation]
 	...  create a cluster on openstack with IpAccessDedicated and num_nodes=2
-	...  verify it creates 1 lb and 3 nodes and 1 master
+	...  verify it creates 1 lb and 2 nodes and 1 master
 
 	${x}   Catenate  SEPARATOR=   ${x}   1
 	${flavor_name}=   Set Variable    flavor${x}
@@ -129,7 +129,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=2 on openstack
 
 	#Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
 	Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
-	Should Be Equal As Numbers  ${cluster_inst.num_nodes}     3
+	Should Be Equal As Numbers  ${cluster_inst.num_nodes}     2
 	Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
 
 	Sleep  120 seconds  #wait for metrics apps to build before can delete

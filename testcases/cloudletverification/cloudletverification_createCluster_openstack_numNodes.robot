@@ -60,7 +60,7 @@ Cluster shall create with IpAccessShared and num_nodes=1 on openstack
 Cluster shall create with IpAccessShared and num_nodes=2 on openstack
    [Documentation]
    ...  create a cluster on openstack with num_nodes=2
-   ...  verify it 4 nodes and 1 master
+   ...  verify it 2 nodes and 1 master
 
    Create Flavor          ram=1024  vcpus=1  disk=20
 
