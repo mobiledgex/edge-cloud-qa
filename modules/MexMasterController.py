@@ -38,7 +38,7 @@ timestamp = str(time.time())
 class MexMasterController(MexRest):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, mc_address='127.0.0.1:9900', root_cert='mex-ca.crt'):
+    def __init__(self, mc_address='127.0.0.1:9900', root_cert='mex-ca.crt', auto_login=True):
         self.root_cert = None
 
         if len(root_cert) > 0:
@@ -121,7 +121,8 @@ class MexMasterController(MexRest):
         self._number_runcommand_requests_success = 0
         self._number_runcommand_requests_fail = 0
 
-        self.super_token = self.login(self.username, self.password, None, False)
+        if auto_login:
+            self.super_token = self.login(self.username, self.password, None, False)
 
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
@@ -692,7 +693,7 @@ class MexMasterController(MexRest):
                 #if str(self.resp.text) == '{"message":"Organization type must be developer, or operator"}':
                 #    raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
                 raise Exception("error creating organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            return self.orgname
+            return self.organization_name
 
     def show_organizations(self, token=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/org/show'
@@ -1332,7 +1333,7 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateClusterInst'
 
         payload = None
@@ -1345,7 +1346,7 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             if developer_name is None and self.organization_name: developer_name = self.organization_name
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, use_defaults=use_defaults).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, use_defaults=use_defaults).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -1861,6 +1862,9 @@ class MexMasterController(MexRest):
 #            resp = send_message()
 #            return self.decoded_data
 
+    def add_cloudlet_resource_mapping(self, token=None, region=None, operator_name=None, cloudlet_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.add_cloudlet_resource_mapping(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, mapping=mapping, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_cluster_metrics(self, token=None, region=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, developer_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/metrics/cluster'
 
@@ -1922,65 +1926,67 @@ class MexMasterController(MexRest):
             return self.decoded_data
 
     def get_app_metrics(self, token=None, region=None, app_name=None, cluster_name=None, developer_name=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/metrics/app'
+        return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, cluster_name=cluster_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-        payload = None
-        metric_dict = {}
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            print('*WARN*', 'xxxx', developer_name)
-            app = AppInstance(app_name=app_name, cluster_instance_name=cluster_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).app_instance
-            print('*WARN*', 'app',app)
-            if 'key' in app:
-                metric_dict = {'appinst': app['key']}
-            if region is not None:
-                metric_dict['region'] = region
-            if selector is not None:
-                metric_dict['selector'] = selector
-            if last is not None:
-                try:
-                    metric_dict['last'] = int(last)
-                except:
-                    metric_dict['last'] = last
-            if start_time is not None:
-                metric_dict['starttime'] = start_time
-            if end_time is not None:
-                metric_dict['endtime'] = end_time
-                
-
-            payload = json.dumps(metric_dict)
-
-        logger.info('get app metrics on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            #self._number_deletecloudlet_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    #self._number_deletecloudlet_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-
-            except Exception as e:
-                #self._number_deletecloudlet_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            #self._number_deletecloudlet_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+#        url = self.root_url + '/auth/metrics/app'
+#
+#        payload = None
+#        metric_dict = {}
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            print('*WARN*', 'xxxx', developer_name)
+#            app = AppInstance(app_name=app_name, cluster_instance_name=cluster_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).app_instance
+#            print('*WARN*', 'app',app)
+#            if 'key' in app:
+#                metric_dict = {'appinst': app['key']}
+#            if region is not None:
+#                metric_dict['region'] = region
+#            if selector is not None:
+#                metric_dict['selector'] = selector
+#            if last is not None:
+#                try:
+#                    metric_dict['last'] = int(last)
+#                except:
+#                    metric_dict['last'] = last
+#            if start_time is not None:
+#                metric_dict['starttime'] = start_time
+#            if end_time is not None:
+#                metric_dict['endtime'] = end_time
+#                
+#
+#            payload = json.dumps(metric_dict)
+#
+#        logger.info('get app metrics on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+#            #self._number_deletecloudlet_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    #self._number_deletecloudlet_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#
+#            except Exception as e:
+#                #self._number_deletecloudlet_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            #self._number_deletecloudlet_requests_success += 1
+#
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cellid=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_find_cloudlet_api_metrics(token=token, region=region, app_name=app_name, developer_name=developer_name, app_version=app_version, cellid=cellid, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
