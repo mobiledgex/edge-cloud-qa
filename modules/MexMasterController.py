@@ -1376,7 +1376,7 @@ class MexMasterController(MexRest):
 
             self._number_createclusterinst_requests_success += 1
 
-            resp =  self.show_cluster_instances(region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'])
+            resp =  self.show_cluster_instances(token=token, region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'])
 
             return resp
 
