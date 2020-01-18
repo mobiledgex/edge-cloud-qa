@@ -121,6 +121,15 @@ class MexMasterController(MexRest):
         self._number_runcommand_requests_success = 0
         self._number_runcommand_requests_fail = 0
 
+        self.flavor = None
+        self.app = None
+        self.app_instance = None
+        self.cloudlet = None
+        self.cloudlet_pool = None
+        self.cloudlet_pool_member = None
+        self.org_cloudlet_pool = None
+        self.org_cloudlet = None
+
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
 
@@ -134,14 +143,6 @@ class MexMasterController(MexRest):
         #self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         #self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         #self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
-        self.flavor = None
-        self.app = None
-        self.app_instance = None
-        self.cloudlet = None
-        self.cloudlet_pool = None
-        self.cloudlet_pool_member = None
-        self.org_cloudlet_pool = None
-        self.org_cloudlet = None
 
     def _create_classes(self):
         self.flavor = Flavor(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
@@ -325,7 +326,7 @@ class MexMasterController(MexRest):
             t.start()
             return t
         else:
-            print('sending message')
+            print('*WARN*', 'sending message')
             resp = send_message()
             self._create_classes()
             return self.token
