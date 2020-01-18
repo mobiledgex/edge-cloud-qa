@@ -75,18 +75,36 @@ MC - User shall be able to create multiple organizations
 	Should Be Equal               ${body}         {"message":"Organization created"}
 
 	${orgs}=  Show Organizations   token=${userToken}
-        Should Be Equal       ${orgs[0]["Name"]}                   ${dev_orgname}
-	Should Be Equal       ${orgs[0]["Type"]}                   developer
-	Should Be Equal       ${orgs[0]["Address"]}                222 somewhere dr
-	Should Be Equal       ${orgs[0]["Phone"]}                  111-222-3333
-	Convert Date          ${orgs[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
-	Convert Date          ${orgs[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
-	Should Be Equal       ${orgs[1]["Name"]}                   ${op_orgname}
-	Should Be Equal       ${orgs[1]["Type"]}                   operator
-	Should Be Equal       ${orgs[1]["Address"]}                333 somewhere st
-	Should Be Equal       ${orgs[1]["Phone"]}                  111-222-4444
-	Convert Date          ${orgs[1]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
-	Convert Date          ${orgs[1]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        ${numorgs}=  Get Length  ${orgs}
+
+        Should Be Equal As Numbers  ${numorgs}  2
+
+        ${devfound}=  Set Variable  ${FALSE}
+        ${opfound}=  Set Variable  ${FALSE}
+        log to console  xx ${devfound} ${opfound}
+
+        FOR  ${org}  IN  @{orgs}
+           ${devfound}=  Run Keyword If  "${org["Name"]}"=="${dev_orgname}"  Verify Dev Org  ${org}
+           ...           ELSE  Set Variable  ${devfound}
+           ${opfound}=   Run Keyword If  "${org["Name"]}"=="${op_orgname}"   Verify Op Org   ${org}
+           ...           ELSE  Set Variable  ${opfound}
+        END
+        log to console  yy ${devfound} ${opfound}
+        Should Be True  ${devfound}
+        Should Be True  ${opfound}
+
+#        Should Be Equal       ${orgs[0]["Name"]}                   ${dev_orgname}
+#	Should Be Equal       ${orgs[0]["Type"]}                   developer
+#	Should Be Equal       ${orgs[0]["Address"]}                222 somewhere dr
+#	Should Be Equal       ${orgs[0]["Phone"]}                  111-222-3333
+#	Convert Date          ${orgs[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+#	Convert Date          ${orgs[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+#	Should Be Equal       ${orgs[1]["Name"]}                   ${op_orgname}
+#	Should Be Equal       ${orgs[1]["Type"]}                   operator
+#	Should Be Equal       ${orgs[1]["Address"]}                333 somewhere st
+#	Should Be Equal       ${orgs[1]["Phone"]}                  111-222-4444
+#	Convert Date          ${orgs[1]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+#	Convert Date          ${orgs[1]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
 MC - User shall not be able to create an org without an org name	
 	[Documentation]
@@ -168,3 +186,24 @@ Setup
    ${userToken}=  Login  username=${epochusername}  password=${password}
 	
    Set Suite Variable  ${userToken}
+
+Verify Dev Org
+        [Arguments]  ${org}
+        Should Be Equal       ${org["Name"]}                   ${dev_orgname}
+        Should Be Equal       ${org["Type"]}                   developer
+        Should Be Equal       ${org["Address"]}                222 somewhere dr
+        Should Be Equal       ${org["Phone"]}                  111-222-3333
+        Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        [Return]  ${TRUE}
+
+Verify Op Org
+        [Arguments]  ${org}
+        Should Be Equal       ${org["Name"]}                   ${op_orgname}
+        Should Be Equal       ${org["Type"]}                   operator
+        Should Be Equal       ${org["Address"]}                333 somewhere st
+        Should Be Equal       ${org["Phone"]}                  111-222-4444
+        Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        [Return]  ${TRUE}
+
