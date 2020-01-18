@@ -126,6 +126,24 @@ class MexMasterController(MexRest):
 
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
+        #self.flavor = Flavor(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.app = App(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.app_instance = AppInstance(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        #self.cloudlet = Cloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.cloudlet_pool = CloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.flavor = None
+        self.app = None
+        self.app_instance = None
+        self.cloudlet = None
+        self.cloudlet_pool = None
+        self.cloudlet_pool_member = None
+        self.org_cloudlet_pool = None
+        self.org_cloudlet = None
+
+    def _create_classes(self):
         self.flavor = Flavor(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.app = App(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.app_instance = AppInstance(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
@@ -309,6 +327,7 @@ class MexMasterController(MexRest):
         else:
             print('sending message')
             resp = send_message()
+            self._create_classes()
             return self.token
 
     def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=True, json_data=None, use_defaults=True, use_thread=False):
