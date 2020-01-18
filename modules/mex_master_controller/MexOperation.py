@@ -100,7 +100,7 @@ class MexOperation(MexRest):
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
-                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=self.super_token, message=delete_message, use_defaults=False))
+                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=token, message=delete_message, use_defaults=False))
             self.counter_dict[message_type]['req_success'] += 1
 
             if message and show_message:
