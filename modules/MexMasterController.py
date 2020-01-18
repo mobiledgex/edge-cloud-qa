@@ -55,6 +55,8 @@ class MexMasterController(MexRest):
 
         self.username = 'mexadmin'
         self.password = 'mexadmin123'
+
+        self.admin_username = 'mexadmin'
         
         self.super_token = None
         self._decoded_token = None
@@ -129,7 +131,7 @@ class MexMasterController(MexRest):
         self.cloudlet_pool_member = None
         self.org_cloudlet_pool = None
         self.org_cloudlet = None
-
+        
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
 
@@ -310,6 +312,8 @@ class MexMasterController(MexRest):
                 logger.info('response:\n' + str(self.resp.text))
 
                 self.token = self.decoded_data['token']
+                if username == self.admin_username:  self.super_token = self.token
+                
                 self._decoded_token = jwt.decode(self.token, verify=False)
 
                 if str(self.resp.status_code) != '200':
