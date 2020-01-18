@@ -104,7 +104,7 @@ MC - User shall not be able assign AdminManger role
    ...  assign AdminManager role via user token 
    ...  verify proper error returned
 
-   ${error}=   Run Keyword and Expect Error  *  Adduser Role   username=${username}   role=AdminManager   token=${userToken}     use_defaults=${False}
+   ${error}=   Run Keyword and Expect Error  *  Adduser Role   username=${epochusername}   role=AdminManager   token=${userToken}     use_defaults=${False}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Organization not specified or no permissions"}
@@ -184,3 +184,4 @@ Setup
 
    Set Suite Variable  ${adminToken}
    Set Suite Variable  ${userToken}
+   Set Suite Variable  ${epochusername}
