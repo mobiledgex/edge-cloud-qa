@@ -33,7 +33,7 @@ class MexOperation(MexRest):
         self.super_token = super_token
         self.token = token
         self.thread_queue = thread_queue
-        
+
     def create(self, token=None, url=None, delete_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, show_msg=None, thread_name=None):
         return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
 
@@ -46,7 +46,6 @@ class MexOperation(MexRest):
     def update(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None):
         return self.send(message_type='update', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message)
 
-        
     def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name'):
         url = self.root_url + url
     
