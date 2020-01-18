@@ -105,7 +105,8 @@ class MexOperation(MexRest):
 
             if message and show_message:
                 logger.debug(f'showing:{show_message}')
-                resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
+                #resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
+                resp = self.send(message_type='show', region=region, url=show_url, token=token, message=show_message, use_defaults=False)
         if use_thread is True:
             thread_name = f'Thread-{thread_name}-{str(time.time())}'
             t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
