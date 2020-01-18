@@ -2,7 +2,7 @@ project = "${project}"
 version = "${version}"
 cycle = "${cycle}"
 controller = "${controller}"
-mastercontroller = "${mastercontroller}
+mastercontroller = "${mastercontroller}"
 dme = "${dme}"
 commit_version = "${CommitVersion}"
 
