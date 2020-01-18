@@ -350,7 +350,7 @@ class Dme(MexGrpc):
 
         logger.info('updating location with ipaddr={} lat={} long={}'.format(ip_address, latitude, longitude))
 
-        location_server = 'http://mextest.locsim.mobiledgex.net:8888/updateLocation'
+        location_server = 'http://mexdemo.locsim.mobiledgex.net:8888/updateLocation'
         payload = '{"latitude":' + str(latitude) + ', "longitude":' + longitude + ', "ipaddr": "' + ip_address + '"}'
         
         requests.post(location_server, data=payload)
