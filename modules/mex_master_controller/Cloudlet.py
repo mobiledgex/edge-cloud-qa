@@ -17,6 +17,7 @@ class Cloudlet(MexOperation):
         self.show_url = '/auth/ctrl/ShowCloudlet'
         self.update_url = '/auth/ctrl/UpdateCloudlet'
         self.metrics_url = '/auth/metrics/cloudlet'
+        self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
 
     def _build(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
@@ -121,6 +122,19 @@ class Cloudlet(MexOperation):
 
         return metric_dict
 
+    def _build_mapping(self, cloudlet_dict=None, mapping=None, use_defaults=True):
+        print('*WARN*', 'buildmapping')
+                
+        map_dict = {}
+        if cloudlet_dict is not None:
+            map_dict.update(cloudlet_dict)
+        if mapping is not None:
+            tag,value = mapping.split('=')
+            map_dict['mapping'] = {tag:value}
+        print('*WARN*', 'mapping', map_dict)
+        return map_dict
+
+    
     def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
@@ -158,11 +172,37 @@ class Cloudlet(MexOperation):
 
     def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
-
+        print('*WARN*', 'msg',msg)
         metric_dict = msg
-        metric_dict['cloudlet'] = msg['key']
-        del metric_dict['key']
+        if 'key' in msg:
+            metric_dict['cloudlet'] = msg['key']
+            del metric_dict['key']
+        else:
+            metric_dict = msg
 
         msg_dict = self._build_metrics(type_dict=metric_dict, selector=selector, last=last, start_time=start_time, end_time=end_time)
 
         return self.show(token=token, url=self.metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def add_cloudlet_resource_mapping(self, token=None, region=None, cloudlet_name=None, operator_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
+
+        map_dict = {'cloudletresmap': msg}
+        msg_dict = self._build_mapping(cloudlet_dict=map_dict, mapping=mapping)
+        
+        msg_dict_delete = None
+        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'operator_key' in msg['key']:
+            msg_delete = self._build(cloudlet_name=msg['key']['name'], operator_name=msg['key']['operator_key']['name'], use_defaults=False)
+            map_dict_delete = {'cloudletresmap': msg_delete}
+            msg_dict_delete = self._build_mapping(cloudlet_dict=map_dict_delete, mapping=mapping)
+
+        #msg_dict_show = None
+        #if 'key' in msg:
+        #    msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
+        #    msg_dict_show = {'app': msg_show}
+
+
+
+
+        return self.create(token=token, url=self.addmapping_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
+            
