@@ -121,13 +121,18 @@ class tc(unittest.TestCase):
         assert_expectations()
 
     def tearDown(self):
-        self.controller.delete_app_instance(self.app_instance.app_instance)
+        try: self.controller.delete_app_instance(self.app_instance.app_instance)
+        except: print('delete_app_instance failed')
         #time.sleep(1) # wait till app instance is actually deleted else delete app will fail
-        self.controller.delete_app(self.app.app)
-        self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
+        try: self.controller.delete_app(self.app.app)
+        except: print('delete_app failed')
+        try: self.controller.delete_cluster_instance(self.cluster_instance.cluster_instance)
+        except: print('delete_cluster_instance failed')
         #self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_developer(self.developer.developer)
-        self.controller.delete_flavor(self.flavor.flavor)
+        try: self.controller.delete_developer(self.developer.developer)
+        except: print('delete_developer failed')
+        try: self.controller.delete_flavor(self.flavor.flavor)
+        except: print('delete_flavor failed')
         #self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         #self.controller.delete_operator(self.operator.operator)
 
