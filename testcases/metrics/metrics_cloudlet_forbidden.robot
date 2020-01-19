@@ -28,18 +28,14 @@ CloudletMetrics - DeveloperManager shall not be able to get cloudlet metrics
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 
 CloudletMetrics - DeveloperContributor shall not be able to get cloudlet metrics
    [Documentation]
@@ -51,18 +47,14 @@ CloudletMetrics - DeveloperContributor shall not be able to get cloudlet metrics
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 
 CloudletMetrics - DeveloperViewer shall not be able to get cloudlet metrics
    [Documentation]
@@ -74,18 +66,14 @@ CloudletMetrics - DeveloperViewer shall not be able to get cloudlet metrics
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 
 CloudletMetrics - OperatorManager shall not be able to get cloudlet metrics from another operator
    [Documentation]
@@ -97,18 +85,14 @@ CloudletMetrics - OperatorManager shall not be able to get cloudlet metrics from
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 
 CloudletMetrics - OperatorContributor shall not be able to get cloudlet metrics from another operator
    [Documentation]
@@ -120,18 +104,14 @@ CloudletMetrics - OperatorContributor shall not be able to get cloudlet metrics 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorContributor  token=${adminToken}  #use_defaults=${False}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 
 CloudletMetrics - OperatorViewer shall not be able to get cloudlet metrics from another operator
    [Documentation]
@@ -143,18 +123,14 @@ CloudletMetrics - OperatorViewer shall not be able to get cloudlet metrics from 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorViewer  token=${adminToken}  #use_defaults=${False}
 
    # get utilization metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  token=${userToken}
+   Should Contain  ${error}  code=403
+   Should Contain  ${error}  {"message":"Forbidden"}
 
    # get ipusage metrics
-   Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
-   ${status_code}=  Response Status Code
-   ${body} =        Response Body
-   Should Be Equal As Integers  ${status_code}  403
-   Should Be Equal              ${body}         {"message":"Forbidden"}
+   ${error2}=  Run Keyword and Expect Error  *   MexMasterController.Get Cloudlet Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=ipusage  token=${userToken}
+   Should Contain  ${error2}  code=403
+   Should Contain  ${error2}  {"message":"Forbidden"}
 	
 *** Keywords ***
 Setup
