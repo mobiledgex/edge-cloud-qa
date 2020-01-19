@@ -383,7 +383,7 @@ def exec_testcases(z, l):
         tc_replace = tc.replace('/','')  # remove slash from filename
         #file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
         file_delete = tmpdir + "*" + t['issue_key'] + "*"
-        file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time()))
+        file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time())) + ".out"
         file_extension = '.txt'
         
         # delete old files since /tmp eventually gets filled up
