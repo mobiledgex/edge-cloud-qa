@@ -3,7 +3,7 @@ Documentation   Cloudlet IPUsage Metrics
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
-Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_METRICS_ENV}
 Library  DateTime
 Library  String
 Library  Collections
