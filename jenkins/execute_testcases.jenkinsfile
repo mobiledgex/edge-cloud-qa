@@ -109,7 +109,7 @@ node('jenkinsSlave1'){
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_VERSION=' + crmversion + ';export AUTOMATION_INFLUXDB_ADDRESS=' + influx + ';export AUTOMATION_OPENSTACK_METRICS_ENV=' + metricsenv + ';./execJira.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_VERSION=' + crmversion + ';export AUTOMATION_INFLUXDB_ADDRESS=' + influx + ';export AUTOMATION_OPENSTACK_METRICS_ENV=' + envmetrics + ';./execJira.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
