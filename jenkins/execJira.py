@@ -262,7 +262,10 @@ def find(name, path):
     logging.debug('finding file {} in {}'.format(name, path))
     for root, dirs, files in os.walk(path):
         if name in files:
-            logging.debug('found {} {}'.format(root, name))
+            logging.debug('found file {} {}'.format(root, name))
+            return os.path.join(root, name)
+        elif name in dirs:
+            logging.debug('found directory {} {}'.format(root, name))
             return os.path.join(root, name)
     logging.error('could not find {}'.format(name))
     return 'fileNotFound'
