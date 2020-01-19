@@ -264,6 +264,7 @@ def find(name, path):
         if name in files:
             logging.debug('found {} {}'.format(root, name))
             return os.path.join(root, name)
+    logging.error('could not find {}'.format(name))
     return 'fileNotFound'
 
 def update_single_defect(z, t):
@@ -355,7 +356,7 @@ def exec_testcases(z, l):
         print(t)
         print('xxxxxxxx', t['tc'], 'bbbbbb', os.path.basename(t['tc']))
         #if '.robot' in os.path.basename(t['tc']):
-        if '.robot' in t['tc']:
+        if '.robot' in t['tc'] or t['tc'].endswith('_robot'):
             tc_type = 'robot'
             tclines = t['tc'].splitlines()
             tc = tclines[0]
