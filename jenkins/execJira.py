@@ -13,6 +13,8 @@ import json
 import time
 import subprocess
 import argparse
+import zipfile
+import zlib
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = '***REMOVED***'
@@ -459,6 +461,19 @@ def exec_testcases(z, l):
             logging.info("moving " + file_output + " to " + file_output_done)
             #r = subprocess.run(mv_cmd, shell=True, check=True)
             os.rename(file_output, file_output_done)
+
+            # jira has an upload limit of 1,000,000 bytes
+            file_size = os.path.getsize(file_output_done)
+            if file_size >= 1000000:
+                file_output_zip = file_output_done + '.zip'
+                zfile = zipfile.ZipFile(file_output_zip, mode='w')
+                try:
+                    print('zipping ' + file_output_done)
+                    zfile.write(file_output_done, compress_type=zipfile.ZIP_DEFLATED)
+                    file_output_done = file_output_zip
+                finally:
+                    zfile.close()
+
         except Exception as e:
             logging.info(f'move failed:{e}')
             #except subprocess.CalledProcessError as err:
