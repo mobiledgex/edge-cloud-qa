@@ -1,7 +1,8 @@
 *** Settings ***
 Documentation  CreateOrgCloudletPool
 
-Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  String
 
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
@@ -12,15 +13,15 @@ CreateOrgCloudletPool - shall be able to create with long pool name
    ...  send CreateOrgCloudletPool with long pool name 
    ...  verify it is success 
 
-   ${pool_return1}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=dfafafasfasfasfasfafasfafasfafasfsafasfffafafasfasfasfafasfafasffasfdsa   ##use_defaults=False
-   log to console  xxx ${pool_return1}
+   ${name}=  Generate Random String  length=100
 
-   ${pool_return}=  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=dfafafasfasfasfasfafasfafasfafasfsafasfffafafasfasfasfafasfafasffasfdsa   #use_defaults=False
-   log to console  xxx ${pool_return}
+   ${pool_return1}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${name}   ##use_defaults=False
+
+   ${pool_return}=  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${name}   #use_defaults=False
 
    ${found}=  Set Variable  ${False}
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      ${found}=  Run Keyword And Return Status  Should Be True  '${pool_cloudlet['CloudletPool']}'=='dfafafasfasfasfasfafasfafasfafasfsafasfffafafasfasfasfafasfafasffasfdsa'
+      ${found}=  Run Keyword And Return Status  Should Be True  '${pool_cloudlet['CloudletPool']}'=='${name}'
       Exit For Loop If  ${found}
    END
 
@@ -31,15 +32,18 @@ CreateOrgCloudletPool - shall be able to create with numbers in pool name
    ...  send CreateOrgCloudletPool with numbers name
    ...  verify it is success
 
-   ${pool_return1}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=123   ##use_defaults=False
+   ${epoch}=  Get Time  epoch
+   ${epoch}=  Convert To String  ${epoch}
+
+   ${pool_return1}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}   ##use_defaults=False
    log to console  xxx ${pool_return1}
 
-   ${pool_return}=  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=123   #use_defaults=False
+   ${pool_return}=  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}   #use_defaults=False
    log to console  xxx ${pool_return}
 
    ${found}=  Set Variable  ${False}
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      ${found}=  Run Keyword And Return Status  Should Be True  '${pool_cloudlet['CloudletPool']}'=='123'
+      ${found}=  Run Keyword And Return Status  Should Be True  '${pool_cloudlet['CloudletPool']}'=='${epoch}'
       Exit For Loop If  ${found}
    END
 
