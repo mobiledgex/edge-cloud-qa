@@ -204,8 +204,8 @@ class GetLocation():
 class Dme(MexGrpc):
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
     
-    #def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
-    def __init__(self, dme_address='127.0.0.1:50051'):
+    def __init__(self, dme_address='127.0.0.1:50051', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
+    #def __init__(self, dme_address='127.0.0.1:50051'):
         #self.developer_list = []
         #self.operator_list = []
         #self.app_list = []
@@ -214,9 +214,11 @@ class Dme(MexGrpc):
         self._decoded_session_cookie = None
         self._token_server_uri = None
         #self._auth_token = None
-        
-        #super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
-        super(Dme, self).__init__(address=dme_address)
+
+        if '127.0.0.1' in dme_address:
+            super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
+        else:
+            super(Dme, self).__init__(address=dme_address)
 
         self.match_engine_stub = app_client_pb2_grpc.MatchEngineApiStub(self.grpc_channel)
 
