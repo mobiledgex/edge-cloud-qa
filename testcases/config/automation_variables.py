@@ -15,7 +15,7 @@ operator_name_gcp = 'gcp'
 
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
 docker_image_developer = 'mobiledgex'
-docker_image_facedetection    docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest
+docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 
 artifactory_dummy_image_name = 'execJira.py'
 
