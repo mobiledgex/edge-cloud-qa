@@ -1,0 +1,743 @@
+*** Settings ***
+Documentation   K8s Shared Cluster CPU Metrics
+
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
+Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+Library  DateTime
+Library  String
+Library  Collections
+		      
+Test Setup       Setup
+Test Teardown    Cleanup provisioning
+
+*** Variables ***
+${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
+${operator}=                       TDG
+${clustername_k8s_shared}=   cluster1574731678-0317152-k8sshared
+${developer_name}=  developer1574731678-0317152 
+
+${username_admin}=  mexadmin
+${password_admin}=  mexadmin123
+
+${username}=  mextester06
+${password}=  mextester06123
+${orgname}=   metricsorg
+	
+*** Test Cases ***
+ClusterMetrics - Shall be able to get the last k8s shared cluster CPU metric on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with last=1 
+   ...  verify info is correct
+
+   ${last}=  Set Variable  1
+   ${lastdb}=  Evaluate  ${last} + 1
+	
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=${last}
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY cluster ORDER BY DESC LIMIT ${last}  # last record
+   log to console  ${metrics['data'][0]['Series']}
+   log to console  ${metrics_influx}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+	
+   Metrics Headings Should Be Correct  ${metrics}
+	
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   CPU Should Be In Range  ${metrics}
+   
+	
+ClusterMetrics - Shall be able to get the last 5 k8s shared cluster CPU metrics on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with last=5
+   ...  verify info is correct
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=5
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY DESC LIMIT 5  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   CPU Should Be In Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the last 10 k8s shared cluster CPU metrics on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with last=100
+   ...  verify info is correct
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=10
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY DESC LIMIT 10  # last 5
+
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  10
+
+   CPU Should Be In Range  ${metrics}
+
+
+ClusterMetrics - Shall be able to get all k8s shared cluster CPU metrics on openstack
+   [Documentation]
+   ...  request all cluster CPU metrics
+   ...  verify info is correct
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY DESC LIMIT 101  # last 5
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Log To Console  ${num_readings}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+
+   CPU Should Be In Range  ${metrics}
+
+
+ClusterMetrics - Shall be able to request more k8s shared cluster CPU metrics than exist on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with last=<greater than total number of metrics>
+   ...  verify info is correct
+
+   ${metricsall}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu
+   ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
+
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY DESC LIMIT 101  # last 5
+
+   ${more_readings}=  Evaluate  ${num_readings_all} + 100
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=${more_readings}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+
+   ${num_readings_possible}=  Evaluate  ${num_readings_all} + 5   # could have read 5 more since it might take a while to read a lot of readings
+   Should Be True  ${num_readings} >= ${num_readings_all} and ${num_readings} <= ${num_readings_possible}
+
+   CPU Should Be In Range  ${metrics}
+
+ClusterMetrics - Shall be able to get k8s shared cluster CPU metrics with starttime on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with starttime 
+   ...  verify info is correct
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Should Be True  (${epoch_first} - ${epoch_last}) > 50  # difference between 1st and last time should be about 2min
+   Should Be True  (${epoch_first} - ${epoch_last}) < 150  # difference between 1st and last time should be about 2min 
+   Should Be True  ${epoch_first} >= ${epochpre} 
+	
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   CPU Should Be In Range  ${metrics}
+
+ClusterMetrics - Shall be able to get k8s shared cluster CPU metrics with endtime on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with endtime 
+   ...  verify info is correct
+
+   # get all metric and set endtime = 2 mins from 1st metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${end}=  Evaluate  ${epochpre} + 90
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+	
+   ${metrics}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  end_time=${end_date}
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   # get 1st reading from influx
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY ASC LIMIT ${num_readings} 
+   Metrics Headings Should Be Correct  ${metrics}  
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   #Should Be Equal As Integers  ${num_readings}  6 
+   Should Be True  ${epoch_first} <= ${end}
+
+   CPU Should Be In Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime=lastrecord on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with starttime=lastrecord 
+   ...  verify info is correct
+
+   #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
+
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cluster CPU Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT 1  # last record
+	
+   # get last metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   #log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+
+   # get readings and 1st and last timestamp
+    ${metrics}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics}
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+   Should Be Equal As Integers  ${num_readings}  1
+	
+   CPU Should Be In Range  ${metrics} 
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime > lastrecord on openstack
+   [Documentation]
+   ...  request cloudlet metrics with starttime in the future
+   ...  verify empty list is returned
+
+   # get last metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} + 60
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and with starttime in the future
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}
+
+   # readings should be empty
+   Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with endtime=lastrecord on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with endtime=lastrecord
+   ...  verify info is correct
+
+   EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
+   # get last metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
+
+   # get all metrics
+   ${metrics_all}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics}
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings_all}=  Get Length  ${metrics_all['data'][0]['Series'][0]['values']}
+   ${num_readings}=      Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings_all} = ${num_readings} or ${num_readings}=(${num_readings_all}+1)
+ 
+   Should Be Equal  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  ${metrics['data'][-1]['Series'][0]['values'][-1][0]}   #last metric should show
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+	
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with endtime = firstrecord on openstack
+   [Documentation]
+   ...  request cloudlet metrics with endtime = firstrecord 
+   ...  verify empty list is returned
+
+   # get last metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} + 60
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and with starttime in the future
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}
+
+   # readings should be empty
+   Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime > endtime on openstack
+   [Documentation]
+   ...  request cloudlet metrics with starttime > endtime
+   ...  verify empty list is returned
+
+   ${start_date}=  Set Variable  2019-09-02T01:01:01Z	
+   ${end_date}=  Set Variable  2019-09-01T01:01:01Z
+
+   # get readings and with starttime in the future
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}
+
+   # readings should be empty
+   Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime and endtime > lastrecord on openstack
+   [Documentation]
+   ...  request cloudlet metrics with starttime/endtime in the future
+   ...  verify empty list is returned
+
+   # get last metric
+   ${metricspre}=   Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} + 60
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and with starttime in the future
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}
+
+   # readings should be empty
+   Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime and endtime on openstack
+   [Documentation]
+   ...  request cluster CPU metrics with starttime and endtime on openstack
+   ...  verify info is correct
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1 
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${end}=    Evaluate  ${epochpre} - 30
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  (${epoch_first} - ${epoch_last}) < 90  # difference should be about 30min 
+   Should Be True  ${epoch_first} < ${epochpre}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the k8s shared cluster CPU metrics with starttime and endtime and last on openstack
+   [Documentation]
+   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
+   ...  verify info is correct
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${end}=    Evaluate  ${epochpre} - 30 
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}  last=1
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
+   Should Be True  ${epoch_last} < ${epochpre}
+   Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - DeveloperManager shall be able to get k8s shared cluster CPU metrics
+   [Documentation]
+   ...  request the cluster CPU metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   Create Org  orgname=${developer_name}  orgtype=developer
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${developer_name}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=5  token=${userToken}
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5 
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - DeveloperContributor shall be able to get k8s shared cluster CPU metrics
+   [Documentation]
+   ...  request the cluster CPU metrics as DeveloperContributor
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   Create Org  orgname=${developer_name}  orgtype=developer
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${developer_name}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=5  token=${userToken}
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - DeveloperViewer shall be able to get k8s shared cluster CPU metrics
+   [Documentation]
+   ...  request the cluster CPU metrics as DeveloperViewer
+   ...  verify metrics are returned
+
+   ${epoch}=  Get Time  epoch
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Unlock User
+   Verify Email  email_address=${emailepoch}
+
+   Create Org  orgname=${developer_name}  orgtype=developer
+
+   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+
+   Adduser Role   orgname=${developer_name}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
+
+   ${metrics}=         Get Cluster Metrics  region=US  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=5  token=${userToken}
+   ${metrics_influx}=  Get Influx Cluster CPU Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
+   log to console  ${metrics_influx[0]['time']}
+
+   Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/operator/developer only 
+   [Documentation]
+   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
+   ...  verify info is correct
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${end}=    Evaluate  ${epochpre} - 30
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}  last=1
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
+   Should Be True  ${epoch_last} < ${epochpre}
+   Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/developer only
+   [Documentation]
+   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
+   ...  verify info is correct
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${end}=    Evaluate  ${epochpre} - 30
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}  last=1
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
+   Should Be True  ${epoch_last} < ${epochpre}
+   Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   CPU Should be in Range  ${metrics}
+
+ClusterMetrics - Shall be able to get the cluster CPU metrics with operator/developer only
+   [Documentation]
+   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
+   ...  verify info is correct
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=US  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  last=1
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 120
+   ${end}=    Evaluate  ${epochpre} - 30
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=US  operator_name=${operator}  developer_name=${developer_name}  selector=cpu  start_time=${start_date}  end_time=${end_date}  last=1
+   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   log to console  ${epochpre}
+   log to console  ${epoch_first}
+   log to console  ${epoch_last}
+   Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
+   Should Be True  ${epoch_last} < ${epochpre}
+   Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   CPU Should be in Range  ${metrics}
+
+*** Keywords ***
+Setup
+   #${limits}=  Get Openstack limits
+   #Set Suite Variable  ${limits}
+   
+   ${timestamp}=  Get Default Time Stamp
+   ${developer_name}=  Get Default Developer Name
+   #${clustername}=  Get Default Cluster Name
+   ${clustername_k8s_shared}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sshared
+
+   ${clustername_k8s_shared}=   Set Variable  cluster1574873355-539982-k8sshared
+   ${developer_name}=  Set Variable  developer1574873355-539982
+
+   Set Suite Variable  ${clustername_k8s_shared}
+   Set Suite Variable  ${developer_name}
+ 
+Metrics Headings Should Be Correct
+  [Arguments]  ${metrics}
+
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  operator
+
+CPU Should Be In Range
+  [Arguments]  ${metrics}
+
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+	
+   # verify values
+   : FOR  ${reading}  IN  @{values}
+   \  Should Be True               ${reading[3]} > 0 and ${reading[3]} <= 100
+
+Metrics Should Match Influxdb
+   [Arguments]  ${metrics}  ${metrics_influx}
+
+   ${metrics_influx_t}=  Set Variable  ${metrics_influx}
+   ${index}=  Set Variable  0
+   : FOR  ${reading}  IN  @{metrics_influx}
+   \  Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][${index}]}' != '${reading['time']}'  Remove From List  ${metrics_influx_t}  ${index}
+   \  ...  ELSE  Exit For Loop
+
+   #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
+   #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
+   #log to console  ${metrics_influx}
+
+   ${index}=  Set Variable  0
+   : FOR  ${reading}  IN  @{metrics_influx_t}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['cpu']}
+   \  ${index}=  Evaluate  ${index}+1

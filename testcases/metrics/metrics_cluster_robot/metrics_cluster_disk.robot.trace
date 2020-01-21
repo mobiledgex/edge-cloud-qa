@@ -1,0 +1,10 @@
+==================================================================
+
+REQUEST: 14 Nov 2019 17:22:17
+   GET http://35.202.161.23:8086/query?u=uiteam&p=pa%24%24word&db=metrics&q=select+%2A+from+%22cluster-disk%22+where+cluster%3D%27cluster1573768282-436812%27+and+cloudlet%3D%27automationBonnCloudlet%27+and+operator%3D%27TDG%27+and+dev%3D%27developer1573768282-436812%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.20.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"cluster-disk","tags":{"cluster":"cluster1573768282-436812"},"columns":["time","cloudlet","dev","disk","operator"],"values":[["2019-11-14T23:22:11.836999893Z","automationBonnCloudlet","developer1573768282-436812",16.838893997136136,"TDG"],["2019-11-14T23:22:02.237999916Z","automationBonnCloudlet","developer1573768282-436812",16.838893997136136,"TDG"]]}]}]}
+
