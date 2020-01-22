@@ -12,7 +12,7 @@ DeleteCloudletPool - delete without region shall return error
    ...  send DeleteCloudletPool without region 
    ...  verify proper error is received 
 
-   EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
+   #EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
 
    ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  token=${token}  use_defaults=False
 
@@ -24,7 +24,7 @@ DeleteCloudletPool - delete without parameters shall return error
    ...  send DeleteCloudletPool with region only
    ...  verify proper error is received
 
-   EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
+   #EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
 
    ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}  use_defaults=False
 
