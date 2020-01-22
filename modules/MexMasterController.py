@@ -26,6 +26,7 @@ from mex_master_controller.AppInstance import AppInstance
 from mex_master_controller.AutoScalePolicy import AutoScalePolicy
 from mex_master_controller.Metrics import Metrics
 from mex_master_controller.Flavor import Flavor
+from mex_master_controller.OperatorCode import OperatorCode
 
 import shared_variables_mc
 import shared_variables
@@ -131,7 +132,8 @@ class MexMasterController(MexRest):
         self.cloudlet_pool_member = None
         self.org_cloudlet_pool = None
         self.org_cloudlet = None
-        
+        self.operatorcode =  None
+
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
 
@@ -155,6 +157,7 @@ class MexMasterController(MexRest):
         self.cloudlet_pool_member = CloudletPoolMember(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def get_supertoken(self):
         return self.super_token
@@ -2118,6 +2121,16 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def create_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.operatorcode.delete_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.operatorcode.show_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
 
     def create_cloudlet_pool_member(self, token=None, region=None, cloudlet_pool_name=None, operator_name=None, cloudlet_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.cloudlet_pool_member.create_cloudlet_pool_member(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_name=operator_name, cloudlet_name=cloudlet_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
