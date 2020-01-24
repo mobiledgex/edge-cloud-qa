@@ -12,7 +12,7 @@ ${dme_api_address}  127.0.0.1:50051
 ${app_name}  someapplication   #has to match crm process startup parms
 ${region}  US
 ${code}  2561
-${developer_name}  AcmeAppCo
+${developer_name}  AcmeApp
 ${app_version}  1.0
 ${access_ports}    tcp:80,http:443,udp:10002
 ${operator_name}   tmus
