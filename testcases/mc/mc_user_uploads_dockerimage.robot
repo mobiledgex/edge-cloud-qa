@@ -30,6 +30,9 @@ MC - User shall be able to upload docker image as Developer Manager
     ...  upload docker image 
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+ 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -67,6 +70,9 @@ MC - User shall be able to upload docker image as Developer Contributor
     ...  upload docker image 
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -102,6 +108,9 @@ MC - User shall not be able to upload docker image as Developer Viewer
     ...  add user to org as Developer Viewer
     ...  verify cant upload docker image 
     ...  delete the user
+
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -144,6 +153,9 @@ MC - User shall not be able to upload docker image as Operator Manager
     ...  verify cant upload docker image 
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -185,6 +197,9 @@ MC - User shall not be able to upload docker image as Operator Contributor
     ...  verify cant upload docker image
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -225,6 +240,9 @@ MC - User shall not be able to upload docker image as Operator Viewer
     ...  add user to org as Operator Viewer
     ...  verify cant upload docker image
     ...  delete the user
+
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
