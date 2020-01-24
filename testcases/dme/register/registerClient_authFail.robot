@@ -9,7 +9,7 @@ Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 ${app_version}     1.0
 ${app_name}        automation_api_app
 ${app_name_auth}   automation_api_auth_app
-${developer_name}  automation_api 
+${developer_name}  mobiledgex 
 
 *** Test Cases ***
 RegisterClient - request for app without authpublickey shall return 'No authkey found to validate token'
