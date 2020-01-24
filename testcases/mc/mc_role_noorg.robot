@@ -21,7 +21,7 @@ MC - Admin user shall be able assign AdminManger role with no org
 
    ${found}=  Set Variable  ${False}
    : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${username}' and '${role['role']}'=='AdminManager'
+   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminManager'
    \  Exit For Loop If  ${found}
 
    log to console  ${role}
