@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   CreateOperatorCode with possible error scenarios
+Documentation   CreateOperatorCode with possible failed scenarios
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
