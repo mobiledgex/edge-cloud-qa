@@ -25,7 +25,8 @@ developer_email = 'dev@dev.com'
 flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
 #app_name = 'app' + stamp
-app_name = 'server_ping_threaded'
+app_name = 'server_ping_threaded' + stamp
+app = 'server_ping_threaded'
 #app_version = '1.0'
 app_version = '5.0'
 access_ports = 'tcp:1'
@@ -54,7 +55,7 @@ class tc(unittest.TestCase):
         #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_developer(self.developer.developer) 
+        #self.controller.create_developer(self.developer.developer) 
         #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppDockerNoImagePath(self):
@@ -68,7 +69,7 @@ class tc(unittest.TestCase):
         # create the app
         # contains image_type=Docker and no image_path
         self.app = mex_controller.App(image_type='ImageTypeDocker',
-                                      app_name=app_name,
+                                      app_name=app,
                                       app_version=app_version,
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
@@ -84,7 +85,7 @@ class tc(unittest.TestCase):
 
         # find app in list
         #self.app.image_path = 'docker.mobiledgex.net/' + developer_name + '/images/' + app_name + ':1.0'
-        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
+        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
@@ -117,7 +118,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         # find app in list
-        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app_name + ':' + app_version
+        self.app.image_path = 'docker-qa.mobiledgex.net/' + developer_name + '/images/' + app + ':' + app_version
         found_app = self.app.exists(app_post)
 
         self.controller.delete_app(self.app.app)
@@ -128,7 +129,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         #self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_developer(self.developer.developer)
+        #self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':
