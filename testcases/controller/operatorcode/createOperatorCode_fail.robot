@@ -57,7 +57,7 @@ CreateOperatorCode - create without operatorname
 
 CreateOperatorCode - create without operatorname and code
    [Documentation]
-   ...  send CreateOperatorCode withour Code and Operator Name
+   ...  send CreateOperatorCode without Code and Operator Name
    ...  verify proper error is received
 
    # start with a dash
@@ -67,7 +67,7 @@ CreateOperatorCode - create without operatorname and code
    Should Contain   ${error}  error={"message":"No code specified"}
 
 
-CreateCloudletPool - create with same name shall return error
+CreateOperatorCode - create with same name shall return error
    [Documentation]
    ...  send CreateOperatorName twice for same name
    ...  verify proper error is received
