@@ -5,7 +5,7 @@ Library	    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert
 Library     MexArtifactory
 	
 #Test Setup	 Setup
-Test Teardown    Teardown
+#Test Teardown    Teardown
 
 *** Variables ***
 ${username}          mextester99
@@ -28,6 +28,9 @@ MC - User shall be able to curl artifactory image as Developer Manager
     ...  add user to org as Developer Manager
     ...  curl artifactory image 
     ...  delete the user
+
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -61,6 +64,9 @@ MC - User shall be able to curl artifactory image as Developer Contributor
     ...  curl artifactory image 
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -91,6 +97,9 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     ...  add user to org as Developer Viewer
     ...  verify cant curl artifactory image 
     ...  delete the user
+
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -124,6 +133,9 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     ...  verify cant curl artifactory image 
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -156,6 +168,9 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     ...  verify cant curl artifactory image
     ...  delete the user
 
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 	
@@ -187,6 +202,9 @@ MC - User shall not be able to curl artifactory image as Operator Viewer
     ...  add user to org as Operator Viewer
     ...  verify cant curl artifactory image
     ...  delete the user
+
+    ${i}=  Get Time  epoch
+    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
