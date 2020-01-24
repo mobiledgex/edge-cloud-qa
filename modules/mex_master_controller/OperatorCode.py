@@ -60,17 +60,17 @@ class OperatorCode(MexOperation):
             thread_name = msg['code']
 
         msg_dict_delete = None
-        if auto_delete and 'code' in msg:
+        if auto_delete and 'code' in msg and 'operator_name' in msg:
             msg_delete = self._build(operator_name=msg['operator_name'], code= msg['code'], use_defaults=False)
             msg_dict_delete = {'operatorcode': msg_delete}
 
         msg_dict_show = None
-        if 'code' in msg:
+        if 'code' in msg and 'operator_name' in msg:
             msg_show = self._build(operator_name=msg['operator_name'],code= msg['code'], use_defaults=False)
             msg_dict_show = {'operatorcode': msg_show}
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url,
-                           region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread,
+                           region=region, json_data=json_data, use_defaults=True, use_thread=use_thread,
                            create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show,
                            thread_name=thread_name)
 
