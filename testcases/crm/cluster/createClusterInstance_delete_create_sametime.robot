@@ -41,7 +41,7 @@ User shall be able to delete/create an app instance at the same time on openstac
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
 

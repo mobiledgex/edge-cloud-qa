@@ -57,7 +57,7 @@ Setup
     ${cluster_name}=    Catenate  SEPARATOR=.  cl  ${epoch_time}
     Set Suite Variable  ${cluster_name}
 
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster   cluster_name=${cluster_name} 
     

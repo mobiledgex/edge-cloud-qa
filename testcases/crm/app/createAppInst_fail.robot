@@ -32,7 +32,7 @@ AppInst - VM deployment with wrong md5 shall fail
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     
     ${app_version_default}=  Get Default App Version

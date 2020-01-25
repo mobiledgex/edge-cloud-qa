@@ -161,7 +161,7 @@ Setup
     ${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
     #${cluster_name}=  Remove String  ${cluster_name}  .
 	
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster   cluster_name=${cluster_name} 
     #Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}

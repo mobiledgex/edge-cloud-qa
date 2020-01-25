@@ -8,7 +8,7 @@ Library  MexApp
 Library  String
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -55,8 +55,8 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
 	
     Mount Should Exist on Pod  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
 
-    Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    Register Client  #app_name=app1579992291-485193  developer_name=mobiledgex  app_version=1.0
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  #carrier_name=GDDT  latitude=32.7767  longitude=-96.797
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
@@ -65,7 +65,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated
