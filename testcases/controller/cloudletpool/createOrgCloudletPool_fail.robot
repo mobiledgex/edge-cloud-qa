@@ -52,7 +52,7 @@ CreateOrgCloudletPool - create with pool name not found shall return error
    ...  send CreateOrgCloudletPool for pool name that doesnt exist 
    ...  verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  org_name=myorg  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  org_name=mobiledgex  use_defaults=False
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Specified CloudletPool mypooolxxx for region US not found"}
