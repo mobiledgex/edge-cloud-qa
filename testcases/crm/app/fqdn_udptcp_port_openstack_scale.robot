@@ -112,7 +112,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
 
 *** Keywords ***
 Setup
-    Create Developer
+    #CCreate Developer
     Create Flavor
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
