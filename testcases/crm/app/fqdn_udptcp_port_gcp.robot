@@ -146,7 +146,7 @@ Setup
     #${epoch_time}=  Get Time  epoch
     #${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
 
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster   #cluster_name=${cluster_name} 
 
