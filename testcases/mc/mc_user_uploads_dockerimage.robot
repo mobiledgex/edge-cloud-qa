@@ -154,7 +154,7 @@ MC - User shall not be able to upload docker image as Operator Manager
     ...  delete the user
 
     ${i}=  Get Time  epoch
-    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+    ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -198,7 +198,7 @@ MC - User shall not be able to upload docker image as Operator Contributor
     ...  delete the user
 
     ${i}=  Get Time  epoch
-    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+    ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
@@ -242,7 +242,7 @@ MC - User shall not be able to upload docker image as Operator Viewer
     ...  delete the user
 
     ${i}=  Get Time  epoch
-    ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
+    ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
