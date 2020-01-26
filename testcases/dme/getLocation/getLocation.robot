@@ -25,7 +25,7 @@ GetLocation - request should return LOC_FOUND
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 
