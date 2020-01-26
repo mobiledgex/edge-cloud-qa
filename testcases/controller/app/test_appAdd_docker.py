@@ -105,7 +105,7 @@ class tc(unittest.TestCase):
         # contains image_type=Docker and empty image_path
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       image_path='',
-                                      app_name=app_name,
+                                      app_name=app,
                                       app_version=app_version,
                                       #access_layer='AccessLayerL7',
                                       access_ports=access_ports,
