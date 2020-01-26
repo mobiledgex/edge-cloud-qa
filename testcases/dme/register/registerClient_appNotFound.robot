@@ -106,7 +106,7 @@ RegisterClient - request shall succeed after adding app
 *** Keywords ***
 Setup
     #Create Operator             operator_name=${operator_name} 
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
