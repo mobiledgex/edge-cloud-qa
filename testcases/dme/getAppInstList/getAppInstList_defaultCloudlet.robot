@@ -54,7 +54,7 @@ GetAppInstList - request shall not return default cloudlet apps
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App                  access_ports=tcp:1  official_fqdn=http://andy.com 
