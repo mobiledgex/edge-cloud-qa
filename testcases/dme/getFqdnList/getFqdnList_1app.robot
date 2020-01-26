@@ -34,7 +34,7 @@ GetFqdnList - request shall return 1 app
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     ${app}=  Create App			access_ports=tcp:1  official_fqdn=${platos_uri}
