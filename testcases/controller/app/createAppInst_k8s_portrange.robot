@@ -102,7 +102,7 @@ AppInst - user shall be able to add with TCP/UDP port range for k8s
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster  
     Log To Console  Creating Cluster Instance
