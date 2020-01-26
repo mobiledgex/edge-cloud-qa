@@ -71,7 +71,7 @@ VerifyLocation - request with longitude only should not succeed
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App

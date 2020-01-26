@@ -56,7 +56,7 @@ VerifyLocation - request claiming to be home but actually overseas shall return 
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     Create App             access_ports=${access_ports} 
     Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
