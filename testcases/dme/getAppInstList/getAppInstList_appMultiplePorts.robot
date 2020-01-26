@@ -57,7 +57,7 @@ GetAppInstList - request shall return app with mulitple ports
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     Create App			access_ports=tcp:1,udp:2,http:3
