@@ -43,7 +43,7 @@ AppInst - VM deployment shall be created with clustername
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cloudlet  cloudlet_name=tmocloud-10  operator_name=dmuus
     Create App	 deployment=vm  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}  #	access_ports=tcp:1
