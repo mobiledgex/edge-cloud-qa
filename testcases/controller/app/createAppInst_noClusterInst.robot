@@ -55,7 +55,7 @@ AppInst - User shall not be able to create an app instance without cluster devel
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     Create App                  access_ports=tcp:1
 
