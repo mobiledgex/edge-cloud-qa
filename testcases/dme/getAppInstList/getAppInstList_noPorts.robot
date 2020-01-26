@@ -45,7 +45,7 @@ GetAppInstList - request shall return app with no ports
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     Create App		       app_name=default  app_version=default  developer_name=default  cluster_name=default  image_path=default  image_type=ImageTypeDocker  default_flavor_name=default  use_defaults=${False} 
