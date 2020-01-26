@@ -57,7 +57,7 @@ RegisterClient - register shall work when keep creating/deleting same app instan
 *** Keywords ***
 Setup
     #Create Operator             operator_name=${operator_name} 
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
