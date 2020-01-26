@@ -56,7 +56,7 @@ VerifyLocation - request claiming to be overseas but actually home shall return 
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 

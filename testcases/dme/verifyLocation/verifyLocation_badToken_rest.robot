@@ -42,7 +42,7 @@ VerifyLocation REST - request with empty token shall return 'verifyloc token req
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 
