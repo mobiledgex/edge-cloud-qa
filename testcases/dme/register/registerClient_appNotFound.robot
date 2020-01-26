@@ -105,11 +105,13 @@ RegisterClient - request shall succeed after adding app
 
 *** Keywords ***
 Setup
+    ${time}=  Get Time  epoch
+
     #Create Operator             operator_name=${operator_name} 
     #Create Developer            
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
     Create App 
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster${time}
 
