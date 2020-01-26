@@ -133,5 +133,5 @@ Flavor - error shall be recieved when deleting flavor used by appinst
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
