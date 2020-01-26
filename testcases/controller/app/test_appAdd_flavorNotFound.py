@@ -43,7 +43,7 @@ class tc(unittest.TestCase):
                                                    )
         self.developer = mex_controller.Developer(developer_name=developer_name,
                                                   )
-        self.controller.create_developer(self.developer.developer) 
+        #self.controller.create_developer(self.developer.developer) 
 
     def test_CreateAppImageTypeOnlyImageTypeUnknown(self):
         # [Documentation] App - User shall not be able to create an app with no cluster and defaultflavor that doesnot exist 
@@ -78,9 +78,9 @@ class tc(unittest.TestCase):
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
-    @classmethod
-    def tearDownClass(self):
-        self.controller.delete_developer(self.developer.developer)
+#    @classmethod
+#    def tearDownClass(self):
+#        self.controller.delete_developer(self.developer.developer)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
