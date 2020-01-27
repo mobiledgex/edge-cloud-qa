@@ -57,7 +57,7 @@ namespace MexGrpcSampleConsoleApp
             string uri = dmeHost + ":" + dmePort;
             //string devName = "MobiledgeX”;
             //string appName = "MobiledgeX SDK Demo”;
-            string devName = "automation_api";
+            string devName = "mobiledgex";
             string appName = "automation_api_app";
             string developerAuthToken = "";
 
