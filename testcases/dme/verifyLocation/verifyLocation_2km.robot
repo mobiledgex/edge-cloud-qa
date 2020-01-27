@@ -53,7 +53,7 @@ VerifyLocation - request within < 2KM shall return LOC_VERIFIED of 2KM
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 

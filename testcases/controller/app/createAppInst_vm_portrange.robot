@@ -44,7 +44,7 @@ AppInst - user shall be able to add with TCP/UDP port range for VM
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
 
     ${cluster_instance_default}=  Get Default Cluster Name

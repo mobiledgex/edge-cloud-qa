@@ -59,7 +59,7 @@ VerifyLocation - request with invalid high long should return 'Invalid GpsLocati
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App

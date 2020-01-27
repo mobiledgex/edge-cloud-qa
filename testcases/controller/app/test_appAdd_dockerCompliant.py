@@ -26,6 +26,7 @@ flavor_name = 'x1.small' + stamp
 cluster_name = 'cluster' + stamp
 #app_name = 'app' + stamp
 app_name = 'server_ping_threaded'
+app = 'server_ping_threaded' + stamp
 app_version = '5.0'
 access_ports = 'tcp:1'
 docker = 'docker-qa.mobiledgex.net'
@@ -54,7 +55,7 @@ class tc(unittest.TestCase):
         #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_developer(self.developer.developer) 
+        #self.controller.create_developer(self.developer.developer) 
         #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateNameSpace(self):
@@ -200,7 +201,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         #self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_developer(self.developer.developer)
+        #self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':

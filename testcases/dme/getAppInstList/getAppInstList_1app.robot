@@ -49,7 +49,7 @@ GetAppInstList - request shall return 1 app
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     Create App			access_ports=tcp:1  #permits_platform_apps=${True}

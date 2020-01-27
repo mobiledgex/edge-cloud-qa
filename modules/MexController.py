@@ -338,7 +338,6 @@ class ClusterInstance():
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
 
-        print("Liveness", self.liveness)    
         self.state = 5    # Ready
 
         if cluster_name == 'default':
@@ -1460,12 +1459,10 @@ class MexController(MexGrpc):
         def sendMessage(thread_name='Thread'):
             success = False
             time1 = time.time()
-            print("*WARN*", "thread_time1", time.time())
 
             try:
                 resp = self.clusterinst_stub.CreateClusterInst(cluster_instance)
             except:
-                print("*WARN*", "Unexpected error0:", sys.exc_info()[0])
                 resp = sys.exc_info()[0]
 
             self.response = resp
@@ -1482,7 +1479,6 @@ class MexController(MexGrpc):
                     raise Exception(sys.exc_info())
                 
             time2 = time.time()
-            print("*WARN*", "thread_time2", time.time())
             threadtime = time2 - time1
             self.thread_dict[thread_name]=(time1, time2, threadtime)
             threadtime = 0
@@ -1495,7 +1491,7 @@ class MexController(MexGrpc):
                     self.prov_stack.append(lambda:self.delete_cluster_instance(use_thread=True, **kwargs))
                 else:
                     self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
-
+                    
             resp =  self.show_cluster_instances(cluster_name=cluster_instance.key.cluster_key.name, operator_name=cluster_instance.key.cloudlet_key.operator_key.name, cloudlet_name=cluster_instance.key.cloudlet_key.name, use_defaults=False)
 
             return resp[0]
@@ -2498,6 +2494,7 @@ class MexController(MexGrpc):
         shared_variables.cluster_name_default = 'cluster' + default_time_stamp
         shared_variables.app_name_default = 'app' + default_time_stamp
         shared_variables.app_version_default = '1.0'
-        shared_variables.developer_name_default = 'developer' + default_time_stamp
+        #shared_variables.developer_name_default = 'developer' + default_time_stamp
+        shared_variables.developer_name_default = 'mobiledgex'
         shared_variables.flavor_name_default = 'flavor' + default_time_stamp
         shared_variables.cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp

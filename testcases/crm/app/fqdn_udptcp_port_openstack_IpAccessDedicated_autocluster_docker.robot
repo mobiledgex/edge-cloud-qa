@@ -53,7 +53,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and 
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}

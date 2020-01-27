@@ -208,7 +208,7 @@ Setup
     ${cloudlet_name_azure}=  Catenate  SEPARATOR=  ${cloudlet_name_azure}  ${epoch}
     ${cloudlet_name_gcp}=  Catenate  SEPARATOR=  ${cloudlet_name_gcp}  ${epoch}
 
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster
     Create Cloudlet  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  latitude=1  longitude=1

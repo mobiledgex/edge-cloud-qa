@@ -89,7 +89,7 @@ GetLocation - request with expired cookie should return 'token is expired by'
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App              

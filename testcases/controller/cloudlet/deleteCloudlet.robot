@@ -85,7 +85,7 @@ DeleteCloudlet with a valid operator and cloudlet name
 
 *** Keywords ***
 Setup
-	Create Developer            
+	#Create Developer            
 	Create Flavor
 	Create Cloudlet		operator_name=${oper}       cloudlet_name=${cldlet}  
 	#Create Cluster
