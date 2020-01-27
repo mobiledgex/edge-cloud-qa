@@ -12,17 +12,17 @@ namespace RestSample
 {
     class Program
     {
-        static string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "tmus";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
-        static string devName = "automation_api";
+        static string devName = "mobiledgex";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
 
         //static string host = "tdg.dme.mobiledgex.net";
-        static string host = "automationbonn.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
         static UInt32 port = 38001;
         static string sessionCookie;
 
@@ -52,7 +52,7 @@ namespace RestSample
             //Console.WriteLine(clientIP);
 
             string resp = null;
-            string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
+            string serverURL = "http://mexdemo.locsim.mobiledgex.net:8888/updateLocation";
             string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + clientIP + '"' + "}";
             Console.WriteLine(payload);
             byte[] postBytes = Encoding.UTF8.GetBytes(payload);
@@ -126,7 +126,7 @@ namespace RestSample
                 long timeLongMs = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                 long seconds = timeLongMs / 1000;
                 int nanoSec = (int)(timeLongMs % 1000) * 1000000;
-                var ts = new Timestamp { nanos = nanoSec, seconds = seconds };
+                var ts = new Timestamp { nanos = nanoSec, seconds = seconds.ToString() };
                 var loc = new Loc()
                 {
                     course = 0,
