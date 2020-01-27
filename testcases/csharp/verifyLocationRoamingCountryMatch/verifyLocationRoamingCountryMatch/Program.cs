@@ -44,7 +44,7 @@ namespace MexGrpcSampleConsoleApp
         //string expSessionCookie = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDk1Njc1MzcsImlhdCI6MTU0OTQ4MTEzNywia2V5Ijp7InBlZXJpcCI6IjEwLjEzOC4wLjkiLCJkZXZuYW1lIjoiYXV0b21hdGlvbl9hcGkiLCJhcHBuYW1lIjoiYXV0b21hdGlvbl9hcGlfYXBwIiwiYXBwdmVycyI6IjEuMCIsImtpZCI6Nn19.d_UaPU9LJSqowEQfPHnXNgtpmTj84HTGL5t8PDpyz5ZBuIXxWKjd4YYdOa2qWe5sQrLy594fdmo-Pi-8Hp8sSg";
 
         //string dmeHost = null; // DME server hostname or ip.
-        string dmeHost = "automationbonn.dme.mobiledgex.net"; // DME server hostname or ip.
+        string dmeHost = "us-qa.dme.mobiledgex.net"; // DME server hostname or ip.
         //string dmeHost = "mexdemo.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
@@ -53,11 +53,11 @@ namespace MexGrpcSampleConsoleApp
         public void RunSampleFlow()
         {
             location = getLocation();
-            string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+            string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
             string uri = dmeHost + ":" + dmePort;
             //string devName = "MobiledgeX";
             //string appName = "MobiledgeX SDK Demo";
-            string devName = "automation_api";
+            string devName = "mobiledgex";
             string appName = "automation_api_app";
 
             // Channel:
@@ -323,7 +323,7 @@ namespace MexGrpcSampleConsoleApp
 
             string resp = null;
             string ipAddr = config;
-            string serverURL = "http://mextest.locsim.mobiledgex.net:8888/updateLocation";
+            string serverURL = "http://mexdemo.locsim.mobiledgex.net:8888/updateLocation";
             string payload = "{" + '"' + "latitude" + '"' + ':' + locLat + ',' + ' ' + '"' + "longitude" + '"' + ':' + locLong + ',' + ' ' + '"' + "ipaddr" + '"' + ':' + '"' + ipAddr + '"' + "}";
             Console.WriteLine(payload);
             byte[] postBytes = Encoding.UTF8.GetBytes(payload);
