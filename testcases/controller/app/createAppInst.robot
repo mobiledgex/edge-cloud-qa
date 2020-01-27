@@ -186,7 +186,7 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cloudlet  cloudlet_name=tmocloud-10  operator_name=dmuus
     Create App			access_ports=tcp:1

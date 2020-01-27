@@ -48,7 +48,7 @@ VerifyLocation - request with coord > 2km and < 10km shall return LOC_VERIFIED o
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 

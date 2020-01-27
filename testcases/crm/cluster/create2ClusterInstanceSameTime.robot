@@ -35,7 +35,7 @@ CRM shall be able to Create 2 cluster instances at the same time on openstack
     ${handle2}=  Create Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=${cluster_name_2}  use_thread=${True}
 
     # wait for them to finish
-    Wait For Replies  ${handle1}
+    Wait For Replies  ${handle1}  ${handle2}
 
 #    sleep  120   #wait for prometheus to finish creating before deleting. bug for this already
 	

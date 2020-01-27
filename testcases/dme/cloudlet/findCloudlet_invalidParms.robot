@@ -71,7 +71,7 @@ FindCloudlet - request with out-of-range latitude/longitude should return 'Inval
 *** Keywords ***
 Setup
     #Create Operator             operator_name=${carrier_name} 
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}
     #Create Cluster
