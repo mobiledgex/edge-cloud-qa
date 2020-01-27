@@ -688,7 +688,7 @@ AppInst - user shall be able to allocate public port tcp:18888
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster  
     Log To Console  Creating Cluster Instance

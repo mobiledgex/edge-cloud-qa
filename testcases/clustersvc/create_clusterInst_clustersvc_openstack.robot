@@ -21,7 +21,8 @@ ${mobiledgex_domain}  mobiledgex.net
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-@{clustersvc_pods}  alertmanager-mexprometheusappname-prome-alertmanager  mexprometheusappname-kube-state-metrics  mexprometheusappname-prome-operator  mexprometheusappname-prometheus-node-exporter  prometheus-mexprometheusappname-prome-prometheus  
+#@{clustersvc_pods}  alertmanager-mexprometheusappname-prome-alertmanager  mexprometheusappname-kube-state-metrics  mexprometheusappname-prome-operator  mexprometheusappname-prometheus-node-exporter  prometheus-mexprometheusappname-prome-prometheus  
+@{clustersvc_pods}  mexprometheusappnamev10-kube-state-metrics  mexprometheusappnamev10-pr-operator  mexprometheusappnamev10-prometheus-node-exporter  mexprometheusappnamev10-prometheus-node-exporter  prometheus-mexprometheusappnamev10-pr-prometheus
 #mexmetricswriter-deployment  mexprometheusappname-grafana
 
 #${docker_image}    registry.mobiledgex.net:5000/mobiledgex/server_ping_threaded:4.0

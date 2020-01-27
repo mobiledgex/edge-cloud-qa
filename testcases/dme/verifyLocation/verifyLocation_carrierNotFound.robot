@@ -24,7 +24,7 @@ VerifyLocation - request with carrier not found should pass
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster
     Create App

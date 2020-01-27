@@ -118,7 +118,7 @@ RegisterClient - request with auth shall return proper JWT for deployment=vm
 *** Keywords ***
 Setup
     #Create Operator             operator_name=${operator_name} 
-    Create Developer            #developer_name=${developer_name}
+    #Create Developer            #developer_name=${developer_name}
     Create Flavor
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster

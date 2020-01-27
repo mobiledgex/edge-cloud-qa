@@ -59,7 +59,7 @@ Setup
 
     #Create Operator             operator_name=${tmus_operator_name} 
     #Create Operator             operator_name=${gcp_operator_name} 
-    Create Developer
+    #Create Developer
     Create Flavor
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
     #Create Cluster

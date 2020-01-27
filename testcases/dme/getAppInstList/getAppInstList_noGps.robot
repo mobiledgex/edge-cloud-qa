@@ -26,7 +26,7 @@ GetAppInstList - request shall fail with no GPS coords
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     Create App			access_ports=tcp:1 
