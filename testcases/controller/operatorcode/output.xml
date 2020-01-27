@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200123 17:46:58.830" rpa="false">
+<suite id="s1" name="createOperatorCode fail" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/controller/operatorcode/createOperatorCode_fail.robot">
+<test id="s1-t1" name="CreateOperatorCode - create without region shall return error">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Operator Code</arg>
+<arg>operator_name=${operator_name}</arg>
+<arg>code=${code}</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 17:46:59.612" level="TRACE">Arguments: [ '*' | 'Create Operator Code' | 'operator_name=${operator_name}' | 'code=${code}' ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>operator_name=${operator_name}</arg>
+<arg>code=${code}</arg>
+</arguments>
+<msg timestamp="20200123 17:46:59.613" level="TRACE">Arguments: [ operator_name='dmuus' | code='2561 2$%^' ]</msg>
+<msg timestamp="20200123 17:46:59.613" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}}</msg>
+<msg timestamp="20200123 17:46:59.613" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}}</msg>
+<msg timestamp="20200123 17:46:59.613" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:46:59.615" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:46:59.768" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 400 33</msg>
+<msg timestamp="20200123 17:46:59.769" level="DEBUG">resp={"message":"no region specified"}</msg>
+<msg timestamp="20200123 17:46:59.769" level="DEBUG">content={"message":"no region specified"}</msg>
+<msg timestamp="20200123 17:46:59.769" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"no region specified"}'), &lt;traceback object at 0x10cf92cd0&gt;)</msg>
+<msg timestamp="20200123 17:46:59.774" level="FAIL">('code=400', 'error={"message":"no region specified"}')</msg>
+<msg timestamp="20200123 17:46:59.774" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2126, in create_operator_code
+    return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/OperatorCode.py", line 75, in create_operator_code
+    thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 17:46:59.612" endtime="20200123 17:46:59.774"></status>
+</kw>
+<msg timestamp="20200123 17:46:59.775" level="TRACE">Return: '(\'code=400\', \'error={"message":"no region specified"}\')'</msg>
+<msg timestamp="20200123 17:46:59.775" level="INFO">${error} = ('code=400', 'error={"message":"no region specified"}')</msg>
+<status status="PASS" starttime="20200123 17:46:59.612" endtime="20200123 17:46:59.775"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 17:46:59.776" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"no region specified"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 17:46:59.776" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:46:59.775" endtime="20200123 17:46:59.776"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"no region specified"}</arg>
+</arguments>
+<msg timestamp="20200123 17:46:59.776" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"no region specified"}\')' | 'error={"message":"no region specified"}' ]</msg>
+<msg timestamp="20200123 17:46:59.776" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:46:59.776" endtime="20200123 17:46:59.777"></status>
+</kw>
+<doc>send CreateOperatorCode without region
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 17:46:59.612" endtime="20200123 17:46:59.777" critical="yes"></status>
+</test>
+<test id="s1-t2" name="CreateOperatorCode - create without code shall return error">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Operator Code</arg>
+<arg>operator_name=${operator_name}</arg>
+<arg>region=${region}</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 17:46:59.778" level="TRACE">Arguments: [ '*' | 'Create Operator Code' | 'operator_name=${operator_name}' | 'region=${region}' ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>operator_name=${operator_name}</arg>
+<arg>region=${region}</arg>
+</arguments>
+<msg timestamp="20200123 17:46:59.778" level="TRACE">Arguments: [ operator_name='dmuus' | region='US' ]</msg>
+<msg timestamp="20200123 17:46:59.779" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:46:59.779" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:46:59.779" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:46:59.781" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:00.108" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 400 31</msg>
+<msg timestamp="20200123 17:47:00.109" level="DEBUG">resp={"message":"No code specified"}</msg>
+<msg timestamp="20200123 17:47:00.109" level="DEBUG">content={"message":"No code specified"}</msg>
+<msg timestamp="20200123 17:47:00.109" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"No code specified"}'), &lt;traceback object at 0x10cf8ce10&gt;)</msg>
+<msg timestamp="20200123 17:47:00.109" level="FAIL">('code=400', 'error={"message":"No code specified"}')</msg>
+<msg timestamp="20200123 17:47:00.109" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2126, in create_operator_code
+    return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/OperatorCode.py", line 75, in create_operator_code
+    thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 17:46:59.778" endtime="20200123 17:47:00.109"></status>
+</kw>
+<msg timestamp="20200123 17:47:00.109" level="TRACE">Return: '(\'code=400\', \'error={"message":"No code specified"}\')'</msg>
+<msg timestamp="20200123 17:47:00.109" level="INFO">${error} = ('code=400', 'error={"message":"No code specified"}')</msg>
+<status status="PASS" starttime="20200123 17:46:59.778" endtime="20200123 17:47:00.109"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.110" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No code specified"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 17:47:00.110" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.110" endtime="20200123 17:47:00.110"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"No code specified"}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.110" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No code specified"}\')' | 'error={"message":"No code specified"}' ]</msg>
+<msg timestamp="20200123 17:47:00.110" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.110" endtime="20200123 17:47:00.110"></status>
+</kw>
+<doc>send CreateOperatorCode with region only
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 17:46:59.777" endtime="20200123 17:47:00.111" critical="yes"></status>
+</test>
+<test id="s1-t3" name="CreateOperatorCode - create without operatorname">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Operator Code</arg>
+<arg>code=${code}</arg>
+<arg>region=${region}</arg>
+<arg>use_defaults=${False}</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 17:47:00.111" level="TRACE">Arguments: [ '*' | 'Create Operator Code' | 'code=${code}' | 'region=${region}' | 'use_defaults=${False}' ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>code=${code}</arg>
+<arg>region=${region}</arg>
+<arg>use_defaults=${False}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.112" level="TRACE">Arguments: [ code='2561 2$%^' | region='US' | use_defaults=False ]</msg>
+<msg timestamp="20200123 17:47:00.112" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.112" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.112" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"code": "2561 2$%^"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:00.114" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:00.450" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 17:47:00.451" level="DEBUG">resp={"message":"No operator name specified"}</msg>
+<msg timestamp="20200123 17:47:00.451" level="DEBUG">content={"message":"No operator name specified"}</msg>
+<msg timestamp="20200123 17:47:00.451" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"No operator name specified"}'), &lt;traceback object at 0x10e80adc0&gt;)</msg>
+<msg timestamp="20200123 17:47:00.452" level="FAIL">('code=400', 'error={"message":"No operator name specified"}')</msg>
+<msg timestamp="20200123 17:47:00.452" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2126, in create_operator_code
+    return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/OperatorCode.py", line 75, in create_operator_code
+    thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 17:47:00.112" endtime="20200123 17:47:00.452"></status>
+</kw>
+<msg timestamp="20200123 17:47:00.452" level="TRACE">Return: '(\'code=400\', \'error={"message":"No operator name specified"}\')'</msg>
+<msg timestamp="20200123 17:47:00.452" level="INFO">${error} = ('code=400', 'error={"message":"No operator name specified"}')</msg>
+<status status="PASS" starttime="20200123 17:47:00.111" endtime="20200123 17:47:00.452"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.453" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No operator name specified"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 17:47:00.453" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.453" endtime="20200123 17:47:00.453"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"No operator name specified"}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.453" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No operator name specified"}\')' | 'error={"message":"No operator name specified"}' ]</msg>
+<msg timestamp="20200123 17:47:00.453" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.453" endtime="20200123 17:47:00.453"></status>
+</kw>
+<doc>send CreateOperatorCode without operatorname
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 17:47:00.111" endtime="20200123 17:47:00.454" critical="yes"></status>
+</test>
+<test id="s1-t4" name="CreateOperatorCode - create without operatorname and code">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Operator Code</arg>
+<arg>region=${region}</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 17:47:00.455" level="TRACE">Arguments: [ '*' | 'Create Operator Code' | 'region=${region}' ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.455" level="TRACE">Arguments: [ region='US' ]</msg>
+<msg timestamp="20200123 17:47:00.455" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.455" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.456" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:00.458" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:00.779" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 400 31</msg>
+<msg timestamp="20200123 17:47:00.780" level="DEBUG">resp={"message":"No code specified"}</msg>
+<msg timestamp="20200123 17:47:00.780" level="DEBUG">content={"message":"No code specified"}</msg>
+<msg timestamp="20200123 17:47:00.780" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"No code specified"}'), &lt;traceback object at 0x10cf8f730&gt;)</msg>
+<msg timestamp="20200123 17:47:00.780" level="FAIL">('code=400', 'error={"message":"No code specified"}')</msg>
+<msg timestamp="20200123 17:47:00.780" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2126, in create_operator_code
+    return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/OperatorCode.py", line 75, in create_operator_code
+    thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 17:47:00.455" endtime="20200123 17:47:00.780"></status>
+</kw>
+<msg timestamp="20200123 17:47:00.780" level="TRACE">Return: '(\'code=400\', \'error={"message":"No code specified"}\')'</msg>
+<msg timestamp="20200123 17:47:00.781" level="INFO">${error} = ('code=400', 'error={"message":"No code specified"}')</msg>
+<status status="PASS" starttime="20200123 17:47:00.455" endtime="20200123 17:47:00.781"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.781" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No code specified"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 17:47:00.781" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.781" endtime="20200123 17:47:00.781"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"No code specified"}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.781" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"No code specified"}\')' | 'error={"message":"No code specified"}' ]</msg>
+<msg timestamp="20200123 17:47:00.782" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:00.781" endtime="20200123 17:47:00.782"></status>
+</kw>
+<doc>send CreateOperatorCode withour Code and Operator Name
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 17:47:00.454" endtime="20200123 17:47:00.782" critical="yes"></status>
+</test>
+<test id="s1-t5" name="CreateCloudletPool - create with same name shall return error">
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>code=${code}</arg>
+<arg>operator_name=${operator_name}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:00.783" level="TRACE">Arguments: [ region='US' | code='2561 2$%^' | operator_name='dmuus' ]</msg>
+<msg timestamp="20200123 17:47:00.783" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.783" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:00.783" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:00.785" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:01.130" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 200 2</msg>
+<msg timestamp="20200123 17:47:01.131" level="DEBUG">resp={}</msg>
+<msg timestamp="20200123 17:47:01.131" level="DEBUG">content={}</msg>
+<msg timestamp="20200123 17:47:01.131" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200123 17:47:01.131" level="DEBUG">adding message to delete stack: {'operatorcode': {'operator_name': 'dmuus', 'code': '2561 2$%^'}}</msg>
+<msg timestamp="20200123 17:47:01.132" level="DEBUG">showing:{'operatorcode': {'operator_name': 'dmuus', 'code': '2561 2$%^'}}</msg>
+<msg timestamp="20200123 17:47:01.132" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.132" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.132" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:01.134" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:01.479" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowOperatorCode HTTP/1.1" 200 None</msg>
+<msg timestamp="20200123 17:47:01.480" level="DEBUG">resp={"data":{"code":"2561 2$%^","operator_name":"dmuus"}}
+</msg>
+<msg timestamp="20200123 17:47:01.480" level="DEBUG">content={"data":{"code":"2561 2$%^","operator_name":"dmuus"}}
+</msg>
+<msg timestamp="20200123 17:47:01.480" level="INFO">response:
+200
+{"data":{"code":"2561 2$%^","operator_name":"dmuus"}}
+</msg>
+<msg timestamp="20200123 17:47:01.480" level="TRACE">Return: {'data': {'code': '2561 2$%^', 'operator_name': 'dmuus'}}</msg>
+<status status="PASS" starttime="20200123 17:47:00.783" endtime="20200123 17:47:01.480"></status>
+</kw>
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Operator Code</arg>
+<arg>region=${region}</arg>
+<arg>code=${code}</arg>
+<arg>operator_name=${operator_name}</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 17:47:01.481" level="TRACE">Arguments: [ '*' | 'Create Operator Code' | 'region=${region}' | 'code=${code}' | 'operator_name=${operator_name}' ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>code=${code}</arg>
+<arg>operator_name=${operator_name}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:01.481" level="TRACE">Arguments: [ region='US' | code='2561 2$%^' | operator_name='dmuus' ]</msg>
+<msg timestamp="20200123 17:47:01.481" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.481" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.482" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:01.484" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:01.836" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 400 42</msg>
+<msg timestamp="20200123 17:47:01.837" level="DEBUG">resp={"message":"key 2561 2$%^ already exists"}</msg>
+<msg timestamp="20200123 17:47:01.837" level="DEBUG">content={"message":"key 2561 2$%^ already exists"}</msg>
+<msg timestamp="20200123 17:47:01.837" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"key 2561 2$%^ already exists"}'), &lt;traceback object at 0x10cf942d0&gt;)</msg>
+<msg timestamp="20200123 17:47:01.838" level="FAIL">('code=400', 'error={"message":"key 2561 2$%^ already exists"}')</msg>
+<msg timestamp="20200123 17:47:01.838" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2126, in create_operator_code
+    return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/OperatorCode.py", line 75, in create_operator_code
+    thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 17:47:01.481" endtime="20200123 17:47:01.838"></status>
+</kw>
+<msg timestamp="20200123 17:47:01.838" level="TRACE">Return: '(\'code=400\', \'error={"message":"key 2561 2$%^ already exists"}\')'</msg>
+<msg timestamp="20200123 17:47:01.838" level="INFO">${error} = ('code=400', 'error={"message":"key 2561 2$%^ already exists"}')</msg>
+<status status="PASS" starttime="20200123 17:47:01.481" endtime="20200123 17:47:01.838"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 17:47:01.839" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"key 2561 2$%^ already exists"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 17:47:01.839" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:01.838" endtime="20200123 17:47:01.839"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"key ${code} already exists"}</arg>
+</arguments>
+<msg timestamp="20200123 17:47:01.839" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"key 2561 2$%^ already exists"}\')' | 'error={"message":"key 2561 2$%^ already exists"}' ]</msg>
+<msg timestamp="20200123 17:47:01.839" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:01.839" endtime="20200123 17:47:01.839"></status>
+</kw>
+<doc>send CreateOperatorName twice for same name
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 17:47:00.782" endtime="20200123 17:47:01.840" critical="yes"></status>
+</test>
+<kw name="Cleanup Provisioning" library="MexMasterController" type="teardown">
+<msg timestamp="20200123 17:47:01.841" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200123 17:47:01.841" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200123 17:47:01.841" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x10cf70200&gt;</msg>
+<msg timestamp="20200123 17:47:01.841" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode. 
+	{"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.841" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"}</msg>
+<msg timestamp="20200123 17:47:01.841" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode data={"operatorcode": {"operator_name": "dmuus", "code": "2561 2$%^"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5MDk2MTksImlhdCI6MTU3OTgyMzIxOSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.A1zbP3wnqO6KZMpZl6Dev5i8woj91EFXWnGNL-if25F0R5dbpILfGMOoWBRQAFz40oSxnkL78iIa6KT95NeFPg'} verify_cert=False</msg>
+<msg timestamp="20200123 17:47:01.843" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 17:47:02.193" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteOperatorCode HTTP/1.1" 200 2</msg>
+<msg timestamp="20200123 17:47:02.194" level="DEBUG">resp={}</msg>
+<msg timestamp="20200123 17:47:02.194" level="DEBUG">content={}</msg>
+<msg timestamp="20200123 17:47:02.194" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200123 17:47:02.195" level="INFO">[&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x10cf70200&gt;]</msg>
+<msg timestamp="20200123 17:47:02.195" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 17:47:01.840" endtime="20200123 17:47:02.195"></status>
+</kw>
+<doc>CreateOperatorCode with possible error scenarios</doc>
+<status status="PASS" starttime="20200123 17:46:58.833" endtime="20200123 17:47:02.195"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0">Critical Tests</stat>
+<stat pass="5" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="5" fail="0" id="s1" name="createOperatorCode fail">createOperatorCode fail</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200123 17:46:59.363" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200123 17:46:59.594" level="WARN">sending message</msg>
+</errors>
+</robot>

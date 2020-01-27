@@ -34,7 +34,7 @@ UpdateApp - user shall be able to update the manifest
 	
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
 
     Create Session      manifest_server         http://35.199.188.102

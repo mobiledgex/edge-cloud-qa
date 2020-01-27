@@ -3,12 +3,14 @@ version = "${version}"
 cycle = "${cycle}"
 controller = "${controller}"
 dme = "${dme}"
+variables = "${variablefile}"
+mastercontroller = "${mastercontroller}"
 
 //jobName = "${components}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runFindCloudletTests", "runRegisterClientTests", "runVerifyLocationTests", "runGetLocationTests", "runDmeProcessTests"]
+def jobList1Parallel = ["runFindCloudletTests","runOperatorCodeTests" ,"runRegisterClientTests", "runVerifyLocationTests", "runGetLocationTests", "runDmeProcessTests"]
 def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
 builds1 = [:]
@@ -66,7 +68,7 @@ node('jenkinsSlave1'){
             def jobName = jobList1Parallel[i];
             echo "i1=" + jobName
             builds1[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variables)]
 	    }
          }
 
@@ -83,7 +85,7 @@ node('jenkinsSlave1'){
             def jobName = jobList2Parallel[i];
             echo "i1=" + jobName
             builds2[jobName] = {
-               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme)]
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller)]
 	    }
          }
 

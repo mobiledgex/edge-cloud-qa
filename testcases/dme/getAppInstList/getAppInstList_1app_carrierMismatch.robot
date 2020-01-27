@@ -49,7 +49,7 @@ GetAppInstList - request shall return only app that matches carrier
 
 *** Keywords ***
 Setup
-    Create Developer            
+    #Create Developer            
     Create Flavor
     #Create Cluster	
     Create App			access_ports=tcp:1
