@@ -8,7 +8,7 @@ namespace RestSample
 {
     class Program
     {
-        static string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
@@ -18,7 +18,7 @@ namespace RestSample
         static string developerAuthToken = "";
 
         //static string host = "gddt.dme.mobiledgex.net";
-        static string host = "automationbuckhorn.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
         static UInt32 port = 38001;
         static string sessionCookie;
 
@@ -33,16 +33,16 @@ namespace RestSample
         {
             try
             {
-                carrierName = await getCurrentCarrierName();
-
                 Console.WriteLine("FindCloudletSuccessRest Testcase");
 
-                MatchingEngine me = new MatchingEngine();
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()));
+                me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
+                // var registerClientRequest = me.CreateRegisterClientRequest(me.GetCarrierName(), devName, appName, appVers, developerAuthToken);
                 var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
@@ -54,15 +54,15 @@ namespace RestSample
                 long timeLongMs = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                 long seconds = timeLongMs / 1000;
                 int nanoSec = (int)(timeLongMs % 1000) * 1000000;
-                var ts = new Timestamp { nanos = nanoSec, seconds = seconds };
+                var ts = new Timestamp { nanos = nanoSec, seconds = seconds.ToString()};
                 var loc = new Loc()
                 {
                     course = 0,
                     altitude = 100,
                     horizontal_accuracy = 5,
                     speed = 2,
-                    longitude = 13.405,
-                    latitude = 52.52,
+                    longitude = -91.405,
+                    latitude = 31.52,
                     vertical_accuracy = 20,
                     timestamp = ts
                 };
@@ -70,6 +70,7 @@ namespace RestSample
                 //Verify the Token Server URI is correct
                 if (registerClientReply.token_server_uri != tokenServerURI)
                 {
+                    Console.WriteLine("Token Server URI Is NOT Correct!");
                     Environment.Exit(1);
                 }
                 else
@@ -198,6 +199,7 @@ namespace RestSample
                     }
 
                 }
+
                 var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc);
 
                 // Async:
