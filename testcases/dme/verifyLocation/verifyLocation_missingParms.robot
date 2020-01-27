@@ -71,8 +71,10 @@ VerifyLocation - request with longitude only should not succeed
 
 *** Keywords ***
 Setup
+    ${time}=  Get Time  epoch
+
     #Create Developer
     Create Flavor
     #Create Cluster
     Create App
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}  cluster_instance_name=autocluster${time}
