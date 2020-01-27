@@ -39,7 +39,7 @@ namespace MexGrpcSampleConsoleApp
     {
         string sessionCookie;
 
-        string dmeHost = "automationbonn.dme.mobiledgex.net"; // DME server hostname or ip.
+        string dmeHost = "us-qa.dme.mobiledgex.net"; // DME server hostname or ip.
         //string dmeHost = "mexdemo.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
@@ -47,12 +47,12 @@ namespace MexGrpcSampleConsoleApp
 
         public void RunSampleFlow()
         {
-            string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+            string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
             string uri = dmeHost + ":" + dmePort;
             //string devName = "MobiledgeX”;
             //string appName = "MobiledgeX SDK Demo”;
             string appName = "automation_api_auth_app";
-            string devName = "automation_api";
+            string devName = "mobiledgex";
             string developerAuthToken = "";
 
             // Channel:
@@ -66,7 +66,7 @@ namespace MexGrpcSampleConsoleApp
             var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
             //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
-            psi.Arguments = "-appname automation_api_auth_app -appvers 3.0 -devname automation_api -privkeyfile " + pubkey;
+            psi.Arguments = "-appname automation_api_auth_app -appvers 3.0 -devname mobiledgex -privkeyfile " + pubkey;
             psi.RedirectStandardOutput = true;
             System.Diagnostics.Process genauthtoken;
             genauthtoken = System.Diagnostics.Process.Start(psi);
