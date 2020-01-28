@@ -183,12 +183,12 @@ CloudletMetrics - get with operator not found shall return an empty list
    ${token}=  Get Token
 
    # utilization
-   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=xx  selector=utilization  region=US  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  selector=utilization  region=US  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
    # ipusage
-   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=xx  selector=ipusage  region=US  token=${token}  use_defaults=${False}
+   ${metrics}=  Get Cloudlet Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  selector=ipusage  region=US  token=${token}  use_defaults=${False}
    Should Be Equal  ${metrics['data'][0]['Series']}        ${None}
    Should Be Equal  ${metrics['data'][0]['Messages']}      ${None}
 
