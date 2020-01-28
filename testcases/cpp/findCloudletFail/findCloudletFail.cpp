@@ -26,7 +26,7 @@ class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
     const string appName = "automation_api_auth_app"; // Your application name
-    const string devName = "automation_api"; // Your developer name
+    const string devName = "mobiledgex"; // Your developer name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
     //const string devName = "EmptyMatchEngineApp"; // Your developer name
     const string appVersionStr = "1.0";
@@ -318,8 +318,8 @@ class MexGrpcClient {
 int main() {
     cout << "FindCloudletFail Test Case";
     cout << endl;
-    string host = "automationbuckhorn.dme.mobiledgex.net:50051";
-    const string tokenURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+    string host = "us-qa.dme.mobiledgex.net:50051";
+    const string tokenURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
     double expTime = 0;
     double iatTime = 0;
     int sessionTime = 0;
@@ -348,7 +348,7 @@ int main() {
     } else {
       cout << "Removing Token File Failed!" << endl;
     }
-    int authToken = system(("genauthtoken -appname automation_api_auth_app -appvers 1.0 -devname automation_api -privkeyfile " + pubkey + " >token.txt").c_str());
+    int authToken = system(("genauthtoken -appname automation_api_auth_app -appvers 1.0 -devname mobiledgex -privkeyfile " + pubkey + " >token.txt").c_str());
     std::ifstream tokenFile("token.txt");
      if (tokenFile.is_open()){
        tokenFile >> tstr;
@@ -401,7 +401,7 @@ int main() {
 		    exit (EXIT_FAILURE);
 		}
 		string devName =  e.second.to_json().get("devname").get<string>().c_str();
-		if(devName == "automation_api") {
+		if(devName == "mobiledgex") {
 		    cout << "DEV NAME CORRECT! " << devName << endl;
 		} else {
 		    cout << "DEV NAME INCORRECT! " << devName << endl;
