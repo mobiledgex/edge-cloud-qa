@@ -24,7 +24,7 @@ class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
     const string appName = "automation_api_app"; // Your application name
-    const string devName = "automation_api"; // Your developer name
+    const string devName = "mobiledgex"; // Your developer name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
     //const string devName = "EmptyMatchEngineApp"; // Your developer name
     const string appVersionStr = "1.0";
@@ -206,7 +206,7 @@ class MexGrpcClient {
     }
   
     string setLocation(const string locLat, const string locLong) {
-      const string uri ="http://mextest.locsim.mobiledgex.net:8888/updateLocation";
+      const string uri ="http://mexdemo.locsim.mobiledgex.net:8888/updateLocation";
       string setLocStr = "";
       FILE *wfd = fopen("setLoc.txt", "w");
       string ipAddr = "";
@@ -388,8 +388,8 @@ class MexGrpcClient {
 int main() {
     cout << "Verify Location Bad Carrier Test Case" << endl;
     cout << endl;
-    string host = "automationbuckhorn.dme.mobiledgex.net:50051";
-    const string tokenURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+    string host = "us-qa.dme.mobiledgex.net:50051";
+    const string tokenURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
     double expTime = 0;
     double iatTime = 0;
     int sessionTime = 0;
