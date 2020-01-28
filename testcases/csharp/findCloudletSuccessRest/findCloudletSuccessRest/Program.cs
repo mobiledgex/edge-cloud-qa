@@ -12,7 +12,7 @@ namespace RestSample
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
-        static string devName = "automation_api";
+        static string devName = "mobiledgex";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";

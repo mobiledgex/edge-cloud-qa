@@ -9,17 +9,17 @@ namespace RestSample
 {
     class Program
     {
-        static string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
-        static string devName = "automation_api";
+        static string devName = "mobiledgex";
         static string appName = "automation_api_auth_leon";
         static string appVers = "1.0";
         static string developerAuthToken = "";
 
         //static string host = "gddt.dme.mobiledgex.net";
-        static string host = "automationbuckhorn.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
         static UInt32 port = 38001;
         static string sessionCookie;
 
@@ -45,7 +45,7 @@ namespace RestSample
                 var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
-                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_api -privkeyfile " + pubkey;
+                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname mobiledgex -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
                 System.Diagnostics.Process genauthtoken;
                 genauthtoken = System.Diagnostics.Process.Start(psi);
@@ -76,7 +76,7 @@ namespace RestSample
                 long timeLongMs = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
                 long seconds = timeLongMs / 1000;
                 int nanoSec = (int)(timeLongMs % 1000) * 1000000;
-                var ts = new Timestamp { nanos = nanoSec, seconds = seconds };
+                var ts = new Timestamp { nanos = nanoSec, seconds = seconds.ToString() };
                 var loc = new Loc()
                 {
                     course = 0,
