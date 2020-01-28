@@ -11,7 +11,9 @@ Test Teardown  Cleanup Provisioning
 &{cloudlet0}=  cloudlet=attcloud-1  operator=att
 &{cloudlet1}=  cloudlet=tmocloud-1  operator=tmus
 &{cloudlet2}=  cloudlet=tmocloud-2  operator=tmus
-@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}
+&{cloudlet3}=  cloudlet=gcpcloud-1  operator=gcp
+
+@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}
 
 ${username}=  mextester06
 ${password}=  mextester06123
