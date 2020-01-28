@@ -42,18 +42,17 @@ GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
 # Run "brew install coreutils" to get "grealpath" for protoc's requirement of absolute paths
-#.
-#ABSOLUTEPATH := $(shell grealpath ../../../../)
-ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/)
+ABSOLUTEPATH := $(shell grealpath ../../../../)
+#ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/)
 DME_PROTO_PATH = $(ABSOLUTEPATH)/edge-proto/dme
 THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-proto/third_party
 
-PROTO_INCLUDE_DIRECTORIES := $(DME_PROTO_PATH) $(THIRD_PARTY_PROTOS_PATH)/googleapis
+PROTO_INCLUDE_DIRECTORIES := $(DME_PROTO_PATH) $(THIRD_PARTY_PROTOS_PATH)/googleapis 
 
 vpath %.proto $(PROTO_INCLUDE_DIRECTORIES)
 PROTO_INCLUDE_FLAGS += $(addprefix --proto_path ,$(PROTO_INCLUDE_DIRECTORIES))
 
-all: system-check libmexgrpc.so registerClient
+all: edge-proto-check system-check libmexgrpc.so registerClient
 
 registerClient: ../common/test_credentials.o registerClient.o
 	$(CXX) $^ $(LDFLAGS) -I. -L. -lmexgrpc -Wl,-rpath,. -o $@
@@ -77,7 +76,7 @@ clean:
 # They are by no means necessary to actually compile a grpc-enabled software.
 
 PROTOC_CMD = which $(PROTOC)
-PROTOC_CHECK_CMD = $(PROTOC) --version | grep -q libprotoc.3
+proPROTOC_CHECK_CMD = $(PROTOC) --version | grep -q libprotoc.3
 PLUGIN_CHECK_CMD = which $(GRPC_CPP_PLUGIN)
 HAS_PROTOC = $(shell $(PROTOC_CMD) > /dev/null && echo true || echo false)
 ifeq ($(HAS_PROTOC),true)
@@ -134,6 +133,6 @@ else
 	@echo "Expected edge-proto.git repo clone at DME_PROTO_PATH outside at the same directory level this git repo here: $(DME_PROTO_PATH)"
 endif
 
-test: sample_client
+test: registerClient
 	@echo "Basic test"
-	echo y | ./sample_client
+	echo y | ./registerClient

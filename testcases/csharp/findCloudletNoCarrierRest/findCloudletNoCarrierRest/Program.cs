@@ -8,17 +8,17 @@ namespace RestSample
 {
     class Program
     {
-        static string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
-        static string devName = "automation_api";
+        static string devName = "mobiledgex";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
 
         //static string host = "tdg.dme.mobiledgex.net";
-        static string host = "automationbonn.dme.mobiledgex.net";
+        static string host = "us-qa.dme.mobiledgex.net";
         static UInt32 port = 38001;
         static string sessionCookie;
 

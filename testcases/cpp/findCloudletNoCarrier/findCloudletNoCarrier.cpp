@@ -24,12 +24,12 @@ using grpc::Status;
 class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
-    inline static const string carrierNameDefault = "TDG";
+    inline static const string carrierNameDefault = "tmus";
     inline static const string baseDmeHost = "mobiledgex.net";
     static const unsigned int defaultDmePort = 50051;
     unsigned int dmePort = defaultDmePort;
     const string appName = "automation_api_app"; // Your application name
-    const string devName = "automation_api"; // Your developer name
+    const string devName = "mobiledgex"; // Your developer name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
     //const string devName = "EmptyMatchEngineApp"; // Your developer name
     const string appVersionStr = "1.0";
@@ -336,8 +336,8 @@ int main() {
   
     cout << "FindCloudletNoCarrier Test Case" << endl;
     cout << endl;
-    string host = "automationbonn.dme.mobiledgex.net:50051";
-    const string tokenURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+    string host = "us-qa.dme.mobiledgex.net:50051";
+    const string tokenURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
     double expTime = 0;
     double iatTime = 0;
     int sessionTime = 0;
@@ -395,7 +395,7 @@ int main() {
 		    exit (EXIT_FAILURE);
 		}
 		string devName =  e.second.to_json().get("devname").get<string>().c_str();
-		if(devName == "automation_api") {
+		if(devName == "mobiledgex") {
 		    cout << "DEV NAME CORRECT! " << devName << endl;
 		} else {
 		    cout << "DEV NAME INCORRECT! " << devName << endl;
