@@ -76,6 +76,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
 
@@ -83,7 +84,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
    Cloudlets Should Be In List  ${cloudlets}  ${show_return}
-   Length Should Be   ${show_return}  3
+   Length Should Be   ${show_return}  4
 
    Length Should Be   ${show_return2}  0
 
