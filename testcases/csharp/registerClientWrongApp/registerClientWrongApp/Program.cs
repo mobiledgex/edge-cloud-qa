@@ -40,7 +40,7 @@ namespace MexGrpcSampleConsoleApp
     {
         Loc location;
 
-        string dmeHost = "automationbuckhorn.dme.mobiledgex.net"; // DME server hostname or ip.
+        string dmeHost = "us-qa.dme.mobiledgex.net"; // DME server hostname or ip.
         //string dmeHost = "mexdemo.dme.mobiledgex.net"; // DME server hostname or ip.
         int dmePort = 50051; // DME port.
 
@@ -49,11 +49,11 @@ namespace MexGrpcSampleConsoleApp
         public void RunSampleFlow()
         {
             location = getLocation();
-            //string tokenServerURI = "http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+            //string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
             string uri = dmeHost + ":" + dmePort;
             //string devName = "MobiledgeX”;
             //string appName = "MobiledgeX SDK Demo”;
-            string devName = "automation_api";
+            string devName = "mobiledgex";
             string appName = "automation_api_leon";
 
             // Channel:
@@ -72,11 +72,13 @@ namespace MexGrpcSampleConsoleApp
                 if(regReplyError.Status.Detail == "app not found")
                 {
                     Console.WriteLine("Register Client Wrong App Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Test Case Passed!!");
                     Environment.Exit(0);
                 }
                 else
                 {
                     Console.WriteLine("Register Client Wrong App Failed Return: " + regReplyError.Status.Detail);
+                    Console.WriteLine("Test Case Failed!!");
                     Environment.Exit(1);
                 }
 
