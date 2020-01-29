@@ -28,6 +28,7 @@ ${physical_name_openstack_packet}  packet-ord2
 ${cloudlet_name_openstack_paradise}  automationParadiseCloudlet
 ${operator_name_openstack_paradise}  GDDT
 ${physical_name_openstack_paradise}  paradise 
+${operator_name_gcp}  gcp 
 
 ${version}  version
 
