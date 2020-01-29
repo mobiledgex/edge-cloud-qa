@@ -13,9 +13,10 @@ ${operator0}=  att
 &{cloudlet0}=  cloudlet=attcloud-1  operator=att
 &{cloudlet1}=  cloudlet=tmocloud-1  operator=tmus
 &{cloudlet2}=  cloudlet=tmocloud-2  operator=tmus
-&{cloudlet3}=  cloudlet=gcpcloud-1  operator=gcp
+&{cloudlet3}=  cloudlet=automationGcpCentralCloudlet  operator=gcp
+&{cloudlet4}=  cloudlet=automationAzureCentralCloudlet  operator=azure
 
-@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}
+@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}  &{cloudlet4}
 
 ${username}=  mextester06
 ${password}=  mextester06123
@@ -39,9 +40,9 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    Should Be Equal  ${show_return[0]['key']['operator_key']['name']}  ${cloudlet1['operator']}
    Length Should Be   ${show_return}  1
 
-   @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}
+   @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  2
+   Length Should Be   ${show_return2}  4
 
 ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    [Documentation]
@@ -62,9 +63,9 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
    Length Should Be   ${show_return}  2
 
-   @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet3}
+   @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  2
+   Length Should Be   ${show_return2}  3
 
 ShowOrgCloudlet - org shall be assigned to all cloudlets
    [Documentation]
@@ -77,6 +78,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
 
@@ -84,7 +86,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
    Cloudlets Should Be In List  ${cloudlets}  ${show_return}
-   Length Should Be   ${show_return}  4
+   Length Should Be   ${show_return}  5
 
    Length Should Be   ${show_return2}  0
 
@@ -222,6 +224,7 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -233,9 +236,9 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
    Length Should Be   ${show_return}  1
 
-   @{cloudlets2}=  Create List  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}
+   @{cloudlets2}=  Create List  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  3
+   Length Should Be   ${show_return2}  4
 
    # delete all the org pools
    Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
@@ -307,6 +310,7 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}  auto_delete=${False}  auto_delete=${False}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}  auto_delete=${False}  auto_delete=${False}
    Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}  auto_delete=${False}  auto_delete=${False}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}  auto_delete=${False}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}  auto_delete=${False}
@@ -318,9 +322,9 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
    Length Should Be   ${show_return}  1
 
-   @{cloudlets2}=  Create List  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}
+   @{cloudlets2}=  Create List  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  3
+   Length Should Be   ${show_return2}  4
 
    Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -333,13 +337,13 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    ${show_return_new2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
    # no cloudlets are returned since they are still in the pools even though org is removed from pool
-   @{cloudlets_new1}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}
+   @{cloudlets_new1}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets_new1}  ${show_return_new}
-   Length Should Be   ${show_return_new}  4
+   Length Should Be   ${show_return_new}  5
 
-   @{cloudlets_new2}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}
+   @{cloudlets_new2}=  Create List  ${cloudlet0}  ${cloudlet1}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
    Cloudlets Should Be In List  ${cloudlets_new2}  ${show_return_new2}
-   Length Should Be   ${show_return_new2}  4
+   Length Should Be   ${show_return_new2}  5
 
 ShowOrgCloudlet - shall be to add members after orgpoolcreate
    [Documentation]
