@@ -20,7 +20,7 @@ ${cloudlet_name_openstack}  automationMunichCloudlet
 ${operator_name_openstack}  TDG 
 #${operator_name_openstack}  tmus
 ${mobiledgex_domain}  mobiledgex.net
-${developer_name_openstack}   automation_api
+#${developer_name_openstack}   mobiledgex
 
 ${test_timeout_crm}  32 min
 	
@@ -35,7 +35,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 1 Node on op
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    	flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}     flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -51,7 +51,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 2 Nodes on o
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}   number_nodes=2  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}     flavor_name=${flavor_name}   number_nodes=2  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -67,7 +67,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 3 Nodes on o
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}   number_nodes=3  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      flavor_name=${flavor_name}   number_nodes=3  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -82,7 +82,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 4 Nodes on o
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}   number_nodes=4  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      flavor_name=${flavor_name}   number_nodes=4  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -97,7 +97,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 5 Nodes on o
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}   number_nodes=5  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      flavor_name=${flavor_name}   number_nodes=5  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
@@ -113,7 +113,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 10 Nodes on 
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
 	${epoch_start_time}=   Get Time  epoch
-	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}    developer_name=${developer_name_openstack}    flavor_name=${flavor_name}   number_nodes=10  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
+	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_name=${operator_name_openstack}      flavor_name=${flavor_name}   number_nodes=10  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
