@@ -28,6 +28,7 @@ ${physical_name_openstack_packet}  packet-ord2
 ${cloudlet_name_openstack_dusseldorf}  automationDusseldorfCloudlet
 ${operator_name_openstack_dusseldorf}  TDG
 ${physical_name_openstack_dusseldorf}  dusseldorf 
+${operator_name_gcp}  gcp 
 
 ${version}  version
 
