@@ -42,8 +42,8 @@ GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
 # Run "brew install coreutils" to get "grealpath" for protoc's requirement of absolute paths
-ABSOLUTEPATH := $(shell grealpath ../../../../)
-#ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/)
+#ABSOLUTEPATH := $(shell grealpath ../../../../)
+ABSOLUTEPATH := $(shell realpath ~/workspace/runEdgecloud/go/src/github.com/mobiledgex/)
 DME_PROTO_PATH = $(ABSOLUTEPATH)/edge-proto/dme
 THIRD_PARTY_PROTOS_PATH = $(ABSOLUTEPATH)/edge-proto/third_party
 
