@@ -72,7 +72,7 @@ namespace MexGrpcSampleConsoleApp
             var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
             //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
             System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
-            psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_api -privkeyfile " + pubkey;
+            psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname mobiledgex -privkeyfile " + pubkey;
             psi.RedirectStandardOutput = true;
             System.Diagnostics.Process genauthtoken;
             genauthtoken = System.Diagnostics.Process.Start(psi);
@@ -284,16 +284,18 @@ namespace MexGrpcSampleConsoleApp
             string fcStatus = findCloudletResponse.Status.ToString();
             if (fcStatus == "FindNotfound")
             {
-                Console.WriteLine("Testcase Passed!");
+                
                 Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
                 Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                Console.WriteLine("Testcase Passed!");
                 Environment.Exit(0);
             }
             else
             {
-                Console.WriteLine("Testcase Failed!");
+                
                 Console.WriteLine("FindCloudlet Status: " + findCloudletResponse.Status);
                 Console.WriteLine("FindCloudlet Response: " + findCloudletResponse);
+                Console.WriteLine("Testcase Failed!");
                 Environment.Exit(1);
             }
 
