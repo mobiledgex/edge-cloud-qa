@@ -16,7 +16,7 @@ CreateClusterInst - create a clusterinst with nummasters=1 numnodes=0 for gcp sh
     ...  create a cluster instance with nummasters=1 numnodes-0 for gcp 
     ...  verify correct error occurs 
 
-    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_name=${operator_name_gcp}  cloudlet_name=${cloudlet_name_gcp_fake}  number_masters=1  number_nodes=0 
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_name=${operator_name_gcp}  cloudlet_name=${cloudlet_name_gcp}  number_masters=1  number_nodes=0 
 
     ${code}=  Response Status Code
     ${body}=  Response Body
