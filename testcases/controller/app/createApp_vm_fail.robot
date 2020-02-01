@@ -19,7 +19,7 @@ App - VM deployment with command shall fail
     ${error_msg}=  Run Keyword and Expect Error  *  Create App   deployment=vm  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}  command=ls 
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "invalid argument, command is not supported for VM based deployments"
+    Should Contain  ${error_msg}   details = "Invalid argument, command is not supported for VM based deployments"
 
 *** Keywords ***
 Setup
