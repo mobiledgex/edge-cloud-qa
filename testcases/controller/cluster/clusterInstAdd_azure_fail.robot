@@ -43,7 +43,10 @@ CreateClusterInst - create a clusterinst with numnodes=0 for azure should fail
     ...  verify correct error occurs
 
     ${token}=  Get Token
-    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_name=${operator_name_azure}  cloudlet_name=${cloudlet_name_azure}  number_nodes=0  token=${token}  use_defaults=${False}
+    ${cluster}=  Get Default Cluster Name
+    ${developer}=  Get Default Developer Name
+
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  cluster_name=${cluster}  developer_name=${developer}  operator_name=${operator_name_azure}  cloudlet_name=${cloudlet_name_azure}  number_nodes=0  token=${token}  use_defaults=${False}
 
     ${code}=  Response Status Code
     ${body}=  Response Body
