@@ -104,6 +104,7 @@ Metrics - Shall be able to get all cloudlet utilization metrics on openstack
    ...  request all cloudlet utilization metrics
    ...  verify info is correct
 
+    EDGECLOUD-1836 Metrics - cloudlet metrics for maxTotalVolumeGigabytes and totalGigabytesUsed are wrong
     EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data	
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
@@ -125,6 +126,7 @@ Metrics - Shall be able to request more utilization metrics than exist on openst
    ...  request more cloudlet utilization metrics than exist by using last=<greater than total metrics>
    ...  verify info is correct
 
+    EDGECLOUD-1836 Metrics - cloudlet metrics for maxTotalVolumeGigabytes and totalGigabytesUsed are wrong
     EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
@@ -194,6 +196,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime on 
    ...  request cloudlet utilization metrics with endtime on openstack
    ...  verify info is correct
 
+    EDGECLOUD-1836 Metrics - cloudlet metrics for maxTotalVolumeGigabytes and totalGigabytesUsed are wrong
     EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
@@ -279,7 +282,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
    ...  request cloudlet metrics with endtime=lastrecord 
    ...  verify only last record is received
 
-    EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
+    #EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 	
    # get last metric
    ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
@@ -610,13 +613,13 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cloudlet-utilization
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  diskMax
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  diskUsed
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  memMax
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  vCpuUsed
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  vCpuMax
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  memUsed
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  operator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  vCpuMax
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  vCpuUsed
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  memMax
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  diskUsed
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  diskMax
 
 Metrics Should Match Openstack
    [Arguments]  ${metrics}  ${reverse}=${False}
@@ -638,13 +641,13 @@ Metrics Should Match Openstack
    \  Should Be True               ${epoch} <= ${epochlast}
    \  Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
    \  Should Be Equal              ${reading[1]}  ${cloudlet_name_openstack_metrics}                        #cloudlet name
-   \  Should Be Equal As Integers  ${reading[2]}  ${limits['maxTotalVolumeGigabytes']}                                                   # disk size
-   \  Should Be Equal As Integers  ${reading[3]}  ${limits['totalGigabytesUsed']}                                                  # disk used
-   \  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalRAMSize']}                                                  # ram size
+   \  Should Be Equal              ${reading[2]}  ${operator}                                            # operator name
+   \  Should Be Equal As Integers  ${reading[8]}  ${limits['maxTotalVolumeGigabytes']}                                                   # disk size
+   \  Should Be Equal As Integers  ${reading[7]}  ${limits['totalGigabytesUsed']}                                                  # disk used
+   \  Should Be Equal As Integers  ${reading[6]}  ${limits['maxTotalRAMSize']}                                                  # ram size
    \  Should Be True               ${reading[5]}  ${limits['totalRAMUsed']}                                                 # ram used
-   \  Should Be Equal              ${reading[6]}  ${operator}                                            # operator name
-   \  Should Be Equal As Integers  ${reading[7]}  ${limits['maxTotalCores']}                                                     # number of cpus
-   \  Should Be True               ${reading[8]} < ${limits['maxTotalCores']}                                                    # cpus used
+   \  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalCores']}                                                     # number of cpus
+   \  Should Be True               ${reading[3]} < ${limits['maxTotalCores']}                                                    # cpus used
    \  ${epochlast}=  Set Variable  ${epoch}
 
 Metrics Should Match Openstack With Different Cloudlet Names
@@ -672,13 +675,13 @@ Metrics Should Match Openstack With Different Cloudlet Names
    \  ${found_other_cloudlet}=  Run Keyword If  '${reading[1]}' != '${cloudlet_name_openstack_metrics}'   Set Variable  ${True} 
    \  ...                                 ELSE  Set Variable  ${found_other_cloudlet}
    #\  Should Be Equal              ${reading[1]}  ${cloudlet_name_openstack_metrics}                        #cloudlet name
-   \  Should Be Equal As Integers  ${reading[2]}  ${limits['maxTotalVolumeGigabytes']}                                                   # disk size
-   \  Should Be Equal As Integers  ${reading[3]}  ${limits['totalGigabytesUsed']}                                                  # disk used
-   \  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalRAMSize']}                                                  # ram size
-   \  Should Be True               ${reading[5]}  ${limits['totalRAMUsed']}                                                 # ram used
-   \  Should Be Equal              ${reading[6]}  ${operator}                                            # operator name
-   \  Should Be Equal As Integers  ${reading[7]}  ${limits['maxTotalCores']}                                                     # number of cpus
-   \  Should Be True               ${reading[8]} < ${limits['maxTotalCores']}                                                    # cpus used
+   \  Should Be Equal              ${reading[2]}  ${operator}                                            # operator name
+   #\  Should Be Equal As Integers  ${reading[8]}  ${limits['maxTotalVolumeGigabytes']}                                                   # disk size
+   #\  Should Be Equal As Integers  ${reading[7]}  ${limits['totalGigabytesUsed']}                                                  # disk used
+   #\  Should Be Equal As Integers  ${reading[6]}  ${limits['maxTotalRAMSize']}                                                  # ram size
+   #\  Should Be True               ${reading[5]}  ${limits['totalRAMUsed']}                                                 # ram used
+   #\  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalCores']}                                                     # number of cpus
+   #\  Should Be True               ${reading[3]} < ${limits['maxTotalCores']}                                                    # cpus used
    \  ${epochlast}=  Set Variable  ${epoch}
 
    Should Be True  ${found_own_cloudlet}
@@ -694,12 +697,12 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    : FOR  ${reading}  IN  @{metrics_influx}
    \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][2]}  ${reading['diskMax']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['diskUsed']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][4]}  ${reading['memMax']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][8]}  ${reading['diskMax']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][7]}  ${reading['diskUsed']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['memMax']}
    \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['memUsed']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][7]}  ${reading['vCpuMax']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][8]}  ${reading['vCpuUsed']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][4]}  ${reading['vCpuMax']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['vCpuUsed']}
    \  ${index}=  Evaluate  ${index}+1
 
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][0][0]}  ${metrics_influx[0]['time']}
