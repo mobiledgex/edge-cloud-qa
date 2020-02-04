@@ -625,10 +625,11 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cloudlet-ipusage
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  floatingIpsMax
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  operator
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  floatingIpsUsed
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  ipv4Max
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  floatingIpsMax
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  ipv4Used
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  ipv4Max
 
 Metrics Should Match Openstack With Different Cloudlet Names
    [Arguments]  ${metrics}  ${reverse}=${False}
@@ -655,12 +656,12 @@ Metrics Should Match Openstack With Different Cloudlet Names
    \  ${found_other_cloudlet}=  Run Keyword If  '${reading[1]}' != '${cloudlet_name_openstack_metrics}'   Set Variable  ${True}
    \  ...                                 ELSE  Set Variable  ${found_other_cloudlet}
    #\  Should Be Equal              ${reading[1]}  ${cloudlet_name_openstack_metrics}                        #cloudlet name
-   \  Should Be Equal As Integers  ${reading[2]}  ${limits['maxTotalFloatingIps']}  
-   \  Should Be Equal As Integers  ${reading[3]}  ${limits['totalFloatingIpsUsed']}
-   \  Should Be Equal As Integers  ${reading[4]}  ${maxips}                  
-   #\  Should Be Equal As Integers  ${reading[5]}  ${networkcount}        
-   \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= ${maxips}
-   \  Should Be Equal              ${reading[6]}  ${operator}                                            # operator name
+   \  Should Be Equal              ${reading[2]}  ${operator}
+   #\  Should Be Equal As Integers  ${reading[3]}  ${limits['totalFloatingIpsUsed']}
+   #\  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalFloatingIps']}
+   #\  Should Be Equal As Integers  ${reading[6]}  ${maxips}                  
+   ##\  Should Be Equal As Integers  ${reading[5]}  ${networkcount}        
+   #\  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= ${maxips}
    \  ${epochlast}=  Set Variable  ${epoch}
 
    Should Be True  ${found_own_cloudlet}
@@ -686,12 +687,12 @@ Metrics Should Match Openstack
    \  Should Be True               ${epoch} <= ${epochlast}
    \  Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
    \  Should Be Equal              ${reading[1]}  ${cloudlet_name_openstack_metrics}                        #cloudlet name
-   \  Should Be Equal As Integers  ${reading[2]}  ${limits['maxTotalFloatingIps']}  
+   \  Should Be Equal              ${reading[2]}  ${operator} 
    \  Should Be Equal As Integers  ${reading[3]}  ${limits['totalFloatingIpsUsed']}
-   \  Should Be Equal As Integers  ${reading[4]}  ${maxips}                    
+   \  Should Be Equal As Integers  ${reading[4]}  ${limits['maxTotalFloatingIps']}  
+   \  Should Be Equal As Integers  ${reading[6]}  ${maxips}                    
    #\  Should Be Equal As Integers  ${reading[5]}  ${networkcount}           
    \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= ${maxips} 
-   \  Should Be Equal              ${reading[6]}  ${operator}                                            # operator name
    \  ${epochlast}=  Set Variable  ${epoch}
 
 Metrics Should Match Influxdb
@@ -704,8 +705,8 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    : FOR  ${reading}  IN  @{metrics_influx}
    \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][2]}  ${reading['floatingIpsMax']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][4]}  ${reading['floatingIpsMax']}
    \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['floatingIpsUsed']}
-   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][4]}  ${reading['ipv4Max']}
+   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['ipv4Max']}
    \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['ipv4Used']}
    \  ${index}=  Evaluate  ${index}+1
