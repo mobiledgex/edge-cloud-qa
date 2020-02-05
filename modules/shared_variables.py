@@ -15,6 +15,10 @@ flavor_name_default = 'flavor' + default_time_stamp
 cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 organization_name_default = 'org' + default_time_stamp
 cloudletpool_name_default = 'cloudletpool' + default_time_stamp
+
+privacy_policy_name_default = 'privacypolicy' + default_time_stamp
+autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
+
 latitude_default = 10
 longitude_default = 10
 number_dynamic_ips_default = 254
