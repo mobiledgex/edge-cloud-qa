@@ -9,7 +9,7 @@ variablefile = "${variablefile}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runOperatorTests", "runDeveloperTests", "runFlavorTests", "runControllerControllerTests", "runClusterInstTests", "runAppTests", "runCloudletTests", "runAppInstTests"]
+def jobList1Parallel = ["runOperatorTests", "runDeveloperTests", "runFlavorTests", "runControllerControllerTests", "runClusterInstTests", "runAppTests", "runCloudletTests", "runAppInstTests", "runPrivacyPolicyTests"]
  
 builds1 = [:]
 
