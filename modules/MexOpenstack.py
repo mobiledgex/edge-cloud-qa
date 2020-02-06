@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 from linux import Linux
-
+import rootlb
 
 class MexOpenstack():
     def __init__(self, environment_file=None):
@@ -406,6 +406,54 @@ class MexOpenstack():
             limit_dict[name['Name']] = name['Value']
 
         return limit_dict
+
+    def get_security_group_rules(self, protocol=None, group_id=None, ip_range=None, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+
+        cmd = f'{cmd};openstack security group rule list {group_id} -f json'
+        if protocol:
+            cmd = f'{cmd} --protocol {protocol}'
+            
+        logging.debug(f'getting openstack security group rules with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+
+        if ip_range:
+            rules = json.loads(o_out)
+            for rule in rules:
+                if rule['IP Range'] == ip_range:
+                    o_out=json.dumps([rule])
+                    break
+
+        return json.loads(o_out)
+
+    def get_security_groups(self, group_id=None, name=None, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+
+        if group_id:
+            cmd = f'{cmd};openstack security group show {group_id} -f json'
+        else:
+            cmd = f'{cmd};openstack security group list -f json'
+        logging.debug(f'getting openstack security groups with cmd = {cmd}')
+        o_out=self._execute_cmd(cmd)
+
+        if name:
+            groups = json.loads(o_out)
+            for group in groups:
+                print(group['Name'],name)
+                if group['Name'] == name:
+                    groupid = group['ID']
+                    cmd = f'openstack security group show {groupid} -f json'
+                    logging.debug(f'getting openstack security groups with cmd = {cmd}')
+                    o_out=self._execute_cmd(cmd)
+                    break
+                
+        return json.loads(o_out)
 
     def delete_stack(self, name=None):
         cmd = f'source {self.env_file};openstack stack delete {name} -y'
@@ -1160,3 +1208,20 @@ class MexOpenstack():
         return outcome
 
     
+    def node_should_have_gpu(self, root_loadbalancer, node=None):
+        rb = rootlb.Rootlb(host=root_loadbalancer)
+        if node is None: node = '127.0.0.1'
+
+        cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
+        try:
+            print('*WARN*', cmd)
+            rb.run_command_on_node(node, cmd)
+            logging.info('NVIDIA GPU is allocated')
+        except:
+            raise Exception('NVIDIA GPU is NOT allocated')
+        
+    def node_should_not_have_gpu(self, root_loadbalancer, node=None):
+        if self.node_should_have_gpu(root_loadbalancer, node):
+            raise Exception('NVIDIA GPU IS allocated')
+        
+        logging.info('NVIDIA GPU is not allocated')
