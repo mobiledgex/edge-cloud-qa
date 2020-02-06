@@ -624,6 +624,65 @@ UpdatePrivacyPolicy - shall be able to update with duplicate policy items
 
    Should Be Equal As Numbers  ${numrules}  6
 
+UpdatePrivacyPolicy - shall be able to update with same rules 
+   [Documentation]
+   ...  send CreatePrivacyPolicy with tcp/udp/icmp
+   ...  update the rules to the same rules
+   ...  verify policy is the same 
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
+   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
+   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+
+   ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
+
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+
+   ${policy_return2}=  Update Privacy Policy  region=${region}  rule_list=${rulelist}
+
+   ${numrules}=  Get Length  ${policy_return2['data']['outbound_security_rules']}
+
+   Should Be Equal  ${policy_return2['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${policy_return2['data']['key']['developer']}                              ${developer_name}
+
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${policy_return2['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${policy_return2['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${policy_return2['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return2['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${policy_return2['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
