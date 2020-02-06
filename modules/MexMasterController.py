@@ -27,6 +27,7 @@ from mex_master_controller.AutoScalePolicy import AutoScalePolicy
 from mex_master_controller.Metrics import Metrics
 from mex_master_controller.Flavor import Flavor
 from mex_master_controller.OperatorCode import OperatorCode
+from mex_master_controller.PrivacyPolicy import PrivacyPolicy
 
 import shared_variables_mc
 import shared_variables
@@ -133,6 +134,7 @@ class MexMasterController(MexRest):
         self.org_cloudlet_pool = None
         self.org_cloudlet = None
         self.operatorcode =  None
+        self.privacy_policy =  None
 
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
@@ -158,6 +160,7 @@ class MexMasterController(MexRest):
         self.org_cloudlet_pool = OrgCloudletPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.privacy_policy = PrivacyPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def get_supertoken(self):
         return self.super_token
@@ -185,13 +188,16 @@ class MexMasterController(MexRest):
         return shared_variables.flavor_name_default
 
     def get_default_autoscale_policy_name(self):
-        return shared_variables.autoscalepolicy_name_default
+        return shared_variables.autoscale_policy_name_default
 
     def get_default_cloudlet_pool_name(self):
         return shared_variables.cloudletpool_name_default
 
     def get_default_organization_name(self):
         return shared_variables.organization_name_default
+
+    def get_default_privacy_policy_name(self):
+        return shared_variables.privacy_policy_name_default
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
@@ -1034,61 +1040,63 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_cloudlets(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
-        url = self.root_url + '/auth/ctrl/ShowCloudlet'
+    def show_cloudlets(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
+        return self.cloudlet.show_cloudlet(token=token, region=region, operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
-        payload = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            cloudlet_dict = {}
-            if region is not None:
-                cloudlet_dict['region'] = region
-
-            payload = json.dumps(cloudlet_dict)
-
-        logger.info('show cloudlet on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_showcloudlet_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-
-                logger.info('response:\n' + str(self.resp.text))
-
-                respText = str(self.resp.text)
-
-                if str(self.resp.status_code) != '200':
-                    self._number_showcloudlet_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_showcloudlet_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_showcloudlet_requests_success += 1
-
-            resp_data = self.decoded_data
-            if type(resp_data) is dict:
-                resp_data = [resp_data]
-
-            reverse = True if sort_order == 'descending' else False
-            if sort_field == 'cloudlet_name':
-                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
-
-            return resp_data
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return resp
+#        url = self.root_url + '/auth/ctrl/ShowCloudlet'
+#
+#        payload = None
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            cloudlet_dict = {}
+#            if region is not None:
+#                cloudlet_dict['region'] = region
+#
+#            payload = json.dumps(cloudlet_dict)
+#
+#        logger.info('show cloudlet on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+#            self._number_showcloudlet_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#
+#                logger.info('response:\n' + str(self.resp.text))
+#
+#                respText = str(self.resp.text)
+#
+#                if str(self.resp.status_code) != '200':
+#                    self._number_showcloudlet_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#            except Exception as e:
+#                self._number_showcloudlet_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            self._number_showcloudlet_requests_success += 1
+#
+#            resp_data = self.decoded_data
+#            if type(resp_data) is dict:
+#                resp_data = [resp_data]
+#
+#            reverse = True if sort_order == 'descending' else False
+#            if sort_field == 'cloudlet_name':
+#                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+#
+#            return resp_data
+#
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return resp
 
     def show_cluster_instances(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cluster_name', sort_order='ascending'):
         url = self.root_url + '/auth/ctrl/ShowClusterInst'
@@ -1360,7 +1368,7 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/ctrl/CreateClusterInst'
 
         payload = None
@@ -1373,7 +1381,7 @@ class MexMasterController(MexRest):
             payload = json_data
         else:
             if developer_name is None and self.organization_name: developer_name = self.organization_name
-            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, use_defaults=use_defaults).cluster_instance
+            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, use_defaults=use_defaults).cluster_instance
             cluster_dict = {'clusterinst': clusterInst}
             if region is not None:
                 cluster_dict['region'] = region
@@ -2161,7 +2169,19 @@ class MexMasterController(MexRest):
 
     def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-        
+
+    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.privacy_policy.create_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.show_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.delete_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
         print(self.prov_stack)
