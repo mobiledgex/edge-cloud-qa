@@ -1,5 +1,68 @@
 {
+  "serverTest":{
+    "create":[
+      [  100, "network","create huber-mex-net01","-f json"],
+      [  200, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+      [  300, "server","create --image mobiledgex-v3.0.3 --flavor m4.small --nic net-id=huber-mex-net01 --wait  huber.mex.test","-f json"],
+      [  400, "server","show huber.mex.test","-f json"],
+      [  500, "server","list","-f json"]
+    ]
+   ,
+    "delete":[
+      [  100, "server","delete --wait  huber.mex.test"],
+      [  200, "network","delete huber-mex-net01"] 
+      ]
+  },
 
+  "networkTest":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  100, "network","create huber-mex-net02","-f json"],
+      [  200, "network","list","-f json"],      
+      [  210, "network","show huber-mex-net01","-f json"],
+      [  300, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+      [  400, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
+      [  450, "subnet","list","-f json"],      
+      [  470, "subnet","show huber-mex-subnet02","-f json"],      
+      [  500, "router","create huber.mex.rtr01","-f json"],
+      [  550, "router","list","-f json"],      
+      [  600, "router","add subnet huber.mex.rtr01 huber-mex-subnet01",""],
+      [  700, "router","add subnet huber.mex.rtr01 huber-mex-subnet02",""],
+      [  850, "router","list","-f json"],      
+      [  950, "router","show huber.mex.rtr01","-f json"]   
+    ]
+   ,
+    "delete":[
+      [0,"router","remove subnet huber.mex.rtr01 huber-mex-subnet01"],
+      [1,"router","remove subnet huber.mex.rtr01 huber-mex-subnet02"],
+      [2,"router","delete huber.mex.rtr01" ],
+      [3,"network","delete huber-mex-net01"],
+      [4,"network","delete huber-mex-net02"]
+      ]
+  },
+
+  "simpleDeploymentDemo":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  200, "network","list","-f json"]    
+    ]
+   ,
+    "delete":[
+      [4,"network","delete huber-mex-net01"]
+      ]
+  },
+
+  "simpleDeploymentDemoWithBug":{
+    "create":[
+      [  0, "network","create huber-mex-net01","-f json"],
+      [  200, "network","list","-f json"],
+      [  300, "network","show this-network-does-not-exist","-f json"]    
+    ]
+   ,
+    "delete":[
+      [4,"network","delete huber-mex-net01"]
+      ]
+  },
 
   "stressServer" :{
     "create":[
@@ -23,27 +86,6 @@
       [1,"network","delete huber-mex-net01"]
       ]
 
-  },
-
-
-  "simpleDeplyment":{
-    "create":[
-      [  0, "network","create huber-mex-net01","-f json"],
-      [  1, "network","create huber-mex-net02","-f json"],
-      [  2, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
-      [  3, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
-      [  4, "router","create huber.mex.rtr01","-f json"],
-      [  5, "router","add subnet huber.mex.rtr01 huber-mex-subnet01",""],
-      [  6, "router","add subnet huber.mex.rtr01 huber-mex-subnet02",""]
-    ]
-   ,
-    "delete":[
-      [0,"router","remove subnet huber.mex.rtr01 huber-mex-subnet01"],
-      [1,"router","remove subnet huber.mex.rtr01 huber-mex-subnet02"],
-      [2,"router","delete huber.mex.rtr01" ],
-      [3,"network","delete huber-mex-net01"],
-      [4,"network","delete huber-mex-net02"]
-      ]
   },
 
 
