@@ -1565,7 +1565,7 @@ class MexMasterController(MexRest):
 
         #    payload = json.dumps(runcommand_dict)
 
-        cmd_docker = 'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+        cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         cmd = f'{cmd_docker} mcctl --addr https://{self.mc_address} region RunCommand region={region} {runcommand} --token {token}'
         #cmd_login = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
         ##cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
