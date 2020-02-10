@@ -4,8 +4,9 @@ import os
 import subprocess
 import sys
 
-from linux import Linux
 import rootlb
+from linux import Linux
+
 
 class MexOpenstack():
     def __init__(self, environment_file=None):
@@ -34,7 +35,7 @@ class MexOpenstack():
             try:
                 o_out=self._execute_cmd(cmd)
             except:
-                result['result']='EXCEPION'
+                result['result']='EXCEPTION'
                 createOutcome.append(result)
                 exceptionOccured=True
                 break
@@ -72,7 +73,7 @@ class MexOpenstack():
             try:
                 o_out=self._execute_cmd(cmd)
             except:
-                result['result']='EXCEPION'
+                result['result']='EXCEPTION'
                 serverOutcome.append(result)
                 exceptionOccured=True
                 break
@@ -142,8 +143,9 @@ class MexOpenstack():
         return outcome
 
 
-    def deploy_test_infrastructure(self,limit_dict_global):
-        todo=limit_dict_global["simpleDeplyment"]
+    def deploy_test_infrastructure(self,limit_dict_global,testKey):
+        todo=limit_dict_global[testKey]
+        logging.debug(f'TODO= {todo}')
         #this is needed to delete created objects when exception occures
         createdID={}
         exceptionOccured=False
@@ -160,7 +162,7 @@ class MexOpenstack():
             try:
                 o_out=self._execute_cmd(cmd)
             except:
-                result['result']='EXCEPION'
+                result['result']='EXCEPTION'
                 createOutcome.append(result)
                 exceptionOccured=True
                 break
@@ -169,14 +171,62 @@ class MexOpenstack():
             if item[3]=="":
                 result['result']="PASS"
             else:
-                rawJson=json.loads(o_out)
-                if "id" in rawJson:
-                    #assumption is when we have id then object is created succesfully
-                    createdID[rawJson["id"]]=item
-                    result['result']='PASS'
+                if item[2]=="list":
+                #find if created id is present in list output
+                #as many as we have already created objects
+                    logging.debug("hereIsList")
+                    logging.debug(f'here is createdID= {createdID}')
+                    logging.debug(f'here is list out = {json.loads(o_out)}')
+                    listOutput=json.loads(o_out)
+                    objectsToBeFound={}
+                    objectsFound={}
+                    for x in createdID:
+                        z=createdID[x]
+                        if z[1]==item[1]:
+                            objectsToBeFound[x]=""
+                    for objectID in objectsToBeFound:
+                        for x in listOutput:
+                            if x["ID"]==objectID:
+                                logging.debug(f'found = {x["ID"]}')
+                                objectsFound[x["ID"]]=""
+                    for x in objectsFound:
+                        del objectsToBeFound[x]
+                    
+                    if len(objectsToBeFound)>0:
+                        #so we have leftovers:TODO to list which objectes were not found in the output
+                        result['result']="FAIL"
+                    else:
+                        result['result']="PASS"
+                elif item[2].startswith("show"):
+                    logging.debug("hereIsShow")
+                    logging.debug(f'here is createdID= {createdID}')
+                    logging.debug(f'here is show out = {json.loads(o_out)}')
+                    listOutput=json.loads(o_out)
+                    objectsToBeFound={}
+                    found=False
+                    for x in createdID:
+                        z=createdID[x]
+                        if z[1]==item[1]:
+                            objectsToBeFound[x]=""
+                    for objectID in objectsToBeFound:
+                        if listOutput["id"]==objectID:
+                            found=True
+                    if found:
+                        #so nothing found
+                        result['result']="PASS"
+                    else:
+                        result['result']="FAIL"
                 else:
-                    result['result']='FAIL'
-                    exceptionOccured=True
+                    rawJson=json.loads(o_out)
+                    if "id" in rawJson:
+                        #assumption is when we have id then object is created succesfully
+                        createdID[rawJson["id"]]=item
+                        result['result']='PASS'
+                        logging.debug(f'ID {rawJson["id"]}={item}')
+                    else:
+                        result['result']='FAIL'
+                        exceptionOccured=True
+                        break
 
             createOutcome.append(result)
 
@@ -237,7 +287,7 @@ class MexOpenstack():
             try:
                 o_out=self._execute_cmd(cmd)
             except:
-                result['result']='EXCEPION'
+                result['result']='EXCEPTION'
                 createOutcome.append(result)
                 exceptionOccured=True
                 break
