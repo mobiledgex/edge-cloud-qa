@@ -167,31 +167,31 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Bonn
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on bonn openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_bonn}  cloudlet_name=${cloudlet_name_openstack_bonn}  version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_bonn}  cloudlet_name=${cloudlet_name_openstack_bonn}  container_version=${version}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Munich 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on munich openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_munich}  cloudlet_name=${cloudlet_name_openstack_munich}  container_version=${version}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Hamburg 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on hamburg openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  container_version=${version}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Frankfurt 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on frankfurt openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  container_version=${version}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Dusseldorf
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on dusseldorf openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  container_version=${version}  use_defaults=${False}
 
 *** Keywords ***
 Setup
