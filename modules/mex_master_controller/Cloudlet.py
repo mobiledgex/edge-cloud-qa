@@ -19,7 +19,7 @@ class Cloudlet(MexOperation):
         self.metrics_url = '/auth/metrics/cloudlet'
         self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
 
-    def _build(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1.1"
@@ -87,8 +87,8 @@ class Cloudlet(MexOperation):
         if notify_server_address is not None:
             cloudlet_dict['notify_srv_addr'] = notify_server_address
 
-        if version is not None:
-            cloudlet_dict['version'] = version
+        if container_version is not None:
+            cloudlet_dict['containerversion'] = container_version
             _fields_list.append(_version_field_number)
             
         env_dict = {}
@@ -159,13 +159,13 @@ class Cloudlet(MexOperation):
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def show_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, version=version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
+        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, version=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, version=version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
