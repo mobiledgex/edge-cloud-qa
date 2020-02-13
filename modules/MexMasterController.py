@@ -1597,17 +1597,19 @@ class MexMasterController(MexRest):
                                            #env=env_dict,
                                            #preexec_fn=os.setpgrp
                 #)
-                stdout = process.stdout.readline()
-                stderr = process.stderr.readline()
+                stdout = [line.decode('utf-8') for line in process.stdout.readlines()]
+                stderr = [line.decode('utf-8') for line in process.stderr.readlines()]
                 #stdout, stderr = process.communicate()
-                print('*WARN*', 'std', stdout, stderr)
+                print('*WARN*', 'stdstderr', stdout, stderr)
                 if stderr:
-                    raise Exception(f'code={self.resp.status_code}', f'error={stderr.decode("utf-8")}')
+                    raise Exception(f'code={self.resp.status_code}', f'error={stderr}')
                     #raise Exception('runCommand failed with stderr:' + stderr.decode('utf-8'))
-                if 'Error' in stdout.decode('utf-8'):
-                    raise Exception(f'code={self.resp.status_code}', f'error={stdout.decode("utf-8")}')
+                for line in stdout:
+                    if 'Error' in line:
+                        print('*WARN*', 'found error')
+                        raise Exception(f'code={self.resp.status_code}', f'error={stdout}')
                     #raise Exception('runCommand failed with error:' + stdout.decode('utf-8'))
-                
+                print('*WARN*', 'stdstderrdddddd',)
                # self.post(url=url, bearer=token, data=payload)
                # logger.info('response:\n' + str(self.resp.text))
 
@@ -1629,7 +1631,7 @@ class MexMasterController(MexRest):
             return t
         else:
             resp = send_message()
-            return resp.decode('utf-8')
+            return resp
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
         if username is None: username = self.username
@@ -1899,6 +1901,9 @@ class MexMasterController(MexRest):
 
     def add_cloudlet_resource_mapping(self, token=None, region=None, operator_name=None, cloudlet_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.add_cloudlet_resource_mapping(token=token, region=region, cloudlet_name=cloudlet_name, operator_name=operator_name, mapping=mapping, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def add_resource_tag(self, token=None, region=None, resource_name=None, operator_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.add_resource_tag(token=token, region=region, resource_name=resource_name, operator_name=operator_name, tags=tags, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_cluster_metrics(self, token=None, region=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, developer_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/auth/metrics/cluster'
