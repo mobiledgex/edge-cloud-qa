@@ -147,7 +147,7 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
 
    ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.large
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.large 
+   Should Be Equal   ${server_info[1]['Flavor']}  m4.small
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
@@ -180,7 +180,7 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
+   Should Be Equal  ${cluster_inst.node_flavor}     m4.small
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -201,7 +201,7 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
 
    ${server_info}=  Get Server List  name=${cluster_name}
    Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.large 
+   Should Be Equal   ${server_info[1]['Flavor']}  m4.small 
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
@@ -234,7 +234,7 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
+   Should Be Equal  ${cluster_inst.node_flavor}     m4.small
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 

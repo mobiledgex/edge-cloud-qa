@@ -90,7 +90,7 @@ Cluster shall create with IpAccessShared and num_nodes=10 on openstack
    Should Be Equal   ${server_info_node[7]['Flavor']}    m4.large
    Should Be Equal   ${server_info_node[8]['Flavor']}    m4.large
    Should Be Equal   ${server_info_node[9]['Flavor']}    m4.large
-   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.large
+   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
 
    ${num_servers_node}=     Get Length  ${server_info_node}
    ${num_servers_master}=   Get Length  ${server_info_master}
