@@ -1,0 +1,26 @@
+*** Settings ***
+Documentation   CreateClusterInst with no org
+
+Library         MexMasterController  %{AUTOMATION_MC_ADDRESS}  %{AUTOMATION_MC_CERT}
+
+#Test Setup      Setup
+#Test Teardown   Cleanup provisioning
+
+*** Variables ***
+${operator_name_fake}   tmus 
+${cloudlet_name_fake}  tmocloudlet-1
+
+*** Test Cases ***
+CreateClusterInst - create a clusterinst with org that doesnot exist should fail
+    [Documentation]
+    ...  create a cluster instance with an org that does not exist
+    ...  verify correct error occurs
+
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_name=${operator_name_fake}  cloudlet_name=${cloudlet_name_fake}  developer_name=notexist  number_masters=1  number_nodes=0
+
+    ${code}=  Response Status Code
+    ${body}=  Response Body
+
+    Should Be Equal As Numbers  ${code}  403
+    Should Be Equal             ${body}  {"message":"code=403, message=Forbidden"}
+
