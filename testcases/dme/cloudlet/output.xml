@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200214 12:30:19.420" rpa="false">
+<suite id="s1" name="findCloudlet tmus carriername" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/dme/cloudlet/findCloudlet_tmus_carriername.robot">
+<kw name="Setup" type="setup">
+<msg timestamp="20200214 12:30:20.141" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Operator Code" library="MexMasterController">
+<arguments>
+<arg>operator_name=${operator_name}</arg>
+<arg>code=${code}</arg>
+<arg>region=${region}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:20.141" level="TRACE">Arguments: [ operator_name='tmus' | code='2561' | region='US' ]</msg>
+<msg timestamp="20200214 12:30:20.142" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode. 
+	{"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:20.142" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:20.142" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:20.144" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:20.662" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateOperatorCode HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:20.663" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">adding message to delete stack: {'operatorcode': {'operator_name': 'tmus', 'code': '2561'}}</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">showing:{'operatorcode': {'operator_name': 'tmus', 'code': '2561'}}</msg>
+<msg timestamp="20200214 12:30:20.663" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode. 
+	{"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:20.663" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:20.666" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:21.021" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowOperatorCode HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:21.022" level="DEBUG">resp={"data":{"code":"2561","operator_name":"tmus"}}
+</msg>
+<msg timestamp="20200214 12:30:21.022" level="DEBUG">content={"data":{"code":"2561","operator_name":"tmus"}}
+</msg>
+<msg timestamp="20200214 12:30:21.022" level="INFO">response:
+200
+{"data":{"code":"2561","operator_name":"tmus"}}
+</msg>
+<msg timestamp="20200214 12:30:21.022" level="TRACE">Return: {'data': {'code': '2561', 'operator_name': 'tmus'}}</msg>
+<status status="PASS" starttime="20200214 12:30:20.141" endtime="20200214 12:30:21.022"></status>
+</kw>
+<kw name="Create Flavor" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:21.022" level="TRACE">Arguments: [ region='US' ]</msg>
+<msg timestamp="20200214 12:30:21.022" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateFlavor. 
+	{"flavor": {"key": {"name": "flavor1581705019-695211"}, "ram": 1024, "vcpus": 1, "disk": 1}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.023" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}, "ram": 1024, "vcpus": 1, "disk": 1}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.023" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}, "ram": 1024, "vcpus": 1, "disk": 1}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:21.025" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:21.483" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateFlavor HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:21.484" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:21.484" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:21.484" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:21.484" level="DEBUG">adding message to delete stack: {'flavor': {'key': {'name': 'flavor1581705019-695211'}}}</msg>
+<msg timestamp="20200214 12:30:21.484" level="DEBUG">showing:{'flavor': {'key': {'name': 'flavor1581705019-695211'}}}</msg>
+<msg timestamp="20200214 12:30:21.485" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowFlavor. 
+	{"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.485" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.485" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:21.487" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:21.835" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowFlavor HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:21.836" level="DEBUG">resp={"data":{"key":{"name":"flavor1581705019-695211"},"ram":1024,"vcpus":1,"disk":1}}
+</msg>
+<msg timestamp="20200214 12:30:21.836" level="DEBUG">content={"data":{"key":{"name":"flavor1581705019-695211"},"ram":1024,"vcpus":1,"disk":1}}
+</msg>
+<msg timestamp="20200214 12:30:21.836" level="INFO">response:
+200
+{"data":{"key":{"name":"flavor1581705019-695211"},"ram":1024,"vcpus":1,"disk":1}}
+</msg>
+<msg timestamp="20200214 12:30:21.837" level="TRACE">Return: {'data': {'disk': 1,
+          'key': {'name': 'flavor1581705019-695211'},
+          'ram': 1024,
+          'vcpus': 1}}</msg>
+<status status="PASS" starttime="20200214 12:30:21.022" endtime="20200214 12:30:21.837"></status>
+</kw>
+<kw name="Create App" library="MexMasterController">
+<arguments>
+<arg>access_ports=${access_ports}</arg>
+<arg>region=${region}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:21.837" level="TRACE">Arguments: [ access_ports='tcp:80,http:443,udp:10002' | region='US' ]</msg>
+<msg timestamp="20200214 12:30:21.838" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateApp. 
+	{"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "image_type": 1, "image_path": "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0", "default_flavor": {"name": "flavor1581705019-695211"}, "access_ports": "tcp:80,http:443,udp:10002", "deployment": "kubernetes"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.838" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateApp data={"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "image_type": 1, "image_path": "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0", "default_flavor": {"name": "flavor1581705019-695211"}, "access_ports": "tcp:80,http:443,udp:10002", "deployment": "kubernetes"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:21.838" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateApp data={"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "image_type": 1, "image_path": "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0", "default_flavor": {"name": "flavor1581705019-695211"}, "access_ports": "tcp:80,http:443,udp:10002", "deployment": "kubernetes"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:21.840" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:24.447" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateApp HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:24.448" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:24.448" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:24.448" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:24.448" level="DEBUG">adding message to delete stack: {'app': {'key': {'name': 'app1581705019-695211', 'version': '1.0', 'developer_key': {'name': 'mobiledgex'}}}}</msg>
+<msg timestamp="20200214 12:30:24.448" level="DEBUG">showing:{'app': {'key': {'name': 'app1581705019-695211'}}}</msg>
+<msg timestamp="20200214 12:30:24.448" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowApp. 
+	{"app": {"key": {"name": "app1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:24.449" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowApp data={"app": {"key": {"name": "app1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:24.449" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowApp data={"app": {"key": {"name": "app1581705019-695211"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:24.451" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:24.794" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowApp HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:24.795" level="DEBUG">resp={"data":{"key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"image_path":"docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0","image_type":1,"access_ports":"tcp:80,http:443,udp:10002","default_flavor":{"name":"flavor1581705019-695211"},"deployment":"kubernetes","deployment_manifest":"apiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-tcp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp80\n    protocol: TCP\n    port: 80\n    targetPort: 80\n  - name: http443\n    protocol: TCP\n    port: 443\n    targetPort: 443\n  selector:\n    run: app1581705019-695211\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-udp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp10002\n    protocol: UDP\n    port: 10002\n    targetPort: 10002\n  selector:\n    run: app1581705019-695211\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1581705019-695211-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1581705019-695211\n  template:\n    metadata:\n      labels:\n        run: app1581705019-695211\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1581705019-695211\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 80\n          protocol: TCP\n        - containerPort: 443\n          protocol: TCP\n        - containerPort: 10002\n          protocol: UDP\n","deployment_generator":"kubernetes-basic","access_type":2}}
+</msg>
+<msg timestamp="20200214 12:30:24.796" level="DEBUG">content={"data":{"key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"image_path":"docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0","image_type":1,"access_ports":"tcp:80,http:443,udp:10002","default_flavor":{"name":"flavor1581705019-695211"},"deployment":"kubernetes","deployment_manifest":"apiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-tcp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp80\n    protocol: TCP\n    port: 80\n    targetPort: 80\n  - name: http443\n    protocol: TCP\n    port: 443\n    targetPort: 443\n  selector:\n    run: app1581705019-695211\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-udp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp10002\n    protocol: UDP\n    port: 10002\n    targetPort: 10002\n  selector:\n    run: app1581705019-695211\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1581705019-695211-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1581705019-695211\n  template:\n    metadata:\n      labels:\n        run: app1581705019-695211\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1581705019-695211\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 80\n          protocol: TCP\n        - containerPort: 443\n          protocol: TCP\n        - containerPort: 10002\n          protocol: UDP\n","deployment_generator":"kubernetes-basic","access_type":2}}
+</msg>
+<msg timestamp="20200214 12:30:24.796" level="INFO">response:
+200
+{"data":{"key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"image_path":"docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0","image_type":1,"access_ports":"tcp:80,http:443,udp:10002","default_flavor":{"name":"flavor1581705019-695211"},"deployment":"kubernetes","deployment_manifest":"apiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-tcp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp80\n    protocol: TCP\n    port: 80\n    targetPort: 80\n  - name: http443\n    protocol: TCP\n    port: 443\n    targetPort: 443\n  selector:\n    run: app1581705019-695211\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-udp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp10002\n    protocol: UDP\n    port: 10002\n    targetPort: 10002\n  selector:\n    run: app1581705019-695211\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1581705019-695211-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1581705019-695211\n  template:\n    metadata:\n      labels:\n        run: app1581705019-695211\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1581705019-695211\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 80\n          protocol: TCP\n        - containerPort: 443\n          protocol: TCP\n        - containerPort: 10002\n          protocol: UDP\n","deployment_generator":"kubernetes-basic","access_type":2}}
+</msg>
+<msg timestamp="20200214 12:30:24.796" level="TRACE">Return: {'data': {'access_ports': 'tcp:80,http:443,udp:10002',
+          'access_type': 2,
+          'default_flavor': {'name': 'flavor1581705019-695211'},
+          'deployment': 'kubernetes',
+          'deployment_generator': 'kubernetes-basic',
+          'deployment_manifest': 'apiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-tcp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp80\n    protocol: TCP\n    port: 80\n    targetPort: 80\n  - name: http443\n    protocol: TCP\n    port: 443\n    targetPort: 443\n  selector:\n    run: app1581705019-695211\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: app1581705019-695211-udp\n  labels:\n    run: app1581705019-695211\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp10002\n    protocol: UDP\n    port: 10002\n    targetPort: 10002\n  selector:\n    run: app1581705019-695211\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1581705019-695211-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1581705019-695211\n  template:\n    metadata:\n      labels:\n        run: app1581705019-695211\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1581705019-695211\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 80\n          protocol: TCP\n        - containerPort: 443\n          protocol: TCP\n        - containerPort: 10002\n          protocol: UDP\n',
+          'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0',
+          'image_type': 1,
+          'key': {'developer_key': {'name': 'mobiledgex'},
+                  'name': 'app1581705019-695211',
+                  'version': '1.0'}}}</msg>
+<status status="PASS" starttime="20200214 12:30:21.837" endtime="20200214 12:30:24.797"></status>
+</kw>
+<kw name="Create App Instance" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet_name1}</arg>
+<arg>operator_name=${operator_name}</arg>
+<arg>cluster_instance_name=autocluster</arg>
+</arguments>
+<assign>
+<var>${appinst_1}</var>
+</assign>
+<msg timestamp="20200214 12:30:24.797" level="TRACE">Arguments: [ region='US' | cloudlet_name='tmocloud-1' | operator_name='tmus' | cluster_instance_name='autocluster' ]</msg>
+<msg timestamp="20200214 12:30:24.797" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:24.798" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:24.798" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:24.800" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:25.475" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:25.629" level="DEBUG">resp={"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:25.630" level="DEBUG">content={"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:25.630" level="INFO">response:
+200
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:25.630" level="DEBUG">adding message to delete stack: {'appinst': {'key': {'app_key': {'name': 'app1581705019-695211', 'version': '1.0', 'developer_key': {'name': 'mobiledgex'}}, 'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-1', 'operator_key': {'name': 'tmus'}}, 'cluster_key': {'name': 'autocluster'}, 'developer': 'mobiledgex'}}}}</msg>
+<msg timestamp="20200214 12:30:25.630" level="DEBUG">showing:{'appinst': {'key': {'app_key': {'name': 'app1581705019-695211', 'version': '1.0', 'developer_key': {'name': 'mobiledgex'}}, 'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-1', 'operator_key': {'name': 'tmus'}}, 'cluster_key': {'name': 'autocluster'}, 'developer': 'mobiledgex'}}}}</msg>
+<msg timestamp="20200214 12:30:25.630" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:25.630" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:25.631" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:25.633" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:25.985" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:25.986" level="DEBUG">resp={"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":31,"longitude":-91},"uri":"tmocloud-1.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705025,"nanos":501303816},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:25.986" level="DEBUG">content={"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":31,"longitude":-91},"uri":"tmocloud-1.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705025,"nanos":501303816},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:25.987" level="INFO">response:
+200
+{"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-1"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":31,"longitude":-91},"uri":"tmocloud-1.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705025,"nanos":501303816},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Created ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Created AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="TRACE">Return: {'data': {'cloudlet_loc': {'latitude': 31, 'longitude': -91},
+          'created_at': {'nanos': 501303816, 'seconds': 1581705025},
+          'flavor': {'name': 'flavor1581705019-695211'},
+          'key': {'app_key': {'developer_key': {'name': 'mobiledgex'},
+                              'name': 'app1581705019-695211',
+                              'version': '1.0'},
+                  'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-1',
+                                                        'operator_key': {'name': 'tmus'}},
+                                       'cluster_key': {'name': 'autocluster'},
+                                       'developer': 'mobiledgex'}},
+          'liveness': 1,
+          'mapped_ports': [{'fqdn_prefix': 'app1581705019-695211-tcp.',
+                            'internal_port': 80,
+                            'proto': 1,
+                            'public_port': 80},
+                           {'internal_port': 443,
+                            'path_prefix': 'mobiledgex/app1581705019-69521110/p443',
+                            'proto': 3,
+                            'public_port': 443},
+                           {'fqdn_prefix': 'app1581705019-695211-udp.',
+                            'internal_port': 10002,
+                            'proto': 2,
+                            'public_port': 10002}],
+          'runtime_info': {},
+          'state': 5,
+          'status': {},
+          'uri': 'tmocloud-1.tmus.mobiledgex.net'}}</msg>
+<msg timestamp="20200214 12:30:25.989" level="INFO">${appinst_1} = {'data': {'key': {'app_key': {'developer_key': {'name': 'mobiledgex'}, 'name': 'app1581705019-695211', 'version': '1.0'}, 'cluster_inst_key': {'cluster_key': {'name': 'autocluster'}, 'cloudlet_key': {...</msg>
+<status status="PASS" starttime="20200214 12:30:24.797" endtime="20200214 12:30:25.989"></status>
+</kw>
+<kw name="Create App Instance" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet_name2}</arg>
+<arg>operator_name=${operator_name}</arg>
+<arg>cluster_instance_name=autocluster</arg>
+</arguments>
+<assign>
+<var>${appinst_2}</var>
+</assign>
+<msg timestamp="20200214 12:30:25.989" level="TRACE">Arguments: [ region='US' | cloudlet_name='tmocloud-2' | operator_name='tmus' | cluster_instance_name='autocluster' ]</msg>
+<msg timestamp="20200214 12:30:25.989" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:25.989" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:25.990" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:25.992" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:26.762" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:26.875" level="DEBUG">resp={"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:26.875" level="DEBUG">content={"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:26.875" level="INFO">response:
+200
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created AppInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:26.876" level="DEBUG">adding message to delete stack: {'appinst': {'key': {'app_key': {'name': 'app1581705019-695211', 'version': '1.0', 'developer_key': {'name': 'mobiledgex'}}, 'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-2', 'operator_key': {'name': 'tmus'}}, 'cluster_key': {'name': 'autocluster'}, 'developer': 'mobiledgex'}}}}</msg>
+<msg timestamp="20200214 12:30:26.876" level="DEBUG">showing:{'appinst': {'key': {'app_key': {'name': 'app1581705019-695211', 'version': '1.0', 'developer_key': {'name': 'mobiledgex'}}, 'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-2', 'operator_key': {'name': 'tmus'}}, 'cluster_key': {'name': 'autocluster'}, 'developer': 'mobiledgex'}}}}</msg>
+<msg timestamp="20200214 12:30:26.876" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:26.876" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:26.876" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:26.879" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:27.215" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:27.217" level="DEBUG">resp={"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-2"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":35,"longitude":-95},"uri":"tmocloud-2.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705026,"nanos":768444902},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:27.217" level="DEBUG">content={"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-2"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":35,"longitude":-95},"uri":"tmocloud-2.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705026,"nanos":768444902},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:27.217" level="INFO">response:
+200
+{"data":{"key":{"app_key":{"developer_key":{"name":"mobiledgex"},"name":"app1581705019-695211","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"operator_key":{"name":"tmus"},"name":"tmocloud-2"},"developer":"mobiledgex"}},"cloudlet_loc":{"latitude":35,"longitude":-95},"uri":"tmocloud-2.tmus.mobiledgex.net","liveness":1,"mapped_ports":[{"proto":1,"internal_port":80,"public_port":80,"fqdn_prefix":"app1581705019-695211-tcp."},{"proto":3,"internal_port":443,"public_port":443,"path_prefix":"mobiledgex/app1581705019-69521110/p443"},{"proto":2,"internal_port":10002,"public_port":10002,"fqdn_prefix":"app1581705019-695211-udp."}],"flavor":{"name":"flavor1581705019-695211"},"state":5,"runtime_info":{},"created_at":{"seconds":1581705026,"nanos":768444902},"status":{}}}
+</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Created ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Created AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:27.218" level="TRACE">Return: {'data': {'cloudlet_loc': {'latitude': 35, 'longitude': -95},
+          'created_at': {'nanos': 768444902, 'seconds': 1581705026},
+          'flavor': {'name': 'flavor1581705019-695211'},
+          'key': {'app_key': {'developer_key': {'name': 'mobiledgex'},
+                              'name': 'app1581705019-695211',
+                              'version': '1.0'},
+                  'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-2',
+                                                        'operator_key': {'name': 'tmus'}},
+                                       'cluster_key': {'name': 'autocluster'},
+                                       'developer': 'mobiledgex'}},
+          'liveness': 1,
+          'mapped_ports': [{'fqdn_prefix': 'app1581705019-695211-tcp.',
+                            'internal_port': 80,
+                            'proto': 1,
+                            'public_port': 80},
+                           {'internal_port': 443,
+                            'path_prefix': 'mobiledgex/app1581705019-69521110/p443',
+                            'proto': 3,
+                            'public_port': 443},
+                           {'fqdn_prefix': 'app1581705019-695211-udp.',
+                            'internal_port': 10002,
+                            'proto': 2,
+                            'public_port': 10002}],
+          'runtime_info': {},
+          'state': 5,
+          'status': {},
+          'uri': 'tmocloud-2.tmus.mobiledgex.net'}}</msg>
+<msg timestamp="20200214 12:30:27.219" level="INFO">${appinst_2} = {'data': {'key': {'app_key': {'developer_key': {'name': 'mobiledgex'}, 'name': 'app1581705019-695211', 'version': '1.0'}, 'cluster_inst_key': {'cluster_key': {'name': 'autocluster'}, 'cloudlet_key': {...</msg>
+<status status="PASS" starttime="20200214 12:30:25.989" endtime="20200214 12:30:27.219"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${appinst_1}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.219" level="TRACE">Arguments: [ '${appinst_1}' ]</msg>
+<msg timestamp="20200214 12:30:27.220" level="INFO">${appinst_1} = {'data': {'key': {'app_key': {'developer_key': {'name': 'mobiledgex'}, 'name': 'app1581705019-695211', 'version': '1.0'}, 'cluster_inst_key': {'cluster_key': {'name': 'autocluster'}, 'cloudlet_key': {...</msg>
+<msg timestamp="20200214 12:30:27.220" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.219" endtime="20200214 12:30:27.220"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${appinst_2}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.220" level="TRACE">Arguments: [ '${appinst_2}' ]</msg>
+<msg timestamp="20200214 12:30:27.220" level="INFO">${appinst_2} = {'data': {'key': {'app_key': {'developer_key': {'name': 'mobiledgex'}, 'name': 'app1581705019-695211', 'version': '1.0'}, 'cluster_inst_key': {'cluster_key': {'name': 'autocluster'}, 'cloudlet_key': {...</msg>
+<msg timestamp="20200214 12:30:27.220" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.220" endtime="20200214 12:30:27.220"></status>
+</kw>
+<msg timestamp="20200214 12:30:27.220" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:20.141" endtime="20200214 12:30:27.220"></status>
+</kw>
+<test id="s1-t1" name="FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same coord as tmocloud-1">
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${appinst_1}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.222" level="TRACE">Arguments: [ {'data': {'cloudlet_loc': {'latitude': 31, 'longitude': -91},
+          'created_at': {'nanos': 501303816, 'seconds': 1581705025},
+          'flavor': {'name': 'flavor1581705019-695211'},
+          'key': {'app_key': {'developer_key': {'name': 'mobiledgex'},
+                              'name': 'app1581705019-695211',
+                              'version': '1.0'},
+                  'cluster_inst_key': {'cloudlet_key': {'name': 'tmocloud-1',
+                                                        'operator_key': {'name': 'tmus'}},
+                                       'cluster_key': {'name': 'autocluster'},
+                                       'developer': 'mobiledgex'}},
+          'liveness': 1,
+          'mapped_ports': [{'fqdn_prefix': 'app1581705019-695211-tcp.',
+                            'internal_port': 80,
+                            'proto': 1,
+                            'public_port': 80},
+                           {'internal_port': 443,
+                            'path_prefix': 'mobiledgex/app1581705019-69521110/p443',
+                            'proto': 3,
+                            'public_port': 443},
+                           {'fqdn_prefix': 'app1581705019-695211-udp.',
+                            'internal_port': 10002,
+                            'proto': 2,
+                            'public_port': 10002}],
+          'runtime_info': {},
+          'state': 5,
+          'status': {},
+          'uri': 'tmocloud-1.tmus.mobiledgex.net'}} ]</msg>
+<msg timestamp="20200214 12:30:27.222" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.221" endtime="20200214 12:30:27.223"></status>
+</kw>
+<kw name="Register Client" library="MexDme">
+<msg timestamp="20200214 12:30:27.223" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200214 12:30:27.224" level="INFO">register client on us-qa.dme.mobiledgex.net:50051. 
+	dev_name: "mobiledgex"
+	app_name: "app1581705019-695211"
+	app_vers: "1.0"
+	</msg>
+<msg timestamp="20200214 12:30:27.357" level="DEBUG">session_cookie=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjcsImlhdCI6MTU4MTcwNTAyNywia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgxNzA1MDE5LTY5NTIxMSIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFYb0dSb2tyWWp2Ujc2S0RCRDlCODlMd1EzUSIsImtpZCI6Mn19.RvV0KszZrQ-nHoENYcf9PXGVSK5WNTOCI8MEVAsFQcRH4ppdfBPomFzbRuSpyuYsQmvGr0ruu1w9s1oN-QwRaQ</msg>
+<msg timestamp="20200214 12:30:27.357" level="DEBUG">token server uri=http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc</msg>
+<msg timestamp="20200214 12:30:27.357" level="TRACE">Return: status: RS_SUCCESS
+session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjcsImlhdCI6MTU4MTcwNTAyNywia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgxNzA1MDE5LTY5NTIxMSIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFYb0dSb2tyWWp2Ujc2S0RCRDlCODlMd1EzUSIsImtpZCI6Mn19.RvV0KszZrQ-nHoENYcf9PXGVSK5WNTOCI8MEVAsFQcRH4ppdfBPomFzbRuSpyuYsQmvGr0ruu1w9s1oN-QwRaQ"
+token_server_uri: "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc"
+</msg>
+<status status="PASS" starttime="20200214 12:30:27.223" endtime="20200214 12:30:27.357"></status>
+</kw>
+<kw name="Find Cloudlet" library="MexDme">
+<arguments>
+<arg>carrier_name=${code}</arg>
+<arg>latitude=31</arg>
+<arg>longitude=-91</arg>
+</arguments>
+<assign>
+<var>${cloudlet}</var>
+</assign>
+<msg timestamp="20200214 12:30:27.358" level="TRACE">Arguments: [ carrier_name='2561' | latitude='31' | longitude='-91' ]</msg>
+<msg timestamp="20200214 12:30:27.358" level="INFO">find cloudlet on us-qa.dme.mobiledgex.net:50051. 
+	session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjcsImlhdCI6MTU4MTcwNTAyNywia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgxNzA1MDE5LTY5NTIxMSIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFYb0dSb2tyWWp2Ujc2S0RCRDlCODlMd1EzUSIsImtpZCI6Mn19.RvV0KszZrQ-nHoENYcf9PXGVSK5WNTOCI8MEVAsFQcRH4ppdfBPomFzbRuSpyuYsQmvGr0ruu1w9s1oN-QwRaQ"
+	carrier_name: "2561"
+	gps_location {
+	  latitude: 31.0
+	  longitude: -91.0
+	}
+	</msg>
+<msg timestamp="20200214 12:30:27.376" level="TRACE">Return: status: FIND_FOUND
+fqdn: "tmocloud-1.tmus.mobiledgex.net"
+ports {
+  proto: L_PROTO_TCP
+  internal_port: 80
+  public_port: 80
+  fqdn_prefix: "app1581705019-695211-tcp."
+}
+ports {
+  proto: L_PROTO_HTTP
+  internal_port: 443
+  public_port: 443
+  path_prefix: "mobiledgex/app1581705019-69521110/p443"
+}
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 10002
+  public_port: 10002
+  fqdn_prefix: "app1581705019-695211-udp."
+}
+cloudlet_location {
+  latitude: 31.0
+  longitude: -91.0
+}
+</msg>
+<msg timestamp="20200214 12:30:27.376" level="INFO">${cloudlet} = status: FIND_FOUND
+fqdn: "tmocloud-1.tmus.mobiledgex.net"
+ports {
+  proto: L_PROTO_TCP
+  internal_port: 80
+  public_port: 80
+  fqdn_prefix: "app1581705019-695211-tcp."
+}
+ports {
+  proto: L_PROTO_HTTP
+...</msg>
+<status status="PASS" starttime="20200214 12:30:27.358" endtime="20200214 12:30:27.376"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${app_name_default}</arg>
+<arg>-</arg>
+<arg>tcp</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>${fqdn_prefix_tcp}</var>
+</assign>
+<msg timestamp="20200214 12:30:27.377" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1581705019-695211' | '-' | 'tcp' | '.' ]</msg>
+<msg timestamp="20200214 12:30:27.377" level="TRACE">Return: 'app1581705019-695211-tcp.'</msg>
+<msg timestamp="20200214 12:30:27.377" level="INFO">${fqdn_prefix_tcp} = app1581705019-695211-tcp.</msg>
+<status status="PASS" starttime="20200214 12:30:27.376" endtime="20200214 12:30:27.377"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${app_name_default}</arg>
+<arg>-</arg>
+<arg>udp</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>${fqdn_prefix_udp}</var>
+</assign>
+<msg timestamp="20200214 12:30:27.377" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1581705019-695211' | '-' | 'udp' | '.' ]</msg>
+<msg timestamp="20200214 12:30:27.377" level="TRACE">Return: 'app1581705019-695211-udp.'</msg>
+<msg timestamp="20200214 12:30:27.377" level="INFO">${fqdn_prefix_udp} = app1581705019-695211-udp.</msg>
+<status status="PASS" starttime="20200214 12:30:27.377" endtime="20200214 12:30:27.378"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${app_name_default}</arg>
+<arg>-</arg>
+<arg>http</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>${fqdn_prefix_http}</var>
+</assign>
+<msg timestamp="20200214 12:30:27.378" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1581705019-695211' | '-' | 'http' | '.' ]</msg>
+<msg timestamp="20200214 12:30:27.378" level="TRACE">Return: 'app1581705019-695211-http.'</msg>
+<msg timestamp="20200214 12:30:27.378" level="INFO">${fqdn_prefix_http} = app1581705019-695211-http.</msg>
+<status status="PASS" starttime="20200214 12:30:27.378" endtime="20200214 12:30:27.378"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.status}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.379" level="TRACE">Arguments: [ 1 | '1' ]</msg>
+<msg timestamp="20200214 12:30:27.379" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.379" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.378" endtime="20200214 12:30:27.379"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cloudlet.fqdn}</arg>
+<arg>${appinst_1['data']['uri']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.379" level="TRACE">Arguments: [ 'tmocloud-1.tmus.mobiledgex.net' | 'tmocloud-1.tmus.mobiledgex.net' ]</msg>
+<msg timestamp="20200214 12:30:27.380" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.380" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.379" endtime="20200214 12:30:27.380"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.cloudlet_location.latitude}</arg>
+<arg>${cloudlet_lat1}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.380" level="TRACE">Arguments: [ 31.0 | '31' ]</msg>
+<msg timestamp="20200214 12:30:27.380" level="INFO">Argument types are:
+&lt;class 'float'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.380" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.380" endtime="20200214 12:30:27.380"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.cloudlet_location.longitude}</arg>
+<arg>${cloudlet_long1}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.381" level="TRACE">Arguments: [ -91.0 | '-91' ]</msg>
+<msg timestamp="20200214 12:30:27.381" level="INFO">Argument types are:
+&lt;class 'float'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.381" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.380" endtime="20200214 12:30:27.381"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[0].proto}</arg>
+<arg>${appinst_1['data']['mapped_ports'][0]['proto']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.381" level="TRACE">Arguments: [ 1 | 1 ]</msg>
+<msg timestamp="20200214 12:30:27.381" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.381" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.381" endtime="20200214 12:30:27.382"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[0].internal_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][0]['internal_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.382" level="TRACE">Arguments: [ 80 | 80 ]</msg>
+<msg timestamp="20200214 12:30:27.382" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.382" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.382" endtime="20200214 12:30:27.382"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[0].public_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][0]['public_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.383" level="TRACE">Arguments: [ 80 | 80 ]</msg>
+<msg timestamp="20200214 12:30:27.383" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.383" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.382" endtime="20200214 12:30:27.383"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cloudlet.ports[0].fqdn_prefix}</arg>
+<arg>${appinst_1['data']['mapped_ports'][0]['fqdn_prefix']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.383" level="TRACE">Arguments: [ 'app1581705019-695211-tcp.' | 'app1581705019-695211-tcp.' ]</msg>
+<msg timestamp="20200214 12:30:27.383" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.383" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.383" endtime="20200214 12:30:27.384"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[1].proto}</arg>
+<arg>${appinst_1['data']['mapped_ports'][1]['proto']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.384" level="TRACE">Arguments: [ 3 | 3 ]</msg>
+<msg timestamp="20200214 12:30:27.384" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.384" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.384" endtime="20200214 12:30:27.384"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[1].internal_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][1]['internal_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.385" level="TRACE">Arguments: [ 443 | 443 ]</msg>
+<msg timestamp="20200214 12:30:27.385" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.385" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.384" endtime="20200214 12:30:27.385"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[1].public_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][1]['public_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.385" level="TRACE">Arguments: [ 443 | 443 ]</msg>
+<msg timestamp="20200214 12:30:27.385" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.385" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.385" endtime="20200214 12:30:27.386"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cloudlet.ports[1].path_prefix}</arg>
+<arg>${appinst_1['data']['mapped_ports'][1]['path_prefix']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.386" level="TRACE">Arguments: [ 'mobiledgex/app1581705019-69521110/p443' | 'mobiledgex/app1581705019-69521110/p443' ]</msg>
+<msg timestamp="20200214 12:30:27.386" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.386" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.386" endtime="20200214 12:30:27.386"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[2].proto}</arg>
+<arg>${appinst_1['data']['mapped_ports'][2]['proto']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.387" level="TRACE">Arguments: [ 2 | 2 ]</msg>
+<msg timestamp="20200214 12:30:27.387" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.387" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.386" endtime="20200214 12:30:27.387"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[2].internal_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][2]['internal_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.387" level="TRACE">Arguments: [ 10002 | 10002 ]</msg>
+<msg timestamp="20200214 12:30:27.388" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.388" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.387" endtime="20200214 12:30:27.388"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cloudlet.ports[2].public_port}</arg>
+<arg>${appinst_1['data']['mapped_ports'][2]['public_port']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.388" level="TRACE">Arguments: [ 10002 | 10002 ]</msg>
+<msg timestamp="20200214 12:30:27.388" level="DEBUG">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'int'&gt;</msg>
+<msg timestamp="20200214 12:30:27.388" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.388" endtime="20200214 12:30:27.388"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cloudlet.ports[2].fqdn_prefix}</arg>
+<arg>${appinst_1['data']['mapped_ports'][2]['fqdn_prefix']}</arg>
+</arguments>
+<msg timestamp="20200214 12:30:27.389" level="TRACE">Arguments: [ 'app1581705019-695211-udp.' | 'app1581705019-695211-udp.' ]</msg>
+<msg timestamp="20200214 12:30:27.389" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200214 12:30:27.389" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.389" endtime="20200214 12:30:27.389"></status>
+</kw>
+<doc>send findCloudlet with same coord as tmocloud-1 and no gcp/azure provisioned. return tmocloud-1</doc>
+<status status="PASS" starttime="20200214 12:30:27.221" endtime="20200214 12:30:27.389" critical="yes"></status>
+</test>
+<kw name="Cleanup Provisioning" library="MexMasterController" type="teardown">
+<msg timestamp="20200214 12:30:27.390" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200214 12:30:27.390" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200214 12:30:27.390" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c53680&gt;</msg>
+<msg timestamp="20200214 12:30:27.390" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:27.390" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:27.390" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-2", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:27.392" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:27.875" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:28.064" level="DEBUG">resp={"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:28.065" level="DEBUG">content={"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:28.065" level="INFO">response:
+200
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:28.065" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c40050&gt;</msg>
+<msg timestamp="20200214 12:30:28.065" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst. 
+	{"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:28.065" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:28.065" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteAppInst data={"appinst": {"key": {"app_key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}, "cluster_inst_key": {"cloudlet_key": {"name": "tmocloud-1", "operator_key": {"name": "tmus"}}, "cluster_key": {"name": "autocluster"}, "developer": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:28.068" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:28.724" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteAppInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200214 12:30:29.037" level="DEBUG">resp={"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:29.037" level="DEBUG">content={"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:29.037" level="INFO">response:
+200
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted AppInst successfully"}}
+{"data":{"message":"Deleting auto-ClusterInst"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200214 12:30:29.037" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c408c0&gt;</msg>
+<msg timestamp="20200214 12:30:29.038" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteApp. 
+	{"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.038" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteApp data={"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.038" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteApp data={"app": {"key": {"name": "app1581705019-695211", "version": "1.0", "developer_key": {"name": "mobiledgex"}}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:29.040" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:29.409" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteApp HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:29.410" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:29.410" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:29.410" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:29.410" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c409e0&gt;</msg>
+<msg timestamp="20200214 12:30:29.410" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteFlavor. 
+	{"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.410" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.410" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteFlavor data={"flavor": {"key": {"name": "flavor1581705019-695211"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:29.412" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:29.784" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteFlavor HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:29.785" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:29.785" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:29.785" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:29.786" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c40290&gt;</msg>
+<msg timestamp="20200214 12:30:29.786" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode. 
+	{"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.786" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"}</msg>
+<msg timestamp="20200214 12:30:29.786" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteOperatorCode data={"operatorcode": {"operator_name": "tmus", "code": "2561"}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODE3OTE0MjAsImlhdCI6MTU4MTcwNTAyMCwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.OWob54Gw28BPbxbGDoaIqupFSqD2pKGaVlEZtARIu-WNBUkxTJ8I4bDSQQsCECPfFNpXFOfHraJEln4hEONsbg'} verify_cert=False</msg>
+<msg timestamp="20200214 12:30:29.788" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200214 12:30:30.163" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteOperatorCode HTTP/1.1" 200 2</msg>
+<msg timestamp="20200214 12:30:30.164" level="DEBUG">resp={}</msg>
+<msg timestamp="20200214 12:30:30.164" level="DEBUG">content={}</msg>
+<msg timestamp="20200214 12:30:30.164" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200214 12:30:30.165" level="INFO">[&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c40290&gt;, &lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c409e0&gt;, &lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c408c0&gt;, &lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c40050&gt;, &lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x104c53680&gt;]</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.166" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200214 12:30:27.390" endtime="20200214 12:30:30.166"></status>
+</kw>
+<doc>FindCloudlet - request shall return tmus with no gcp/azure cloudlet provisioned</doc>
+<status status="PASS" starttime="20200214 12:30:19.423" endtime="20200214 12:30:30.166"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0">Critical Tests</stat>
+<stat pass="1" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" id="s1" name="findCloudlet tmus carriername">findCloudlet tmus carriername</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200214 12:30:19.846" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200214 12:30:20.120" level="WARN">sending message</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Created ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:25.987" level="WARN">ddddd {"data":{"message":"Created AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Created ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Ready"}}</msg>
+<msg timestamp="20200214 12:30:27.217" level="WARN">ddddd {"data":{"message":"Created AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:27.223" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted ClusterInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Autodeleting AppInst MEXPrometheusAppName"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted AppInst successfully"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleting auto-ClusterInst"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"NotPresent"}}</msg>
+<msg timestamp="20200214 12:30:30.165" level="WARN">ddddd {"data":{"message":"Deleted ClusterInst successfully"}}</msg>
+</errors>
+</robot>
