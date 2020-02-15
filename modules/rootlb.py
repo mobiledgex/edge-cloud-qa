@@ -63,14 +63,16 @@ class Rootlb(Linux):
         if errcode != 0:
             raise Exception("cmd returned non-zero status of " + errcode)
 
-        print(output)
-        
+        output = [id.rstrip() for id in output]
+
         #ps_list = []
         #output.pop(0)  #remove header
         #for line in output:
         #    print('*WARN*', line)
         #    ps_dict = {'container_id': 
-        return output[0].rstrip()
+        #return output[0].rstrip()
+        
+        return output
 
     def get_docker_container_info(self, container_id):
         cmd = f'docker inspect --format="{{{{.State.Status}}}} {{{{.Config.Image}}}} {{{{.Path}}}}" {container_id}'
