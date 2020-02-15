@@ -24,8 +24,8 @@ import developer_pb2
 import developer_pb2_grpc
 #import clusterflavor_pb2
 #import clusterflavor_pb2_grpc
-import app_inst_pb2
-import app_inst_pb2_grpc
+import appinst_pb2
+import appinst_pb2_grpc
 import exec_pb2
 import exec_pb2_grpc
 import loc_pb2
@@ -966,7 +966,7 @@ class AppInstance():
 
 
         if appinst_key_dict:
-            appinst_dict['key'] = app_inst_pb2.AppInstKey(**appinst_key_dict)
+            appinst_dict['key'] = appinst_pb2.AppInstKey(**appinst_key_dict)
         
         if self.uri is not None:
             appinst_dict['uri'] = self.uri
@@ -978,7 +978,7 @@ class AppInstance():
         if self.crm_override:
             appinst_dict['crm_override'] = 1  # ignore errors from CRM
             
-        self.app_instance = app_inst_pb2.AppInst(**appinst_dict)
+        self.app_instance = appinst_pb2.AppInst(**appinst_dict)
 
         print(appinst_dict)
         print('s',self.app_instance)
@@ -1118,7 +1118,7 @@ class MexController(MexGrpc):
         self.flavor_stub = flavor_pb2_grpc.FlavorApiStub(self.grpc_channel)
         self.app_stub = app_pb2_grpc.AppApiStub(self.grpc_channel)
         self.dev_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
-        self.appinst_stub = app_inst_pb2_grpc.AppInstApiStub(self.grpc_channel)
+        self.appinst_stub = appinst_pb2_grpc.AppInstApiStub(self.grpc_channel)
         self.operator_stub = operator_pb2_grpc.OperatorApiStub(self.grpc_channel)
         self.developer_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
         self.exec_stub = exec_pb2_grpc.ExecApiStub(self.grpc_channel)
