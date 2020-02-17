@@ -30,7 +30,7 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
     ...  send findCloudlet with same coord as tmocloud-1 and no gcp/azure provisioned. return tmocloud-1
       log to console  ${appinst_1}
       Register Client  #developer_name=MobiledgeX
-      ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name}  latitude=31  longitude=-91
+      ${cloudlet}=  Find Cloudlet  carrier_name=${code}  latitude=31  longitude=-91
 
       ${fqdn_prefix_tcp}=             Catenate  SEPARATOR=  ${app_name_default}  -  tcp  .
       ${fqdn_prefix_udp}=             Catenate  SEPARATOR=  ${app_name_default}  -  udp  .

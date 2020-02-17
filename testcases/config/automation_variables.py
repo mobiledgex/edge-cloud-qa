@@ -13,7 +13,7 @@ cloudlet_name_openstack_gpu = 'automationDusseldorfCloudlet'
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'
 
-docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
 docker_image_developer = 'mobiledgex'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 
