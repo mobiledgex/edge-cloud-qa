@@ -141,9 +141,9 @@ ShowLogs - shall return error without invalid parms
     Should Contain  ${error3}  Error: Bad Request, Unable to parse Since field as duration or RFC3339 formatted time
     Should Contain  ${error4}  Error: Bad Request, Unable to parse Since field as duration or RFC3339 formatted time
 
-ShowLogs - shall return error VM apps
+ShowLogs - shall return error for VM apps
     [Documentation]
-    ...  execute Show Logs with no token
+    ...  execute Show Logs for VM 
     ...  verify error is received
 
     Create Flavor  region=US
