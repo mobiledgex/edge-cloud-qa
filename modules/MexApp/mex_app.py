@@ -186,16 +186,18 @@ class MexApp(object):
         if root_loadbalancer is not None:
             rb = rootlb.Rootlb(host=root_loadbalancer)
 
-        container_id = rb.get_docker_container_id()
-        logging.debug(container_id)
+        container_ids = rb.get_docker_container_id()
+        logging.debug(f'container_ids={container_ids}')
 
         for t in range(wait_time):
-            info = rb.get_docker_container_info(container_id)
-            if docker_image == info['image']:
-                if info['status'] == 'running':
-                    logging.info('Found running container:' + info['image'])
-                    return True
-            time.sleep(1)
+            for container_id in container_ids:
+                info = rb.get_docker_container_info(container_id)
+                if docker_image == info['image']:
+                    if info['status'] == 'running':
+                        logging.info('Found running container:' + info['image'])
+                        return True
+                logging.debug(f'no match. expecting={docker_image} got={info["image"]}')
+                time.sleep(1)
 
         raise Exception('Running docker container not found')
 

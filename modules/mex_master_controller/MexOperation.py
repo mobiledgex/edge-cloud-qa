@@ -3,6 +3,7 @@ import logging
 import time
 import threading
 import sys
+import subprocess
 
 import shared_variables
 
@@ -22,7 +23,10 @@ class MexOperation(MexRest):
                                'req_fail': 0},
                     'update': {'req_attempts': 0,
                                'req_success': 0,
-                               'req_fail': 0}
+                               'req_fail': 0},
+                    'run': {'req_attempts': 0,
+                            'req_success': 0,
+                            'req_fail': 0}
                     }
 
     def __init__(self, root_url, prov_stack=None, token=None, super_token=None, thread_queue=None):
@@ -114,3 +118,50 @@ class MexOperation(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def run(self, message_type='run', token=None, command=None, region=None, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
+        if use_defaults == True:
+            if token == None: token = self.token
+
+        cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest > /dev/null && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
+        cmd = f'{cmd_docker} {command} --token {token}'
+
+        def send_message():
+            self.counter_dict[message_type]['req_attempts'] += 1
+
+            try:
+                print('*WARN*',cmd)
+                process = subprocess.Popen(cmd,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE,
+                                           shell=True
+                )                
+
+                stdout = [line.decode('utf-8') for line in process.stdout.readlines()]
+                stderr = [line.decode('utf-8') for line in process.stderr.readlines()]
+                print('*WARN*', 'stdstderr', stdout, stderr)
+                if stderr:
+                    raise Exception(f'error={stderr}')
+                for line in stdout:
+                    if 'Error' in line:
+                        print('*WARN*', 'found error')
+                        raise Exception(f'error={stdout}')
+            except subprocess.CalledProcessError as e:
+                print('*WARN*','cpe',e)
+            except Exception as e:
+                self.counter_dict[message_type]['req_fail'] += 1
+                #raise Exception(f'error3={e}')
+                raise
+
+            self.counter_dict[message_type]['req_success'] += 1
+
+            return stdout
+        
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
+            resp = send_message()
+            return resp
+
