@@ -14,7 +14,7 @@ import queue
 import sys
 
 from mex_rest import MexRest
-from mex_controller_classes import ClusterInstance, RunCommand, Organization
+from mex_controller_classes import ClusterInstance, Organization
 
 from mex_master_controller.OrgCloudletPool import OrgCloudletPool
 from mex_master_controller.OrgCloudlet import OrgCloudlet
@@ -28,6 +28,7 @@ from mex_master_controller.Metrics import Metrics
 from mex_master_controller.Flavor import Flavor
 from mex_master_controller.OperatorCode import OperatorCode
 from mex_master_controller.PrivacyPolicy import PrivacyPolicy
+from mex_master_controller.RunCommand import RunCommand
 
 import shared_variables_mc
 import shared_variables
@@ -121,10 +122,6 @@ class MexMasterController(MexRest):
         self._number_showaccount_requests_success = 0
         self._number_showaccount_requests_fail = 0
 
-        self._number_runcommand_requests = 0
-        self._number_runcommand_requests_success = 0
-        self._number_runcommand_requests_fail = 0
-
         self.flavor = None
         self.app = None
         self.app_instance = None
@@ -135,7 +132,8 @@ class MexMasterController(MexRest):
         self.org_cloudlet = None
         self.operatorcode =  None
         self.privacy_policy =  None
-
+        self.run_cmd = None
+        
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
 
@@ -161,6 +159,7 @@ class MexMasterController(MexRest):
         self.org_cloudlet = OrgCloudlet(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.privacy_policy = PrivacyPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.run_cmd = RunCommand(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def get_supertoken(self):
         return self.super_token
@@ -1544,94 +1543,10 @@ class MexMasterController(MexRest):
             self.app_instance.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_name=app['data']['key']['app_key']['developer_key']['name'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name'], cluster_instance_developer_name=app['data']['key']['cluster_inst_key']['developer'], crm_override=crm_override)
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, json_data=None, use_defaults=True, use_thread=False):
-        #url = self.root_url + '/auth/ctrl/RunCommand'
+        return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread)
 
-        #payload = None
-        #run_command = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if developer_name is None and self.organization_name: developer_name = self.organization_name
-        runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, developer_name=developer_name, container_id=container_id).run_command
-
-        #if json_data !=  None:
-        #    payload = json_data
-        #else:
-        #    runcommand = RunCommand(command=command, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_name=developer_name).run_command
-        #    runcommand_dict = {'Execrequest': runcommand}
-        #    #if region is not None:
-        #    #    runcommand_dict['region'] = region
-
-        #    payload = json.dumps(runcommand_dict)
-
-        cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
-        cmd = f'{cmd_docker} mcctl --addr https://{self.mc_address} region RunCommand region={region} {runcommand} --token {token}'
-        #cmd_login = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
-        ##cmd = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --skipverify'
-        #cmd_run = f'mcctl --addr https://{self.mc_address} region RunCommand region={region} appname={app_name} appvers={app_version} developer={developer_name} cluster={cluster_instance_name} operator={operator_name} cloudlet={cloudlet_name} command={command} --token={token} --skipverify'
-        #if container_id:
-        #    cmd_run += f' containerid={container_id}'
-        ##cmd = cmd_login + '; ' + cmd_run + ';>/tmp/a'
-        #cmd = cmd_docker + ' ' + cmd_run
-        logger.info('run {} on mc.'.format(cmd))
-
-        def send_message():
-            self._number_runcommand_requests += 1
-
-            try:
-                #c = shlex.split(cmd)
-                print('*WARN*',cmd)
-                #out = subprocess.check_output(cmd, shell=True)
-                #print('*WARN*', out)
-                process = subprocess.Popen(cmd,
-                                           stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE,
-                                           shell=True
-                )                
-                #process = subprocess.Popen(shlex.split(cmd_run),
-                #                           stdout=subprocess.PIPE,
-                #                           stderr=subprocess.PIPE,
-                                           #stdout=open(log_file, 'w'),
-                                           #shell=True,
-                                           #env=env_dict,
-                                           #preexec_fn=os.setpgrp
-                #)
-                stdout = [line.decode('utf-8') for line in process.stdout.readlines()]
-                stderr = [line.decode('utf-8') for line in process.stderr.readlines()]
-                #stdout, stderr = process.communicate()
-                print('*WARN*', 'stdstderr', stdout, stderr)
-                if stderr:
-                    raise Exception(f'code={self.resp.status_code}', f'error={stderr}')
-                    #raise Exception('runCommand failed with stderr:' + stderr.decode('utf-8'))
-                for line in stdout:
-                    if 'Error' in line:
-                        print('*WARN*', 'found error')
-                        raise Exception(f'code={self.resp.status_code}', f'error={stdout}')
-                    #raise Exception('runCommand failed with error:' + stdout.decode('utf-8'))
-                print('*WARN*', 'stdstderrdddddd',)
-               # self.post(url=url, bearer=token, data=payload)
-               # logger.info('response:\n' + str(self.resp.text))
-
-                #if str(self.resp.status_code) != '200':
-                #    self._number_runcommand_requests_fail += 1
-                #    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except subprocess.CalledProcessError as e:
-                print('*WARN*','cpe',e)
-            except Exception as e:
-                self._number_runcommand_requests_fail += 1
-                raise Exception("runCommanddd failed:", e)
-
-            self._number_runcommand_requests_success += 1
-            return stdout
-        
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return resp
+    def show_logs(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, container_id=None, since=None, tail=None, time_stamps=None, follow=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.run_cmd.show_logs(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, container_id=container_id, since=since, tail=tail, time_stamps=time_stamps, follow=follow, use_defaults=use_defaults, use_thread=use_thread)
 
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
         if username is None: username = self.username
