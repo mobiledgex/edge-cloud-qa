@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  RunCommand for DeveloperManager/DeveloperContributor/DeveloperViewer
+Documentation  ShowLogs for DeveloperManager/DeveloperContributor/DeveloperViewer
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 
@@ -22,48 +22,46 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
-RunCommand - DeveloperManager shall be able to do RunCommand
+ShowLogs - DeveloperManager shall be able to do ShowLogs
     [Documentation]
-    ...  execute Run Command as DeveloperManager
-    ...  verify RunCommand is successful
+    ...  execute Show Logs as DeveloperManager
+    ...  verify ShowLogs is successful
 
     Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  root\r\n
+    Should Be Equal  ${stdout[0]}  here's some logs\r\n 
 
-RunCommand - DeveloperContributor shall be able to do RunCommand
+ShowLogs - DeveloperContributor shall be able to do ShowLogs
     [Documentation]
-    ...  execute Run Command as DeveloperContributor
-    ...  verify RunCommand is successful
+    ...  execute Show Logs as DeveloperContributor
+    ...  verify ShowLogs is successful
 
     Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  root\r\n
+    Should Be Equal  ${stdout[0]}  here's some logs\r\n 
 
-RunCommand - DeveloperViewer shall not be able to do RunCommand
+ShowLogs - DeveloperViewer shall be able to do ShowLogs
     [Documentation]
-    ...  execute RunCommand as DeveloperViewer
-    ...  verify error is received
+    ...  execute ShowLogs as DeveloperViewer
+    ...  verify ShowLogs is successful
 
-    #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"	
+    #EDGECLOUD-1446 ShowLogs for unauthorized user returns "Forbidden, Forbidden"	
 
     Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
 
-    log to console  xxxxxxxxx ${error}
-
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden 
+    Should Be Equal  ${stdout[0]}  here's some logs\r\n
 
 *** Keywords ***
 Setup
