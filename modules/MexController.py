@@ -1979,7 +1979,7 @@ class MexController(MexGrpc):
             logger.debug('show' + str(resp))
             logger.debug('level' + str(logging.getLogger().getEffectiveLevel()))
         else:
-            resp = list(self.appinst_stub.ShowAppInst(app_inst_pb2.AppInst()))
+            resp = list(self.appinst_stub.ShowAppInst(appinst_pb2.AppInst()))
         if logging.getLogger().getEffectiveLevel() == 10: # debug level
             logger.debug('app instance list:')
             for c in resp:
