@@ -30,7 +30,8 @@ ${operator_name_openstack_paradise}  GDDT
 ${physical_name_openstack_paradise}  paradise 
 ${operator_name_gcp}  gcp 
 
-${version}  version
+${version}   version
+${imgversion}	3.0.3
 
 ${test_timeout_crm}  60 min
 
@@ -167,35 +168,35 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on buckhorn openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  container_version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  container_version=${version}   package_version=${imgversion}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Sunnydale 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on sunnydale openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  container_version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_sunnydale}  cloudlet_name=${cloudlet_name_openstack_sunnydale}  container_version=${version}   package_version=${imgversion}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Hawkins 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on hawkins openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  container_version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  container_version=${version}   package_version=${imgversion}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Fairview 
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on fairview openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  container_version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  container_version=${version}   package_version=${imgversion}  use_defaults=${False}
 
 UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Paradise
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on paradise openstack
 
-        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  container_version=${version}  use_defaults=${False}
+        Update Cloudlet  region=EU  operator_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  container_version=${version}   package_version=${imgversion}  use_defaults=${False}
 
 *** Keywords ***
 Setup
-   ${version}=  Get Environment Variable  AUTOMATION_VERSION  version_not_set
+   ${version}  Get Environment Variable  AUTOMATION_VERSION  version_not_set
    Set Suite Variable  ${version}
 
 Cleanup Clusters and Apps
