@@ -88,7 +88,7 @@ class MexOperation(MexRest):
                     if 'Deleted Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
                 elif 'UpdateCloudlet' in url:
-                    if 'Updated Cloudlet successfully' not in str(self.resp.text):
+                    if 'Updated Cloudlet successfully' not in str(self.resp.text) or 'Upgraded Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
                 
             except Exception as e:
