@@ -1,4 +1,21 @@
 {
+  "secGroup":{
+    "create":[
+
+      [  100, "security group","create --description test huber-test","-f json"],
+      [  200, "security group rule","create --remote-ip 8.8.8.8 --dst-port 22 huber-test","-f json"],
+      [  300, "security group","list","-f json"],
+      [  300, "security group rule","list","-f json"]
+
+    ]
+    ,
+     "delete":[
+       [  100, "security","group delete huber-test"]
+      ]
+    },
+    
+
+
   "serverTest":{
     "create":[
       [  100, "network","create huber-mex-net01","-f json"],
