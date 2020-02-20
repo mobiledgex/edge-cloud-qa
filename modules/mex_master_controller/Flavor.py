@@ -23,7 +23,7 @@ class Flavor(MexOperation):
             if flavor_name is None: flavor_name = shared_variables.flavor_name_default
             if ram is None: ram = 1024 
             if vcpus is None: vcpus = 1 
-            if disk is None: disk = 1
+            if disk is None: disk = 20
 
         shared_variables.flavor_name_default = flavor_name
 
