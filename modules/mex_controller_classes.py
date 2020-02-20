@@ -152,7 +152,7 @@ class Cloudlet():
         self.cloudlet = cloudlet_dict
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -169,6 +169,7 @@ class ClusterInstance():
         self.deployment = deployment
         self.shared_volume_size = shared_volume_size
         self.privacy_policy = privacy_policy
+        self.reservable = reservable
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -252,6 +253,9 @@ class ClusterInstance():
 
         if self.privacy_policy is not None:
             clusterinst_dict['privacy_policy'] = self.privacy_policy
+
+        if self.reservable is not None:
+            clusterinst_dict['reservable'] = self.reservable
 
         if self.crm_override:
             if self.crm_override.lower() == "ignorecrm":
