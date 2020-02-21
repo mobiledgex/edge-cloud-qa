@@ -20,10 +20,10 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 operator_name = 'dmuus'
 cloud_name = 'tmocloud-1'
 flavor_name = 'c1.small' + str(time.time())
-#mex_cert = '/root/go/src/github.com/mobiledgex/edge-cloud/tls/out/localserver.crt'
+#mex_cert = '/root/go/src/github.com/mobiledgex/edge-cloud/tls/out/mex-client.crt'
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
