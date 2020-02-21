@@ -1054,7 +1054,7 @@ class MexController(MexGrpc):
 
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
     
-    def __init__(self, controller_address='127.0.0.1:55001', root_cert='mex-ca.crt', key='localserver.key', client_cert='localserver.crt'):
+    def __init__(self, controller_address='127.0.0.1:55001', root_cert='mex-ca.crt', key='mex-ca.key', client_cert='mex-ca.crt'):
         """The controller address and certs can be given at library import time.
         These will be used for controller operations
 

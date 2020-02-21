@@ -20,8 +20,8 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 flavor_name = str(time.time())
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

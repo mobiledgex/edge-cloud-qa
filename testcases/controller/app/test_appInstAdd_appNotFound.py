@@ -24,8 +24,8 @@ developer_name = 'developer' + stamp
 version = '1.0'
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 class tc(unittest.TestCase):
     def setUp(self):
