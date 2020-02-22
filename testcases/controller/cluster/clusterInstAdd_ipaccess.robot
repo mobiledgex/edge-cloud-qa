@@ -88,18 +88,21 @@ CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAcces
 
     Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
-CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessShared
+CreateClusterInst - shall not be able to create a azure clusterInst with ipaccess=IpAccessShared
     [Documentation]
     ...  create a azure cluster instance with ipaccess=IpAccessShared
-    ...  verify it is set to IpAccessDedicated
+    ...  verify error is received 
 
     [Setup]  Setup
     [Teardown]  Cleanup Provisioning
 
     # allocateIP sets azure/gcp to Dedicated
-    ${clusterInst}=  Create Cluster Instance  operator_name=${operator_name_azure}  cloudlet_name=${cloudlet_name_azure}  ip_access=IpAccessShared
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name_azure}  cloudlet_name=${cloudlet_name_azure}  ip_access=IpAccessShared
 
-    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   IpAccessShared not supported for operator: azure 
+
+    #Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
 CreateClusterInst - shall be to create a azure clusterInst with ipaccess=IpAccessUnknown
     [Documentation]
@@ -140,18 +143,21 @@ CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessD
 
     Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
-CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessShared
+CreateClusterInst - shall not be able to create a gcp clusterInst with ipaccess=IpAccessShared
     [Documentation]
     ...  create a gcp cluster instance with ipaccess=IpAccessShared
-    ...  verify it is set to IpAccessDedicated
+    ...  verify error is returned 
 
     [Setup]  Setup
     [Teardown]  Cleanup Provisioning
 
     # allocateIP sets azure/gcp to Dedicated
-    ${clusterInst}=  Create Cluster Instance  operator_name=${operator_name_gcp}  cloudlet_name=${cloudlet_name_gcp}  ip_access=IpAccessShared
+    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name_gcp}  cloudlet_name=${cloudlet_name_gcp}  ip_access=IpAccessShared
 
-    Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   IpAccessShared not supported for operator: gcp 
+
+    #Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
 CreateClusterInst - shall be to create a gcp clusterInst with ipaccess=IpAccessUnknown
     [Documentation]
@@ -179,15 +185,18 @@ CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessUnkno
     Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
     Should Be Equal             ${clusterInst.deployment}  docker
 
-CreateClusterInst - shall not be to create a clusterInst with ipaccess=IpAccessShared and deployment=docker
+CreateClusterInst - shall be able to create a clusterInst with ipaccess=IpAccessShared and deployment=docker
     [Documentation]
     ...  create a cluster instance with ipaccess=IpAccessShared and deployment=docker
-    ...  verify  error is received
+    ...  verify cluster is created 
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  number_masters=0  number_nodes=0
+    [Setup]  Setup
+    [Teardown]  Cleanup Provisioning
 
-   Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   Should Contain  ${error_msg}   IpAccess must be dedicated for deployment type docker
+    ${clusterInst}=  Create Cluster Instance  operator_name=${operator_name}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  number_masters=0  number_nodes=0
+
+    # should be set to Shared 
+    Should Be Equal As Numbers  ${clusterInst.ip_access}  3  #IpAccessShared
 
 CreateClusterInst - shall be to create a clusterInst with ipaccess=IpAccessDedicatedOrShared and deployment=docker
     [Documentation]
