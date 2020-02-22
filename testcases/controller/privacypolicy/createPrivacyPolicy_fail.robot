@@ -210,7 +210,7 @@ CreatePrivacyPolicy - CreateClusterInst with k8s shared shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_name=${operator_name_fake}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
-   Should Contain  ${error}  responseCode = 400. ResponseBody={"message":"PrivacyPolicy only supported for IP_ACCESS_DEDICATED"}
+   Should Contain  ${error}  responseCode = 400. ResponseBody={"message":"IpAccessShared not supported for privacy policy enabled cluster"}
 
 CreatePrivacyPolicy - CreateClusterInst with azure shall return error
    [Documentation]
