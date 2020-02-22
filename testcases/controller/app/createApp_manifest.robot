@@ -166,7 +166,7 @@ CreateApp - error shall be received wih deployment=kubernetes and http range acc
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2014,tcp:2015,tcp:2017,tcp:2018 defined in AccessPorts but missing from kubernetes manifest (note http is mapped to tcp)"
+    Should Contain  ${error_msg}   details = "Invalid deployment manifest, Port range not allowed for HTTP"
 
 CreateApp - http shall map to tcp wih deployment=kubernetes and manifest
     [Documentation]
