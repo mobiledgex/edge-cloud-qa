@@ -54,7 +54,7 @@ Create clusterInst for clustersvc on openstack
 
 *** Keywords ***
 Setup
-    Create Developer
+    #Create Developer
     Create Flavor
     #Create Cluster Flavor  cluster_flavor_name=${cluster_flavor_name}  
     #Create Cluster   default_flavor_name=${cluster_flavor_name}
