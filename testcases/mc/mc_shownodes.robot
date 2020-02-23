@@ -13,16 +13,18 @@ MC - User shall be able to show nodes
     ...  verify info is correct
 
    Login
+   ${token}=  Get Token
+
    ${nodes}=  Show Nodes  region=US
 #   log to console  ${nodes}
 
-   ${cloudlets}=  Show Cloudlets  region=US
+   ${cloudlets}=  Show Cloudlets  region=US  token=${token}  use_defaults=${False}
    ${num_cloudlets}=  Get Length  ${cloudlets}
    log to console  ${num_cloudlets}
 
    Controller Should Exist  ${nodes}
    DME Should Exist  ${nodes}
-   Hamburg CRM Should Exist  ${nodes}
+   #Hamburg CRM Should Exist  ${nodes}
    Azure CRM Should Exist    ${nodes}
    GCP CRM Should Exist      ${nodes}
 
@@ -78,15 +80,15 @@ Controller Should Exist
    Should Match Regexp             ${nodes[0]['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
    Should Match Regexp             ${nodes[0]['data']['hostname']}  ^controller-
 
-   ${op_len}=  Get Length  ${nodes[1]['data']['key']['cloudlet_key']['operator_key']}
-   #${build_head}=  Catenate  SEPARATOR=  ${nodes[1]['data']['build_master']}  +
-   Should Match Regexp             ${nodes[1]['data']['key']['name']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b:55001
-   Should Be Equal As Integers     ${nodes[1]['data']['key']['node_type']}  3
-   Should Be Equal As Integers     ${op_len}  0
-   Should Match Regexp             ${nodes[1]['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   #Should Be Equal                 ${nodes[1]['data']['build_head']}  ${build_head}
-   Should Match Regexp             ${nodes[1]['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   Should Match Regexp             ${nodes[1]['data']['hostname']}  ^controller-
+#   ${op_len}=  Get Length  ${nodes[1]['data']['key']['cloudlet_key']['operator_key']}
+#   #${build_head}=  Catenate  SEPARATOR=  ${nodes[1]['data']['build_master']}  +
+#   Should Match Regexp             ${nodes[1]['data']['key']['name']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b:55001
+#   Should Be Equal As Integers     ${nodes[1]['data']['key']['node_type']}  3
+#   Should Be Equal As Integers     ${op_len}  0
+#   Should Match Regexp             ${nodes[1]['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+#   #Should Be Equal                 ${nodes[1]['data']['build_head']}  ${build_head}
+#   Should Match Regexp             ${nodes[1]['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+#   Should Match Regexp             ${nodes[1]['data']['hostname']}  ^controller-
 
 DME Should Exist
    [Arguments]  ${nodes}
@@ -99,7 +101,7 @@ DME Should Exist
    \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^dme-
    \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  1
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  TDG
-   \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationBonnCloudlet 
+   \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  mexplat-qa-cloudlet 
 
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
    \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
@@ -146,7 +148,7 @@ Azure CRM Should Exist
    : FOR  ${node}  IN  @{nodes}
    \  log to console  ${node['data']}
    #\  ${name_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['name']}  automationHamburgCloudlet
-   \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^crmazurecentral- 
+   \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^gitlab-qa 
 
    \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  2
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  azure
@@ -155,7 +157,7 @@ Azure CRM Should Exist
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
    \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
 
-   \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^crmazurecentral-
+   \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^gitlab-qa
 
    \  ${found}=  Run Keyword And Return Status  Should Be True  ${name_match} and ${type_match} and ${operator_match} and ${cloudlet_match} and ${master_match} and ${head_match} and ${host_match}
 
@@ -172,7 +174,7 @@ GCP CRM Should Exist
    : FOR  ${node}  IN  @{nodes}
    \  log to console  ${node['data']}
    #\  ${name_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['name']}  automationHamburgCloudlet
-   \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^crmgcpcentral-
+   \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^gitlab-qa
 
    \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  2
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  gcp 
@@ -181,7 +183,7 @@ GCP CRM Should Exist
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
    \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
 
-   \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^crmgcpcentral-
+   \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^gitlab-qa
 
    \  ${found}=  Run Keyword And Return Status  Should Be True  ${name_match} and ${type_match} and ${operator_match} and ${cloudlet_match} and ${master_match} and ${head_match} and ${host_match}
 
@@ -225,13 +227,13 @@ Get Number Of CRMs
    [Arguments]   ${nodes}
    #{"data":{"key":{"name":"10.12.0.90:55001","node_type":3,"cloudlet_key":{"operator_key":{}}},"build_master":"v1.0.2-24-g277eca5","build_head":"v1.0.2-24-g277eca5","hostname":"controller-f8459444c-k6j2j"}}
 
-   ${count}=  Set Variable  1 
+   ${count}=  Set Variable  0 
    
    : FOR  ${node}  IN  @{nodes}
    \  Log to console  andy
    \  Log to console  ${count}
    \  Log to console  andy2
-   \  ${count}=  Evaluate  ${count} + 1
+#   \  ${count}=  Evaluate  ${count} + 1
    \  ${count}=  Run Keyword If  "${node['data']['key']['node_type']}" == "2"   Evaluate  ${count}+1  ELSE  Set Variable  ${count}
 
    [Return]  ${count}
