@@ -41,7 +41,7 @@ ${test_timeout_crm}  15 min
 *** Test Cases ***
 GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu 16
     [Documentation]
-    ...  delete Ubuntu 16 VM image with GPU support on openstack
+    ...  deploy Ubuntu 16 VM image with GPU support on openstack
     ...  verify app uses the GPU
 
     ${cluster_name_default}=  Get Default Cluster Name
