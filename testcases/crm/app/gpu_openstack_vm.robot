@@ -53,6 +53,8 @@ GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
 
+    Wait For DNS  ${cloudlet.fqdn}
+
     ${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
     ${image_full}=     Catenate  SEPARATOR=/  ${client_path}  ${image}
 
