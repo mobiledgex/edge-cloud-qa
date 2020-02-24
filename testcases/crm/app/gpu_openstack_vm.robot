@@ -55,6 +55,8 @@ GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu
 
     Wait For DNS  ${cloudlet.fqdn}
 
+    Sleep  30 s
+
     ${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
     ${image_full}=     Catenate  SEPARATOR=/  ${client_path}  ${image}
 
