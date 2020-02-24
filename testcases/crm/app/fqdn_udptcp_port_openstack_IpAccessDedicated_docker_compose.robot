@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation  use FQDN to access app on openstack with docker and IpAccessDedicated
 
-Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  MexApp
 Library  String
@@ -28,6 +28,8 @@ ${http_page}       automation.html
 ${docker_compose_url}=  http://35.199.188.102/apps/server_ping_threaded_compose.yml
 ${docker_image_path}=   docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 
+${region}=  EU
+
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
@@ -39,8 +41,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0 
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_name=mobiledgex  cluster_instance_developer_name=mobiledgex
+    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0   access_type=direct
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_name=mobiledgex  cluster_instance_developer_name=mobiledgex
 
     Register Client  developer_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -60,11 +62,11 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
 *** Keywords ***
 Setup
     #Create Developer
-    Create Flavor
+    Create Flavor  region=${region}
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_name=mobiledgex
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_masters=0  number_nodes=0  deployment=docker  developer_name=mobiledgex
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
