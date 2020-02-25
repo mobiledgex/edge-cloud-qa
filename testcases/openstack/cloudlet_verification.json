@@ -1,21 +1,47 @@
 {
 
-  "TestPorts":{
+  "TestPortsAndSet":{
     "create":[
-
   [  100, "network","create huber-mex-net01","-f json"],
-  [  200, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
-  [  300, "port","create --network huber-mex-net01 --fixed-ip subnet=huber-mex-subnet01 huber-test-port",""],
-  [  400, "router","create huber.mex.rtr01",""],
-  [  500, "router","add port huber.mex.rtr01 huber-test-port",""],
-  [  600, "port","list",""],
-  [  700, "router","show huber.mex.rtr01",""],
-  [  800, "router","remove port huber.mex.rtr01 huber-test-port",""]
+  [  200, "network","create huber-mex-net02","-f json"],
+  [  250, "port","create --network huber-mex-net02  huber-test-port-02","-f json"],
+  [  300, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+  [  350, "subnet","create huber-mex-subnet02  --network huber-mex-net02  --subnet-range 192.168.2.0/24","-f json"],
+  [  400, "port","create --network huber-mex-net01 huber-test-port-01","-f json"],
+  [  450, "router","create huber.mex.rtr01","-f json"],
+  [  500, "port","set --fixed-ip subnet=huber-mex-subnet02 huber-test-port-02",""],
+  [  550, "router","add port huber.mex.rtr01 huber-test-port-01",""],
+  [  600, "router","add port huber.mex.rtr01 huber-test-port-02",""],
+  [  650, "port","list","-f json"],
+  [  700, "router","show huber.mex.rtr01","-f json"]
 ]
 ,
  "delete":[
-  [  100, "router","delete  huber.mex.rtr01",""],
-  [  200, "network","delete huber-mex-net01",""]
+  [  100, "router","remove port huber.mex.rtr01 huber-test-port-01"],
+  [  200, "router","remove port huber.mex.rtr01 huber-test-port-02"],
+  [  300, "router","delete huber.mex.rtr01"],
+  [  400, "subnet","delete huber-mex-subnet01"],
+  [  500, "subnet","delete huber-mex-subnet02"],
+  [  600, "network","delete huber-mex-net01"],
+  [  700, "network","delete huber-mex-net02"]
+]
+},
+
+  "TestPorts":{
+    "create":[
+  [  100, "network","create huber-mex-net01","-f json"],
+  [  200, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+  [  300, "port","create --network huber-mex-net01 --fixed-ip subnet=huber-mex-subnet01 huber-test-port","-f json"],
+  [  400, "router","create huber.mex.rtr01","-f json"],
+  [  500, "router","add port huber.mex.rtr01 huber-test-port",""],
+  [  600, "port","list","-f json"],
+  [  700, "router","show huber.mex.rtr01","-f json"]
+]
+,
+ "delete":[
+  [  100, "router","remove port huber.mex.rtr01 huber-test-port",""],
+  [  200, "router","delete  huber.mex.rtr01",""],
+  [  300, "network","delete huber-mex-net01",""]
 ]
 },
 
@@ -24,7 +50,7 @@
       [  100, "security group","create --description test huber-test","-f json"],
       [  200, "security group rule","create --remote-ip 8.8.8.8 --dst-port 22 huber-test","-f json"],
       [  300, "security group","list","-f json"],
-      [  300, "security group rule","list","-f json"]
+      [  400, "security group rule","list","-f json"]
     ]
     ,
      "delete":[
