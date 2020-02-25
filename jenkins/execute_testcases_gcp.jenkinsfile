@@ -57,6 +57,8 @@ currentBuild.displayName = cycle
 
 node('jenkinsGcpSlave1'){
     stage('Checkout') {
+       sh 'docker system prune -af'  //remove all docker stuff without prompting
+
         // delete old protos before git and build
         dir('go/src/github.com/mobiledgex/protos') {
            sh 'rm -rf *'
