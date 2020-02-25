@@ -1,12 +1,30 @@
 {
-  "secGroup":{
+
+  "TestPorts":{
     "create":[
 
+  [  100, "network","create huber-mex-net01","-f json"],
+  [  200, "subnet","create huber-mex-subnet01  --network huber-mex-net01  --subnet-range 192.168.1.0/24","-f json"],
+  [  300, "port","create --network huber-mex-net01 --fixed-ip subnet=huber-mex-subnet01 huber-test-port",""],
+  [  400, "router","create huber.mex.rtr01",""],
+  [  500, "router","add port huber.mex.rtr01 huber-test-port",""],
+  [  600, "port","list",""],
+  [  700, "router","show huber.mex.rtr01",""],
+  [  800, "router","remove port huber.mex.rtr01 huber-test-port",""]
+]
+,
+ "delete":[
+  [  100, "router","delete  huber.mex.rtr01",""],
+  [  200, "network","delete huber-mex-net01",""]
+]
+},
+
+  "secGroup":{
+    "create":[
       [  100, "security group","create --description test huber-test","-f json"],
       [  200, "security group rule","create --remote-ip 8.8.8.8 --dst-port 22 huber-test","-f json"],
       [  300, "security group","list","-f json"],
       [  300, "security group rule","list","-f json"]
-
     ]
     ,
      "delete":[
