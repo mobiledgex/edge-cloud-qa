@@ -1264,14 +1264,17 @@ class MexOpenstack():
 
         cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
         try:
-            print('*WARN*', cmd)
             rb.run_command_on_node(node, cmd)
             logging.info('NVIDIA GPU is allocated')
         except:
             raise Exception('NVIDIA GPU is NOT allocated')
         
     def node_should_not_have_gpu(self, root_loadbalancer, node=None):
-        if self.node_should_have_gpu(root_loadbalancer, node):
-            raise Exception('NVIDIA GPU IS allocated')
-        
-        logging.info('NVIDIA GPU is not allocated')
+        try:
+            self.node_should_have_gpu(root_loadbalancer, node)
+        except:
+            logging.info('NVIDIA GPU is not allocated')
+            return
+
+        raise Exception('NVIDIA GPU is allocated')
+
