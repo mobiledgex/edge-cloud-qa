@@ -264,27 +264,45 @@ class MexApp(object):
         else:
             rb = self.rootlb
 
+        filename = None
         try:
             rb.mount_exists_on_pod(pod=pod_name, mount=mount)
             logging.info(f'mount={mount} exists on pod={pod_name}')
         except:
             raise Exception(f'mount={mount} DOES NOT exist on pod={pod_name}')
         try:
-            rb.write_file_to_pod(pod=pod_name, mount=mount)
+            filename = rb.write_file_to_pod(pod=pod_name, mount=mount)
             logging.info(f'successfully wrote file to pod={pod_name} on mount={mount}')
         except:
             raise Exception(f'error writing file to mount={mount} and pod={pod_name}. {sys.exc_info()[0]}')
 
-        node_file = f'/data/{cluster_name}_node.txt'
+        #node_file = f'/data/{cluster_name}_node.txt'
         try:
-            output = rb.read_file_from_pod(pod=pod_name, filename=node_file)
-            #logging.info('output', output)
-            assert output[0].rstrip() == cluster_name
+            output = rb.read_file_from_pod(pod=pod_name, filename=filename)
+            logging.info(f'output={output} expecting={cluster_name}')
+            assert output[0].rstrip() == pod_name
         except:
-            raise Exception(f'error. file not found on node for file={node_file} and pod={pod_name}. {sys.exc_info()[0]}')
+            raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
 
+        return filename
+    
+    def mount_should_persist(self, root_loadbalancer=None, cluster_name=None, operator_name=None, pod_name=None, mount=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+        else:
+            rb = self.rootlb
 
-        
+        filename = self.mount_should_exist_on_pod(root_loadbalancer=root_loadbalancer, cluster_name=cluster_name, operator_name=operator_name, pod_name=pod_name, mount=mount)
+        rb.delete_pod(pod_name=pod_name)
+
+        try:
+            output = rb.read_file_from_pod(pod=pod_name, filename=filename)
+            logging.info(f'output={output} expecting={cluster_name}')
+            assert output[0].rstrip() == pod_name
+        except:
+            raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
+
     def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
         rb = None
         if root_loadbalancer is not None:
