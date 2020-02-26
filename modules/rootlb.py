@@ -34,15 +34,42 @@ class Rootlb(Linux):
 
         return output
 
-    def get_pod(self, pod_name):
+    def get_pod(self, pod_name, pod_state=None):
         pod_list = self.get_pods()
 
         for pod in pod_list:
-            if pod_name in pod:
+            if pod_state:
+                state_found = pod.split()[2]
+            else:
+                state_found = pod_state
+            logging.info(f'looking for pod={pod_name} and state={state_found}')
+            if pod_name in pod and pod_state == state_found:
+                logging.info(f'found pod={pod_name}')
                 return pod.split()[0]
 
         raise Exception(f'pod with name={pod_name} not found')
 
+    def delete_pod(self, pod_name):
+        real_pod_name = self.get_pod(pod_name)
+        
+        cmd = f'KUBECONFIG={self.kubeconfig} kubectl delete pod {real_pod_name}'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        logging.info(f'waiting for pod restart of {pod_name}')
+        new_pod_name = None
+        for count in range(30):
+            try:
+                new_pod_name = self.get_pod(pod_name=pod_name, pod_state='Running')
+                if new_pod_name != real_pod_name:
+                    break
+            except:
+                sleep(1)
+                
+        if not new_pod_name:
+            raise Exception(f'pod={pod_name} of Running status not found')
+        
     def helm_list(self):
         cmd = f'KUBECONFIG={self.kubeconfig} helm list'
         logging.info('executing ' + cmd)
@@ -136,11 +163,14 @@ class Rootlb(Linux):
         if data:
             data_to_write = data
         else:
-            data_to_write = real_pod
-            
-        cmd = f'echo {data_to_write} > {mount}/{pod}.txt'
+            data_to_write = pod
+
+        filename = f'{mount}/{pod}.txt'
+        cmd = f'echo {data_to_write} > {filename}'
 
         self.run_command_on_pod(real_pod, cmd)
+
+        return filename
 
     def read_file_from_pod(self, pod, filename):
         logging.info(f'reading file on pod pod={pod} file={filename}')
