@@ -570,7 +570,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be between "+str(min)+" and "+str(max)+". Found: "+str(value)
             return result
         if ifmax and not ifmin:
             if  max>=value:
@@ -578,7 +578,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be less than "+str(max)+". Found: "+str(value)
             return result
         if not ifmax and ifmin:
             if min <= value :
@@ -586,7 +586,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be greater than "+str(min)+". Found: "+str(value)
             return result
 #and weird case
 #        if not ifmax and not ifmin:
@@ -1277,4 +1277,3 @@ class MexOpenstack():
             return
 
         raise Exception('NVIDIA GPU is allocated')
-
