@@ -171,33 +171,60 @@
   },
 
   "check_openstack_limits": {
-    "maxTotalInstances": {
-      "min": 100
-    },
-    "maxTotalRAMSize": {
-      "min": 512000
-    },
-    "maxSecurityGroups": {
-      "min": 10
-    },
-    "maxTotalCores": {
-      "min": 20
-    },
-    "maxTotalFloatingIps": {
-      "min": 10
-    },
-    "maxTotalVolumeGigabytes": {
-      "min": 5000
-    },
-    "maxTotalVolumes": {
-      "min": 100
-    },
-    "maxPersonalitySize": {
-      "key": "this is to show error when min or max keys do not exist"
-    },
-    "Parameternottobefound": {
-      "key": "this is to show error when parameter is not found in API"
-    }
+      "maxServerMeta": {
+        "min": 1280
+      },
+      "maxTotalInstances": {
+        "min": 100
+      },
+      "maxPersonality": {
+        "min": 50
+      },
+      "maxImageMeta": {
+        "min": 1280
+      },
+      "maxPersonalitySize": {
+        "min": 655360
+      },
+      "maxTotalRAMSize": {
+        "min": 512000
+      },
+      "maxServerGroups": {
+        "min": 10
+      },
+      "maxSecurityGroupRules": {
+        "min": 20
+      },
+      "maxTotalKeypairs": {
+        "min": 100
+      },
+      "maxSecurityGroups": {
+        "min": 10
+      },
+      "maxServerGroupMembers": {
+        "min": 10
+      },
+      "maxTotalFloatingIps": {
+        "min": 10
+      },
+      "maxTotalCores": {
+        "min": 200
+      },
+      "maxTotalBackups": {
+        "min": 10
+      },
+      "maxTotalVolumeGigabytes": {
+        "min": 5000
+      },
+      "maxTotalSnapshots": {
+        "min": 100
+      },
+      "maxTotalBackupGigabytes": {
+        "min": 1000
+      },
+      "maxTotalVolumes": {
+        "min": 100
+      }
   },
 
   "check_openstack_flavor_list": {
