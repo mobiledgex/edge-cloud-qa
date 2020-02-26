@@ -191,7 +191,7 @@ class Flavor():
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
             if ram is None: self.ram = 1024 
             if vcpus is None: self.vcpus = 1 
-            if disk is None: self.disk = 1
+            if disk is None: self.disk = 20
 
         shared_variables.flavor_name_default = self.flavor_name
 
