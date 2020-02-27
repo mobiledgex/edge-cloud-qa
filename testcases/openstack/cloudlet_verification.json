@@ -1,4 +1,22 @@
 {
+  "TestFlavors":{
+    "create":[
+      [  100, "flavor","create --ram 4096   --disk 40 --vcpus 2  --public huber.tst.01.flvr","-f json"],
+      [  200, "flavor","create --ram 16192  --disk 40 --vcpus 2  --public huber.tst.02.flvr","-f json"],
+      [  300, "flavor","create --ram 1024   --disk 20 --vcpus 1  --public huber.tst.03.flvr","-f json"],
+      [  400, "flavor","create --ram 4096   --disk 80 --vcpus 4  --public huber.tst.04.flvr","-f json"],
+      [  450, "flavor","create --ram 16192  --disk 80 --vcpus 16 --public huber.tst.05.flvr","-f json"],
+      [  500, "flavor","list","-f json"]
+]
+,
+ "delete":[
+  [  100, "flavor","delete huber.tst.01.flvr"],
+  [  200, "flavor","delete huber.tst.02.flvr"],
+  [  300, "flavor","delete huber.tst.03.flvr"],
+  [  400, "flavor","delete huber.tst.04.flvr"],
+  [  500, "flavor","delete huber.tst.05.flvr"]
+]
+},
 
   "TestPortsAndSet":{
     "create":[
