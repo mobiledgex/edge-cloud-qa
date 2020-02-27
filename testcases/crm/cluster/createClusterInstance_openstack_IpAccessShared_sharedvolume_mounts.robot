@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Shared Volume Mounts 
+Documentation  IpAccessShared Shared Volume Mounts 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT} 
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
@@ -7,7 +7,7 @@ Library  MexApp
 Library  String
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -15,6 +15,8 @@ Test Timeout    ${test_timeout_crm}
 ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name_openstack_shared}  automationBonnCloudlet
+${cloudlet_name_openstack_dedicated}  automationBonnCloudlet
+
 ${operator_name_openstack}  TDG
 
 ${region}  EU
@@ -30,13 +32,22 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-Shall be able to configure cluster/app with shared volume mounts
+Shall be able to configure IpAccessShared k8s cluster/app with shared volume mounts
     [Documentation]
-    ...  deploy app with manifest with shared volume mounts
+    ...  deploy IpAccessShared k8s cluster and app with manifest with shared volume mounts
     ...  verify mounts are persisted over pod restart
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating Cluster Instance
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared  number_nodes=1  shared_volume_size=1
+    Log To Console  Done Creating Cluster Instance
 
     Create App           region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
@@ -53,15 +64,3 @@ Shall be able to configure cluster/app with shared volume mounts
 *** Keywords ***
 Setup
     Create Flavor     region=${region}
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=1  shared_volume_size=1 
-    Log To Console  Done Creating Cluster Instance
-
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb}=  Convert To Lowercase  ${rootlb}
-
-    ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
-
-    Set Suite Variable  ${cloudlet_lowercase}
-
-    Set Suite Variable  ${rootlb}
