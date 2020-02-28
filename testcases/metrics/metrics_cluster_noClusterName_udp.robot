@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Cluster CPU Metrics with no cluster name
+Documentation   Cluster UDP Metrics with no cluster name
 
 #Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 #Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
@@ -7,7 +7,7 @@ Documentation   Cluster CPU Metrics with no cluster name
 #Library  DateTime
 #Library  String
 #Library  Collections
-Resource  ../metrics_cluster_library.robot
+Resource  metrics_cluster_library.robot
 	      
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
@@ -28,45 +28,45 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
-ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/operator/developer only
+ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/operator/developer only
    [Documentation]
-   ...  request all cluster CPU metrics with cloudlet/operator/developer on openstack
+   ...  request all cluster UDP metrics with cloudlet/operator/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   CPU Should be in Range  ${metrics}
+   UDP Should be in Range  ${metrics}
 
    #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
-ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/developer only
+ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/developer only
    [Documentation]
-   ...  request all cluster CPU metrics with cloudlet/developer on openstack
+   ...  request all cluster UDP metrics with cloudlet/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with cloudlet/developer only  ${cloudlet_name_openstack_metrics}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with cloudlet/developer only  ${cloudlet_name_openstack_metrics}  ${developer_name}  udp 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   CPU Should be in Range  ${metrics}
+   UDP Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
-ClusterMetrics - Shall be able to get the cluster CPU metrics with operator/developer only
+ClusterMetrics - Shall be able to get the cluster UDP metrics with operator/developer only
    [Documentation]
-   ...  request all cluster CPU metrics with operator/developer only
+   ...  request all cluster UDP metrics with operator/developer only
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with operator/developer only  ${operator}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with operator/developer only  ${operator}  ${developer_name}  udp 
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   CPU Should be in Range  ${metrics}
+   UDP Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
@@ -89,22 +89,24 @@ Setup
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-udp
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  udpSent
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  udpRecv
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  udpRecvErr
 
-CPU Should Be In Range
+UDP Should Be In Range
   [Arguments]  ${metrics}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -126,11 +128,13 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
 #   : FOR  ${reading}  IN  @{metrics_influx_t}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
-#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['cpu']}
+#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['udp']}
 #   \  ${index}=  Evaluate  ${index}+1
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}   ${reading[5]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['udpSent']}   ${reading[5]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecv']}   ${reading[6]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecvErr']}   ${reading[7]}
    \  ${index}=  Evaluate  ${index}+1
 
 Metrics Should Match Different Cluster Names
