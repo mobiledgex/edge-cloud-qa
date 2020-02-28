@@ -12,6 +12,8 @@ Resource  ../metrics_cluster_library.robot
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
 
+Test Timeout  ${test_timeout_crm}
+
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
 ${operator}=                       TDG
@@ -141,7 +143,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster UDP metrics with
    ...  request cluster UDP metrics with endtime=lastrecord
    ...  verify info is correct
 
-   EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
+   #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
    ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
@@ -268,7 +270,7 @@ UDP Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0
+   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
