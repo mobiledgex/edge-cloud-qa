@@ -12,6 +12,8 @@ Resource  ../metrics_cluster_library.robot
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
 
+Test Timeout  ${test_timeout_crm}
+
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
 ${operator}=                       GDDT
@@ -24,7 +26,7 @@ ${password_admin}=  mexadmin123
 ${username}=  mextester06
 ${password}=  mextester06123
 ${orgname}=   metricsorg
-	
+
 *** Test Cases ***
 ClusterMetrics - Shall be able to get the last k8s dedicated cluster CPU metric on openstack
    [Documentation]
@@ -141,7 +143,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster CPU metrics with
    ...  request cluster CPU metrics with endtime=lastrecord
    ...  verify info is correct
 
-   EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
+   #EDGECLOUD-1648 xMetrics - requesting metrics with endtime=lastrecord does not return the last record
 
    ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
 
@@ -241,8 +243,8 @@ Setup
    #${clustername}=  Get Default Cluster Name
    ${clustername_k8dedicated}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sdedicated
 
-   #${clustername_k8dedicated}=   Set Variable  cluster1574873355-539982-docker 
-   #${developer_name}=  Set Variable  developer1574873355-539982 
+   #${clustername_k8dedicated}=   Set Variable  cluster1582758935-850827-k8sdedicated 
+   #${developer_name}=  Set Variable  mobiledgex 
 
    Set Suite Variable  ${clustername_k8dedicated}
    Set Suite Variable  ${developer_name}

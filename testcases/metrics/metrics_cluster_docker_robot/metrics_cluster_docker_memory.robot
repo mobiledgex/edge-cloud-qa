@@ -11,7 +11,7 @@ Resource  ../metrics_cluster_library.robot
 			      
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
-Test Timeout  ${test_timeout}
+Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
@@ -141,7 +141,7 @@ ClusterMetrics - Shall be able to get the docker cluster Memory metrics with end
    ...  request cluster Memory metrics with endtime=lastrecord
    ...  verify info is correct
 
-   EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
+   #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
    ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
