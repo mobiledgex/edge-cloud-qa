@@ -1,4 +1,16 @@
 {
+
+  "TestImage":{
+    "create":[
+  [  100,  "image","create --file /Users/hubertjanczak/mobiledgex-v3.0.3.qcow2 huber.image.tst","-f json"],
+  [  200,  "image","list","-f json"]
+]
+,
+ "delete":[  
+  [  100,  "image","delete huber.image.tst"]
+]
+},
+
   "TestFlavors":{
     "create":[
       [  100, "flavor","create --ram 4096   --disk 40 --vcpus 2  --public huber.tst.01.flvr","-f json"],
