@@ -17,6 +17,8 @@ class AppInstance(MexOperation):
         self.show_url = '/auth/ctrl/ShowAppInst'
         self.update_url = '/auth/ctrl/UpdateAppInst'
         self.metrics_client_url = '/auth/metrics/client'
+        self.metrics_app_url = '/auth/metrics/app'
+        self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
     def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
         
@@ -111,12 +113,13 @@ class AppInstance(MexOperation):
             elif crm_override.lower() == "IgnoreCrmAndTransientState":
                 crm_override = 4
             appinst_dict['crm_override'] = crm_override  # ignore errors from CRM
+        print('*WARN*', 'fffff', appinst_dict)
             
         return appinst_dict
 
-    def _build_metrics(self, type_dict=None, method=None, cellid=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
+    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
         metric_dict = {}
-        print('*WARN*', cellid)
+        print('*WARN*', cell_id)
         if type_dict is not None:
             metric_dict.update(type_dict)
         if selector is not None:
@@ -132,8 +135,8 @@ class AppInstance(MexOperation):
             metric_dict['endtime'] = end_time
         if method is not None:
             metric_dict['method'] = method
-        if cellid is not None:
-            metric_dict['cellid'] = int(cellid)
+        if cell_id is not None:
+            metric_dict['cellid'] = int(cell_id)
 
         return metric_dict
 
@@ -171,8 +174,8 @@ class AppInstance(MexOperation):
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
     
-    def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cellid=None, json_data=None, use_defaults=True, use_thread=False):
-        print('*WARN*', 'c',cellid)
+    def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        print('*WARN*', 'c',cell_id)
         app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, use_defaults=False)
         app_inst_metric = app_inst
         app_inst_metric['appinst'] = app_inst['key']
@@ -180,6 +183,31 @@ class AppInstance(MexOperation):
 
 
 
-        msg_dict = self._build_metrics(type_dict=app_inst_metric, method='FindCloudlet', cellid=cellid, selector='api', last=last, start_time=start_time, end_time=end_time)
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, method='FindCloudlet', cell_id=cell_id, selector='api', last=last, start_time=start_time, end_time=end_time)
 
         return self.show(token=token, url=self.metrics_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def get_app_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False)
+        app_inst_metric = app_inst
+        app_inst_metric['appinst'] = app_inst['key']
+        del app_inst_metric['key']
+
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
+
+        return self.show(token=token, url=self.metrics_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=True)
+        #app_inst_metric = app_inst
+        print('*WARN*', 'xxxx', app_inst)
+        app_inst_metric = {'appinstclientkey': app_inst}
+        print('*WARN*', 'xxxx2', app_inst_metric)
+
+        #del app_inst_metric['key']
+
+        #msg_dict = self._build_metrics(type_dict=app_inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
+
+        return self.show(token=token, url=self.show_appinst_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=app_inst_metric)
+
+    
