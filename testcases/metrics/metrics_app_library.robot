@@ -57,6 +57,25 @@ Get the last 5 app metrics on openstack
    Should Be Equal As Integers  ${num_readings}  5
 
    [Return]  ${metrics}  ${metrics_influx}
+
+Get the last 5 app metrics on openstack for multiple selectors
+   [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
+
+   #${contains}=  Evaluate   "," in """${selector}""" or "*" in """${selector}"""
+
+   ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5
+   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics['data'][0]['Series']}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   [Return]  ${metrics}  #${metrics_influx}
 	
 Get the last 10 app metrics on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
@@ -364,7 +383,7 @@ Get app metrics with starttime and endtime on openstack
    log to console  ${epochpre}
    log to console  ${epoch_first}
    log to console  ${epoch_last}
-   Should Be True  (${epoch_first} - ${epoch_last}) < 30  # difference should be about 30min
+   Should Be True  (${epoch_first} - ${epoch_last}) < 60  # difference should be about 30min
    Should Be True  ${epoch_first} < ${epochpre}
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
