@@ -71,15 +71,20 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
+   ${openstack_rootlb}=       Catenate  SEPARATOR=.  ${cluster_name}  ${cloudlet_lowercase}
 
    ${server_info_node}=    Get Server List  name=${openstack_node_name}
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
+   ${server_info_rootlb}=  Get Server List  name=${openstack_rootlb}
 
    # verify master and node have gpu_flavor
    Should Be Equal       ${server_info_node[0]['Flavor']}    ${openstack_flavor_name} 
    Should Not Be Equal   ${server_info_master[0]['Flavor']}  ${openstack_flavor_name} 
+   Should Not Be Equal   ${server_info_rootlb[0]['Flavor']}  ${openstack_flavor_name}
+
    Should Be Equal       ${server_info_node[0]['Status']}    ACTIVE
    Should Be Equal       ${server_info_master[0]['Status']}  ACTIVE
+   Should Be Equal       ${server_info_rootlb[0]['Status']}  ACTIVE
 
    Should Be Equal              ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name}
    Should Be Equal              ${cluster_inst['data']['deployment']}   kubernetes
@@ -90,6 +95,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
    # verify the NVIDIA is allocated
    Node Should Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
    Node Should Not Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_master[0]['Networks']}
+   Node Should Not Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_rootlb[0]['Networks']}
 
 GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    [Documentation]
