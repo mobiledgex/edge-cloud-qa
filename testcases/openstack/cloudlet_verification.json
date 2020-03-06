@@ -1,33 +1,5 @@
 {
 
-
-
-
-  "zxspectrum":{
-    "create":[
-  [  100, "network","create mex.test.net01","-f json"],
-  [  200, "network","create mex.test.net02","-f json"],
-  [  250, "port","create --network mex.test.net02  mex-test-port-02","-f json"],
-  [  300, "subnet","create mex.test.subnet01  --network mex.test.net01  --subnet-range 192.168.1.0/24","-f json"],
-  [  350, "subnet","create mex.test.subnet02  --network mex.test.net02  --subnet-range 192.168.2.0/24","-f json"],
-  [  400, "port","create --network mex.test.net01 mex-test-port-01","-f json"],
-  [  450, "router","create mex.test.rtr01","-f json"],
-  [  500, "port","set --fixed-ip subnet=mex.test.subnet02 mex-test-port-02",""],
-  [  550, "router","add port mex.test.rtr01 mex-test-port-01",""],
-  [  600, "router","add port mex.test.rtr01 mex-test-port-02",""]
-]
-,
- "delete":[
-]
-},
-
-"cl":{
-  "ForceDelete":[  
-  [  300, "router", "mex.test.rtr01"]
-  ]
-},
-
-
   "CleanUpSpace":{
       "ForceDelete":[  
       [  100, "server","mex.test.server"   ],
