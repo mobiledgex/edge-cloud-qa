@@ -27,7 +27,7 @@ ClusterMetrics - Shall be able to get the last 5 k8s shared cluster CPU/Network/
    ...  request cluster CPU metrics with all selectors
    ...  verify info is correct
 
-   ${metrics}=  Get the last 5 cluster metrics on openstack for multiple selectors     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu,network,tcp,udp,mem,disk
+   ${metrics}=  Get the last 5 cluster metrics on openstack for multiple selectors     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu,mem,disk,network,tcp,udp
 
    #Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
