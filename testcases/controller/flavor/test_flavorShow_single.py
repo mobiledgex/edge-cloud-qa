@@ -20,7 +20,7 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 stamp = str(time.time())
 flavor_name = 'flavor' + stamp
 ram = 1024
-disk = 1
+disk = 20
 vcpus = 1
 
 mex_root_cert = 'mex-ca.crt'
