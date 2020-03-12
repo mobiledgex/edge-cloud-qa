@@ -60,7 +60,7 @@ node('jenkinsGcpSlave1'){
        try {
           sh 'docker system prune -af'  //remove all docker stuff without prompting
         } catch (err) {
-           echo err
+           echo 'docker prune failed. mayber already running'
         }
         // delete old protos before git and build
         dir('go/src/github.com/mobiledgex/protos') {
