@@ -88,17 +88,35 @@ class MexApp(object):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
-        
-        self.ping_udp_port(host, int(port))
-        return True
 
+        for attempt in range(1,4):
+            logging.debug(f'UDP port attempt {attempt}')
+            try:
+                self.ping_udp_port(host, int(port))
+                return True
+            except Exception as e:
+                logging.debug(f'udp exception caught:{e}')
+                if attempt == 3:
+                    raise Exception(e)
+                else:
+                    time.sleep(1)
+                
     def tcp_port_should_be_alive(self, host, port, wait_time=0):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
-        
-        self.ping_tcp_port(host, port, wait_time)
-        return True
+
+        for attempt in range(1,4):
+            logging.debug(f'TCP port attempt {attempt}')
+            try:
+                self.ping_tcp_port(host, port, wait_time)
+                return True
+            except Exception as e:
+                logging.debug(f'tcp exception caught:{e}')
+                if attempt == 3:
+                    raise Exception(e)
+                else:
+                    time.sleep(1)
 
     def http_port_should_be_alive(self, host, port, page):
         logging.info('host:' + host + ' port:' + str(port))
@@ -311,4 +329,15 @@ class MexApp(object):
             rb = self.rootlb
 
         rb.write_file_to_node(node=node, mount=mount, data=data)
+        
+
+    def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+        else:
+            rb = self.rootlb
+
+        pod = rb.get_pod(pod_name)
+        return rb.run_command_on_pod(pod, command)
         
