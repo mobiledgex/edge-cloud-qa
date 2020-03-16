@@ -14,14 +14,14 @@ import clusterinst_pb2
 import clusterinst_pb2_grpc
 import cloudlet_pb2
 import cloudlet_pb2_grpc
-import operator_pb2
-import operator_pb2_grpc
+#import operator_pb2
+#import operator_pb2_grpc
 import flavor_pb2
 import flavor_pb2_grpc
 import app_pb2
 import app_pb2_grpc
-import developer_pb2
-import developer_pb2_grpc
+#import developer_pb2
+#import developer_pb2_grpc
 #import clusterflavor_pb2
 #import clusterflavor_pb2_grpc
 import appinst_pb2
@@ -1118,10 +1118,10 @@ class MexController(MexGrpc):
         self.cloudlet_stub = cloudlet_pb2_grpc.CloudletApiStub(self.grpc_channel)
         self.flavor_stub = flavor_pb2_grpc.FlavorApiStub(self.grpc_channel)
         self.app_stub = app_pb2_grpc.AppApiStub(self.grpc_channel)
-        self.dev_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
+#        self.dev_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
         self.appinst_stub = appinst_pb2_grpc.AppInstApiStub(self.grpc_channel)
-        self.operator_stub = operator_pb2_grpc.OperatorApiStub(self.grpc_channel)
-        self.developer_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
+#        self.operator_stub = operator_pb2_grpc.OperatorApiStub(self.grpc_channel)
+#        self.developer_stub = developer_pb2_grpc.DeveloperApiStub(self.grpc_channel)
         self.exec_stub = exec_pb2_grpc.ExecApiStub(self.grpc_channel)
 
         self._init_shared_variables()
