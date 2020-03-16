@@ -34,7 +34,7 @@ class tc(unittest.TestCase):
         self.flavor_name = 'c1.small' + stamp
         self.developer_name = 'developer' + stamp
 
-        self.operator = mex_controller.Operator(operator_name = self.operator_name)        
+#        self.operator = mex_controller.Operator(operator_name = self.operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = self.cloud_name,
                                                 operator_org_name = self.operator_name,
                                                 number_of_dynamic_ips = 254)
