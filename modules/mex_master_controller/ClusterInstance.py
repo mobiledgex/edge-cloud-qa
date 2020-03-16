@@ -31,7 +31,7 @@ class ClusterInstance(MexOperation):
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
             if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
             if flavor_name is None: flavor_name = shared_variables.flavor_name_default
-            if developer_org_name is None: developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
             if liveness is None: liveness = 1
             if deployment == 'kubernetes':
                 if number_masters is None: number_masters = 1
@@ -71,7 +71,7 @@ class ClusterInstance(MexOperation):
             clusterinst_key_dict['cluster_key'] = {'name': cluster_name}
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_key_dict
-        if developer_name is not None:
+        if developer_org_name is not None:
             clusterinst_key_dict['organization'] = developer_org_name
 
         if clusterinst_key_dict:
@@ -115,8 +115,8 @@ class ClusterInstance(MexOperation):
 
         return clusterinst_dict
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
         thread_name = None
@@ -125,14 +125,14 @@ class ClusterInstance(MexOperation):
 
         msg_dict_delete = None
         if auto_delete and 'key' in msg:
-            msg_delete = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cluster_key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cluster_key']['cloudlet_key']['name'], developer_org_name=msg['key']['cluster_key']['organization'], use_defaults=False)
+            msg_delete = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_delete = {'clusterinst': msg_delete}
 
         msg_dict_show = None
         if 'key' in msg:
-            msg_delete = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cluster_key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cluster_key']['cloudlet_key']['name'], developer_org_name=msg['key']['cluster_key']['organization'], use_defaults=False)
+            msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_show = {'clusterinst': msg_show}
-        
+        print('*WARN*', use_defaults, region)        
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
 
 
