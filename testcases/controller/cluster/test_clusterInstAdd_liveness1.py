@@ -42,14 +42,14 @@ class tc(unittest.TestCase):
 
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         #self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
         #                                 default_flavor_name=flavor_name)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                              cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
+                                                             operator_org_name=operator_name,
                                                              flavor_name=flavor_name,
                                                              liveness=1)
         self.controller.create_flavor(self.flavor.flavor)

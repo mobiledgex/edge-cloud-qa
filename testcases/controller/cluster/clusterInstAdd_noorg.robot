@@ -16,7 +16,7 @@ CreateClusterInst - create a clusterinst with org that doesnot exist should fail
     ...  create a cluster instance with an org that does not exist
     ...  verify correct error occurs
 
-    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_name=${operator_name_fake}  cloudlet_name=${cloudlet_name_fake}  developer_name=notexist  number_masters=1  number_nodes=0
+    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name_fake}  developer_org_name=notexist  number_masters=1  number_nodes=0
 
     ${code}=  Response Status Code
     ${body}=  Response Body

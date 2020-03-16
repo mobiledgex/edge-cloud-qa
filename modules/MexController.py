@@ -319,18 +319,18 @@ class Cluster():
         return found_cluster
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, use_defaults=True):
+    def __init__(self, operator_org_name=None, cluster_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, use_defaults=True):
 
         self.cluster_instance = None
 
         self.cluster_name = cluster_name
-        self.operator_name = operator_name
+        self.operator_org_name = operator_org_name
         self.cloudlet_name = cloudlet_name
         self.flavor_name = flavor_name
         self.crm_override = crm_override
         self.liveness = liveness
         self.ip_access = ip_access
-        self.developer_name = developer_name
+        self.developer_org_name = developer_org_name
         self.number_masters = number_masters
         self.number_nodes = number_nodes
         self.deployment = deployment
@@ -346,9 +346,9 @@ class ClusterInstance():
         if use_defaults:
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if operator_name is None: self.operator_name = shared_variables.operator_name_default
+            if operator_org_name is None: self.operator_org_name = shared_variables.operator_name_default
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
-            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: self.developer_org_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
             if self.deployment is None or self.deployment == 'kubernetes':
                 if number_masters is None: self.number_masters = 1
@@ -376,11 +376,11 @@ class ClusterInstance():
 
         shared_variables.cluster_name_default = self.cluster_name
         shared_variables.cloudlet_name_default = self.cloudlet_name
-        shared_variables.operator_name_default = self.operator_name
+        shared_variables.operator_name_default = self.operator_org_name
 
 
-        if self.operator_name is not None:
-            cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
+        if self.operator_org_name is not None:
+            cloudlet_key_dict['organization'] = self.operator_org_name
         if self.cloudlet_name:
             cloudlet_key_dict['name'] = self.cloudlet_name
             
@@ -388,8 +388,8 @@ class ClusterInstance():
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(name = self.cluster_name)
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
-        if self.developer_name is not None:
-            clusterinst_key_dict['developer'] = self.developer_name
+        if self.developer_org_name is not None:
+            clusterinst_key_dict['organization'] = self.developer_org_name
 
         if clusterinst_key_dict:
             clusterinst_dict['key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
@@ -458,7 +458,7 @@ class ClusterInstance():
         #print(self.cluster_instance)
 
     def __eq__(self, c):
-        if c.key.cluster_key.name == self.cluster_name and c.key.cloudlet_key.operator_key.name == self.operator_name and c.key.cloudlet_key.name == self.cloudlet_name and c.flavor.name == self.flavor_name and c.state == self.state and c.liveness == self.liveness:
+        if c.key.cluster_key.name == self.cluster_name and c.key.cloudlet_key.organization == self.operator_org_name and c.key.cloudlet_key.name == self.cloudlet_name and c.flavor.name == self.flavor_name and c.state == self.state and c.liveness == self.liveness:
             #print('contains')
             return True
         else:
@@ -479,13 +479,13 @@ class ClusterInstance():
         return found_cluster
 
 class Cloudlet():
-    def __init__(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, platform_type=None, physical_name=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_org_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, platform_type=None, physical_name=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
         #global cloudlet_name_default
         #global operator_name_default
 
         _fields_list = []
         self.cloudlet_name = cloudlet_name
-        self.operator_name = operator_name
+        self.operator_org_name = operator_org_name
         self.accesscredentials = accesscredentials
         self.latitude = latitude
         self.longitude = longitude
@@ -499,7 +499,7 @@ class Cloudlet():
         
         print('*WARN*', vars(loc_pb2.Loc))
         # used for UpdateCloudelet - hardcoded from proto
-        self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.OPERATOR_KEY_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
+        self._cloudlet_operator_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.ORGANIZATION_FIELD_NUMBER) + '.' + str(operator_pb2.OperatorKey.NAME_FIELD_NUMBER)
         self._cloudlet_name_field = str(cloudlet_pb2.Cloudlet.KEY_FIELD_NUMBER) + '.' + str(cloudlet_pb2.CloudletKey.NAME_FIELD_NUMBER)
         #self._cloudlet_accesscredentials_field = str(cloudlet_pb2.Cloudlet.ACCESS_CREDENTIALS_FIELD_NUMBER)
         self._cloudlet_latitude_field = str(cloudlet_pb2.Cloudlet.LOCATION_FIELD_NUMBER) + '.' + str(loc_pb2.Loc.LATITUDE_FIELD_NUMBER)
@@ -510,8 +510,8 @@ class Cloudlet():
 
         if cloudlet_name is None and use_defaults == True:
             self.cloudlet_name = shared_variables.cloudlet_name_default
-        if operator_name is None and use_defaults == True:
-            self.operator_name = shared_variables.operator_name_default
+        if operator_org_name is None and use_defaults == True:
+            self.operator_org_name = shared_variables.operator_name_default
         if latitude is None and use_defaults == True:
             self.latitude = 10
         if longitude is None and use_defaults == True:
@@ -536,13 +536,13 @@ class Cloudlet():
 
         if cloudlet_name == 'default':
             self.cloudlet_name = shared_variables.cloudlet_name_default
-        if operator_name == 'default':
-            self.operator_name = shared_variables.operator_name_default
+        if operator_org_name == 'default':
+            self.operator_org_name = shared_variables.operator_name_default
         if number_of_dynamic_ips == 'default':
             self.number_of_dynamic_ips = 254
 
         shared_variables.cloudlet_name_default = self.cloudlet_name
-        shared_variables.operator_name_default = self.operator_name
+        shared_variables.operator_name_default = self.operator_org_name
 
         if self.ipsupport == "IpSupportUnknown":
             self.ipsupport = 0
@@ -562,8 +562,8 @@ class Cloudlet():
             self.platform_type = 4
         
         cloudlet_key_dict = {}
-        if self.operator_name is not None:
-            cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
+        if self.operator_org_name is not None:
+            cloudlet_key_dict['organization'] = self.operator_org_name
             _fields_list.append(self._cloudlet_operator_field)
         if self.cloudlet_name is not None:
             cloudlet_key_dict['name'] = self.cloudlet_name
@@ -668,13 +668,13 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
         self.app_name = app_name
         self.app_version = app_version
-        self.developer_name = developer_name
+        self.developer_org_name = developer_org_name
         self.image_type = image_type
         self.image_path = image_path
         #self.config = config
@@ -706,7 +706,7 @@ class App():
 
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
-            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: self.developer_org_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
             if image_type is None: self.image_type = 'imagetypedocker'
             #if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
@@ -756,8 +756,8 @@ class App():
             self.app_name = shared_variables.app_name_default
         if self.app_version == 'default':
             self.app_version = shared_variables.app_version_default
-        if self.developer_name == 'default':
-            self.developer_name = shared_variables.developer_name_default
+        if self.developer_org_name == 'default':
+            self.developer_org_name = shared_variables.developer_name_default
         #if self.cluster_name == 'default':
         #    self.cluster_name = shared_variables.cluster_name_default
         if self.default_flavor_name == 'default':
@@ -772,8 +772,8 @@ class App():
             app_key_dict['name'] = self.app_name
         if self.app_version:
             app_key_dict['version'] = self.app_version
-        if self.developer_name is not None:
-            app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
+        if self.developer_org_name is not None:
+            app_key_dict['organization'] = self.developer_org_name
 
         if 'name' in app_key_dict or self.app_version or 'developer_key' in app_key_dict:
             app_dict['key'] = app_pb2.AppKey(**app_key_dict)
@@ -814,6 +814,7 @@ class App():
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
+        shared_variables.developer_name_default = self.developer_org_name
         
         #self.app_complete = copy.copy(self.app)
         #self.app_complete.image_path = self.image_path
@@ -867,13 +868,13 @@ class App():
         return str
     
 class AppInstance():
-    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_name=None, developer_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
+    def __init__(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
         self.appinst_id = appinst_id
         self.app_name = app_name
         self.app_version = app_version
-        self.developer_name = developer_name
-        self.cluster_developer_name = cluster_instance_developer_name
-        self.operator_name = operator_name
+        self.developer_org_name = developer_org_name
+        self.cluster_developer_org_name = cluster_instance_developer_org_name
+        self.operator_org_name = operator_org_name
         self.cloudlet_name = cloudlet_name
         self.uri = uri
         self.flavor_name = flavor_name
@@ -885,24 +886,24 @@ class AppInstance():
         
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
-        if self.developer_name == 'default':
-            self.developer_name = shared_variables.developer_name_default
+        if self.developer_org_name == 'default':
+            self.developer_org_name = shared_variables.developer_name_default
         if self.app_version == 'default':
             self.app_version = shared_variables.app_version_default
-        if self.operator_name == 'default':
-            self.operator_name = shared_variables.operator_name_default
+        if self.operator_org_name == 'default':
+            self.operator_org_name = shared_variables.operator_name_default
         if self.cloudlet_name == 'default' and self.operator_name != 'developer':  # special case for platos where they use operator=developer and cloudlet=default
             self.cloudlet_name = shared_variables.cloudlet_name_default
 
         if use_defaults:
             if not app_name: self.app_name = shared_variables.app_name_default
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
-            if not developer_name: self.developer_name = shared_variables.developer_name_default
+            if not developer_org_name: self.developer_org_name = shared_variables.developer_name_default
             if not cluster_instance_name: self.cluster_name = shared_variables.cluster_name_default
-            if not cluster_instance_developer_name: self.cluster_developer_name = shared_variables.developer_name_default
+            if not cluster_instance_developer_org_name: self.cluster_developer_org_name = shared_variables.developer_name_default
             if not app_version: self.app_version = shared_variables.app_version_default
             if not cloudlet_name: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if not operator_name: self.operator_name = shared_variables.operator_name_default
+            if not operator_org_name: self.operator_org_name = shared_variables.operator_name_default
 
         if self.cluster_name == 'default':
             self.cluster_name = shared_variables.cluster_name_default
@@ -916,7 +917,7 @@ class AppInstance():
         elif self.autocluster_ipaccess == 'IpAccessShared':
             self.autocluster_ipaccess = 3
 
-        shared_variables.operator_name_default = self.operator_name
+        shared_variables.operator_name_default = self.operator_org_name
 
         appinst_dict = {}
         appinst_key_dict = {}
@@ -930,8 +931,8 @@ class AppInstance():
             app_key_dict['name'] = self.app_name
         if self.app_version:
             app_key_dict['version'] = self.app_version
-        if self.developer_name is not None:
-            app_key_dict['developer_key'] = developer_pb2.DeveloperKey(name=self.developer_name)
+        if self.developer_org_name is not None:
+            app_key_dict['organization'] = self.developer_org_name
 
         if self.cluster_name is not None:
             #clusterinst_key_dict['cluster_key'] = clusterinst_pb2.ClusterInstKey(name = self.cluster_name)
@@ -940,14 +941,14 @@ class AppInstance():
         #    clusterinst_key_dict['developer'] = self.developer_name
         if self.cloudlet_name is not None:
             cloudlet_key_dict['name'] = self.cloudlet_name
-        if self.operator_name is not None:
-            cloudlet_key_dict['operator_key'] = operator_pb2.OperatorKey(name = self.operator_name)
+        if self.operator_org_name is not None:
+            cloudlet_key_dict['organization'] = self.operator_org_name
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict)
         if cluster_key_dict:
             clusterinst_key_dict['cluster_key'] = cluster_pb2.ClusterKey(**cluster_key_dict)
-        if self.cluster_developer_name is not None:
-            clusterinst_key_dict['developer'] = self.cluster_developer_name
+        if self.cluster_developer_org_name is not None:
+            clusterinst_key_dict['organization'] = self.cluster_developer_org_name
         if self.latitude is not None:
             loc_dict['latitude'] = float(self.latitude)
         if self.longitude is not None:
@@ -1492,7 +1493,7 @@ class MexController(MexGrpc):
                 else:
                     self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_instance))
                     
-            resp =  self.show_cluster_instances(cluster_name=cluster_instance.key.cluster_key.name, operator_name=cluster_instance.key.cloudlet_key.operator_key.name, cloudlet_name=cluster_instance.key.cloudlet_key.name, use_defaults=False)
+            resp =  self.show_cluster_instances(cluster_name=cluster_instance.key.cluster_key.name, operator_org_name=cluster_instance.key.cloudlet_key.organization, cloudlet_name=cluster_instance.key.cloudlet_key.name, use_defaults=False)
 
             return resp[0]
 
@@ -1894,7 +1895,7 @@ class MexController(MexGrpc):
         self.prov_stack.append(lambda:self.delete_app(app_instance))
 
         #resp =  self.show_apps(app_instance)
-        resp = self.show_apps(app_name=app_instance.key.name, developer_name=app_instance.key.developer_key.name, app_version=app_instance.key.version, use_defaults=False)
+        resp = self.show_apps(app_name=app_instance.key.name, developer_org_name=app_instance.key.organization, app_version=app_instance.key.version, use_defaults=False)
 
         if len(resp) == 0:
             return None
@@ -2075,7 +2076,7 @@ class MexController(MexGrpc):
                     self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
 
             #resp =  self.show_app_instances(app_instance)
-            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_name=app_instance.key.app_key.developer_key.name, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_name=app_instance.key.cluster_inst_key.cloudlet_key.operator_key.name, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
+            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_org_name=app_instance.key.app_key.organization, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_org_name=app_instance.key.cluster_inst_key.cloudlet_key.organization, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
 
             return resp[0]
         

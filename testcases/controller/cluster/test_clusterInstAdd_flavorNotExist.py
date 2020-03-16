@@ -41,13 +41,13 @@ class tc(unittest.TestCase):
         # no default flavor
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                cloudlet_name=cloud_name,
                                                                flavor_name=flavor_name,
-                                                               operator_name=operator_name
+                                                               operator_org_name=operator_name
                                                               )
 
         # create a new cluster for adding the instance
