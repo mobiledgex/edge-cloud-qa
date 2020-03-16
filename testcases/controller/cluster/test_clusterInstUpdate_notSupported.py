@@ -39,7 +39,7 @@ class tc(unittest.TestCase):
                                                    )
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
+                                                             operator_org_name=operator_name,
                                                              flavor_name=flavor_name)
 
     def test_UpdateClusterInst(self):

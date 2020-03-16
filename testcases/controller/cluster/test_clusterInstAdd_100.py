@@ -45,7 +45,7 @@ class tc(unittest.TestCase):
         #self.cluster = mex_controller.Cluster(cluster_name=self.cluster_name,
         #                                 default_flavor_name=flavor_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
 
         self.cluster_list = []
@@ -63,7 +63,7 @@ class tc(unittest.TestCase):
             #                                                default_flavor_name=flavor_name))
             self.clusterinst_list.append(mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
-                                                                        operator_name=operator_name,
+                                                                        operator_org_name=operator_name,
                                                                         flavor_name=flavor_name))
 
     def test_AddClusterInstance(self):

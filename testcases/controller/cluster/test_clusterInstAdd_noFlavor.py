@@ -44,14 +44,14 @@ class tc(unittest.TestCase):
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                 default_flavor_name=flavor_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
 
         # flavor_name  does not exist
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
-                                                                        operator_name=operator_name,
-                                                                        developer_name='mydev',
+                                                                        operator_org_name=operator_name,
+                                                                        developer_org_name='mydev',
                                                                         number_masters=1,
                                                                         number_nodes=1,
                                                                         use_defaults=False
@@ -60,8 +60,8 @@ class tc(unittest.TestCase):
         self.cluster_instance_emptyFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                            cloudlet_name=cloud_name,
                                                                            flavor_name='',
-                                                                           developer_name='mydev',
-                                                                           operator_name=operator_name
+                                                                           developer_org_name='mydev',
+                                                                           operator_org_name=operator_name
                                                                           )
 
         # create a new cluster for adding the instance

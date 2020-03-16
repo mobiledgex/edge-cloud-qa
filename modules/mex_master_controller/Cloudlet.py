@@ -23,7 +23,7 @@ class Cloudlet(MexOperation):
     def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
-        _operator_name_field_number = "2.1.1"
+        _operator_name_field_number = "2.1"
         _cloudlet_name_field_number = "2.2"
         _container_version_field_number = "20"
         _package_version_field_number = "25"
