@@ -20,7 +20,7 @@ class AppInstance(MexOperation):
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
+    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
 
         if app_name == 'default':
             app_name = shared_variables.app_name_default
@@ -38,7 +38,7 @@ class AppInstance(MexOperation):
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_org_name: developer_org_name = shared_variables.developer_name_default
             if not cluster_instance_name: cluster_instance_name = shared_variables.cluster_name_default
-            if not cluster_instance_developer_name: cluster_instance_developer_name = developer_org_name
+            if not cluster_instance_developer_org_name: cluster_instance_developer_org_name = developer_org_name
             if not app_version: app_version = shared_variables.app_version_default
             if not cloudlet_name: cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_org_name: operator_org_name = shared_variables.operator_name_default
@@ -83,8 +83,8 @@ class AppInstance(MexOperation):
             clusterinst_key_dict['cloudlet_key'] = cloudlet_key_dict
         if cluster_key_dict:
             clusterinst_key_dict['cluster_key'] = cluster_key_dict
-        if cluster_instance_developer_name is not None:
-            clusterinst_key_dict['developer'] = cluster_instance_developer_name
+        if cluster_instance_developer_org_name is not None:
+            clusterinst_key_dict['organization'] = cluster_instance_developer_org_name
         if latitude is not None:
             loc_dict['latitude'] = float(latitude)
         if longitude is not None:
@@ -142,35 +142,34 @@ class AppInstance(MexOperation):
         return metric_dict
 
 
-    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
-        print('*WARN*', msg)
-        print('*WARN*', msg['key']['app_key'])
+
         thread_name = None
         if 'key' in msg and 'app_key' in msg['key']:
             thread_name = msg['key']['app_key']['name']
 
         msg_dict_delete = None
         if auto_delete and 'key' in msg:
-            msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_name=msg['key']['cluster_inst_key']['developer'], use_defaults=False)
+            msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_delete = {'appinst': msg_delete}
 
         msg_dict_show = None
         if 'key' in msg:
-            msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_name=msg['key']['cluster_inst_key']['developer'], use_defaults=False)
+            msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_show = {'appinst': msg_show}
         
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
 
-    def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
+    def delete_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_name=cluster_instance_developer_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
+    def show_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
