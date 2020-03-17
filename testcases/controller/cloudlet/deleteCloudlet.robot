@@ -16,34 +16,34 @@ DeleteCloudlet without an operator
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{},"name":"tmocloud-4"} not found" 
+	Should Contain  ${error_msg}   details = "Cloudlet key {"name":"tmocloud-4"} not found" 
 
 DeleteCloudlet with an invalid operator
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid operator
 	...  This test case will try and delete a cloudlet with an invalid operator name 
 	...  Expect this test case to fail with an invalid Key (Needs a valid operator and a valid cloudlet name)
 	 
-	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=mci      cloudlet_name=${cldlet}      use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_org_name=mci      cloudlet_name=${cldlet}      use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"mci"},"name":"tmocloud-4"} not found" 
+	Should Contain  ${error_msg}   details = "Cloudlet key {"organization":"mci","name":"tmocloud-4"} not found" 
 
 DeleteCloudlet without a cloudlet name
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet without a cloudlet name
 	...  This test case trys to delete a cloudlet without giving a cloudlet name
 	...  Expect to fail witn invalid cloudlet name
 	
-	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=${oper}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_org_name=${oper}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"dmuus"}} not found" 
+	Should Contain  ${error_msg}   details = "Cloudlet key {"organization":"dmuus"} not found" 
 
 DeleteCloudlet with an invalid cloudlet name
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with an invalid cloudlet name
 	...  This test case will try and delete a cloudlet with an invalid cloudlet name 
 	...  Expect this test case to fail with an invalid Key (Needs a valid operator and a valid cloudlet name)
 
-	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_name=${oper}   cloudlet_name=Test     use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	operator_org_name=${oper}   cloudlet_name=Test     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"dmuus"},"name":"Test"} not found"
+	Should Contain  ${error_msg}   details = "Cloudlet key {"organization":"dmuus","name":"Test"} not found"
 
 DeleteCloudlet with a static app assigned
 	[Documentation]   DeleteCloudlet -  Tries to delete a cloudlet with a static appinst assigned
@@ -54,7 +54,7 @@ DeleteCloudlet with a static app assigned
 	Create App                  
 	Create App Instance  cluster_instance_name=autocluster         
 	
-	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Cloudlet in use by static AppInst"
 
@@ -68,7 +68,7 @@ DeleteCloudlet with a static cluster instance assigned
 	[Setup]  Setup
 	Create Cluster Instance	
 
-	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Cloudlet in use by static ClusterInst"
 
@@ -79,14 +79,14 @@ DeleteCloudlet with a valid operator and cloudlet name
 	...  This test case will create a cloudlet and then delete the cloudlet
 	...  Expect to pass. The cloudlet will successfully be created and then deleted'
 	
-	Create Cloudlet     operator_name=${oper}       cloudlet_name=${cldlet}      number_of_dynamic_ips=default    latitude=35.0     longitude=-96.0
-	Delete Cloudlet     operator_name=${oper}       cloudlet_name=${cldlet}
+	Create Cloudlet     operator_org_name=${oper}       cloudlet_name=${cldlet}      number_of_dynamic_ips=default    latitude=35.0     longitude=-96.0
+	Delete Cloudlet     operator_org_name=${oper}       cloudlet_name=${cldlet}
 	Cloudlet Should Not Exist
 
 *** Keywords ***
 Setup
 	#Create Developer            
 	Create Flavor
-	Create Cloudlet		operator_name=${oper}       cloudlet_name=${cldlet}  
+	Create Cloudlet		operator_org_name=${oper}       cloudlet_name=${cldlet}  
 	#Create Cluster
 

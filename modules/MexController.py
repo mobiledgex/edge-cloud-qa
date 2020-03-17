@@ -614,7 +614,7 @@ class Cloudlet():
 
         #print('*WARN*', cloudlet_dict['notify_srv_addr'])
         
-    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
+    def update(self, cloudlet_name=None, operator_org_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         print ("In Update", staticips)
         
         if latitude is not None:
@@ -647,7 +647,7 @@ class Cloudlet():
             self.staticips=""
         #print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.organization == self.operator_org_name and c.key.name == self.cloudlet_name and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
             return True
         else:
             return False
