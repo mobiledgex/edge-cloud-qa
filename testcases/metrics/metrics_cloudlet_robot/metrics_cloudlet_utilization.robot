@@ -81,10 +81,17 @@ Metrics - Shall be able to get the last 100 cloudlet utilization metrics on open
    ...  request the last 100 cloudlet utilization metrics
    ...  verify info is correct
 
-   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 100
    ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=100
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 101
+
    log to console  ${metrics}
    log to console  ${metrics_influx}
+
+   @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   @{datesplit2}=  Split String  ${metrics_influx[0]['time']}  .
+   ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx}  ${index}
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -282,20 +289,18 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
    ...  request cloudlet metrics with endtime=lastrecord 
    ...  verify only last record is received
 
-    #EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
-	
    # get last metric
    ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
-   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
-   #${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    #log to console  ${epochpre}
    #${start}=  Evaluate  ${epochpre} - 3600
    #${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
    #log to console  ${start_date}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}  last=5
    log to console  ${metrics}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -305,8 +310,8 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
    log to console  ${epochpre}
    log to console  ${epoch_first}
    log to console  ${epoch_last}
-   Should Be True  (${epoch_last} - ${epoch_first}) > 3500  # difference between 1st and last time should be about 1hr
-   Should Be True  ${epoch_last} >= ${epochpre} 
+   Should Be True  (${epoch_first} - ${epoch_last}) < 100 
+   Should Be True  ${epoch_first} >= ${epochpre} 
 	
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -315,8 +320,10 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
 	
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
+
+   Should Be Equal As Integers  ${num_readings}  5
 	
-   Metrics Should Match Openstack  ${metrics}  reverse=${True}
+   Metrics Should Match Openstack  ${metrics}
 
 Metrics - Shall be able to get the cloudlet utilization metrics with endtime = firstrecord on openstack
    [Documentation]

@@ -67,10 +67,10 @@ class Flavor():
 class Cloudlet():
     cloudlet = None
     
-    def __init__(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, use_defaults=True):
+    def __init__(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, use_defaults=True):
         print('*WARN*', 'nsa' , notify_server_address)
         self.cloudlet_name = cloudlet_name
-        self.operator_name = operator_name
+        self.operator_org_name = operator_org_name
         self.access_uri = access_uri
         self.latitude = latitude
         self.longitude = longitude
@@ -85,7 +85,7 @@ class Cloudlet():
         
         if use_defaults:
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if operator_name is None: self.operator_name = shared_variables.operator_name_default
+            if operator_org_name is None: self.operator_org_name = shared_variables.operator_name_default
             if latitude is None: self.latitude = shared_variables.latitude_default
             if longitude is None: self.longitude = shared_variables.longitude_default
             if number_dynamic_ips is None: self.number_dynamic_ips = shared_variables.number_dynamic_ips_default
@@ -103,8 +103,8 @@ class Cloudlet():
         #"{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         cloudlet_dict = {}
         cloudlet_key_dict = {}
-        if self.operator_name is not None:
-            cloudlet_key_dict['operator_key'] = {'name': self.operator_name}
+        if self.operator_org_name is not None:
+            cloudlet_key_dict['organization'] = self.operator_org_name
         if self.cloudlet_name is not None:
             cloudlet_key_dict['name'] = self.cloudlet_name
 
@@ -152,7 +152,7 @@ class Cloudlet():
         self.cloudlet = cloudlet_dict
 
 class ClusterInstance():
-    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, developer_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, use_defaults=True):
+    def __init__(self, operator_name=None, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, use_defaults=True):
 
         self.cluster_instance = None
 
@@ -163,12 +163,14 @@ class ClusterInstance():
         self.crm_override = crm_override
         self.liveness = liveness
         self.ip_access = ip_access
-        self.developer_name = developer_name
+        self.developer_org_name = developer_org_name
+        self.operator_org_name = operator_org_name
         self.number_masters = number_masters
         self.number_nodes = number_nodes
         self.deployment = deployment
         self.shared_volume_size = shared_volume_size
         self.privacy_policy = privacy_policy
+        self.reservable = reservable
         #self.liveness = 1
         #if liveness is not None:
         #    self.liveness = liveness # LivenessStatic
@@ -182,9 +184,9 @@ class ClusterInstance():
         if use_defaults:
             if cluster_name is None: self.cluster_name = shared_variables.cluster_name_default
             if cloudlet_name is None: self.cloudlet_name = shared_variables.cloudlet_name_default
-            if operator_name is None: self.operator_name = shared_variables.operator_name_default
+            if operator_org_name is None: self.operator_org_name = shared_variables.operator_name_default
             if flavor_name is None: self.flavor_name = shared_variables.flavor_name_default
-            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: self.developer_name = shared_variables.developer_name_default
             if liveness is None: self.liveness = 1
             if deployment == 'kubernetes':
                 if number_masters is None: self.number_masters = 1
@@ -215,9 +217,8 @@ class ClusterInstance():
         cloudlet_key_dict = {}
         #cluster_key_dict = {}
 
-        print('*WARN*','clusterf', flavor_name, self.flavor_name, shared_variables.flavor_name_default, self.developer_name)
-        if self.operator_name is not None:
-            cloudlet_key_dict['operator_key'] = {'name': self.operator_name}
+        if self.operator_org_name is not None:
+            cloudlet_key_dict['organization'] = self.operator_org_name
         if self.cloudlet_name:
             cloudlet_key_dict['name'] = self.cloudlet_name
             
@@ -226,13 +227,12 @@ class ClusterInstance():
         if cloudlet_key_dict:
             clusterinst_key_dict['cloudlet_key'] = cloudlet_key_dict
         if self.developer_name is not None:
-            clusterinst_key_dict['developer'] = self.developer_name
+            clusterinst_key_dict['organization'] = self.developer_org_name
 
         if clusterinst_key_dict:
             clusterinst_dict['key'] = clusterinst_key_dict
             
         if self.flavor_name is not None:
-            print('*WARN*','clusterf2', flavor_name, self.flavor_name, shared_variables.flavor_name_default)
             clusterinst_dict['flavor'] = {'name': self.flavor_name}
 
         if self.liveness is not None:
@@ -253,6 +253,9 @@ class ClusterInstance():
         if self.privacy_policy is not None:
             clusterinst_dict['privacy_policy'] = self.privacy_policy
 
+        if self.reservable is not None:
+            clusterinst_dict['reservable'] = self.reservable
+
         if self.crm_override:
             if self.crm_override.lower() == "ignorecrm":
                 self.crm_override = 2
@@ -268,13 +271,13 @@ class ClusterInstance():
         self.cluster_instance = clusterinst_dict
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         print('*WARN*', 'dfn=', default_flavor_name)
         self.app_name = app_name
         self.app_version = app_version
-        self.developer_name = developer_name
+        self.developer_org_name = developer_org_name
         self.image_type = image_type
         self.image_path = image_path
         #self.config = config
@@ -297,7 +300,7 @@ class App():
 
         if use_defaults:
             if app_name is None: self.app_name = shared_variables.app_name_default
-            if developer_name is None: self.developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: self.developer_org_name = shared_variables.developer_name_default
             if app_version is None: self.app_version = shared_variables.app_version_default
             if image_type is None: self.image_type = 'ImageTypeDocker'
             if deployment is None: self.deployment = 'kubernetes'
@@ -341,8 +344,8 @@ class App():
             self.app_name = shared_variables.app_name_default
         if self.app_version == 'default':
             self.app_version = shared_variables.app_version_default
-        if self.developer_name == 'default':
-            self.developer_name = shared_variables.developer_name_default
+        if self.developer_org_name == 'default':
+            self.developer_org_name = shared_variables.developer_name_default
         #if self.cluster_name == 'default':
         #    self.cluster_name = shared_variables.cluster_name_default
         if self.default_flavor_name == 'default':
@@ -357,8 +360,8 @@ class App():
             app_key_dict['name'] = self.app_name
         if self.app_version:
             app_key_dict['version'] = self.app_version
-        if self.developer_name is not None:
-            app_key_dict['developer_key'] = {'name': self.developer_name}
+        if self.developer_org_name is not None:
+            app_key_dict['organization'] = self.developer_org_name
 
         if 'name' in app_key_dict or self.app_version or 'developer_key' in app_key_dict:
             app_dict['key'] = app_key_dict

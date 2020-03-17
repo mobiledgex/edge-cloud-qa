@@ -23,8 +23,8 @@ app_version = '1.0'
 developer_name = 'developer' + stamp
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -96,7 +96,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'App ports out of range', 'error details')
+        expect_equal(error.details(), 'Unable to convert port range base value')
+        #expect_equal(error.details(), 'App ports out of range', 'error details')
 
         #expect_equal(error.details(), 'Port -1 out of range', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')

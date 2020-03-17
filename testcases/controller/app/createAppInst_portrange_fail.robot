@@ -47,11 +47,14 @@ AppInst - create with http port range on k8s shared shall return error
 
    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes
 
-   Create App  region=US  access_ports=http:1-10
+   ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=http:1-10
 
-   ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  error={"message":"Shared IP access with port range not allowed"}
+   Should Contain  ${error}  error={"message":"Invalid deployment manifest, Port range not allowed for HTTP"}
+
+#   ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+#   Should Contain  ${error}  code=400
+#   Should Contain  ${error}  error={"message":"Shared IP access with port range not allowed"}
 
 AppInst - create with tcp/udp single port and port range on k8s shared shall return error
    [Documentation]

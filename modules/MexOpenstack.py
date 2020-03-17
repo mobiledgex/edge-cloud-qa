@@ -142,6 +142,23 @@ class MexOpenstack():
         outcome['delete']=deleteOutcome
         return outcome
 
+    def _removePortsFromRouter(self,id):
+        cmd="openstack router show "+id+" -f json"
+        logging.debug(f'Executing cmd = {cmd}')
+        try:
+            local_out=self._execute_cmd(cmd)
+        except:
+            return
+        listOutput=json.loads(local_out)
+        interfaces=json.loads(listOutput["interfaces_info"])
+        for port in interfaces:
+            cmd="openstack router remove port "+id+" "+port["port_id"]
+            logging.debug(f'Executing cmd = {cmd}')
+            try:
+                self._execute_cmd(cmd)
+            except:
+                return
+        
 
     def deploy_test_infrastructure(self,limit_dict_global,testKey):
         todo=limit_dict_global[testKey]
@@ -150,7 +167,12 @@ class MexOpenstack():
         createdID={}
         exceptionOccured=False
         #sorting by sequence
-        create=sorted(todo["create"],key=lambda cx: cx[0])
+        try:
+            create=todo["create"]
+        except KeyError:
+            create=[]
+
+        create=sorted(create,key=lambda cx: cx[0])
 
         createOutcome=[]
 
@@ -166,7 +188,6 @@ class MexOpenstack():
                 createOutcome.append(result)
                 exceptionOccured=True
                 break
-            
             # if json output is not supported then we can not evaluate output from command
             if item[3]=="":
                 result['result']="PASS"
@@ -174,9 +195,9 @@ class MexOpenstack():
                 if item[2]=="list":
                 #find if created id is present in list output
                 #as many as we have already created objects
-                    logging.debug("hereIsList")
-                    logging.debug(f'here is createdID= {createdID}')
-                    logging.debug(f'here is list out = {json.loads(o_out)}')
+                    #logging.debug("hereIsList")
+                    #logging.debug(f'here is createdID= {createdID}')
+                    #logging.debug(f'here is list out = {json.loads(o_out)}')
                     listOutput=json.loads(o_out)
                     objectsToBeFound={}
                     objectsFound={}
@@ -187,7 +208,7 @@ class MexOpenstack():
                     for objectID in objectsToBeFound:
                         for x in listOutput:
                             if x["ID"]==objectID:
-                                logging.debug(f'found = {x["ID"]}')
+                                #logging.debug(f'found = {x["ID"]}')
                                 objectsFound[x["ID"]]=""
                     for x in objectsFound:
                         del objectsToBeFound[x]
@@ -198,9 +219,9 @@ class MexOpenstack():
                     else:
                         result['result']="PASS"
                 elif item[2].startswith("show"):
-                    logging.debug("hereIsShow")
-                    logging.debug(f'here is createdID= {createdID}')
-                    logging.debug(f'here is show out = {json.loads(o_out)}')
+                    #logging.debug("hereIsShow")
+                    #logging.debug(f'here is createdID= {createdID}')
+                    #logging.debug(f'here is show out = {json.loads(o_out)}')
                     listOutput=json.loads(o_out)
                     objectsToBeFound={}
                     found=False
@@ -222,7 +243,7 @@ class MexOpenstack():
                         #assumption is when we have id then object is created succesfully
                         createdID[rawJson["id"]]=item
                         result['result']='PASS'
-                        logging.debug(f'ID {rawJson["id"]}={item}')
+                        #logging.debug(f'ID {rawJson["id"]}={item}')
                     else:
                         result['result']='FAIL'
                         exceptionOccured=True
@@ -230,8 +251,13 @@ class MexOpenstack():
 
             createOutcome.append(result)
 
+        try:
+            delete=todo["delete"]
+        except KeyError:
+            delete=[]
+
         deleteOutcome=[]
-        delete=sorted(todo["delete"],key=lambda cx: cx[0])
+        delete=sorted(delete,key=lambda cx: cx[0])
         for item in delete:
             result={}
             cmd="openstack "+item[1]+" "+item[2]
@@ -245,6 +271,39 @@ class MexOpenstack():
                 exceptionOccured=True
                 result['result']='EXCEPTION'
             deleteOutcome.append(result)
+
+        try:
+            ForceDelete=todo["ForceDelete"]
+        except KeyError:
+            ForceDelete=[]
+
+        ForceDeleteOutcome=[]
+        ForceDelete=sorted(ForceDelete,key=lambda cx: cx[0])
+        for item in ForceDelete:
+            result={}
+            cmd="openstack "+item[1]+" list -f json"
+            result['cmd']=cmd
+            result['result']='PASS'
+            logging.debug(f'Executing X cmd = {cmd}')            
+            try:
+                o_out=self._execute_cmd(cmd)
+                listOutput=json.loads(o_out)
+            except:
+                logging.debug(f'Ignored exception ')
+                exceptionOccured=True
+                result['result']='EXCEPTION'
+            ForceDeleteOutcome.append(result)
+            
+            for toDeleteID in listOutput:
+                if len(toDeleteID)>2:
+                    if toDeleteID['Name']==item[2]:
+                        if item[1]=="router":
+                            self._removePortsFromRouter(toDeleteID['ID'])
+                        cmd="openstack "+item[1]+" delete "+toDeleteID['ID']
+                        try:
+                            o_out=self._execute_cmd(cmd)
+                        except:
+                            continue            
 
 #when we have exception then special cleanup operation needs to be executed, otherwise we will leave mess
         if exceptionOccured:
@@ -319,9 +378,9 @@ class MexOpenstack():
 #        l.get_processes()
         exitData=l.command("ping -c 5 192.168.13.15")
       
-        print("1:"+str(exitData[0][8]))
+        logging.debug("1:"+str(exitData[0][8]))
         pp=exitData[0][8][0:55]
-        print("pp:[]"+str(pp)+"]")
+        logging.debug("pp:[]"+str(pp)+"]")
         result={}
         result['cmd']='ping'
         result['result']='FAIL'
@@ -380,7 +439,10 @@ class MexOpenstack():
         o_err = o_return.stderr.decode('utf-8')
 
         if o_err:
-            raise Exception(o_err)
+            #ignoring libressl error after upgrade to catalina
+            result=o_err.find("LIBRESSL_REDIRECT_STUB_ABORT")
+            if  result==-1:
+                raise Exception(o_err)
 
         logging.debug(o_out)
 
@@ -570,7 +632,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be between "+str(min)+" and "+str(max)+". Found: "+str(value)
             return result
         if ifmax and not ifmin:
             if  max>=value:
@@ -578,7 +640,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be less than "+str(max)+". Found: "+str(value)
             return result
         if not ifmax and ifmin:
             if min <= value :
@@ -586,7 +648,7 @@ class MexOpenstack():
                 result['comment']=""
             else:
                 result['result']='FAILED'
-                result['comment']=""
+                result['comment']="Request for "+param+" is not satisfied. Shall be greater than "+str(min)+". Found: "+str(value)
             return result
 #and weird case
 #        if not ifmax and not ifmin:
@@ -1264,14 +1326,16 @@ class MexOpenstack():
 
         cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
         try:
-            print('*WARN*', cmd)
             rb.run_command_on_node(node, cmd)
             logging.info('NVIDIA GPU is allocated')
         except:
             raise Exception('NVIDIA GPU is NOT allocated')
         
     def node_should_not_have_gpu(self, root_loadbalancer, node=None):
-        if self.node_should_have_gpu(root_loadbalancer, node):
-            raise Exception('NVIDIA GPU IS allocated')
-        
-        logging.info('NVIDIA GPU is not allocated')
+        try:
+            self.node_should_have_gpu(root_loadbalancer, node)
+        except:
+            logging.info('NVIDIA GPU is not allocated')
+            return
+
+        raise Exception('NVIDIA GPU is allocated')
