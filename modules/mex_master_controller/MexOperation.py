@@ -88,7 +88,9 @@ class MexOperation(MexRest):
                     if 'Deleted Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
                 elif 'UpdateCloudlet' in url:
-                    if 'Updated Cloudlet successfully' not in str(self.resp.text) or 'Upgraded Cloudlet successfully' not in str(self.resp.text):
+                    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text):
+                        pass
+                    else:
                         raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
                 
             except Exception as e:
@@ -130,7 +132,6 @@ class MexOperation(MexRest):
             self.counter_dict[message_type]['req_attempts'] += 1
 
             try:
-                print('*WARN*',cmd)
                 process = subprocess.Popen(cmd,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE,
@@ -139,12 +140,10 @@ class MexOperation(MexRest):
 
                 stdout = [line.decode('utf-8') for line in process.stdout.readlines()]
                 stderr = [line.decode('utf-8') for line in process.stderr.readlines()]
-                print('*WARN*', 'stdstderr', stdout, stderr)
                 if stderr:
                     raise Exception(f'error={stderr}')
                 for line in stdout:
                     if 'Error' in line:
-                        print('*WARN*', 'found error')
                         raise Exception(f'error={stdout}')
             except subprocess.CalledProcessError as e:
                 print('*WARN*','cpe',e)

@@ -20,10 +20,10 @@ controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001
 operator_name = 'dmuus'
 cloud_name = 'tmocloud-1'
 flavor_name = 'c1.small' + str(time.time())
-#mex_cert = '/root/go/src/github.com/mobiledgex/edge-cloud/tls/out/localserver.crt'
+#mex_cert = '/root/go/src/github.com/mobiledgex/edge-cloud/tls/out/mex-client.crt'
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -44,10 +44,10 @@ class tc(unittest.TestCase):
 #                                         default_flavor_name=flavor_name)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                              cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
+                                                             operator_org_name=operator_name,
                                                              flavor_name=flavor_name)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
 
         #self.controller.create_operator(self.operator.operator)

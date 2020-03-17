@@ -88,17 +88,35 @@ class MexApp(object):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
-        
-        self.ping_udp_port(host, int(port))
-        return True
 
+        for attempt in range(1,4):
+            logging.debug(f'UDP port attempt {attempt}')
+            try:
+                self.ping_udp_port(host, int(port))
+                return True
+            except Exception as e:
+                logging.debug(f'udp exception caught:{e}')
+                if attempt == 3:
+                    raise Exception(e)
+                else:
+                    time.sleep(1)
+                
     def tcp_port_should_be_alive(self, host, port, wait_time=0):
         logging.info('host:' + host + ' port:' + str(port))
 
         self.wait_for_dns(host)
-        
-        self.ping_tcp_port(host, port, wait_time)
-        return True
+
+        for attempt in range(1,4):
+            logging.debug(f'TCP port attempt {attempt}')
+            try:
+                self.ping_tcp_port(host, port, wait_time)
+                return True
+            except Exception as e:
+                logging.debug(f'tcp exception caught:{e}')
+                if attempt == 3:
+                    raise Exception(e)
+                else:
+                    time.sleep(1)
 
     def http_port_should_be_alive(self, host, port, page):
         logging.info('host:' + host + ' port:' + str(port))
@@ -264,27 +282,45 @@ class MexApp(object):
         else:
             rb = self.rootlb
 
+        filename = None
         try:
             rb.mount_exists_on_pod(pod=pod_name, mount=mount)
             logging.info(f'mount={mount} exists on pod={pod_name}')
         except:
             raise Exception(f'mount={mount} DOES NOT exist on pod={pod_name}')
         try:
-            rb.write_file_to_pod(pod=pod_name, mount=mount)
+            filename = rb.write_file_to_pod(pod=pod_name, mount=mount)
             logging.info(f'successfully wrote file to pod={pod_name} on mount={mount}')
         except:
             raise Exception(f'error writing file to mount={mount} and pod={pod_name}. {sys.exc_info()[0]}')
 
-        node_file = f'/data/{cluster_name}_node.txt'
+        #node_file = f'/data/{cluster_name}_node.txt'
         try:
-            output = rb.read_file_from_pod(pod=pod_name, filename=node_file)
-            #logging.info('output', output)
-            assert output[0].rstrip() == cluster_name
+            output = rb.read_file_from_pod(pod=pod_name, filename=filename)
+            logging.info(f'output={output} expecting={cluster_name}')
+            assert output[0].rstrip() == pod_name
         except:
-            raise Exception(f'error. file not found on node for file={node_file} and pod={pod_name}. {sys.exc_info()[0]}')
+            raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
 
+        return filename
+    
+    def mount_should_persist(self, root_loadbalancer=None, cluster_name=None, operator_name=None, pod_name=None, mount=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+        else:
+            rb = self.rootlb
 
-        
+        filename = self.mount_should_exist_on_pod(root_loadbalancer=root_loadbalancer, cluster_name=cluster_name, operator_name=operator_name, pod_name=pod_name, mount=mount)
+        rb.delete_pod(pod_name=pod_name)
+
+        try:
+            output = rb.read_file_from_pod(pod=pod_name, filename=filename)
+            logging.info(f'output={output} expecting={cluster_name}')
+            assert output[0].rstrip() == pod_name
+        except:
+            raise Exception(f'error. file not found on node for file={filename} and pod={pod_name}. {sys.exc_info()[0]}')
+
     def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
         rb = None
         if root_loadbalancer is not None:
@@ -293,4 +329,15 @@ class MexApp(object):
             rb = self.rootlb
 
         rb.write_file_to_node(node=node, mount=mount, data=data)
+        
+
+    def run_command_on_pod(self, pod_name, command, cluster_name, operator_name, root_loadbalancer=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+        else:
+            rb = self.rootlb
+
+        pod = rb.get_pod(pod_name)
+        return rb.run_command_on_pod(pod, command)
         

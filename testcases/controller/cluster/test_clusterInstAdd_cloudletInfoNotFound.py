@@ -25,8 +25,8 @@ cloud_name = 'cloudlet' + stamp
 flavor_name = 'c1.small' + stamp
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -40,19 +40,19 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
       
-        self.operator = mex_controller.Operator(operator_name = operator_name)
+#        self.operator = mex_controller.Operator(operator_name = operator_name)
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 crm_override=2,
                                                 number_of_dynamic_ips = 254)
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                      default_flavor_name=flavor_name)
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
+                                                             operator_org_name=operator_name,
                                                              flavor_name=flavor_name)
-        self.controller.create_operator(self.operator.operator)
+        #self.controller.create_operator(self.operator.operator)
         self.controller.create_flavor(self.flavor.flavor)
  
     def test_CreateClusterInstCloudletNotFound(self):
@@ -81,7 +81,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"' + operator_name + '" > name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet organization:"' + operator_name + '" name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
@@ -89,7 +89,7 @@ class tc(unittest.TestCase):
         #self.controller.delete_cluster(self.cluster.cluster)
         self.controller.delete_cloudlet(self.cloudlet.cloudlet)
         self.controller.delete_flavor(self.flavor.flavor)
-        self.controller.delete_operator(self.operator.operator)
+#        self.controller.delete_operator(self.operator.operator)
 
 
 
