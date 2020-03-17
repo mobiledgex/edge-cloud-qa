@@ -57,7 +57,7 @@ class tc(unittest.TestCase):
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       default_flavor_name=flavor_name)
 
         error = None
@@ -94,7 +94,7 @@ class tc(unittest.TestCase):
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       default_flavor_name=flavor_name)
 
         error = None
@@ -131,7 +131,7 @@ class tc(unittest.TestCase):
                                       app_version=app_version,
                                       access_ports=access_ports,
                                       cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       default_flavor_name=flavor_name)
 
         error = None
