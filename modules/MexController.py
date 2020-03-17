@@ -775,7 +775,7 @@ class App():
         if self.developer_org_name is not None:
             app_key_dict['organization'] = self.developer_org_name
 
-        if 'name' in app_key_dict or self.app_version or 'developer_key' in app_key_dict:
+        if 'name' in app_key_dict or self.app_version or 'organization' in app_key_dict:
             app_dict['key'] = app_pb2.AppKey(**app_key_dict)
         if self.image_type is not None:
             app_dict['image_type'] = self.image_type
@@ -810,7 +810,6 @@ class App():
         if self.official_fqdn:
             app_dict['official_fqdn'] = self.official_fqdn
             
-        print(app_dict)
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
