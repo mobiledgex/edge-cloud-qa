@@ -27,13 +27,13 @@ RegisterClient - request with auth shall return proper JWT for deployment=docker
    ...  Verify returned JWT is correct
 
    Create App                  auth_public_key=${app_key}  deployment=docker
-   Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+   Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=  Get Default App Name
    ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}
    
-   Register Client	app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}  auth_token=${token}
+   Register Client	app_name=${app_name_default}  app_version=${app_version}  developer_org_name=${developer_name_default}  auth_token=${token}
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
@@ -49,7 +49,7 @@ RegisterClient - request with auth shall return proper JWT for deployment=docker
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip} 	
    Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}	
+   Should Be Equal             ${decoded_cookie['key']['orgname']}  ${developer_name_default}	
    Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}	
    Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}	
    Should Be Equal As Numbers  ${uuid_length}  27
@@ -61,13 +61,13 @@ RegisterClient - request with auth shall return proper JWT for deployment=kubern
    ...  Verify returned JWT is correct
 
    Create App                  auth_public_key=${app_key}  deployment=kubernetes
-   Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+   Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=  Get Default App Name
    ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}
 
-   Register Client      app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}  auth_token=${token}
+   Register Client      app_name=${app_name_default}  app_version=${app_version}  developer_org_name=${developer_name_default}  auth_token=${token}
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
@@ -79,7 +79,7 @@ RegisterClient - request with auth shall return proper JWT for deployment=kubern
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip}
    Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}
+   Should Be Equal             ${decoded_cookie['key']['orgname']}  ${developer_name_default}
    Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}
    Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}
    Should Be Equal As Numbers  ${uuid_length}  27
@@ -91,13 +91,13 @@ RegisterClient - request with auth shall return proper JWT for deployment=vm
    ...  Verify returned JWT is correct
 
    Create App                  auth_public_key=${app_key}  deployment=vm  image_type=ImageTypeQCOW
-   Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+   Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=  Get Default App Name
    ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}
 
-   Register Client      app_name=${app_name_default}  app_version=${app_version}  developer_name=${developer_name_default}  auth_token=${token}
+   Register Client      app_name=${app_name_default}  app_version=${app_version}  developer_org_name=${developer_name_default}  auth_token=${token}
    ${decoded_cookie}=  decoded session cookie
    ${token_server}=    token server uri
 
@@ -109,7 +109,7 @@ RegisterClient - request with auth shall return proper JWT for deployment=vm
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip}
    Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}
+   Should Be Equal             ${decoded_cookie['key']['orgname']}  ${developer_name_default}
    Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}
    Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version}
    Should Be Equal As Numbers  ${uuid_length}  27
