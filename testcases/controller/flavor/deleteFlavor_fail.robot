@@ -19,7 +19,7 @@ Flavor - error shall be recieved when deleting flavor used by k8s/dedicated clus
     ...  attempt to delete the flavor used by the clusterinst
     ...  verify error is received
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
 
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor
 
@@ -32,7 +32,7 @@ Flavor - error shall be recieved when deleting flavor used by k8s/shared cluster
     ...  attempt to delete the flavor used by the clusterinst
     ...  verify error is received
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
 
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor
 
@@ -45,7 +45,7 @@ Flavor - error shall be recieved when deleting flavor used by docker/dedicated c
     ...  attempt to delete the flavor used by the clusterinst
     ...  verify error is received
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
 
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor
 
@@ -103,7 +103,7 @@ Flavor - error shall be recieved when deleting flavor used by autocluster appins
 
     Create App  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}  access_ports=tcp:1
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor
 
@@ -116,7 +116,7 @@ Flavor - error shall be recieved when deleting flavor used by appinst
     ...  attempt to delete the flavor used by the appinst/cluster
     ...  verify error is received
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
 
     Create App  deployment=docker  image_type=ImageTypeDocker  image_path=${docker_image}  access_ports=tcp:1
 
@@ -124,7 +124,7 @@ Flavor - error shall be recieved when deleting flavor used by appinst
     ${flavor_name_new}=  Catenate  SEPARATOR=  ${flavor_name_default}  1 
     Create Flavor  flavor_name=${flavor_name_new}
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${flavor_name_new}
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  flavor_name=${flavor_name_new}
 
     ${error_msg}=  Run Keyword and Expect Error  *  Delete Flavor  flavor_name=${flavor_name_new}
 
