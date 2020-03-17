@@ -75,7 +75,6 @@ class tc(unittest.TestCase):
                                       default_flavor_name=flavor_name)
         resp = self.controller.create_app(self.app.app)
 
-        print('XXXXXXXXXXXXXXXXXXXXX')
         # try to add the app again
         err = None
         try:
@@ -85,7 +84,7 @@ class tc(unittest.TestCase):
             logger.debug('got error:' + str(err))
 
         expect_equal(err.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(err.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"' + app_version + '"} already exists', 'error details')
+        expect_equal(err.details(), 'App key {"organization":"' + developer_name + '","name":"' + app_name + '","version":"' + app_version + '"} already exists', 'error details')
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
@@ -135,7 +134,7 @@ class tc(unittest.TestCase):
             logger.debug('got error:' + str(err))
 
         expect_equal(err.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(err.details(), 'App key {"developer_key":{"name":"' + developer_name + '"},"name":"' + app_name + '","version":"' + app_version + '"} already exists', 'error details')
+        expect_equal(err.details(), 'App key {"organization":"' + developer_name + '","name":"' + app_name + '","version":"' + app_version + '"} already exists', 'error details')
 
         # print the cluster instances after error
         app_post = self.controller.show_apps()
