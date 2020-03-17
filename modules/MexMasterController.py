@@ -2108,17 +2108,17 @@ class MexMasterController(MexRest):
     def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.privacy_policy.create_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.privacy_policy.create_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
-    def show_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.privacy_policy.show_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def show_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.show_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
-        return self.privacy_policy.delete_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.delete_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
-        return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):
         logging.info('cleaning up provisioning')
