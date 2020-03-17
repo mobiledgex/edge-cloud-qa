@@ -110,22 +110,22 @@ Setup
 
     #Create Developer            
     Create Flavor
-    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
-    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     #Create Cluster
     Create App			access_ports=tcp:1  #official_fqdn=${platos_uri}   #permits_platform_apps=${True}
 
     # create operator app instance
-    ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     # create public app instance
-    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=        Get Default App Name
 
     #Create Developer            developer_name=${platos_developer_name}
     Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  #official_fqdn=${platos_uri}
-    #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+    #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${azure_appinst} 
     Set Suite Variable  ${developer_name_default}
