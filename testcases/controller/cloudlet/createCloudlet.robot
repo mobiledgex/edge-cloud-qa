@@ -20,7 +20,7 @@ CreateCloudlet with all parameters
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch} 
 		
 	#Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport   ipsupport=IpSupportDynamic    staticips=30.30.30.1   
-        Create Cloudlet         operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96  ipsupport=IpSupportDynamic    staticips=30.30.30.1
+        Create Cloudlet         operator_org_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96  ipsupport=IpSupportDynamic    staticips=30.30.30.1
 
 	Cloudlet Should Exist   
 
@@ -37,7 +37,7 @@ CreateCloudlet without the optional parameters
         #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum} 
 
-	Create Cloudlet	  operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=default     latitude=35     longitude=-96  notify_server_address=${port}   use_defaults=False
+	Create Cloudlet	  operator_org_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=default     latitude=35     longitude=-96  notify_server_address=${port}   use_defaults=False
 	Cloudlet Should Exist   
 
 CreateCloudlet with required parameters and accessuri
@@ -54,7 +54,7 @@ CreateCloudlet with required parameters and accessuri
         #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport  notify_server_address=${port}  use_defaults=False
+	Create Cloudlet	 operator_org_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96     accesscredentials=https://support.sup.com/supersupport  notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist   
 
 CreateCloudlet with required parameters and ipsupport
@@ -70,7 +70,7 @@ CreateCloudlet with required parameters and ipsupport
         #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96       ipsupport=IpSupportDynamic  notify_server_address=${port}  use_defaults=False
+	Create Cloudlet	 operator_org_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96       ipsupport=IpSupportDynamic  notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist   
 
 CreateCloudlet with required parameters and staticips
@@ -86,7 +86,7 @@ CreateCloudlet with required parameters and staticips
         #${portnum}=  Get Substring  ${epochstring}  -5
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet	 operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=${port}   use_defaults=False
+	Create Cloudlet	 operator_org_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=${port}   use_defaults=False
 	Cloudlet Should Exist   
 
 CreateCloudlet without physicalname 
@@ -97,7 +97,7 @@ CreateCloudlet without physicalname
         ${epoch}=  Get Time  epoch
         ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
 
-        ${resp}=  Run Keyword and Expect Error  *  Create Cloudlet  operator_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=5000  platform_type=PlatformTypeOpenstack  use_defaults=False
+        ${resp}=  Run Keyword and Expect Error  *  Create Cloudlet  operator_org_name=${oper}   cloudlet_name=${cldlet}   number_of_dynamic_ips=default     latitude=35     longitude=-96      staticips=30.30.30.1  notify_server_address=5000  platform_type=PlatformTypeOpenstack  use_defaults=False
 
         #Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
         #Should Contain  ${resp}  Failed to source platform variables as physicalname '${cldlet}' is invalid
