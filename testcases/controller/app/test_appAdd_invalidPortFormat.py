@@ -49,7 +49,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -79,7 +79,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -112,7 +112,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -145,7 +145,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -178,7 +178,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -209,7 +209,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -240,7 +240,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  #ip_access='IpAccessDedicated',
@@ -271,7 +271,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 #ip_access='IpAccessDedicatedOrShared',
@@ -302,7 +302,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 #ip_access='IpAccessDedicatedOrShared',
@@ -332,7 +332,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessDedicatedOrShared',
@@ -362,7 +362,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessDedicatedOrShared',
@@ -392,7 +392,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessDedicatedOrShared',
@@ -422,7 +422,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessDedicatedOrShared',
@@ -452,7 +452,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessDedicatedOrShared',
@@ -482,7 +482,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -513,7 +513,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -543,7 +543,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -573,7 +573,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -603,7 +603,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -633,7 +633,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',
@@ -663,7 +663,7 @@ class tc(unittest.TestCase):
 #        # create the app with no parms
 #        error = None
 #        app = mex_controller.App(image_type='ImageTypeDocker',
-#                                 developer_name=developer_name,
+#                                 developer_org_name=developer_name,
 #                                 app_name=app_name,
 #                                 app_version=app_version,
 #                                 ip_access='IpAccessShared',

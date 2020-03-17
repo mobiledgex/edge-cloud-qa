@@ -17,7 +17,7 @@ AppInst - User shall not be able to create an AppInst without a ClusterInst
     ...  verify "Cloudlet operator_key:<>  not ready, state is CloudletStateNotPresent" is received
     #...  verify "No cluster name specified. Create one first or use "autocluster" as the name to automatically create a ClusterInst" is received 
 
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  use_defaults=${False}
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Cloudlet operator_key:<>  not ready, state is CloudletStateNotPresent"
@@ -29,7 +29,7 @@ AppInst - User shall not be able to create an AppInst with a ClusterInst that do
     ...  create an app instance with a cluster that doesnt exist
     ...  verify "Specified ClusterInst not found" is received
 
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  cluster_instance_name=mycluster  cluster_instance_developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  use_defaults=${False} use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  use_defaults=${False}
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False} use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Specified ClusterInst not found"
@@ -45,9 +45,9 @@ AppInst - User shall not be able to create an app instance without cluster devel
     ${cluster_name}=  Catenate  SEPARATOR=-  cluster  ${epoch_time}
     ${developer_name}=  Catenate  SEPARATOR=-  ${developer_name_default}  2 
 
-    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name} 
+    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name} 
 
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Specified ClusterInst not found"

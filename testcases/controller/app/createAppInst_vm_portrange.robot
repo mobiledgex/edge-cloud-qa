@@ -23,7 +23,7 @@ AppInst - user shall be able to add with TCP/UDP port range for VM
     ...  verify ports are correct
 
     Create App  access_ports=tcp:1-10,udp:1-10  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Set Variable  ${app_default}-udp.

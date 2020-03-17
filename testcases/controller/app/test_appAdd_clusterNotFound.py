@@ -44,10 +44,10 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name)#,
-                                                  #developer_address=developer_address,
-                                                  #developer_email=developer_email)
-        self.controller.create_developer(self.developer.developer) 
+#        self.developer = mex_controller.Developer(developer_org_name=developer_name)#,
+#                                                  #developer_address=developer_address,
+#                                                  #developer_email=developer_email)
+#        self.controller.create_developer(self.developer.developer) 
         self.controller.create_flavor(self.flavor.flavor)
 
     def test_CreateAppClusterNotFound_docker(self):
@@ -67,7 +67,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  default_flavor_name=flavor_name)
         #try:
         #    resp = self.controller.create_app(app.app)
@@ -108,7 +108,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  default_flavor_name=flavor_name)
         #try:
         #    resp = self.controller.create_app(app.app)
@@ -134,7 +134,7 @@ class tc(unittest.TestCase):
 
     @classmethod
     def tearDownClass(self):
-        self.controller.delete_developer(self.developer.developer)
+#        self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':
