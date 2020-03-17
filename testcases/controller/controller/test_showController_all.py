@@ -20,8 +20,8 @@ controller1_address = '0.0.0.0:55001' # will only be 1 controller shown since k8
 #controller2_address = '0.0.0.0:55002'
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

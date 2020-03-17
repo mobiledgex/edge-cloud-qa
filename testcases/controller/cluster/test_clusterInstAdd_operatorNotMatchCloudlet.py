@@ -25,8 +25,8 @@ flavor_name = 'c1.small' + stamp
 cluster_name = 'cluster' + stamp
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -46,7 +46,7 @@ class tc(unittest.TestCase):
 
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
-                                                             operator_name=operator_name,
+                                                             operator_org_name=operator_name,
                                                              flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
@@ -73,7 +73,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet key {"operator_key":{"name":"' + operator_name + '"},"name":"' + cloud_name + '"} not found', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"' + operator_name + '","name":"' + cloud_name + '"} not found', 'error details')
         #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"' + operator_name + '" > name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()

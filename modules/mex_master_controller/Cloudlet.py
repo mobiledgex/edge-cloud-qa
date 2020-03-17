@@ -20,17 +20,17 @@ class Cloudlet(MexOperation):
         self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
         self.addrestag_url = '/auth/ctrl/AddResTag'
 
-    def _build(self, cloudlet_name=None, operator_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
-        _operator_name_field_number = "2.1.1"
+        _operator_name_field_number = "2.1"
         _cloudlet_name_field_number = "2.2"
         _container_version_field_number = "20"
         _package_version_field_number = "25"
 
         if use_defaults:
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
-            if operator_name is None: operator_name = shared_variables.operator_name_default
+            if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
             if latitude is None: latitude = shared_variables.latitude_default
             if longitude is None: longitude = shared_variables.longitude_default
             if number_dynamic_ips is None: number_dynamic_ips = shared_variables.number_dynamic_ips_default
@@ -48,8 +48,8 @@ class Cloudlet(MexOperation):
         #"{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         cloudlet_dict = {}
         cloudlet_key_dict = {}
-        if operator_name is not None:
-            cloudlet_key_dict['operator_key'] = {'name': operator_name}
+        if operator_org_name is not None:
+            cloudlet_key_dict['organization'] = operator_org_name
             _fields_list.append(_operator_name_field_number)
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
@@ -152,13 +152,13 @@ class Cloudlet(MexOperation):
         return map_dict
 
     
-    def create_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'operator_key' in msg['key']:
-            msg_delete = self._build(cloudlet_name=msg['key']['name'], operator_name=msg['key']['operator_key']['name'], use_defaults=False)
+        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_delete = self._build(cloudlet_name=msg['key']['name'], operator_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_delete = {'cloudlet': msg_delete}
 
         msg_dict_show = None
@@ -169,26 +169,26 @@ class Cloudlet(MexOperation):
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
 
-    def delete_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults)
+    def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
+    def show_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_cloudlet(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
-    def get_cloudlet_metrics(self, token=None, region=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
+    def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         print('*WARN*', 'msg',msg)
         metric_dict = msg
         if 'key' in msg:
@@ -201,15 +201,15 @@ class Cloudlet(MexOperation):
 
         return self.show(token=token, url=self.metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def add_cloudlet_resource_mapping(self, token=None, region=None, cloudlet_name=None, operator_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def add_cloudlet_resource_mapping(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
 
         map_dict = {'cloudletresmap': msg}
         msg_dict = self._build_mapping(cloudlet_dict=map_dict, mapping=mapping)
         
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'operator_key' in msg['key']:
-            msg_delete = self._build(cloudlet_name=msg['key']['name'], operator_name=msg['key']['operator_key']['name'], use_defaults=False)
+        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_delete = self._build(cloudlet_name=msg['key']['name'], operator_org_name=msg['key']['organization'], use_defaults=False)
             map_dict_delete = {'cloudletresmap': msg_delete}
             msg_dict_delete = self._build_mapping(cloudlet_dict=map_dict_delete, mapping=mapping)
 
@@ -228,7 +228,7 @@ class Cloudlet(MexOperation):
         
         msg_dict_delete = None
         if auto_delete and 'key' in msg and 'name' in msg['key']:
-            msg_delete_pre = self._build(cloudlet_name=msg['key']['name'], operator_name=msg['key']['operator_key'], use_defaults=False)
+            msg_delete_pre = self._build(cloudlet_name=msg['key']['name'], operator_org_name=msg['key']['organization'], use_defaults=False)
             map_dict_del = {'restagtable': msg_delete_pre}
             msg_delete = self._build_restag(cloudlet_dict=map_dict_del, tags=tags, use_defaults=False)
             #map_dict_delete = {'restagtable': msg_delete}
