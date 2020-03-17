@@ -148,7 +148,7 @@ class tc(unittest.TestCase):
         appinst_pre = self.controller.show_app_instances()
 
         # create the app instance
-        app_instance = mex_controller.AppInstance(developer_name='dev', use_defaults=False)
+        app_instance = mex_controller.AppInstance(developer_org_name='dev', use_defaults=False)
 
         resp = None
         try:
@@ -177,7 +177,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='someApplication',
                                                   app_version='1.0',
-                                                  developer_name='dev',
+                                                  developer_org_name='dev',
                                                   use_defaults=False)
 
         resp = None
@@ -207,9 +207,9 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='someApplication',
                                                   app_version='1.0',
-                                                  developer_name='dev',
+                                                  developer_org_name='dev',
                                                   cloudlet_name='nocloud',
-                                                  operator_name='DMUUS')
+                                                  operator_org_name='DMUUS')
 
         resp = None
         try:
@@ -221,7 +221,7 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet key {"operator_key":{"name":"DMUUS"},"name":"nocloud"} not found', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"DMUUS","name":"nocloud"} not found', 'error details')
         #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"DMUUS" > name:"nocloud"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
@@ -237,8 +237,8 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='someApplication',
                                                   app_version='1.0',
-                                                  developer_name='dev',
-                                                  operator_name='DMUUS',
+                                                  developer_org_name='dev',
+                                                  operator_org_name='DMUUS',
                                                   cluster_instance_name='mycluster',
                                                   use_defaults=False)
 
@@ -269,7 +269,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='someApplication',
                                                   app_version='1.0',
-                                                  developer_name='dev',
+                                                  developer_org_name='dev',
                                                   cloudlet_name='tmocloud-1',
                                                   use_defaults=False)
 
