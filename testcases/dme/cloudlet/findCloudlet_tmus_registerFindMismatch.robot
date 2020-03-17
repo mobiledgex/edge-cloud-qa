@@ -28,11 +28,11 @@ FindCloudlet - request shall return error when FindCloudlet app does not match R
 
 *** Keywords ***
 Setup
-    #Create Operator        operator_name=${operator_name} 
+    #Create Operator        operator_org_name=${operator_name} 
     #Create Developer
     Create Flavor
-    #Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
-    #Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
+    #Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
+    #Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
     #Create Cluster
 
     ${app_name_default}=  Get Default App Name
