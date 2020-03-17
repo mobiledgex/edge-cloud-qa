@@ -23,9 +23,9 @@ UpdateCloudlet accessuri
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}  notify_server_address=${port}   
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}  notify_server_address=${port}   
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      accesscredentials=https://support.net/supportme
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}      accesscredentials=https://support.net/supportme
 	Cloudlet Should Exist  
 
 UpdateCloudlet staticips
@@ -41,9 +41,9 @@ UpdateCloudlet staticips
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      staticips=50.50.50.50
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}      staticips=50.50.50.50
 	Cloudlet Should Exist       
 
 
@@ -62,9 +62,9 @@ UpdateCloudlet number_of_dynamic_ips
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      number_of_dynamic_ips=${dips}  
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}      number_of_dynamic_ips=${dips}  
 	Cloudlet Should Exist        
 
 
@@ -83,9 +83,9 @@ UpdateCloudlet location
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}          latitude=${loc}       longitude=${loc} 
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}          latitude=${loc}       longitude=${loc} 
 	Cloudlet Should Exist       
 
 UpdateCloudlet location lat
@@ -103,9 +103,9 @@ UpdateCloudlet location lat
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      latitude=${loc}
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}      latitude=${loc}
 	Cloudlet Should Exist           
 	
 UpdateCloudlet location long
@@ -123,9 +123,9 @@ UpdateCloudlet location long
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}    notify_server_address=${port} 
 	Cloudlet Should Exist
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}      longitude=${loc}
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}      longitude=${loc}
 	Cloudlet Should Exist       
 
 UpdateCloudlet optional accessuri
@@ -145,9 +145,9 @@ UpdateCloudlet optional accessuri
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}   notify_server_address=${port}  use_defaults=False
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}   notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist	   
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     accesscredentials=https://support.net/supportme     use_defaults=False
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}     accesscredentials=https://support.net/supportme     use_defaults=False
 	Cloudlet Should Exist      
 
 UpdateCloudlet optional staticips	
@@ -167,9 +167,9 @@ UpdateCloudlet optional staticips
         ${portnum}=    Evaluate    random.randint(49152, 65500)   random
         ${port}=  Catenate  SEPARATOR=  127.0.0.1:  ${portnum}
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    notify_server_address=${port}  use_defaults=False
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}      latitude=${lat}     longitude=${long}    notify_server_address=${port}  use_defaults=False
 	Cloudlet Should Exist	  
-	Update Cloudlet	   operator_name=${oper}    cloudlet_name=${cldlet}     staticips=50.50.50.50    use_defaults=False
+	Update Cloudlet	   operator_org_name=${oper}    cloudlet_name=${cldlet}     staticips=50.50.50.50    use_defaults=False
 	Cloudlet Should Exist      
 
 	
