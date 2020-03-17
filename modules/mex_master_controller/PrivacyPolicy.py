@@ -17,7 +17,7 @@ class PrivacyPolicy(MexOperation):
         self.show_url = '/auth/ctrl/ShowPrivacyPolicy'
         self.update_url = '/auth/ctrl/UpdatePrivacyPolicy'
 
-    def _build(self, policy_name=None, developer_name=None, rule_list=[], include_fields=False, use_defaults=True):
+    def _build(self, policy_name=None, developer_org_name=None, rule_list=[], include_fields=False, use_defaults=True):
         _fields_list = []
         _policy_name_field_number = "2.1"
         _developer_name_field_number = "2.2"
@@ -28,7 +28,7 @@ class PrivacyPolicy(MexOperation):
 
         if use_defaults:
             if policy_name is None: policy_name = shared_variables.privacy_policy_name_default
-            if developer_name is None: developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
         
         #"{\"cloudlet\":{\"key\":{\"name\":\"rrrr\",\"developer\":\"dev\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         policy_dict = {}
@@ -37,8 +37,8 @@ class PrivacyPolicy(MexOperation):
         if policy_name is not None:
             policy_key_dict['name'] = policy_name
             _fields_list.append(_policy_name_field_number)
-        if developer_name is not None:
-            policy_key_dict['developer'] = developer_name
+        if developer_org_name is not None:
+            policy_key_dict['organization'] = developer_org_name
             _fields_list.append(_developer_name_field_number)
 
         if policy_key_dict:
@@ -80,13 +80,13 @@ class PrivacyPolicy(MexOperation):
 
         return policy_dict
 
-    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, use_defaults=use_defaults)
+    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, use_defaults=use_defaults)
         msg_dict = {'privacypolicy': msg}
 
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'developer' in msg['key']:
-            msg_delete = self._build(policy_name=msg['key']['name'], developer_name=msg['key']['developer'], use_defaults=False)
+        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_delete = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_delete = {'privacypolicy': msg_delete}
 
         msg_dict_show = None
@@ -96,20 +96,20 @@ class PrivacyPolicy(MexOperation):
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
-    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, use_defaults=use_defaults)
+    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, use_defaults=use_defaults)
         msg_dict = {'privacypolicy': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, use_defaults=use_defaults)
+    def show_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = {'privacypolicy': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_name=None, rule_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, rule_list=rule_list, use_defaults=use_defaults, include_fields=True)
+    def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'privacypolicy': msg}
 
         msg_dict_show = None
