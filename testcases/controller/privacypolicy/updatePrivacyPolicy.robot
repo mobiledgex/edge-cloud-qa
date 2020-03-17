@@ -21,7 +21,7 @@ UpdatePrivacyPolicy - shall be able to add rules
    ${policy_return}=  Create Privacy Policy  region=${region}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${developer_name}
    Should Not Contain  ${policy_return['data']  outbound_security_rules
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
@@ -32,7 +32,7 @@ UpdatePrivacyPolicy - shall be able to add rules
    ${numrules}=  Get Length  ${policy_return2['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -57,7 +57,7 @@ UpdatePrivacyPolicy - shall be able to delete rules
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${developer_name}
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
@@ -78,7 +78,7 @@ UpdatePrivacyPolicy - shall be able to delete rules
    ${numrules}=  Get Length  ${policy_return2['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -100,7 +100,7 @@ UpdatePrivacyPolicy - update with no rules shall not change the rules
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${developer_name}
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
@@ -118,7 +118,7 @@ UpdatePrivacyPolicy - update with no rules shall not change the rules
    ${numrules}=  Get Length  ${policy_return2['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -144,7 +144,7 @@ UpdatePrivacyPolicy - shall be able to update icmp cidr
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}     icmp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}  1.1.1.1/1 
 
@@ -155,7 +155,7 @@ UpdatePrivacyPolicy - shall be able to update icmp cidr
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2} 
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}     icmp
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}  2.1.1.1/1
 
@@ -174,7 +174,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and no maxport
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -190,7 +190,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and no maxport
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -211,7 +211,7 @@ UpdatePrivacyPolicy - shall be able to create with tcp and maxport=0
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -225,7 +225,7 @@ UpdatePrivacyPolicy - shall be able to create with tcp and maxport=0
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
@@ -246,7 +246,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and minport/maxport
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -260,7 +260,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and minport/maxport
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
@@ -284,7 +284,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and min/max port numbers
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -298,7 +298,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp and min/max port numbers
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        tcp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
@@ -322,7 +322,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and no maxport
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -336,7 +336,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and no maxport
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
@@ -360,7 +360,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and maxport=0
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -398,7 +398,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and minport/maxport
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -412,7 +412,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and minport/maxport
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
@@ -436,7 +436,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and min/max port numbers
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
 
@@ -450,7 +450,7 @@ UpdatePrivacyPolicy - shall be able to update with udp and min/max port numbers
    ${policy_return2}=  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist2}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                           ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${developer_name}
 
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal             ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     6.1.1.1/1
@@ -476,7 +476,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp/udp/icmp
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
    
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
@@ -505,7 +505,7 @@ UpdatePrivacyPolicy - shall be able to update with tcp/udp/icmp
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/3
@@ -543,7 +543,7 @@ UpdatePrivacyPolicy - shall be able to update with duplicate policy items
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
@@ -590,7 +590,7 @@ UpdatePrivacyPolicy - shall be able to update with duplicate policy items
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     2.1.1.1/3
@@ -640,7 +640,7 @@ UpdatePrivacyPolicy - shall be able to update with same rules
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${developer_name}
 
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
    Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
@@ -664,7 +664,7 @@ UpdatePrivacyPolicy - shall be able to update with same rules
    ${numrules}=  Get Length  ${policy_return2['data']['outbound_security_rules']}
 
    Should Be Equal  ${policy_return2['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return2['data']['key']['developer']}                              ${developer_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                              ${developer_name}
 
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['protocol']}        icmp
    Should Be Equal  ${policy_return2['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
