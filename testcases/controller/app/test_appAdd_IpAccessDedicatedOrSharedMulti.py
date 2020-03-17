@@ -44,14 +44,14 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name)#,
-                                                  #developer_address=developer_address,
-                                                  #developer_email=developer_email)
+#        self.developer = mex_controller.Developer(developer_org_name=developer_name)#,
+#                                                  #developer_address=developer_address,
+#                                                  #developer_email=developer_email)
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_developer(self.developer.developer) 
+#        self.controller.create_developer(self.developer.developer) 
         #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppDockerIpAccessDedicatedOrSharedTCP2Ports(self):
@@ -68,7 +68,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:655,tcp:2',
                                              default_flavor_name=flavor_name)
@@ -102,7 +102,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:1,tcp:2,tcp:3,tcp:4,tcp:5,tcp:6,tcp:7,tcp:8,tcp:9,tcp:10',
                                              default_flavor_name=flavor_name)
@@ -139,7 +139,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = tcp_list[:-1],
                                              default_flavor_name=flavor_name)
@@ -173,7 +173,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3',
                                              default_flavor_name=flavor_name)
@@ -209,7 +209,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:655,http:2',
                                              default_flavor_name=flavor_name)
@@ -246,7 +246,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10',
                                              default_flavor_name=flavor_name)
@@ -286,7 +286,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = tcp_list[:-1],
                                              default_flavor_name=flavor_name)
@@ -323,7 +323,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'tcp:1,udp:1,http:8080,tcp:2,udp:2,http:80,udp:3,tcp:3',
                                              default_flavor_name=flavor_name)
@@ -358,7 +358,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:5535,udp:55',
                                              default_flavor_name=flavor_name)
@@ -392,7 +392,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = 'udp:10,udp:9,udp:8,udp:7,udp:6,udp:5,udp:4,udp:3,udp:2,udp:1',
                                              default_flavor_name=flavor_name)
@@ -429,7 +429,7 @@ class tc(unittest.TestCase):
                                              app_name=app_name,
                                              app_version=app_version,
                                              #cluster_name=cluster_name,
-                                             developer_name=developer_name,
+                                             developer_org_name=developer_name,
                                              ip_access = 'IpAccessDedicatedOrShared',
                                              access_ports = udp_list[:-1],
                                              default_flavor_name=flavor_name)
@@ -464,7 +464,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'tcp:655,tcp:2',
                                       default_flavor_name=flavor_name)
@@ -496,7 +496,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'tcp:1,tcp:2,tcp:3,tcp:4,tcp:5,tcp:6,tcp:7,tcp:8,tcp:9,tcp:10',
                                       default_flavor_name=flavor_name)
@@ -531,7 +531,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = tcp_list[:-1],
                                       default_flavor_name=flavor_name)
@@ -563,7 +563,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3',
                                       default_flavor_name=flavor_name)
@@ -595,7 +595,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'udp:5535,udp:55',
                                       default_flavor_name=flavor_name)
@@ -627,7 +627,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'udp:10,udp:9,udp:8,udp:7,udp:6,udp:5,udp:4,udp:3,udp:2,udp:1',
                                       default_flavor_name=flavor_name)
@@ -662,7 +662,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = udp_list[:-1],
                                       default_flavor_name=flavor_name)
@@ -694,7 +694,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'http:655,http:2',
                                       default_flavor_name=flavor_name)
@@ -726,7 +726,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10',
                                       default_flavor_name=flavor_name)
@@ -761,7 +761,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = tcp_list[:-1],
                                       default_flavor_name=flavor_name)
@@ -793,7 +793,7 @@ class tc(unittest.TestCase):
                                       app_name=app_name,
                                       app_version=app_version,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       ip_access = 'IpAccessDedicatedOrShared',
                                       access_ports = 'http:80,tcp:1,udp:1,tcp:2,udp:2,udp:3,tcp:3,http:8080',
                                       default_flavor_name=flavor_name)
@@ -812,7 +812,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         #self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_developer(self.developer.developer)
+#        self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':

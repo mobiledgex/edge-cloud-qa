@@ -814,7 +814,8 @@ class App():
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
-        shared_variables.developer_name_default = self.developer_org_name
+        if self.developer_org_name is not None:
+            shared_variables.developer_name_default = self.developer_org_name
         
         #self.app_complete = copy.copy(self.app)
         #self.app_complete.image_path = self.image_path
@@ -883,7 +884,7 @@ class AppInstance():
         self.longitude = longitude
         self.crm_override = crm_override
         self.autocluster_ipaccess = autocluster_ip_access
-        
+        print('*WARN*', 'xxxx', self.developer_org_name, use_defaults)        
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
         if self.developer_org_name == 'default':
@@ -926,7 +927,7 @@ class AppInstance():
         clusterinst_key_dict = {}
         cluster_key_dict = {}
         loc_dict = {}
-        
+
         if self.app_name:
             app_key_dict['name'] = self.app_name
         if self.app_version:
