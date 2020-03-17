@@ -59,17 +59,17 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same
 
 *** Keywords ***
 Setup
-    Create Operator Code     operator_name=${operator_name}  code=${code}  region=${region}
+    Create Operator Code     operator_org_name=${operator_name}  code=${code}  region=${region}
     #Create Developer
     Create Flavor  region=${region}
 #    CreateOperatorCode  region=${region}
-    #Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
-    #Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
+    #Create Cloudlet	   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  latitude=${cloudlet_lat1}  longitude=${cloudlet_long1}
+    #Create Cloudlet	   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  latitude=${cloudlet_lat2}  longitude=${cloudlet_long2}
     #Create Cluster
     Create App             access_ports=${access_ports}  region=${region}
-     #${appinst_1}=          Create App Instance    region=${region}  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autoclusterAutomatio  cluster_instance_developer_name=automation_api  cloudlet_name=tmocloud-1  operator_name=dmuus  flavor_name=automation_api_flavor
-     ${appinst_1}=          Create App Instance    region=${region}  cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
-     ${appinst_2}=          Create App Instance    region=${region}  cloudlet_name=${cloudlet_name2}  operator_name=${operator_name}  cluster_instance_name=autocluster
+     #${appinst_1}=          Create App Instance    region=${region}  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autoclusterAutomatio  cluster_instance_developer_name=automation_api  cloudlet_name=tmocloud-1  operator_org_name=dmuus  flavor_name=automation_api_flavor
+     ${appinst_1}=          Create App Instance    region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+     ${appinst_2}=          Create App Instance    region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${appinst_1}
     Set Suite Variable  ${appinst_2}
