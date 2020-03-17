@@ -29,7 +29,7 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
 
@@ -37,7 +37,7 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
    Should Be Equal  ${show_return[0]['key']['name']}  ${cloudlet1['cloudlet']} 
-   Should Be Equal  ${show_return[0]['key']['operator_key']['name']}  ${cloudlet1['operator']}
+   Should Be Equal  ${show_return[0]['key']['organization']}  ${cloudlet1['operator']}
    Length Should Be   ${show_return}  1
 
    @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
@@ -51,8 +51,8 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
 
@@ -74,11 +74,11 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    ...  send ShowOrgCloudlet for org2 and verify it returns no cloudlets
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
 
@@ -97,9 +97,9 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -122,9 +122,9 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -147,9 +147,9 @@ ShowOrgCloudlet - orgs shall be assigned the same pool
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname2}
@@ -174,9 +174,9 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -220,11 +220,11 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -262,9 +262,9 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}  auto_delete=${False}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -281,8 +281,8 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
    Length Should Be   ${show_return2}  2
 
    # delete the pool members 
-   Delete Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Delete Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Delete Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Delete Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    ${show_return_new}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
    ${show_return_new2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
@@ -306,11 +306,11 @@ ShowOrgCloudlet - shall be to show after deleting all pools
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  auto_delete=${False}  auto_delete=${False}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  auto_delete=${False}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}  auto_delete=${False}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}  auto_delete=${False}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}  auto_delete=${False}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}  auto_delete=${False}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}  auto_delete=${False}  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}  auto_delete=${False}  auto_delete=${False}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}  auto_delete=${False}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}  auto_delete=${False}
@@ -368,9 +368,9 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
    Length Should Be   ${show_return2}  0
 
    # add members
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']} 
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']} 
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    ${show_return_new}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
    ${show_return_new2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
@@ -393,8 +393,8 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  #auto_delete=${False}
 
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
 
@@ -426,7 +426,7 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
 Cloudlets Should Be In List
    [Arguments]  ${cloudlet_list}  ${show_list}
    FOR  ${pool_cloudlet}  IN  @{show_list}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlet_list}  ${cloudlet_key}
    END
 

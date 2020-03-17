@@ -30,7 +30,7 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}  
    END
 
@@ -48,7 +48,7 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -68,7 +68,7 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -89,7 +89,7 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -109,7 +109,7 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -129,7 +129,7 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -149,7 +149,7 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 
@@ -169,7 +169,7 @@ ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['operator_key']['name']}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}
    END
 

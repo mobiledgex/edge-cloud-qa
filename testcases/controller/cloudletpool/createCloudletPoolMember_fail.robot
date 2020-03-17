@@ -25,7 +25,7 @@ CreateCloudletPoolMember - create without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool Member  region=US  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid operator name"}
+   Should Contain   ${error}  error={"message":"Invalid organization name"}
 
 CreateCloudletPoolMember - create with invalid pool name shall return error 
    [Documentation]
@@ -60,12 +60,12 @@ CreateCloudletPoolMember - create with same name shall return error
    #EDGECLOUD-1716 CreateCloudletPoolMember for duplicate create should return the member name in the error
 
    Create Cloudlet Pool  region=US  token=${token} 
-   Create Cloudlet Pool Member  region=US  token=${token}  operator_name=tmus  cloudlet_name=tmocloud-1  
+   Create Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1  
 
-   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_name=tmus  cloudlet_name=tmocloud-1
+   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1
    
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"CloudletPoolMember key {\\\\"pool_key\\\\":{\\\\"name\\\\":\\\\"${pool_name}\\\\"},\\\\"cloudlet_key\\\\":{\\\\"operator_key\\\\":{\\\\"name\\\\":\\\\"tmus\\\\"},\\\\"name\\\\":\\\\"tmocloud-1\\\\"}} already exists"}
+   Should Contain  ${error}   {"message":"CloudletPoolMember key {\\\\"pool_key\\\\":{\\\\"name\\\\":\\\\"${pool_name}\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"}} already exists"}
 
 CreateCloudletPoolMember - create operator not found shall return error
    [Documentation]
@@ -76,10 +76,10 @@ CreateCloudletPoolMember - create operator not found shall return error
 
    Create Cloudlet Pool  region=US  token=${token}
 
-   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_name=tmusxxx  cloudlet_name=tmocloud-1
+   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmusxxx  cloudlet_name=tmocloud-1
    
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cloudlet key {\\\\"operator_key\\\\":{\\\\"name\\\\":\\\\"tmusxxx\\\\"},\\\\"name\\\\":\\\\"tmocloud-1\\\\"} not found"}
+   Should Contain  ${error}   {"message":"Cloudlet key {\\\\"organization\\\\":\\\\"tmusxxx\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"} not found"}
 
 CreateCloudletPoolMember - create cloudlet not found shall return error
    [Documentation]
@@ -90,10 +90,10 @@ CreateCloudletPoolMember - create cloudlet not found shall return error
 
    Create Cloudlet Pool  region=US  token=${token}
 
-   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_name=tmus  cloudlet_name=tmocloud-1xx
+   ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool Member  region=US  token=${token}  operator_org_name=tmus  cloudlet_name=tmocloud-1xx
    
    Should Contain  ${error}   400
-   Should Contain  ${error}   {"message":"Cloudlet key {\\\\"operator_key\\\\":{\\\\"name\\\\":\\\\"tmus\\\\"},\\\\"name\\\\":\\\\"tmocloud-1xx\\\\"} not found"}
+   Should Contain  ${error}   {"message":"Cloudlet key {\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1xx\\\\"} not found"}
 
 *** Keywords ***
 Setup
