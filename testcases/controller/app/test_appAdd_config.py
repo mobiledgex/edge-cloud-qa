@@ -30,8 +30,8 @@ access_ports = 'tcp:1'
 config = '"template": { "spec": { "hostAliases": [ { "ip": "37.50.143.121", "hostnames": [ "buckhornedgecloud.telecom.de" ] }]}}'
 config_http = 'http://35.199.188.102/apps/dummyconfig.json'
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
 logger = logging.getLogger()

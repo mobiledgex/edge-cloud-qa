@@ -25,8 +25,8 @@ flavor_name = 'c1.tiny' + str(time.time())
 cluster_name = 'cluster' + str(time.time())
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -44,8 +44,8 @@ class tc(unittest.TestCase):
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name, use_defaults=False)
         self.cluster_instance_noFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                         cloudlet_name=cloud_name,
-                                                                        operator_name=operator_name,
-                                                                        developer_name='mydev',
+                                                                        operator_org_name=operator_name,
+                                                                        developer_org_name='mydev',
                                                                         number_nodes=1,
                                                                         number_masters=1,
                                                                         use_defaults=False
@@ -53,14 +53,14 @@ class tc(unittest.TestCase):
         self.cluster_instance_emptyFlavor = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                                            cloudlet_name=cloud_name,
                                                                            flavor_name='',
-                                                                           developer_name='mydev',
-                                                                           operator_name=operator_name
+                                                                           developer_org_name='mydev',
+                                                                           operator_org_name=operator_name
                                                                           )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
         #self.operator = mex_controller.Operator(operator_name = operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = cloud_name,
-                                                operator_name = operator_name,
+                                                operator_org_name = operator_name,
                                                 number_of_dynamic_ips = 254)
 
         # create a new cluster for adding the instance

@@ -21,8 +21,8 @@ import MexController as mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -71,7 +71,7 @@ class tc(unittest.TestCase):
         clusterinst_pre = self.controller.show_cluster_instances()
 
         # create the cluster instance with flavor_name only
-        self.cluster_instance = mex_controller.ClusterInstance(operator_name='dmuus', use_defaults=False)
+        self.cluster_instance = mex_controller.ClusterInstance(operator_org_name='dmuus', use_defaults=False)
         try:
             resp = self.controller.create_cluster_instance(self.cluster_instance.cluster_instance)
         except Exception as e:
@@ -131,7 +131,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Invalid operator name', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid organization name', 'error details')
 
         #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
@@ -173,7 +173,7 @@ class tc(unittest.TestCase):
         # create the cluster instance with no develeper 
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name='mycluster',
                                                              cloudlet_name='tmocloud-1',
-                                                             operator_name='dmuus',
+                                                             operator_org_name='dmuus',
                                                              flavor_name='flavor_name',
                                                              use_defaults=False)
         try:
@@ -185,7 +185,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Developer cannot be empty', 'error details')
+        expect_equal(self.controller.response.details(), 'ClusterInst Organization cannot be empty', 'error details')
         assert_expectations()
 
 if __name__ == '__main__':

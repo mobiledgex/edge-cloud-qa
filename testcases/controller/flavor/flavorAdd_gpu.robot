@@ -9,32 +9,49 @@ Test Teardown  Cleanup Provisioning
 ${region}=  US
 
 *** Test Cases ***
-Flavor - shall be able to create flavor with 1 gpu resource 
+Flavor - shall be able to create flavor with gpu resources
     [Documentation]
     ...  create a flavor with gpu resource 
     ...  verify create is successful
 
-    ${flavor}=  Create Flavor  region=${region}  optional_resources=gpu=1
+    ${flavor}=  Create Flavor  region=${region}  optional_resources=gpu=gpu:1
+    Should Be Equal  ${flavor['data']['opt_res_map']['gpu']}  gpu:1
 
-    Should Be Equal  ${flavor['data']['opt_res_map']['gpu']}  1
+    ${flavor_name}=  Get Default Flavor Name
+    ${flavor}=  Create Flavor  region=${region}  flavor_name=${flavor_name}xx  optional_resources=gpu=gpu:4
+    Should Be Equal  ${flavor['data']['opt_res_map']['gpu']}  gpu:4
 
-Flavor - shall be able to create flavor with 4 gpu resources
+Flavor - create shall fail with invalid gpu resources
     [Documentation]
-    ...  create a flavor with gpu resources
-    ...  verify create is successful
-
-    ${flavor}=  Create Flavor  region=${region}  optional_resources=gpu=4
-
-    Should Be Equal  ${flavor['data']['opt_res_map']['gpu']}  4
-
-Flavor - create shall faile with invalid gpu resources
-    [Documentation]
-    ...  create a flavor with gpu resources = xx
+    ...  create a flavor with invalid gpu resources
     ...  verify proper error is returned 
 
-    EDGECLOUD-1743 - CreateFlavor with invalid gpu value should return an error
+    #EDGECLOUD-1743 - CreateFlavor with invalid gpu value should return an error
 
-    ${flavor}=  Create Flavor  region=${region}  optional_resources=gpu=xx
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=gpu=gpu:xx
+    Should Contain  ${error}  ('code=400', 'error={"message":"Non-numeric resource count encountered, found xx"}')
 
-    Should Be Equal  ${flavor['data']['opt_res_map']['gpu']}  4
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=gpu=gpu:
+    Should Contain  ${error}  ('code=400', 'error={"message":"Non-numeric resource count encountered, found "}')
 
+Flavor - create shall fail with invalid gpu resource type
+    [Documentation]
+    ...  create a flavor with invalid gpu resource type 
+    ...  verify proper error is returned
+
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=gpu=pu:1
+    Should Contain  ${error}  ('code=400', 'error={"message":"GPU resource type selector must be one of [gpu, pci, vgpu] found pu"}') 
+
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=gpu=1
+    Should Contain  ${error}  ('code=400', 'error={"message":"Missing manditory resource count, ex: optresmap=gpu=gpu:1"}') 
+
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=gpu=
+    Should Contain  ${error}  ('code=400', 'error={"message":"Missing manditory resource count, ex: optresmap=gpu=gpu:1"}')
+
+Flavor - create shall fail with invalid resource
+    [Documentation]
+    ...  create a flavor with invalid resource
+    ...  verify proper error is returned
+
+    ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=pu=pu:1
+    Should Contain  ${error}  ('code=400', 'error={"message":"Only GPU resources currently supported, use optresmap=gpu=$resource:$count found pu"}')

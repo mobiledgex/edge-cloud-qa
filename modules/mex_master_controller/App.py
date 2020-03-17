@@ -17,7 +17,7 @@ class App(MexOperation):
         self.show_url = '/auth/ctrl/ShowApp'
         self.update_url = '/auth/ctrl/UpdateApp'
 
-    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, include_fields=False, use_defaults=True):
+    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, access_type=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _app_name_field_number = "2.2"
@@ -25,21 +25,21 @@ class App(MexOperation):
         _developer_name_field_number = "2.1.2"
         _accessports_field_number = "7"
 
-        app_name = app_name
-        app_version = app_version
-        developer_name = developer_name
-        image_type = image_type
-        image_path = image_path
-        command = command
-        default_flavor_name = default_flavor_name
-        access_ports = access_ports
-        auth_public_key = auth_public_key
-        permits_platform_apps = permits_platform_apps
-        deployment = deployment
-        deployment_manifest = deployment_manifest
-        scale_with_cluster = scale_with_cluster
-        official_fqdn = official_fqdn
-        annotations = annotations
+#        app_name = app_name
+#        app_version = app_version
+#        developer_name = developer_name
+#        image_type = image_type
+#        image_path = image_path
+#        command = command
+#        default_flavor_name = default_flavor_name
+#        access_ports = access_ports
+#        auth_public_key = auth_public_key
+#        permits_platform_apps = permits_platform_apps
+#        deployment = deployment
+#        deployment_manifest = deployment_manifest
+#        scale_with_cluster = scale_with_cluster
+#        official_fqdn = official_fqdn
+#        annotations = annotations
 
         if app_name == 'default': app_name = shared_variables.app_name_default
         if app_version == 'default': app_version = shared_variables.app_version_default
@@ -79,6 +79,13 @@ class App(MexOperation):
             image_type = 3            
         elif image_type == 'ImageTypeUnknown':
             image_type = 0
+
+        if access_type and access_type.lower() == 'default':
+            access_type = 0
+        elif access_type and access_type.lower() == 'direct':
+            access_type = 1
+        elif access_type and access_type.lower() == 'loadbalancer':
+            access_type = 2            
 
         if app_name == 'default':
             app_name = shared_variables.app_name_default
@@ -123,6 +130,8 @@ class App(MexOperation):
             app_dict['permits_platform_apps'] = permits_platform_apps
         if deployment is not None:
             app_dict['deployment'] = deployment
+        if access_type is not None:
+            app_dict['access_type'] = access_type        
         if deployment_manifest is not None:
             app_dict['deployment_manifest'] = deployment_manifest
             #_fields_list.append(self._deployment_manifest_field)
@@ -132,6 +141,8 @@ class App(MexOperation):
             app_dict['official_fqdn'] = official_fqdn
         if annotations:
             app_dict['annotations'] = annotations
+        if auto_prov_policy:
+            app_dict['auto_prov_policy'] = auto_prov_policy
 
         if include_fields and _fields_list:
             app_dict['fields'] = []
@@ -141,8 +152,8 @@ class App(MexOperation):
         return app_dict
 
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, access_type=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, access_type=access_type, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         msg_dict_delete = None
@@ -157,20 +168,20 @@ class App(MexOperation):
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
-    def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+    def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         return self.delete(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+    def show_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         return self.show(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
         
-    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults, include_fields=True)
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_name=developer_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'app': msg}
 
         return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)

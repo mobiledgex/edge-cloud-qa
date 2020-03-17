@@ -219,7 +219,7 @@ class MexInfluxDB(WebService) :
     def get_influx_cluster_disk_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
         return self.get_influx_cluster_metrics(selector='disk', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, condition=condition)
 
-    def get_influx_cluster_memory_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
+    def get_influx_cluster_mem_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):
         return self.get_influx_cluster_metrics(selector='memory', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_name=operator_name, developer_name=developer_name, condition=condition)
 
     def get_influx_cluster_network_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_name=None, developer_name=None, condition=None):

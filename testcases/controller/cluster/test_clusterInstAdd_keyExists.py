@@ -18,8 +18,8 @@ import MexController as mex_controller
 controller_address = os.getenv('AUTOMATION_CONTROLLER_ADDRESS', '127.0.0.1:55001')
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -34,9 +34,9 @@ class tc(unittest.TestCase):
         self.flavor_name = 'c1.small' + stamp
         self.developer_name = 'developer' + stamp
 
-        self.operator = mex_controller.Operator(operator_name = self.operator_name)        
+#        self.operator = mex_controller.Operator(operator_name = self.operator_name)        
         self.cloudlet = mex_controller.Cloudlet(cloudlet_name = self.cloud_name,
-                                                operator_name = self.operator_name,
+                                                operator_org_name = self.operator_name,
                                                 number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=self.flavor_name, ram=1024, vcpus=1, disk=1)
         self.controller = mex_controller.MexController(controller_address = controller_address,
@@ -49,8 +49,8 @@ class tc(unittest.TestCase):
 
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                              cloudlet_name=self.cloud_name,
-                                                             operator_name=self.operator_name,
-                                                             developer_name=self.developer_name,
+                                                             operator_org_name=self.operator_name,
+                                                             developer_org_name=self.developer_name,
                                                              flavor_name=self.flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
@@ -79,7 +79,7 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"operator_key":{"name":"' + self.operator_name + '"},"name":"' + self.cloud_name + '"},"developer":"' + self.developer_name + '"} already exists', 'error details')
+        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"organization":"' + self.operator_name + '","name":"' + self.cloud_name + '"},"organization":"' + self.developer_name + '"} already exists', 'error details')
         expect_equal(len(clusterinst_pre)+1, len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 

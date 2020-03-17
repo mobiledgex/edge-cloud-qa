@@ -60,6 +60,7 @@ AppInst - user shall be able to add with HTTP port range for k8s
     ...  create an app instance
     ...  verify ports are correct
 
+# no longer supported
     Create App  access_ports=http:1-10
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 

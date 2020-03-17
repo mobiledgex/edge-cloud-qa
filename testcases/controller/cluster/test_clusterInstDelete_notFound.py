@@ -23,8 +23,8 @@ cloud_name = 'tmocloud-1'
 flavor_name = 'c1.small'
 
 mex_root_cert = 'mex-ca.crt'
-mex_cert = 'localserver.crt'
-mex_key = 'localserver.key'
+mex_cert = 'mex-client.crt'
+mex_key = 'mex-client.key'
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -44,13 +44,13 @@ class tc(unittest.TestCase):
 
         self.cluster_instance_noflavor = mex_controller.ClusterInstance(cluster_name=self.cluster_name,
                                                                         cloudlet_name=cloud_name,
-                                                                        operator_name=operator_name,
+                                                                        operator_org_name=operator_name,
                                                                         use_defaults=False
                                                                        )
 
         self.cluster_instance_noName = mex_controller.ClusterInstance(
                                                                         cloudlet_name=cloud_name,
-                                                                        operator_name=operator_name,
+                                                                        operator_org_name=operator_name,
                                                                         use_defaults=False
                                                                        )
 
@@ -73,7 +73,7 @@ class tc(unittest.TestCase):
         clusterinst_after_add = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Invalid operator name', 'error details')
+        expect_equal(self.controller.response.details(), 'Invalid organization name', 'error details')
 
         #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<>  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
 
@@ -100,7 +100,7 @@ class tc(unittest.TestCase):
         clusterinst_after_add = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"operator_key":{"name":"' + operator_name + '"},"name":"' + cloud_name + '"}} not found', 'error details')
+        expect_equal(self.controller.response.details(), 'ClusterInst key {"cluster_key":{"name":"' + self.cluster_name + '"},"cloudlet_key":{"organization":"' + operator_name + '","name":"' + cloud_name + '"}} not found', 'error details')
 
         #expect_equal(len(clusterinst_after_add), len(clusterinst_before), 'count after add')
 
