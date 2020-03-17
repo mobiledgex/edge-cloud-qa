@@ -27,9 +27,9 @@ token_server_uri_global = None
 token_global = None
 
 class Client():
-    def __init__(self, developer_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True):
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True):
         client_dict = {}
-        self.dev_name = developer_name
+        self.dev_name = developer_org_name
         self.app_name = app_name
         self.app_vers = app_version
         self.auth_token = auth_token
@@ -39,13 +39,13 @@ class Client():
         if use_defaults:
             if not app_name: self.app_name = shared_variables.app_name_default
             if not app_version: self.app_vers = shared_variables.app_version_default
-            if not developer_name: self.dev_name = shared_variables.developer_name_default
+            if not developer_org_name: self.dev_name = shared_variables.developer_name_default
             if not auth_token: self.auth_token = auth_token_global
             
         #if auth_token == 'default':
         #    self.auth_token = 
         if self.dev_name is not None:
-            client_dict['dev_name'] = self.dev_name
+            client_dict['org_name'] = self.dev_name
         if self.app_name is not None:
             client_dict['app_name'] = self.app_name
         if self.app_vers is not None:
