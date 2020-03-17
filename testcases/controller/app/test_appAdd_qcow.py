@@ -44,14 +44,14 @@ class tc(unittest.TestCase):
                                                    )
 
         self.flavor = mex_controller.Flavor(flavor_name=flavor_name, ram=1024, vcpus=1, disk=1)
-        self.developer = mex_controller.Developer(developer_name=developer_name)#,
-                                                  #developer_address=developer_address,
-                                                  #developer_email=developer_email)
+#        self.developer = mex_controller.Developer(developer_org_name=developer_name)#,
+#                                                  #developer_address=developer_address,
+#                                                  #developer_email=developer_email)
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                      default_flavor_name=flavor_name)
 
         self.controller.create_flavor(self.flavor.flavor)
-        self.controller.create_developer(self.developer.developer) 
+#        self.controller.create_developer(self.developer.developer) 
         #self.controller.create_cluster(self.cluster.cluster)
 
     def test_CreateAppQCOWNoImagePath(self):
@@ -70,7 +70,7 @@ class tc(unittest.TestCase):
                                       #ip_access='IpAccessDedicatedOrShared',
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
         #resp = self.controller.create_app(self.app.app)
@@ -112,7 +112,7 @@ class tc(unittest.TestCase):
                                       #ip_access='IpAccessDedicated',
                                       access_ports=access_ports,
                                       #cluster_name=cluster_name,
-                                      developer_name=developer_name,
+                                      developer_org_name=developer_name,
                                       default_flavor_name=flavor_name,
                                       use_defaults=False)
         #resp = self.controller.create_app(self.app.app)
@@ -140,7 +140,7 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         #self.controller.delete_cluster(self.cluster.cluster)
-        self.controller.delete_developer(self.developer.developer)
+#        self.controller.delete_developer(self.developer.developer)
         self.controller.delete_flavor(self.flavor.flavor)
 
 if __name__ == '__main__':

@@ -43,10 +43,10 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
-        self.developer = mex_controller.Developer(developer_name=developer_name)#,
-                                                  #developer_address=developer_address,
-                                                  #developer_email=developer_email)
-        self.controller.create_developer(self.developer.developer) 
+#        self.developer = mex_controller.Developer(developer_org_name=developer_name)#,
+#                                                  #developer_address=developer_address,
+#                                                  #developer_email=developer_email)
+#        self.controller.create_developer(self.developer.developer) 
 
     def test_CreateAppDefaultFlavorEmpty_Docker(self):
         # [Documentation] App - User shall be not be able to create app with empty defaultflavor and type Docker
@@ -63,7 +63,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  default_flavor_name='')
         try:
             resp = self.controller.create_app(app.app)
@@ -96,7 +96,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  default_flavor_name='')
         try:
             resp = self.controller.create_app(app.app)
@@ -129,7 +129,7 @@ class tc(unittest.TestCase):
                                  image_path=docker,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  use_defaults=False
                                  )
         try:
@@ -163,7 +163,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version=app_version,
                                  cluster_name='dummyCluster',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  #image_path='imagepath#md5:12345678901234567890123456789012',
                                  use_defaults=False
                                  )
@@ -182,9 +182,9 @@ class tc(unittest.TestCase):
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
-    @classmethod
-    def tearDownClass(self):
-        self.controller.delete_developer(self.developer.developer)
+#    @classmethod
+#    def tearDownClass(self):
+#        self.controller.delete_developer(self.developer.developer)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(tc)
