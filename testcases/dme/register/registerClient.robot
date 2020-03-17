@@ -45,7 +45,7 @@ RegisterClient - request without auth shall return proper JWT
 
    #Should Be Equal  ${decoded_cookie['key']['peerip']}   ${peer_ip} 
    Should Match Regexp         ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   Should Be Equal             ${decoded_cookie['key']['devname']}  ${developer_name_default}	
+   Should Be Equal             ${decoded_cookie['key']['orgname']}  ${developer_name_default}	
    Should Be Equal             ${decoded_cookie['key']['appname']}  ${app_name_default}	
    Should Be Equal             ${decoded_cookie['key']['appvers']}  ${app_version_default}	
    Should Be Equal As Numbers  ${uuid_length}  27 
@@ -59,5 +59,5 @@ Setup
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
     Create App                  
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 

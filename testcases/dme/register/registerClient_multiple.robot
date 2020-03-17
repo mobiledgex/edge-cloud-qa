@@ -34,7 +34,7 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    ${app_version_default}=     Get Default App Version
 
    : FOR  ${INDEX}  IN RANGE  0  10 
-   \  Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  no_auto_delete=True  cluster_instance_name=autocluster
+   \  Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  no_auto_delete=True  cluster_instance_name=autocluster
 
    \  Register Client	
    \  ${decoded_cookie}=  decoded session cookie
@@ -48,11 +48,11 @@ RegisterClient - register shall work when keep creating/deleting same app instan
    \  ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    \  Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
    \  Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
-   \  Should Be Equal  ${decoded_cookie['key']['devname']}  ${developer_name_default}	
+   \  Should Be Equal  ${decoded_cookie['key']['orgname']}  ${developer_name_default}	
    \  Should Be Equal  ${decoded_cookie['key']['appname']}  ${app_name_default}	
    \  Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version_default}	
  
-   \  Delete App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+   \  Delete App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
 *** Keywords ***
 Setup
