@@ -23,6 +23,7 @@ app_name = 'app' + stamp
 flavor_name = 'x1.medium'
 cluster_name = 'cluster' + stamp
 qcow_image = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'mex-client.crt'
@@ -53,11 +54,11 @@ class tc(unittest.TestCase):
         app = mex_controller.App(image_type='ImageTypeDocker',
                                  cluster_name='dummyCluster',
                                  access_ports=access_ports,
-                                 developer_name='',
+                                 developer_org_name='',
                                  app_name=app_name,
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
-                                 image_path='automation.com',
+                                 image_path=docker_image,
                                  #ip_access='IpAccessShared',
                                  use_defaults=False)
 
@@ -94,7 +95,7 @@ class tc(unittest.TestCase):
         app = mex_controller.App(image_type='ImageTypeQCOW',
                                  cluster_name='dummyCluster',
                                  access_ports=access_ports,
-                                 developer_name='',
+                                 developer_org_name='',
                                  app_name=app_name,
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
@@ -139,7 +140,7 @@ class tc(unittest.TestCase):
                                  app_name=app_name,
                                  app_version='1.0',
                                  default_flavor_name=flavor_name,
-                                 image_path='automation.com',
+                                 image_path=docker_image,
                                  #ip_access='IpAccessShared',
                                  use_defaults=False
                                  )
