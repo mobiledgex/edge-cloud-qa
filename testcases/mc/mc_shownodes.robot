@@ -22,7 +22,7 @@ MC - User shall be able to show nodes
    ${num_cloudlets}=  Get Length  ${cloudlets}
    log to console  ${num_cloudlets}
 
-   Controller Should Exist  ${nodes}
+#   Controller Should Exist  ${nodes}
    DME Should Exist  ${nodes}
    #Hamburg CRM Should Exist  ${nodes}
    Azure CRM Should Exist    ${nodes}
@@ -99,8 +99,8 @@ DME Should Exist
    : FOR  ${node}  IN  @{nodes}
    \  log to console  ${node['data']}
    \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^dme-
-   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  1
-   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  TDG
+   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal     ${node['data']['key']['type']}  dme 
+   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  TDG
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  mexplat-qa-cloudlet 
 
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
@@ -125,7 +125,7 @@ Hamburg CRM Should Exist
    \  log to console  ${node['data']}
    \  ${name_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['name']}  automationHamburgCloudlet 
    \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  2
-   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  TDG
+   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  TDG
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationHamburgCloudlet
 
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
@@ -150,8 +150,8 @@ Azure CRM Should Exist
    #\  ${name_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['name']}  automationHamburgCloudlet
    \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^gitlab-qa 
 
-   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  2
-   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  azure
+   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['type']}  crm 
+   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  azure
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationAzureCentralCloudlet
 
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
@@ -176,8 +176,8 @@ GCP CRM Should Exist
    #\  ${name_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['name']}  automationHamburgCloudlet
    \  ${name_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['key']['name']}  ^gitlab-qa
 
-   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal As Integers    ${node['data']['key']['node_type']}  2
-   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['operator_key']['name']}  gcp 
+   \  ${type_match}=  Run Keyword And Return Status  Should Be Equal                ${node['data']['key']['type']}  crm 
+   \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  gcp 
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationGcpCentralCloudlet
 
    \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
@@ -234,6 +234,6 @@ Get Number Of CRMs
    \  Log to console  ${count}
    \  Log to console  andy2
 #   \  ${count}=  Evaluate  ${count} + 1
-   \  ${count}=  Run Keyword If  "${node['data']['key']['node_type']}" == "2"   Evaluate  ${count}+1  ELSE  Set Variable  ${count}
+   \  ${count}=  Run Keyword If  "${node['data']['key']['type']}" == "crm"   Evaluate  ${count}+1  ELSE  Set Variable  ${count}
 
    [Return]  ${count}

@@ -25,18 +25,18 @@ CreateAppInst - autocluster shall be created when app instance is created withou
     ${epoch_time}=  Get Time  epoch
     ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}
 	
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     Update App          access_ports=udp:1
 
-    ${app_instance}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    ${app_instance}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
 
     ${app_name_default}=  Get Default App Name
     ${flavor_name_default}=  Get Default Flavor Name
 	
     #Show Cluster Instances
     #${cluster_name}=  Catenate   SEPARATOR=  autocluster  ${app_name_default}
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  liveness=LivenessDynamic
 	
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}	
@@ -62,14 +62,14 @@ AppInst - User shall be able to update the app accessports afer appInst delete
     ${epoch_time}=  Get Time  epoch
     ${cluster_name}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}
 
-    ${appInst_pre}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  no_auto_delete=${True}
-    Delete App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
+    ${appInst_pre}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  no_auto_delete=${True}
+    Delete App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     Update App          access_ports=udp:2
 
-    ${appInst_post}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_post}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
-    #${appInst_post}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    #${appInst_post}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
   
     ${app_name_default}=  Get Default App Name
  

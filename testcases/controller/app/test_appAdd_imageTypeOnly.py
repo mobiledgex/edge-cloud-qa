@@ -52,7 +52,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeUnknown',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  access_ports='tcp:1',
@@ -84,7 +84,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  image_path=docker,
                                  app_version=app_version,
@@ -119,7 +119,7 @@ class tc(unittest.TestCase):
         error = None
         app = mex_controller.App(image_type='ImageTypeQCOW',
                                  #image_path=qcow_image,
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  use_defaults=False
@@ -154,7 +154,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type=9,
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  access_ports='tcp:1',

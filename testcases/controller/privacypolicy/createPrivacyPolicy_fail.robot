@@ -39,28 +39,28 @@ CreatePrivacyPolicy - create without parms shall return error
    ...  send CreatePrivacyPolicy with no parms 
    ...  verify error is returned 
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid developer name, name cannot be empty"}')  Create Privacy Policy  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid organization, name cannot be empty"}')  Create Privacy Policy  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create without policy name shall return error
    [Documentation]
    ...  send CreatePrivacyPolicy with no policy name 
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Privacy Policy  developer_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create with unknown org name shall return error
    [Documentation]
    ...  send CreatePrivacyPolicy with unknown org name
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create without developer name shall return error
    [Documentation]
    ...  send CreatePrivacyPolicy with no developer name
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid developer name, name cannot be empty"}')  Create Privacy Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid organization, name cannot be empty"}')  Create Privacy Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create without protocol shall return error
    [Documentation]
@@ -196,7 +196,7 @@ CreatePrivacyPolicy - create with duplicate policy shall return error
    ${policyname}=  Get Default Privacy Policy Name
    ${developer}=  Get Default Developer Name
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"key {\\\\"developer\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"${policyname}\\\\"} already exists"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"key {\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"${policyname}\\\\"} already exists"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
 CreatePrivacyPolicy - CreateClusterInst with k8s shared shall return error
    [Documentation]
@@ -208,9 +208,9 @@ CreatePrivacyPolicy - CreateClusterInst with k8s shared shall return error
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_name=${operator_name_fake}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
-   Should Contain  ${error}  responseCode = 400. ResponseBody={"message":"IpAccessShared not supported for privacy policy enabled cluster"}
+   Should Contain  ${error}  ('code=400', 'error={"message":"IpAccessShared not supported for privacy policy enabled cluster"}')
 
 CreatePrivacyPolicy - CreateClusterInst with azure shall return error
    [Documentation]
@@ -222,9 +222,9 @@ CreatePrivacyPolicy - CreateClusterInst with azure shall return error
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
-   Should Contain  ${error}  responseCode = 400. ResponseBody={"message":"Privacy Policy not supported on PLATFORM_TYPE_AZURE"}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Privacy Policy not supported on PLATFORM_TYPE_AZURE"}')
 
 CreatePrivacyPolicy - CreateClusterInst with gcp shall return error
    [Documentation]
@@ -236,9 +236,9 @@ CreatePrivacyPolicy - CreateClusterInst with gcp shall return error
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
-   Should Contain  ${error}  responseCode = 400. ResponseBody={"message":"Privacy Policy not supported on PLATFORM_TYPE_GCP"}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Privacy Policy not supported on PLATFORM_TYPE_GCP"}') 
 
 *** Keywords ***
 Setup

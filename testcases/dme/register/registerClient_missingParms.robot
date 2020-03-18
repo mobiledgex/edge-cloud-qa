@@ -30,7 +30,7 @@ RegisterClient - request with app_name only shall return 'DevName cannot be empt
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "DevName cannot be empty"
+   Should Contain  ${error_msg}   details = "OrgName cannot be empty"
 
 RegisterClient - request with app_version only shall return 'DevName cannot be empty'
    [Documentation]
@@ -40,14 +40,14 @@ RegisterClient - request with app_version only shall return 'DevName cannot be e
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_version=${app_version}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "DevName cannot be empty"
+   Should Contain  ${error_msg}   details = "OrgName cannot be empty"
 
 RegisterClient - request with developer name only shall return 'AppName cannot be empty'
    [Documentation]
    ...  Send RegisterClient with developer name only
    ...  Verify 'AppName cannot be empty' is returned
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	developer_name=${developer_name}  use_defaults=${False}
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	developer_org_name=${developer_name}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppName cannot be empty"
@@ -60,14 +60,14 @@ RegisterClient - request without developer name shall return 'DevName cannot be 
    ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  app_version=${app_version}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "DevName cannot be empty"
+   Should Contain  ${error_msg}   details = "OrgName cannot be empty"
 
 RegisterClient - request without app version shall return 'AppVers cannot be empty'
    [Documentation]
    ...  Send RegisterClient without app version
    ...  Verify 'AppVers cannot be empty' is returned
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  developer_name=${developer_name}  use_defaults=${False}
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name}  developer_org_name=${developer_name}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppVers cannot be empty"
@@ -77,7 +77,7 @@ RegisterClient - request without app name shall return 'AppName cannot be empty'
    ...  Send RegisterClient without app_name
    ...  Verify 'AppName cannot be empty' is returned
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_version=${app_version}  developer_name=${developer_name}  use_defaults=${False}
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_version=${app_version}  developer_org_name=${developer_name}  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "AppName cannot be empty"
@@ -89,7 +89,7 @@ RegisterClient - request without authtoken for app with token shall return 'No a
 
    ${app_version_default}=     Get Default App Version
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version_default}  developer_name=${developer_name}  use_defaults=${False} 
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_auth}  app_version=${app_version_default}  developer_org_name=${developer_name}  use_defaults=${False} 
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "No authtoken received"
@@ -102,8 +102,8 @@ Setup
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
     Create App                 app_name=${app_name} 
-    Create App Instance        app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance        app_name=${app_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
     Create App                  app_name=${app_name_auth}  auth_public_key=${app_key}
-    Create App Instance         app_name=${app_name_auth}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance         app_name=${app_name_auth}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
 

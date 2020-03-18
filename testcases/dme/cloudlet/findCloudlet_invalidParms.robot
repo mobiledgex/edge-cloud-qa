@@ -72,10 +72,10 @@ FindCloudlet - request with out-of-range latitude/longitude should return 'Inval
 Setup
     ${time}=  Get Time  epoch
 
-    #Create Operator             operator_name=${carrier_name} 
+    #Create Operator             operator_org_name=${carrier_name} 
     #Create Developer
     Create Flavor
-    #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}
+    #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_org_name=${carrier_name}
     #Create Cluster
     Create App
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}  cluster_instance_name=autocluster${time}
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${carrier_name}  cluster_instance_name=autocluster${time}

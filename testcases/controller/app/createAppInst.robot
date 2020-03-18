@@ -24,17 +24,17 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
+    Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     Show Cluster Instances
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}	
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}	
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}	
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}	
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}       ${operator_name}	
+    Should Be Equal              ${clusterInst[0].key.organization}                    ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
     #sleep  5s
@@ -49,20 +49,20 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
 
     Show Cluster Instances
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
 
@@ -75,25 +75,25 @@ AppInst - appinst shall be created when app instance is created without cluster 
 
     ${cluster_name}=  Catenate  SEPARATOR=-  cluster  ${epoch_time}
 
-    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  no_auto_delete=${True}
+    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  no_auto_delete=${True}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}  no_auto_delete=${True}
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}  no_auto_delete=${True}
 
     Show Cluster Instances
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessStatic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessStatic
 
-    Delete App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}
-    Delete Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Delete App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
+    Delete Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            1  # LivenessStatic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
 
@@ -106,19 +106,19 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicated
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicated
 
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  use_defaults=${False}
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
     Should Be Equal As Integers  ${clusterInst[0].ip_access}                           1  # IpAccessDedicated
     Should Be Equal              ${clusterInst[0].deployment}                          kubernetes 
     Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1 
@@ -135,19 +135,19 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessShared
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessShared
 
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  use_defaults=${False}
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
     Should Be Equal As Integers  ${clusterInst[0].ip_access}                           3  # IpAccessShared
     Should Be Equal              ${clusterInst[0].deployment}                          kubernetes
     Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
@@ -164,19 +164,19 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicatedOrShared
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicatedOrShared
 
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  use_defaults=${False}
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  use_defaults=${False}
 
-    Should Be Equal              ${appInst.key.app_key.developer_key.name}             ${developer_name_default}
-    Should Be Equal              ${appInst.key.cluster_inst_key.developer}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
+    Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
     Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst[0].key.cloudlet_key.operator_key.name}  ${operator_name}
-    Should Be Equal              ${clusterInst[0].key.developer}                       ${developer_name_default}
+    Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
+    Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
     Should Be Equal As Integers  ${clusterInst[0].ip_access}                           3  # IpAccessShared
     Should Be Equal              ${clusterInst[0].deployment}                          kubernetes
     Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1
@@ -188,7 +188,7 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 Setup
     #Create Developer            
     Create Flavor
-    #Create Cloudlet  cloudlet_name=tmocloud-10  operator_name=tmus
+    #Create Cloudlet  cloudlet_name=tmocloud-10  operator_org_name=tmus
     Create App			access_ports=tcp:1
 
     ${app_name_default}=  Get Default App Name
@@ -204,6 +204,6 @@ Setup
 Teardown
     Cleanup provisioning
 
-    ${clusterInst}=  Show Cluster Instances  cluster_name=autocluster  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${developer_name_default}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=autocluster  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
     Length Should Be   ${clusterInst}  0
 

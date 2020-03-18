@@ -31,7 +31,7 @@ GetAppInstList - request with opertor code mapping shall return 1 app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
       log to console  ${tmus_appinst}
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst['data']['key']['cluster_inst_key']['cloudlet_key']['operator_key']['name']}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst['data']['cloudlet_loc']['latitude']}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst['data']['cloudlet_loc']['longitude']}
@@ -54,9 +54,9 @@ GetAppInstList - request with opertor code mapping shall return 1 app
 Setup
     Create Flavor  region=${region}
     Create App		region=${region}  access_ports=tcp:1  #permits_platform_apps=${True}
-    ${tmus_appinst}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst}=           Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
-    Create Operator Code  region=${region}  operator_name=${operator_name}  code=${operator_wifi_name}
+    Create Operator Code  region=${region}  operator_org_name=${operator_name}  code=${operator_wifi_name}
 
     Set Suite Variable  ${tmus_appinst} 
 
