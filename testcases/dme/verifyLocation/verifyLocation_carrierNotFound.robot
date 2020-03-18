@@ -28,4 +28,4 @@ Setup
     Create Flavor
     #Create Cluster
     Create App
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${carrier_name}  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${carrier_name}  cluster_instance_name=autocluster

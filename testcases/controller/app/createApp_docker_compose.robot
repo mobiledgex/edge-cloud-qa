@@ -21,7 +21,7 @@ CreateApp - User shall be able to create an app with docker compose and access_t
     ...  create app with docker compose access_type=direct
     ...  verify app is created
 
-    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0   access_type=direct
+    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=direct
 
     Should Be Equal As Numbers  ${app['data']['access_type']}          1  #AccessTypeDirect
     Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
@@ -32,7 +32,7 @@ CreateApp - User shall be able to create an app with docker compose and no acces
     ...  create app with docker compose with no access_type
     ...  verify app is created
 
-    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0 
+    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0 
 
     Should Not Contain          ${app['data']}                          access_type 
     Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
@@ -43,7 +43,7 @@ CreateApp - User shall not be able to create an app with docker compose and acce
     ...  create app with docker compose access_type=loadbalancer
     ...  verify error is received 
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0   access_type=loadbalancer
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=loadbalancer
 
     Should Contain  ${error}  code=400
     Should Contain  ${error}  "message":"ACCESS_TYPE_LOAD_BALANCER not supported for docker deployment type: docker-compose" 
@@ -53,7 +53,7 @@ CreateApp - User shall be able to create an app with docker compose and access_t
     ...  create app with docker compose access_type=direct
     ...  verify app is created
 
-    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_name=mobiledgex  app_version=1.0   access_type=default
+    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=default
 
     Should Not Contain          ${app['data']}                          access_type
     Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker

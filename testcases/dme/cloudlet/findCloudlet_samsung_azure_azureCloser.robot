@@ -110,22 +110,22 @@ Setup
 
     #Create Developer            
     Create Flavor
-    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
-    #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
+    #Create Cloudlet		cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}  latitude=${tmus_cloudlet_latitude}  longitude=${tmus_cloudlet_longitude}
     #Create Cluster
     Create App			access_ports=tcp:1  #official_fqdn=${samsung_uri}   #permits_platform_apps=${True}
 
     # create operator app instance
-    ${tmus_appinst}=               Create App Instance  cloudlet_name=${tmus_cloudlet_name}  operator_name=${tmus_operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst}=               Create App Instance  cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
     # create public app instance
-    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${azure_appinst}=               Create App Instance   cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=        Get Default App Name
 
     #Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri}
-    #Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
+    #Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_org_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${azure_appinst} 
     Set Suite Variable  ${developer_name_default}

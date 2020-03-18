@@ -53,8 +53,8 @@ Setup
     Create Flavor
     #Create Cluster	
     Create App			access_ports=tcp:1
-    ${tmus_appinst}=           Create App Instance  cloudlet_name=tmocloud-1  operator_name=tmus  cluster_instance_name=autocluster
-    Create App Instance         cloudlet_name=attcloud-1  operator_name=att  cluster_instance_name=autocluster
+    ${tmus_appinst}=           Create App Instance  cloudlet_name=tmocloud-1  operator_org_name=tmus  cluster_instance_name=autocluster
+    Create App Instance         cloudlet_name=attcloud-1  operator_org_name=att  cluster_instance_name=autocluster
 
     Set Suite Variable  ${tmus_appinst} 
 

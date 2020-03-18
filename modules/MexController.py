@@ -614,7 +614,7 @@ class Cloudlet():
 
         #print('*WARN*', cloudlet_dict['notify_srv_addr'])
         
-    def update(self, cloudlet_name=None, operator_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
+    def update(self, cloudlet_name=None, operator_org_name=None, number_of_dynamic_ips=None, latitude=None, longitude=None, ipsupport=None, accesscredentials=None, staticips=None, include_fields=False, use_defaults=True):
         print ("In Update", staticips)
         
         if latitude is not None:
@@ -647,7 +647,7 @@ class Cloudlet():
             self.staticips=""
         #print(c.key.operator_key.name, self.operator_name, c.key.name, self.cloudlet_name, c.access_credentials, self.accesscredentials, c.location.latitude, self.latitude, c.location.longitude, self.longitude, c.ip_support, self.ipsupport, c.num_dynamic_ips, self.number_of_dynamic_ips, c.static_ips, self.staticips)
 
-        if c.key.operator_key.name == self.operator_name and c.key.name == self.cloudlet_name and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
+        if c.key.organization == self.operator_org_name and c.key.name == self.cloudlet_name and c.location.latitude == self.latitude and c.location.longitude == self.longitude and c.ip_support == self.ipsupport and c.num_dynamic_ips == self.number_of_dynamic_ips and c.static_ips == self.staticips:
             return True
         else:
             return False
@@ -775,7 +775,7 @@ class App():
         if self.developer_org_name is not None:
             app_key_dict['organization'] = self.developer_org_name
 
-        if 'name' in app_key_dict or self.app_version or 'developer_key' in app_key_dict:
+        if 'name' in app_key_dict or self.app_version or 'organization' in app_key_dict:
             app_dict['key'] = app_pb2.AppKey(**app_key_dict)
         if self.image_type is not None:
             app_dict['image_type'] = self.image_type
@@ -810,11 +810,11 @@ class App():
         if self.official_fqdn:
             app_dict['official_fqdn'] = self.official_fqdn
             
-        print(app_dict)
         self.app = app_pb2.App(**app_dict)
 
         shared_variables.app_name_default = self.app_name
-        shared_variables.developer_name_default = self.developer_org_name
+        if self.developer_org_name is not None:
+            shared_variables.developer_name_default = self.developer_org_name
         
         #self.app_complete = copy.copy(self.app)
         #self.app_complete.image_path = self.image_path
@@ -883,7 +883,7 @@ class AppInstance():
         self.longitude = longitude
         self.crm_override = crm_override
         self.autocluster_ipaccess = autocluster_ip_access
-        
+        print('*WARN*', 'xxxx', self.developer_org_name, use_defaults)        
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
         if self.developer_org_name == 'default':
@@ -926,7 +926,7 @@ class AppInstance():
         clusterinst_key_dict = {}
         cluster_key_dict = {}
         loc_dict = {}
-        
+
         if self.app_name:
             app_key_dict['name'] = self.app_name
         if self.app_version:

@@ -30,7 +30,7 @@ RegisterClient - request with wrong app_version shall return 'app not found'
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=  Get Default App Name
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=1.1  developer_name=${developer_name_default}
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=1.1  developer_org_name=${developer_name_default}
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
@@ -45,7 +45,7 @@ RegisterClient - request with wrong developer_name shall return 'app not found'
 
    ${app_name_default}=        Get Default App Name
    ${app_version_default}=     Get Default App Version
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=${app_version_default}  developer_name=dummy
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=dummy
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
@@ -57,7 +57,7 @@ RegisterClient - request with wrong app_name,app_version, and developer_name sha
    ...  send RegisterClient with app name, app version and developer that doenst exist
    ...  verify 'app not found' error is received
 
-   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=dummy  app_version=dummy  developer_name=dummy
+   ${error_msg}=  Run Keyword And Expect Error  *  Register Client	app_name=dummy  app_version=dummy  developer_org_name=dummy
 
    Should Contain  ${error_msg}   status = StatusCode.NOT_FOUND
    Should Contain  ${error_msg}   details = "app not found"
@@ -96,7 +96,7 @@ RegisterClient - request shall succeed after adding app
    ${decoded_cookie}=  decoded session cookie
    ${expire_time}=  Evaluate  (${decoded_cookie['exp']} - ${decoded_cookie['iat']}) / 60 / 60
    Should Be Equal As Numbers  ${expire_time}  24   #expires in 24hrs
-   Should Be Equal  ${decoded_cookie['key']['devname']}  ${developer_name_default}	
+   Should Be Equal  ${decoded_cookie['key']['orgname']}  ${developer_name_default}	
    Should Be Equal  ${decoded_cookie['key']['appname']}  dummy	
    Should Be Equal  ${decoded_cookie['key']['appvers']}  ${app_version_default}	
    Should Match Regexp  ${decoded_cookie['key']['peerip']}  \\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
@@ -113,5 +113,5 @@ Setup
     #Create Cloudlet		cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
     #Create Cluster
     Create App 
-    Create App Instance         cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster${time}
+    Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${time}
 

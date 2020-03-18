@@ -24,7 +24,7 @@ AppInst - user shall be able to add 1 HTTP port
     ...  verify internal and public port is 443 and public_path is correct
 	
     Create App  access_ports=http:1
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p1
@@ -44,7 +44,7 @@ AppInst - user shall be able to add 10 HTTP ports
     ...  verify public port is 443 and public_path is correct
 
     Create App  access_ports=http:1,http:2,http:3,http:4,http:5,http:6,http:7,http:8,http:9,http:10
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path_1}=   Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p1
@@ -119,7 +119,7 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall be
 
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=   Get Default App Name
     ${app_default_2}=   Catenate  SEPARATOR=-  ${app_default_1}  2
@@ -128,7 +128,7 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall be
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=http:1
-    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -153,7 +153,7 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
 
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
@@ -162,7 +162,7 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=http:1
-    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -187,7 +187,7 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
 
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
@@ -197,7 +197,7 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=http:1
-    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_2}=  Create App Instance  app_name=${app_default_2}  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -226,7 +226,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
 	
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
@@ -237,7 +237,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
     # create app2 and appInst on the same port
     #Create App  app_name=${app_default_2}  access_ports=tcp:1
     ${autocluster}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster}
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -263,7 +263,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
 #
 #    # create app1 and appIns 1
 #    Create App  access_ports=http:1
-#    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+#    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 #
 #
 #    ${app_default_1}=  Get Default App Name
@@ -273,7 +273,7 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall be
 #    ${cloudlet_1}=  Find Cloudlet	latitude=31  longitude=-91
 #
 #    # create app2 and appInst on the same port
-#    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
+#    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 #
 #    ${cloudlet_2}=  Find Cloudlet	latitude=35  longitude=-95
 #
@@ -306,12 +306,12 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same HTT
 
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}  no_auto_delete=${True}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}  no_auto_delete=${True}
 
     Delete App Instance
 
     # create appInst again
-    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
@@ -344,7 +344,7 @@ AppInst - User shall be able to add app, udpate app, add appInst with same HTTP 
     Update App  access_ports=http:3,http:4
 
     # create appInst
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p3
@@ -375,7 +375,7 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
 
     # create app1 and appIns 1
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p1
@@ -385,7 +385,7 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     ${public_path_2}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name_2}${version_default}  p1
     ${autocluster_2}=  Catenate  SEPARATOR=-  autocluster  2
     Create App  app_name=${app_name_2}  access_ports=http:1
-    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_2}
+    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
 
     # create appInst4 on the port 10000
@@ -393,7 +393,7 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     ${public_path_3}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name_3}${version_default}  p10000
     ${autocluster_3}=  Catenate  SEPARATOR=-  autocluster  3
     Create App  app_name=${app_name_3}  access_ports=http:10000
-    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${autocluster_3}
+    ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_3}
 
     # verify app1 uses port 443
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -425,7 +425,7 @@ AppInst - appInst shall allocate HTTP port 10000 if already allocated
 
     # create app1 and appIns 1
     Create App  access_ports=http:10000
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default_1}${version_default}  p10000
@@ -434,7 +434,7 @@ AppInst - appInst shall allocate HTTP port 10000 if already allocated
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
     ${public_path_2}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name_2}${version_default}  p10000
     Create App  app_name=${app_name_2}  access_ports=http:10000
-    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
 
     # verify app1 uses port 10000
@@ -464,7 +464,7 @@ AppInst - user shall be to add multiple HTTP public ports
     ${app_default}=  Get Default App Name
 
     Create App  access_ports=http:1
-    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -476,7 +476,7 @@ AppInst - user shall be to add multiple HTTP public ports
     FOR  ${index}  IN RANGE  0  100
     \   ${app_name}=  Catenate  SEPARATOR=-  ${app_default}  ${index}
     \   Create App  app_name=${app_name}  access_ports=http:1
-    \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     \   
     \   ${public_path_1}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_name}${version_default}  p1
@@ -494,7 +494,7 @@ AppInst - user shall be able to allocate port http:22
     ...  verify public port is 443
 
     Create App  access_ports=http:22
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p22
@@ -513,7 +513,7 @@ AppInst - user shall be able to allocate port http:18889
     ...  verify public port is 443
 
     Create App  access_ports=http:18889
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p18889
@@ -532,7 +532,7 @@ AppInst - user shall be able to allocate port http:18888
     ...  verify public port is 443
 
     Create App  access_ports=http:18888
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Catenate  SEPARATOR=/  ${developer_name_default}  ${app_default}${version_default}  p18888
@@ -550,7 +550,7 @@ Setup
     Create Flavor
     #Create Cluster  
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_instance_default}=  Get Default Cluster Name
