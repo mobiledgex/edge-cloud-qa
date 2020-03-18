@@ -41,14 +41,14 @@ DeletePrivacyPolicy - delete without policy name shall return error
    ...  send DeletePrivacyPolicy with no policy name 
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"developer\\\\":\\\\"mobiledgex\\\\"} not found"}')  Delete Privacy Policy  developer_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"mobiledgex\\\\"} not found"}')  Delete Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
 DeletePrivacyPolicy - delete with unknown org name shall return error
    [Documentation]
    ...  send DeletePrivacyPolicy with unknown org name
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Delete Privacy Policy  developer_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Delete Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 DeletePrivacyPolicy - delete without developer name shall return error
    [Documentation]
@@ -68,7 +68,7 @@ DeletePrivacyPolicy - delete with policy not found shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=1  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"developer\\\\":\\\\"${dev}\\\\",\\\\"name\\\\":\\\\"${name}\\\\"} not found"}')  Delete Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"${dev}\\\\",\\\\"name\\\\":\\\\"${name}\\\\"} not found"}')  Delete Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
 DeletePrivacyPolicy - delete policy in use by cluster instance shall retun error
    [Documentation]
@@ -82,7 +82,7 @@ DeletePrivacyPolicy - delete policy in use by cluster instance shall retun error
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_name=${operator_name_fake}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy in use by ClusterInst"}')  Delete Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 

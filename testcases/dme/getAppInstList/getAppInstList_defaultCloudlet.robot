@@ -35,7 +35,7 @@ GetAppInstList - request shall not return default cloudlet apps
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
 
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${dmuus_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${dmuus_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${dmuus_appinst.cloudlet_loc.longitude}
@@ -58,7 +58,7 @@ Setup
     Create Flavor
     #Create Cluster
     Create App                  access_ports=tcp:1  official_fqdn=http://andy.com 
-    ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     #Create App Instance         cloudlet_name=default  operator_name=developer  uri=http://andy.com  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 

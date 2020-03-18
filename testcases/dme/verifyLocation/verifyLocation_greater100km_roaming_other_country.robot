@@ -60,6 +60,6 @@ Setup
     Create Flavor
     #Create Cluster
     Create App             access_ports=${access_ports} 
-    Create App Instance    cloudlet_name=${cloudlet_name1}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    Create App Instance    cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
 

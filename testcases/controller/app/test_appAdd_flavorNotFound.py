@@ -41,8 +41,8 @@ class tc(unittest.TestCase):
                                                     key = mex_key,
                                                     client_cert = mex_cert
                                                    )
-        self.developer = mex_controller.Developer(developer_name=developer_name,
-                                                  )
+#        self.developer = mex_controller.Developer(developer_org_name=developer_name,
+#                                                  )
         #self.controller.create_developer(self.developer.developer) 
 
     def test_CreateAppImageTypeOnlyImageTypeUnknown(self):
@@ -56,7 +56,7 @@ class tc(unittest.TestCase):
         # create the app with no parms
         error = None
         app = mex_controller.App(image_type='ImageTypeDocker',
-                                 developer_name=developer_name,
+                                 developer_org_name=developer_name,
                                  app_name=app_name,
                                  app_version=app_version,
                                  default_flavor_name='flavorNotFound',

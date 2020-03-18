@@ -20,7 +20,7 @@ UpdateCloudlet without an operator
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Key not found"
-        Should Contain  ${error_msg}   details = "Invalid operator name"
+        Should Contain  ${error_msg}   details = "Invalid organization name"
 
         [Teardown]  Cleanup provisioning
 
@@ -29,10 +29,10 @@ UpdateCloudlet with an invalid operator
 	...  The test case will try and update a Cloudlet with a valid cloudlet name and in invalid operator name.
 	...  A Key not found error is expected
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=mci      cloudlet_name=${cldlet}    use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=mci      cloudlet_name=${cldlet}    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"mci"},"name":"${cldlet}"} not found" 
+	Should Contain  ${error_msg}   details = "Cloudlet key {"organization":"mci","name":"${cldlet}"} not found" 
 
 
 UpdateCloudlet without a cloudlet name
@@ -40,7 +40,7 @@ UpdateCloudlet without a cloudlet name
 	...  The test case will try and update a Cloudlet with only the operator name.
 	...  An Invalid cloudlet name error is expected
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	    operator_name=${oper}     use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	    operator_org_name=${oper}     use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Key not found"
@@ -51,10 +51,10 @@ UpdateCloudlet with an invalid cloudlet name
 	...  The test case will try and update a Cloudlet with an invalid cloudlet name.
 	...  A Key not found error is expected
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=TestMe    use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=TestMe    use_defaults=False
 
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet key {"operator_key":{"name":"${oper}"},"name":"TestMe"} not found" 
+	Should Contain  ${error_msg}   details = "Cloudlet key {"organization":"${oper}","name":"TestMe"} not found" 
 
 
 UpdateCloudlet with a numdynamicips 0
@@ -64,7 +64,7 @@ UpdateCloudlet with a numdynamicips 0
 
 	${dips}  Convert To Integer 	0
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}    use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Cannot specify less than one dynamic IP unless Ip Support Static is specified"
 	
@@ -76,7 +76,7 @@ UpdateCloudlet with a numdynamicips -1
 
 	${dips}    Convert To Integer 	-1
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}      use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}      use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Cannot specify less than one dynamic IP unless Ip Support Static is specified"
 
@@ -87,7 +87,7 @@ UpdateCloudlet with a numdynamicips A
 	...  TypeError: 'A' has type str, but expected one of: int, long   error is expected
 
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=A        use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=A        use_defaults=False
 	Should Contain Any  ${error_msg}   ValueError: invalid literal for int() with base 10: 'A'  TypeError: 'A' has type str, but expected one of: int, long    TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
         #Should Contain  ${error_msg}   TypeError: 'A' has type <class 'str'>, but expected one of: (<class 'int'>,) for field Cloudlet.num_dynamic_ips
 
@@ -99,7 +99,7 @@ UpdateCloudlet with a numdynamicips 2323232232323
 
 	${dips}    Convert To Integer 	2323232232323
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}        use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    number_of_dynamic_ips=${dips}        use_defaults=False
 	Should Contain  ${error_msg}   ValueError: Value out of range: 2323232232323
 
 UpdateCloudlet with a ipsupport of -1
@@ -111,7 +111,7 @@ UpdateCloudlet with a ipsupport of -1
 
 	${ipsup}    Convert To Integer 	-1
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}      use_defaults=False             
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}      use_defaults=False             
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "invalid IpSupport"
        
@@ -124,7 +124,7 @@ UpdateCloudlet with a ipsupport of -8
 
 	${ipsup}    Convert To Integer 	-8
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}        use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}        use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "invalid IpSupport"
 
@@ -137,7 +137,7 @@ UpdateCloudlet with a location of 0 0
 
 	${locat}    Convert To Integer 	0
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
@@ -153,7 +153,7 @@ UpdateCloudlet with a location of 100 200
 	${lat}    Convert To Integer 	100
 	${long}    Convert To Integer 	200
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
@@ -170,7 +170,7 @@ UpdateCloudlet with a location of 90 200
 	${lat}    Convert To Integer 	90
 	${long}    Convert To Integer 	200
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
@@ -185,7 +185,7 @@ UpdateCloudlet with a location of -100 -200
 	${lat}    Convert To Integer 	-100
 	${long}    Convert To Integer 	-200
 
-	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid latitude value"
 
@@ -200,7 +200,7 @@ UpdateCloudlet with a location of -90 -200
 	${lat}    Convert To Integer 	-90
 	${long}    Convert To Integer 	-200
 
-	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *   Update Cloudlet   operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${lat}      longitude=${long}       use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	Should Contain  ${error_msg}   details = "Invalid longitude value"
 
@@ -209,7 +209,7 @@ UpdateCloudlet with a location of A A
 	...  The test case will try and update a Cloudlet with an invalid location lat and long of A A.
 	...  A 'location is missing; 0,0 is not a valid location' error is expected
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    latitude=A    longitude=A         use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    latitude=A    longitude=A         use_defaults=False
 	Should Contain  ${error_msg}   ValueError: could not convert string to float: 'A'
 
 UpdateCloudlet with accessuri of 6 
@@ -222,7 +222,7 @@ UpdateCloudlet with accessuri of 6
 
 	${accessuri}    Convert To Integer 	6
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}   cloudlet_name=${cldlet}    accesscredentials=${accessuri}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    accesscredentials=${accessuri}       use_defaults=False
 	Should Contain Any  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode    TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.access_credentials
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.access_uri
 
@@ -233,7 +233,7 @@ UpdateCloudlet with staticips of 6
 
 	${statips}    Convert To Integer 	6
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_name=${oper}     cloudlet_name=${cldlet}     staticips=${statips}       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}     cloudlet_name=${cldlet}     staticips=${statips}       use_defaults=False
 	Should Contain Any  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode    TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
 
@@ -252,7 +252,7 @@ Setup
 
         Sleep  1s
 
-	Create Cloudlet     operator_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  notify_server_address=${port}  use_defaults=False 
+	Create Cloudlet     operator_org_name=${oper}   cloudlet_name=${cldlet}     number_of_dynamic_ips=${dips}    latitude=35     longitude=-96  notify_server_address=${port}  use_defaults=False 
 	Cloudlet Should Exist
 
         Set Suite Variable  ${cldlet}
