@@ -21,10 +21,11 @@ FindCloudlet - request shall return error when FindCloudlet app does not match R
       ${developer_name_default}=  Get Default Developer Name
 
       Register Client  app_name=${app_name_1}
-      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet  app_name=${app_name_2}  app_version=1.0  developer_name=${developer_name_default}   carrier_name=${operator_name}  latitude=31  longitude=-91
+      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet  app_name=${app_name_2}  app_version=1.0  developer_org_name=${developer_name_default}   carrier_name=${operator_name}  latitude=31  longitude=-91
 
       Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
-      Should Contain  ${error_msg}  details = "Access to requested app: Devname: ${developer_name_default} Appname: ${app_name_2} AppVers: 1.0 not allowed for the registered app: Devname: ${developer_name_default} Appname: ${app_name_1} Appvers: 1.0"
+#      Should Contain  ${error_msg}  details = "Access to requested app: Devname: ${developer_name_default} Appname: ${app_name_2} AppVers: 1.0 not allowed for the registered app: Devname: ${developer_name_default} Appname: ${app_name_1} Appvers: 1.0"
+      Should Contain  ${error_msg}  details = "Specifying AppName, AppVers or OrgName is not permitted for a non-platform app after registration"
 
 *** Keywords ***
 Setup
