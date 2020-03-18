@@ -130,7 +130,8 @@ class MexOperation(MexRest):
 
         cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest > /dev/null && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         cmd = f'{cmd_docker} {command} --token {token}'
-
+        logging.info(f'running cmd: {cmd}')
+        
         def send_message():
             self.counter_dict[message_type]['req_attempts'] += 1
 
