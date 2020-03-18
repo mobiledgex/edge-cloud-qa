@@ -30,7 +30,7 @@ CreateOperatorCode - create without region shall return error
    ...  send CreateOperatorCode without region
    ...  verify proper error is received
 
-    ${error}=  Run Keyword And Expect Error  *    Create Operator Code  operator_name=${operator_name}  code=${code}
+    ${error}=  Run Keyword And Expect Error  *    Create Operator Code  operator_org_name=${operator_name}  code=${code}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"no region specified"}
@@ -40,7 +40,7 @@ CreateOperatorCode - create without code shall return error
    ...  send CreateOperatorCode with region only
    ...  verify proper error is received
 
-    ${error}=  Run Keyword And Expect Error  *    Create Operator Code  operator_name=${operator_name}  region=${region}
+    ${error}=  Run Keyword And Expect Error  *    Create Operator Code  operator_org_name=${operator_name}  region=${region}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"No code specified"}
@@ -53,7 +53,7 @@ CreateOperatorCode - create without operatorname
     ${error}=  Run Keyword And Expect Error  *   Create Operator Code  code=${code}  region=${region}  use_defaults=${False}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"No operator name specified"}
+   Should Contain   ${error}  error={"message":"No organization specified"}
 
 CreateOperatorCode - create without operatorname and code
    [Documentation]
@@ -72,9 +72,9 @@ CreateOperatorCode - create with same name shall return error
    ...  send CreateOperatorName twice for same name
    ...  verify proper error is received
 
-   Create Operator Code  region=${region}  code=${code}  operator_name=${operator_name}
+   Create Operator Code  region=${region}  code=${code}  operator_org_name=${operator_name}
 
-   ${error}=  Run Keyword And Expect Error  *     Create Operator Code  region=${region}  code=${code}  operator_name=${operator_name}
+   ${error}=  Run Keyword And Expect Error  *     Create Operator Code  region=${region}  code=${code}  operator_org_name=${operator_name}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"key ${code} already exists"}
