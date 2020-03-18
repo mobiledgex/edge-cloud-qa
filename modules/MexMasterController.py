@@ -1032,8 +1032,8 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
-    def show_cloudlets(self, token=None, region=None, operator_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
-        return self.cloudlet.show_cloudlet(token=token, region=region, operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+    def show_cloudlets(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
+        return self.cloudlet.show_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
 #        url = self.root_url + '/auth/ctrl/ShowCloudlet'
 #
@@ -1343,10 +1343,10 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            node_dict = {}
+            region_dict = {}
             if region is not None:
-                node_dict['region'] = region
-
+                region_dict['region'] = region
+            node_dict = {'node': {'key': region_dict}}
             payload = json.dumps(node_dict)
 
         logger.info('shownode on mc at {}. \n\t{}'.format(url, payload))
