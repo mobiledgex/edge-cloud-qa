@@ -29,7 +29,7 @@ Cluster with vcpus=1 and ram=1024 on azure shall be Standard_DS1_v2
    Create Flavor  ram=1024  vcpus=1  disk=1
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}
+   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name}
    Log to Console  DONE creating cluster instance
 
    ${cluster_info}=  Get Azure Cluster Info  cloudlet=${cloudlet_name_azure}  cluster=${cluster_name}
@@ -48,7 +48,7 @@ Cluster with vcpus=2 and ram=2048 on azure shall be Standard_DS2_v2
    Create Flavor  ram=2048  vcpus=2  disk=2
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}
+   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name}
    Log to Console  DONE creating cluster instance
 
    ${cluster_info}=  Get Azure Cluster Info  cloudlet=${cloudlet_name_azure}  cluster=${cluster_name}
@@ -67,7 +67,7 @@ Cluster with vcpus=4 and ram=4096 on azure shall be Standard_DS3_v2
    Create Flavor  ram=4096  vcpus=4  disk=4
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}
+   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name}
    Log to Console  DONE creating cluster instance
 
    ${cluster_info}=  Get Azure Cluster Info  cloudlet=${cloudlet_name_azure}  cluster=${cluster_name}
@@ -86,7 +86,7 @@ Cluster with vcpus=1 and num_nodes=4 on azure shall be Standard_DS1_v2
    Create Flavor          ram=1024  vcpus=1  disk=1
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}  number_masters=1  number_nodes=4
+   ${cluster_inst}=  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name}  number_masters=1  number_nodes=4
    Log to Console  DONE creating cluster instance
 
    ${cluster_info}=  Get Azure Cluster Info  cloudlet=${cloudlet_name_azure}  cluster=${cluster_name}
@@ -106,7 +106,7 @@ Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
    Create Flavor  ram=4096  vcpus=20  disk=4
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name}
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name}
 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
