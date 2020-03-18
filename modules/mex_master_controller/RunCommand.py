@@ -45,7 +45,7 @@ class RunCommand(MexOperation):
         msg = self._build(app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults)
 
         cmd = f'mcctl --addr https://{mc_address} region RunCommand region={region} {msg}'
-        
+
         return self.run(token=token, command=cmd, region=region, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_logs(self, mc_address=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, since=None, tail=None, time_stamps=None, follow=None, token=None, region=None, use_defaults=True, use_thread=False):
