@@ -2068,14 +2068,14 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def create_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.operatorcode.create_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_operator_code (self, token=None, region=None, operator_org_name=None, code=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.operatorcode.create_operator_code(token=token, region=region, operator_org_name=operator_org_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
-    def delete_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.operatorcode.delete_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def delete_operator_code (self, token=None, region=None, operator_org_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.operatorcode.delete_operator_code(token=token, region=region, operator_org_name=operator_org_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def show_operator_code (self, token=None, region=None, operator_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.operatorcode.show_operator_code(token=token, region=region, operator_name=operator_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def show_operator_code (self, token=None, region=None, operator_org_name=None, code=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.operatorcode.show_operator_code(token=token, region=region, operator_org_name=operator_org_name,code=code, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
 
     def create_cloudlet_pool_member(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
