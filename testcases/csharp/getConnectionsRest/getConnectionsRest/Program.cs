@@ -126,7 +126,7 @@ namespace RestSample
         {
             try
             {
-                Console.WriteLine("Get Connections Testcase!");
+                Console.WriteLine("Get Connections Testcase!!");
 
                 MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
