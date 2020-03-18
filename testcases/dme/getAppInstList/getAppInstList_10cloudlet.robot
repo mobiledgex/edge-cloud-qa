@@ -88,7 +88,7 @@ GetAppInstList - request shall return 10 cloudlets
       ${distance_round_10}=  Convert To Number  ${distance_10}  1
       ${appfqdns_distance_round_10}=  Convert To Number  ${appfqdns[9].distance}  1
 
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${azure_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${azure_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${azure_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${azure_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${azure_appinst.cloudlet_loc.longitude}
@@ -101,7 +101,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${azure_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${azure_appinst.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[1].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[1].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
@@ -114,7 +114,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${gcp_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${gcp_appinst.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[2].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[2].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
@@ -127,7 +127,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${tmus_appinst_1.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_1.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[3].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[3].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[3].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[3].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[3].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
@@ -140,7 +140,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[3].appinstances[0].ports[0].public_port}    ${tmus_appinst_2.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[3].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_2.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[4].carrier_name}                             ${tmus_appinst_3.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[4].carrier_name}                             ${tmus_appinst_3.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[4].cloudlet_name}                            ${tmus_appinst_3.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[4].gps_location.latitude}                    ${tmus_appinst_3.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[4].gps_location.longitude}                   ${tmus_appinst_3.cloudlet_loc.longitude}
@@ -153,7 +153,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[4].appinstances[0].ports[0].public_port}    ${tmus_appinst_3.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[4].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_3.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[5].carrier_name}                             ${tmus_appinst_4.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[5].carrier_name}                             ${tmus_appinst_4.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[5].cloudlet_name}                            ${tmus_appinst_4.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[5].gps_location.latitude}                    ${tmus_appinst_4.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[5].gps_location.longitude}                   ${tmus_appinst_4.cloudlet_loc.longitude}
@@ -166,7 +166,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[5].appinstances[0].ports[0].public_port}    ${tmus_appinst_4.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[5].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_4.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[6].carrier_name}                             ${tmus_appinst_5.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[6].carrier_name}                             ${tmus_appinst_5.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[6].cloudlet_name}                            ${tmus_appinst_5.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[6].gps_location.latitude}                    ${tmus_appinst_5.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[6].gps_location.longitude}                   ${tmus_appinst_5.cloudlet_loc.longitude}
@@ -179,7 +179,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[6].appinstances[0].ports[0].public_port}    ${tmus_appinst_5.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[6].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_5.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[7].carrier_name}                             ${tmus_appinst_6.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[7].carrier_name}                             ${tmus_appinst_6.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[7].cloudlet_name}                            ${tmus_appinst_6.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[7].gps_location.latitude}                    ${tmus_appinst_6.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[7].gps_location.longitude}                   ${tmus_appinst_6.cloudlet_loc.longitude}
@@ -192,7 +192,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[7].appinstances[0].ports[0].public_port}    ${tmus_appinst_6.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[7].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_6.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[8].carrier_name}                             ${tmus_appinst_7.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[8].carrier_name}                             ${tmus_appinst_7.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[8].cloudlet_name}                            ${tmus_appinst_7.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[8].gps_location.latitude}                    ${tmus_appinst_7.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[8].gps_location.longitude}                   ${tmus_appinst_7.cloudlet_loc.longitude}
@@ -205,7 +205,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[8].appinstances[0].ports[0].public_port}    ${tmus_appinst_7.mapped_ports[0].public_port}
       Should Be Equal             ${appfqdns[8].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_7.mapped_ports[0].fqdn_prefix}
 
-      Should Be Equal             ${appfqdns[9].carrier_name}                             ${tmus_appinst_8.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[9].carrier_name}                             ${tmus_appinst_8.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[9].cloudlet_name}                            ${tmus_appinst_8.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[9].gps_location.latitude}                    ${tmus_appinst_8.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[9].gps_location.longitude}                   ${tmus_appinst_8.cloudlet_loc.longitude}
@@ -239,32 +239,32 @@ Setup
     #Create Developer            
     Create Flavor
     #Create Cluster	
-    Create Cloudlet	   cloudlet_name=${cloudlet_name3}  operator_name=${operator_name}  latitude=3  longitude=3
-    Create Cloudlet        cloudlet_name=${cloudlet_name4}  operator_name=${operator_name}  latitude=4  longitude=4
-    Create Cloudlet        cloudlet_name=${cloudlet_name5}  operator_name=${operator_name}  latitude=5  longitude=5
-    Create Cloudlet        cloudlet_name=${cloudlet_name6}  operator_name=${operator_name}  latitude=6  longitude=6
-    Create Cloudlet        cloudlet_name=${cloudlet_name7}  operator_name=${operator_name}  latitude=7  longitude=7
-    Create Cloudlet        cloudlet_name=${cloudlet_name8}  operator_name=${operator_name}  latitude=8  longitude=8
-    #Create Cloudlet        cloudlet_name=${cloudlet_name9}  operator_name=${operator_name}  latitude=9  longitude=9
-    #Create Cloudlet        cloudlet_name=${cloudlet_name10}  operator_name=${operator_name}  latitude=10  longitude=10
+    Create Cloudlet	   cloudlet_name=${cloudlet_name3}  operator_org_name=${operator_name}  latitude=3  longitude=3
+    Create Cloudlet        cloudlet_name=${cloudlet_name4}  operator_org_name=${operator_name}  latitude=4  longitude=4
+    Create Cloudlet        cloudlet_name=${cloudlet_name5}  operator_org_name=${operator_name}  latitude=5  longitude=5
+    Create Cloudlet        cloudlet_name=${cloudlet_name6}  operator_org_name=${operator_name}  latitude=6  longitude=6
+    Create Cloudlet        cloudlet_name=${cloudlet_name7}  operator_org_name=${operator_name}  latitude=7  longitude=7
+    Create Cloudlet        cloudlet_name=${cloudlet_name8}  operator_org_name=${operator_name}  latitude=8  longitude=8
+    #Create Cloudlet        cloudlet_name=${cloudlet_name9}  operator_org_name=${operator_name}  latitude=9  longitude=9
+    #Create Cloudlet        cloudlet_name=${cloudlet_name10}  operator_org_name=${operator_name}  latitude=10  longitude=10
 
-    Create Cloudlet        cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
-    Create Cloudlet        cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
+    Create Cloudlet        cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
+    Create Cloudlet        cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
 
     Create App			access_ports=tcp:1  #permits_platform_apps=${True}
-    ${tmus_appinst_1}=           Create App Instance  cloudlet_name=${cloudlet_name_1}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_2}=           Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_3}=           Create App Instance  cloudlet_name=${cloudlet_name_3}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_4}=           Create App Instance  cloudlet_name=${cloudlet_name_4}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_5}=           Create App Instance  cloudlet_name=${cloudlet_name_5}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_6}=           Create App Instance  cloudlet_name=${cloudlet_name_6}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_7}=           Create App Instance  cloudlet_name=${cloudlet_name_7}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    ${tmus_appinst_8}=           Create App Instance  cloudlet_name=${cloudlet_name_8}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    #${tmus_appinst_9}=           Create App Instance  cloudlet_name=${cloudlet_name_9}  operator_name=${operator_name}  cluster_instance_name=autocluster
-    #${tmus_appinst_10}=           Create App Instance  cloudlet_name=${cloudlet_name_10}  operator_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_1}=           Create App Instance  cloudlet_name=${cloudlet_name_1}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_2}=           Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_3}=           Create App Instance  cloudlet_name=${cloudlet_name_3}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_4}=           Create App Instance  cloudlet_name=${cloudlet_name_4}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_5}=           Create App Instance  cloudlet_name=${cloudlet_name_5}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_6}=           Create App Instance  cloudlet_name=${cloudlet_name_6}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_7}=           Create App Instance  cloudlet_name=${cloudlet_name_7}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    ${tmus_appinst_8}=           Create App Instance  cloudlet_name=${cloudlet_name_8}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    #${tmus_appinst_9}=           Create App Instance  cloudlet_name=${cloudlet_name_9}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+    #${tmus_appinst_10}=           Create App Instance  cloudlet_name=${cloudlet_name_10}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
-    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
-    ${azure_appinst}=           Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  cluster_instance_name=autocluster
+    ${azure_appinst}=           Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${tmus_appinst_1} 
     Set Suite Variable  ${tmus_appinst_2}

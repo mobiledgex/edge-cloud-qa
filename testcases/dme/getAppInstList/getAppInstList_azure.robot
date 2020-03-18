@@ -35,7 +35,7 @@ GetAppInstList - request shall return azure app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
 
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${azure_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${azure_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${azure_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${azure_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${azure_appinst.cloudlet_loc.longitude}
@@ -61,9 +61,9 @@ Setup
     #Create Operator             operator_name=${gcp_operator_name} 
     #Create Developer
     Create Flavor
-    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
     #Create Cluster
     Create App                  access_ports=tcp:1 
-    ${azure_appinst}=             Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_name=${azure_operator_name}  cluster_instance_name=autocluster
+    ${azure_appinst}=             Create App Instance         cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${azure_appinst} 
