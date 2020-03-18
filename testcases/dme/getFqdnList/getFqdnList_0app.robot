@@ -22,7 +22,7 @@ GetFqdnList - request shall return 0 apps
     ...  send GetFqdnList for 0 apps
     ...  verify returns empty result
 
-      Register Client	developer_name=${platos_developer_name}  app_name=${platos_app_name}
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
       ${appfqdns}=  Get Fqdn List
 
       Length Should Be   ${appfqdns}  0
@@ -35,8 +35,8 @@ Setup
     #Create App			access_ports=tcp:1  developer_name=${platos_operator_name}  permits_platform_apps=${True}
     #${dmuus_appinst}=            Create App Instance  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}
 
-    Create Developer            developer_name=${platos_developer_name}
-    Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  official_fqdn=${platos_uri} 
+    #Create Developer            developer_name=${platos_developer_name}
+    Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  official_fqdn=${platos_uri} 
     #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     #Set Suite Variable  ${dmuus_appinst} 

@@ -21,7 +21,7 @@ AppInst - user shall be able to add with TCP port range for docker
     ...  verify ports are correct
 	
     Create App  access_ports=tcp:1-10  deployment=docker
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
 
@@ -41,7 +41,7 @@ AppInst - user shall be able to add with UDP port range for docker
     ...  verify ports are correct
 
     Create App  access_ports=udp:1-10  deployment=docker
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
 
@@ -61,7 +61,7 @@ AppInst - user shall be able to add with TCP/UDP port range for docker
     ...  verify ports are correct
 
     Create App  access_ports=tcp:1-10,udp:1-10  deployment=docker
-    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
 
@@ -85,7 +85,7 @@ Setup
     Create Flavor
     #Create Cluster  
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
+    Create Cluster Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_instance_default}=  Get Default Cluster Name

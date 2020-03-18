@@ -35,7 +35,7 @@ GetAppInstList - request shall return GCP app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
 
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.operator_key.name}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${gcp_appinst.key.cluster_inst_key.cloudlet_key.organization}
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
@@ -61,9 +61,9 @@ Setup
     #Create Operator             operator_name=${gcp_operator_name} 
     #Create Developer
     Create Flavor
-    Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
     #Create Cluster
     Create App                  access_ports=tcp:1 
-    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_name=${gcp_operator_name}  cluster_instance_name=autocluster
+    ${gcp_appinst}=             Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${gcp_appinst} 

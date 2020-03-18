@@ -18,8 +18,8 @@ DeleteCloudletPool - deleting cloudlet pool shall delete all cloudlet pool membe
    ${pool_name}=  Get Default Cloudlet Pool Name
 
    Create Cloudlet Pool         region=US  cloudlet_pool_name=${pool_name}  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_name=dmuus  cloudlet_name=tmocloud-1  auto_delete=${False}
-   Create Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_name=dmuus  cloudlet_name=tmocloud-2  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=dmuus  cloudlet_name=tmocloud-1  auto_delete=${False}
+   Create Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=dmuus  cloudlet_name=tmocloud-2  auto_delete=${False}
 
    ${show_return}=   Show Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  token=${token}  use_defaults=${False} 
    Length Should Be   ${show_return}  2
