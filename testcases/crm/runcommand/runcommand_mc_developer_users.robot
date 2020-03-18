@@ -31,7 +31,7 @@ RunCommand - DeveloperManager shall be able to do RunCommand
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout[0]}  root\r\n
 
@@ -44,7 +44,7 @@ RunCommand - DeveloperContributor shall be able to do RunCommand
 
     ${token}=  Login
 
-    ${stdout}=  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout[0]}  root\r\n
 
@@ -59,7 +59,7 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
     log to console  xxxxxxxxx ${error}
 
@@ -70,9 +70,9 @@ Setup
     #Create Org  orgtype=developer
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}
-    Create App  region=US   image_path=${docker_image}  developer_name=${docker_image_developer}
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}  cluster_instance_developer_name=${docker_image_developer}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}
+    Create App  region=US   image_path=${docker_image}  developer_org_name=${docker_image_developer}
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
