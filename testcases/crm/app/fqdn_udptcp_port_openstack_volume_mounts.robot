@@ -46,7 +46,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with volume mou
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  deployment_manifest=${manifest_url}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${server_info_node}=    Get Server List  name=${openstack_node_name}

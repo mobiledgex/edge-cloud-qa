@@ -53,7 +53,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=1
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=1
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -78,7 +78,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=2
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=2
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -104,7 +104,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=${num_nodes}
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_pods=${num_nodes}
 
     TCP Port Should Be Alive   ${fqdn_0}         ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive   ${fqdn_1}         ${cloudlet.ports[1].public_port}
