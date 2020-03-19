@@ -43,7 +43,7 @@ User shall be able to access 1 UDP port on gcp
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name_default}  operator_name=${operator_name_gcp}  pod_name=${app_name_default} 
+    #Wait for pod to be running on CRM  cluster_name=${cluster_name_default}  operator_name=${operator_name_gcp}  pod_name=${app_name_default} 
 
     Log To Console  Checking if port is alive
     Sleep  1 min
@@ -65,7 +65,7 @@ User shall be able to access 2 UDP ports on azure
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
+    #Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
     UDP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -87,7 +87,7 @@ User shall be able to access 1 TCP port on azure
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
+    #Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -108,7 +108,7 @@ User shall be able to access 2 TCP ports on azure
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
+    #Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
@@ -132,7 +132,7 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
 
     Log To Console  Waiting for k8s pod to be running
     ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
+    #Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name}  pod_name=${app_name_default}
 
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}

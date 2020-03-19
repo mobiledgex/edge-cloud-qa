@@ -207,9 +207,9 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
    Should Contain    ${server_info_node[11]['Image']}    mobiledgex
    Should Be Equal   ${server_info_node[11]['Status']}   ACTIVE
 
-   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.large
+   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.large
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
