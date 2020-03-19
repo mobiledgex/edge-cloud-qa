@@ -41,7 +41,7 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated openstack with 
     ...  verify all ports are accessible via fqdn
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessDedicated  deployment=kubernetes
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_name_default}=  Get Default Cluster Name
@@ -49,7 +49,7 @@ User shall be able to access UDP,TCP and HTTP ports on dedicated openstack with 
     ${rootlb_dedicated}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb_dedicated}
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -70,14 +70,14 @@ User shall be able to access UDP,TCP and HTTP ports on shared openstack with num
     ...  verify all ports are accessible via fqdn
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_masters=1  number_nodes=0   ip_access=IpAccessShared  deployment=kubernetes
     Log To Console  Done Creating Cluster Instance
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}

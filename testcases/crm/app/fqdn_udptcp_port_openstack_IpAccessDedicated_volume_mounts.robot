@@ -44,7 +44,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
@@ -55,7 +55,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
 	
     Mount Should Exist on Pod  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
 
-    Register Client  #app_name=app1579992291-485193  developer_name=mobiledgex  app_version=1.0
+    Register Client  #app_name=app1579992291-485193  developer_org_name=mobiledgex  app_version=1.0
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  #carrier_name=GDDT  latitude=32.7767  longitude=-96.797
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
@@ -68,7 +68,7 @@ Setup
     #Create Developer
     Create Flavor
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
