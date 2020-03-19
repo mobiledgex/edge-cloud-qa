@@ -34,7 +34,7 @@ User shall be able to access 1 UDP port on gcp
 
     Log To Console  Creating App and App Instance	
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}
-    Create App Instance  cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}  cluster_instance_name=${cluster_name_default} 
+    Create App Instance  cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}  cluster_instance_name=${cluster_name_default} 
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -151,7 +151,7 @@ Setup
     #Create Cluster   #cluster_name=${cluster_name} 
 
     log to console  START creating cluster instance
-    Create Cluster Instance   cloudlet_name=${cloudlet_name_gcp}  operator_name=${operator_name_gcp}
+    Create Cluster Instance   cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}
     log to console  DONE creating cluster instance
 
     #Set Suite Variable  ${cluster_name}
