@@ -10,7 +10,7 @@ Library  OperatingSystem
 Library  Process
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -48,7 +48,7 @@ GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu
     ${app_name_default}=  Get Default App Name
 
     Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011,tcp:22
-    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_name=${operator_name_openstack}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -76,6 +76,6 @@ GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu
 Setup
     Create Flavor  region=${region}  disk=80  optional_resources=gpu=gpu:1
 
-    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
-    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_name=${operator_name_openstack}  tags=pci=t4gpu:1
+    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
+    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
 	
