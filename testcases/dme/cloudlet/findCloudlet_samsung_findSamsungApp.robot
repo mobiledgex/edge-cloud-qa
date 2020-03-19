@@ -38,7 +38,7 @@ FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsu
     ...  verify FIND_NOTFOUND is returned since cant search for own app 
     
       #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app - fixed
-      Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
+      Register Client	developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}
       ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
       Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
@@ -50,8 +50,8 @@ FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsu
     ...  verify FIND_NOTFOUND is returned since cant search for own app
 
       #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app - fixed
-      Register Client	developer_name=${samsung_developer_name}  app_name=${samsung_app_name}
-      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
+      Register Client	developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}
+      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_org_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
 
       Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
 
@@ -72,7 +72,7 @@ Setup
     Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
 
     #Create Developer            developer_name=${samsung_developer_name}
-    Create App			developer_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri} 
+    Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri} 
     #${samsung_appinst}=         Create App Instance  app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_org_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${tmus_appinst} 
