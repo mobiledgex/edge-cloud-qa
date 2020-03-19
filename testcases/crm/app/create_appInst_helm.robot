@@ -35,7 +35,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     ...  verify the app is created
 
     Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
+    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
     Log To Console  Done Creating Cluster Instance
 
     EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
@@ -43,7 +43,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${helm_image}  access_ports=udp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=14.5.0
-    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
 
     Log To Console  Waiting for k8s pod to be running
     ${helm_pod1}=  Catenate  SEPARATOR=  ${appinst['data']['key']['app_key']['name']}  v10  -  insightedge-manager-0
@@ -64,7 +64,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
     
     Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated
+    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
@@ -76,7 +76,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  image_path=${helm_image}  access_ports=udp:2015  deployment=helm  image_type=ImageTypeHelm  annotations=version=14.5.0
-    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
 
     Log To Console  Waiting for k8s pod to be running
     ${helm_pod1}=  Catenate  SEPARATOR=  ${appinst['data']['key']['app_key']['name']}  v10  -  insightedge-manager-0
@@ -97,7 +97,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
 
     Log To Console  Creating Cluster Instance
-    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
+    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
     Log To Console  Done Creating Cluster Instance
 
     ${epoch_time}=  Get Time  epoch
@@ -110,7 +110,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
 
     Log To Console  Creating App and App Instance
     Create App  region=${region}  app_name=${app_name}  image_path=${helm_image}  access_ports=udp:2015  deployment=helm  image_type=ImageTypeHelm 
-    ${appinst}=  Create App Instance  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${appinst}=  Create App Instance  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
 
     Log To Console  Waiting for k8s pod to be running
     ${helm_pod1}=  Catenate  SEPARATOR=  ${appinst['data']['key']['app_key']['name']}  v10  -  insightedge-manager-0 
