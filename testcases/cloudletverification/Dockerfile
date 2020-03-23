@@ -1,0 +1,38 @@
+FROM python:3
+
+RUN apt-get update
+#RUN apt-get -y install software-properties-common
+#RUN add-apt-repository ppa:git-core/ppa
+#RUN apt-get update
+
+RUN apt-get -y install vim
+#RUN apt-get install git 
+
+RUN python -m pip install --upgrade pip
+RUN pip3 install robotframework
+RUN pip3 install PyJWT 
+RUN pip3 install requests
+
+#RUN git clone --depth 1 https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git modules 
+#RUN cd modules 
+#RUN git filter-branch --prune-empty --subdirectory-filter modules HEAD
+
+RUN useradd -ms /bin/bash automation
+USER automation
+WORKDIR /home/automation
+
+RUN mkdir edge-cloud-qa;cd edge-cloud-qa;git init;git remote add -f origin https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git
+RUN cd edge-cloud-qa;git config core.sparseCheckout true
+RUN cd edge-cloud-qa;echo "modules\ntestcases/cloudletverification" >> .git/info/sparse-checkout
+RUN cd edge-cloud-qa;git pull origin master
+
+#RUN git clone https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git
+
+RUN source edge-cloud-qa/testcases/cloudletverification/cloudletverification.env
+
+ENV PYTHONPATH=/home/automation/edge-cloud-qa/modules
+#ENV AUTOMATION_MC_ADDRESS=console-qa.mobiledgex.net:443
+#ENV AUTOMATION_MC_CERT=
+
+
+
