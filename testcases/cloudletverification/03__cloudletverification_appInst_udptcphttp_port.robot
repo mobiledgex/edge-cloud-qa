@@ -2,7 +2,7 @@
 Documentation  use FQDN to access app on openstack
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexApp
 Library  String
 
