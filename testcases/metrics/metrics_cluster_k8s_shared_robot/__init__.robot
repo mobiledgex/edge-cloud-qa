@@ -27,7 +27,7 @@ Setup
 
    ${t}=  Get Default Time Stamp
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  deployment=kubernetes  ip_access=IpAccessShared  number_masters=1  number_nodes=1
 
    Log to Console  Waiting for metrics to be collected
    Sleep  15 mins

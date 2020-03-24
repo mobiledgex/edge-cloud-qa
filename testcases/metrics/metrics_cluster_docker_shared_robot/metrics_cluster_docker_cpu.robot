@@ -241,8 +241,8 @@ Setup
    
    ${timestamp}=  Get Default Time Stamp
    ${developer_name}=  Get Default Developer Name 
-   #${clustername}=  Get Default Cluster Name
-   ${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
+   ${clustername_docker}=  Get Default Cluster Name
+   #${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
 
    #${clustername_docker}=   Set Variable  cluster1575415520-263537-docker 
    #${developer_name}=  Set Variable  developer1575415520-263537 

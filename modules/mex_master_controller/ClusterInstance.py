@@ -135,8 +135,6 @@ class ClusterInstance(MexOperation):
             metric_dict['method'] = method
         if cell_id is not None:
             metric_dict['cellid'] = int(cell_id)
-        if last is not None:
-            metric_dict['last'] = int(last)
 
         return metric_dict
 
@@ -176,8 +174,9 @@ class ClusterInstance(MexOperation):
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         inst = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=False)
         inst_metric = inst
-        inst_metric['clusterinst'] = inst['key']
-        del inst_metric['key']
+        if 'key' in inst:
+            inst_metric['clusterinst'] = inst['key']
+            del inst_metric['key']
 
         msg_dict = self._build_metrics(type_dict=inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
 
