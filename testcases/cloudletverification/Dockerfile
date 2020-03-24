@@ -12,8 +12,8 @@ RUN python -m pip install --upgrade pip
 RUN pip3 install robotframework
 RUN pip3 install PyJWT 
 RUN pip3 install requests
-RUN pip3 install grpcio
-RUN pip3 install grpcio-tools
+#RUN pip3 install grpcio
+#RUN pip3 install grpcio-tools
 RUN pip3 install paramiko
 
 #RUN git clone --depth 1 https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git modules 
@@ -26,13 +26,13 @@ WORKDIR /home/automation
 
 RUN mkdir edge-cloud-qa;cd edge-cloud-qa;git init;git remote add -f origin https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git
 RUN cd edge-cloud-qa;git config core.sparseCheckout true
-RUN cd edge-cloud-qa;echo "certs\nmodules\ntestcases/cloudletverification" >> .git/info/sparse-checkout
+RUN cd edge-cloud-qa;echo "modules\ntestcases/cloudletverification" >> .git/info/sparse-checkout
 RUN cd edge-cloud-qa;git pull origin master
 RUN mkdir edge-cloud-qa/testcases/cloudletverification/logs
 
 #RUN git clone https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git
 
-ENV PYTHONPATH=/home/automation/edge-cloud-qa/modules:/home/automation/edge-cloud-qa/certs
+ENV PYTHONPATH=/home/automation/edge-cloud-qa/modules
 #ENV AUTOMATION_MC_ADDRESS=console-qa.mobiledgex.net:443
 #ENV AUTOMATION_MC_CERT=
 

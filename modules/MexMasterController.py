@@ -42,7 +42,7 @@ timestamp = str(time.time())
 class MexMasterController(MexRest):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, mc_address='127.0.0.1:9900', root_cert='mex-ca.crt', auto_login=True):
+    def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, auto_login=True):
         self.root_cert = None
 
         if len(root_cert) > 0:
@@ -1959,6 +1959,9 @@ class MexMasterController(MexRest):
 #        else:
 #            resp = send_message()
 #            return self.decoded_data
+
+    def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
