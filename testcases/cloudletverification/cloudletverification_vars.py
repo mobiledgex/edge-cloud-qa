@@ -21,6 +21,10 @@ cluster_name_k8sdedicated = cluster_name + 'k8sdedicated'
 cluster_name_k8sshared = cluster_name + 'k8sshared'
 
 # these are used to calculated how long the cluster has been up. primarily for metrics tests
+cluster_name_dockerdedicated_starttime = 0
+cluster_name_dockershared_starttime = 0
+cluster_name_k8sdedicated_starttime = 0
+cluster_name_k8sshared_starttime = 0
 cluster_name_dockerdedicated_endtime = 0
 cluster_name_dockershared_endtime = 0
 cluster_name_k8sdedicated_endtime = 0
