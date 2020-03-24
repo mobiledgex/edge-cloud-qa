@@ -11,9 +11,9 @@ from mex_rest import MexRest
 import mex_dme_classes
 import shared_variables
 
-import app_client_pb2
-import app_client_pb2_grpc
-import loc_pb2
+#import app_client_pb2
+#import app_client_pb2_grpc
+#import loc_pb2
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_dme rest')
