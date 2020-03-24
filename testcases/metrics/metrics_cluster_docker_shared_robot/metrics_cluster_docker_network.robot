@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   K8s Shared Cluster Network Metrics
+Documentation   Docker Cluster Network Metrics
 
 #Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 #Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
@@ -11,13 +11,12 @@ Resource  ../metrics_cluster_library.robot
 		      
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
-
 Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
 ${operator}=                       TDG
-#${clustername_k8shared}=  cluster1573768282-436812 
+#${clustername_docker}=  cluster1573768282-436812 
 #${developer_name}=   developer1573768282-436812
 
 ${username_admin}=  mexadmin
@@ -26,14 +25,16 @@ ${password_admin}=  mexadmin123
 ${username}=  mextester06
 ${password}=  mextester06123
 ${orgname}=   metricsorg
+
+${test_timeout}=  32 min
 	
 *** Test Cases ***
-ClusterMetrics - Shall be able to get the last k8s shared cluster Network metric on openstack
+ClusterMetrics - Shall be able to get the last docker cluster Network metric on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with last=1 
+   ...  request docker cluster Network metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -42,12 +43,12 @@ ClusterMetrics - Shall be able to get the last k8s shared cluster Network metric
    Network Should Be In Range  ${metrics}
    
 	
-ClusterMetrics - Shall be able to get the last 5 k8s shared cluster Network metrics on openstack
+ClusterMetrics - Shall be able to get the last 5 docker cluster Network metrics on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with last=5
+   ...  request docker cluster Network metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -55,12 +56,12 @@ ClusterMetrics - Shall be able to get the last 5 k8s shared cluster Network metr
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the last 10 k8s shared cluster Network metrics on openstack
+ClusterMetrics - Shall be able to get the last 10 docker cluster Network metrics on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with last=10
+   ...  request docker cluster Network metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -68,12 +69,12 @@ ClusterMetrics - Shall be able to get the last 10 k8s shared cluster Network met
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get all k8s shared cluster Network metrics on openstack
+ClusterMetrics - Shall be able to get all docker cluster Network metrics on openstack
    [Documentation]
-   ...  request all k8s shared cluster Network metrics
+   ...  request all docker cluster Network metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -81,12 +82,12 @@ ClusterMetrics - Shall be able to get all k8s shared cluster Network metrics on 
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to request more k8s shared cluster Network metrics than exist on openstack
+ClusterMetrics - Shall be able to request more docker cluster Network metrics than exist on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with last=<greater than total number of metrics>
+   ...  request docker cluster Network metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -94,34 +95,34 @@ ClusterMetrics - Shall be able to request more k8s shared cluster Network metric
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get k8s shared cluster Network metrics with starttime on openstack
+ClusterMetrics - Shall be able to get docker cluster Network metrics with starttime on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with starttime 
+   ...  request docker cluster Network metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get k8s shared cluster Network metrics with endtime on openstack
+ClusterMetrics - Shall be able to get docker cluster Network metrics with endtime on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with endtime 
+   ...  request docker cluster Network metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}  
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime=lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime=lastrecord on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with starttime=lastrecord 
+   ...  request docker cluster Network metrics with starttime=lastrecord 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -129,75 +130,75 @@ ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics wit
 
    Network Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime > lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with endtime=lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with endtime=lastrecord on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with endtime=lastrecord
+   ...  request docker cluster Network metrics with endtime=lastrecord
    ...  verify info is correct
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should be in Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with endtime = firstrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with endtime = firstrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime > endtime on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get cluster metrics with starttime > endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime and endtime > lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 	
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime and endtime on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime and endtime on openstack
    [Documentation]
-   ...  request k8s shared cluster Network metrics with starttime and endtime on openstack
+   ...  request docker cluster Network metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should be in Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime and endtime and last on openstack
+ClusterMetrics - Shall be able to get the docker cluster Network metrics with starttime and endtime and last on openstack
    [Documentation]
-   ...  request all k8s shared cluster Network metrics with starttime and endtime and last on openstack
+   ...  request all docker cluster Network metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should be in Range  ${metrics}
 
-ClusterMetrics - DeveloperManager shall be able to get k8s shared cluster Network metrics
+ClusterMetrics - DeveloperManager shall be able to get docker cluster Network metrics
    [Documentation]
-   ...  request the k8s shared cluster Network metrics as DeveloperManager
+   ...  request the docker cluster Network metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -205,12 +206,12 @@ ClusterMetrics - DeveloperManager shall be able to get k8s shared cluster Networ
 
    Network Should be in Range  ${metrics}
 
-ClusterMetrics - DeveloperContributor shall be able to get k8s shared cluster Network metrics
+ClusterMetrics - DeveloperContributor shall be able to get docker cluster Network metrics
    [Documentation]
-   ...  request the k8s shared cluster Network metrics as DeveloperContributor
+   ...  request the docker cluster Network metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -218,12 +219,12 @@ ClusterMetrics - DeveloperContributor shall be able to get k8s shared cluster Ne
 
    Network Should be in Range  ${metrics}
 
-ClusterMetrics - DeveloperViewer shall be able to get k8s shared cluster Network metrics
+ClusterMetrics - DeveloperViewer shall be able to get docker cluster Network metrics
    [Documentation]
-   ...  request the k8s shared cluster Network metrics as DeveloperViewer
+   ...  request the docker cluster Network metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -237,18 +238,19 @@ Setup
    #Set Suite Variable  ${limits}
   
    ${timestamp}=  Get Default Time Stamp
-   ${developer_name}=  Get Default Developer Name
-   #${clustername}=  Get Default Cluster Name
-   ${clustername_k8shared}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sshared
+   ${developer_name}=  Get Default Developer Name 
+   ${clustername_docker}=  Get Default Cluster Name
+   #${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
 
-   #${clustername_k8shared}=   Set Variable  cluster1574811700-5411682-k8sshared
+   #${clustername_docker}=   Set Variable  cluster1574811700-5411682-k8sshared
    #${developer_name}=  Set Variable  developer1574811700-5411682
 
-   #${clustername_k8shared}=   Set Variable  cluster1574873355-539982-k8sshared
+   #${clustername_docker}=   Set Variable  cluster1574873355-539982-k8sshared
    #${developer_name}=  Set Variable  developer1574873355-539982
 
-   Set Suite Variable  ${clustername_k8shared}
+   Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
+   Set Suite Variable  ${timestamp}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
@@ -295,11 +297,12 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
 #   : FOR  ${reading}  IN  @{metrics_influx_t}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
-#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['sendBytes']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['recvBytes']}
+#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['sendBytes']}
+#   \  ${index}=  Evaluate  ${index}+1
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
    \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}   ${reading[5]}
    \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}   ${reading[6]}
-
    \  ${index}=  Evaluate  ${index}+1
+
