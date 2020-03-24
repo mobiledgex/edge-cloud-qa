@@ -239,8 +239,8 @@ Setup
   
    ${timestamp}=  Get Default Time Stamp
    ${developer_name}=  Get Default Developer Name 
-   #${clustername}=  Get Default Cluster Name
-   ${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
+   ${clustername_docker}=  Get Default Cluster Name
+   #${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
 
    #${clustername_docker}=   Set Variable  cluster1574811700-5411682-k8sshared
    #${developer_name}=  Set Variable  developer1574811700-5411682

@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   K8s Shared Cluster UDP Metrics
+Documentation   Docker Cluster UDP Metrics
 
 #Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 #Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
@@ -11,13 +11,12 @@ Resource  ../metrics_cluster_library.robot
 	      
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
-
 Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
 ${operator}=                       GDDT
-${clustername_k8shared}=   cluster1574731678-0317152-k8sshared
+${clustername_docker}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
 
 ${username_admin}=  mexadmin
@@ -26,14 +25,16 @@ ${password_admin}=  mexadmin123
 ${username}=  mextester06
 ${password}=  mextester06123
 ${orgname}=   metricsorg
+
+${test_timeout}=  32 min
 	
 *** Test Cases ***
-ClusterMetrics - Shall be able to get the last k8s shared cluster UDP metric on openstack
+ClusterMetrics - Shall be able to get the last docker cluster UDP metric on openstack
    [Documentation]
    ...  request cluster UDP metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp 
+   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp 
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -42,12 +43,12 @@ ClusterMetrics - Shall be able to get the last k8s shared cluster UDP metric on 
    UDP Should Be In Range  ${metrics}
    
 	
-ClusterMetrics - Shall be able to get the last 5 k8s shared cluster UDP metrics on openstack
+ClusterMetrics - Shall be able to get the last 5 docker cluster UDP metrics on openstack
    [Documentation]
    ...  request cluster UDP metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -55,12 +56,12 @@ ClusterMetrics - Shall be able to get the last 5 k8s shared cluster UDP metrics 
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the last 10 k8s shared cluster UDP metrics on openstack
+ClusterMetrics - Shall be able to get the last 10 docker cluster UDP metrics on openstack
    [Documentation]
    ...  request cluster UDP metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -68,12 +69,12 @@ ClusterMetrics - Shall be able to get the last 10 k8s shared cluster UDP metrics
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get all k8s shared cluster UDP metrics on openstack
+ClusterMetrics - Shall be able to get all docker cluster UDP metrics on openstack
    [Documentation]
    ...  request all cluster UDP metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -81,12 +82,12 @@ ClusterMetrics - Shall be able to get all k8s shared cluster UDP metrics on open
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to request more k8s shared cluster UDP metrics than exist on openstack
+ClusterMetrics - Shall be able to request more docker cluster UDP metrics than exist on openstack
    [Documentation]
    ...  request cluster UDP metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -94,36 +95,36 @@ ClusterMetrics - Shall be able to request more k8s shared cluster UDP metrics th
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get k8s shared cluster UDP metrics with starttime on openstack
+ClusterMetrics - Shall be able to get docker cluster UDP metrics with starttime on openstack
    [Documentation]
    ...  request cluster UDP metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Headings Should Be Correct  ${metrics}
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get k8s shared cluster UDP metrics with endtime on openstack
+ClusterMetrics - Shall be able to get docker cluster UDP metrics with endtime on openstack
    [Documentation]
    ...  request cluster UDP metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Headings Should Be Correct  ${metrics}  
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime=lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime=lastrecord on openstack
    [Documentation]
    ...  request cluster UDP metrics with starttime=lastrecord 
    ...  verify info is correct
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -131,75 +132,75 @@ ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with st
 
    UDP Should Be In Range  ${metrics} 
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime > lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with endtime=lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with endtime=lastrecord on openstack
    [Documentation]
    ...  request cluster UDP metrics with endtime=lastrecord
    ...  verify info is correct
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Headings Should Be Correct  ${metrics}
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with endtime = firstrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with endtime = firstrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime > endtime on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   Get cluster metrics with starttime > endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime and endtime > lastrecord on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime and endtime on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster UDP metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Headings Should Be Correct  ${metrics}
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - Shall be able to get the k8s shared cluster UDP metrics with starttime and endtime and last on openstack
+ClusterMetrics - Shall be able to get the docker cluster UDP metrics with starttime and endtime and last on openstack
    [Documentation]
    ...  request all cluster UDP metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Headings Should Be Correct  ${metrics}
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - DeveloperManager shall be able to get k8s shared cluster UDP metrics
+ClusterMetrics - DeveloperManager shall be able to get docker cluster UDP metrics
    [Documentation]
    ...  request the cluster UDP metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -207,12 +208,12 @@ ClusterMetrics - DeveloperManager shall be able to get k8s shared cluster UDP me
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - DeveloperContributor shall be able to get k8s shared cluster UDP metrics
+ClusterMetrics - DeveloperContributor shall be able to get docker cluster UDP metrics
    [Documentation]
    ...  request the cluster UDP metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -220,12 +221,12 @@ ClusterMetrics - DeveloperContributor shall be able to get k8s shared cluster UD
 
    UDP Should Be In Range  ${metrics}
 
-ClusterMetrics - DeveloperViewer shall be able to get k8s shared cluster UDP metrics
+ClusterMetrics - DeveloperViewer shall be able to get docker cluster UDP metrics
    [Documentation]
    ...  request the cluster UDP metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  udp
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -239,15 +240,16 @@ Setup
    #Set Suite Variable  ${limits}
    
    ${timestamp}=  Get Default Time Stamp
-   ${developer_name}=  Get Default Developer Name
-   #${clustername}=  Get Default Cluster Name
-   ${clustername_k8shared}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sshared
+   ${developer_name}=  Get Default Developer Name 
+   ${clustername_docker}=  Get Default Cluster Name
+   #${clustername_docker}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -docker
 
-   #${clustername_k8shared}=   Set Variable  andycluster 
+   #${clustername_docker}=   Set Variable  andycluster 
    #${developer_name}=  Set Variable  automation_api 
 
-   Set Suite Variable  ${clustername_k8shared}
+   Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
+   Set Suite Variable  ${timestamp}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
@@ -292,12 +294,14 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
 #   : FOR  ${reading}  IN  @{metrics_influx_t}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
-#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['udpRecv']}
-#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['udpRecvErr']}
+#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['udpSent']}
+#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][6]}  ${reading['udpRecv']}
+#   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][7]}  ${reading['udpRecvErr']}
+#   \  ${index}=  Evaluate  ${index}+1
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
    \  Should Be Equal  ${metrics_influx_t[${index}]['udpSent']}   ${reading[5]}
    \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecv']}   ${reading[6]}
    \  Should Be Equal  ${metrics_influx_t[${index}]['udpRecvErr']}   ${reading[7]}
-
    \  ${index}=  Evaluate  ${index}+1
+
