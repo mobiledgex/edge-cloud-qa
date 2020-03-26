@@ -45,7 +45,7 @@ class MexMasterController(MexRest):
     def __init__(self, mc_address='127.0.0.1:9900', root_cert=None, auto_login=True):
         self.root_cert = None
 
-        if len(root_cert) > 0:
+        if root_cert and len(root_cert) > 0:
             self.root_cert = self._findFile(root_cert)
 
         super().__init__(address=mc_address, root_cert=self.root_cert)
@@ -1897,8 +1897,8 @@ class MexMasterController(MexRest):
 #            resp = send_message()
 #            return self.decoded_data
 
-    def get_app_metrics(self, token=None, region=None, app_name=None, app_version=None, cluster_instance_name=None, developer_name=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def get_app_metrics(self, token=None, region=None, app_name=None, app_version=None, cluster_instance_name=None, developer_org_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
 #        url = self.root_url + '/auth/metrics/app'
 #
@@ -1960,8 +1960,8 @@ class MexMasterController(MexRest):
 #            resp = send_message()
 #            return self.decoded_data
 
-    def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method='FindCloudlet', token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cell_id=cell_id, last=last, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)

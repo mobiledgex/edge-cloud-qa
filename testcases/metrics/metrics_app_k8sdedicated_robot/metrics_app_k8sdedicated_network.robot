@@ -30,7 +30,7 @@ AppMetrics - Shall be able to get the last k8s dedicated app Network metric on o
    ...  request app Network metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -44,7 +44,7 @@ AppMetrics - Shall be able to get the last 5 k8s dedicated app Network metrics o
    ...  request app Network metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -57,7 +57,7 @@ AppMetrics - Shall be able to get the last 10 k8s dedicated app Network metrics 
    ...  request cluster Network metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -70,7 +70,7 @@ AppMetrics - Shall be able to get all k8s dedicated app Network metrics on opens
    ...  request all cluster Network metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -85,7 +85,7 @@ AppMetrics - Shall be able to request more k8s dedicated app Network metrics tha
    ...  request cluster Network metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -100,7 +100,7 @@ AppMetrics - Shall be able to get k8s dedicated app Network metrics with startti
    ...  request cluster Network metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -111,7 +111,7 @@ AppMetrics - Shall be able to get k8s dedicated app Network metrics with endtime
    ...  request cluster Network metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -124,7 +124,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Network metrics with sta
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -137,7 +137,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Network metrics with sta
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
 AppMetrics - Shall be able to get the k8s dedicated app Network metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -146,7 +146,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Network metrics with end
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -157,28 +157,28 @@ AppMetrics - Shall be able to get the k8s dedicated app Network metrics with end
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
 AppMetrics - Shall be able to get the k8s dedicated app Network metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
 AppMetrics - Shall be able to get the k8s dedicated app Network metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
 AppMetrics - Shall be able to get the k8s dedicated app Network metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Network metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -189,7 +189,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Network metrics with sta
    ...  request all cluster Network metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -200,7 +200,7 @@ AppMetrics - DeveloperManager shall be able to get k8s dedicated app Network met
    ...  request the cluster Network metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -213,7 +213,7 @@ AppMetrics - DeveloperContributor shall be able to get k8s dedicated app Network
    ...  request the cluster Network metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -226,7 +226,7 @@ AppMetrics - DeveloperViewer shall be able to get k8s dedicated app Network metr
    ...  request the cluster Network metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -250,10 +250,12 @@ Setup
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
+   ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    log to console  ${appinst} ${pod}
 
    Set Suite Variable  ${app_name}
+   Set Suite Variable  ${app_name_influx}
    Set Suite Variable  ${clustername_k8sdedicated}
    Set Suite Variable  ${developer_name}
    Set Suite Variable  ${pod}
@@ -263,13 +265,16 @@ Metrics Headings Should Be Correct
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-network
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudlet 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  operator 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  sendBytes
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  recvBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
 
 Network Should Be In Range
    [Arguments]  ${metrics}
@@ -278,7 +283,16 @@ Network Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} >= 0 and ${reading[7]} >= 0
+   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
+   \  Should Be Equal  ${reading[2]}  10
+   \  Should Be Equal  ${reading[3]}  ${pod}
+   \  Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
+   \  Should Be Equal  ${reading[5]}  ${developer_name}
+   \  Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics}
+   \  Should Be Equal  ${reading[7]}  ${operator}
+   \  Should Be Equal  ${reading[8]}  ${developer_name}
+
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
 
 Network Should Have Received Data 
    [Arguments]  ${metrics}
@@ -289,7 +303,7 @@ Network Should Have Received Data
    # verify values
    : FOR  ${reading}  IN  @{values}
    \  Should Be True               ${reading[6]} >= 0 and ${reading[7]} >= 0
-   \  ${found_data}=  Run Keyword If  '${reading[6]}' > '10' and '${reading[7]}' > '10'  Set Variable  ${True}
+   \  ${found_data}=  Run Keyword If  '${reading[9]}' > '10' and '${reading[10]}' > '10'  Set Variable  ${True}
    \  ...                                 ELSE  Set Variable  ${found_data}
 
    Should Be True  ${found_data}  Didnot find network data 
@@ -314,6 +328,6 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[7]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
    \  ${index}=  Evaluate  ${index}+1

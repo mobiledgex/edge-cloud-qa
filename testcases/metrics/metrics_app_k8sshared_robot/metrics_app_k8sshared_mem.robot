@@ -30,7 +30,7 @@ AppMetrics - Shall be able to get the last k8s shared app Memory metric on opens
    ...  request app Memory metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -44,7 +44,7 @@ AppMetrics - Shall be able to get the last 5 k8s shared app Memory metrics on op
    ...  request app Memory metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -57,7 +57,7 @@ AppMetrics - Shall be able to get the last 10 k8s shared app Memory metrics on o
    ...  request cluster Memory metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -70,7 +70,7 @@ AppMetrics - Shall be able to get all k8s shared app Memory metrics on openstack
    ...  request all cluster Memory metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -83,7 +83,7 @@ AppMetrics - Shall be able to request more k8s shared app Memory metrics than ex
    ...  request cluster Memory metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -96,7 +96,7 @@ AppMetrics - Shall be able to get k8s shared app Memory metrics with starttime o
    ...  request cluster Memory metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -107,7 +107,7 @@ AppMetrics - Shall be able to get k8s shared app Memory metrics with endtime on 
    ...  request cluster Memory metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -120,7 +120,7 @@ AppMetrics - Shall be able to get the k8s shared app Memory metrics with startti
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -133,7 +133,7 @@ AppMetrics - Shall be able to get the k8s shared app Memory metrics with startti
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
 AppMetrics - Shall be able to get the k8s shared app Memory metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -142,7 +142,7 @@ AppMetrics - Shall be able to get the k8s shared app Memory metrics with endtime
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -153,28 +153,28 @@ AppMetrics - Shall be able to get the k8s shared app Memory metrics with endtime
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
 AppMetrics - Shall be able to get the k8s shared app Memory metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
 AppMetrics - Shall be able to get the k8s shared app Memory metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
 AppMetrics - Shall be able to get the k8s shared app Memory metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Memory metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -185,7 +185,7 @@ AppMetrics - Shall be able to get the k8s shared app Memory metrics with startti
    ...  request all cluster Memory metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -196,7 +196,7 @@ AppMetrics - DeveloperManager shall be able to get k8s shared app Memory metrics
    ...  request the cluster Memory metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -209,7 +209,7 @@ AppMetrics - DeveloperContributor shall be able to get k8s shared app Memory met
    ...  request the cluster Memory metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -222,7 +222,7 @@ AppMetrics - DeveloperViewer shall be able to get k8s shared app Memory metrics
    ...  request the cluster Memory metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${pod}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -246,10 +246,12 @@ Setup
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
+   ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    log to console  ${appinst} ${pod}
 
    Set Suite Variable  ${app_name}
+   Set Suite Variable  ${app_name_influx}
    Set Suite Variable  ${clustername_k8sshared}
    Set Suite Variable  ${developer_name}
    Set Suite Variable  ${pod}
@@ -259,12 +261,15 @@ Metrics Headings Should Be Correct
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-mem
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudlet 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  operator 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  mem
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  mem
 
 Memory Should Be In Range
   [Arguments]  ${metrics}
@@ -273,7 +278,16 @@ Memory Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} >= 0 and ${reading[6]} <= 10000000
+   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
+   \  Should Be Equal  ${reading[2]}  10
+   \  Should Be Equal  ${reading[3]}  ${pod}
+   \  Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
+   \  Should Be Equal  ${reading[5]}  ${developer_name}
+   \  Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics}
+   \  Should Be Equal  ${reading[7]}  ${operator}
+   \  Should Be Equal  ${reading[8]}  ${developer_name}
+
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 10000000
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -295,5 +309,5 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['mem']}  ${reading[6]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['mem']}  ${reading[9]}
    \  ${index}=  Evaluate  ${index}+1

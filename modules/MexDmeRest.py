@@ -5,7 +5,7 @@ import threading
 import requests
 import sys
 
-from google.protobuf.json_format import MessageToJson
+#from google.protobuf.json_format import MessageToJson
 
 from mex_rest import MexRest
 import mex_dme_classes
