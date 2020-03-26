@@ -33,7 +33,7 @@ Setup
 
    Create Flavor  region=${region}  flavor_name=${flavorname}
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated 
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessShared 
  
    Create App  region=${region}  app_name=${appname}     deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
 

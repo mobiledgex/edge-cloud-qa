@@ -30,6 +30,8 @@ ${operator_name_openstack_dusseldorf}  TDG
 ${physical_name_openstack_dusseldorf}  dusseldorf 
 ${operator_name_gcp}  gcp 
 
+${gpu_resource_name}  mygpuresrouce
+
 ${version}   version
 ${imgversion}	3.0.3
 
@@ -71,6 +73,9 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Dusseldorf
         ...  do CreateCloudlet to start a CRM on dusseldorf openstack
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_dusseldorf}  number_dynamic_ips=254  latitude=51.2277  longitude=6.7735
+
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  operator_org_name=${operator_name_openstack_dusseldorf}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_dusseldorf}  tags=pci=t4gpu:1
 
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Packet 
         [Documentation]

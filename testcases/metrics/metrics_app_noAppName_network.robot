@@ -81,6 +81,17 @@ AppMetrics - Shall be able to get the app Network metrics with developer only
 
    Network Should be in Range  ${metrics}
 
+AppMetrics - Shall be able to get all app Network metrics with developer only
+   [Documentation]
+   ...  request all app network metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  network 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Network Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits
@@ -103,12 +114,15 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-network
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  operator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  sendBytes
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  recvBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
 
 Network Should Be In Range
   [Arguments]  ${metrics}
@@ -117,7 +131,7 @@ Network Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} >= 0 and ${reading[7]} >= 0
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -143,8 +157,8 @@ Metrics Should Match Influxdb
 #   \  ${index}=  Evaluate  ${index}+1
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[7]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
    \  ${index}=  Evaluate  ${index}+1
 
 Metrics Should Match Different Cluster Names
