@@ -32,7 +32,7 @@ class ClusterInstance(MexOperation):
             if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
             if flavor_name is None: flavor_name = shared_variables.flavor_name_default
             if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
-            if liveness is None: liveness = 1
+            #if liveness is None: liveness = 1
             if deployment == 'kubernetes':
                 if number_masters is None: number_masters = 1
                 if number_nodes is None: number_nodes = 1
