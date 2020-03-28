@@ -4,8 +4,8 @@ Documentation   VM App Metrics
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexApp
 
-Suite Setup  Setup
-Suite Teardown  Teardown 
+#Suite Setup  Setup
+#Suite Teardown  Teardown 
 
 Test Timeout    ${test_timeout_crm}
 
@@ -34,16 +34,16 @@ Setup
 
    Create Flavor  region=${region}  flavor_name=${flavorname}  disk=80
 
-   Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_name=mobiledgex
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator_name_openstack}
+   Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
  
    #${appname_k8s}=  Set Variable  app1576004798-848067k8s 
-   ${appinst}=  Show App Instances  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator_name_openstack}
+   #${appinst}=  Show App Instances  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
 
    Log to Console  Wait and connect to TCP/UDP ports
    Sleep  7 mins
 #   UDP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][1]['public_port']}
-   TCP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
    Sleep  10 mins
