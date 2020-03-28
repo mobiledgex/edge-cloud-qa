@@ -68,6 +68,9 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Fairview
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_fairview}  cloudlet_name=${cloudlet_name_openstack_fairview}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_fairview}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127
 
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_fairview}  operator_org_name=${operator_name_openstack_fairview}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_fairview}  tags=pci=t4gpu:1
+
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Paradise 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on paradise openstack
