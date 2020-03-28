@@ -81,8 +81,11 @@ class Rootlb(Linux):
 
         return output
 
-    def get_docker_container_id(self):
+    def get_docker_container_id(self, name=None):
         cmd = 'docker ps --format "{{.ID}}"'
+        if name:
+            cmd = cmd + f' --filter name=^{name}'
+            
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
@@ -143,7 +146,7 @@ class Rootlb(Linux):
 
             
     def mount_exists_on_pod(self, pod, mount):
-        logging.info(f'mount exists on pod={pod} mount={mount}')
+        logging.info(f'checking if mount exists on pod={pod} mount={mount}')
 
         cmd = f'df {mount}'
 
@@ -188,7 +191,13 @@ class Rootlb(Linux):
 
         output = self.run_command(kubectl_cmd)
         return output
-    
+
+    def run_command_on_container(self, container_name, command):
+        cmd = f'docker exec -it {container_name} bash -c "{command}"'
+
+        output = self.run_command(cmd)
+        return output
+
     def write_file_to_node(self, node, mount, data=None):
         logging.info(f'write file to node={node} mount={mount}')
         network, ip = node.split('=')

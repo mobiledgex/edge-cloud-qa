@@ -68,6 +68,9 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Frankfurt
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_frankfurt}  number_dynamic_ips=254  latitude=50.110922  longitude=8.682127
 
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_frankfurt}  operator_org_name=${operator_name_openstack_frankfurt}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_frankfurt}  tags=pci=t4gpu:1
+
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Dusseldorf 
         [Documentation]
         ...  do CreateCloudlet to start a CRM on dusseldorf openstack
