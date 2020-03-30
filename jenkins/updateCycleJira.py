@@ -12,11 +12,15 @@ import subprocess
 import argparse
 
 username = 'andy.anderson@mobiledgex.com'
+accountid = '***REMOVED***'
 #access_key = '***REMOVED***'
 #secret_key = '***REMOVED***'
 
 #systemkey
-access_key = '***REMOVED***';
+#access_key = '***REMOVED***';
+#secret_key = '***REMOVED***'
+#access_key = '***REMOVED***';
+access_key = '***REMOVED***'
 secret_key = '***REMOVED***'
 
 jira_token = '***REMOVED***'
@@ -49,7 +53,8 @@ def main():
     logging.getLogger('urllib3').setLevel(logging.ERROR)
     logging.getLogger('zapi').setLevel(logging.DEBUG)
 
-    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    #z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=True)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
 
     project_info = j.get_project(project)
