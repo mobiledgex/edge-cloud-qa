@@ -12,12 +12,16 @@ import subprocess
 import argparse
 
 username = 'andy.anderson@mobiledgex.com'
+accountid = '5b85c5f93cee7729fa0660a8'
 #access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gVVNFUl9ERUZBVUxUX05BTUU'
 #secret_key = 'S_KlvniknmZ1EPVVJij70fIsm8V7UqrAgxC3MGQqCqA'
 
 #systemkey
-access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
-secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
+#access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNvbg';
+#secret_key = 'PckHXrGmx7pHzt-_-uAEBAK7fGP3dk3rI5BbVQLb5oU'
+#access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIGFuZHkuYW5kZXJzb24gYW5keS5hbmRlcnNxxx';
+access_key = 'MDAzZTcyMTMtNGY3ZS0zMmMwLWIxZDAtYjZlM2Y1MTljNmNlIDViODVjNWY5M2NlZTc3MjlmYTA2NjBhOCBVU0VSX0RFRkFVTFRfTkFNRQ'
+secret_key = '_1x9j2jdzPGHmpQTs9myoiz76wFTl1f_MC3iBXP0mFg'
 
 jira_token = 'Qoi6yaqSNTvjdyJAhgNz1AE4'
 
@@ -49,7 +53,8 @@ def main():
     logging.getLogger('urllib3').setLevel(logging.ERROR)
     logging.getLogger('zapi').setLevel(logging.DEBUG)
 
-    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    #z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=True)
+    z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=True)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
 
     project_info = j.get_project(project)
