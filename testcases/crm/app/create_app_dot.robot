@@ -54,8 +54,8 @@ User shall be able to create an app instance on openstack with a dot in the app 
     # verify dot is gone
     Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
 
-    Log To Console  Waiting for k8s pod to be running
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name}
+    #Log To Console  Waiting for k8s pod to be running
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name}
 
 *** Keywords ***
 Setup
