@@ -36,11 +36,11 @@ Create clusterInst for clustersvc on openstack
     ...  create a clusterInst on openstack
     ...  verify MEXPrometheusAppName and MEXMetricsWriter are created
 
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}
     ${cluster_name_default}=  Get Default Cluster Name
 
     # check that apps are created
-    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
+    App Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  image_path=stable/prometheus-operator  default_flavor_name=x1.medium  cluster_name=default  deployment=helm
     #App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
 
     # check that pods are running
@@ -48,7 +48,7 @@ Create clusterInst for clustersvc on openstack
     \  Wait for k8s pod to be running  pod_name=${pod}  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}
 
     # check that app instances are created
-    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}
+    App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     #App Instance Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}
 
 
