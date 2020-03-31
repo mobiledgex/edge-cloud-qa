@@ -34,9 +34,10 @@ GPU - CreateClusterInst shall fail if gpu=0
    Create Flavor  region=${region}  flavor_name=${flavor_name}  disk=80  optional_resources=gpu=gpu:0
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
-   
-   Should Contain  ${error}  responseCode = 400
-   Should Contain  ${error}   "message":"no suitable platform flavor found for ${flavor_name}, please try a smaller flavor"
+
+   Should be equal  ${error}  ('code=400', 'error={"message":"no suitable platform flavor found for ${flavor_name}, please try a smaller flavor"}')   
+   #Should Contain  ${error}  responseCode = 400
+   #Should Contain  ${error}   "message":"no suitable platform flavor found for ${flavor_name}, please try a smaller flavor"
 
 *** Keywords ***
 Setup

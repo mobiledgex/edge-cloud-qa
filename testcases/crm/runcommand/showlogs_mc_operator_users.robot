@@ -37,7 +37,7 @@ ShowLogs - OperatorManager shall not be able to do ShowLogs
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -56,7 +56,7 @@ ShowLogs - OperatorContributor shall not be able to do ShowLogs
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -75,7 +75,7 @@ ShowLogs - OperatorViewer shall not be able to do ShowLogs
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
