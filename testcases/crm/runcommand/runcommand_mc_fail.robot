@@ -32,7 +32,7 @@ RunCommand - shall return error with appname not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_ap  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_ap","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_ap","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
 
 RunCommand - shall return error with app version not found
     [Documentation]
@@ -44,7 +44,7 @@ RunCommand - shall return error with app version not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.1  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.1"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.1"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
 
 RunCommand - shall return error with developer not found
     [Documentation]
@@ -56,8 +56,8 @@ RunCommand - shall return error with developer not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=automation_ap  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    #Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"automation_ap","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"automation_ap"}} not found 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"automation_ap","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"automation_ap"}} not found 
+    #Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
 
 RunCommand - shall return error with cluster not found
     [Documentation]
@@ -69,7 +69,7 @@ RunCommand - shall return error with cluster not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluste  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluste"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluste"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
 
 RunCommand - shall return error with operator not found
     [Documentation]
@@ -81,7 +81,7 @@ RunCommand - shall return error with operator not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=tmu  cloudlet_name=tmocloud-1  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"tmu","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"tmu","name":"tmocloud-1"},"organization":"${developer}"}} not found 
 
 RunCommand - shall return error with cloudlet not found
     [Documentation]
@@ -93,7 +93,7 @@ RunCommand - shall return error with cloudlet not found
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-  token=${token}  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request, AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluster"},"cloudlet_key":{"organization":"dmuus","name":"tmocloud-"},"organization":"${developer}"}} not found 
 
 RunCommand - shall return error with bad token 
     [Documentation]
@@ -105,7 +105,7 @@ RunCommand - shall return error with bad token
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=xx  command=ls
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Unauthorized, invalid or expired jwt 
+    Should Contain  ${error}  Error: Unauthorized (401), invalid or expired jwt 
 
 RunCommand - shall return error without token
     [Documentation]
@@ -118,5 +118,5 @@ RunCommand - shall return error without token
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=ls  use_defaults=${False}
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Unauthorized, invalid or expired jwt
+    Should Contain  ${error}  Error: Unauthorized (401), invalid or expired jwt
 
