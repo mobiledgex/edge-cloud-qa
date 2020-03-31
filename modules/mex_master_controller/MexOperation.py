@@ -124,7 +124,7 @@ class MexOperation(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def run(self, message_type='run', token=None, command=None, region=None, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
+    def run(self, message_type='run', token=None, command=None, region=None, timeout=120, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
         if use_defaults == True:
             if token == None: token = self.token
 
@@ -139,6 +139,7 @@ class MexOperation(MexRest):
                 process = subprocess.Popen(cmd,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE,
+                                           #timeout=timeout,
                                            shell=True
                 )                
 
