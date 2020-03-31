@@ -46,7 +46,7 @@ User shall be able to create/delete/create an app instance on openstack
     App Instance Should Exist
 
     Log To Console  Waiting for k8s pod to be running
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
     # delete the app instance
     Delete App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
@@ -56,8 +56,8 @@ User shall be able to create/delete/create an app instance on openstack
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
     App Instance Should Exist
 
-    Log To Console  Waiting for k8s pod to be running
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
+    #Log To Console  Waiting for k8s pod to be running
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
 *** Keywords ***
 Setup
