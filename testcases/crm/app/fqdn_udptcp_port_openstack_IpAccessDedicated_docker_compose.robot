@@ -85,6 +85,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
+# not supported should return an error. There is an error tests in controller/app directory
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=loadbalancer
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker compose dedicated and access_type=loadbalancer
