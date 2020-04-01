@@ -123,9 +123,9 @@ CreatePrivacyPolicy - shall be able to create docker cluster with icmp/tcp/udp
    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
-   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
+   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
    ${openstack_group_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}  pf
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['organization']}  pf
 
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    Should Be Equal  ${openstacksecgroup['name']}   ${openstack_group_name}
@@ -251,9 +251,9 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated cluster with icmp/tc
    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
-   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
+   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
    ${openstack_group_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}  pf
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['organization']}  pf
 
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    Should Be Equal  ${openstacksecgroup['name']}   ${openstack_group_name}
@@ -377,9 +377,9 @@ CreatePrivacyPolicy - shall be able to create cluster after policy update
    ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
-   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
+   ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
    ${openstack_group_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}  pf
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${cluster['data']['key']['cloudlet_key']['name']}  ${cluster['data']['key']['cloudlet_key']['organization']}  pf
 
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    Should Be Equal  ${openstacksecgroup['name']}   ${openstack_group_name}
