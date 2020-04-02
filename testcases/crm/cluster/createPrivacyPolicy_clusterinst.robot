@@ -2,7 +2,7 @@
 Documentation  CreatePrivacyPolicy on openstack
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_ENV} 
+Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV} 
 Library  String
      
 Test Setup  Setup
