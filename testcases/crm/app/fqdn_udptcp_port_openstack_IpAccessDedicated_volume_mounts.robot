@@ -8,7 +8,7 @@ Library  MexApp
 Library  String
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -51,9 +51,9 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
    
-    Write File to Node  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  #root_loadbalancer=${rootlb} 
+    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  #root_loadbalancer=${rootlb} 
 	
-    Mount Should Exist on Pod  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
+    Mount Should Exist on Pod  root_loadbalancer=${rootlb}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
 
     Register Client  #app_name=app1579992291-485193  developer_org_name=mobiledgex  app_version=1.0
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  #carrier_name=GDDT  latitude=32.7767  longitude=-96.797
