@@ -99,6 +99,7 @@ CreatePrivacyPolicy - shall be able to create docker cluster with udp
    Should Be Equal  ${openstackrules[0]['Port Range']}             1001:2001
    Should Be Equal  ${openstackrules[0]['Remote Security Group']}  ${None}
 
+# ECQ-1823
 CreatePrivacyPolicy - shall be able to create docker cluster with icmp/tcp/udp
    [Documentation]
    ...  send docker CreateClusterInst with PrivacyPolicy with multiple icmp/tcp/udp rules

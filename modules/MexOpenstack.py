@@ -543,14 +543,14 @@ class MexOpenstack():
 
     def get_security_groups(self, group_id=None, name=None, env_file=None):
         if env_file:
-            cmd = f'source {env_file}'
+            src_cmd = f'source {env_file}'
         else:
-            cmd = f'source {self.env_file}'
+            src_cmd = f'source {self.env_file}'
 
         if group_id:
-            cmd = f'{cmd};openstack security group show {group_id} -f json'
+            cmd = f'{src_cmd};openstack security group show {group_id} -f json'
         else:
-            cmd = f'{cmd};openstack security group list -f json'
+            cmd = f'{src_cmd};openstack security group list -f json'
         logging.debug(f'getting openstack security groups with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
 
@@ -560,7 +560,7 @@ class MexOpenstack():
                 print(group['Name'],name)
                 if group['Name'] == name:
                     groupid = group['ID']
-                    cmd = f'openstack security group show {groupid} -f json'
+                    cmd = f'{src_cmd};openstack security group show {groupid} -f json'
                     logging.debug(f'getting openstack security groups with cmd = {cmd}')
                     o_out=self._execute_cmd(cmd)
                     break
