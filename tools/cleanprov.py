@@ -11,14 +11,16 @@ import MexController as mex_controller
 
 parser = argparse.ArgumentParser(description='clean prov from controller')
 parser.add_argument('--address', default='127.0.0.1:55001', help='controller address:port default is 127.0.0.1:55001')
-#parser.add_argument('--components',required=True, help='comma seperated list of components. example: Automated,Controller,Operator')
-#parser.add_argument('--versions',required=True, help='comma seperated list of versions. example: Nimbus')
+parser.add_argument('--tables',default='appinst,app,clusterint,flavor,cloudlet', help='comma seperated list of tables in the order to be deleted: appinst,app,clusterint,flavor,cloudlet')
+parser.add_argument('--cloudlet',help='cloudlet to filter the delete by')
 #parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
 #parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
 
 args = parser.parse_args()
 
 controller_address = args.address
+tables = args.tables.split(',')
+cloudlet = args.cloudlet
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -26,7 +28,7 @@ mex_key = 'localserver.key'
 
 #appinst_keep = [{'app_name':'automation_api_app'}, {'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
 #app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}, {'app_name':'MEXMetricsExporter'}]
-appinst_keep = [{'app_name':'automation_api_app'}]
+appinst_keep = [{'app_name':'automation_api_app'},{'app_name':'MEXPrometheusAppName'}]
 app_keep = [{'app_name':'automation_api_auth_app'}, {'app_name':'automation_api_app'}]
 clusterinst_keep = []
 cluster_keep = [{'cluster_name':'automationapicluster'}]
@@ -40,14 +42,14 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 controller = mex_controller.MexController(controller_address = controller_address,
-                                       root_cert = mex_root_cert,
-                                       key = mex_key,
-                                       client_cert = mex_cert
+#                                       root_cert = mex_root_cert,
+#                                       key = mex_key,
+#                                       client_cert = mex_cert
 )
 
 def clean_appinst():
     print('clean appinst')
-    appinst_list = controller.show_app_instances()
+    appinst_list = controller.show_app_instances(cloudlet_name=cloudlet, use_defaults=False)
     if len(appinst_list) == 0:
         print('nothing to delete')
     else:
@@ -62,7 +64,7 @@ def clean_appinst():
 
 def clean_app():
     print('clean app')
-    app_list = controller.show_apps()
+    app_list = controller.show_apps(use_defaults=False)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
@@ -76,12 +78,12 @@ def clean_app():
 
 def clean_clusterinst():
     print('clean cluster instance')
-    app_list = controller.show_cluster_instances()
+    app_list = controller.show_cluster_instances(cloudlet_name=cloudlet, use_defaults=False)
     if len(app_list) == 0:
         print('nothing to delete')
     else:
         for a in app_list:
-            print('aaa',a.key.cluster_key.name, a.key.cloudlet_key.name, a.key.cloudlet_key.operator_key.name)
+            print('aaa',a.key.cluster_key.name, a.key.cloudlet_key.name, a.key.cloudlet_key.organization)
             if in_clusterinst_list(a):
                 print('keeping', a.key.cluster_key.name)
             else:
@@ -237,15 +239,14 @@ def in_operator_list(app):
             print('found operator in operator_keep list', app.key.name)
             return True
 
-clean_appinst()
-clean_app()
-clean_clusterinst()
-#clean_cluster()
-#clean_clusterflavor()
-clean_flavor()
-clean_cloudlet()
-clean_developer()
-clean_operator()
-
-
-
+for table in tables:
+   if table == 'appinst':
+      clean_appinst()
+   if table == 'app':
+      clean_app()
+   if table == 'clusterinst':
+      clean_clusterinst()
+   if table == 'flavor':
+      clean_flavor()
+   if table == 'cloudlet':
+      clean_cloudlet()
