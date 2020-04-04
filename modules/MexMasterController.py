@@ -902,9 +902,9 @@ class MexMasterController(MexRest):
                 raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
 
-    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
-        return self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-
+#    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
+#        return self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+#
 #        url = self.root_url + '/auth/ctrl/ShowFlavor'
 #
 #        payload = None
@@ -967,9 +967,22 @@ class MexMasterController(MexRest):
 #            #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 #            #return self.decoded_data
 #            return resp
-    def show_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
-        return self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def show_flavors(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
+        resp = self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+        reverse = True if sort_order == 'descending' else False
+        if sort_field == 'flavor_name':
+            #allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['name'].casefold()),reverse=reverse)
+            resp_data = sorted(resp, key=lambda x: (x['data']['key']['name'].casefold()),reverse=reverse)
+            print('*WARN*', 'post', resp_data)
+        elif sort_field == 'ram':
+            logging.info('sorting by ram')
+            resp_data = sorted(resp, key=lambda x: (x['data']['key']['ram'].casefold()),reverse=reverse)
+        elif sort_field == 'region':
+            resp_data = sorted(resp, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
+
+        return resp_data
+    
     def create_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, optional_resources=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         return self.flavor.create_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, optional_resources=optional_resources, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
@@ -1175,8 +1188,8 @@ class MexMasterController(MexRest):
     def show_all_flavors(self, sort_field='flavor_name', sort_order='ascending'):
         # should enhance by querying for the regions. But hardcode for now
 
-        usregion = self.show_flavors(region='US')
-        euregion = self.show_flavors(region='EU')
+        usregion = self.show_flavors(region='US', token=self.token, use_defaults=False)
+        euregion = self.show_flavors(region='EU', token=self.token, use_defaults=False)
 
         for region in usregion:
             region['data']['region'] = 'US'
@@ -1191,6 +1204,12 @@ class MexMasterController(MexRest):
             #allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['name'].casefold()),reverse=reverse)
             allregion = sorted(allregion, key=lambda x: (x['data']['key']['name'].casefold()),reverse=reverse)
             print('*WARN*', 'post', allregion)
+        elif sort_field == 'ram':
+            allregion = sorted(allregion, key=lambda x: (x['data']['ram'], x['data']['key']['name'].casefold()),reverse=reverse)
+        elif sort_field == 'vcpus':
+            allregion = sorted(allregion, key=lambda x: (x['data']['vcpus'], x['data']['key']['name'].casefold()),reverse=reverse)
+        elif sort_field == 'disk':
+            allregion = sorted(allregion, key=lambda x: (x['data']['disk'], x['data']['key']['name'].casefold()),reverse=reverse)
         elif sort_field == 'region':
             allregion = sorted(allregion, key=lambda x: x['data']['region'].casefold(),reverse=reverse)
 
@@ -1223,8 +1242,8 @@ class MexMasterController(MexRest):
     def show_all_cluster_instances(self, sort_field='cluster_name', sort_order='ascending'):
         # should enhance by querying for the regions. But hardcode for now
 
-        usregion = self.show_cluster_instances(region='US')
-        euregion = self.show_cluster_instances(region='EU')
+        usregion = self.show_cluster_instances(region='US', token=self.token, use_defaults=False)
+        euregion = self.show_cluster_instances(region='EU', token=self.token, use_defaults=False)
 
         for region in usregion:
             region['data']['region'] = 'US'

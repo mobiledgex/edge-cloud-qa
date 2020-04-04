@@ -97,6 +97,7 @@ GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
    Node Should Not Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_master[0]['Networks']}
    Node Should Not Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_rootlb[0]['Networks']}
 
+# ECQ-1904
 GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    [Documentation]
    ...  create a cluster on openstack with 1 GPU for Docker
@@ -121,6 +122,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    # verify the NVIDIA is allocated
    Node Should Have GPU  root_loadbalancer=${clusterlb}  node=${server_info[0]['Networks']}
 
+# ECQ-1905
 GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
    [Documentation]
    ...  create a cluster on openstack with 1 GPU for docker IpAccessShared
@@ -152,6 +154,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
    # verify the NVIDIA is allocated
    Node Should Have GPU      root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
 
+# ECQ-1902
 GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessShared on openstack
    [Documentation]
    ...  create a cluster on openstack without specifying the gpu option for k8s shared 
@@ -187,6 +190,7 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessShared on o
    Node Should Not Have GPU  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
    Node Should Not Have GPU  root_loadbalancer=${rootlb}  node=${server_master_node[0]['Networks']}
 
+# ECQ-1903
 GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessDedicated on openstack
    [Documentation]
    ...  create a cluster on openstack without specifying the gpu option for k8s dedicated

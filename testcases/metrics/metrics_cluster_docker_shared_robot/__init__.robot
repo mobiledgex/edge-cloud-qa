@@ -16,6 +16,7 @@ ${region}=  EU
 
 ${test_timeout}=  32 min
 
+# ECQ-2002
 *** Keywords ***
 Setup
    Create Flavor  region=${region}
