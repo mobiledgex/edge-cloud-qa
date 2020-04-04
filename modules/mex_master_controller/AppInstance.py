@@ -20,7 +20,7 @@ class AppInstance(MexOperation):
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
+    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, crm_override=None, use_defaults=True):
 
         if app_name == 'default':
             app_name = shared_variables.app_name_default
@@ -106,7 +106,9 @@ class AppInstance(MexOperation):
             appinst_dict['flavor'] = {'name': flavor_name}
         if autocluster_ip_access is not None:
             appinst_dict['auto_cluster_ip_access'] = autocluster_ip_access 
-
+        if privacy_policy is not None:
+            appinst_dict['privacy_policy'] = privacy_policy
+            
         if crm_override:
             if crm_override.lower() == "ignorecrm":
                 crm_override = 2
@@ -140,8 +142,8 @@ class AppInstance(MexOperation):
         return metric_dict
 
 
-    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
         thread_name = None
