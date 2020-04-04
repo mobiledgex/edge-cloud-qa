@@ -532,14 +532,18 @@ class MexOpenstack():
         logging.debug(f'getting openstack security group rules with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
 
+        found = []
         if ip_range:
             rules = json.loads(o_out)
             for rule in rules:
                 if rule['IP Range'] == ip_range:
-                    o_out=json.dumps([rule])
-                    break
-
-        return json.loads(o_out)
+                    found.append(rule)
+                    #o_out=json.dumps([rule])
+                    #break
+        else:
+            found = json.loads(o_out)
+            
+        return found
 
     def get_security_groups(self, group_id=None, name=None, env_file=None):
         if env_file:
