@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1915
 ClusterMetrics - Shall be able to get the cluster Disk metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster Disk metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster Disk metrics with cloudlet/ope
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1916
 ClusterMetrics - Shall be able to get the cluster Disk metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster Disk metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster Disk metrics with cloudlet/dev
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1917
 ClusterMetrics - Shall be able to get the cluster Disk metrics with operator/developer only
    [Documentation]
    ...  request all cluster Disk metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster Disk metrics with operator/dev
    Disk Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2022
+ClusterMetrics - Shall be able to get the cluster Disk metrics with developer only
+   [Documentation]
+   ...  request all cluster Disk metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  disk
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Disk Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
