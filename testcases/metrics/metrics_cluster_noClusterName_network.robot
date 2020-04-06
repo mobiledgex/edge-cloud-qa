@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1921
 ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster Network metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1922
 ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster Network metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1923
 ClusterMetrics - Shall be able to get the cluster Network metrics with operator/developer only
    [Documentation]
    ...  request all cluster Network metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with operator/
    Network Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2024
+ClusterMetrics - Shall be able to get the cluster Network metrics with developer only
+   [Documentation]
+   ...  request all cluster Network metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  network
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Network Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup

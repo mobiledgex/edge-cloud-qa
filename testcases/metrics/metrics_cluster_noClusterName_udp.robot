@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1927
 ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster UDP metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/oper
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1928
 ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster UDP metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster UDP metrics with cloudlet/deve
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1929
 ClusterMetrics - Shall be able to get the cluster UDP metrics with operator/developer only
    [Documentation]
    ...  request all cluster UDP metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster UDP metrics with operator/deve
    UDP Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2026
+ClusterMetrics - Shall be able to get the cluster UDP metrics with developer only
+   [Documentation]
+   ...  request all cluster UDP metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  udp
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   UDP Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
