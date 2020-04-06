@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1924
 ClusterMetrics - Shall be able to get the cluster TCP metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster TCP metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster TCP metrics with cloudlet/oper
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1925
 ClusterMetrics - Shall be able to get the cluster TCP metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster TCP metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster TCP metrics with cloudlet/deve
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1926
 ClusterMetrics - Shall be able to get the cluster TCP metrics with operator/developer only
    [Documentation]
    ...  request all cluster TCP metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster TCP metrics with operator/deve
    TCP Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2025
+ClusterMetrics - Shall be able to get the cluster TCP metrics with developer only
+   [Documentation]
+   ...  request all cluster TCP metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  tcp
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   TCP Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
