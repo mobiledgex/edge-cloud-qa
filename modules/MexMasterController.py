@@ -163,6 +163,9 @@ class MexMasterController(MexRest):
         self.privacy_policy = PrivacyPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.run_cmd = RunCommand(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
+    def find_file(self, filename):
+        return self._findFile(filename)
+
     def get_supertoken(self):
         return self.super_token
 
