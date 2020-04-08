@@ -8,13 +8,14 @@ Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-&{cloudlet0}=  cloudlet=attcloud-1  operator=att
-&{cloudlet1}=  cloudlet=tmocloud-1  operator=dmuus
-&{cloudlet2}=  cloudlet=tmocloud-2  operator=dmuus
-&{cloudlet3}=  cloudlet=automationGcpCentralCloudlet  operator=gcp
-&{cloudlet4}=  cloudlet=automationAzureCentralCloudlet  operator=azure
+#&{cloudlet0}=  cloudlet=attcloud-1  operator=att
+#&{cloudlet1}=  cloudlet=tmocloud-1  operator=dmuus
+#&{cloudlet2}=  cloudlet=tmocloud-2  operator=dmuus
+#&{cloudlet3}=  cloudlet=automationGcpCentralCloudlet  operator=gcp
+#&{cloudlet4}=  cloudlet=automationAzureCentralCloudlet  operator=azure
+#&{cloudlet5}=  cloudlet=andy  operator=Packet
 
-@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}  &{cloudlet4}
+#@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}  &{cloudlet4}  &{cloudlet5}
 
 ${username}=  mextester06
 ${password}=  mextester06123
@@ -30,6 +31,7 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
    FOR  ${pool_cloudlet}  IN  @{pool_return}
+      log to console  xxxxx ${cloudlets}
       &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlets}  ${cloudlet_key}  
    END
@@ -186,7 +188,14 @@ Setup
    ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
 
    ${super_token}=  Get Super Token
-
+ 
+   @{cloudlets}=  Create List
+   ${cloudlet_list}=  Show Cloudlets  region=US  token=${super_token}  use_defaults=${False}
+   FOR  ${cloud}  IN  @{cloudlet_list}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${cloud['data']['key']['name']}  operator=${cloud['data']['key']['organization']}
+      Append To List  ${cloudlets}  ${cloudlet_key}
+   END
+      
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Verify Email  email_address=${emailepoch}
    Unlock User 
@@ -200,3 +209,4 @@ Setup
    Set Suite Variable  ${user_token}
    Set Suite Variable  ${user_token2}
    Set Suite Variable  ${epochusername2}
+   Set Suite Variable  ${cloudlets}

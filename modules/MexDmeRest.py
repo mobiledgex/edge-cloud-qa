@@ -5,15 +5,15 @@ import threading
 import requests
 import sys
 
-from google.protobuf.json_format import MessageToJson
+#from google.protobuf.json_format import MessageToJson
 
 from mex_rest import MexRest
 import mex_dme_classes
 import shared_variables
 
-import app_client_pb2
-import app_client_pb2_grpc
-import loc_pb2
+#import app_client_pb2
+#import app_client_pb2_grpc
+#import loc_pb2
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_dme rest')
@@ -74,9 +74,10 @@ class MexDmeRest(MexRest):
 
     def register_client(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True, use_thread=False):
         client = mex_dme_classes.RegisterClientObject(developer_org_name=developer_org_name, app_name=app_name, app_version=app_version, auth_token=auth_token, use_defaults=use_defaults)
-
+        
         url = self.root_url + '/v1/registerclient'
-        payload = MessageToJson(client.request)
+        #payload = MessageToJson(client.request)
+        payload = client.request
 
         #payload = json.dumps(client.register_client_dict)
         
@@ -124,7 +125,8 @@ class MexDmeRest(MexRest):
         client = mex_dme_classes.FindCloudletRequestObject(session_cookie=session_cookie, carrier_name=carrier_name, latitude=latitude, longitude=longitude, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cell_id=cell_id, timestamp_seconds=seconds, timestamp_nanos=nanos, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/findcloudlet'
-        payload = MessageToJson(client.request)
+        #payload = MessageToJson(client.request)
+        payload = client.request
         
         logger.info('findcloudlet rest client on {}. \n\t{}'.format(url, payload))
 
@@ -167,7 +169,8 @@ class MexDmeRest(MexRest):
         client = mex_dme_classes.VerifyLocationRequestObject(session_cookie=session_cookie, token=token, carrier_name=carrier_name, latitude=latitude, longitude=longitude, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/verifylocation'
-        payload = MessageToJson(client.request)
+        #payload = MessageToJson(client.request)
+        payload = client.request
         
         logger.info('verifylocation rest client on {}. \n\t{}'.format(url, payload))
 

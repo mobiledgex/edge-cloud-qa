@@ -37,7 +37,7 @@ User shall be able to create an app instance on azure with a dot in the app name
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #app_template=${apptemplate}    #   default_flavor_name=flavor1550592128-673488   cluster_name=cl1550691984-633559
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
@@ -62,5 +62,5 @@ Setup
     #Create Cluster   cluster_name=${cluster_name} 
     
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_name=${operator_name_azure}
+    Create Cluster Instance  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}
     Log To Console  Done Creating Cluster Instance

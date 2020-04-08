@@ -53,7 +53,8 @@ UpdatePrivacyPolicy - update with unknown org name shall return error
    ...  send UpdatePrivacyPolicy with unknown org name
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Update Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   #Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Update Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"xxxx\\\\"} not found"}')  Update Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 UpdatePrivacyPolicy - update without developer name shall return error
    [Documentation]

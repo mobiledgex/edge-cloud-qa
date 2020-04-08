@@ -258,9 +258,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-network
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  clusterorg 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  sendBytes
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  recvBytes
 

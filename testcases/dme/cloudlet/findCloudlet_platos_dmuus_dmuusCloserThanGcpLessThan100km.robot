@@ -82,8 +82,8 @@ FindCloudlet platos - request shall return dmuus with gcp cloudlet provisioned a
     ...                 lat: 37
     ...                 long: -95
       
-      Register Client  developer_name=${platos_developer_name}  app_name=${platos_app_name}
-      ${cloudlet}=  Find Cloudlet   carrier_name=${dmuus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_name=${developer_name_default}  latitude=35  longitude=-94
+      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${cloudlet}=  Find Cloudlet   carrier_name=${dmuus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -117,7 +117,7 @@ Setup
     ${app_name_default}=  Get Default App Name
 
     #Create Developer            developer_name=${platos_developer_name}
-    Create App			developer_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
+    Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  
     #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${dmuus_appinst} 

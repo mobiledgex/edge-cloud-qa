@@ -32,7 +32,7 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=docker
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=0  number_masters=0  ip_access=IpAccessDedicated  deployment=docker
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}

@@ -22,7 +22,10 @@ jira_token = '***REMOVED***'
 #secret_key = '***REMOVED***'
 
 #systemkey
-access_key = '***REMOVED***';
+#access_key = '***REMOVED***';
+#secret_key = '***REMOVED***'
+accountid = '***REMOVED***'
+access_key = '***REMOVED***'
 secret_key = '***REMOVED***'
 
 python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/github.com/mobiledgex/modules:$WORKSPACE/go/src/github.com/mobiledgex/certs:$WORKSPACE/go/src/github.com/mobiledgex/testcases:$WORKSPACE/go/src/github.com/mobiledgex/testcases/config'
@@ -84,7 +87,7 @@ def main():
     logging.info("cycle=%s version=%s project=%s component=%s workspace=%s" % (cycle, version, project, component, workspace))
         
     #z = zapi.Zapi(username = username, password = password)
-    z = zapi.Zapi(username=username, access_key=access_key, secret_key=secret_key, debug=False)
+    z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=False)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
 
     project_info = j.get_project(project)

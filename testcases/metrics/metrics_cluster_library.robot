@@ -1,9 +1,9 @@
 *** Settings ***
-Documentation   Cluster Disk Metrics Library
+Documentation   Cluster Metrics Library
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
-LIbrary  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+#LIbrary  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  DateTime
 Library  String
 Library  Collections
@@ -27,8 +27,8 @@ ${region}=  EU
 Get the last cluster metric on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 2  # last record
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 2  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}
 
@@ -44,8 +44,8 @@ Get the last cluster metric on openstack
 Get the last 5 cluster metrics on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series']}
@@ -64,8 +64,8 @@ Get the last 5 cluster metrics on openstack for multiple selectors
 
    #${contains}=  Evaluate   "," in """${selector}""" or "*" in """${selector}"""
    
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5
-   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
+   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics['data'][0]['Series']}
 
@@ -81,8 +81,8 @@ Get the last 5 cluster metrics on openstack for multiple selectors
 Get the last 10 cluster metrics on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=10
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 11  # last 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=10
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 11  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -96,8 +96,8 @@ Get the last 10 cluster metrics on openstack
 Get all cluster metrics on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC  # last 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -108,12 +108,12 @@ Get all cluster metrics on openstack
 Get more cluster metrics than exist on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${metricsall}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}
+   ${metricsall}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
 
    ${more_readings}=  Evaluate  ${num_readings_all} + 100
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=${more_readings}
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY * ORDER BY DESC  #LIMIT 101  # last 5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=${more_readings}
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC  #LIMIT 101  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -130,7 +130,7 @@ Get cluster metrics with starttime on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 2 mins earlier
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -138,7 +138,7 @@ Get cluster metrics with starttime on openstack
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and 1st and last timestamp
-   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}
+   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -157,19 +157,20 @@ Get cluster metrics with endtime on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get all metric and set endtime = 2 mins from 1st metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${end}=  Evaluate  ${epochpre} + 90
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 	
-   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  end_time=${end_date}
+   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  end_time=${end_date}
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
 
    # get 1st reading from influx
-   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=${developer_name}  condition=GROUP BY * ORDER BY ASC LIMIT ${num_readings} 
+   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${developer_name}  condition=GROUP BY * ORDER BY ASC LIMIT ${num_readings} 
    
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
@@ -183,17 +184,17 @@ Get cluster metrics with starttime=lastrecord on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    #${metrics_influx}=  MexInfluxDB.Get Influx Cluster Disk Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 1  # last record
-   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=ORDER BY DESC LIMIT 1
+   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 1
 
    # get last metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
    #log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
 
    # get readings and 1st and last timestamp
-   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
    #log to console  ${metrics}
 
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=ORDER BY DESC LIMIT 2
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 2
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
@@ -213,14 +214,15 @@ Get cluster metrics with starttime > lastrecord on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 	
    # get last metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -232,16 +234,18 @@ Get cluster metrics with endtime=lastrecord on openstack
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 	
    # get last metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
 
    # get all metrics
-   ${metrics_all}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}
+   ${metrics_all}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  end_time=${metrics_all['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  end_time=${metrics_all['data'][0]['Series'][0]['values'][0][0]}
    log to console  ${metrics}
+   @{datesplit_first}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   @{datesplit_last}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  Z
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -264,14 +268,15 @@ Get cluster metrics with endtime = firstrecord on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -284,7 +289,7 @@ Get cluster metrics with starttime > endtime on openstack
    ${end_date}=  Set Variable  2019-09-01T01:01:01Z
 
    # get readings and with starttime in the future
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -294,7 +299,8 @@ Get cluster metrics with starttime and endtime > lastrecord on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric
-   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=   Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
@@ -303,7 +309,7 @@ Get cluster metrics with starttime and endtime > lastrecord on openstack
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -313,8 +319,9 @@ Get cluster metrics with starttime and endtime on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5
+   ${metricspre}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
    log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
@@ -326,7 +333,7 @@ Get cluster metrics with starttime and endtime on openstack
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -352,7 +359,7 @@ Get cluster metrics with starttime and endtime and last on openstack
    [Arguments]  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=1
+   ${metricspre}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -365,7 +372,7 @@ Get cluster metrics with starttime and endtime and last on openstack
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=1
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=1
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -404,8 +411,8 @@ DeveloperManager shall be able to get cluster metrics
 
    Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5  token=${userToken}
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5 
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6 
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -438,8 +445,8 @@ DeveloperContributor shall be able to get cluster metrics
 
    Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5  token=${userToken}
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -472,8 +479,8 @@ DeveloperViewer shall be able to get cluster metrics
 
    Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=5  token=${userToken}
-   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
+   ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series'][0]['values'][0][0]}
@@ -492,7 +499,7 @@ Get cluster metrics with cloudlet/operator/developer only
    [Arguments]  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=20
+   ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -505,7 +512,7 @@ Get cluster metrics with cloudlet/operator/developer only
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   ${metrics}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -532,7 +539,7 @@ Get cluster metrics with cloudlet/developer only
    [Arguments]  ${cloudlet}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_name=${developer}  selector=${selector}  last=20
+   ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -545,7 +552,7 @@ Get cluster metrics with cloudlet/developer only
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   ${metrics}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -572,7 +579,7 @@ Get cluster metrics with operator/developer only
    [Arguments]  ${operator}  ${developer}  ${selector}
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  Get Cluster Metrics  region=${region}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  last=20
+   ${metricspre}=  Get Cluster Metrics  region=${region}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -585,7 +592,7 @@ Get cluster metrics with operator/developer only
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get Cluster Metrics  region=${region}  operator_name=${operator}  developer_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   ${metrics}=  Get Cluster Metrics  region=${region}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
