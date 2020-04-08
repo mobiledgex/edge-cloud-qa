@@ -53,7 +53,8 @@ CreatePrivacyPolicy - create with unknown org name shall return error
    ...  send CreatePrivacyPolicy with unknown org name
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   #Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"code=400, message=org xxxx not found"}')  Create Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create without developer name shall return error
    [Documentation]

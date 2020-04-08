@@ -20,7 +20,7 @@ class AppInstance(MexOperation):
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, use_defaults=True):
+    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, crm_override=None, use_defaults=True):
 
         if app_name == 'default':
             app_name = shared_variables.app_name_default
@@ -106,7 +106,9 @@ class AppInstance(MexOperation):
             appinst_dict['flavor'] = {'name': flavor_name}
         if autocluster_ip_access is not None:
             appinst_dict['auto_cluster_ip_access'] = autocluster_ip_access 
-
+        if privacy_policy is not None:
+            appinst_dict['privacy_policy'] = privacy_policy
+            
         if crm_override:
             if crm_override.lower() == "ignorecrm":
                 crm_override = 2
@@ -118,7 +120,7 @@ class AppInstance(MexOperation):
 
     def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
         metric_dict = {}
-        print('*WARN*', 'last',last)
+
         if type_dict is not None:
             metric_dict.update(type_dict)
         if selector is not None:
@@ -136,14 +138,12 @@ class AppInstance(MexOperation):
             metric_dict['method'] = method
         if cell_id is not None:
             metric_dict['cellid'] = int(cell_id)
-        if last is not None:
-            metric_dict['last'] = int(last)
 
         return metric_dict
 
 
-    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
+    def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
 
         thread_name = None
@@ -175,21 +175,19 @@ class AppInstance(MexOperation):
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
     
-    def get_find_cloudlet_api_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
-        print('*WARN*', 'c',cell_id)
-        app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, use_defaults=False)
+    def get_api_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
         app_inst_metric = app_inst
-        app_inst_metric['appinst'] = app_inst['key']
-        del app_inst_metric['key']
+        if 'key' in app_inst:
+            app_inst_metric['appinst'] = app_inst['key']
+            del app_inst_metric['key']
 
-
-
-        msg_dict = self._build_metrics(type_dict=app_inst_metric, method='FindCloudlet', cell_id=cell_id, selector='api', last=last, start_time=start_time, end_time=end_time)
+        msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector='api', last=last, start_time=start_time, end_time=end_time)
 
         return self.show(token=token, url=self.metrics_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def get_app_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
-        app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False)
+    def get_app_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
         app_inst_metric = app_inst
         app_inst_metric['appinst'] = app_inst['key']
         del app_inst_metric['key']

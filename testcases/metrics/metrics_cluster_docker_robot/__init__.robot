@@ -27,7 +27,7 @@ Setup
 
    ${t}=  Get Default Time Stamp
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  deployment=docker  ip_access=IpAccessDedicated 
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated 
 
    Log to Console  Waiting for metrics to be collected
    Sleep  20 mins

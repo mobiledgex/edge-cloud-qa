@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1912
 ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster CPU metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/oper
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1913
 ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster CPU metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/deve
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1914
 ClusterMetrics - Shall be able to get the cluster CPU metrics with operator/developer only
    [Documentation]
    ...  request all cluster CPU metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster CPU metrics with operator/deve
    CPU Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2021
+ClusterMetrics - Shall be able to get the cluster CPU metrics with developer only
+   [Documentation]
+   ...  request all cluster CPU metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  cpu
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   CPU Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
@@ -92,9 +107,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-cpu
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  clusterorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cpu
 
 CPU Should Be In Range

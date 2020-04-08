@@ -87,9 +87,9 @@ Metrics Headings Should Be Correct
    FOR  ${i}  IN RANGE  0  6
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  dev
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  clusterorg 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  operator
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cloudletorg 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  cpu
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  sendBytes 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  recvBytes 

@@ -44,16 +44,18 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with volume mou
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  deployment_manifest=${manifest_url}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
-    Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
    
-    Write File to Node  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  
+    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_default}  
+
+    #Mount Should Exist on Pod  pod_name=server-ping-threaded-udptcphttp  mount=/data  operator_name=${operator_name_openstack}  cluster_name=cluster1585343784-147785  root_loadbalancer=automationfrankfurtcloudlet.tdg.mobiledgex.net
 	
-    Mount Should Exist on Pod  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}  
+    Mount Should Exist on Pod  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack} 
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -72,7 +74,7 @@ Setup
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
+    Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}

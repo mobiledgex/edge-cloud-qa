@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1918
 ClusterMetrics - Shall be able to get the cluster Memory metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster Memory metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with cloudlet/o
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1919
 ClusterMetrics - Shall be able to get the cluster Memory metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster Memory metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with cloudlet/d
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1920
 ClusterMetrics - Shall be able to get the cluster Memory metrics with operator/developer only
    [Documentation]
    ...  request all cluster Memory metrics with operator/developer only
@@ -69,6 +72,18 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with operator/d
    Memory Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2023
+ClusterMetrics - Shall be able to get the cluster Memory metrics with developer only
+   [Documentation]
+   ...  request all cluster Memory metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  mem
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Memory Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
@@ -92,9 +107,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-mem
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  clusterorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  mem
 
 Memory Should Be In Range

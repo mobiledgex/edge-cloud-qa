@@ -265,29 +265,30 @@ Metrics Headings Should Be Correct
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-connections
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cluster 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  dev 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  operator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  port 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  active 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  handled
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  accepts
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  bytesSent
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  bytesRecvd
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  P0
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  P25
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  P50
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  P75
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  P90
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  P95
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  P99
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  P99.5
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][20]}  P99.9
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][21]}  P100
-
-
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  port
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  active
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  handled
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  accepts
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  bytesSent
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  bytesRecvd
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  P0
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  P25
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  P50
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  P75
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  P90
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][20]}  P95
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][21]}  P99
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][22]}  P99.5
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][23]}  P99.9
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][24]}  P100
 
 Connections Should Be In Range
   [Arguments]  ${metrics}
@@ -296,9 +297,16 @@ Connections Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[7]} >= 0
-   \  Should Be True               ${reading[8]} >= 0
-   \  Should Be True               ${reading[9]} >= 0
+   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
+   \  Should Be Equal  ${reading[2]}  10
+   \  Should Be Equal  ${reading[3]}  ${pod}
+   \  Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
+   \  Should Be Equal  ${reading[5]}  ${developer_name}
+   \  Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics} 
+   \  Should Be Equal  ${reading[7]}  ${operator}
+   \  Should Be Equal  ${reading[8]}  ${developer_name}
+   \  Should Be Equal  ${reading[9]}  ${port}
+
    \  Should Be True               ${reading[10]} >= 0
    \  Should Be True               ${reading[11]} >= 0
    \  Should Be True               ${reading[12]} >= 0
@@ -311,6 +319,9 @@ Connections Should Be In Range
    \  Should Be True               ${reading[19]} >= 0
    \  Should Be True               ${reading[20]} >= 0
    \  Should Be True               ${reading[21]} >= 0
+   \  Should Be True               ${reading[22]} >= 0
+   \  Should Be True               ${reading[23]} >= 0
+   \  Should Be True               ${reading[24]} >= 0
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -340,21 +351,21 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}  ${reading[4]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['operator']}  ${reading[5]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['port']}  ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[7]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[8]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[9]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[10]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[11]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[12]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[13]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[14]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[15]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[16]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[17]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[18]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[19]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[20]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[21]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[10]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[11]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[12]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[13]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[14]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[15]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[16]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[17]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[18]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[19]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[20]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[21]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[22]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[23]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[24]}
 
    \  ${index}=  Evaluate  ${index}+1
 
@@ -369,9 +380,9 @@ Metrics Should Match Connected App
    # verify values
    : FOR  ${reading}  IN  @{values}
    #\  @{datesplit}=  Split String  ${reading[0]}  .
-   \  ${found_connection}=  Run Keyword If  '${reading[6]}' == '${port}' and '${reading[7]}' == '1' and '${reading[8]}' == '1' and '${reading[9]}' == '1' and '${reading[10]}' > '0' and '${reading[11]}' > '0'  Set Variable  ${True}
+   \  ${found_connection}=  Run Keyword If  '${reading[9]}' == '${port}' and '${reading[10]}' == '1' and '${reading[11]}' == '1' and '${reading[12]}' == '1' and '${reading[13]}' > '0' and '${reading[14]}' > '0'  Set Variable  ${True}
    \  ...                                 ELSE  Set Variable  ${found_connection}
-   \  ${found_histogram}=  Run Keyword If  '${reading[12]}' > '0' and '${reading[13]}' > '0' and '${reading[14]}' > '0' and '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0'  Set Variable  ${True}
+   \  ${found_histogram}=  Run Keyword If  '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0' and '${reading[22]}' > '0' and '${reading[23]}' > '0' and '${reading[24]}' > '0'  Set Variable  ${True}
    \  ...                                 ELSE  Set Variable  ${found_histogram}
 
    Should Be True  ${found_connection}  Didnot find connected app 

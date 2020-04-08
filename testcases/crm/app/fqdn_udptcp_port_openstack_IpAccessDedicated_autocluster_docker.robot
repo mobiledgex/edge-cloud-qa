@@ -34,7 +34,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and 
     ...  verify all ports are accessible via fqdn
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  #default_flavor_name=${cluster_flavor_name}
-    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
@@ -43,7 +43,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker and 
     ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
+    #Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}

@@ -39,7 +39,7 @@ Controller should cleanup autocluster after CreateAppInst fail
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Encountered failures: Create App Inst failed
