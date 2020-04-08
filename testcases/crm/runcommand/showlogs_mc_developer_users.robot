@@ -31,7 +31,7 @@ ShowLogs - DeveloperManager shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout[0]}  here's some logs\r\n 
 
@@ -44,7 +44,7 @@ ShowLogs - DeveloperContributor shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout[0]}  here's some logs\r\n 
 
@@ -59,7 +59,7 @@ ShowLogs - DeveloperViewer shall be able to do ShowLogs
 
     ${token}=  Login
 
-    ${stdout}=  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     Should Be Equal  ${stdout[0]}  here's some logs\r\n
 
@@ -68,9 +68,9 @@ Setup
     #Create Org  orgtype=developer
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}
-    Create App  region=US   image_path=${docker_image}  developer_name=${docker_image_developer}
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}  cluster_instance_developer_name=${docker_image_developer}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}
+    Create App  region=US   image_path=${docker_image}  developer_org_name=${docker_image_developer}
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}

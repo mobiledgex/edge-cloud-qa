@@ -38,7 +38,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_n
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=helm
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=helm
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -88,7 +88,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_n
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=6  number_masters=1  ip_access=IpAccessDedicated  deployment=helm
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=6  number_masters=1  ip_access=IpAccessDedicated  deployment=helm
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -160,7 +160,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=0 and num_n
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated  deployment=helm
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessDedicated  deployment=helm
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}

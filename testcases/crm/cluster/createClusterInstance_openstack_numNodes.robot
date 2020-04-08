@@ -36,7 +36,7 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=1  ip_access=IpAccessShared
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=4  number_masters=1  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
@@ -72,7 +72,7 @@ Cluster shall create with IpAccessShared and num_nodes=10 on openstack
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=10  number_masters=1  ip_access=IpAccessShared
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=10  number_masters=1  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  "node  \\d+  ${cloudlet_lowercase}  ${cluster_name}"
@@ -115,8 +115,8 @@ Cluster shall not create with IpAccessShared and multiple masters
    ${flavor_name}=   Get Default Flavor Name
 
    Log to Console  START creating cluster instance
-   #${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=2  ip_access=IpAccessShared
+   #${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=4  number_masters=2
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=4  number_masters=2  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
@@ -153,7 +153,7 @@ Cluster shall not create clusterInst with IpAccessShared and 0 masters
    #Create Cluster        
 
    Log to Console  START creating cluster instance
-   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessShared
+   ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=4  number_masters=0  ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN

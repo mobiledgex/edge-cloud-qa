@@ -124,13 +124,14 @@ class MexOperation(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def run(self, message_type='run', token=None, command=None, region=None, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
+    def run(self, message_type='run', token=None, command=None, region=None, timeout=120, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
         if use_defaults == True:
             if token == None: token = self.token
 
         cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest > /dev/null && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         cmd = f'{cmd_docker} {command} --token {token}'
-
+        logging.info(f'running cmd: {cmd}')
+        
         def send_message():
             self.counter_dict[message_type]['req_attempts'] += 1
 
@@ -138,6 +139,7 @@ class MexOperation(MexRest):
                 process = subprocess.Popen(cmd,
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE,
+                                           #timeout=timeout,
                                            shell=True
                 )                
 

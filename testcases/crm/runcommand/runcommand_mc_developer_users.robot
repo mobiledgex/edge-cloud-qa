@@ -63,7 +63,7 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     log to console  xxxxxxxxx ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden 
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden 
 
 *** Keywords ***
 Setup

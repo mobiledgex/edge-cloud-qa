@@ -202,7 +202,7 @@ class Cloudlet(MexOperation):
         return self.show(token=token, url=self.metrics_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def add_cloudlet_resource_mapping(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_name=operator_name, use_defaults=False)
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
 
         map_dict = {'cloudletresmap': msg}
         msg_dict = self._build_mapping(cloudlet_dict=map_dict, mapping=mapping)
@@ -220,8 +220,8 @@ class Cloudlet(MexOperation):
 
         return self.create(token=token, url=self.addmapping_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
 
-    def add_resource_tag(self, token=None, region=None, resource_name=None, operator_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(cloudlet_name=resource_name, operator_name=operator_name, use_defaults=False)
+    def add_resource_tag(self, token=None, region=None, resource_name=None, operator_org_name=None, tags=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=resource_name, operator_org_name=operator_org_name, use_defaults=False)
 
         map_dict = {'restagtable': msg}
         msg_dict = self._build_restag(cloudlet_dict=map_dict, tags=tags)

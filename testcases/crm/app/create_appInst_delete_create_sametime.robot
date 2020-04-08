@@ -36,10 +36,10 @@ User shall be able to delete/create an app instance at the same time on openstac
 
     # create app instance in thread
     Log To Console  Creating Second App Instance
-    ${handle1}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}   cluster_instance_name=autocluster  use_thread=${True}
+    ${handle1}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}   cluster_instance_name=autocluster  use_thread=${True}
 
     # delete the app instance in thread
-    ${handle2}=  Delete App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  use_thread=${True}
+    ${handle2}=  Delete App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  use_thread=${True}
 
     # wait for them to finish
     Log To Console  Waiting for threads
@@ -76,7 +76,7 @@ Setup
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
 #    Log To Console  Creating First App Instance
-    ${app_inst_1}=  Create App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}   cluster_instance_name=autocluster  no_auto_delete=${True}
+    ${app_inst_1}=  Create App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}   cluster_instance_name=autocluster  no_auto_delete=${True}
     App Instance Should Exist  app_instance=${app_inst_1}
 
     Log To Console  Waiting for k8s pod to be running

@@ -39,7 +39,6 @@ class MexRest(WebService) :
             else:
                 data_list = []
                 for data in datasplit:
-                    print('*WARN*', 'ddddd', data)
                     data_list.append(json.loads(data))
                 self.decoded_data = data_list
 

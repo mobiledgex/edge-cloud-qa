@@ -26,7 +26,7 @@ CRM shall be able to create 2 clusterInst with one name a substring of the other
     ...  Delete both
     ...  Verify both are deleted
 
-    Delete Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  cluster_name=xxxx  flavor_name=${flavor_name}
+    Delete Cluster Instance	cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=xxxx  flavor_name=${flavor_name}
 
 	
 *** Keywords ***

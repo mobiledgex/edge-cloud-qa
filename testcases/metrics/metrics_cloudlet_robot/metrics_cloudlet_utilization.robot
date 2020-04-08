@@ -33,7 +33,7 @@ Metrics - Shall be able to get the last cloudlet utilization metric on openstack
    ${last}=  Set Variable  1
    ${lastdb}=  Evaluate  ${last} + 1
 	
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=${last}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=${last}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}
@@ -56,7 +56,7 @@ Metrics - Shall be able to get the last 5 cloudlet utilization metrics on openst
    ...  request the last 5 cloudlet utilization metrics
    ...  verify info is correct
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=5
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -81,17 +81,17 @@ Metrics - Shall be able to get the last 100 cloudlet utilization metrics on open
    ...  request the last 100 cloudlet utilization metrics
    ...  verify info is correct
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=100
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=100
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 100  # last 101
 
    log to console  ${metrics}
    log to console  ${metrics_influx}
 
-   @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
-   ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   @{datesplit2}=  Split String  ${metrics_influx[0]['time']}  .
-   ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx}  ${index}
+   #@{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   #${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #@{datesplit2}=  Split String  ${metrics_influx[0]['time']}  .
+   #${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx}  ${index}
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -115,7 +115,7 @@ Metrics - Shall be able to get all cloudlet utilization metrics on openstack
     EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data	
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization
 
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    Log To Console  ${num_readings}
@@ -137,11 +137,11 @@ Metrics - Shall be able to request more utilization metrics than exist on openst
     EDGECLOUD-1339 Metrics - shepherd should be able to handle erroneous data
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
-   ${metricsall}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization
+   ${metricsall}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
 
    ${more_readings}=  Evaluate  ${num_readings_all} + 100
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=${more_readings}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=${more_readings}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -163,7 +163,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime o
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -173,7 +173,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime o
    log to console  ${start_date}
 
    # get readings with starttime 
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}
    log to console  ${metrics['data'][0]}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -208,7 +208,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime on 
     EDGECLOUD-1337 Metrics - cloudlet metrics return old data from previous versions of the cloudlet
 
    # get last metric and set endtime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -217,7 +217,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime on 
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
    log to console  ${end_date}
 	
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  end_time=${end_date}
    log to console  ${metrics['data'][0]}
 
    Metrics Headings Should Be Correct  ${metrics}
@@ -240,11 +240,11 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime=l
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 2  # last record
 	
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}
    log to console  ${metrics}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -271,14 +271,14 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime >
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -290,7 +290,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
    ...  verify only last record is received
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -300,7 +300,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime=las
    #log to console  ${start_date}
 
    # get readings and 1st and last timestamp
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}  last=5
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  end_time=${metricspre['data'][0]['Series'][0]['values'][0][0]}  last=5
    log to console  ${metrics}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
@@ -331,14 +331,14 @@ Metrics - Shall be able to get the cloudlet utilization metrics with endtime = f
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -353,7 +353,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime >
    ${end_date}=  Set Variable  2019-09-01T01:01:01Z
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -365,7 +365,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    ...  verify empty list is returned
 
    # get last metric
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    ${start}=  Evaluate  ${epochpre} + 60
@@ -374,7 +374,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
 
    # readings should be empty
    Should Be Equal  ${metrics['data'][0]['Series']}  ${None}
@@ -386,7 +386,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -399,7 +399,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -427,7 +427,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    ...  verify info is correct
 
    # get last metric and set starttime = 1 hour earlier
-   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=1
+   ${metricspre}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=1
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -440,7 +440,7 @@ Metrics - Shall be able to get the cloudlet utilization metrics with starttime a
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}  last=5
+   ${metrics}=  MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  start_time=${start_date}  end_time=${end_date}  last=5
    @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
    @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -483,7 +483,7 @@ Metrics - OperatorManager shall be able to get cloudlet utilization metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -523,7 +523,7 @@ Metrics - OperatorViewer shall be able to get cloudlet utilization metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorViewer   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -563,7 +563,7 @@ Metrics - OperatorContributor shall be able to get cloudlet utilization metrics
 
    Adduser Role   orgname=${operator}   username=${epochusername}  role=OperatorContributor   token=${adminToken}  #use_defaults=${False}
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=utilization  last=5  token=${userToken}
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=utilization  last=5  token=${userToken}
    ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
@@ -591,8 +591,8 @@ Metrics - Shall be able to get the cloudlet utilization metrics without cloudlet
    ${last}=  Set Variable  10
    ${lastdb}=  Evaluate  ${last} + 1
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  operator_name=${operator}  selector=utilization  last=${last}
-   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  operator_name=${operator}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  operator_org_name=${operator}  selector=utilization  last=${last}
+   ${metrics_influx}=  MexInfluxDB.Get Influx Cloudlet Utilization Metrics  operator_org_name=${operator}  condition=ORDER BY DESC LIMIT ${lastdb}  # last record
    log to console  ${metrics['data'][0]['Series']}
    log to console  ${metrics_influx}
 
@@ -620,7 +620,7 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cloudlet-utilization
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  vCpuUsed
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  vCpuMax
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  memUsed

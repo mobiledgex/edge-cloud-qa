@@ -1,6 +1,7 @@
-import app_client_pb2
-import app_client_pb2_grpc
-import loc_pb2
+#import app_client_pb2
+#import app_client_pb2_grpc
+#import loc_pb2
+import json
 
 import shared_variables
 
@@ -38,8 +39,9 @@ class RegisterClientObject():
         if self.auth_token is not None:
             client_dict['auth_token'] = self.auth_token
 
-        self.request = app_client_pb2.RegisterClientRequest(**client_dict)
-
+        #self.request = app_client_pb2.RegisterClientRequest(**client_dict)
+        self.request = json.dumps(client_dict)
+        
 class FindCloudletRequestObject():
     request_dict = None
     request_dict_string = None
@@ -77,7 +79,8 @@ class FindCloudletRequestObject():
         if self.longitude is not None:
             loc_dict['longitude'] = float(self.longitude)
         if time_dict:
-            loc_dict['timestamp'] = loc_pb2.Timestamp(**time_dict)
+            #loc_dict['timestamp'] = loc_pb2.Timestamp(**time_dict)
+            loc_dict['timestamp'] = time_dict
 
         if self.session_cookie is not None:
             request_dict['session_cookie'] = self.session_cookie
@@ -86,18 +89,20 @@ class FindCloudletRequestObject():
         if self.app_name is not None:
             request_dict['app_name'] = self.app_name
         if self.app_version is not None:
-            request_dict['appVers'] = self.app_version
+            request_dict['app_vers'] = self.app_version
         if self.developer_name is not None:
             request_dict['org_name'] = self.developer_name
         if self.cell_id is not None:
             request_dict['cell_id'] = int(self.cell_id)
 
         if loc_dict:
-            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_dict
 
         #self.request_dict = request_dict
         #self.request_dict_string = str(request_dict).replace('\n', ',')
-        self.request = app_client_pb2.FindCloudletRequest(**request_dict)
+        #self.request = app_client_pb2.FindCloudletRequest(**request_dict)
+        self.request = json.dumps(request_dict)
         #print('*WARN*', 'aa', str(self.request_dict['GpsLocation'].__dict__))
 
 class VerifyLocationRequestObject():
@@ -130,9 +135,11 @@ class VerifyLocationRequestObject():
         if self.carrier_name is not None:
             request_dict['carrier_name'] = self.carrier_name    
         if loc_dict:
-            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_dict
         if self.token is not None:
             request_dict['verify_loc_token'] = self.token
 
         print(request_dict)
-        self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
+        #self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
+        self.request = json.dumps(request_dict)
