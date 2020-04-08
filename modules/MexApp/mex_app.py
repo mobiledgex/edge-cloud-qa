@@ -286,8 +286,8 @@ class MexApp(object):
         try:
             rb.mount_exists_on_pod(pod=pod_name, mount=mount)
             logging.info(f'mount={mount} exists on pod={pod_name}')
-        except:
-            raise Exception(f'mount={mount} DOES NOT exist on pod={pod_name}')
+        except Exception as e:
+            raise Exception(f'mount={mount} DOES NOT exist on pod={pod_name}.{e}')
         try:
             filename = rb.write_file_to_pod(pod=pod_name, mount=mount)
             logging.info(f'successfully wrote file to pod={pod_name} on mount={mount}')
@@ -328,6 +328,8 @@ class MexApp(object):
         else:
             rb = self.rootlb
 
+        self.rootlb = rb
+
         rb.write_file_to_node(node=node, mount=mount, data=data)
         
 
@@ -340,4 +342,14 @@ class MexApp(object):
 
         pod = rb.get_pod(pod_name)
         return rb.run_command_on_pod(pod, command)
-        
+
+    def run_command_on_container(self, container_name, command, cluster_name, operator_name, root_loadbalancer=None):
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig')
+        else:
+            rb = self.rootlb
+
+        container_name = rb.get_docker_container_id(name=container_name)
+        return rb.run_command_on_container(container_name[0], command)
+

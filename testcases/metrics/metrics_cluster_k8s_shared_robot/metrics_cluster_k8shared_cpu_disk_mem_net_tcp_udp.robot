@@ -87,19 +87,19 @@ Metrics Headings Should Be Correct
    FOR  ${i}  IN RANGE  0  6
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  dev
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  clusterorg 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  operator
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cloudletorg
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  cpu
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  sendBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  recvBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  tcpConns 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  tcpRetrans 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  udpSent 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  udpRecv
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  udpRecvErr
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  mem
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  disk 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  mem
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  disk
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  sendBytes 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  recvBytes 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  tcpConns 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  tcpRetrans 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  udpSent 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  udpRecv
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  udpRecvErr
    END 
 
 CPU Should Be In Range
@@ -143,32 +143,32 @@ Disk Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[14]} > 0 and ${reading[14]} <= 100
+   \  Should Be True               ${reading[7]} > 0 and ${reading[7]} <= 100
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[14]}  ${None}
+   \  Should Be Equal               ${reading[7]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[14]}  ${None}
+   \  Should Be Equal               ${reading[7]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[14]}  ${None}
+   \  Should Be Equal               ${reading[7]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[14]}  ${None}
+   \  Should Be Equal               ${reading[7]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[14]}  ${None}
+   \  Should Be Equal               ${reading[7]}  ${None}
 
 Memory Should Be In Range
   [Arguments]  ${metrics}
@@ -176,32 +176,32 @@ Memory Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[13]} > 0 and ${reading[13]} <= 100
+   \  Should Be True               ${reading[6]} > 0 and ${reading[6]} <= 100
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[13]}  ${None}
+   \  Should Be Equal               ${reading[6]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[13]}  ${None}
+   \  Should Be Equal               ${reading[6]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[13]}  ${None}
+   \  Should Be Equal               ${reading[6]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[13]}  ${None}
+   \  Should Be Equal               ${reading[6]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[13]}  ${None}
+   \  Should Be Equal               ${reading[6]}  ${None}
 
 Network Should Be In Range
   [Arguments]  ${metrics}
@@ -209,37 +209,37 @@ Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} > 0 and ${reading[7]} > 0
+   \  Should Be True               ${reading[8]} > 0 and ${reading[9]} > 0
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[6]}  ${None}
-   \  Should Be Equal               ${reading[7]}  ${None}
+   \  Should Be Equal               ${reading[8]}  ${None}
+   \  Should Be Equal               ${reading[9]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[6]}  ${None}
-   \  Should Be Equal               ${reading[7]}  ${None}
+   \  Should Be Equal               ${reading[8]}  ${None}
+   \  Should Be Equal               ${reading[9]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[6]}  ${None}
-   \  Should Be Equal               ${reading[7]}  ${None}
+   \  Should Be Equal               ${reading[8]}  ${None}
+   \  Should Be Equal               ${reading[9]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[6]}  ${None}
-   \  Should Be Equal               ${reading[7]}  ${None}
+   \  Should Be Equal               ${reading[8]}  ${None}
+   \  Should Be Equal               ${reading[9]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[7]}  ${None}
-   \  Should Be Equal               ${reading[6]}  ${None}
+   \  Should Be Equal               ${reading[8]}  ${None}
+   \  Should Be Equal               ${reading[9]}  ${None}
 
 TCP Should Be In Range
   [Arguments]  ${metrics}
@@ -247,37 +247,37 @@ TCP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[8]} >= 0 and ${reading[9]} >= 0
+   \  Should Be True               ${reading[10]} >= 0 and ${reading[11]} >= 0
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be Equal               ${reading[11]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be Equal               ${reading[11]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be Equal               ${reading[11]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be Equal               ${reading[11]}  ${None}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be Equal               ${reading[11]}  ${None}
 
 UDP Should Be In Range
   [Arguments]  ${metrics}
@@ -285,48 +285,41 @@ UDP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[10]} >= 0 and ${reading[11]} >= 0 and ${reading[12]} >= 0
+   \  Should Be True               ${reading[12]} >= 0 and ${reading[13]} >= 0 and ${reading[14]} >= 0
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
       Should Be Equal               ${reading[12]}  ${None}
-   END
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
-      Should Be Equal               ${reading[12]}  ${None}
+      Should Be Equal               ${reading[13]}  ${None}
+      Should Be Equal               ${reading[14]}  ${None}
    END
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
       Should Be Equal               ${reading[12]}  ${None}
+      Should Be Equal               ${reading[13]}  ${None}
+      Should Be Equal               ${reading[14]}  ${None}
    END
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
       Should Be Equal               ${reading[12]}  ${None}
+      Should Be Equal               ${reading[13]}  ${None}
+      Should Be Equal               ${reading[14]}  ${None}
    END
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
       Should Be Equal               ${reading[12]}  ${None}
+      Should Be Equal               ${reading[13]}  ${None}
+      Should Be Equal               ${reading[14]}  ${None}
    END
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][5]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be Equal               ${reading[10]}  ${None}
-      Should Be Equal               ${reading[11]}  ${None}
       Should Be Equal               ${reading[12]}  ${None}
+      Should Be Equal               ${reading[13]}  ${None}
+      Should Be Equal               ${reading[14]}  ${None}
    END
 
 

@@ -28,12 +28,13 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1921
 ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all cluster Network metrics with cloudlet/operator/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network 
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -44,12 +45,13 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1922
 ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/developer only
    [Documentation]
    ...  request all cluster Network metrics with cloudlet/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with cloudlet/developer only  ${cloudlet_name_openstack_metrics}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with cloudlet/developer only  ${cloudlet_name_openstack_metrics}  ${developer_name}  network
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -57,18 +59,31 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with cloudlet/
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1923
 ClusterMetrics - Shall be able to get the cluster Network metrics with operator/developer only
    [Documentation]
    ...  request all cluster Network metrics with operator/developer only
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with operator/developer only  ${operator}  ${developer_name}  cpu 
+   ${metrics}=  Get cluster metrics with operator/developer only  ${operator}  ${developer_name}  network 
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should be in Range  ${metrics}
 
    #Metrics Should Match Different Cluster Names  ${metrics}
+
+# ECQ-2024
+ClusterMetrics - Shall be able to get the cluster Network metrics with developer only
+   [Documentation]
+   ...  request all cluster Network metrics with developer only
+   ...  verify info is correct
+
+   ${metrics}=  Get cluster metrics with developer only  ${developer_name}  network
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Network Should be in Range  ${metrics}
 
 *** Keywords ***
 Setup
@@ -89,12 +104,12 @@ Setup
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-network
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  clusterorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  sendBytes
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  recvBytes
 

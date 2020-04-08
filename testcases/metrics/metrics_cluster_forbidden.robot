@@ -27,27 +27,27 @@ ClusterMetrics - OperatorManager shall not be able to get cluster metrics
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorManager   token=${adminToken}  #use_defaults=${False}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}  last=5
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}  last=5
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=mobiledgex  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
@@ -60,27 +60,27 @@ ClusterMetrics - OperatorContributor shall not be able to get cluster metrics
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorContributor   token=${adminToken}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
@@ -93,27 +93,27 @@ ClusterMetrics - OperatorViewer shall not be able to get cluster metrics
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=OperatorViewer   token=${adminToken}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=EU  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
@@ -126,27 +126,27 @@ ClusterMetrics - DeveloperManager shall not be able to get cluster metrics from 
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
@@ -159,27 +159,27 @@ ClusterMetrics - DeveloperContributor shall not be able to get cluster metrics f
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperContributor  token=${adminToken}  #use_defaults=${False}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
@@ -192,27 +192,27 @@ ClusterMetrics - DeveloperViewer shall not be able to get cluster metrics from a
 
    Adduser Role   orgname=${orgname}   username=${epochusername}  role=DeveloperViewer  token=${adminToken}  #use_defaults=${False}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=cpu  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=disk  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=mem  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=tcp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=tcp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=udp  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=udp  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 
-   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  developer_name=mobiledgex  selector=network  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *   Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
    Should Contain  ${error}  {"message":"Forbidden"}
 

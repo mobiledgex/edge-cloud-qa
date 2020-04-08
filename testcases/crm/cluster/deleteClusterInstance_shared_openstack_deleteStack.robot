@@ -29,7 +29,7 @@ ClusterInst shall be deleted with IpAccessShared/k8s on openstack when no stack 
    ${developer_name}=  Get Default Developer Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  no_auto_delete={$True}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  no_auto_delete={$True}
    Log to Console  DONE creating cluster instance
 
    ${openstack_stack_name}=    Catenate  SEPARATOR=-  ${cloudlet_lowercase_shared}  ${cluster_name}  ${developer_name}

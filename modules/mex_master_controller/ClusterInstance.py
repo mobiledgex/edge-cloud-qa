@@ -17,11 +17,11 @@ class ClusterInstance(MexOperation):
         self.show_url = '/auth/ctrl/ShowClusterInst'
         self.update_url = '/auth/ctrl/UpdateClusterInst'
         #self.metrics_client_url = '/auth/metrics/client'
-        #self.metrics_app_url = '/auth/metrics/app'
+        self.metrics_cluster_url = '/auth/metrics/cluster'
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
     def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, use_defaults=True):
-        liveness = 5
+        liveness = None
         
         if cluster_name == 'default':
             cluster_name = shared_variables.cluster_name_default
@@ -32,7 +32,7 @@ class ClusterInstance(MexOperation):
             if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
             if flavor_name is None: flavor_name = shared_variables.flavor_name_default
             if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
-            if liveness is None: liveness = 1
+            #if liveness is None: liveness = 1
             if deployment == 'kubernetes':
                 if number_masters is None: number_masters = 1
                 if number_nodes is None: number_nodes = 1
@@ -115,6 +115,29 @@ class ClusterInstance(MexOperation):
 
         return clusterinst_dict
 
+    def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
+        metric_dict = {}
+
+        if type_dict is not None:
+            metric_dict.update(type_dict)
+        if selector is not None:
+            metric_dict['selector'] = selector
+        if last is not None:
+            try:
+                metric_dict['last'] = int(last)
+            except:
+                metric_dict['last'] = last
+        if start_time is not None:
+            metric_dict['starttime'] = start_time
+        if end_time is not None:
+            metric_dict['endtime'] = end_time
+        if method is not None:
+            metric_dict['method'] = method
+        if cell_id is not None:
+            metric_dict['cellid'] = int(cell_id)
+
+        return metric_dict
+
     def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
@@ -148,4 +171,13 @@ class ClusterInstance(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-                                     
+    def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        inst = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=False)
+        inst_metric = inst
+        if 'key' in inst:
+            inst_metric['clusterinst'] = inst['key']
+            del inst_metric['key']
+
+        msg_dict = self._build_metrics(type_dict=inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
+
+        return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)

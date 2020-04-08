@@ -25,9 +25,9 @@ AppInst - VM deployment with wrong md5 shall fail
     ${qcow_new}=  Replace String Using Regexp  ${qcow_centos_image}  [1,2,3,4,6,,8,9]  2
     
     Create App   deployment=vm  image_type=ImageTypeQCOW  image_path=${qcow_new}
-    ${error}=  Run Keyword and Expect Error  *  Create App Instance  app_name=${app_name_default}  developer_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  use_defaults=${False}
+    ${error}=  Run Keyword and Expect Error  *  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
     
-    Should Contain  ${error}  details = "Encountered failures: Create App Inst failed: mismatch in md5sum" 
+    Should Contain  ${error}  details = "Encountered failures: Create App Inst failed: mismatch in md5sum 
     Should Contain  ${error}  status = StatusCode.UNKNOWN
 
 *** Keywords ***

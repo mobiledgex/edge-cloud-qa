@@ -61,7 +61,7 @@ CreateOperatorCode - create without operatorname and code
    ...  verify proper error is received
 
    # start with a dash
-   ${error}=  Run Keyword and Expect Error  *  Create Operator Code  region=${region}
+   ${error}=  Run Keyword and Expect Error  *  Create Operator Code  region=${region}  use_defaults=${False}
 
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"No code specified"}

@@ -35,14 +35,14 @@ Setup
 
    Create Flavor  region=${region}  flavor_name=${flavorname}
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_nodes=1
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  number_nodes=1
  
    Create App  region=${region}  app_name=${appname}     deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
 
-   Create App Instance  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
 
    #${appname_k8s}=  Set Variable  app1576004798-848067k8s 
-   ${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator_name_openstack}
+   ${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
    ${fqdn_tcp}=  Catenate  SEPARATOR=  ${appinst[0]['data']['mapped_ports'][0]['fqdn_prefix']}  ${appinst[0]['data']['uri']}
 #   ${fqdn_udp}=  Catenate  SEPARATOR=  ${appinst[0]['data']['mapped_ports'][1]['fqdn_prefix']}  ${appinst[0]['data']['uri']}
 

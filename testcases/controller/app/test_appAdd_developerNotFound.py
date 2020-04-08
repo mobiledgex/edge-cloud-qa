@@ -58,7 +58,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_version = '1.0',
                                  cluster_name='dummyCluster',
-                                 developer_name='developerNotFound',
+                                 developer_org_name='developerNotFound',
                                  default_flavor_name = flavor_name
                                 )
         #try:
@@ -101,7 +101,7 @@ class tc(unittest.TestCase):
                                  access_ports=access_ports,
                                  app_name = 'dummpyApp',
                                  app_version = '1.0',
-                                 developer_name='developerNotFound'
+                                 developer_org_name='developerNotFound'
                                 )
         #try:
         #    resp = self.controller.create_app(app.app)

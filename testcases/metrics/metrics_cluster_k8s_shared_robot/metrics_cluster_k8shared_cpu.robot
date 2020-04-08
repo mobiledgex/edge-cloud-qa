@@ -255,9 +255,9 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        cluster-cpu
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  clusterorg 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  operator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cpu
 
 CPU Should Be In Range
@@ -267,7 +267,7 @@ CPU Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}

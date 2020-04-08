@@ -32,7 +32,7 @@ CloudletMetrics - Shall be able to get the last 5 cloudlet Ipusage/Utilization m
    ...  request cloudlet metrics with all selectors
    ...  verify info is correct
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=network,utilization,ipusage  last=5
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=network,utilization,ipusage  last=5
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -48,7 +48,7 @@ CloudletMetrics - Shall be able to get the last 5 cloudlet wildcard metrics on o
    ...  request cloudlet metrics with wildcard selector 
    ...  verify info is correct
 
-   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_name=${operator}  selector=*  last=5
+   ${metrics}=         MexMasterController.Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  selector=*  last=5
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -84,7 +84,7 @@ Metrics Headings Should Be Correct
    FOR  ${i}  IN RANGE  0  2
       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  operator
+      Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  cloudletorg
       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  netSend
       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  netRecv
       Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  vCpuUsed

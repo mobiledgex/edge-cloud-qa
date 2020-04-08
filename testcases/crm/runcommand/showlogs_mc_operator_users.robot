@@ -33,11 +33,11 @@ ShowLogs - OperatorManager shall not be able to do ShowLogs
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -52,11 +52,11 @@ ShowLogs - OperatorContributor shall not be able to do ShowLogs
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -71,11 +71,11 @@ ShowLogs - OperatorViewer shall not be able to do ShowLogs
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
+    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -84,9 +84,9 @@ Setup
     Create Org  orgtype=operator
     
     Create Flavor  region=US
-    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}
-    Create App  region=US  developer_name=${docker_image_developer} 
-    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  developer_name=${docker_image_developer}  cluster_instance_developer_name=${docker_image_developer}
+    Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}
+    Create App  region=US  developer_org_name=${docker_image_developer} 
+    Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
