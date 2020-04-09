@@ -24,9 +24,9 @@ class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
     const string appName = "automation_api_app"; // Your application name
-    const string devName = "mobiledgex"; // Your developer name
+    const string orgName = "MobiledgeX"; // Your developer org name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
-    //const string devName = "EmptyMatchEngineApp"; // Your developer name
+    //const string orgName = "EmptyMatchEngineApp"; // Your developer org name
     const string appVersionStr = "1.0";
 
     MexGrpcClient(std::shared_ptr<Channel> channel)
@@ -71,7 +71,7 @@ class MexGrpcClient {
 
         request->set_ver(1);
 
-        request->set_dev_name(devName);
+        request->set_org_name(orgName);
         request->set_app_name(appName);
         request->set_app_vers(appVersionStr);
         request->set_auth_token(authToken);
@@ -446,11 +446,11 @@ int main() {
 		    cout << "APP NAME INCORRECT! " << appName << endl;
 		    exit (EXIT_FAILURE);
 		}
-		string devName =  e.second.to_json().get("devname").get<string>().c_str();
-		if(devName == "mobiledgex") {
-		    cout << "DEV NAME CORRECT! " << devName << endl;
+		string orgName =  e.second.to_json().get("orgname").get<string>().c_str();
+		if(orgName == "MobiledgeX") {
+		    cout << "ORG NAME CORRECT! " << orgName << endl;
 		} else {
-		    cout << "DEV NAME INCORRECT! " << devName << endl;
+		    cout << "ORG NAME INCORRECT! " << orgName << endl;
 		    exit (EXIT_FAILURE);
 		}
 		string appVers =  e.second.to_json().get("appvers").get<string>().c_str();
