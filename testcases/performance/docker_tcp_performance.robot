@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create Dedicated K8s Cluster and Run Performance Test between PODs
+Documentation   Create Dedicated Docker Cluster VM and Run TCP Performance Test between PODs
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
