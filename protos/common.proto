@@ -1,0 +1,112 @@
+// common definitions
+
+syntax = "proto3";
+package edgeproto;
+
+import "annotations.proto";
+
+// Liveness Options
+//
+// Liveness indicates if an object was created statically via an external API call, or dynamically via an internal algorithm.
+enum Liveness {
+  // Unknown liveness
+  LIVENESS_UNKNOWN = 0;
+  // Object managed by external entity
+  LIVENESS_STATIC = 1;
+  // Object managed internally
+  LIVENESS_DYNAMIC = 2;
+}
+
+// Type of public IP support
+//
+// Static IP support indicates a set of static public IPs are available for use, and managed by the Controller. Dynamic indicates the Cloudlet uses a DHCP server to provide public IP addresses, and the controller has no control over which IPs are assigned.
+enum IpSupport {
+  // Unknown IP support
+  IP_SUPPORT_UNKNOWN = 0;
+  // Static IP addresses are provided to and managed by Controller
+  IP_SUPPORT_STATIC = 1;
+  // IP addresses are dynamically provided by an Operator's DHCP server
+  IP_SUPPORT_DYNAMIC = 2;
+}
+
+// IpAccess Options
+//
+// IpAccess indicates the type of RootLB that Developer requires for their App
+enum IpAccess {
+  // Unknown IP access
+  IP_ACCESS_UNKNOWN = 0;
+  // Dedicated RootLB
+  IP_ACCESS_DEDICATED = 1;
+  // Shared RootLB
+  IP_ACCESS_SHARED = 3;
+}
+
+// Tracked States
+//
+// TrackedState is used to track the state of an object on a remote node,
+// i.e. track the state of a ClusterInst object on the CRM (Cloudlet).
+enum TrackedState {
+  // Unknown state
+  TRACKED_STATE_UNKNOWN = 0;
+  // Not present (does not exist)
+  NOT_PRESENT = 1;
+  // Create requested
+  CREATE_REQUESTED = 2;
+  // Creating
+  CREATING = 3;
+  // Create error
+  CREATE_ERROR = 4;
+  // Ready
+  READY = 5;
+  // Update requested
+  UPDATE_REQUESTED = 6;
+  // Updating
+  UPDATING = 7;
+  // Update error
+  UPDATE_ERROR = 8;
+  // Delete requested
+  DELETE_REQUESTED = 9;
+  // Deleting
+  DELETING = 10;
+  // Delete error
+  DELETE_ERROR = 11;
+  // Delete prepare (extra state used by controller to block other changes)
+  DELETE_PREPARE = 12;
+  // CRM INIT OK
+  CRM_INITOK = 13;
+  // Creating dependencies (state used to tracked dependent object change progress)
+  CREATING_DEPENDENCIES = 14;
+}
+
+// Overrides default CRM behaviour
+//
+// CRMOverride can be applied to commands that issue requests to the CRM.
+// It should only be used by administrators when bugs have caused the
+// Controller and CRM to get out of sync. It allows commands from the
+// Controller to ignore errors from the CRM, or ignore the CRM completely
+// (messages will not be sent to CRM).
+enum CRMOverride {
+  // No override
+  NO_OVERRIDE = 0;
+  // Ignore errors from CRM
+  IGNORE_CRM_ERRORS = 1;
+  // Ignore CRM completely (does not inform CRM of operation)
+  IGNORE_CRM = 2;
+  // Ignore Transient State (only admin should use if CRM crashed)
+  IGNORE_TRANSIENT_STATE = 3;
+  // Ignore CRM and Transient State
+  IGNORE_CRM_AND_TRANSIENT_STATE = 4;
+}
+
+// Status Information
+//
+// Used to track status of create/delete/update for resources that are being modified 
+// by the controller via the CRM.  Tasks are the high level jobs that are to be completed.
+// Steps are work items within a task. Within the clusterinst and appinst objects this
+// is converted to a string
+message StatusInfo{
+  uint32 task_number = 1;
+  uint32 max_tasks = 2;
+  string task_name = 3;
+  string step_name = 4;
+}

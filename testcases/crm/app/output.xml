@@ -1,0 +1,3740 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200221 16:31:04.890" rpa="false">
+<suite id="s1" name="fqdn udptcp port openstack IpAccessDedicated" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/crm/app/fqdn_udptcp_port_openstack_IpAccessDedicated.robot">
+<test id="s1-t1" name="User shall be able to access 1 UDP port on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 16:31:05.412" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 16:31:05.412" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:31:05.413" level="DEBUG">Test timeout 1 hour active. 3599.998 seconds left.</msg>
+<msg timestamp="20200221 16:31:05.413" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 16:31:05.777" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	</msg>
+<msg timestamp="20200221 16:31:05.798" level="TRACE">Return: key {
+  name: "flavor1582324265-412752"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 16:31:05.412" endtime="20200221 16:31:05.798"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:31:05.799" level="TRACE">Arguments: [ 'Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:31:05.799" level="DEBUG">Test timeout 1 hour active. 3599.612 seconds left.</msg>
+<msg timestamp="20200221 16:31:05.799" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:31:05.799" endtime="20200221 16:31:05.799"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+</arguments>
+<msg timestamp="20200221 16:31:05.800" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | ip_access='IpAccessDedicated' ]</msg>
+<msg timestamp="20200221 16:31:05.800" level="DEBUG">Test timeout 1 hour active. 3599.611 seconds left.</msg>
+<msg timestamp="20200221 16:31:05.801" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 16:39:17.714" level="INFO">show cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	}
+	</msg>
+<msg timestamp="20200221 16:39:17.731" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582324265-412752"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 1}
+sending message
+message: "Creating"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_COMPLETE"
+
+message: "Setting Up Root LB"
+
+message: "Waiting for Cluster to Initialize"
+
+message: "Waiting for Cluster to Initialize, Checking Master for Available Nodes"
+
+message: "Waiting for Cluster to Initialize, 1 of 1 nodes active"
+
+message: "Creating config map"
+
+message: "Ready"
+
+message: "Created ClusterInst successfully"
+
+ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+}</msg>
+<msg timestamp="20200221 16:39:17.732" level="TRACE">Return: key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+ip_access: IP_ACCESS_DEDICATED
+allocated_ip: "dynamic"
+liveness: LIVENESS_STATIC
+node_flavor: "m4.small"
+num_masters: 1
+num_nodes: 1
+deployment: "kubernetes"
+status {
+}
+master_node_flavor: "m4.small"
+</msg>
+<status status="PASS" starttime="20200221 16:31:05.800" endtime="20200221 16:39:17.732"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Done Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:39:17.732" level="TRACE">Arguments: [ 'Done Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:39:17.732" level="DEBUG">Test timeout 1 hour active. 3107.679 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.733" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:39:17.732" endtime="20200221 16:39:17.733"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.733" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'automationMunichCloudlet' | 'TDG' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:39:17.733" level="DEBUG">Test timeout 1 hour active. 3107.678 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.733" level="TRACE">Return: 'automationMunichCloudlet.TDG.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:39:17.734" level="INFO">${rootlb} = automationMunichCloudlet.TDG.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:39:17.733" endtime="20200221 16:39:17.734"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.734" level="TRACE">Arguments: [ 'automationMunichCloudlet.TDG.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:39:17.734" level="DEBUG">Test timeout 1 hour active. 3107.677 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.735" level="TRACE">Return: 'automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:39:17.735" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:39:17.734" endtime="20200221 16:39:17.735"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.735" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:39:17.735" level="DEBUG">Test timeout 1 hour active. 3107.676 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.735" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:39:17.735" level="INFO">${cluster_name} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:39:17.735" endtime="20200221 16:39:17.735"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.736" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1582324265-412752' | 'automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:39:17.736" level="DEBUG">Test timeout 1 hour active. 3107.675 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.736" level="TRACE">Return: 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:39:17.736" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:39:17.736" endtime="20200221 16:39:17.736"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200221 16:39:17.737" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200221 16:39:17.737" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 16:39:17.737" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:39:17.736" endtime="20200221 16:39:17.737"></status>
+</kw>
+<msg timestamp="20200221 16:39:17.737" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:31:05.411" endtime="20200221 16:39:17.737"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.738" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:39:17.738" level="DEBUG">Test timeout 1 hour active. 3107.673 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.738" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:39:17.738" level="INFO">${cluster_name_default} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:39:17.737" endtime="20200221 16:39:17.738"></status>
+</kw>
+<kw name="Get Default App Name" library="MexController">
+<assign>
+<var>${app_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:39:17.738" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:39:17.738" level="DEBUG">Test timeout 1 hour active. 3107.673 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.738" level="TRACE">Return: 'app1582324265-412752'</msg>
+<msg timestamp="20200221 16:39:17.738" level="INFO">${app_name_default} = app1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:39:17.738" endtime="20200221 16:39:17.738"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating App and App Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:39:17.739" level="TRACE">Arguments: [ 'Creating App and App Instance' ]</msg>
+<msg timestamp="20200221 16:39:17.739" level="DEBUG">Test timeout 1 hour active. 3107.672 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.739" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:39:17.739" endtime="20200221 16:39:17.739"></status>
+</kw>
+<kw name="Create App" library="MexController">
+<arguments>
+<arg>image_path=${docker_image}</arg>
+<arg>access_ports=udp:2015</arg>
+<arg>command=${docker_command}</arg>
+</arguments>
+<msg timestamp="20200221 16:39:17.739" level="TRACE">Arguments: [ image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0' | access_ports='udp:2015' | command='./server_ping_threaded.py' ]</msg>
+<msg timestamp="20200221 16:39:17.740" level="DEBUG">Test timeout 1 hour active. 3107.671 seconds left.</msg>
+<msg timestamp="20200221 16:39:17.740" level="INFO">create app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "udp:2015"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 16:39:18.802" level="INFO">show apps on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	</msg>
+<msg timestamp="20200221 16:39:18.823" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'udp:2015', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:39:18.823" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 16:39:18.823" level="TRACE">Return: key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+image_type: IMAGE_TYPE_DOCKER
+access_ports: "udp:2015"
+default_flavor {
+  name: "flavor1582324265-412752"
+}
+command: "./server_ping_threaded.py"
+deployment: "kubernetes"
+deployment_manifest: "apiVersion: v1\nkind: Service\nmetadata:\n  name: app1582324265-412752-udp\n  labels:\n    run: app1582324265-412752\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp2015\n    protocol: UDP\n    port: 2015\n    targetPort: 2015\n  selector:\n    run: app1582324265-412752\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1582324265-412752-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1582324265-412752\n  template:\n    metadata:\n      labels:\n        run: app1582324265-412752\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1582324265-412752\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 2015\n          protocol: UDP\n        command:\n        - \"./server_ping_threaded.py\"\n"
+deployment_generator: "kubernetes-basic"
+access_type: ACCESS_TYPE_LOAD_BALANCER
+</msg>
+<status status="PASS" starttime="20200221 16:39:17.739" endtime="20200221 16:39:18.823"></status>
+</kw>
+<kw name="Create App Instance" library="MexController">
+<doc>Creates an app instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>cluster_instance_name=${cluster_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 16:39:18.824" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | cluster_instance_name='cluster1582324265-412752' ]</msg>
+<msg timestamp="20200221 16:39:18.824" level="DEBUG">Test timeout 1 hour active. 3106.587 seconds left.</msg>
+<msg timestamp="20200221 16:39:18.825" level="INFO">create app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:39:19.067" level="DEBUG">message: "Setting up registry secret"
+</msg>
+<msg timestamp="20200221 16:39:26.195" level="DEBUG">message: "Creating Kubernetes App"
+</msg>
+<msg timestamp="20200221 16:39:27.302" level="DEBUG">message: "Configuring Service: LB, Firewall Rules and DNS"
+</msg>
+<msg timestamp="20200221 16:40:23.359" level="DEBUG">message: "Ready"
+</msg>
+<msg timestamp="20200221 16:40:23.359" level="DEBUG">message: "Created AppInst successfully"
+</msg>
+<msg timestamp="20200221 16:40:23.359" level="INFO">show app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:40:23.379" level="DEBUG">show[key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-b97f9b875-fhwjq"
+}
+created_at {
+  seconds: 1582324758
+  nanos: 896058926
+}
+status {
+}
+]</msg>
+<msg timestamp="20200221 16:40:23.379" level="DEBUG">level0</msg>
+<msg timestamp="20200221 16:40:23.380" level="INFO">{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+}
+
+sending message</msg>
+<msg timestamp="20200221 16:40:23.380" level="WARN">thread_time1 1582324758.824692</msg>
+<msg timestamp="20200221 16:40:23.380" level="WARN">thread_time2 1582324823.3591821
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 16:40:23.380" level="TRACE">Return: key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-b97f9b875-fhwjq"
+}
+created_at {
+  seconds: 1582324758
+  nanos: 896058926
+}
+status {
+}
+</msg>
+<status status="PASS" starttime="20200221 16:39:18.824" endtime="20200221 16:40:23.380"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Registering Client and Finding Cloudlet</arg>
+</arguments>
+<msg timestamp="20200221 16:40:23.380" level="TRACE">Arguments: [ 'Registering Client and Finding Cloudlet' ]</msg>
+<msg timestamp="20200221 16:40:23.380" level="DEBUG">Test timeout 1 hour active. 3042.03 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.381" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:40:23.380" endtime="20200221 16:40:23.381"></status>
+</kw>
+<kw name="Register Client" library="MexDme">
+<msg timestamp="20200221 16:40:23.381" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:40:23.381" level="DEBUG">Test timeout 1 hour active. 3042.029 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.382" level="INFO">register client on eu-qa.dme.mobiledgex.net:50051. 
+	dev_name: "mobiledgex"
+	app_name: "app1582324265-412752"
+	app_vers: "1.0"
+	</msg>
+<msg timestamp="20200221 16:40:23.593" level="DEBUG">session_cookie=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTEyMjMsImlhdCI6MTU4MjMyNDgyMywia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFdocUgwSVlIMnBUcDhyUU1SSkdGRm12NCIsImtpZCI6Mn19.4-Zuq3582Cpyk7hBn4QIMRW3tC2kgAfKiwR5-EJenS-do_08gL6f95uraolNzzyI4dIutOnY9RjFkTj3qMCo1Q</msg>
+<msg timestamp="20200221 16:40:23.593" level="DEBUG">token server uri=http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc</msg>
+<msg timestamp="20200221 16:40:23.594" level="TRACE">Return: status: RS_SUCCESS
+session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTEyMjMsImlhdCI6MTU4MjMyNDgyMywia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFdocUgwSVlIMnBUcDhyUU1SSkdGRm12NCIsImtpZCI6Mn19.4-Zuq3582Cpyk7hBn4QIMRW3tC2kgAfKiwR5-EJenS-do_08gL6f95uraolNzzyI4dIutOnY9RjFkTj3qMCo1Q"
+token_server_uri: "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc"
+</msg>
+<status status="PASS" starttime="20200221 16:40:23.381" endtime="20200221 16:40:23.594"></status>
+</kw>
+<kw name="Find Cloudlet" library="MexDme">
+<arguments>
+<arg>latitude=${latitude}</arg>
+<arg>longitude=${longitude}</arg>
+<arg>carrier_name=${operator_name_openstack}</arg>
+</arguments>
+<assign>
+<var>${cloudlet}</var>
+</assign>
+<msg timestamp="20200221 16:40:23.594" level="TRACE">Arguments: [ latitude='32.7767' | longitude='-96.7970' | carrier_name='TDG' ]</msg>
+<msg timestamp="20200221 16:40:23.594" level="DEBUG">Test timeout 1 hour active. 3041.816 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.595" level="INFO">find cloudlet on eu-qa.dme.mobiledgex.net:50051. 
+	session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTEyMjMsImlhdCI6MTU4MjMyNDgyMywia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFdocUgwSVlIMnBUcDhyUU1SSkdGRm12NCIsImtpZCI6Mn19.4-Zuq3582Cpyk7hBn4QIMRW3tC2kgAfKiwR5-EJenS-do_08gL6f95uraolNzzyI4dIutOnY9RjFkTj3qMCo1Q"
+	carrier_name: "TDG"
+	gps_location {
+	  latitude: 32.7767
+	  longitude: -96.797
+	}
+	</msg>
+<msg timestamp="20200221 16:40:23.613" level="TRACE">Return: status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+cloudlet_location {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+</msg>
+<msg timestamp="20200221 16:40:23.613" level="INFO">${cloudlet} = status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412...</msg>
+<status status="PASS" starttime="20200221 16:40:23.594" endtime="20200221 16:40:23.613"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${cloudlet.ports[0].fqdn_prefix}</arg>
+<arg>${cloudlet.fqdn}</arg>
+</arguments>
+<assign>
+<var>${fqdn}</var>
+</assign>
+<msg timestamp="20200221 16:40:23.614" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1582324265-412752-udp.' | 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:40:23.614" level="DEBUG">Test timeout 1 hour active. 3041.797 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.614" level="TRACE">Return: 'app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:40:23.614" level="INFO">${fqdn} = app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:40:23.613" endtime="20200221 16:40:23.615"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Waiting for k8s pod to be running</arg>
+</arguments>
+<msg timestamp="20200221 16:40:23.615" level="TRACE">Arguments: [ 'Waiting for k8s pod to be running' ]</msg>
+<msg timestamp="20200221 16:40:23.615" level="DEBUG">Test timeout 1 hour active. 3041.796 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.615" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:40:23.615" endtime="20200221 16:40:23.615"></status>
+</kw>
+<kw name="Wait For K8s Pod To Be Running" library="MexApp">
+<arguments>
+<arg>root_loadbalancer=${rootlb}</arg>
+<arg>cluster_name=${cluster_name_default}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>pod_name=${app_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 16:40:23.616" level="TRACE">Arguments: [ root_loadbalancer='cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' | cluster_name='cluster1582324265-412752' | operator_name='TDG' | pod_name='app1582324265-412752' ]</msg>
+<msg timestamp="20200221 16:40:23.616" level="DEBUG">Test timeout 1 hour active. 3041.794 seconds left.</msg>
+<msg timestamp="20200221 16:40:23.617" level="DEBUG">init</msg>
+<msg timestamp="20200221 16:40:23.617" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:40:23.617" level="DEBUG">init</msg>
+<msg timestamp="20200221 16:40:23.617" level="INFO">host=cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net port=22 username=ubuntu password=None key_file=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex logfile=/tmp/sshLogfile.txt</msg>
+<msg timestamp="20200221 16:40:23.618" level="INFO">Not enough fields found in known_hosts in line 1 ('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkOD3XAeG27o3DpNioaTf0w7akjrfvK8AnQKBGEoGA+nes8r4N4u9h0yNCiU/L4+d0rQwUnTJwMvYGuLzvWU6oRBmsc/sHxyVbJEDwlOL9ZuzHrwvbkTM2LyFiRukUeXUo6QSWtB7fInXXVgRCz41sD+kIoUEvx+IrKrn18OSC9iV6mcBtw6C2gmAWTwrFAXPzuKA3fTkbFxOnVUz1c+Uolbvi+b5qrGgFI3jrg1TV2DJSjn3Lf6X3GDE4H43GhMjDjayVN8zG2V3p3nX1h2at0zAwZcNgXhZmswqIarAQyDJxgco8Zy0/vZKtyOScFroYVB6s/kHEnh6CEjSmvp3l')</msg>
+<msg timestamp="20200221 16:40:23.627" level="INFO">connecting with keyfile=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:40:23.628" level="WARN">rootlb</msg>
+<msg timestamp="20200221 16:40:23.632" level="FAIL">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</msg>
+<msg timestamp="20200221 16:40:23.632" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexApp/mex_app.py", line 136, in wait_for_k8s_pod_to_be_running
+    rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/rootlb.py", line 20, in __init__
+    super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/linux.py", line 32, in __init__
+    k = paramiko.RSAKey.from_private_key_file(key_file)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 206, in from_private_key_file
+    key = cls(filename=filename, password=password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 55, in __init__
+    self._from_private_key_file(filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 175, in _from_private_key_file
+    data = self._read_private_key_file("RSA", filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 278, in _read_private_key_file
+    with open(filename, "r") as f:</msg>
+<status status="FAIL" starttime="20200221 16:40:23.616" endtime="20200221 16:40:23.632"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 16:40:23.632" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:40:23.632" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 16:40:23.632" level="DEBUG">deleting obj&lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084a70&gt;</msg>
+<msg timestamp="20200221 16:40:23.633" level="INFO">delete app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:41:27.539" level="DEBUG">deleting obj&lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084e60&gt;</msg>
+<msg timestamp="20200221 16:41:27.539" level="INFO">delete app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "udp:2015"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 16:41:27.572" level="DEBUG">deleting obj&lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b080e60&gt;</msg>
+<msg timestamp="20200221 16:41:27.573" level="INFO">delete cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 16:43:58.680" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0527a0&gt;</msg>
+<msg timestamp="20200221 16:43:58.680" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 16:43:58.722" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0527a0&gt;, &lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b080e60&gt;, &lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084e60&gt;, &lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084a70&gt;]
+sending message</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time1 1582324823.6327171
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time2 1582324887.538344</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">Thread Dict {'Thread': (1582324823.6327171, 1582324887.538342, 63.905624866485596)}
+sending message</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time1 1582324887.572853
+message: "Autodeleting AppInst MEXPrometheusAppName"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time2 1582325038.67967</msg>
+<msg timestamp="20200221 16:43:58.723" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:40:23.632" endtime="20200221 16:43:58.723"></status>
+</kw>
+<doc>deploy app with 1 UDP port
+verify the port as accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 16:31:05.411" endtime="20200221 16:43:58.723" critical="yes">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</status>
+</test>
+<test id="s1-t2" name="User shall be able to access 2 UDP ports on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 16:43:58.725" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 16:43:58.725" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:43:58.725" level="DEBUG">Test timeout 1 hour active. 3599.999 seconds left.</msg>
+<msg timestamp="20200221 16:43:58.726" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 16:43:58.758" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	</msg>
+<msg timestamp="20200221 16:43:58.780" level="TRACE">Return: key {
+  name: "flavor1582324265-412752"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 16:43:58.725" endtime="20200221 16:43:58.780"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:43:58.780" level="TRACE">Arguments: [ 'Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:43:58.780" level="DEBUG">Test timeout 1 hour active. 3599.944 seconds left.</msg>
+<msg timestamp="20200221 16:43:58.781" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:43:58.780" endtime="20200221 16:43:58.781"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+</arguments>
+<msg timestamp="20200221 16:43:58.781" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | ip_access='IpAccessDedicated' ]</msg>
+<msg timestamp="20200221 16:43:58.781" level="DEBUG">Test timeout 1 hour active. 3599.943 seconds left.</msg>
+<msg timestamp="20200221 16:43:58.782" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 16:49:16.109" level="INFO">show cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	}
+	</msg>
+<msg timestamp="20200221 16:49:16.130" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582324265-412752"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 1}
+sending message
+message: "Creating"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_COMPLETE"
+
+message: "Setting Up Root LB"
+
+message: "Waiting for Cluster to Initialize"
+
+message: "Waiting for Cluster to Initialize, Checking Master for Available Nodes"
+
+message: "Creating config map"
+
+message: "Ready"
+
+message: "Created ClusterInst successfully"
+
+ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+}</msg>
+<msg timestamp="20200221 16:49:16.130" level="TRACE">Return: key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+ip_access: IP_ACCESS_DEDICATED
+allocated_ip: "dynamic"
+liveness: LIVENESS_STATIC
+node_flavor: "m4.small"
+num_masters: 1
+num_nodes: 1
+deployment: "kubernetes"
+status {
+}
+master_node_flavor: "m4.small"
+</msg>
+<status status="PASS" starttime="20200221 16:43:58.781" endtime="20200221 16:49:16.130"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Done Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:49:16.131" level="TRACE">Arguments: [ 'Done Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:49:16.131" level="DEBUG">Test timeout 1 hour active. 3282.593 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.131" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:49:16.130" endtime="20200221 16:49:16.131"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.132" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'automationMunichCloudlet' | 'TDG' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:49:16.132" level="DEBUG">Test timeout 1 hour active. 3282.592 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.132" level="TRACE">Return: 'automationMunichCloudlet.TDG.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:49:16.132" level="INFO">${rootlb} = automationMunichCloudlet.TDG.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:49:16.131" endtime="20200221 16:49:16.132"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.132" level="TRACE">Arguments: [ 'automationMunichCloudlet.TDG.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:49:16.132" level="DEBUG">Test timeout 1 hour active. 3282.592 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.133" level="TRACE">Return: 'automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:49:16.133" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:49:16.132" endtime="20200221 16:49:16.133"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.133" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:49:16.134" level="DEBUG">Test timeout 1 hour active. 3282.59 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.134" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:49:16.134" level="INFO">${cluster_name} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:49:16.133" endtime="20200221 16:49:16.134"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.134" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1582324265-412752' | 'automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:49:16.135" level="DEBUG">Test timeout 1 hour active. 3282.589 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.135" level="TRACE">Return: 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:49:16.135" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:49:16.134" endtime="20200221 16:49:16.135"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200221 16:49:16.135" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200221 16:49:16.135" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 16:49:16.136" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:49:16.135" endtime="20200221 16:49:16.136"></status>
+</kw>
+<msg timestamp="20200221 16:49:16.136" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:43:58.725" endtime="20200221 16:49:16.136"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.136" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:49:16.136" level="DEBUG">Test timeout 1 hour active. 3282.588 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.136" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:49:16.136" level="INFO">${cluster_name_default} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:49:16.136" endtime="20200221 16:49:16.137"></status>
+</kw>
+<kw name="Get Default App Name" library="MexController">
+<assign>
+<var>${app_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:49:16.137" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:49:16.137" level="DEBUG">Test timeout 1 hour active. 3282.587 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.137" level="TRACE">Return: 'app1582324265-412752'</msg>
+<msg timestamp="20200221 16:49:16.137" level="INFO">${app_name_default} = app1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:49:16.137" endtime="20200221 16:49:16.137"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating App and App Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:49:16.137" level="TRACE">Arguments: [ 'Creating App and App Instance' ]</msg>
+<msg timestamp="20200221 16:49:16.138" level="DEBUG">Test timeout 1 hour active. 3282.587 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.138" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:49:16.137" endtime="20200221 16:49:16.138"></status>
+</kw>
+<kw name="Create App" library="MexController">
+<arguments>
+<arg>image_path=${docker_image}</arg>
+<arg>access_ports=udp:2015,udp:2016</arg>
+<arg>command=${docker_command}</arg>
+</arguments>
+<msg timestamp="20200221 16:49:16.138" level="TRACE">Arguments: [ image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0' | access_ports='udp:2015,udp:2016' | command='./server_ping_threaded.py' ]</msg>
+<msg timestamp="20200221 16:49:16.138" level="DEBUG">Test timeout 1 hour active. 3282.586 seconds left.</msg>
+<msg timestamp="20200221 16:49:16.139" level="INFO">create app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "udp:2015,udp:2016"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 16:49:17.166" level="INFO">show apps on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	</msg>
+<msg timestamp="20200221 16:49:17.187" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'udp:2015,udp:2016', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:49:17.187" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 16:49:17.188" level="TRACE">Return: key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+image_type: IMAGE_TYPE_DOCKER
+access_ports: "udp:2015,udp:2016"
+default_flavor {
+  name: "flavor1582324265-412752"
+}
+command: "./server_ping_threaded.py"
+deployment: "kubernetes"
+deployment_manifest: "apiVersion: v1\nkind: Service\nmetadata:\n  name: app1582324265-412752-udp\n  labels:\n    run: app1582324265-412752\nspec:\n  type: LoadBalancer\n  ports:\n  - name: udp2015\n    protocol: UDP\n    port: 2015\n    targetPort: 2015\n  - name: udp2016\n    protocol: UDP\n    port: 2016\n    targetPort: 2016\n  selector:\n    run: app1582324265-412752\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1582324265-412752-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1582324265-412752\n  template:\n    metadata:\n      labels:\n        run: app1582324265-412752\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1582324265-412752\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 2015\n          protocol: UDP\n        - containerPort: 2016\n          protocol: UDP\n        command:\n        - \"./server_ping_threaded.py\"\n"
+deployment_generator: "kubernetes-basic"
+access_type: ACCESS_TYPE_LOAD_BALANCER
+</msg>
+<status status="PASS" starttime="20200221 16:49:16.138" endtime="20200221 16:49:17.188"></status>
+</kw>
+<kw name="Create App Instance" library="MexController">
+<doc>Creates an app instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>cluster_instance_name=${cluster_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 16:49:17.189" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | cluster_instance_name='cluster1582324265-412752' ]</msg>
+<msg timestamp="20200221 16:49:17.189" level="DEBUG">Test timeout 1 hour active. 3281.535 seconds left.</msg>
+<msg timestamp="20200221 16:49:17.189" level="INFO">create app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:49:17.530" level="DEBUG">message: "Setting up registry secret"
+</msg>
+<msg timestamp="20200221 16:49:23.735" level="DEBUG">message: "Creating Kubernetes App"
+</msg>
+<msg timestamp="20200221 16:49:24.759" level="DEBUG">message: "Configuring Service: LB, Firewall Rules and DNS"
+</msg>
+<msg timestamp="20200221 16:51:00.855" level="DEBUG">message: "Ready"
+</msg>
+<msg timestamp="20200221 16:51:00.856" level="DEBUG">message: "Created AppInst successfully"
+</msg>
+<msg timestamp="20200221 16:51:00.856" level="INFO">show app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:51:00.880" level="DEBUG">show[key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2016
+  public_port: 2016
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-d4bd85f58-ch4xk"
+}
+created_at {
+  seconds: 1582325357
+  nanos: 228450050
+}
+status {
+}
+]</msg>
+<msg timestamp="20200221 16:51:00.881" level="DEBUG">level0</msg>
+<msg timestamp="20200221 16:51:00.882" level="INFO">{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+}
+
+sending message</msg>
+<msg timestamp="20200221 16:51:00.882" level="WARN">thread_time1 1582325357.189305</msg>
+<msg timestamp="20200221 16:51:00.882" level="WARN">thread_time2 1582325460.855842
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 16:51:00.883" level="TRACE">Return: key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+mapped_ports {
+  proto: L_PROTO_UDP
+  internal_port: 2016
+  public_port: 2016
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-d4bd85f58-ch4xk"
+}
+created_at {
+  seconds: 1582325357
+  nanos: 228450050
+}
+status {
+}
+</msg>
+<status status="PASS" starttime="20200221 16:49:17.188" endtime="20200221 16:51:00.883"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Registering Client and Finding Cloudlet</arg>
+</arguments>
+<msg timestamp="20200221 16:51:00.883" level="TRACE">Arguments: [ 'Registering Client and Finding Cloudlet' ]</msg>
+<msg timestamp="20200221 16:51:00.883" level="DEBUG">Test timeout 1 hour active. 3177.841 seconds left.</msg>
+<msg timestamp="20200221 16:51:00.884" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:51:00.883" endtime="20200221 16:51:00.884"></status>
+</kw>
+<kw name="Register Client" library="MexDme">
+<msg timestamp="20200221 16:51:00.884" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:51:00.884" level="DEBUG">Test timeout 1 hour active. 3177.84 seconds left.</msg>
+<msg timestamp="20200221 16:51:00.884" level="INFO">register client on eu-qa.dme.mobiledgex.net:50051. 
+	dev_name: "mobiledgex"
+	app_name: "app1582324265-412752"
+	app_vers: "1.0"
+	</msg>
+<msg timestamp="20200221 16:51:01.035" level="DEBUG">session_cookie=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTE4NjEsImlhdCI6MTU4MjMyNTQ2MSwia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFh6emI5S0JBVUluSHR1THVmc0pHRjgzMCIsImtpZCI6Mn19.J7eT3lfit7KE-3dhFk565sjyZrgKilV7eqKw0Ex9tmS1zMWdpJQBE7gjwxoIzLJxUy_h9EHn0vaENmr8T0VciA</msg>
+<msg timestamp="20200221 16:51:01.035" level="DEBUG">token server uri=http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc</msg>
+<msg timestamp="20200221 16:51:01.036" level="TRACE">Return: status: RS_SUCCESS
+session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTE4NjEsImlhdCI6MTU4MjMyNTQ2MSwia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFh6emI5S0JBVUluSHR1THVmc0pHRjgzMCIsImtpZCI6Mn19.J7eT3lfit7KE-3dhFk565sjyZrgKilV7eqKw0Ex9tmS1zMWdpJQBE7gjwxoIzLJxUy_h9EHn0vaENmr8T0VciA"
+token_server_uri: "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc"
+</msg>
+<status status="PASS" starttime="20200221 16:51:00.884" endtime="20200221 16:51:01.036"></status>
+</kw>
+<kw name="Find Cloudlet" library="MexDme">
+<arguments>
+<arg>latitude=${latitude}</arg>
+<arg>longitude=${longitude}</arg>
+</arguments>
+<assign>
+<var>${cloudlet}</var>
+</assign>
+<msg timestamp="20200221 16:51:01.036" level="TRACE">Arguments: [ latitude='32.7767' | longitude='-96.7970' ]</msg>
+<msg timestamp="20200221 16:51:01.036" level="DEBUG">Test timeout 1 hour active. 3177.688 seconds left.</msg>
+<msg timestamp="20200221 16:51:01.037" level="INFO">find cloudlet on eu-qa.dme.mobiledgex.net:50051. 
+	session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTE4NjEsImlhdCI6MTU4MjMyNTQ2MSwia2V5Ijp7InBlZXJpcCI6IjEwLjI0NC4xLjEiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFh6emI5S0JBVUluSHR1THVmc0pHRjgzMCIsImtpZCI6Mn19.J7eT3lfit7KE-3dhFk565sjyZrgKilV7eqKw0Ex9tmS1zMWdpJQBE7gjwxoIzLJxUy_h9EHn0vaENmr8T0VciA"
+	carrier_name: "TDG"
+	gps_location {
+	  latitude: 32.7767
+	  longitude: -96.797
+	}
+	</msg>
+<msg timestamp="20200221 16:51:01.078" level="TRACE">Return: status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 2016
+  public_port: 2016
+  fqdn_prefix: "app1582324265-412752-udp."
+}
+cloudlet_location {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+</msg>
+<msg timestamp="20200221 16:51:01.078" level="INFO">${cloudlet} = status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_UDP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412...</msg>
+<status status="PASS" starttime="20200221 16:51:01.036" endtime="20200221 16:51:01.079"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${cloudlet.ports[0].fqdn_prefix}</arg>
+<arg>${cloudlet.fqdn}</arg>
+</arguments>
+<assign>
+<var>${fqdn_0}</var>
+</assign>
+<msg timestamp="20200221 16:51:01.079" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1582324265-412752-udp.' | 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:51:01.080" level="DEBUG">Test timeout 1 hour active. 3177.644 seconds left.</msg>
+<msg timestamp="20200221 16:51:01.080" level="TRACE">Return: 'app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:51:01.080" level="INFO">${fqdn_0} = app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:51:01.079" endtime="20200221 16:51:01.080"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${cloudlet.ports[1].fqdn_prefix}</arg>
+<arg>${cloudlet.fqdn}</arg>
+</arguments>
+<assign>
+<var>${fqdn_1}</var>
+</assign>
+<msg timestamp="20200221 16:51:01.081" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1582324265-412752-udp.' | 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:51:01.081" level="DEBUG">Test timeout 1 hour active. 3177.643 seconds left.</msg>
+<msg timestamp="20200221 16:51:01.081" level="TRACE">Return: 'app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:51:01.081" level="INFO">${fqdn_1} = app1582324265-412752-udp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:51:01.080" endtime="20200221 16:51:01.081"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Waiting for k8s pod to be running</arg>
+</arguments>
+<msg timestamp="20200221 16:51:01.081" level="TRACE">Arguments: [ 'Waiting for k8s pod to be running' ]</msg>
+<msg timestamp="20200221 16:51:01.081" level="DEBUG">Test timeout 1 hour active. 3177.643 seconds left.</msg>
+<msg timestamp="20200221 16:51:01.082" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:51:01.081" endtime="20200221 16:51:01.082"></status>
+</kw>
+<kw name="Wait For K8s Pod To Be Running" library="MexApp">
+<arguments>
+<arg>root_loadbalancer=${rootlb}</arg>
+<arg>cluster_name=${cluster_name_default}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>pod_name=${app_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 16:51:01.082" level="TRACE">Arguments: [ root_loadbalancer='cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' | cluster_name='cluster1582324265-412752' | operator_name='TDG' | pod_name='app1582324265-412752' ]</msg>
+<msg timestamp="20200221 16:51:01.082" level="DEBUG">Test timeout 1 hour active. 3177.642 seconds left.</msg>
+<msg timestamp="20200221 16:51:01.082" level="DEBUG">init</msg>
+<msg timestamp="20200221 16:51:01.082" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:51:01.083" level="DEBUG">init</msg>
+<msg timestamp="20200221 16:51:01.083" level="INFO">host=cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net port=22 username=ubuntu password=None key_file=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex logfile=/tmp/sshLogfile.txt</msg>
+<msg timestamp="20200221 16:51:01.084" level="INFO">Not enough fields found in known_hosts in line 1 ('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkOD3XAeG27o3DpNioaTf0w7akjrfvK8AnQKBGEoGA+nes8r4N4u9h0yNCiU/L4+d0rQwUnTJwMvYGuLzvWU6oRBmsc/sHxyVbJEDwlOL9ZuzHrwvbkTM2LyFiRukUeXUo6QSWtB7fInXXVgRCz41sD+kIoUEvx+IrKrn18OSC9iV6mcBtw6C2gmAWTwrFAXPzuKA3fTkbFxOnVUz1c+Uolbvi+b5qrGgFI3jrg1TV2DJSjn3Lf6X3GDE4H43GhMjDjayVN8zG2V3p3nX1h2at0zAwZcNgXhZmswqIarAQyDJxgco8Zy0/vZKtyOScFroYVB6s/kHEnh6CEjSmvp3l')</msg>
+<msg timestamp="20200221 16:51:01.095" level="INFO">connecting with keyfile=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:51:01.095" level="WARN">rootlb</msg>
+<msg timestamp="20200221 16:51:01.095" level="FAIL">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</msg>
+<msg timestamp="20200221 16:51:01.095" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexApp/mex_app.py", line 136, in wait_for_k8s_pod_to_be_running
+    rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/rootlb.py", line 20, in __init__
+    super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/linux.py", line 32, in __init__
+    k = paramiko.RSAKey.from_private_key_file(key_file)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 206, in from_private_key_file
+    key = cls(filename=filename, password=password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 55, in __init__
+    self._from_private_key_file(filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 175, in _from_private_key_file
+    data = self._read_private_key_file("RSA", filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 278, in _read_private_key_file
+    with open(filename, "r") as f:</msg>
+<status status="FAIL" starttime="20200221 16:51:01.082" endtime="20200221 16:51:01.095"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 16:51:01.096" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:51:01.096" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 16:51:01.096" level="DEBUG">deleting obj&lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b44d0&gt;</msg>
+<msg timestamp="20200221 16:51:01.096" level="INFO">delete app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:52:00.409" level="DEBUG">deleting obj&lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0b90&gt;</msg>
+<msg timestamp="20200221 16:52:00.409" level="INFO">delete app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "udp:2015,udp:2016"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 16:52:00.497" level="DEBUG">deleting obj&lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0d7b00&gt;</msg>
+<msg timestamp="20200221 16:52:00.498" level="INFO">delete cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 16:53:47.949" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4290&gt;</msg>
+<msg timestamp="20200221 16:53:47.949" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 16:53:47.993" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4290&gt;, &lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0d7b00&gt;, &lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0b90&gt;, &lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b44d0&gt;]
+sending message</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time1 1582325461.096112
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time2 1582325520.408897</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">Thread Dict {'Thread': (1582325461.096112, 1582325520.408895, 59.312783002853394)}
+sending message</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time1 1582325520.497932
+message: "Autodeleting AppInst MEXPrometheusAppName"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time2 1582325627.948361</msg>
+<msg timestamp="20200221 16:53:47.997" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:51:01.096" endtime="20200221 16:53:47.998"></status>
+</kw>
+<doc>deploy app with 2 UDP ports
+verify both ports are accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 16:43:58.724" endtime="20200221 16:53:47.998" critical="yes">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</status>
+</test>
+<test id="s1-t3" name="User shall be able to access 1 TCP port on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 16:53:47.999" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 16:53:48.000" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:53:48.000" level="DEBUG">Test timeout 1 hour active. 3599.999 seconds left.</msg>
+<msg timestamp="20200221 16:53:48.000" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 16:53:48.027" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	</msg>
+<msg timestamp="20200221 16:53:48.046" level="TRACE">Return: key {
+  name: "flavor1582324265-412752"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 16:53:48.000" endtime="20200221 16:53:48.046"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:53:48.047" level="TRACE">Arguments: [ 'Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:53:48.047" level="DEBUG">Test timeout 1 hour active. 3599.952 seconds left.</msg>
+<msg timestamp="20200221 16:53:48.047" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:53:48.046" endtime="20200221 16:53:48.047"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+</arguments>
+<msg timestamp="20200221 16:53:48.048" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | ip_access='IpAccessDedicated' ]</msg>
+<msg timestamp="20200221 16:53:48.048" level="DEBUG">Test timeout 1 hour active. 3599.951 seconds left.</msg>
+<msg timestamp="20200221 16:53:48.048" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 16:59:10.231" level="INFO">show cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	}
+	</msg>
+<msg timestamp="20200221 16:59:10.248" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582324265-412752"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 1}
+sending message
+message: "Creating"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_COMPLETE"
+
+message: "Setting Up Root LB"
+
+message: "Waiting for Cluster to Initialize"
+
+message: "Waiting for Cluster to Initialize, Checking Master for Available Nodes"
+
+message: "Creating config map"
+
+message: "Ready"
+
+message: "Created ClusterInst successfully"
+
+ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+}</msg>
+<msg timestamp="20200221 16:59:10.248" level="TRACE">Return: key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+ip_access: IP_ACCESS_DEDICATED
+allocated_ip: "dynamic"
+liveness: LIVENESS_STATIC
+node_flavor: "m4.small"
+num_masters: 1
+num_nodes: 1
+deployment: "kubernetes"
+status {
+}
+master_node_flavor: "m4.small"
+</msg>
+<status status="PASS" starttime="20200221 16:53:48.047" endtime="20200221 16:59:10.249"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Done Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 16:59:10.249" level="TRACE">Arguments: [ 'Done Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 16:59:10.249" level="DEBUG">Test timeout 1 hour active. 3277.75 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.249" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:59:10.249" endtime="20200221 16:59:10.249"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.250" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'automationMunichCloudlet' | 'TDG' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:59:10.250" level="DEBUG">Test timeout 1 hour active. 3277.748 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.250" level="TRACE">Return: 'automationMunichCloudlet.TDG.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:59:10.250" level="INFO">${rootlb} = automationMunichCloudlet.TDG.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:59:10.250" endtime="20200221 16:59:10.251"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.251" level="TRACE">Arguments: [ 'automationMunichCloudlet.TDG.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:59:10.251" level="DEBUG">Test timeout 1 hour active. 3277.748 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.251" level="TRACE">Return: 'automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:59:10.251" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:59:10.251" endtime="20200221 16:59:10.251"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.251" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:59:10.252" level="DEBUG">Test timeout 1 hour active. 3277.747 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.252" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:59:10.252" level="INFO">${cluster_name} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:59:10.251" endtime="20200221 16:59:10.252"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.252" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1582324265-412752' | 'automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 16:59:10.252" level="DEBUG">Test timeout 1 hour active. 3277.746 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.252" level="TRACE">Return: 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 16:59:10.252" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 16:59:10.252" endtime="20200221 16:59:10.253"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200221 16:59:10.253" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200221 16:59:10.253" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 16:59:10.253" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:59:10.253" endtime="20200221 16:59:10.253"></status>
+</kw>
+<msg timestamp="20200221 16:59:10.253" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 16:53:47.999" endtime="20200221 16:59:10.253"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.254" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:59:10.254" level="DEBUG">Test timeout 1 hour active. 3277.745 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.255" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 16:59:10.255" level="INFO">${cluster_name_default} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:59:10.253" endtime="20200221 16:59:10.255"></status>
+</kw>
+<kw name="Get Default App Name" library="MexController">
+<assign>
+<var>${app_name_default}</var>
+</assign>
+<msg timestamp="20200221 16:59:10.255" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 16:59:10.256" level="DEBUG">Test timeout 1 hour active. 3277.743 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.256" level="TRACE">Return: 'app1582324265-412752'</msg>
+<msg timestamp="20200221 16:59:10.256" level="INFO">${app_name_default} = app1582324265-412752</msg>
+<status status="PASS" starttime="20200221 16:59:10.255" endtime="20200221 16:59:10.256"></status>
+</kw>
+<kw name="Create App" library="MexController">
+<arguments>
+<arg>image_path=${docker_image}</arg>
+<arg>access_ports=tcp:2015</arg>
+<arg>command=${docker_command}</arg>
+</arguments>
+<msg timestamp="20200221 16:59:10.256" level="TRACE">Arguments: [ image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0' | access_ports='tcp:2015' | command='./server_ping_threaded.py' ]</msg>
+<msg timestamp="20200221 16:59:10.256" level="DEBUG">Test timeout 1 hour active. 3277.742 seconds left.</msg>
+<msg timestamp="20200221 16:59:10.256" level="INFO">create app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "tcp:2015"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 16:59:11.254" level="INFO">show apps on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	</msg>
+<msg timestamp="20200221 16:59:11.286" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'tcp:2015', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:59:11.286" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 16:59:11.286" level="TRACE">Return: key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+image_type: IMAGE_TYPE_DOCKER
+access_ports: "tcp:2015"
+default_flavor {
+  name: "flavor1582324265-412752"
+}
+command: "./server_ping_threaded.py"
+deployment: "kubernetes"
+deployment_manifest: "apiVersion: v1\nkind: Service\nmetadata:\n  name: app1582324265-412752-tcp\n  labels:\n    run: app1582324265-412752\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp2015\n    protocol: TCP\n    port: 2015\n    targetPort: 2015\n  selector:\n    run: app1582324265-412752\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1582324265-412752-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1582324265-412752\n  template:\n    metadata:\n      labels:\n        run: app1582324265-412752\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1582324265-412752\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 2015\n          protocol: TCP\n        command:\n        - \"./server_ping_threaded.py\"\n"
+deployment_generator: "kubernetes-basic"
+access_type: ACCESS_TYPE_LOAD_BALANCER
+</msg>
+<status status="PASS" starttime="20200221 16:59:10.256" endtime="20200221 16:59:11.287"></status>
+</kw>
+<kw name="Create App Instance" library="MexController">
+<doc>Creates an app instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>cluster_instance_name=${cluster_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 16:59:11.287" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | cluster_instance_name='cluster1582324265-412752' ]</msg>
+<msg timestamp="20200221 16:59:11.288" level="DEBUG">Test timeout 1 hour active. 3276.711 seconds left.</msg>
+<msg timestamp="20200221 16:59:11.288" level="INFO">create app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 16:59:11.516" level="DEBUG">message: "Setting up registry secret"
+</msg>
+<msg timestamp="20200221 16:59:20.256" level="DEBUG">message: "Creating Kubernetes App"
+</msg>
+<msg timestamp="20200221 16:59:20.588" level="DEBUG">message: "Configuring Service: LB, Firewall Rules and DNS"
+</msg>
+<msg timestamp="20200221 17:01:34.278" level="DEBUG">message: "Ready"
+</msg>
+<msg timestamp="20200221 17:01:34.279" level="DEBUG">message: "Created AppInst successfully"
+</msg>
+<msg timestamp="20200221 17:01:34.279" level="INFO">show app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 17:01:34.298" level="DEBUG">show[key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-d9f65645f-5b244"
+}
+created_at {
+  seconds: 1582325951
+  nanos: 336630623
+}
+status {
+}
+]</msg>
+<msg timestamp="20200221 17:01:34.298" level="DEBUG">level0</msg>
+<msg timestamp="20200221 17:01:34.299" level="INFO">{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+}
+
+sending message</msg>
+<msg timestamp="20200221 17:01:34.299" level="WARN">thread_time1 1582325951.288001</msg>
+<msg timestamp="20200221 17:01:34.299" level="WARN">thread_time2 1582326094.2789278
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 17:01:34.303" level="TRACE">Return: key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-d9f65645f-5b244"
+}
+created_at {
+  seconds: 1582325951
+  nanos: 336630623
+}
+status {
+}
+</msg>
+<status status="PASS" starttime="20200221 16:59:11.287" endtime="20200221 17:01:34.304"></status>
+</kw>
+<kw name="Register Client" library="MexDme">
+<msg timestamp="20200221 17:01:34.304" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:01:34.305" level="DEBUG">Test timeout 1 hour active. 3133.694 seconds left.</msg>
+<msg timestamp="20200221 17:01:34.305" level="INFO">register client on eu-qa.dme.mobiledgex.net:50051. 
+	dev_name: "mobiledgex"
+	app_name: "app1582324265-412752"
+	app_vers: "1.0"
+	</msg>
+<msg timestamp="20200221 17:01:34.612" level="DEBUG">session_cookie=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTI0OTQsImlhdCI6MTU4MjMyNjA5NCwia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFpIWUFmdmdJTUdQT0hZbGN0V0d2WWp1ZSIsImtpZCI6Mn19.lyXqBCcu5pTKc44ZSohDvzUOlyukmFHMhe5GxBoYSOBwRhmI_zwZEPG_Lmoj4X0OoDcY2ZL6-_IVowAYGE90bQ</msg>
+<msg timestamp="20200221 17:01:34.612" level="DEBUG">token server uri=http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc</msg>
+<msg timestamp="20200221 17:01:34.613" level="TRACE">Return: status: RS_SUCCESS
+session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTI0OTQsImlhdCI6MTU4MjMyNjA5NCwia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFpIWUFmdmdJTUdQT0hZbGN0V0d2WWp1ZSIsImtpZCI6Mn19.lyXqBCcu5pTKc44ZSohDvzUOlyukmFHMhe5GxBoYSOBwRhmI_zwZEPG_Lmoj4X0OoDcY2ZL6-_IVowAYGE90bQ"
+token_server_uri: "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc"
+</msg>
+<status status="PASS" starttime="20200221 17:01:34.304" endtime="20200221 17:01:34.613"></status>
+</kw>
+<kw name="Find Cloudlet" library="MexDme">
+<arguments>
+<arg>latitude=${latitude}</arg>
+<arg>longitude=${longitude}</arg>
+</arguments>
+<assign>
+<var>${cloudlet}</var>
+</assign>
+<msg timestamp="20200221 17:01:34.613" level="TRACE">Arguments: [ latitude='32.7767' | longitude='-96.7970' ]</msg>
+<msg timestamp="20200221 17:01:34.614" level="DEBUG">Test timeout 1 hour active. 3133.385 seconds left.</msg>
+<msg timestamp="20200221 17:01:34.614" level="INFO">find cloudlet on eu-qa.dme.mobiledgex.net:50051. 
+	session_cookie: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODI0MTI0OTQsImlhdCI6MTU4MjMyNjA5NCwia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjYiLCJkZXZuYW1lIjoibW9iaWxlZGdleCIsImFwcG5hbWUiOiJhcHAxNTgyMzI0MjY1LTQxMjc1MiIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFZOFpIWUFmdmdJTUdQT0hZbGN0V0d2WWp1ZSIsImtpZCI6Mn19.lyXqBCcu5pTKc44ZSohDvzUOlyukmFHMhe5GxBoYSOBwRhmI_zwZEPG_Lmoj4X0OoDcY2ZL6-_IVowAYGE90bQ"
+	carrier_name: "TDG"
+	gps_location {
+	  latitude: 32.7767
+	  longitude: -96.797
+	}
+	</msg>
+<msg timestamp="20200221 17:01:34.634" level="TRACE">Return: status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+cloudlet_location {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+</msg>
+<msg timestamp="20200221 17:01:34.635" level="INFO">${cloudlet} = status: FIND_FOUND
+fqdn: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412...</msg>
+<status status="PASS" starttime="20200221 17:01:34.613" endtime="20200221 17:01:34.635"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>${cloudlet.ports[0].fqdn_prefix}</arg>
+<arg>${cloudlet.fqdn}</arg>
+</arguments>
+<assign>
+<var>${fqdn}</var>
+</assign>
+<msg timestamp="20200221 17:01:34.635" level="TRACE">Arguments: [ 'SEPARATOR=' | 'app1582324265-412752-tcp.' | 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 17:01:34.636" level="DEBUG">Test timeout 1 hour active. 3133.363 seconds left.</msg>
+<msg timestamp="20200221 17:01:34.636" level="TRACE">Return: 'app1582324265-412752-tcp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 17:01:34.636" level="INFO">${fqdn} = app1582324265-412752-tcp.cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 17:01:34.635" endtime="20200221 17:01:34.636"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Waiting for k8s pod to be running</arg>
+</arguments>
+<msg timestamp="20200221 17:01:34.636" level="TRACE">Arguments: [ 'Waiting for k8s pod to be running' ]</msg>
+<msg timestamp="20200221 17:01:34.637" level="DEBUG">Test timeout 1 hour active. 3133.362 seconds left.</msg>
+<msg timestamp="20200221 17:01:34.637" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:01:34.636" endtime="20200221 17:01:34.637"></status>
+</kw>
+<kw name="Wait For K8s Pod To Be Running" library="MexApp">
+<arguments>
+<arg>root_loadbalancer=${rootlb}</arg>
+<arg>cluster_name=${cluster_name_default}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>pod_name=${app_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 17:01:34.637" level="TRACE">Arguments: [ root_loadbalancer='cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net' | cluster_name='cluster1582324265-412752' | operator_name='TDG' | pod_name='app1582324265-412752' ]</msg>
+<msg timestamp="20200221 17:01:34.637" level="DEBUG">Test timeout 1 hour active. 3133.361 seconds left.</msg>
+<msg timestamp="20200221 17:01:34.638" level="DEBUG">init</msg>
+<msg timestamp="20200221 17:01:34.638" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 17:01:34.638" level="DEBUG">init</msg>
+<msg timestamp="20200221 17:01:34.638" level="INFO">host=cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net port=22 username=ubuntu password=None key_file=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex logfile=/tmp/sshLogfile.txt</msg>
+<msg timestamp="20200221 17:01:34.638" level="INFO">Not enough fields found in known_hosts in line 1 ('ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkOD3XAeG27o3DpNioaTf0w7akjrfvK8AnQKBGEoGA+nes8r4N4u9h0yNCiU/L4+d0rQwUnTJwMvYGuLzvWU6oRBmsc/sHxyVbJEDwlOL9ZuzHrwvbkTM2LyFiRukUeXUo6QSWtB7fInXXVgRCz41sD+kIoUEvx+IrKrn18OSC9iV6mcBtw6C2gmAWTwrFAXPzuKA3fTkbFxOnVUz1c+Uolbvi+b5qrGgFI3jrg1TV2DJSjn3Lf6X3GDE4H43GhMjDjayVN8zG2V3p3nX1h2at0zAwZcNgXhZmswqIarAQyDJxgco8Zy0/vZKtyOScFroYVB6s/kHEnh6CEjSmvp3l')</msg>
+<msg timestamp="20200221 17:01:34.648" level="INFO">connecting with keyfile=/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 17:01:34.648" level="WARN">rootlb</msg>
+<msg timestamp="20200221 17:01:34.649" level="FAIL">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</msg>
+<msg timestamp="20200221 17:01:34.649" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexApp/mex_app.py", line 136, in wait_for_k8s_pod_to_be_running
+    rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/rootlb.py", line 20, in __init__
+    super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/linux.py", line 32, in __init__
+    k = paramiko.RSAKey.from_private_key_file(key_file)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 206, in from_private_key_file
+    key = cls(filename=filename, password=password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 55, in __init__
+    self._from_private_key_file(filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/rsakey.py", line 175, in _from_private_key_file
+    data = self._read_private_key_file("RSA", filename, password)
+  File "/usr/local/lib/python3.7/site-packages/paramiko/pkey.py", line 278, in _read_private_key_file
+    with open(filename, "r") as f:</msg>
+<status status="FAIL" starttime="20200221 17:01:34.637" endtime="20200221 17:01:34.649"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 17:01:34.649" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:01:34.649" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 17:01:34.649" level="DEBUG">deleting obj&lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4320&gt;</msg>
+<msg timestamp="20200221 17:01:34.649" level="INFO">delete app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 17:02:38.399" level="DEBUG">deleting obj&lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4560&gt;</msg>
+<msg timestamp="20200221 17:02:38.399" level="INFO">delete app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "tcp:2015"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 17:02:38.427" level="DEBUG">deleting obj&lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4d40&gt;</msg>
+<msg timestamp="20200221 17:02:38.427" level="INFO">delete cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 17:03:16.764" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0e60&gt;</msg>
+<msg timestamp="20200221 17:03:16.765" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:03:17.017" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0e60&gt;, &lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4d40&gt;, &lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4560&gt;, &lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0b4320&gt;]
+sending message</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time1 1582326094.649385
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time2 1582326158.3988428</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">Thread Dict {'Thread': (1582326094.649385, 1582326158.398842, 63.749457120895386)}
+sending message</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time1 1582326158.427562
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time2 1582326196.764225</msg>
+<msg timestamp="20200221 17:03:17.019" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:01:34.649" endtime="20200221 17:03:17.019"></status>
+</kw>
+<doc>deploy app with 1 TCP port
+verify the port as accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 16:53:47.998" endtime="20200221 17:03:17.020" critical="yes">FileNotFoundError: [Errno 2] No such file or directory: '/Users/ashutoshbhatt/.mobiledgex/id_rsa_mex'</status>
+</test>
+<test id="s1-t4" name="User shall be able to access 2 TCP ports on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 17:03:17.023" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 17:03:17.024" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:03:17.024" level="DEBUG">Test timeout 1 hour active. 3599.997 seconds left.</msg>
+<msg timestamp="20200221 17:03:17.025" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:03:17.060" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	</msg>
+<msg timestamp="20200221 17:03:17.080" level="TRACE">Return: key {
+  name: "flavor1582324265-412752"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 17:03:17.024" endtime="20200221 17:03:17.080"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 17:03:17.081" level="TRACE">Arguments: [ 'Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 17:03:17.081" level="DEBUG">Test timeout 1 hour active. 3599.94 seconds left.</msg>
+<msg timestamp="20200221 17:03:17.082" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:03:17.081" endtime="20200221 17:03:17.082"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+</arguments>
+<msg timestamp="20200221 17:03:17.083" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | ip_access='IpAccessDedicated' ]</msg>
+<msg timestamp="20200221 17:03:17.084" level="DEBUG">Test timeout 1 hour active. 3599.937 seconds left.</msg>
+<msg timestamp="20200221 17:03:17.084" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 17:08:34.958" level="INFO">show cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	}
+	</msg>
+<msg timestamp="20200221 17:08:34.985" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582324265-412752"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 1}
+sending message
+message: "Creating"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_COMPLETE"
+
+message: "Setting Up Root LB"
+
+message: "Waiting for Cluster to Initialize"
+
+message: "Waiting for Cluster to Initialize, Checking Master for Available Nodes"
+
+message: "Creating config map"
+
+message: "Ready"
+
+message: "Created ClusterInst successfully"
+
+ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+}</msg>
+<msg timestamp="20200221 17:08:34.985" level="TRACE">Return: key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+ip_access: IP_ACCESS_DEDICATED
+allocated_ip: "dynamic"
+liveness: LIVENESS_STATIC
+node_flavor: "m4.small"
+num_masters: 1
+num_nodes: 1
+deployment: "kubernetes"
+status {
+}
+master_node_flavor: "m4.small"
+</msg>
+<status status="PASS" starttime="20200221 17:03:17.082" endtime="20200221 17:08:34.986"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Done Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 17:08:34.986" level="TRACE">Arguments: [ 'Done Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 17:08:34.986" level="DEBUG">Test timeout 1 hour active. 3282.035 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.986" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:08:34.986" endtime="20200221 17:08:34.986"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.987" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'automationMunichCloudlet' | 'TDG' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200221 17:08:34.987" level="DEBUG">Test timeout 1 hour active. 3282.034 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.987" level="TRACE">Return: 'automationMunichCloudlet.TDG.mobiledgex.net'</msg>
+<msg timestamp="20200221 17:08:34.987" level="INFO">${rootlb} = automationMunichCloudlet.TDG.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 17:08:34.987" endtime="20200221 17:08:34.987"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.988" level="TRACE">Arguments: [ 'automationMunichCloudlet.TDG.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 17:08:34.989" level="DEBUG">Test timeout 1 hour active. 3282.032 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.989" level="TRACE">Return: 'automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 17:08:34.990" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 17:08:34.988" endtime="20200221 17:08:34.990"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.990" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:08:34.990" level="DEBUG">Test timeout 1 hour active. 3282.031 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.990" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 17:08:34.990" level="INFO">${cluster_name} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 17:08:34.990" endtime="20200221 17:08:34.990"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.991" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1582324265-412752' | 'automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 17:08:34.991" level="DEBUG">Test timeout 1 hour active. 3282.03 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.992" level="TRACE">Return: 'cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 17:08:34.992" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 17:08:34.991" endtime="20200221 17:08:34.992"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200221 17:08:34.992" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200221 17:08:34.992" level="INFO">${rootlb} = cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 17:08:34.992" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:08:34.992" endtime="20200221 17:08:34.992"></status>
+</kw>
+<msg timestamp="20200221 17:08:34.993" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:03:17.023" endtime="20200221 17:08:34.993"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name_default}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.993" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:08:34.993" level="DEBUG">Test timeout 1 hour active. 3282.028 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.993" level="TRACE">Return: 'cluster1582324265-412752'</msg>
+<msg timestamp="20200221 17:08:34.993" level="INFO">${cluster_name_default} = cluster1582324265-412752</msg>
+<status status="PASS" starttime="20200221 17:08:34.993" endtime="20200221 17:08:34.993"></status>
+</kw>
+<kw name="Get Default App Name" library="MexController">
+<assign>
+<var>${app_name_default}</var>
+</assign>
+<msg timestamp="20200221 17:08:34.994" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:08:34.994" level="DEBUG">Test timeout 1 hour active. 3282.027 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.994" level="TRACE">Return: 'app1582324265-412752'</msg>
+<msg timestamp="20200221 17:08:34.994" level="INFO">${app_name_default} = app1582324265-412752</msg>
+<status status="PASS" starttime="20200221 17:08:34.993" endtime="20200221 17:08:34.994"></status>
+</kw>
+<kw name="Create App" library="MexController">
+<arguments>
+<arg>image_path=${docker_image}</arg>
+<arg>access_ports=tcp:2015,tcp:2016</arg>
+<arg>command=${docker_command}</arg>
+</arguments>
+<msg timestamp="20200221 17:08:34.994" level="TRACE">Arguments: [ image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0' | access_ports='tcp:2015,tcp:2016' | command='./server_ping_threaded.py' ]</msg>
+<msg timestamp="20200221 17:08:34.994" level="DEBUG">Test timeout 1 hour active. 3282.027 seconds left.</msg>
+<msg timestamp="20200221 17:08:34.995" level="INFO">create app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "tcp:2015,tcp:2016"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 17:08:35.954" level="INFO">show apps on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	</msg>
+<msg timestamp="20200221 17:08:35.974" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'tcp:2015,tcp:2016', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 17:08:35.974" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 17:08:35.974" level="TRACE">Return: key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+image_type: IMAGE_TYPE_DOCKER
+access_ports: "tcp:2015,tcp:2016"
+default_flavor {
+  name: "flavor1582324265-412752"
+}
+command: "./server_ping_threaded.py"
+deployment: "kubernetes"
+deployment_manifest: "apiVersion: v1\nkind: Service\nmetadata:\n  name: app1582324265-412752-tcp\n  labels:\n    run: app1582324265-412752\nspec:\n  type: LoadBalancer\n  ports:\n  - name: tcp2015\n    protocol: TCP\n    port: 2015\n    targetPort: 2015\n  - name: tcp2016\n    protocol: TCP\n    port: 2016\n    targetPort: 2016\n  selector:\n    run: app1582324265-412752\n---\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: app1582324265-412752-deployment\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      run: app1582324265-412752\n  template:\n    metadata:\n      labels:\n        run: app1582324265-412752\n    spec:\n      volumes:\n      imagePullSecrets:\n      - name: docker-qa.mobiledgex.net\n      containers:\n      - name: app1582324265-412752\n        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0\n        imagePullPolicy: Always\n        ports:\n        - containerPort: 2015\n          protocol: TCP\n        - containerPort: 2016\n          protocol: TCP\n        command:\n        - \"./server_ping_threaded.py\"\n"
+deployment_generator: "kubernetes-basic"
+access_type: ACCESS_TYPE_LOAD_BALANCER
+</msg>
+<status status="PASS" starttime="20200221 17:08:34.994" endtime="20200221 17:08:35.974"></status>
+</kw>
+<kw name="Create App Instance" library="MexController">
+<doc>Creates an app instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>cluster_instance_name=${cluster_name_default}</arg>
+</arguments>
+<msg timestamp="20200221 17:08:35.975" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | cluster_instance_name='cluster1582324265-412752' ]</msg>
+<msg timestamp="20200221 17:08:35.975" level="DEBUG">Test timeout 1 hour active. 3281.046 seconds left.</msg>
+<msg timestamp="20200221 17:08:35.975" level="INFO">create app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 17:08:36.224" level="DEBUG">message: "Creating"
+</msg>
+<msg timestamp="20200221 17:08:36.267" level="DEBUG">message: "Setting up registry secret"
+</msg>
+<msg timestamp="20200221 17:08:43.004" level="DEBUG">message: "Creating Kubernetes App"
+</msg>
+<msg timestamp="20200221 17:08:44.052" level="DEBUG">message: "Configuring Service: LB, Firewall Rules and DNS"
+</msg>
+<msg timestamp="20200221 17:09:59.435" level="DEBUG">message: "Ready"
+</msg>
+<msg timestamp="20200221 17:09:59.435" level="DEBUG">message: "Created AppInst successfully"
+</msg>
+<msg timestamp="20200221 17:09:59.435" level="INFO">show app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 17:09:59.541" level="DEBUG">show[key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2016
+  public_port: 2016
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-6d45979cf8-n6zv8"
+}
+created_at {
+  seconds: 1582326516
+  nanos: 23311766
+}
+status {
+}
+]</msg>
+<msg timestamp="20200221 17:09:59.541" level="DEBUG">level0</msg>
+<msg timestamp="20200221 17:09:59.541" level="INFO">{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+  version: "1.0"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+}
+
+sending message</msg>
+<msg timestamp="20200221 17:09:59.541" level="WARN">thread_time1 1582326515.975378</msg>
+<msg timestamp="20200221 17:09:59.541" level="WARN">thread_time2 1582326599.435113
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 17:09:59.542" level="TRACE">Return: key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+    version: "1.0"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+    developer: "mobiledgex"
+  }
+}
+cloudlet_loc {
+  latitude: 48.1351253
+  longitude: 11.5819806
+}
+uri: "cluster1582324265-412752.automationmunichcloudlet.tdg.mobiledgex.net"
+liveness: LIVENESS_STATIC
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2015
+  public_port: 2015
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+mapped_ports {
+  proto: L_PROTO_TCP
+  internal_port: 2016
+  public_port: 2016
+  fqdn_prefix: "app1582324265-412752-tcp."
+}
+flavor {
+  name: "flavor1582324265-412752"
+}
+state: READY
+runtime_info {
+  container_ids: "app1582324265-412752-deployment-6d45979cf8-n6zv8"
+}
+created_at {
+  seconds: 1582326516
+  nanos: 23311766
+}
+status {
+}
+</msg>
+<status status="PASS" starttime="20200221 17:08:35.975" endtime="20200221 17:09:59.542"></status>
+</kw>
+<kw name="Register Client" library="MexDme">
+<msg timestamp="20200221 17:09:59.542" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:09:59.542" level="DEBUG">Test timeout 1 hour active. 3197.478 seconds left.</msg>
+<msg timestamp="20200221 17:09:59.543" level="INFO">register client on eu-qa.dme.mobiledgex.net:50051. 
+	dev_name: "mobiledgex"
+	app_name: "app1582324265-412752"
+	app_vers: "1.0"
+	</msg>
+<msg timestamp="20200221 17:11:12.817" level="FAIL">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Operation timed out"
+	debug_error_string = "{"created":"@1582326672.813945000","description":"Error received from peer ipv4:157.55.80.203:50051","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Operation timed out","grpc_status":14}"
+&gt;</msg>
+<msg timestamp="20200221 17:11:12.817" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexDme/mex_dme.py", line 258, in register_client
+    resp = self.match_engine_stub.RegisterClient(request)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 565, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 467, in _end_unary_response_blocking
+    raise _Rendezvous(state, None, None, deadline)</msg>
+<status status="FAIL" starttime="20200221 17:09:59.542" endtime="20200221 17:11:12.817"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 17:11:12.817" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:11:12.818" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 17:11:12.818" level="DEBUG">deleting obj&lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0c2a70&gt;</msg>
+<msg timestamp="20200221 17:11:12.818" level="INFO">delete app instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  app_key {
+	    developer_key {
+	      name: "mobiledgex"
+	    }
+	    name: "app1582324265-412752"
+	    version: "1.0"
+	  }
+	  cluster_inst_key {
+	    cluster_key {
+	      name: "cluster1582324265-412752"
+	    }
+	    cloudlet_key {
+	      operator_key {
+	        name: "TDG"
+	      }
+	      name: "automationMunichCloudlet"
+	    }
+	    developer: "mobiledgex"
+	  }
+	}
+	cloudlet_loc {
+	}
+	</msg>
+<msg timestamp="20200221 17:12:09.828" level="DEBUG">deleting obj&lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a03b0&gt;</msg>
+<msg timestamp="20200221 17:12:09.828" level="INFO">delete app on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  developer_key {
+	    name: "mobiledgex"
+	  }
+	  name: "app1582324265-412752"
+	  version: "1.0"
+	}
+	image_path: "docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0"
+	image_type: IMAGE_TYPE_DOCKER
+	access_ports: "tcp:2015,tcp:2016"
+	default_flavor {
+	  name: "flavor1582324265-412752"
+	}
+	command: "./server_ping_threaded.py"
+	</msg>
+<msg timestamp="20200221 17:12:09.871" level="DEBUG">deleting obj&lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0320&gt;</msg>
+<msg timestamp="20200221 17:12:09.872" level="INFO">delete cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 17:12:52.389" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0c2c20&gt;</msg>
+<msg timestamp="20200221 17:12:52.389" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:12:52.812" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0c2c20&gt;, &lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a0320&gt;, &lt;function MexController.create_app.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0a03b0&gt;, &lt;function MexController.create_app_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10b0c2a70&gt;]
+sending message</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time1 1582326672.817711
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time2 1582326729.827693</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">Thread Dict {'Thread': (1582326672.8177102, 1582326729.827692, 57.009981870651245)}
+sending message</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time1 1582326729.8719769
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time2 1582326772.3889768</msg>
+<msg timestamp="20200221 17:12:52.812" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:11:12.817" endtime="20200221 17:12:52.813"></status>
+</kw>
+<doc>deploy app with 2 TCP ports
+verify both ports are accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 17:03:17.020" endtime="20200221 17:12:52.813" critical="yes">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Operation timed out"
+	debug_error_string = "{"created":"@1582326672.813945000","description":"Error received from peer ipv4:157.55.80.203:50051","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Operation timed out","grpc_status":14}"
+&gt;</status>
+</test>
+<test id="s1-t5" name="User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 17:12:52.814" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 17:12:52.815" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:12:52.815" level="DEBUG">Test timeout 1 hour active. 3599.999 seconds left.</msg>
+<msg timestamp="20200221 17:12:52.815" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:12:52.868" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	</msg>
+<msg timestamp="20200221 17:12:52.903" level="TRACE">Return: key {
+  name: "flavor1582324265-412752"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 17:12:52.814" endtime="20200221 17:12:52.903"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>Creating Cluster Instance</arg>
+</arguments>
+<msg timestamp="20200221 17:12:52.904" level="TRACE">Arguments: [ 'Creating Cluster Instance' ]</msg>
+<msg timestamp="20200221 17:12:52.904" level="DEBUG">Test timeout 1 hour active. 3599.91 seconds left.</msg>
+<msg timestamp="20200221 17:12:52.904" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 17:12:52.903" endtime="20200221 17:12:52.904"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+</arguments>
+<msg timestamp="20200221 17:12:52.905" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | ip_access='IpAccessDedicated' ]</msg>
+<msg timestamp="20200221 17:12:52.905" level="DEBUG">Test timeout 1 hour active. 3599.909 seconds left.</msg>
+<msg timestamp="20200221 17:12:52.905" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582324265-412752"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582324265-412752"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	num_masters: 1
+	num_nodes: 1
+	</msg>
+<msg timestamp="20200221 17:14:18.020" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582324265-412752"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582324265-412752"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 1}
+sending message
+message: "Creating"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582324265-412752-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+**WARN** XXXXXXXXXXXXXXXX</msg>
+<msg timestamp="20200221 17:14:18.025" level="FAIL">Error creating cluster instance:&lt;_Rendezvous object of in-flight RPC&gt;</msg>
+<msg timestamp="20200221 17:14:18.025" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1509, in create_cluster_instance
+    resp = sendMessage()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1487, in sendMessage
+    raise Exception('Error creating cluster instance:{}'.format(str(resp)))</msg>
+<status status="FAIL" starttime="20200221 17:12:52.904" endtime="20200221 17:14:18.025"></status>
+</kw>
+<status status="FAIL" starttime="20200221 17:12:52.814" endtime="20200221 17:14:18.025"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 17:14:18.026" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:14:18.026" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 17:14:18.026" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084b00&gt;</msg>
+<msg timestamp="20200221 17:14:18.026" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:14:18.048" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084b00&gt;]</msg>
+<msg timestamp="20200221 17:14:18.049" level="TRACE">Return: None</msg>
+<msg timestamp="20200221 17:14:18.049" level="FAIL">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.048130000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</msg>
+<msg timestamp="20200221 17:14:18.049" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 2458, in cleanup_provisioning
+    t = obj()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1782, in &lt;lambda&gt;
+    self.prov_stack.append(lambda:self.delete_flavor(flavor_instance))
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1831, in delete_flavor
+    resp = self.flavor_stub.DeleteFlavor(flavor_instance)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 565, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 467, in _end_unary_response_blocking
+    raise _Rendezvous(state, None, None, deadline)</msg>
+<status status="FAIL" starttime="20200221 17:14:18.025" endtime="20200221 17:14:18.050">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.048130000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</status>
+</kw>
+<doc>deploy app with 2 UDP and 2 TCP ports
+verify all ports are accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 17:12:52.813" endtime="20200221 17:14:18.050" critical="yes">Setup failed:
+Error creating cluster instance:&lt;_Rendezvous object of in-flight RPC&gt;
+
+Also teardown failed:
+_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.048130000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</status>
+</test>
+<test id="s1-t6" name="User shall be able to access HTTP port on openstack with IpAccessDedicated">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 17:14:18.051" level="TRACE">Arguments: [  ]</msg>
+<kw name="Create Flavor" library="MexController">
+<msg timestamp="20200221 17:14:18.052" level="TRACE">Arguments: [  ]</msg>
+<status status="FAIL" starttime="20200221 17:14:18.052" endtime="20200221 17:14:18.052"></status>
+</kw>
+<status status="FAIL" starttime="20200221 17:14:18.051" endtime="20200221 17:14:18.052"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 17:14:18.052" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 17:14:18.052" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 17:14:18.052" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084b00&gt;</msg>
+<msg timestamp="20200221 17:14:18.052" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582324265-412752"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 17:14:18.070" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10b084b00&gt;]</msg>
+<msg timestamp="20200221 17:14:18.071" level="TRACE">Return: None</msg>
+<msg timestamp="20200221 17:14:18.071" level="FAIL">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.070085000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</msg>
+<msg timestamp="20200221 17:14:18.071" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 2458, in cleanup_provisioning
+    t = obj()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1782, in &lt;lambda&gt;
+    self.prov_stack.append(lambda:self.delete_flavor(flavor_instance))
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexController.py", line 1831, in delete_flavor
+    resp = self.flavor_stub.DeleteFlavor(flavor_instance)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 565, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/usr/local/lib/python3.7/site-packages/grpc/_channel.py", line 467, in _end_unary_response_blocking
+    raise _Rendezvous(state, None, None, deadline)</msg>
+<status status="FAIL" starttime="20200221 17:14:18.052" endtime="20200221 17:14:18.071">_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.070085000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</status>
+</kw>
+<doc>deploy app with HTTP port
+verify the port as accessible via fqdn</doc>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 17:14:18.050" endtime="20200221 17:14:18.071" critical="yes">Setup failed:
+Execution terminated by signal
+
+Also teardown failed:
+_Rendezvous: &lt;_Rendezvous of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Flavor in use by ClusterInst"
+	debug_error_string = "{"created":"@1582326858.070085000","description":"Error received from peer ipv4:104.214.26.185:55001","file":"src/core/lib/surface/call.cc","file_line":1052,"grpc_message":"Flavor in use by ClusterInst","grpc_status":2}"
+&gt;</status>
+</test>
+<test id="s1-t7" name="User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDedicated">
+<doc>deploy app with 1 UDP and 1 TCP and 1 HTTP ports
+verify all ports are accessible via fqdn</doc>
+<tags>
+<tag>robot:exit</tag>
+</tags>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 17:14:18.072" endtime="20200221 17:14:18.072" critical="yes">Test execution stopped due to a fatal error.</status>
+</test>
+<test id="s1-t8" name="User shall be able to access UDP,TCP ports with port range on openstack with IpAccessDedicated">
+<doc>deploy app with port range
+verify all ports are accessible via fqdn</doc>
+<tags>
+<tag>robot:exit</tag>
+</tags>
+<timeout value="1 hour"></timeout>
+<status status="FAIL" starttime="20200221 17:14:18.073" endtime="20200221 17:14:18.073" critical="yes">Test execution stopped due to a fatal error.</status>
+</test>
+<doc>use FQDN to access app on openstack with IpAccessDedicated</doc>
+<status status="FAIL" starttime="20200221 16:31:04.892" endtime="20200221 17:14:18.074"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="8">Critical Tests</stat>
+<stat pass="0" fail="8">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="6" info="combined" combined="NOT robot:exit">NOT robot:exit</stat>
+<stat pass="0" fail="2">robot:exit</stat>
+</tag>
+<suite>
+<stat pass="0" fail="8" id="s1" name="fqdn udptcp port openstack IpAccessDedicated">fqdn udptcp port openstack IpAccessDedicated</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200221 16:31:05.129" level="WARN">INIT mobiledgex</msg>
+<msg timestamp="20200221 16:31:05.328" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200221 16:31:05.413" level="WARN">INIT mobiledgex</msg>
+<msg timestamp="20200221 16:39:18.823" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'udp:2015', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:39:18.823" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 16:40:23.380" level="WARN">thread_time1 1582324758.824692</msg>
+<msg timestamp="20200221 16:40:23.380" level="WARN">thread_time2 1582324823.3591821
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 16:40:23.381" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200221 16:40:23.617" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:40:23.628" level="WARN">rootlb</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time1 1582324823.6327171
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time2 1582324887.538344</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">Thread Dict {'Thread': (1582324823.6327171, 1582324887.538342, 63.905624866485596)}
+sending message</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time1 1582324887.572853
+message: "Autodeleting AppInst MEXPrometheusAppName"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 16:43:58.722" level="WARN">thread_time2 1582325038.67967</msg>
+<msg timestamp="20200221 16:49:17.187" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'udp:2015,udp:2016', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:49:17.187" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 16:51:00.882" level="WARN">thread_time1 1582325357.189305</msg>
+<msg timestamp="20200221 16:51:00.882" level="WARN">thread_time2 1582325460.855842
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 16:51:01.082" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 16:51:01.095" level="WARN">rootlb</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time1 1582325461.096112
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time2 1582325520.408897</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">Thread Dict {'Thread': (1582325461.096112, 1582325520.408895, 59.312783002853394)}
+sending message</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time1 1582325520.497932
+message: "Autodeleting AppInst MEXPrometheusAppName"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"
+
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 16:53:47.993" level="WARN">thread_time2 1582325627.948361</msg>
+<msg timestamp="20200221 16:59:11.286" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'tcp:2015', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 16:59:11.286" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 17:01:34.299" level="WARN">thread_time1 1582325951.288001</msg>
+<msg timestamp="20200221 17:01:34.299" level="WARN">thread_time2 1582326094.2789278
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 17:01:34.638" level="WARN">id_rsa_mex not found. using /Users/ashutoshbhatt/.mobiledgex/id_rsa_mex</msg>
+<msg timestamp="20200221 17:01:34.648" level="WARN">rootlb</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time1 1582326094.649385
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time2 1582326158.3988428</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">Thread Dict {'Thread': (1582326094.649385, 1582326158.398842, 63.749457120895386)}
+sending message</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time1 1582326158.427562
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 17:03:17.018" level="WARN">thread_time2 1582326196.764225</msg>
+<msg timestamp="20200221 17:08:35.974" level="WARN">imagetypedocker
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+, 'image_type': 1, 'image_path': 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0', 'default_flavor': name: "flavor1582324265-412752"
+, 'access_ports': 'tcp:2015,tcp:2016', 'command': './server_ping_threaded.py'}</msg>
+<msg timestamp="20200221 17:08:35.974" level="WARN">None
+{'key': developer_key {
+  name: "mobiledgex"
+}
+name: "app1582324265-412752"
+version: "1.0"
+}</msg>
+<msg timestamp="20200221 17:09:59.541" level="WARN">thread_time1 1582326515.975378</msg>
+<msg timestamp="20200221 17:09:59.541" level="WARN">thread_time2 1582326599.435113
+{'cloudlet_loc': , 'key': app_key {
+  developer_key {
+    name: "mobiledgex"
+  }
+  name: "app1582324265-412752"
+}
+cluster_inst_key {
+  cluster_key {
+    name: "cluster1582324265-412752"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+}
+}
+s key {
+  app_key {
+    developer_key {
+      name: "mobiledgex"
+    }
+    name: "app1582324265-412752"
+  }
+  cluster_inst_key {
+    cluster_key {
+      name: "cluster1582324265-412752"
+    }
+    cloudlet_key {
+      operator_key {
+        name: "TDG"
+      }
+      name: "automationMunichCloudlet"
+    }
+  }
+}
+cloudlet_loc {
+}</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time1 1582326672.817711
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted AppInst successfully"</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time2 1582326729.827693</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">Thread Dict {'Thread': (1582326672.8177102, 1582326729.827692, 57.009981870651245)}
+sending message</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time1 1582326729.8719769
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 17:12:52.812" level="WARN">thread_time2 1582326772.3889768</msg>
+</errors>
+</robot>

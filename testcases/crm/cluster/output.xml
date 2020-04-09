@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200221 15:27:46.262" rpa="false">
+<suite id="s1" name="createClusterInstance openstack IpAccessDedicated docker" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/crm/cluster/createClusterInstance_openstack_IpAccessDedicated_docker.robot">
+<test id="s1-t1" name="ClusterInst shall create with IpAccessDedicated/docker on openstack">
+<kw name="Setup" type="setup">
+<msg timestamp="20200221 15:27:46.797" level="TRACE">Arguments: [  ]</msg>
+<kw name="Get Time" library="BuiltIn">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${epoch_time}</var>
+</assign>
+<msg timestamp="20200221 15:27:46.798" level="TRACE">Arguments: [ 'epoch' ]</msg>
+<msg timestamp="20200221 15:27:46.798" level="DEBUG">Test timeout 1 hour active. 3599.998 seconds left.</msg>
+<msg timestamp="20200221 15:27:46.798" level="TRACE">Return: 1582320466</msg>
+<msg timestamp="20200221 15:27:46.798" level="INFO">${epoch_time} = 1582320466</msg>
+<status status="PASS" starttime="20200221 15:27:46.797" endtime="20200221 15:27:46.798"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+</arguments>
+<assign>
+<var>${cloudlet_lowercase}</var>
+</assign>
+<msg timestamp="20200221 15:27:46.799" level="TRACE">Arguments: [ 'automationMunichCloudlet' ]</msg>
+<msg timestamp="20200221 15:27:46.799" level="DEBUG">Test timeout 1 hour active. 3599.997 seconds left.</msg>
+<msg timestamp="20200221 15:27:46.799" level="TRACE">Return: 'automationmunichcloudlet'</msg>
+<msg timestamp="20200221 15:27:46.799" level="INFO">${cloudlet_lowercase} = automationmunichcloudlet</msg>
+<status status="PASS" starttime="20200221 15:27:46.798" endtime="20200221 15:27:46.799"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cloudlet_lowercase}</arg>
+</arguments>
+<msg timestamp="20200221 15:27:46.799" level="TRACE">Arguments: [ '${cloudlet_lowercase}' ]</msg>
+<msg timestamp="20200221 15:27:46.799" level="INFO">${cloudlet_lowercase} = automationmunichcloudlet</msg>
+<msg timestamp="20200221 15:27:46.799" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:27:46.799" endtime="20200221 15:27:46.799"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 15:27:46.800" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'automationMunichCloudlet' | 'TDG' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200221 15:27:46.800" level="DEBUG">Test timeout 1 hour active. 3599.996 seconds left.</msg>
+<msg timestamp="20200221 15:27:46.800" level="TRACE">Return: 'automationMunichCloudlet.TDG.mobiledgex.net'</msg>
+<msg timestamp="20200221 15:27:46.800" level="INFO">${rootlb} = automationMunichCloudlet.TDG.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 15:27:46.799" endtime="20200221 15:27:46.800"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200221 15:27:46.800" level="TRACE">Arguments: [ 'automationMunichCloudlet.TDG.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 15:27:46.800" level="DEBUG">Test timeout 1 hour active. 3599.996 seconds left.</msg>
+<msg timestamp="20200221 15:27:46.800" level="TRACE">Return: 'automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 15:27:46.801" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 15:27:46.800" endtime="20200221 15:27:46.801"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200221 15:27:46.801" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200221 15:27:46.801" level="INFO">${rootlb} = automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 15:27:46.801" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:27:46.801" endtime="20200221 15:27:46.801"></status>
+</kw>
+<msg timestamp="20200221 15:27:46.801" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:27:46.797" endtime="20200221 15:27:46.801"></status>
+</kw>
+<kw name="Create Flavor" library="MexController">
+<arguments>
+<arg>ram=1024</arg>
+<arg>vcpus=1</arg>
+<arg>disk=1</arg>
+</arguments>
+<msg timestamp="20200221 15:27:46.802" level="TRACE">Arguments: [ ram='1024' | vcpus='1' | disk='1' ]</msg>
+<msg timestamp="20200221 15:27:46.803" level="DEBUG">Test timeout 1 hour active. 3599.993 seconds left.</msg>
+<msg timestamp="20200221 15:27:46.805" level="INFO">create flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582320466-802579"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 15:27:46.980" level="INFO">show flavors on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582320466-802579"
+	}
+	</msg>
+<msg timestamp="20200221 15:27:46.999" level="TRACE">Return: key {
+  name: "flavor1582320466-802579"
+}
+ram: 1024
+vcpus: 1
+disk: 1
+</msg>
+<status status="PASS" starttime="20200221 15:27:46.801" endtime="20200221 15:27:46.999"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200221 15:27:47.000" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 15:27:47.000" level="DEBUG">Test timeout 1 hour active. 3599.796 seconds left.</msg>
+<msg timestamp="20200221 15:27:47.000" level="TRACE">Return: 'cluster1582320466-802579'</msg>
+<msg timestamp="20200221 15:27:47.000" level="INFO">${cluster_name} = cluster1582320466-802579</msg>
+<status status="PASS" starttime="20200221 15:27:47.000" endtime="20200221 15:27:47.000"></status>
+</kw>
+<kw name="Get Default Flavor Name" library="MexController">
+<assign>
+<var>${flavor_name}</var>
+</assign>
+<msg timestamp="20200221 15:27:47.001" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 15:27:47.001" level="DEBUG">Test timeout 1 hour active. 3599.795 seconds left.</msg>
+<msg timestamp="20200221 15:27:47.001" level="TRACE">Return: 'flavor1582320466-802579'</msg>
+<msg timestamp="20200221 15:27:47.001" level="INFO">${flavor_name} = flavor1582320466-802579</msg>
+<status status="PASS" starttime="20200221 15:27:47.001" endtime="20200221 15:27:47.001"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${clusterlb}</var>
+</assign>
+<msg timestamp="20200221 15:27:47.002" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1582320466-802579' | 'automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 15:27:47.002" level="DEBUG">Test timeout 1 hour active. 3599.794 seconds left.</msg>
+<msg timestamp="20200221 15:27:47.002" level="TRACE">Return: 'cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net'</msg>
+<msg timestamp="20200221 15:27:47.002" level="INFO">${clusterlb} = cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<status status="PASS" starttime="20200221 15:27:47.001" endtime="20200221 15:27:47.002"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>START creating cluster instance</arg>
+</arguments>
+<msg timestamp="20200221 15:27:47.002" level="TRACE">Arguments: [ 'START creating cluster instance' ]</msg>
+<msg timestamp="20200221 15:27:47.003" level="DEBUG">Test timeout 1 hour active. 3599.794 seconds left.</msg>
+<msg timestamp="20200221 15:27:47.003" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:27:47.002" endtime="20200221 15:27:47.003"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexController">
+<doc>Creates a cluster instance with the specified object, values or all default values</doc>
+<arguments>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_name=${operator_name_openstack}</arg>
+<arg>number_nodes=0</arg>
+<arg>number_masters=0</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+<arg>deployment=docker</arg>
+</arguments>
+<assign>
+<var>${cluster_inst}</var>
+</assign>
+<msg timestamp="20200221 15:27:47.003" level="TRACE">Arguments: [ cloudlet_name='automationMunichCloudlet' | operator_name='TDG' | number_nodes='0' | number_masters='0' | ip_access='IpAccessDedicated' | deployment='docker' ]</msg>
+<msg timestamp="20200221 15:27:47.003" level="DEBUG">Test timeout 1 hour active. 3599.793 seconds left.</msg>
+<msg timestamp="20200221 15:27:47.004" level="INFO">create cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582320466-802579"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582320466-802579"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	deployment: "docker"
+	</msg>
+<msg timestamp="20200221 15:29:22.346" level="INFO">show cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582320466-802579"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	}
+	</msg>
+<msg timestamp="20200221 15:29:22.360" level="INFO">ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582320466-802579"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+developer: "mobiledgex"
+, 'flavor': name: "flavor1582320466-802579"
+, 'liveness': 1, 'ip_access': 1, 'num_masters': 0, 'num_nodes': 0, 'deployment': 'docker'}
+sending message
+message: "Creating"
+
+message: "Creating Dedicated VM for Docker"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582320466-802579-mobiledgex"
+
+message: "Creating Heat Stack for automationmunichcloudlet-cluster1582320466-802579-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"
+
+message: "Setting Up Root LB"
+
+message: "Ready"
+
+message: "Created ClusterInst successfully"
+
+ClusterInst Dict {'key': cluster_key {
+  name: "cluster1582320466-802579"
+}
+cloudlet_key {
+  operator_key {
+    name: "TDG"
+  }
+  name: "automationMunichCloudlet"
+}
+}</msg>
+<msg timestamp="20200221 15:29:22.360" level="TRACE">Return: key {
+  cluster_key {
+    name: "cluster1582320466-802579"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {
+  name: "flavor1582320466-802579"
+}
+state: READY
+ip_access: IP_ACCESS_DEDICATED
+allocated_ip: "dynamic"
+liveness: LIVENESS_STATIC
+node_flavor: "m4.small"
+deployment: "docker"
+status {
+}
+</msg>
+<msg timestamp="20200221 15:29:22.361" level="INFO">${cluster_inst} = key {
+  cluster_key {
+    name: "cluster1582320466-802579"
+  }
+  cloudlet_key {
+    operator_key {
+      name: "TDG"
+    }
+    name: "automationMunichCloudlet"
+  }
+  developer: "mobiledgex"
+}
+flavor {...</msg>
+<status status="PASS" starttime="20200221 15:27:47.003" endtime="20200221 15:29:22.361"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>DONE creating cluster instance</arg>
+</arguments>
+<msg timestamp="20200221 15:29:22.361" level="TRACE">Arguments: [ 'DONE creating cluster instance' ]</msg>
+<msg timestamp="20200221 15:29:22.361" level="DEBUG">Test timeout 1 hour active. 3504.435 seconds left.</msg>
+<msg timestamp="20200221 15:29:22.361" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:22.361" endtime="20200221 15:29:22.362"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=-</arg>
+<arg>node</arg>
+<arg>.</arg>
+<arg>${cloudlet_lowercase}</arg>
+<arg>${cluster_name}</arg>
+</arguments>
+<assign>
+<var>${openstack_node_name}</var>
+</assign>
+<msg timestamp="20200221 15:29:22.362" level="TRACE">Arguments: [ 'SEPARATOR=-' | 'node' | '.' | 'automationmunichcloudlet' | 'cluster1582320466-802579' ]</msg>
+<msg timestamp="20200221 15:29:22.362" level="DEBUG">Test timeout 1 hour active. 3504.434 seconds left.</msg>
+<msg timestamp="20200221 15:29:22.362" level="TRACE">Return: 'node-.-automationmunichcloudlet-cluster1582320466-802579'</msg>
+<msg timestamp="20200221 15:29:22.362" level="INFO">${openstack_node_name} = node-.-automationmunichcloudlet-cluster1582320466-802579</msg>
+<status status="PASS" starttime="20200221 15:29:22.362" endtime="20200221 15:29:22.362"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=-</arg>
+<arg>master</arg>
+<arg>${cloudlet_lowercase}</arg>
+<arg>${cluster_name}</arg>
+</arguments>
+<assign>
+<var>${openstack_node_master}</var>
+</assign>
+<msg timestamp="20200221 15:29:22.363" level="TRACE">Arguments: [ 'SEPARATOR=-' | 'master' | 'automationmunichcloudlet' | 'cluster1582320466-802579' ]</msg>
+<msg timestamp="20200221 15:29:22.363" level="DEBUG">Test timeout 1 hour active. 3504.433 seconds left.</msg>
+<msg timestamp="20200221 15:29:22.363" level="TRACE">Return: 'master-automationmunichcloudlet-cluster1582320466-802579'</msg>
+<msg timestamp="20200221 15:29:22.363" level="INFO">${openstack_node_master} = master-automationmunichcloudlet-cluster1582320466-802579</msg>
+<status status="PASS" starttime="20200221 15:29:22.362" endtime="20200221 15:29:22.363"></status>
+</kw>
+<kw name="Get Server List" library="MexOpenstack">
+<arguments>
+<arg>name=${openstack_node_name}</arg>
+</arguments>
+<assign>
+<var>${server_info_node}</var>
+</assign>
+<msg timestamp="20200221 15:29:22.363" level="TRACE">Arguments: [ name='node-.-automationmunichcloudlet-cluster1582320466-802579' ]</msg>
+<msg timestamp="20200221 15:29:22.364" level="DEBUG">Test timeout 1 hour active. 3504.432 seconds left.</msg>
+<msg timestamp="20200221 15:29:22.364" level="DEBUG">getting openstack server list with cmd = source /Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/config/openrc_munich.mex;openstack server list -f json --name node-.-automationmunichcloudlet-cluster1582320466-802579</msg>
+<msg timestamp="20200221 15:29:27.083" level="DEBUG">[]
+</msg>
+<msg timestamp="20200221 15:29:27.083" level="TRACE">Return: []</msg>
+<msg timestamp="20200221 15:29:27.084" level="INFO">${server_info_node} = []</msg>
+<status status="PASS" starttime="20200221 15:29:22.363" endtime="20200221 15:29:27.084"></status>
+</kw>
+<kw name="Get Server List" library="MexOpenstack">
+<arguments>
+<arg>name=${openstack_node_master}</arg>
+</arguments>
+<assign>
+<var>${server_info_master}</var>
+</assign>
+<msg timestamp="20200221 15:29:27.085" level="TRACE">Arguments: [ name='master-automationmunichcloudlet-cluster1582320466-802579' ]</msg>
+<msg timestamp="20200221 15:29:27.085" level="DEBUG">Test timeout 1 hour active. 3499.711 seconds left.</msg>
+<msg timestamp="20200221 15:29:27.085" level="DEBUG">getting openstack server list with cmd = source /Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/config/openrc_munich.mex;openstack server list -f json --name master-automationmunichcloudlet-cluster1582320466-802579</msg>
+<msg timestamp="20200221 15:29:31.239" level="DEBUG">[]
+</msg>
+<msg timestamp="20200221 15:29:31.239" level="TRACE">Return: []</msg>
+<msg timestamp="20200221 15:29:31.240" level="INFO">${server_info_master} = []</msg>
+<status status="PASS" starttime="20200221 15:29:27.084" endtime="20200221 15:29:31.240"></status>
+</kw>
+<kw name="Get Server List" library="MexOpenstack">
+<arguments>
+<arg>name=${clusterlb}</arg>
+</arguments>
+<assign>
+<var>${server_info_lb}</var>
+</assign>
+<msg timestamp="20200221 15:29:31.242" level="TRACE">Arguments: [ name='cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net' ]</msg>
+<msg timestamp="20200221 15:29:31.242" level="DEBUG">Test timeout 1 hour active. 3495.554 seconds left.</msg>
+<msg timestamp="20200221 15:29:31.242" level="DEBUG">getting openstack server list with cmd = source /Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/config/openrc_munich.mex;openstack server list -f json --name cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net</msg>
+<msg timestamp="20200221 15:29:37.564" level="DEBUG">[
+  {
+    "ID": "e9a95a8e-1ada-4ba3-bee8-6ff37a70a0f1",
+    "Name": "cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net",
+    "Status": "ACTIVE",
+    "Networks": "external-network-shared=80.187.140.33",
+    "Image": "mobiledgex-v3.0.3",
+    "Flavor": "m4.small"
+  }
+]
+</msg>
+<msg timestamp="20200221 15:29:37.565" level="TRACE">Return: [{'Flavor': 'm4.small',
+  'ID': 'e9a95a8e-1ada-4ba3-bee8-6ff37a70a0f1',
+  'Image': 'mobiledgex-v3.0.3',
+  'Name': 'cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net',
+  'Networks': 'external-network-shared=80.187.140.33',
+  'Status': 'ACTIVE'}]</msg>
+<msg timestamp="20200221 15:29:37.565" level="INFO">${server_info_lb} = [{'ID': 'e9a95a8e-1ada-4ba3-bee8-6ff37a70a0f1', 'Name': 'cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net', 'Status': 'ACTIVE', 'Networks': 'external-network-shared=80.187.140.33',...</msg>
+<status status="PASS" starttime="20200221 15:29:31.241" endtime="20200221 15:29:37.565"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${server_info_lb[0]['Flavor']}</arg>
+<arg>m4.small</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.567" level="TRACE">Arguments: [ 'm4.small' | 'm4.small' ]</msg>
+<msg timestamp="20200221 15:29:37.567" level="DEBUG">Test timeout 1 hour active. 3489.229 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.567" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.567" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.566" endtime="20200221 15:29:37.567"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${server_info_lb[0]['Image']}</arg>
+<arg>mobiledgex</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.568" level="TRACE">Arguments: [ 'mobiledgex-v3.0.3' | 'mobiledgex' ]</msg>
+<msg timestamp="20200221 15:29:37.568" level="DEBUG">Test timeout 1 hour active. 3489.228 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.568" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.567" endtime="20200221 15:29:37.568"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${server_info_lb[0]['Status']}</arg>
+<arg>ACTIVE</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.569" level="TRACE">Arguments: [ 'ACTIVE' | 'ACTIVE' ]</msg>
+<msg timestamp="20200221 15:29:37.569" level="DEBUG">Test timeout 1 hour active. 3489.227 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.569" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.569" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.568" endtime="20200221 15:29:37.569"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${server_info_node}</arg>
+</arguments>
+<assign>
+<var>${num_servers_node}</var>
+</assign>
+<msg timestamp="20200221 15:29:37.569" level="TRACE">Arguments: [ [] ]</msg>
+<msg timestamp="20200221 15:29:37.569" level="DEBUG">Test timeout 1 hour active. 3489.227 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.570" level="INFO">Length is 0</msg>
+<msg timestamp="20200221 15:29:37.570" level="TRACE">Return: 0</msg>
+<msg timestamp="20200221 15:29:37.570" level="INFO">${num_servers_node} = 0</msg>
+<status status="PASS" starttime="20200221 15:29:37.569" endtime="20200221 15:29:37.570"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${server_info_master}</arg>
+</arguments>
+<assign>
+<var>${num_servers_master}</var>
+</assign>
+<msg timestamp="20200221 15:29:37.570" level="TRACE">Arguments: [ [] ]</msg>
+<msg timestamp="20200221 15:29:37.571" level="DEBUG">Test timeout 1 hour active. 3489.225 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.571" level="INFO">Length is 0</msg>
+<msg timestamp="20200221 15:29:37.571" level="TRACE">Return: 0</msg>
+<msg timestamp="20200221 15:29:37.571" level="INFO">${num_servers_master} = 0</msg>
+<status status="PASS" starttime="20200221 15:29:37.570" endtime="20200221 15:29:37.571"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${server_info_lb}</arg>
+</arguments>
+<assign>
+<var>${num_servers_lb}</var>
+</assign>
+<msg timestamp="20200221 15:29:37.572" level="TRACE">Arguments: [ [{'Flavor': 'm4.small',
+  'ID': 'e9a95a8e-1ada-4ba3-bee8-6ff37a70a0f1',
+  'Image': 'mobiledgex-v3.0.3',
+  'Name': 'cluster1582320466-802579.automationmunichcloudlet.tdg.mobiledgex.net',
+  'Networks': 'external-network-shared=80.187.140.33',
+  'Status': 'ACTIVE'}] ]</msg>
+<msg timestamp="20200221 15:29:37.572" level="DEBUG">Test timeout 1 hour active. 3489.224 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.572" level="INFO">Length is 1</msg>
+<msg timestamp="20200221 15:29:37.572" level="TRACE">Return: 1</msg>
+<msg timestamp="20200221 15:29:37.572" level="INFO">${num_servers_lb} = 1</msg>
+<status status="PASS" starttime="20200221 15:29:37.571" endtime="20200221 15:29:37.572"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${num_servers_node}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.573" level="TRACE">Arguments: [ 0 | '0' ]</msg>
+<msg timestamp="20200221 15:29:37.573" level="DEBUG">Test timeout 1 hour active. 3489.223 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.573" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.573" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.573" endtime="20200221 15:29:37.573"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${num_servers_master}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.574" level="TRACE">Arguments: [ 0 | '0' ]</msg>
+<msg timestamp="20200221 15:29:37.574" level="DEBUG">Test timeout 1 hour active. 3489.222 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.574" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.574" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.573" endtime="20200221 15:29:37.574"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${num_servers_lb}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.575" level="TRACE">Arguments: [ 1 | '1' ]</msg>
+<msg timestamp="20200221 15:29:37.575" level="DEBUG">Test timeout 1 hour active. 3489.221 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.575" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.575" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.574" endtime="20200221 15:29:37.575"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cluster_inst.flavor.name}</arg>
+<arg>${flavor_name}</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.576" level="TRACE">Arguments: [ 'flavor1582320466-802579' | 'flavor1582320466-802579' ]</msg>
+<msg timestamp="20200221 15:29:37.576" level="DEBUG">Test timeout 1 hour active. 3489.22 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.576" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.576" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.575" endtime="20200221 15:29:37.576"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cluster_inst.node_flavor}</arg>
+<arg>m4.small</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.577" level="TRACE">Arguments: [ 'm4.small' | 'm4.small' ]</msg>
+<msg timestamp="20200221 15:29:37.577" level="DEBUG">Test timeout 1 hour active. 3489.219 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.577" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.577" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.576" endtime="20200221 15:29:37.577"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cluster_inst.num_masters}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.578" level="TRACE">Arguments: [ 0 | '0' ]</msg>
+<msg timestamp="20200221 15:29:37.578" level="DEBUG">Test timeout 1 hour active. 3489.218 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.578" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.578" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.577" endtime="20200221 15:29:37.578"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cluster_inst.num_nodes}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.579" level="TRACE">Arguments: [ 0 | '0' ]</msg>
+<msg timestamp="20200221 15:29:37.579" level="DEBUG">Test timeout 1 hour active. 3489.217 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.579" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.579" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.578" endtime="20200221 15:29:37.579"></status>
+</kw>
+<kw name="Should Be Equal As Numbers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<arguments>
+<arg>${cluster_inst.ip_access}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.579" level="TRACE">Arguments: [ 1 | '1' ]</msg>
+<msg timestamp="20200221 15:29:37.580" level="DEBUG">Test timeout 1 hour active. 3489.217 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.580" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.580" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.579" endtime="20200221 15:29:37.580"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${cluster_inst.deployment}</arg>
+<arg>docker</arg>
+</arguments>
+<msg timestamp="20200221 15:29:37.580" level="TRACE">Arguments: [ 'docker' | 'docker' ]</msg>
+<msg timestamp="20200221 15:29:37.580" level="DEBUG">Test timeout 1 hour active. 3489.216 seconds left.</msg>
+<msg timestamp="20200221 15:29:37.581" level="DEBUG">Argument types are:
+&lt;type 'unicode'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg timestamp="20200221 15:29:37.581" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.580" endtime="20200221 15:29:37.581"></status>
+</kw>
+<kw name="Cleanup Provisioning" library="MexController" type="teardown">
+<msg timestamp="20200221 15:29:37.582" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200221 15:29:37.582" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200221 15:29:37.582" level="DEBUG">deleting obj&lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10c9b59e0&gt;</msg>
+<msg timestamp="20200221 15:29:37.582" level="INFO">delete cluster instance on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  cluster_key {
+	    name: "cluster1582320466-802579"
+	  }
+	  cloudlet_key {
+	    operator_key {
+	      name: "TDG"
+	    }
+	    name: "automationMunichCloudlet"
+	  }
+	  developer: "mobiledgex"
+	}
+	flavor {
+	  name: "flavor1582320466-802579"
+	}
+	ip_access: IP_ACCESS_DEDICATED
+	liveness: LIVENESS_STATIC
+	deployment: "docker"
+	</msg>
+<msg timestamp="20200221 15:30:18.184" level="DEBUG">deleting obj&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10e299f80&gt;</msg>
+<msg timestamp="20200221 15:30:18.184" level="INFO">delete flavor on mexplat-qa-eu.ctrl.mobiledgex.net:55001. 
+	key {
+	  name: "flavor1582320466-802579"
+	}
+	ram: 1024
+	vcpus: 1
+	disk: 1
+	</msg>
+<msg timestamp="20200221 15:30:18.218" level="INFO">[&lt;function MexController.create_flavor.&lt;locals&gt;.&lt;lambda&gt; at 0x10e299f80&gt;, &lt;function MexController.create_cluster_instance.&lt;locals&gt;.sendMessage.&lt;locals&gt;.&lt;lambda&gt; at 0x10c9b59e0&gt;]
+sending message</msg>
+<msg timestamp="20200221 15:30:18.218" level="WARN">thread_time1 1582320577.582452
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 15:30:18.218" level="WARN">thread_time2 1582320618.183842</msg>
+<msg timestamp="20200221 15:30:18.218" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200221 15:29:37.582" endtime="20200221 15:30:18.219"></status>
+</kw>
+<doc>create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
+verify it creates lb only</doc>
+<timeout value="1 hour"></timeout>
+<status status="PASS" starttime="20200221 15:27:46.796" endtime="20200221 15:30:18.219" critical="yes"></status>
+</test>
+<doc>Cluster size for openstack with IpAccessDedicated and Docker</doc>
+<status status="PASS" starttime="20200221 15:27:46.265" endtime="20200221 15:30:18.219"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0">Critical Tests</stat>
+<stat pass="1" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" id="s1" name="createClusterInstance openstack IpAccessDedicated docker">createClusterInstance openstack IpAccessDedicated docker</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200221 15:27:46.587" level="WARN">INIT mobiledgex</msg>
+<msg timestamp="20200221 15:27:46.803" level="WARN">INIT mobiledgex</msg>
+<msg timestamp="20200221 15:30:18.218" level="WARN">thread_time1 1582320577.582452
+message: "Deleting"
+
+message: "NotPresent"
+
+message: "Deleted ClusterInst successfully"</msg>
+<msg timestamp="20200221 15:30:18.218" level="WARN">thread_time2 1582320618.183842</msg>
+</errors>
+</robot>
