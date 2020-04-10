@@ -146,6 +146,30 @@ ClusterInst shall create with K8s and sharedvolumesize on openstack
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_starttime}
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_endtime}
 
+ClusterInst shall create with IpAccessDedicated/docker and GPU on openstack
+   [Documentation]
+   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
+   ...  verify it creates vm with gpu flavor
+   [Tags]  cluster  docker  dedicated  gpu  create
+
+   Log to Console  \nCreating docker dedicated IP cluster instance
+
+   ${cluster_name_dockerdedicatedgpu_starttime}=  Get Time  epoch
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedgpu}   cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_gpu}
+   ${cluster_name_dockerdedicatedgpu_endtime}=  Get Time  epoch
+
+   Log to Console  \nCreating cluster instance done
+
+   # verify master and node have gpu_flavor
+   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_gpu}
+   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
+   Should Be Equal             ${cluster_inst['data']['deployment']}      docker
+   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
+   Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_gpu}
+
+   Set Global Variable  ${cluster_name_dockerdedicatedgpu_starttime}
+   Set Global Variable  ${cluster_name_dockerdedicatedgpu_endtime}
+
 *** Keywords ***
 Setup
    ${flavor_name}=   Get Default Flavor Name
