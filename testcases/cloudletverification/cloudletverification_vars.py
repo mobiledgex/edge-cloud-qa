@@ -23,6 +23,7 @@ operator_name_openstack = 'GDDT'
 physical_name_openstack = 'paradise'
 cloudlet_latitude = '45.5017'
 cloudlet_longitude = '-73.5673'
+cloudlet_security_group = 'cloudletverification'
 
 # docker image used for docker/k8s deployments
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
@@ -55,10 +56,12 @@ flavor_name_small = flavor_name + 'small'
 flavor_name_medium = flavor_name + 'medium'
 flavor_name_large = flavor_name + 'large'
 flavor_name_vm = flavor_name + 'vm'
+flavor_name_gpu = flavor_name + 'gpu'
 master_flavor_name = 'm4.small'
 node_flavor_name_small = 'm4.small'
 node_flavor_name_medium = 'm4.medium'
 node_flavor_name_large = 'm4.large'
+node_flavor_name_gpu = 'm4.large-gpu'
 
 app_name_dockerdedicated = app_name + 'dockerdedicated'
 app_name_dockershared = app_name + 'dockershared'
@@ -70,6 +73,8 @@ app_name_vm_cloudconfig = app_name + 'vmcloudconfig'
 
 cluster_name_dockerdedicated = cluster_name + 'dockerdedicated'
 cluster_name_dockershared = cluster_name + 'dockershared'
+cluster_name_dockerdedicatedgpu = cluster_name + 'dockerdedicatedgpu'
+cluster_name_dockersharedgpu = cluster_name + 'dockersharedgpu'
 cluster_name_k8sdedicated = cluster_name + 'k8sdedicated'
 cluster_name_k8sshared = cluster_name + 'k8sshared'
 cluster_name_k8ssharedvolumesize = cluster_name + 'k8ssharedvolumesize'
@@ -83,6 +88,8 @@ metrics_wait_vm = 1200
 # these are used to calculated how long the cluster has been up. primarily for metrics tests
 cluster_name_dockerdedicated_starttime = 0
 cluster_name_dockershared_starttime = 0
+cluster_name_dockerdedicatedgpu_starttime = 0
+cluster_name_dockersharedgpu_starttime = 0
 cluster_name_k8sdedicated_starttime = 0
 cluster_name_k8sshared_starttime = 0
 cluster_name_k8ssharedvolumesize_starttime = 0
@@ -90,6 +97,8 @@ vm_starttime = 0
 vmcloudconfig_starttime = 0
 cluster_name_dockerdedicated_endtime = 0
 cluster_name_dockershared_endtime = 0
+cluster_name_dockerdedicatedgpu_endtime = 0
+cluster_name_dockersharedgpu_endtime = 0
 cluster_name_k8sdedicated_endtime = 0
 cluster_name_k8sshared_endtime = 0
 cluster_name_k8ssharedvolumesize_endtime = 0
