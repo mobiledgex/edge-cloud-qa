@@ -1,54 +1,98 @@
+#####################################3
+# This file defines variables used by the testcases.
+# The file is in Python.
+# It should be passed into the robot command when running the testcases by using the '-V' option
+# example: robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --outputdir=cloudletverification/logs -i cloudlet  cloudletverification
+#
+# Individual parameters can be overriden with the '-v' option
+# example: robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py -v cloudlet_name_openstack:mycloudlet --outputdir=cloudletverification/logs -i cloudlet  cloudletverification
+################################################3
 import time
 
 timestamp = str(time.time()).replace('.','')
 
+# this is the time to wait before aborting the testcase. This avoids testcases hanging or wasting time
 test_timeout = '32 min'
 
+# this is the controller region used to run the tests
 region = 'EU'
 
+# cloudlet variables
+cloudlet_name_openstack = 'verificationCloudlet'
+operator_name_openstack = 'GDDT'
+physical_name_openstack = 'paradise'
+cloudlet_latitude = '45.5017'
+cloudlet_longitude = '-73.5673'
+
+# docker image used for docker/k8s deployments
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
+
+# QCOW image used for VM deployments which has the test app running on it
+qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-mobiledgex/server_ping_threaded_centos7_http.qcow2#md5:c7f7e312dd18b1c9ea586650721c75ba'
+# QCOW image used for VM deployments which does NOT have the test app running on it. This is used for cloudconfig tests with starts the app via a manifest file
+qcow_centos_image_notrunning = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-mobiledgex/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
+
+# cloudconfig to use for VM deploymenst
+vm_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
+
+# http page to request when testing http app inst acces
+http_page = 'automation.html'
+
+# token server to verify for DME requests
+token_server_url = 'http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc'
+
+# GPU resource name used for configuring the cloudlets for GPUs
+gpu_resource_name = 'mygpuresrouce'
+
+##############################################
+# these define the names used for flavors/apps/clusters
+##############################################3
+flavor_name = 'flavor' + timestamp
 app_name = 'app' + timestamp
 cluster_name = 'cluster' + timestamp
+
+flavor_name_small = flavor_name + 'small'
+flavor_name_medium = flavor_name + 'medium'
+flavor_name_large = flavor_name + 'large'
+flavor_name_vm = flavor_name + 'vm'
+master_flavor_name = 'm4.small'
+node_flavor_name_small = 'm4.small'
+node_flavor_name_medium = 'm4.medium'
+node_flavor_name_large = 'm4.large'
 
 app_name_dockerdedicated = app_name + 'dockerdedicated'
 app_name_dockershared = app_name + 'dockershared'
 app_name_k8sdedicated = app_name + 'k8sdedicated'
 app_name_k8sshared = app_name + 'k8sshared'
+app_name_k8ssharedvolumesize = app_name + 'k8ssharedvolumesize'
 app_name_vm = app_name + 'vm'
+app_name_vm_cloudconfig = app_name + 'vmcloudconfig'
 
 cluster_name_dockerdedicated = cluster_name + 'dockerdedicated'
 cluster_name_dockershared = cluster_name + 'dockershared'
 cluster_name_k8sdedicated = cluster_name + 'k8sdedicated'
 cluster_name_k8sshared = cluster_name + 'k8sshared'
+cluster_name_k8ssharedvolumesize = cluster_name + 'k8ssharedvolumesize'
+cluster_name_vm = 'autoclustervm'
+
+# metrics wait time
+metrics_wait_docker = 1200
+metrics_wait_k8s = 1200
+metrics_wait_vm = 1200
 
 # these are used to calculated how long the cluster has been up. primarily for metrics tests
 cluster_name_dockerdedicated_starttime = 0
 cluster_name_dockershared_starttime = 0
 cluster_name_k8sdedicated_starttime = 0
 cluster_name_k8sshared_starttime = 0
+cluster_name_k8ssharedvolumesize_starttime = 0
+vm_starttime = 0
+vmcloudconfig_starttime = 0
 cluster_name_dockerdedicated_endtime = 0
 cluster_name_dockershared_endtime = 0
 cluster_name_k8sdedicated_endtime = 0
 cluster_name_k8sshared_endtime = 0
-
-cloudlet_name_openstack = 'verificationCloudlet'
-operator_name_openstack = 'GDDT'
-physical_name_openstack = 'paradise'
-
-cloudlet_name_openstack_metrics = 'montreal-pitfield'
-
-cloudlet_latitude = '45.5017'
-cloudlet_longitude = '-73.5673'
-
-cluster_name = 'cluster' + timestamp
-
-docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
-
-qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-mobiledgex/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
-#qcow_centos_image_notrunning = 'https://artifactory.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
-#qcow_windows_image = 'https://artifactory.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_windows2012.qcow2#md5:42171406daca80298098ac314200634a'
-#qcow_centos_openstack_image = 'server_ping_threaded_centos7'
-
-http_page = 'automation.html'
-
-token_server_url = 'http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc'
+cluster_name_k8ssharedvolumesize_endtime = 0
+vm_endtime = 0
+vmcloudconfig_endtime = 0
 
