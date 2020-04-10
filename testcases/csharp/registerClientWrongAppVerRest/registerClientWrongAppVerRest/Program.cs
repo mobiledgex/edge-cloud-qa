@@ -11,8 +11,8 @@ namespace RestSample
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
-        //static string devName = "EmptyMatchEngineApp";
-        static string devName = "mobiledgex";
+        //static string orgName = "EmptyMatchEngineApp";
+        static string orgName = "MobiledgeX";
         static string appName = "automation_api_app";
         static string appVers = "3.0";
         static string developerAuthToken = "";
@@ -43,7 +43,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -102,7 +102,7 @@ namespace RestSample
                 bool expParse = false;
                 bool iatParse = false;
                 string peer;
-                string dev;
+                string org;
                 string app;
                 string appver;
 
@@ -152,18 +152,18 @@ namespace RestSample
                                 Environment.Exit(1);
                             }
                         }
-                        if (word.Substring(1, 7) == "devname")
+                        if (word.Substring(1, 7) == "orgname")
                         {
-                            dev = word.Substring(11);
-                            dev = dev.Substring(0, dev.Length - 1);
-                            if (dev != devName)
+                            org = word.Substring(11);
+                            org = org.Substring(0, org.Length - 1);
+                            if (org != orgName)
                             {
-                                Console.WriteLine("Devname Didn't Match!  " + dev);
+                                Console.WriteLine("Orgname Didn't Match!  " + org);
                                 Environment.Exit(1);
                             }
                             else
                             {
-                                Console.WriteLine("Devname Matched!  " + dev);
+                                Console.WriteLine("Orgname Matched!  " + org);
                             }
                         }
                         if (word.Substring(1, 7) == "appname")
