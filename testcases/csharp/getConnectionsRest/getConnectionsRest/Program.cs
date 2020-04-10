@@ -45,7 +45,7 @@ namespace RestSample
     {
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "TDG";
-        static string devName = "mobiledgex";
+        static string orgName = "MobiledgeX";
         static string appName = "automation_api_app";
         static string appVers = "6.0";
         static string host = "eu-qa.dme.mobiledgex.net";
@@ -137,7 +137,7 @@ namespace RestSample
                 // location in an Unity application should be from an application context
                 // LocationService.
                 var locTask = Util.GetLocationFromDevice();
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType(), tags);
+                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType(), tags);
                 // APIs depend on Register client to complete successfully:
                 RegisterClientReply registerClientReply;
                 try
@@ -171,7 +171,7 @@ namespace RestSample
 
                 // Independent requests:
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(carrierName, loc, cellID, tags);
-                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, devName, appName, appVers, loc, cellID, tags);
+                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, loc, orgName, appName, appVers, cellID, tags);
                 var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
 
                 

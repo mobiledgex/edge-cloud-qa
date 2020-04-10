@@ -13,7 +13,7 @@ namespace RestSample
         static string carrierName = "tmus";
         //static string appName = "EmptyMatchEngineApp";
         //static string devName = "EmptyMatchEngineApp";
-        static string devName = "mobiledgex_leon";
+        static string orgName = "MobiledgeX_leon";
         static string appName = "automation_api_auth_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
@@ -45,7 +45,7 @@ namespace RestSample
                 var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
-                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname mobiledgex -privkeyfile " + pubkey;
+                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
                 System.Diagnostics.Process genauthtoken;
                 genauthtoken = System.Diagnostics.Process.Start(psi);
@@ -65,7 +65,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -125,7 +125,7 @@ namespace RestSample
                 bool expParse = false;
                 bool iatParse = false;
                 string peer;
-                string dev;
+                string org;
                 string app;
                 string appver;
 
@@ -175,18 +175,18 @@ namespace RestSample
                                 Environment.Exit(1);
                             }
                         }
-                        if (word.Substring(1, 7) == "devname")
+                        if (word.Substring(1, 7) == "orgname")
                         {
-                            dev = word.Substring(11);
-                            dev = dev.Substring(0, dev.Length - 1);
-                            if (dev != devName)
+                            org = word.Substring(11);
+                            org = org.Substring(0, org.Length - 1);
+                            if (org != orgName)
                             {
-                                Console.WriteLine("Devname Didn't Match!  " + dev);
+                                Console.WriteLine("Orgname Didn't Match!  " + org);
                                 Environment.Exit(1);
                             }
                             else
                             {
-                                Console.WriteLine("Devname Matched!  " + dev);
+                                Console.WriteLine("Orgname Matched!  " + org);
                             }
                         }
                         if (word.Substring(1, 7) == "appname")
