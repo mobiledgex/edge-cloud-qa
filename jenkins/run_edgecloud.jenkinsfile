@@ -11,6 +11,7 @@ def jobListPerformance=["runPerformance"]
 
 builds1 = [:]
 builds2 = [:]
+builds3 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
