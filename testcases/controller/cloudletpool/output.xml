@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200123 14:55:16.835" rpa="false">
+<suite id="s1" name="createCloudletPool fail" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/controller/cloudletpool/createCloudletPool_fail.robot">
+<kw name="Setup" type="setup">
+<msg timestamp="20200123 14:55:17.353" level="TRACE">Arguments: [  ]</msg>
+<kw name="Get Supertoken" library="MexMasterController">
+<assign>
+<var>${token}</var>
+</assign>
+<msg timestamp="20200123 14:55:17.353" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200123 14:55:17.354" level="TRACE">Return: 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'</msg>
+<msg timestamp="20200123 14:55:17.354" level="INFO">${token} = eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCeP...</msg>
+<status status="PASS" starttime="20200123 14:55:17.353" endtime="20200123 14:55:17.354"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${token}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.354" level="TRACE">Arguments: [ '${token}' ]</msg>
+<msg timestamp="20200123 14:55:17.354" level="INFO">${token} = eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCeP...</msg>
+<msg timestamp="20200123 14:55:17.354" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.354" endtime="20200123 14:55:17.354"></status>
+</kw>
+<kw name="Get Default Cloudlet Pool Name" library="MexMasterController">
+<assign>
+<var>${pool_name}</var>
+</assign>
+<msg timestamp="20200123 14:55:17.354" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200123 14:55:17.354" level="TRACE">Return: 'cloudletpool1579812917-1161048'</msg>
+<msg timestamp="20200123 14:55:17.355" level="INFO">${pool_name} = cloudletpool1579812917-1161048</msg>
+<status status="PASS" starttime="20200123 14:55:17.354" endtime="20200123 14:55:17.355"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${pool_name}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.355" level="TRACE">Arguments: [ '${pool_name}' ]</msg>
+<msg timestamp="20200123 14:55:17.355" level="INFO">${pool_name} = cloudletpool1579812917-1161048</msg>
+<msg timestamp="20200123 14:55:17.355" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.355" endtime="20200123 14:55:17.355"></status>
+</kw>
+<msg timestamp="20200123 14:55:17.355" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.351" endtime="20200123 14:55:17.355"></status>
+</kw>
+<test id="s1-t1" name="CreateCloudletPool - create without region shall return error">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>token=${token}</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:17.356" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'token=${token}' | 'use_defaults=False' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>token=${token}</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.357" level="TRACE">Arguments: [ token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | use_defaults=False ]</msg>
+<msg timestamp="20200123 14:55:17.357" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {}}</msg>
+<msg timestamp="20200123 14:55:17.357" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {}}</msg>
+<msg timestamp="20200123 14:55:17.357" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {}} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:17.359" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:17.514" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 33</msg>
+<msg timestamp="20200123 14:55:17.515" level="DEBUG">resp={"message":"no region specified"}</msg>
+<msg timestamp="20200123 14:55:17.515" level="DEBUG">content={"message":"no region specified"}</msg>
+<msg timestamp="20200123 14:55:17.515" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"no region specified"}'), &lt;traceback object at 0x1104c4550&gt;)</msg>
+<msg timestamp="20200123 14:55:17.519" level="FAIL">('code=400', 'error={"message":"no region specified"}')</msg>
+<msg timestamp="20200123 14:55:17.519" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:17.356" endtime="20200123 14:55:17.519"></status>
+</kw>
+<msg timestamp="20200123 14:55:17.519" level="TRACE">Return: '(\'code=400\', \'error={"message":"no region specified"}\')'</msg>
+<msg timestamp="20200123 14:55:17.519" level="INFO">${error} = ('code=400', 'error={"message":"no region specified"}')</msg>
+<status status="PASS" starttime="20200123 14:55:17.356" endtime="20200123 14:55:17.519"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.520" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"no region specified"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:17.520" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.519" endtime="20200123 14:55:17.520"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"no region specified"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.520" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"no region specified"}\')' | 'error={"message":"no region specified"}' ]</msg>
+<msg timestamp="20200123 14:55:17.520" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.520" endtime="20200123 14:55:17.521"></status>
+</kw>
+<doc>send CreateCloudletPool without region
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 14:55:17.355" endtime="20200123 14:55:17.521" critical="yes"></status>
+</test>
+<test id="s1-t2" name="CreateCloudletPool - create without parameters shall return error">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:17.522" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'use_defaults=False' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.522" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | use_defaults=False ]</msg>
+<msg timestamp="20200123 14:55:17.522" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:17.523" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:17.523" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:17.525" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:17.976" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 14:55:17.977" level="DEBUG">resp={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:17.977" level="DEBUG">content={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:17.977" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"Invalid Cloudlet Pool name"}'), &lt;traceback object at 0x1104baeb0&gt;)</msg>
+<msg timestamp="20200123 14:55:17.977" level="FAIL">('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<msg timestamp="20200123 14:55:17.977" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:17.522" endtime="20200123 14:55:17.977"></status>
+</kw>
+<msg timestamp="20200123 14:55:17.977" level="TRACE">Return: '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')'</msg>
+<msg timestamp="20200123 14:55:17.978" level="INFO">${error} = ('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<status status="PASS" starttime="20200123 14:55:17.522" endtime="20200123 14:55:17.978"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.978" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:17.978" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.978" endtime="20200123 14:55:17.978"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"Invalid Cloudlet Pool name"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.979" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'error={"message":"Invalid Cloudlet Pool name"}' ]</msg>
+<msg timestamp="20200123 14:55:17.979" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:17.978" endtime="20200123 14:55:17.979"></status>
+</kw>
+<doc>send CreateCloudletPool with region only
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 14:55:17.521" endtime="20200123 14:55:17.979" critical="yes"></status>
+</test>
+<test id="s1-t3" name="CreateCloudletPool - create with invalid pool name shall fails">
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=-pool</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:17.980" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'cloudlet_pool_name=-pool' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=-pool</arg>
+</arguments>
+<msg timestamp="20200123 14:55:17.981" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='-pool' ]</msg>
+<msg timestamp="20200123 14:55:17.981" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "-pool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:17.981" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "-pool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:17.981" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "-pool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:17.983" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:18.310" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 14:55:18.311" level="DEBUG">resp={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.311" level="DEBUG">content={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.311" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"Invalid Cloudlet Pool name"}'), &lt;traceback object at 0x1104c4550&gt;)</msg>
+<msg timestamp="20200123 14:55:18.312" level="FAIL">('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<msg timestamp="20200123 14:55:18.312" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:17.980" endtime="20200123 14:55:18.312"></status>
+</kw>
+<msg timestamp="20200123 14:55:18.312" level="TRACE">Return: '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')'</msg>
+<msg timestamp="20200123 14:55:18.312" level="INFO">${error} = ('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<status status="PASS" starttime="20200123 14:55:17.980" endtime="20200123 14:55:18.312"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.312" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:18.312" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.312" endtime="20200123 14:55:18.313"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"Invalid Cloudlet Pool name"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.313" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'error={"message":"Invalid Cloudlet Pool name"}' ]</msg>
+<msg timestamp="20200123 14:55:18.313" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.313" endtime="20200123 14:55:18.313"></status>
+</kw>
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=p$ool</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:18.313" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'cloudlet_pool_name=p$ool' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=p$ool</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.314" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='p$ool' ]</msg>
+<msg timestamp="20200123 14:55:18.314" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "p$ool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.314" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "p$ool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.314" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "p$ool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:18.316" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:18.639" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 14:55:18.640" level="DEBUG">resp={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.640" level="DEBUG">content={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.640" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"Invalid Cloudlet Pool name"}'), &lt;traceback object at 0x11050f0a0&gt;)</msg>
+<msg timestamp="20200123 14:55:18.640" level="FAIL">('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<msg timestamp="20200123 14:55:18.640" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:18.314" endtime="20200123 14:55:18.640"></status>
+</kw>
+<msg timestamp="20200123 14:55:18.641" level="TRACE">Return: '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')'</msg>
+<msg timestamp="20200123 14:55:18.641" level="INFO">${error} = ('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<status status="PASS" starttime="20200123 14:55:18.313" endtime="20200123 14:55:18.641"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.641" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:18.641" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.641" endtime="20200123 14:55:18.641"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"Invalid Cloudlet Pool name"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.642" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'error={"message":"Invalid Cloudlet Pool name"}' ]</msg>
+<msg timestamp="20200123 14:55:18.642" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.641" endtime="20200123 14:55:18.642"></status>
+</kw>
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=p(o)ol</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:18.642" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'cloudlet_pool_name=p(o)ol' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=p(o)ol</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.642" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='p(o)ol' ]</msg>
+<msg timestamp="20200123 14:55:18.643" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "p(o)ol"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.643" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "p(o)ol"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.643" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "p(o)ol"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:18.645" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:18.986" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 14:55:18.987" level="DEBUG">resp={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.987" level="DEBUG">content={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:18.987" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"Invalid Cloudlet Pool name"}'), &lt;traceback object at 0x1104fb910&gt;)</msg>
+<msg timestamp="20200123 14:55:18.987" level="FAIL">('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<msg timestamp="20200123 14:55:18.987" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:18.642" endtime="20200123 14:55:18.988"></status>
+</kw>
+<msg timestamp="20200123 14:55:18.988" level="TRACE">Return: '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')'</msg>
+<msg timestamp="20200123 14:55:18.988" level="INFO">${error} = ('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<status status="PASS" starttime="20200123 14:55:18.642" endtime="20200123 14:55:18.988"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.988" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:18.988" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.988" endtime="20200123 14:55:18.988"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"Invalid Cloudlet Pool name"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.989" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'error={"message":"Invalid Cloudlet Pool name"}' ]</msg>
+<msg timestamp="20200123 14:55:18.989" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:18.989" endtime="20200123 14:55:18.989"></status>
+</kw>
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=+={}&lt;&gt;</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:18.989" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'cloudlet_pool_name=+={}&lt;&gt;' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=+={}&lt;&gt;</arg>
+</arguments>
+<msg timestamp="20200123 14:55:18.990" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='+={}&lt;&gt;' ]</msg>
+<msg timestamp="20200123 14:55:18.990" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "+={}&lt;&gt;"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.990" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "+={}&lt;&gt;"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:18.990" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "+={}&lt;&gt;"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:18.992" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:19.319" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 40</msg>
+<msg timestamp="20200123 14:55:19.320" level="DEBUG">resp={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:19.320" level="DEBUG">content={"message":"Invalid Cloudlet Pool name"}</msg>
+<msg timestamp="20200123 14:55:19.320" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"Invalid Cloudlet Pool name"}'), &lt;traceback object at 0x11050e190&gt;)</msg>
+<msg timestamp="20200123 14:55:19.320" level="FAIL">('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<msg timestamp="20200123 14:55:19.320" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:18.989" endtime="20200123 14:55:19.320"></status>
+</kw>
+<msg timestamp="20200123 14:55:19.320" level="TRACE">Return: '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')'</msg>
+<msg timestamp="20200123 14:55:19.321" level="INFO">${error} = ('code=400', 'error={"message":"Invalid Cloudlet Pool name"}')</msg>
+<status status="PASS" starttime="20200123 14:55:18.989" endtime="20200123 14:55:19.321"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:19.321" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:19.321" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:19.321" endtime="20200123 14:55:19.321"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"Invalid Cloudlet Pool name"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:19.322" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"Invalid Cloudlet Pool name"}\')' | 'error={"message":"Invalid Cloudlet Pool name"}' ]</msg>
+<msg timestamp="20200123 14:55:19.322" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:19.322" endtime="20200123 14:55:19.322"></status>
+</kw>
+<doc>send CreateCloudletPool with invalid name
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 14:55:17.979" endtime="20200123 14:55:19.322" critical="yes"></status>
+</test>
+<test id="s1-t4" name="CreateCloudletPool - create with same name shall return error">
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=mypoool</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<msg timestamp="20200123 14:55:19.323" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='mypoool' | use_defaults=False ]</msg>
+<msg timestamp="20200123 14:55:19.323" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:19.324" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:19.324" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:19.326" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:19.696" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 200 2</msg>
+<msg timestamp="20200123 14:55:19.697" level="DEBUG">resp={}</msg>
+<msg timestamp="20200123 14:55:19.697" level="DEBUG">content={}</msg>
+<msg timestamp="20200123 14:55:19.697" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200123 14:55:19.698" level="DEBUG">adding message to delete stack: {'cloudletpool': {'key': {'name': 'mypoool'}}}</msg>
+<msg timestamp="20200123 14:55:19.698" level="DEBUG">showing:{'cloudletpool': {'key': {'name': 'mypoool'}}}</msg>
+<msg timestamp="20200123 14:55:19.698" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowCloudletPool. 
+	{"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:19.698" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:19.698" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:19.700" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:20.104" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowCloudletPool HTTP/1.1" 200 None</msg>
+<msg timestamp="20200123 14:55:20.105" level="DEBUG">resp={"data":{"key":{"name":"mypoool"}}}
+</msg>
+<msg timestamp="20200123 14:55:20.105" level="DEBUG">content={"data":{"key":{"name":"mypoool"}}}
+</msg>
+<msg timestamp="20200123 14:55:20.105" level="INFO">response:
+200
+{"data":{"key":{"name":"mypoool"}}}
+</msg>
+<msg timestamp="20200123 14:55:20.105" level="TRACE">Return: {'data': {'key': {'name': 'mypoool'}}}</msg>
+<status status="PASS" starttime="20200123 14:55:19.323" endtime="20200123 14:55:20.105"></status>
+</kw>
+<kw name="Run Keyword And Expect Error" library="BuiltIn">
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<arguments>
+<arg>*</arg>
+<arg>Create Cloudlet Pool</arg>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=mypoool</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<assign>
+<var>${error}</var>
+</assign>
+<msg timestamp="20200123 14:55:20.106" level="TRACE">Arguments: [ '*' | 'Create Cloudlet Pool' | 'region=US' | 'token=${token}' | 'cloudlet_pool_name=mypoool' | 'use_defaults=False' ]</msg>
+<kw name="Create Cloudlet Pool" library="MexMasterController">
+<arguments>
+<arg>region=US</arg>
+<arg>token=${token}</arg>
+<arg>cloudlet_pool_name=mypoool</arg>
+<arg>use_defaults=False</arg>
+</arguments>
+<msg timestamp="20200123 14:55:20.106" level="TRACE">Arguments: [ region='US' | token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg' | cloudlet_pool_name='mypoool' | use_defaults=False ]</msg>
+<msg timestamp="20200123 14:55:20.106" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool. 
+	{"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:20.106" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:20.106" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:20.108" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:20.443" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateCloudletPool HTTP/1.1" 400 68</msg>
+<msg timestamp="20200123 14:55:20.443" level="DEBUG">resp={"message":"CloudletPool key {\"name\":\"mypoool\"} already exists"}</msg>
+<msg timestamp="20200123 14:55:20.443" level="DEBUG">content={"message":"CloudletPool key {\"name\":\"mypoool\"} already exists"}</msg>
+<msg timestamp="20200123 14:55:20.443" level="INFO">operation failed:(&lt;class 'Exception'&gt;, Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={"message":"CloudletPool key {\\"name\\":\\"mypoool\\"} already exists"}'), &lt;traceback object at 0x11051d230&gt;)</msg>
+<msg timestamp="20200123 14:55:20.444" level="FAIL">('code=400', 'error={"message":"CloudletPool key {\\"name\\":\\"mypoool\\"} already exists"}')</msg>
+<msg timestamp="20200123 14:55:20.444" level="DEBUG">Traceback (most recent call last):
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/MexMasterController.py", line 2145, in create_cloudlet_pool
+    return self.cloudlet_pool.create_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/CloudletPool.py", line 56, in create_cloudlet_pool
+    return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 38, in create
+    return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 115, in send
+    resp = send_message()
+  File "/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/modules/mex_master_controller/MexOperation.py", line 98, in send_message
+    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')</msg>
+<status status="FAIL" starttime="20200123 14:55:20.106" endtime="20200123 14:55:20.444"></status>
+</kw>
+<msg timestamp="20200123 14:55:20.444" level="TRACE">Return: '(\'code=400\', \'error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}\')'</msg>
+<msg timestamp="20200123 14:55:20.444" level="INFO">${error} = ('code=400', 'error={"message":"CloudletPool key {\\"name\\":\\"mypoool\\"} already exists"}')</msg>
+<status status="PASS" starttime="20200123 14:55:20.106" endtime="20200123 14:55:20.444"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>code=400</arg>
+</arguments>
+<msg timestamp="20200123 14:55:20.445" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}\')' | 'code=400' ]</msg>
+<msg timestamp="20200123 14:55:20.445" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:20.444" endtime="20200123 14:55:20.445"></status>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<arguments>
+<arg>${error}</arg>
+<arg>error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}</arg>
+</arguments>
+<msg timestamp="20200123 14:55:20.445" level="TRACE">Arguments: [ '(\'code=400\', \'error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}\')' | 'error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"mypoool\\\\"} already exists"}' ]</msg>
+<msg timestamp="20200123 14:55:20.445" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:20.445" endtime="20200123 14:55:20.446"></status>
+</kw>
+<doc>send CreateCloudletPool twice for same name
+verify proper error is received</doc>
+<status status="PASS" starttime="20200123 14:55:19.322" endtime="20200123 14:55:20.446" critical="yes"></status>
+</test>
+<kw name="Cleanup Provisioning" library="MexMasterController" type="teardown">
+<msg timestamp="20200123 14:55:20.446" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200123 14:55:20.447" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200123 14:55:20.447" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x11048fd40&gt;</msg>
+<msg timestamp="20200123 14:55:20.447" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteCloudletPool. 
+	{"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:20.447" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"}</msg>
+<msg timestamp="20200123 14:55:20.447" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteCloudletPool data={"cloudletpool": {"key": {"name": "mypoool"}}, "region": "US"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk4OTkzMTcsImlhdCI6MTU3OTgxMjkxNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.CrFNHNzIYooW8D38lMY3incazLeCePYK7XGTvyAYLM63eC3VR6YPEt9A85MCF6QXng7Djuq8B7zzRVOgohAAFg'} verify_cert=False</msg>
+<msg timestamp="20200123 14:55:20.449" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200123 14:55:20.797" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteCloudletPool HTTP/1.1" 200 2</msg>
+<msg timestamp="20200123 14:55:20.798" level="DEBUG">resp={}</msg>
+<msg timestamp="20200123 14:55:20.798" level="DEBUG">content={}</msg>
+<msg timestamp="20200123 14:55:20.798" level="INFO">response:
+200
+{}</msg>
+<msg timestamp="20200123 14:55:20.799" level="INFO">[&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x11048fd40&gt;]</msg>
+<msg timestamp="20200123 14:55:20.799" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200123 14:55:20.446" endtime="20200123 14:55:20.799"></status>
+</kw>
+<doc>CreateCloudletPool Fail</doc>
+<status status="PASS" starttime="20200123 14:55:16.837" endtime="20200123 14:55:20.799"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0">Critical Tests</stat>
+<stat pass="4" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="4" fail="0" id="s1" name="createCloudletPool fail">createCloudletPool fail</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200123 14:55:17.333" level="WARN">sending message</msg>
+</errors>
+</robot>

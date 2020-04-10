@@ -1,0 +1,64 @@
+==================================================================
+
+REQUEST: 02 Oct 2019 16:51:56
+   POST https://login.microsoftonline.com/***REMOVED***/oauth2/token
+      headers: {'User-Agent': 'python-requests/2.22.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '186', 'Content-Type': 'application/x-www-form-urlencoded'}
+      body: grant_type=client_credentials&client_id=097ee991-3485-434f-ab2b-faef98ee03ce&client_secret=70xBsqeSQytUthfMKPQ9eex2W8whHaaJHlKSJDdTa%2Fg%3D&resource=https%3A%2F%2Fmanagement.azure.com%2F
+RESPONSE:
+   status_code:200
+   body:{"token_type":"Bearer","expires_in":"3599","ext_expires_in":"3599","expires_on":"1570056716","not_before":"1570052816","resource":"https://management.azure.com/","access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImFQY3R3X29kdlJPb0VOZzNWb09sSWgydGlFcyIsImtpZCI6ImFQY3R3X29kdlJPb0VOZzNWb09sSWgydGlFcyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuYXp1cmUuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2RiMzRjZDE0LTZkMTItNDMyMS1hMjE2LTk1YWQ0MDA1MDJkYy8iLCJpYXQiOjE1NzAwNTI4MTYsIm5iZiI6MTU3MDA1MjgxNiwiZXhwIjoxNTcwMDU2NzE2LCJhaW8iOiI0MlZnWUxCL2VkellhSlB1Z2ZyN3F4YnorVjU0QWdBPSIsImFwcGlkIjoiMDk3ZWU5OTEtMzQ4NS00MzRmLWFiMmItZmFlZjk4ZWUwM2NlIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvZGIzNGNkMTQtNmQxMi00MzIxLWEyMTYtOTVhZDQwMDUwMmRjLyIsIm9pZCI6ImZlMWNjMTUxLTI3ZDAtNDRmZi1iOGJlLThhNzc3YjM1YTY4YiIsInN1YiI6ImZlMWNjMTUxLTI3ZDAtNDRmZi1iOGJlLThhNzc3YjM1YTY4YiIsInRpZCI6ImRiMzRjZDE0LTZkMTItNDMyMS1hMjE2LTk1YWQ0MDA1MDJkYyIsInV0aSI6IkFDaEI0NzhyVmtPSFN1X0Zyb05RQUEiLCJ2ZXIiOiIxLjAifQ.kEIMCmmVz3Pethf5_-eAQkPp7PqCRVcHKyZybL_PyZb3cvokBLsDrvzdozpKrxRxcWjNnZya5pll8928yXL3tXQdTFpT4Z_nTr0vQh9qEdtXZ1zb0fvcr7ArbiS3YGq0khTl_aSH-A2O5UmTfFbn4sWFZku4gI_eqrOWIU2EZmm_uQd9fJRkmQ76YNo4DWr5yIkAJyo57n0f7p-QcQCLeyOAwejFOcWkagjSXkvfgQSW5LrgtFQCBy7Jvc1WUkAchFZtOxgKfKDWtMQIuAc9MgDoZW_140v6Irzz3CLDfJWPIhvjHp4RbNjeb72yb1bBqAD6ppUSEHNVzM-Iv7WTjA"}
+==================================================================
+
+REQUEST: 02 Oct 2019 16:51:56
+   GET https://management.azure.com/subscriptions/902e8722-dc5f-469e-b218-da958e7e25e5/resourceGroups/automationAzureCentralCloudlet_cl1570052547/providers/Microsoft.ContainerService/managedClusters/cl1570052547?api-version=2019-02-01
+      headers: {'User-Agent': 'python-requests/2.22.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-type': 'application/json', 'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImFQY3R3X29kdlJPb0VOZzNWb09sSWgydGlFcyIsImtpZCI6ImFQY3R3X29kdlJPb0VOZzNWb09sSWgydGlFcyJ9.eyJhdWQiOiJodHRwczovL21hbmFnZW1lbnQuYXp1cmUuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0L2RiMzRjZDE0LTZkMTItNDMyMS1hMjE2LTk1YWQ0MDA1MDJkYy8iLCJpYXQiOjE1NzAwNTI4MTYsIm5iZiI6MTU3MDA1MjgxNiwiZXhwIjoxNTcwMDU2NzE2LCJhaW8iOiI0MlZnWUxCL2VkellhSlB1Z2ZyN3F4YnorVjU0QWdBPSIsImFwcGlkIjoiMDk3ZWU5OTEtMzQ4NS00MzRmLWFiMmItZmFlZjk4ZWUwM2NlIiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvZGIzNGNkMTQtNmQxMi00MzIxLWEyMTYtOTVhZDQwMDUwMmRjLyIsIm9pZCI6ImZlMWNjMTUxLTI3ZDAtNDRmZi1iOGJlLThhNzc3YjM1YTY4YiIsInN1YiI6ImZlMWNjMTUxLTI3ZDAtNDRmZi1iOGJlLThhNzc3YjM1YTY4YiIsInRpZCI6ImRiMzRjZDE0LTZkMTItNDMyMS1hMjE2LTk1YWQ0MDA1MDJkYyIsInV0aSI6IkFDaEI0NzhyVmtPSFN1X0Zyb05RQUEiLCJ2ZXIiOiIxLjAifQ.kEIMCmmVz3Pethf5_-eAQkPp7PqCRVcHKyZybL_PyZb3cvokBLsDrvzdozpKrxRxcWjNnZya5pll8928yXL3tXQdTFpT4Z_nTr0vQh9qEdtXZ1zb0fvcr7ArbiS3YGq0khTl_aSH-A2O5UmTfFbn4sWFZku4gI_eqrOWIU2EZmm_uQd9fJRkmQ76YNo4DWr5yIkAJyo57n0f7p-QcQCLeyOAwejFOcWkagjSXkvfgQSW5LrgtFQCBy7Jvc1WUkAchFZtOxgKfKDWtMQIuAc9MgDoZW_140v6Irzz3CLDfJWPIhvjHp4RbNjeb72yb1bBqAD6ppUSEHNVzM-Iv7WTjA'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{
+  "id": "/subscriptions/902e8722-dc5f-469e-b218-da958e7e25e5/resourcegroups/automationAzureCentralCloudlet_cl1570052547/providers/Microsoft.ContainerService/managedClusters/cl1570052547",
+  "location": "centralus",
+  "name": "cl1570052547",
+  "type": "Microsoft.ContainerService/ManagedClusters",
+  "properties": {
+   "provisioningState": "Succeeded",
+   "kubernetesVersion": "1.13.10",
+   "dnsPrefix": "cl15700525-automationAzureC-902e87",
+   "fqdn": "cl15700525-automationazurec-902e87-6857eb3f.hcp.centralus.azmk8s.io",
+   "agentPoolProfiles": [
+    {
+     "name": "nodepool1",
+     "count": 1,
+     "vmSize": "Standard_DS1_v2",
+     "osDiskSizeGB": 100,
+     "maxPods": 110,
+     "type": "AvailabilitySet",
+     "provisioningState": "Succeeded",
+     "orchestratorVersion": "1.13.10",
+     "osType": "Linux"
+    }
+   ],
+   "linuxProfile": {
+    "adminUsername": "azureuser",
+    "ssh": {
+     "publicKeys": [
+      {
+       "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDuM+UeeQIuR36jCCuWX/WhW+y/BuvBytuSizrPDVIxtss5xVA3kBu3PGQWGl2DVQC56YENgxsOQAZnFp50GpqqVG7xYzEJV8qNec5FVlYHqq+WFTVq+OJWAvUa8YlfWyg+F28XwtIwlve84pwK06xPiaTJ2K9C7bTSyBGODIWAVoEiREyNsuSSUzx0zoBua5h3vN/yrX0ekvNqeAEmLsbU7zGghQ+qEr8az48tjWTkm2rAqw0JhqR/m3EIlVxj9Mbq7q0pqTCVsVE7Qj0ICe32qzn6kDjPnfgBe8k7Rkx51x2+KdsrBcKvBW0d6Qfs3UoIjcuShEmFnNiIlTyQP22l"
+      }
+     ]
+    }
+   },
+   "servicePrincipalProfile": {
+    "clientId": "***REMOVED***"
+   },
+   "nodeResourceGroup": "MC_automationAzureCentralCloudlet_cl1570052547_cl1570052547_centralus",
+   "enableRBAC": true,
+   "networkProfile": {
+    "networkPlugin": "kubenet",
+    "podCidr": "10.244.0.0/16",
+    "serviceCidr": "10.0.0.0/16",
+    "dnsServiceIP": "10.0.0.10",
+    "dockerBridgeCidr": "172.17.0.1/16"
+   }
+  }
+ }
