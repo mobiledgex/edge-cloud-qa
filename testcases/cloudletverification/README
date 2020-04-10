@@ -1,0 +1,19 @@
+# make a directory to store the testcase logs and reports
+mkdir ~/cloudletverificationlogs
+
+# start the docker container
+# this command mountst the log directory created above to the output directory in the containe. 
+# This allows the logs from the container to be written to the directory on your machine. Otherwise, you have to copy the logs out of the container
+docker run -ti -v ~/cloudletverificationlogs:/home/automation/edge-cloud-qa/testcases/cloudletverification/logs robot-docker bash
+
+# run the testcases once inside the container
+# this does the following and runs all testcases:
+# 1) set the loglevel to the most verbose level
+# 2) load the required variables file with -V option
+# 3) sets the log output directory 
+cd edge-cloud-qa/testcases
+robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --outputdir=cloudletverification/logs cloudletverification
+
+# you can also use the '-i' option to only run tests that match a certain tag
+# do the following to only run the cloudlet and docker testscases
+robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --outputdir=cloudletverification/logs -i cloudlet -i docker  cloudletverification

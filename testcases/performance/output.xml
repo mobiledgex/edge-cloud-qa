@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.6 on darwin)" generated="20200409 12:02:25.047" rpa="false">
+<suite id="s1" name="Performancek8S" source="/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/performance/performancek8s.robot">
+<test id="s1-t1" name="ClusterInst shall create with IpAccessDedicated/k8s and num_masters=1 and num_nodes=2 on openstack">
+<kw name="Setup" type="setup">
+<msg timestamp="20200409 12:02:25.869" level="TRACE">Arguments: [  ]</msg>
+<kw name="Get Default Cluster Name" library="MexMasterController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.869" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200409 12:02:25.869" level="DEBUG">Test timeout 15 minutes active. 899.999 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.869" level="TRACE">Return: 'cluster1586451745-314301'</msg>
+<msg timestamp="20200409 12:02:25.869" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<status status="PASS" starttime="20200409 12:02:25.869" endtime="20200409 12:02:25.869"></status>
+</kw>
+<kw name="Get Time" library="BuiltIn">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${epoch_time}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.869" level="TRACE">Arguments: [ 'epoch' ]</msg>
+<msg timestamp="20200409 12:02:25.870" level="DEBUG">Test timeout 15 minutes active. 899.998 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.870" level="TRACE">Return: 1586451745</msg>
+<msg timestamp="20200409 12:02:25.870" level="INFO">${epoch_time} = 1586451745</msg>
+<status status="PASS" starttime="20200409 12:02:25.869" endtime="20200409 12:02:25.870"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+</arguments>
+<assign>
+<var>${cloudlet_lowercase}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.870" level="TRACE">Arguments: [ 'automationParadiseCloudlet' ]</msg>
+<msg timestamp="20200409 12:02:25.870" level="DEBUG">Test timeout 15 minutes active. 899.998 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.870" level="TRACE">Return: 'automationparadisecloudlet'</msg>
+<msg timestamp="20200409 12:02:25.870" level="INFO">${cloudlet_lowercase} = automationparadisecloudlet</msg>
+<status status="PASS" starttime="20200409 12:02:25.870" endtime="20200409 12:02:25.870"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cloudlet_lowercase}</arg>
+</arguments>
+<msg timestamp="20200409 12:02:25.871" level="TRACE">Arguments: [ '${cloudlet_lowercase}' ]</msg>
+<msg timestamp="20200409 12:02:25.871" level="INFO">${cloudlet_lowercase} = automationparadisecloudlet</msg>
+<msg timestamp="20200409 12:02:25.871" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:02:25.870" endtime="20200409 12:02:25.871"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cluster_name}</arg>
+</arguments>
+<msg timestamp="20200409 12:02:25.871" level="TRACE">Arguments: [ '${cluster_name}' ]</msg>
+<msg timestamp="20200409 12:02:25.871" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<msg timestamp="20200409 12:02:25.871" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:02:25.871" endtime="20200409 12:02:25.871"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.872" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1586451745-314301' | 'automationParadiseCloudlet' | 'GDDT' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:02:25.872" level="DEBUG">Test timeout 15 minutes active. 899.996 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.872" level="TRACE">Return: 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:02:25.872" level="INFO">${rootlb} = cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:02:25.871" endtime="20200409 12:02:25.872"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.872" level="TRACE">Arguments: [ 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:02:25.872" level="DEBUG">Test timeout 15 minutes active. 899.996 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.872" level="TRACE">Return: 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:02:25.873" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:02:25.872" endtime="20200409 12:02:25.873"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200409 12:02:25.873" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200409 12:02:25.873" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<msg timestamp="20200409 12:02:25.873" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:02:25.873" endtime="20200409 12:02:25.873"></status>
+</kw>
+<msg timestamp="20200409 12:02:25.873" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:02:25.869" endtime="20200409 12:02:25.873"></status>
+</kw>
+<kw name="Get Default Cluster Name" library="MexMasterController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.873" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200409 12:02:25.874" level="DEBUG">Test timeout 15 minutes active. 899.994 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.874" level="TRACE">Return: 'cluster1586451745-314301'</msg>
+<msg timestamp="20200409 12:02:25.874" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<status status="PASS" starttime="20200409 12:02:25.873" endtime="20200409 12:02:25.874"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${clusterlb}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.874" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1586451745-314301' | 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:02:25.874" level="DEBUG">Test timeout 15 minutes active. 899.994 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.874" level="TRACE">Return: 'cluster1586451745-314301.cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:02:25.874" level="INFO">${clusterlb} = cluster1586451745-314301.cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:02:25.874" endtime="20200409 12:02:25.875"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>START creating cluster instance</arg>
+</arguments>
+<msg timestamp="20200409 12:02:25.875" level="TRACE">Arguments: [ 'START creating cluster instance' ]</msg>
+<msg timestamp="20200409 12:02:25.875" level="DEBUG">Test timeout 15 minutes active. 899.993 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.875" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:02:25.875" endtime="20200409 12:02:25.875"></status>
+</kw>
+<kw name="Create Cluster Instance" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet_name_openstack_dedicated}</arg>
+<arg>operator_org_name=${operator_name_openstack}</arg>
+<arg>number_nodes=2</arg>
+<arg>number_masters=1</arg>
+<arg>ip_access=IpAccessDedicated</arg>
+<arg>deployment=kubernetes</arg>
+<arg>flavor_name=${flavor}</arg>
+</arguments>
+<assign>
+<var>${cluster_inst}</var>
+</assign>
+<msg timestamp="20200409 12:02:25.876" level="TRACE">Arguments: [ region='EU' | cloudlet_name='automationParadiseCloudlet' | operator_org_name='GDDT' | number_nodes='2' | number_masters='1' | ip_access='IpAccessDedicated' | deployment='kubernetes' | flavor_name='automation_api_flavor' ]</msg>
+<msg timestamp="20200409 12:02:25.876" level="DEBUG">Test timeout 15 minutes active. 899.992 seconds left.</msg>
+<msg timestamp="20200409 12:02:25.876" level="INFO">create at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateClusterInst. 
+	{"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}, "flavor": {"name": "automation_api_flavor"}, "ip_access": 1, "num_masters": 1, "num_nodes": 2, "deployment": "kubernetes"}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:02:25.876" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}, "flavor": {"name": "automation_api_flavor"}, "ip_access": 1, "num_masters": 1, "num_nodes": 2, "deployment": "kubernetes"}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:02:25.876" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/CreateClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}, "flavor": {"name": "automation_api_flavor"}, "ip_access": 1, "num_masters": 1, "num_nodes": 2, "deployment": "kubernetes"}, "region": "EU"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1MzgxNDUsImlhdCI6MTU4NjQ1MTc0NSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.1KIsPQTo4caWXmCi2u-DnS3gG7RFIpCOwwq3ebKg5vD0X9JEGYK3QpBwM5dlOb4ywRQHQWkk_EplJzHiBbe_KA'} verify_cert=False</msg>
+<msg timestamp="20200409 12:02:25.878" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200409 12:02:26.577" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/CreateClusterInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200409 12:05:41.182" level="DEBUG">resp={"data":{"message":"Creating"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_COMPLETE"}}
+{"data":{"message":"Setting Up Root LB"}}
+{"data":{"message":"Waiting for Cluster to Initialize"}}
+{"data":{"message":"Waiting for Cluster to Initialize, Checking Master for Available Nodes"}}
+{"data":{"message":"Waiting for Cluster to Initialize, 2 of 2 nodes active"}}
+{"data":{"message":"Creating config map"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:05:41.182" level="DEBUG">content={"data":{"message":"Creating"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_COMPLETE"}}
+{"data":{"message":"Setting Up Root LB"}}
+{"data":{"message":"Waiting for Cluster to Initialize"}}
+{"data":{"message":"Waiting for Cluster to Initialize, Checking Master for Available Nodes"}}
+{"data":{"message":"Waiting for Cluster to Initialize, 2 of 2 nodes active"}}
+{"data":{"message":"Creating config map"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:05:41.183" level="INFO">response:
+200
+{"data":{"message":"Creating"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_IN_PROGRESS"}}
+{"data":{"message":"Creating Heat Stack for automationparadisecloudlet-cluster1586451745-314301-mobiledgex, Heat Stack Status: CREATE_COMPLETE"}}
+{"data":{"message":"Setting Up Root LB"}}
+{"data":{"message":"Waiting for Cluster to Initialize"}}
+{"data":{"message":"Waiting for Cluster to Initialize, Checking Master for Available Nodes"}}
+{"data":{"message":"Waiting for Cluster to Initialize, 2 of 2 nodes active"}}
+{"data":{"message":"Creating config map"}}
+{"data":{"message":"Ready"}}
+{"data":{"message":"Created ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:05:41.183" level="DEBUG">adding message to delete stack: {'clusterinst': {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}}}</msg>
+<msg timestamp="20200409 12:05:41.183" level="DEBUG">showing:{'clusterinst': {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}}}</msg>
+<msg timestamp="20200409 12:05:41.183" level="INFO">show at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowClusterInst. 
+	{"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:05:41.183" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:05:41.183" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/ShowClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1MzgxNDUsImlhdCI6MTU4NjQ1MTc0NSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.1KIsPQTo4caWXmCi2u-DnS3gG7RFIpCOwwq3ebKg5vD0X9JEGYK3QpBwM5dlOb4ywRQHQWkk_EplJzHiBbe_KA'} verify_cert=False</msg>
+<msg timestamp="20200409 12:05:41.185" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200409 12:05:41.530" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/ShowClusterInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200409 12:05:41.531" level="DEBUG">resp={"data":{"key":{"cluster_key":{"name":"cluster1586451745-314301"},"cloudlet_key":{"organization":"GDDT","name":"automationParadiseCloudlet"},"organization":"MobiledgeX"},"flavor":{"name":"automation_api_flavor"},"liveness":1,"state":5,"ip_access":1,"allocated_ip":"dynamic","node_flavor":"m4.small","deployment":"kubernetes","num_masters":1,"num_nodes":2,"status":{},"master_node_flavor":"m4.small"}}
+</msg>
+<msg timestamp="20200409 12:05:41.531" level="DEBUG">content={"data":{"key":{"cluster_key":{"name":"cluster1586451745-314301"},"cloudlet_key":{"organization":"GDDT","name":"automationParadiseCloudlet"},"organization":"MobiledgeX"},"flavor":{"name":"automation_api_flavor"},"liveness":1,"state":5,"ip_access":1,"allocated_ip":"dynamic","node_flavor":"m4.small","deployment":"kubernetes","num_masters":1,"num_nodes":2,"status":{},"master_node_flavor":"m4.small"}}
+</msg>
+<msg timestamp="20200409 12:05:41.531" level="INFO">response:
+200
+{"data":{"key":{"cluster_key":{"name":"cluster1586451745-314301"},"cloudlet_key":{"organization":"GDDT","name":"automationParadiseCloudlet"},"organization":"MobiledgeX"},"flavor":{"name":"automation_api_flavor"},"liveness":1,"state":5,"ip_access":1,"allocated_ip":"dynamic","node_flavor":"m4.small","deployment":"kubernetes","num_masters":1,"num_nodes":2,"status":{},"master_node_flavor":"m4.small"}}
+</msg>
+<msg timestamp="20200409 12:05:41.532" level="INFO">ClusterInst Dict {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}, 'flavor': {'name': 'automation_api_flavor'}, 'ip_access': 1, 'num_masters': 1, 'num_nodes': 2, 'deployment': 'kubernetes'}
+ClusterInst Dict {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}}
+ClusterInst Dict {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}}</msg>
+<msg timestamp="20200409 12:05:41.532" level="WARN">True EU</msg>
+<msg timestamp="20200409 12:05:41.532" level="TRACE">Return: {'data': {'allocated_ip': 'dynamic',
+          'deployment': 'kubernetes',
+          'flavor': {'name': 'automation_api_flavor'},
+          'ip_access': 1,
+          'key': {'cloudlet_key': {'name': 'automationParadiseCloudlet',
+                                   'organization': 'GDDT'},
+                  'cluster_key': {'name': 'cluster1586451745-314301'},
+                  'organization': 'MobiledgeX'},
+          'liveness': 1,
+          'master_node_flavor': 'm4.small',
+          'node_flavor': 'm4.small',
+          'num_masters': 1,
+          'num_nodes': 2,
+          'state': 5,
+          'status': {}}}</msg>
+<msg timestamp="20200409 12:05:41.533" level="INFO">${cluster_inst} = {'data': {'key': {'cluster_key': {'name': 'cluster1586451745-314301'}, 'cloudlet_key': {'organization': 'GDDT', 'name': 'automationParadiseCloudlet'}, 'organization': 'MobiledgeX'}, 'flavor': {'name'...</msg>
+<status status="PASS" starttime="20200409 12:02:25.875" endtime="20200409 12:05:41.533"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>DONE creating cluster instance</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.533" level="TRACE">Arguments: [ 'DONE creating cluster instance' ]</msg>
+<msg timestamp="20200409 12:05:41.533" level="DEBUG">Test timeout 15 minutes active. 704.335 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.533" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.533" endtime="20200409 12:05:41.533"></status>
+</kw>
+<doc>create a cluster on openstack with IpAccessDedicated and kubernetes and masters=1 and num_nodes=2
+verify it creates 1 lb and 2 nodes and 1 master</doc>
+<timeout value="15 minutes"></timeout>
+<status status="PASS" starttime="20200409 12:02:25.868" endtime="20200409 12:05:41.534" critical="yes"></status>
+</test>
+<test id="s1-t2" name="SSH to RootLB VM">
+<kw name="Setup" type="setup">
+<msg timestamp="20200409 12:05:41.535" level="TRACE">Arguments: [  ]</msg>
+<kw name="Get Default Cluster Name" library="MexMasterController">
+<assign>
+<var>${cluster_name}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.535" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200409 12:05:41.535" level="DEBUG">Test timeout 15 minutes active. 899.999 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.535" level="TRACE">Return: 'cluster1586451745-314301'</msg>
+<msg timestamp="20200409 12:05:41.535" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<status status="PASS" starttime="20200409 12:05:41.535" endtime="20200409 12:05:41.535"></status>
+</kw>
+<kw name="Get Time" library="BuiltIn">
+<doc>Returns the given time in the requested format.</doc>
+<arguments>
+<arg>epoch</arg>
+</arguments>
+<assign>
+<var>${epoch_time}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.535" level="TRACE">Arguments: [ 'epoch' ]</msg>
+<msg timestamp="20200409 12:05:41.536" level="DEBUG">Test timeout 15 minutes active. 899.998 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.536" level="TRACE">Return: 1586451941</msg>
+<msg timestamp="20200409 12:05:41.536" level="INFO">${epoch_time} = 1586451941</msg>
+<status status="PASS" starttime="20200409 12:05:41.535" endtime="20200409 12:05:41.536"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+</arguments>
+<assign>
+<var>${cloudlet_lowercase}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.536" level="TRACE">Arguments: [ 'automationParadiseCloudlet' ]</msg>
+<msg timestamp="20200409 12:05:41.536" level="DEBUG">Test timeout 15 minutes active. 899.998 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.536" level="TRACE">Return: 'automationparadisecloudlet'</msg>
+<msg timestamp="20200409 12:05:41.536" level="INFO">${cloudlet_lowercase} = automationparadisecloudlet</msg>
+<status status="PASS" starttime="20200409 12:05:41.536" endtime="20200409 12:05:41.537"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cloudlet_lowercase}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.537" level="TRACE">Arguments: [ '${cloudlet_lowercase}' ]</msg>
+<msg timestamp="20200409 12:05:41.537" level="INFO">${cloudlet_lowercase} = automationparadisecloudlet</msg>
+<msg timestamp="20200409 12:05:41.537" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.537" endtime="20200409 12:05:41.537"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cluster_name}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.537" level="TRACE">Arguments: [ '${cluster_name}' ]</msg>
+<msg timestamp="20200409 12:05:41.537" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<msg timestamp="20200409 12:05:41.537" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.537" endtime="20200409 12:05:41.537"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.538" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1586451745-314301' | 'automationParadiseCloudlet' | 'GDDT' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:05:41.538" level="DEBUG">Test timeout 15 minutes active. 899.996 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.538" level="TRACE">Return: 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:05:41.538" level="INFO">${rootlb} = cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:05:41.537" endtime="20200409 12:05:41.538"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.538" level="TRACE">Arguments: [ 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:05:41.538" level="DEBUG">Test timeout 15 minutes active. 899.996 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.538" level="TRACE">Return: 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:05:41.538" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:05:41.538" endtime="20200409 12:05:41.538"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.539" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200409 12:05:41.539" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<msg timestamp="20200409 12:05:41.539" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.538" endtime="20200409 12:05:41.539"></status>
+</kw>
+<msg timestamp="20200409 12:05:41.539" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.535" endtime="20200409 12:05:41.539"></status>
+</kw>
+<kw name="Open Connection And Log In">
+<msg timestamp="20200409 12:05:41.539" level="TRACE">Arguments: [  ]</msg>
+<kw name="Find File" library="MexMasterController">
+<arguments>
+<arg>id_rsa_mex</arg>
+</arguments>
+<assign>
+<var>${cert}</var>
+</assign>
+<msg timestamp="20200409 12:05:41.539" level="TRACE">Arguments: [ 'id_rsa_mex' ]</msg>
+<msg timestamp="20200409 12:05:41.539" level="DEBUG">Test timeout 15 minutes active. 899.994 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.540" level="TRACE">Return: '/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/certs/id_rsa_mex'</msg>
+<msg timestamp="20200409 12:05:41.540" level="INFO">${cert} = /Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/certs/id_rsa_mex</msg>
+<status status="PASS" starttime="20200409 12:05:41.539" endtime="20200409 12:05:41.540"></status>
+</kw>
+<kw name="Open Connection" library="SSHLibrary">
+<doc>Opens a new SSH connection to the given ``host`` and ``port``.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.540" level="TRACE">Arguments: [ 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:05:41.540" level="DEBUG">Test timeout 15 minutes active. 899.994 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.540" level="TRACE">Return: 1</msg>
+<status status="PASS" starttime="20200409 12:05:41.540" endtime="20200409 12:05:41.540"></status>
+</kw>
+<kw name="Login With Public Key" library="SSHLibrary">
+<doc>Logs into the SSH server using key-based authentication.</doc>
+<arguments>
+<arg>ubuntu</arg>
+<arg>${cert}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:41.541" level="TRACE">Arguments: [ 'ubuntu' | '/Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/certs/id_rsa_mex' ]</msg>
+<msg timestamp="20200409 12:05:41.541" level="DEBUG">Test timeout 15 minutes active. 899.993 seconds left.</msg>
+<msg timestamp="20200409 12:05:41.541" level="INFO">Logging into 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net:22' as 'ubuntu'.</msg>
+<msg timestamp="20200409 12:05:42.259" level="DEBUG">Adding ssh-ed25519 host key for cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net: b'3368c3ff0f6ff065d1e9df112e41d962'</msg>
+<msg timestamp="20200409 12:05:42.260" level="DEBUG">Trying discovered key b'23632bfa186fa9eeaedaeaa8bf2d566d' in /Users/ashutoshbhatt/go/src/github.com/mobiledgex/edge-cloud-qa/certs/id_rsa_mex</msg>
+<msg timestamp="20200409 12:05:42.898" level="DEBUG">[chan 0] Max packet in: 32768 bytes</msg>
+<msg timestamp="20200409 12:05:44.535" level="INFO">Read output: Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-166-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+ * Kubernetes 1.18 GA is now available! See https://microk8s.io for docs or
+   install it with:
+
+     sudo snap install microk8s --channel=1.18 --classic
+
+ * Multipass 1.1 adds proxy support for developers behind enterprise
+   firewalls. Rapid prototyping for cloud operations just got easier.
+
+     https://multipass.run/
+
+ubuntu@cluster1586451745-314301:~$</msg>
+<msg timestamp="20200409 12:05:44.535" level="TRACE">Return: 'Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-166-generic x86_64)\r\n\r\n * Documentation:  https://help.ubuntu.com\r\n * Management:     https://landscape.canonical.com\r\n * Support:        https://ubuntu.com/advantage\r\n\r\n * Kubernetes 1.18 GA is now available! See https://microk8s.io for docs or\r\n   install it with:\r\n\r\n     sudo snap install microk8s --channel=1.18 --classic\r\n\r\n * Multipass 1.1 adds proxy support for developers behind enterprise\r\n   firewalls. Rapid prototyping for cloud operations just got easier.\r\n\r\n     https://multipass.run/\r\n\r\nubuntu@cluster1586451745-314301:~$ '</msg>
+<status status="PASS" starttime="20200409 12:05:41.540" endtime="20200409 12:05:44.535"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:44.536" level="TRACE">Arguments: [ '${rootlb}' ]</msg>
+<msg timestamp="20200409 12:05:44.536" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<msg timestamp="20200409 12:05:44.536" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:44.536" endtime="20200409 12:05:44.536"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${cluster_name}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:44.537" level="TRACE">Arguments: [ '${cluster_name}' ]</msg>
+<msg timestamp="20200409 12:05:44.537" level="INFO">${cluster_name} = cluster1586451745-314301</msg>
+<msg timestamp="20200409 12:05:44.537" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:44.536" endtime="20200409 12:05:44.537"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:05:44.537" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1586451745-314301' | 'automationParadiseCloudlet' | 'GDDT' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:05:44.538" level="DEBUG">Test timeout 15 minutes active. 896.996 seconds left.</msg>
+<msg timestamp="20200409 12:05:44.538" level="TRACE">Return: 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:05:44.538" level="INFO">${rootlb} = cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:05:44.537" endtime="20200409 12:05:44.538"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:05:44.538" level="TRACE">Arguments: [ 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:05:44.538" level="DEBUG">Test timeout 15 minutes active. 896.995 seconds left.</msg>
+<msg timestamp="20200409 12:05:44.539" level="TRACE">Return: 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:05:44.539" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:05:44.538" endtime="20200409 12:05:44.539"></status>
+</kw>
+<msg timestamp="20200409 12:05:44.539" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:41.539" endtime="20200409 12:05:44.539"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>git clone https://github.com/ashutoshbhatt1/k8sperf.git</arg>
+<arg>return_stderr=${True}</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+</assign>
+<msg timestamp="20200409 12:05:44.540" level="TRACE">Arguments: [ 'git clone https://github.com/ashutoshbhatt1/k8sperf.git' | return_stderr=True ]</msg>
+<msg timestamp="20200409 12:05:44.540" level="DEBUG">Test timeout 15 minutes active. 896.994 seconds left.</msg>
+<msg timestamp="20200409 12:05:44.540" level="INFO">Executing command 'git clone https://github.com/ashutoshbhatt1/k8sperf.git'.</msg>
+<msg timestamp="20200409 12:05:44.540" level="DEBUG">[chan 1] Max packet in: 32768 bytes</msg>
+<msg timestamp="20200409 12:05:46.620" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20200409 12:05:46.621" level="TRACE">Return: ['', "Cloning into 'k8sperf'..."]</msg>
+<msg timestamp="20200409 12:05:46.621" level="INFO">${stdout} = </msg>
+<msg timestamp="20200409 12:05:46.621" level="INFO">${stderr} = Cloning into 'k8sperf'...</msg>
+<status status="PASS" starttime="20200409 12:05:44.539" endtime="20200409 12:05:46.621"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${stdout} ${stderr}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:46.622" level="TRACE">Arguments: [ " Cloning into 'k8sperf'..." ]</msg>
+<msg timestamp="20200409 12:05:46.622" level="DEBUG">Test timeout 15 minutes active. 894.912 seconds left.</msg>
+<msg timestamp="20200409 12:05:46.622" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:46.621" endtime="20200409 12:05:46.622"></status>
+</kw>
+<kw name="Directory Should Exist" library="SSHLibrary">
+<doc>Fails if the given ``path`` does not point to an existing directory.</doc>
+<arguments>
+<arg>k8sperf</arg>
+</arguments>
+<msg timestamp="20200409 12:05:46.623" level="TRACE">Arguments: [ 'k8sperf' ]</msg>
+<msg timestamp="20200409 12:05:46.623" level="DEBUG">Test timeout 15 minutes active. 894.911 seconds left.</msg>
+<msg timestamp="20200409 12:05:46.623" level="DEBUG">[chan 2] Max packet in: 32768 bytes</msg>
+<msg timestamp="20200409 12:05:47.270" level="INFO">[chan 2] Opened sftp connection (server version 3)</msg>
+<msg timestamp="20200409 12:05:47.270" level="DEBUG">[chan 2] normalize(b'.')</msg>
+<msg timestamp="20200409 12:05:47.426" level="DEBUG">[chan 2] stat(b'k8sperf')</msg>
+<msg timestamp="20200409 12:05:47.582" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:46.622" endtime="20200409 12:05:47.582"></status>
+</kw>
+<kw name="Write" library="SSHLibrary">
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<arguments>
+<arg>ls -lrt</arg>
+</arguments>
+<msg timestamp="20200409 12:05:47.582" level="TRACE">Arguments: [ 'ls -lrt' ]</msg>
+<msg timestamp="20200409 12:05:47.582" level="DEBUG">Test timeout 15 minutes active. 893.952 seconds left.</msg>
+<msg timestamp="20200409 12:05:47.745" level="INFO">ls -lrt</msg>
+<msg timestamp="20200409 12:05:47.745" level="TRACE">Return: 'ls -lrt\r\n'</msg>
+<status status="PASS" starttime="20200409 12:05:47.582" endtime="20200409 12:05:47.745"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${stdout} ${stderr}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:47.745" level="TRACE">Arguments: [ " Cloning into 'k8sperf'..." ]</msg>
+<msg timestamp="20200409 12:05:47.745" level="DEBUG">Test timeout 15 minutes active. 893.789 seconds left.</msg>
+<msg timestamp="20200409 12:05:47.745" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:47.745" endtime="20200409 12:05:47.745"></status>
+</kw>
+<kw name="Write" library="SSHLibrary">
+<doc>Writes the given ``text`` on the remote machine and appends a newline.</doc>
+<arguments>
+<arg>cp -r /home/ubuntu/k8sperf/* /home/ubuntu</arg>
+</arguments>
+<msg timestamp="20200409 12:05:47.746" level="TRACE">Arguments: [ 'cp -r /home/ubuntu/k8sperf/* /home/ubuntu' ]</msg>
+<msg timestamp="20200409 12:05:47.746" level="DEBUG">Test timeout 15 minutes active. 893.788 seconds left.</msg>
+<msg timestamp="20200409 12:05:47.746" level="INFO">total 16</msg>
+<msg timestamp="20200409 12:05:47.747" level="TRACE">Return: 'total 16\r\n'</msg>
+<status status="PASS" starttime="20200409 12:05:47.745" endtime="20200409 12:05:47.747"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${stdout} ${stderr}</arg>
+</arguments>
+<msg timestamp="20200409 12:05:47.747" level="TRACE">Arguments: [ " Cloning into 'k8sperf'..." ]</msg>
+<msg timestamp="20200409 12:05:47.747" level="DEBUG">Test timeout 15 minutes active. 893.787 seconds left.</msg>
+<msg timestamp="20200409 12:05:47.747" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:05:47.747" endtime="20200409 12:05:47.747"></status>
+</kw>
+<kw name="Execute Command" library="SSHLibrary">
+<doc>Executes ``command`` on the remote machine and returns its outputs.</doc>
+<arguments>
+<arg>./run-iperf.sh</arg>
+<arg>return_stderr=${True}</arg>
+<arg>return_rc=${True} #timeout=20 Seconds</arg>
+</arguments>
+<assign>
+<var>${stdout}</var>
+<var>${stderr}</var>
+<var>${rc}</var>
+</assign>
+<msg timestamp="20200409 12:05:47.748" level="TRACE">Arguments: [ './run-iperf.sh' | return_stderr=True | return_rc='True #timeout=20 Seconds' ]</msg>
+<msg timestamp="20200409 12:05:47.748" level="DEBUG">Test timeout 15 minutes active. 893.786 seconds left.</msg>
+<msg timestamp="20200409 12:05:47.748" level="INFO">Executing command './run-iperf.sh'.</msg>
+<msg timestamp="20200409 12:05:47.748" level="DEBUG">[chan 3] Max packet in: 32768 bytes</msg>
+<msg timestamp="20200409 12:06:30.881" level="INFO">Command exited with return code 0.</msg>
+<msg timestamp="20200409 12:06:30.882" level="TRACE">Return: ['A Iperf Server is created as a Kubernetes Deployment and Iperf Client is created as a Daemonset\ndeployment.apps/iperf-server-deployment created\nservice/iperf-server created\ndaemonset.apps/iperf-clients created\nWaiting for iperf server to start...\nWaiting for iperf server to start...\nServer is running\n\nClient on 10.101.12.10:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.10:  [  4] local 10.32.0.4 port 59674 connected to 10.111.250.143 port 5201\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.10:  [  4]   0.00-1.00   sec   122 MBytes  1.02 Gbits/sec  380    330 KBytes       \nClient on 10.101.12.10:  [  4]   1.00-2.00   sec   214 MBytes  1.80 Gbits/sec   45    520 KBytes       \nClient on 10.101.12.10:  [  4]   2.00-3.00   sec   259 MBytes  2.17 Gbits/sec   49    644 KBytes       \nClient on 10.101.12.10:  [  4]   3.00-4.00   sec   282 MBytes  2.37 Gbits/sec  297    562 KBytes       \nClient on 10.101.12.10:  [  4]   4.00-5.00   sec   286 MBytes  2.40 Gbits/sec  110    649 KBytes       \nClient on 10.101.12.10:  [  4]   5.00-6.00   sec   274 MBytes  2.30 Gbits/sec  156    577 KBytes       \nClient on 10.101.12.10:  [  4]   6.00-7.00   sec   276 MBytes  2.32 Gbits/sec  237    484 KBytes       \nClient on 10.101.12.10:  [  4]   7.00-8.00   sec   274 MBytes  2.29 Gbits/sec  147    615 KBytes       \nClient on 10.101.12.10:  [  4]   8.00-9.00   sec   288 MBytes  2.42 Gbits/sec  421    526 KBytes       \nClient on 10.101.12.10:  [  4]   9.00-10.00  sec   275 MBytes  2.31 Gbits/sec  146    663 KBytes       \nClient on 10.101.12.10:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec  1988             sender\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec                  receiver\nClient on 10.101.12.10:  \nClient on 10.101.12.10:  iperf Done.\n\nClient on 10.101.12.101:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.101:  [  4] local 10.44.0.2 port 57420 connected to 10.111.250.143 port 5201\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.101:  [  4]   0.00-1.00   sec  3.49 GBytes  30.0 Gbits/sec   49    811 KBytes       \nClient on 10.101.12.101:  [  4]   1.00-2.00   sec  3.63 GBytes  31.2 Gbits/sec    0    811 KBytes       \nClient on 10.101.12.101:  [  4]   2.00-3.00   sec  3.55 GBytes  30.5 Gbits/sec    0   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   3.00-4.00   sec  3.54 GBytes  30.4 Gbits/sec  254   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   4.00-5.00   sec  3.45 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   5.00-6.00   sec  3.44 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   6.00-7.00   sec  3.51 GBytes  30.2 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   7.00-8.00   sec  3.57 GBytes  30.7 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   8.00-9.00   sec  3.52 GBytes  30.3 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   9.00-10.00  sec  3.53 GBytes  30.3 Gbits/sec    0   1.72 MBytes       \nClient on 10.101.12.101:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec  303             sender\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec                  receiver\nClient on 10.101.12.101:  \nClient on 10.101.12.101:  iperf Done.\n\nClient on 10.101.12.102:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.102:  [  4] local 10.36.0.1 port 50664 connected to 10.111.250.143 port 5201\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.102:  [  4]   0.00-1.00   sec   303 MBytes  2.54 Gbits/sec  693    569 KBytes       \nClient on 10.101.12.102:  [  4]   1.00-2.00   sec   286 MBytes  2.40 Gbits/sec  245    484 KBytes       \nClient on 10.101.12.102:  [  4]   2.00-3.00   sec   284 MBytes  2.38 Gbits/sec   87    590 KBytes       \nClient on 10.101.12.102:  [  4]   3.00-4.00   sec   292 MBytes  2.45 Gbits/sec  458    496 KBytes       \nClient on 10.101.12.102:  [  4]   4.00-5.00   sec   269 MBytes  2.25 Gbits/sec   45    654 KBytes       \nClient on 10.101.12.102:  [  4]   5.00-6.00   sec   302 MBytes  2.54 Gbits/sec  294    551 KBytes       \nClient on 10.101.12.102:  [  4]   6.00-7.00   sec   261 MBytes  2.19 Gbits/sec   69    525 KBytes       \nClient on 10.101.12.102:  [  4]   7.00-8.00   sec   281 MBytes  2.36 Gbits/sec  260    464 KBytes       \nClient on 10.101.12.102:  [  4]   8.00-9.00   sec   246 MBytes  2.07 Gbits/sec   96    606 KBytes       \nClient on 10.101.12.102:  [  4]   9.00-10.00  sec   312 MBytes  2.62 Gbits/sec  248    693 KBytes       \nClient on 10.101.12.102:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec  2495             sender\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec                  receiver\nClient on 10.101.12.102:  \nClient on 10.101.12.102:  iperf Done.\n\ndeployment.apps "iperf-server-deployment" deleted\nservice "iperf-server" deleted\ndaemonset.apps "iperf-clients" deleted',
+ 'Unable to use a TTY - input is not a terminal or the right kind of file\nUnable to use a TTY - input is not a terminal or the right kind of file\nUnable to use a TTY - input is not a terminal or the right kind of file',
+ 0]</msg>
+<msg timestamp="20200409 12:06:30.882" level="INFO">${stdout} = A Iperf Server is created as a Kubernetes Deployment and Iperf Client is created as a Daemonset
+deployment.apps/iperf-server-deployment created
+service/iperf-server created
+daemonset.apps/iperf-client...</msg>
+<msg timestamp="20200409 12:06:30.882" level="INFO">${stderr} = Unable to use a TTY - input is not a terminal or the right kind of file
+Unable to use a TTY - input is not a terminal or the right kind of file
+Unable to use a TTY - input is not a terminal or the rig...</msg>
+<msg timestamp="20200409 12:06:30.882" level="INFO">${rc} = 0</msg>
+<status status="PASS" starttime="20200409 12:05:47.748" endtime="20200409 12:06:30.882"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${stdout}</arg>
+</arguments>
+<msg timestamp="20200409 12:06:30.883" level="TRACE">Arguments: [ 'A Iperf Server is created as a Kubernetes Deployment and Iperf Client is created as a Daemonset\ndeployment.apps/iperf-server-deployment created\nservice/iperf-server created\ndaemonset.apps/iperf-clients created\nWaiting for iperf server to start...\nWaiting for iperf server to start...\nServer is running\n\nClient on 10.101.12.10:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.10:  [  4] local 10.32.0.4 port 59674 connected to 10.111.250.143 port 5201\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.10:  [  4]   0.00-1.00   sec   122 MBytes  1.02 Gbits/sec  380    330 KBytes       \nClient on 10.101.12.10:  [  4]   1.00-2.00   sec   214 MBytes  1.80 Gbits/sec   45    520 KBytes       \nClient on 10.101.12.10:  [  4]   2.00-3.00   sec   259 MBytes  2.17 Gbits/sec   49    644 KBytes       \nClient on 10.101.12.10:  [  4]   3.00-4.00   sec   282 MBytes  2.37 Gbits/sec  297    562 KBytes       \nClient on 10.101.12.10:  [  4]   4.00-5.00   sec   286 MBytes  2.40 Gbits/sec  110    649 KBytes       \nClient on 10.101.12.10:  [  4]   5.00-6.00   sec   274 MBytes  2.30 Gbits/sec  156    577 KBytes       \nClient on 10.101.12.10:  [  4]   6.00-7.00   sec   276 MBytes  2.32 Gbits/sec  237    484 KBytes       \nClient on 10.101.12.10:  [  4]   7.00-8.00   sec   274 MBytes  2.29 Gbits/sec  147    615 KBytes       \nClient on 10.101.12.10:  [  4]   8.00-9.00   sec   288 MBytes  2.42 Gbits/sec  421    526 KBytes       \nClient on 10.101.12.10:  [  4]   9.00-10.00  sec   275 MBytes  2.31 Gbits/sec  146    663 KBytes       \nClient on 10.101.12.10:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec  1988             sender\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec                  receiver\nClient on 10.101.12.10:  \nClient on 10.101.12.10:  iperf Done.\n\nClient on 10.101.12.101:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.101:  [  4] local 10.44.0.2 port 57420 connected to 10.111.250.143 port 5201\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.101:  [  4]   0.00-1.00   sec  3.49 GBytes  30.0 Gbits/sec   49    811 KBytes       \nClient on 10.101.12.101:  [  4]   1.00-2.00   sec  3.63 GBytes  31.2 Gbits/sec    0    811 KBytes       \nClient on 10.101.12.101:  [  4]   2.00-3.00   sec  3.55 GBytes  30.5 Gbits/sec    0   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   3.00-4.00   sec  3.54 GBytes  30.4 Gbits/sec  254   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   4.00-5.00   sec  3.45 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   5.00-6.00   sec  3.44 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   6.00-7.00   sec  3.51 GBytes  30.2 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   7.00-8.00   sec  3.57 GBytes  30.7 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   8.00-9.00   sec  3.52 GBytes  30.3 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   9.00-10.00  sec  3.53 GBytes  30.3 Gbits/sec    0   1.72 MBytes       \nClient on 10.101.12.101:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec  303             sender\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec                  receiver\nClient on 10.101.12.101:  \nClient on 10.101.12.101:  iperf Done.\n\nClient on 10.101.12.102:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.102:  [  4] local 10.36.0.1 port 50664 connected to 10.111.250.143 port 5201\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.102:  [  4]   0.00-1.00   sec   303 MBytes  2.54 Gbits/sec  693    569 KBytes       \nClient on 10.101.12.102:  [  4]   1.00-2.00   sec   286 MBytes  2.40 Gbits/sec  245    484 KBytes       \nClient on 10.101.12.102:  [  4]   2.00-3.00   sec   284 MBytes  2.38 Gbits/sec   87    590 KBytes       \nClient on 10.101.12.102:  [  4]   3.00-4.00   sec   292 MBytes  2.45 Gbits/sec  458    496 KBytes       \nClient on 10.101.12.102:  [  4]   4.00-5.00   sec   269 MBytes  2.25 Gbits/sec   45    654 KBytes       \nClient on 10.101.12.102:  [  4]   5.00-6.00   sec   302 MBytes  2.54 Gbits/sec  294    551 KBytes       \nClient on 10.101.12.102:  [  4]   6.00-7.00   sec   261 MBytes  2.19 Gbits/sec   69    525 KBytes       \nClient on 10.101.12.102:  [  4]   7.00-8.00   sec   281 MBytes  2.36 Gbits/sec  260    464 KBytes       \nClient on 10.101.12.102:  [  4]   8.00-9.00   sec   246 MBytes  2.07 Gbits/sec   96    606 KBytes       \nClient on 10.101.12.102:  [  4]   9.00-10.00  sec   312 MBytes  2.62 Gbits/sec  248    693 KBytes       \nClient on 10.101.12.102:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec  2495             sender\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec                  receiver\nClient on 10.101.12.102:  \nClient on 10.101.12.102:  iperf Done.\n\ndeployment.apps "iperf-server-deployment" deleted\nservice "iperf-server" deleted\ndaemonset.apps "iperf-clients" deleted' ]</msg>
+<msg timestamp="20200409 12:06:30.883" level="DEBUG">Test timeout 15 minutes active. 850.651 seconds left.</msg>
+<msg timestamp="20200409 12:06:30.883" level="INFO">A Iperf Server is created as a Kubernetes Deployment and Iperf Client is created as a Daemonset
+deployment.apps/iperf-server-deployment created
+service/iperf-server created
+daemonset.apps/iperf-clients created
+Waiting for iperf server to start...
+Waiting for iperf server to start...
+Server is running
+
+Client on 10.101.12.10:  Connecting to host iperf-server, port 5201
+Client on 10.101.12.10:  [  4] local 10.32.0.4 port 59674 connected to 10.111.250.143 port 5201
+Client on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+Client on 10.101.12.10:  [  4]   0.00-1.00   sec   122 MBytes  1.02 Gbits/sec  380    330 KBytes       
+Client on 10.101.12.10:  [  4]   1.00-2.00   sec   214 MBytes  1.80 Gbits/sec   45    520 KBytes       
+Client on 10.101.12.10:  [  4]   2.00-3.00   sec   259 MBytes  2.17 Gbits/sec   49    644 KBytes       
+Client on 10.101.12.10:  [  4]   3.00-4.00   sec   282 MBytes  2.37 Gbits/sec  297    562 KBytes       
+Client on 10.101.12.10:  [  4]   4.00-5.00   sec   286 MBytes  2.40 Gbits/sec  110    649 KBytes       
+Client on 10.101.12.10:  [  4]   5.00-6.00   sec   274 MBytes  2.30 Gbits/sec  156    577 KBytes       
+Client on 10.101.12.10:  [  4]   6.00-7.00   sec   276 MBytes  2.32 Gbits/sec  237    484 KBytes       
+Client on 10.101.12.10:  [  4]   7.00-8.00   sec   274 MBytes  2.29 Gbits/sec  147    615 KBytes       
+Client on 10.101.12.10:  [  4]   8.00-9.00   sec   288 MBytes  2.42 Gbits/sec  421    526 KBytes       
+Client on 10.101.12.10:  [  4]   9.00-10.00  sec   275 MBytes  2.31 Gbits/sec  146    663 KBytes       
+Client on 10.101.12.10:  - - - - - - - - - - - - - - - - - - - - - - - - -
+Client on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr
+Client on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec  1988             sender
+Client on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec                  receiver
+Client on 10.101.12.10:  
+Client on 10.101.12.10:  iperf Done.
+
+Client on 10.101.12.101:  Connecting to host iperf-server, port 5201
+Client on 10.101.12.101:  [  4] local 10.44.0.2 port 57420 connected to 10.111.250.143 port 5201
+Client on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+Client on 10.101.12.101:  [  4]   0.00-1.00   sec  3.49 GBytes  30.0 Gbits/sec   49    811 KBytes       
+Client on 10.101.12.101:  [  4]   1.00-2.00   sec  3.63 GBytes  31.2 Gbits/sec    0    811 KBytes       
+Client on 10.101.12.101:  [  4]   2.00-3.00   sec  3.55 GBytes  30.5 Gbits/sec    0   1.31 MBytes       
+Client on 10.101.12.101:  [  4]   3.00-4.00   sec  3.54 GBytes  30.4 Gbits/sec  254   1.31 MBytes       
+Client on 10.101.12.101:  [  4]   4.00-5.00   sec  3.45 GBytes  29.6 Gbits/sec    0   1.55 MBytes       
+Client on 10.101.12.101:  [  4]   5.00-6.00   sec  3.44 GBytes  29.6 Gbits/sec    0   1.55 MBytes       
+Client on 10.101.12.101:  [  4]   6.00-7.00   sec  3.51 GBytes  30.2 Gbits/sec    0   1.55 MBytes       
+Client on 10.101.12.101:  [  4]   7.00-8.00   sec  3.57 GBytes  30.7 Gbits/sec    0   1.55 MBytes       
+Client on 10.101.12.101:  [  4]   8.00-9.00   sec  3.52 GBytes  30.3 Gbits/sec    0   1.55 MBytes       
+Client on 10.101.12.101:  [  4]   9.00-10.00  sec  3.53 GBytes  30.3 Gbits/sec    0   1.72 MBytes       
+Client on 10.101.12.101:  - - - - - - - - - - - - - - - - - - - - - - - - -
+Client on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr
+Client on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec  303             sender
+Client on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec                  receiver
+Client on 10.101.12.101:  
+Client on 10.101.12.101:  iperf Done.
+
+Client on 10.101.12.102:  Connecting to host iperf-server, port 5201
+Client on 10.101.12.102:  [  4] local 10.36.0.1 port 50664 connected to 10.111.250.143 port 5201
+Client on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd
+Client on 10.101.12.102:  [  4]   0.00-1.00   sec   303 MBytes  2.54 Gbits/sec  693    569 KBytes       
+Client on 10.101.12.102:  [  4]   1.00-2.00   sec   286 MBytes  2.40 Gbits/sec  245    484 KBytes       
+Client on 10.101.12.102:  [  4]   2.00-3.00   sec   284 MBytes  2.38 Gbits/sec   87    590 KBytes       
+Client on 10.101.12.102:  [  4]   3.00-4.00   sec   292 MBytes  2.45 Gbits/sec  458    496 KBytes       
+Client on 10.101.12.102:  [  4]   4.00-5.00   sec   269 MBytes  2.25 Gbits/sec   45    654 KBytes       
+Client on 10.101.12.102:  [  4]   5.00-6.00   sec   302 MBytes  2.54 Gbits/sec  294    551 KBytes       
+Client on 10.101.12.102:  [  4]   6.00-7.00   sec   261 MBytes  2.19 Gbits/sec   69    525 KBytes       
+Client on 10.101.12.102:  [  4]   7.00-8.00   sec   281 MBytes  2.36 Gbits/sec  260    464 KBytes       
+Client on 10.101.12.102:  [  4]   8.00-9.00   sec   246 MBytes  2.07 Gbits/sec   96    606 KBytes       
+Client on 10.101.12.102:  [  4]   9.00-10.00  sec   312 MBytes  2.62 Gbits/sec  248    693 KBytes       
+Client on 10.101.12.102:  - - - - - - - - - - - - - - - - - - - - - - - - -
+Client on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr
+Client on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec  2495             sender
+Client on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec                  receiver
+Client on 10.101.12.102:  
+Client on 10.101.12.102:  iperf Done.
+
+deployment.apps "iperf-server-deployment" deleted
+service "iperf-server" deleted
+daemonset.apps "iperf-clients" deleted</msg>
+<msg timestamp="20200409 12:06:30.883" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:06:30.882" endtime="20200409 12:06:30.883"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${stdout}</arg>
+</arguments>
+<msg timestamp="20200409 12:06:30.884" level="TRACE">Arguments: [ 'A Iperf Server is created as a Kubernetes Deployment and Iperf Client is created as a Daemonset\ndeployment.apps/iperf-server-deployment created\nservice/iperf-server created\ndaemonset.apps/iperf-clients created\nWaiting for iperf server to start...\nWaiting for iperf server to start...\nServer is running\n\nClient on 10.101.12.10:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.10:  [  4] local 10.32.0.4 port 59674 connected to 10.111.250.143 port 5201\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.10:  [  4]   0.00-1.00   sec   122 MBytes  1.02 Gbits/sec  380    330 KBytes       \nClient on 10.101.12.10:  [  4]   1.00-2.00   sec   214 MBytes  1.80 Gbits/sec   45    520 KBytes       \nClient on 10.101.12.10:  [  4]   2.00-3.00   sec   259 MBytes  2.17 Gbits/sec   49    644 KBytes       \nClient on 10.101.12.10:  [  4]   3.00-4.00   sec   282 MBytes  2.37 Gbits/sec  297    562 KBytes       \nClient on 10.101.12.10:  [  4]   4.00-5.00   sec   286 MBytes  2.40 Gbits/sec  110    649 KBytes       \nClient on 10.101.12.10:  [  4]   5.00-6.00   sec   274 MBytes  2.30 Gbits/sec  156    577 KBytes       \nClient on 10.101.12.10:  [  4]   6.00-7.00   sec   276 MBytes  2.32 Gbits/sec  237    484 KBytes       \nClient on 10.101.12.10:  [  4]   7.00-8.00   sec   274 MBytes  2.29 Gbits/sec  147    615 KBytes       \nClient on 10.101.12.10:  [  4]   8.00-9.00   sec   288 MBytes  2.42 Gbits/sec  421    526 KBytes       \nClient on 10.101.12.10:  [  4]   9.00-10.00  sec   275 MBytes  2.31 Gbits/sec  146    663 KBytes       \nClient on 10.101.12.10:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.10:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec  1988             sender\nClient on 10.101.12.10:  [  4]   0.00-10.00  sec  2.49 GBytes  2.14 Gbits/sec                  receiver\nClient on 10.101.12.10:  \nClient on 10.101.12.10:  iperf Done.\n\nClient on 10.101.12.101:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.101:  [  4] local 10.44.0.2 port 57420 connected to 10.111.250.143 port 5201\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.101:  [  4]   0.00-1.00   sec  3.49 GBytes  30.0 Gbits/sec   49    811 KBytes       \nClient on 10.101.12.101:  [  4]   1.00-2.00   sec  3.63 GBytes  31.2 Gbits/sec    0    811 KBytes       \nClient on 10.101.12.101:  [  4]   2.00-3.00   sec  3.55 GBytes  30.5 Gbits/sec    0   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   3.00-4.00   sec  3.54 GBytes  30.4 Gbits/sec  254   1.31 MBytes       \nClient on 10.101.12.101:  [  4]   4.00-5.00   sec  3.45 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   5.00-6.00   sec  3.44 GBytes  29.6 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   6.00-7.00   sec  3.51 GBytes  30.2 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   7.00-8.00   sec  3.57 GBytes  30.7 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   8.00-9.00   sec  3.52 GBytes  30.3 Gbits/sec    0   1.55 MBytes       \nClient on 10.101.12.101:  [  4]   9.00-10.00  sec  3.53 GBytes  30.3 Gbits/sec    0   1.72 MBytes       \nClient on 10.101.12.101:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.101:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec  303             sender\nClient on 10.101.12.101:  [  4]   0.00-10.00  sec  35.2 GBytes  30.3 Gbits/sec                  receiver\nClient on 10.101.12.101:  \nClient on 10.101.12.101:  iperf Done.\n\nClient on 10.101.12.102:  Connecting to host iperf-server, port 5201\nClient on 10.101.12.102:  [  4] local 10.36.0.1 port 50664 connected to 10.111.250.143 port 5201\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr  Cwnd\nClient on 10.101.12.102:  [  4]   0.00-1.00   sec   303 MBytes  2.54 Gbits/sec  693    569 KBytes       \nClient on 10.101.12.102:  [  4]   1.00-2.00   sec   286 MBytes  2.40 Gbits/sec  245    484 KBytes       \nClient on 10.101.12.102:  [  4]   2.00-3.00   sec   284 MBytes  2.38 Gbits/sec   87    590 KBytes       \nClient on 10.101.12.102:  [  4]   3.00-4.00   sec   292 MBytes  2.45 Gbits/sec  458    496 KBytes       \nClient on 10.101.12.102:  [  4]   4.00-5.00   sec   269 MBytes  2.25 Gbits/sec   45    654 KBytes       \nClient on 10.101.12.102:  [  4]   5.00-6.00   sec   302 MBytes  2.54 Gbits/sec  294    551 KBytes       \nClient on 10.101.12.102:  [  4]   6.00-7.00   sec   261 MBytes  2.19 Gbits/sec   69    525 KBytes       \nClient on 10.101.12.102:  [  4]   7.00-8.00   sec   281 MBytes  2.36 Gbits/sec  260    464 KBytes       \nClient on 10.101.12.102:  [  4]   8.00-9.00   sec   246 MBytes  2.07 Gbits/sec   96    606 KBytes       \nClient on 10.101.12.102:  [  4]   9.00-10.00  sec   312 MBytes  2.62 Gbits/sec  248    693 KBytes       \nClient on 10.101.12.102:  - - - - - - - - - - - - - - - - - - - - - - - - -\nClient on 10.101.12.102:  [ ID] Interval           Transfer     Bandwidth       Retr\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec  2495             sender\nClient on 10.101.12.102:  [  4]   0.00-10.00  sec  2.77 GBytes  2.38 Gbits/sec                  receiver\nClient on 10.101.12.102:  \nClient on 10.101.12.102:  iperf Done.\n\ndeployment.apps "iperf-server-deployment" deleted\nservice "iperf-server" deleted\ndaemonset.apps "iperf-clients" deleted' ]</msg>
+<msg timestamp="20200409 12:06:30.884" level="DEBUG">Test timeout 15 minutes active. 850.65 seconds left.</msg>
+<msg timestamp="20200409 12:06:30.885" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:06:30.883" endtime="20200409 12:06:30.885"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=.</arg>
+<arg>${cluster_name}</arg>
+<arg>${cloudlet_name_openstack_dedicated}</arg>
+<arg>${operator_name_openstack}</arg>
+<arg>${mobiledgex_domain}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:06:30.885" level="TRACE">Arguments: [ 'SEPARATOR=.' | 'cluster1586451745-314301' | 'automationParadiseCloudlet' | 'GDDT' | 'mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:06:30.885" level="DEBUG">Test timeout 15 minutes active. 850.649 seconds left.</msg>
+<msg timestamp="20200409 12:06:30.885" level="TRACE">Return: 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:06:30.885" level="INFO">${rootlb} = cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:06:30.885" endtime="20200409 12:06:30.885"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${rootlb}</arg>
+</arguments>
+<assign>
+<var>${rootlb}</var>
+</assign>
+<msg timestamp="20200409 12:06:30.886" level="TRACE">Arguments: [ 'cluster1586451745-314301.automationParadiseCloudlet.GDDT.mobiledgex.net' ]</msg>
+<msg timestamp="20200409 12:06:30.886" level="DEBUG">Test timeout 15 minutes active. 850.648 seconds left.</msg>
+<msg timestamp="20200409 12:06:30.886" level="TRACE">Return: 'cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net'</msg>
+<msg timestamp="20200409 12:06:30.886" level="INFO">${rootlb} = cluster1586451745-314301.automationparadisecloudlet.gddt.mobiledgex.net</msg>
+<status status="PASS" starttime="20200409 12:06:30.886" endtime="20200409 12:06:30.886"></status>
+</kw>
+<doc>SSH to RootLB VM
+Copy Performance Repository from Github and measture bandwidth between master and worker nodes</doc>
+<timeout value="15 minutes"></timeout>
+<status status="PASS" starttime="20200409 12:05:41.534" endtime="20200409 12:06:30.886" critical="yes"></status>
+</test>
+<kw name="Cleanup Provisioning" library="MexMasterController" type="teardown">
+<msg timestamp="20200409 12:06:30.887" level="TRACE">Arguments: [  ]</msg>
+<msg timestamp="20200409 12:06:30.887" level="INFO">cleaning up provisioning</msg>
+<msg timestamp="20200409 12:06:30.887" level="DEBUG">deleting obj&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x1082b3290&gt;</msg>
+<msg timestamp="20200409 12:06:30.887" level="INFO">delete at https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteClusterInst. 
+	{"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:06:30.887" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"}</msg>
+<msg timestamp="20200409 12:06:30.887" level="DEBUG">url=https://console-qa.mobiledgex.net:443/api/v1/auth/ctrl/DeleteClusterInst data={"clusterinst": {"key": {"cluster_key": {"name": "cluster1586451745-314301"}, "cloudlet_key": {"organization": "GDDT", "name": "automationParadiseCloudlet"}, "organization": "MobiledgeX"}}, "region": "EU"} headers={'Content-type': 'application/json', 'accept': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1MzgxNDUsImlhdCI6MTU4NjQ1MTc0NSwidXNlcm5hbWUiOiJtZXhhZG1pbiIsImVtYWlsIjoibWV4YWRtaW5AbW9iaWxlZGdleC5uZXQiLCJraWQiOjJ9.1KIsPQTo4caWXmCi2u-DnS3gG7RFIpCOwwq3ebKg5vD0X9JEGYK3QpBwM5dlOb4ywRQHQWkk_EplJzHiBbe_KA'} verify_cert=False</msg>
+<msg timestamp="20200409 12:06:30.890" level="DEBUG">Starting new HTTPS connection (1): console-qa.mobiledgex.net:443</msg>
+<msg timestamp="20200409 12:06:31.429" level="DEBUG">https://console-qa.mobiledgex.net:443 "POST /api/v1/auth/ctrl/DeleteClusterInst HTTP/1.1" 200 None</msg>
+<msg timestamp="20200409 12:06:54.683" level="DEBUG">resp={"data":{"message":"Deleting"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:06:54.683" level="DEBUG">content={"data":{"message":"Deleting"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:06:54.683" level="INFO">response:
+200
+{"data":{"message":"Deleting"}}
+{"data":{"message":"NotPresent"}}
+{"data":{"message":"Deleted ClusterInst successfully"}}
+</msg>
+<msg timestamp="20200409 12:06:54.683" level="INFO">[&lt;function MexOperation.send.&lt;locals&gt;.send_message.&lt;locals&gt;.&lt;lambda&gt; at 0x1082b3290&gt;]</msg>
+<msg timestamp="20200409 12:06:54.683" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20200409 12:06:30.887" endtime="20200409 12:06:54.683"></status>
+</kw>
+<doc>Create Dedicated K8s Cluster and Run Performance Test between PODs</doc>
+<status status="PASS" starttime="20200409 12:02:25.049" endtime="20200409 12:06:54.683"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0">Critical Tests</stat>
+<stat pass="2" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" id="s1" name="Performancek8S">Performancek8S</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200409 12:02:25.507" level="WARN">DMEINIT None</msg>
+<msg timestamp="20200409 12:05:41.532" level="WARN">True EU</msg>
+</errors>
+</robot>
