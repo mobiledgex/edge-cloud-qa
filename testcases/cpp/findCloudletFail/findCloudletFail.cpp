@@ -348,7 +348,6 @@ int main() {
     } else {
       cout << "Removing Token File Failed!" << endl;
     }
-    
     int authToken = system(("genauthtoken -appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey + " >token.txt").c_str());
     std::ifstream tokenFile("token.txt");
      if (tokenFile.is_open()){
