@@ -3,7 +3,7 @@ Documentation  use FQDN to access app on gcp
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme         dme_address=%{AUTOMATION_DME_ADDRESS}	
-Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_GCP_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
+#Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_GCP_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
 Library  MexApp
 
 Test Setup      Setup
