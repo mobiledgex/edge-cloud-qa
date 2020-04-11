@@ -14,8 +14,8 @@ namespace RestSample
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "tmus";
         //static string appName = "EmptyMatchEngineApp";
-        //static string devName = "EmptyMatchEngineApp";
-        static string devName = "mobiledgex";
+        //static string orgName = "EmptyMatchEngineApp";
+        static string orgName = "MobiledgeX";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
@@ -114,7 +114,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, devName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);

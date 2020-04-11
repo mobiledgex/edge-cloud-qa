@@ -13,7 +13,7 @@
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
-    <PackageReference Include="MobiledgeX.MatchingEngineSDKRestLibrary" Version="1.4.19" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+    <PackageReference Include="MobiledgeX.MatchingEngineSDKRestLibrary" Version="1.5.0" />
   </ItemGroup>
 </Project>
