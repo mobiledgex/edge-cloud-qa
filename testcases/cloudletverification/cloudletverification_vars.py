@@ -49,8 +49,8 @@ token_server_url = 'http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https:/
 gpu_resource_name = 'mygpuresrouce'
 
 # tester used to the GPU
-facedetection_server_tester = 'FaceDetectionServer/server_tester.py'
-facedetection_image = '3_bodies.png'
+facedetection_server_tester = 'cloudletverification/FaceDetectionServer/server_tester.py'
+facedetection_image = 'cloudletverification/FaceDetectionServer/3_bodies.png'
 
 ##############################################
 # these define the names used for flavors/apps/clusters
@@ -84,7 +84,7 @@ app_name_vmgpu = app_name + 'vmgpu'
 cluster_name_dockerdedicated = cluster_name + 'dockerdedicated'
 cluster_name_dockershared = cluster_name + 'dockershared'
 cluster_name_dockerdedicatedgpu = cluster_name + 'dockerdedicatedgpu'
-cluster_name_dockersharedgpu = cluster_name + 'dockersharedgpu'
+cluster_name_k8ssharedgpu = cluster_name + 'k8ssharedgpu'
 cluster_name_k8sdedicated = cluster_name + 'k8sdedicated'
 cluster_name_k8sshared = cluster_name + 'k8sshared'
 cluster_name_k8ssharedvolumesize = cluster_name + 'k8ssharedvolumesize'
