@@ -2,7 +2,7 @@
 Documentation  Create an app instance on azure with a dot in the appname
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
+#Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
 Library  MexDme         dme_address=%{AUTOMATION_DME_ADDRESS}
 Library  String
 
@@ -47,9 +47,9 @@ User shall be able to create an app instance on azure with a dot in the app name
     # verify dot is gone
     Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
 
-    Log To Console  Waiting for k8s pod to be running
-    ${app_name_default}=  Get Default App Name
-    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name_azure}  pod_name=${app_name_default}
+#    Log To Console  Waiting for k8s pod to be running
+#    ${app_name_default}=  Get Default App Name
+#    Wait for pod to be running on CRM  cluster_name=${cluster_name}  operator_name=${operator_name_azure}  pod_name=${app_name_default}
 
 *** Keywords ***
 Setup

@@ -3,7 +3,7 @@ Documentation  use FQDN to access app on azure
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  MexDme         dme_address=%{AUTOMATION_DME_ADDRESS}	
-Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
+#Library  MexCrm         crm_pod_name=%{AUTOMATION_CRM_AZURE_POD_NAME}  kubeconfig=%{AUTOMATION_KUBECONFIG}
 Library  MexApp
 Library  DateTime
 Library  String
