@@ -5,6 +5,8 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexApp
 Library  String
+Library  Process
+Library  OperatingSystem
 
 Suite Setup      Setup
 #Test Teardown   Cleanup provisioning
@@ -128,6 +130,47 @@ User shall be able to deploy VM App Instance with cloud-config
    Set Global Variable  ${vmcloudconfig_starttime}
    Set Global Variable  ${vmcloudconfig_endtime}
 
+User shall be able to deploy GPU App Instance on docker dedicated
+   [Documentation]
+   ...  deploy app instance on IpAccessDedicated docker with TCP/UDP/HTTP port
+   ...  Verify deployment is successfull
+   [Tags]  app  docker  dedicated  appinst  gpu
+
+   Log To Console  \nCreate GPU app instance for docker dedicated
+
+   Create App Instance  region=${region}  app_name=${app_name_dockerdedicatedgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockerdedicatedgpu}
+
+   Log To Console  \nCreate GPU app instance done
+
+User shall be able to deploy GPU App Instance on k8s shared
+   [Documentation]
+   ...  deploy app instance on IpAccessDedicated docker with TCP/UDP/HTTP port
+   ...  Verify deployment is successfull
+   [Tags]  app  k8s  shared  appinst  gpu
+
+   Log To Console  \nCreate GPU app instance for k8s shared
+
+   Create App Instance  region=${region}  app_name=${app_name_k8sharedgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8ssharedgpu}
+
+   Log To Console  \nCreate GPU app instance done
+
+User shall be able to deploy a GPU VM App Instance
+   [Documentation]
+   ...  deploy a VM app instance with TCP/UDP/HTTP port
+   ...  Verify deployment is successfull
+   [Tags]  app  vm  appinst  gpu
+
+   Log To Console  \nCreate GPU VM app instance
+
+   ${vmgpu_starttime}=  Get Time  epoch
+   Create App Instance  region=${region}  app_name=${app_name_vmgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vmgpu}
+   ${vmgpu_endtime}=  Get Time  epoch
+
+   Log To Console  \nCreate GPU app instance done
+
+   Set Global Variable  ${vmgpu_starttime}
+   Set Global Variable  ${vmgpu_endtime}
+
 User shall be able to access UDP/TCP port on docker dedicated 
    [Documentation]
    ...  deploy app with 1 UDP port
@@ -236,15 +279,99 @@ User shall be able to access UDP/TCP/HTTP port on VM with cloudconfig
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
    HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
 
+User shall be able to access the GPU on docker dedicated
+   [Documentation]
+   ...  deploy app with 1 UDP port
+   ...  verify the port as accessible via fqdn
+   [Tags]  app  docker  dedicated  gpu  gpuaccess
+
+   Log To Console  \nRegistering Client and Finding Cloudlet for GPU docker dedicated
+   Register Client  app_name=${app_name_dockerdedicatedgpu}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+
+   Wait For DNS  ${cloudlet['fqdn']}
+
+   Sleep  30 s
+
+   #${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
+   #${image_full}=     Catenate  SEPARATOR=/  ${client_path}  ${image}
+
+   ${epoch_time}=  Get Time  epoch
+   ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
+
+   # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
+   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+#   Run Process  python3  ${facedetection_server_tester}   -s    cluster1586639345696343dockerdedicatedgpu.verificationcloudlet.tdg.mobiledgex.net  -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+
+   ${output}=  Get File  ${outfile}
+   Log To Console  ${output}
+
+   Should Contain  ${output}  TEST_PASS=True
+
+User shall be able to access the GPU on k8s shared
+   [Documentation]
+   ...  deploy app with 1 UDP port
+   ...  verify the port as accessible via fqdn
+   [Tags]  app  k8s  shared  gpu  gpuaccess
+
+   Log To Console  \nRegistering Client and Finding Cloudlet for GPU k8s shared
+   Register Client  app_name=${app_name_k8ssharedgpu}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+
+   Wait For DNS  ${cloudlet['fqdn']}
+
+   Sleep  30 s
+
+   ${epoch_time}=  Get Time  epoch
+   ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
+
+   # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
+   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+   #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+
+   ${output}=  Get File  ${outfile}
+   Log To Console  ${output}
+
+   Should Contain  ${output}  TEST_PASS=True
+
+User shall be able to access the GPU on VM
+   [Documentation]
+   ...  deploy app with 1 UDP port
+   ...  verify the port as accessible via fqdn
+   [Tags]  app  vm  gpu  gpuaccess
+
+   Log To Console  \nRegistering Client and Finding Cloudlet for GPU VM
+   Register Client  app_name=${app_name_vmgpu}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+
+   Wait For DNS  ${cloudlet['fqdn']}
+
+   Sleep  30 s
+
+   ${epoch_time}=  Get Time  epoch
+   ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
+
+   # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
+   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+   #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+
+   ${output}=  Get File  ${outfile}
+   Log To Console  ${output}
+
+   Should Contain  ${output}  TEST_PASS=True
+
 *** Keywords ***
 Setup
-    Create App  region=${region}  app_name=${app_name_dockerdedicated}  deployment=docker      image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085   command=${docker_command}
-    Create App  region=${region}  app_name=${app_name_dockershared}     deployment=docker      image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085   command=${docker_command}
-    Create App  region=${region}  app_name=${app_name_k8sdedicated}     deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
-    Create App  region=${region}  app_name=${app_name_k8sshared}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
-    Create App  region=${region}  app_name=${app_name_k8ssharedvolumesize}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url_sharedvolumesize} 
+   Create App  region=${region}  app_name=${app_name_dockerdedicated}  deployment=docker      image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085   command=${docker_command}
+   Create App  region=${region}  app_name=${app_name_dockershared}     deployment=docker      image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085   command=${docker_command}
+   Create App  region=${region}  app_name=${app_name_k8sdedicated}     deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
+   Create App  region=${region}  app_name=${app_name_k8sshared}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
+   Create App  region=${region}  app_name=${app_name_k8ssharedvolumesize}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url_sharedvolumesize} 
 
-    Create App  region=${region}  app_name=${app_name_vm}              deployment=vm  image_path=${qcow_centos_image}             access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}
-    Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  deployment_manifest=${vm_cloudconfig}
+   Create App  region=${region}  app_name=${app_name_vm}              deployment=vm  image_path=${qcow_centos_image}             access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}
+   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  deployment_manifest=${vm_cloudconfig}
 
+   Create App  region=${region}  app_name=${app_name_dockerdedicatedgpu}  image_path=${docker_image_gpu}         access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=docker
+   Create App  region=${region}  app_name=${app_name_k8ssharedgpu}        image_path=${docker_image_gpu}         access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes
+   Create App  region=${region}  app_name=${app_name_vm_gpu}              image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011  image_type=ImageTypeQCOW    deployment=vm
 
