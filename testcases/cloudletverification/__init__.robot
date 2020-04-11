@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Cloudlet Verificationn 
+Documentation  Cloudlet Verification 
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
