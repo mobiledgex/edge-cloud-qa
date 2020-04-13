@@ -344,7 +344,7 @@ User shall be able to access the GPU on VM
    Register Client  app_name=${app_name_vmgpu}
    ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
 
-   Wait For DNS  ${cloudlet['fqdn']}
+   Wait For DNS  ${cloudlet['fqdn']}  wait_time=1800
 
    Sleep  30 s
 
