@@ -89,6 +89,7 @@ cluster_name_k8sdedicated = cluster_name + 'k8sdedicated'
 cluster_name_k8sshared = cluster_name + 'k8sshared'
 cluster_name_k8ssharedvolumesize = cluster_name + 'k8ssharedvolumesize'
 cluster_name_vm = 'autoclustervm'
+cluster_name_vmgpu = 'autoclustervmgpu'
 
 # metrics wait time
 metrics_wait_docker = 1200
