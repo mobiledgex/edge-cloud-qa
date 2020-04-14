@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1977
 AppMetrics - Shall be able to get the app Disk metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all app Disk metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ AppMetrics - Shall be able to get the app Disk metrics with cloudlet/operator/de
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1978
 AppMetrics - Shall be able to get the app Disk metrics with cloudlet/developer only
    [Documentation]
    ...  request all app Disk metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ AppMetrics - Shall be able to get the app Disk metrics with cloudlet/developer o
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1979
 AppMetrics - Shall be able to get the app Disk metrics with operator/developer only
    [Documentation]
    ...  request all app Disk metrics with operator/developer only
@@ -70,6 +73,7 @@ AppMetrics - Shall be able to get the app Disk metrics with operator/developer o
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1988
 AppMetrics - Shall be able to get the app Disk metrics with developer only
    [Documentation]
    ...  request all app Disk metrics with developer only
@@ -81,10 +85,11 @@ AppMetrics - Shall be able to get the app Disk metrics with developer only
 
    Disk Should be in Range  ${metrics}
 
+# ECQ-2037
 AppMetrics - Shall be able to get all app Disk metrics with developer only
    [Documentation]
    ...  request all app Disk metrics with developer only
-   ...  verify info is correct
+   ...  verify info is correct and only sends 2000 metrics
 
    ${metrics}=  Get all app metrics with developer only  ${developer_name}  disk 
 
