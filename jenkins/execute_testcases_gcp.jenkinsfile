@@ -1,6 +1,6 @@
 cycle = "${cycle}"
 //components = "${components}"
-controller = "${controllerazuregcp}"
+controller = "${controller}"
 mc = "mcunset"
 mccert = ""
 dme = "dmeunset"
