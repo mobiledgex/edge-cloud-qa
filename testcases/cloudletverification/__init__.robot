@@ -19,10 +19,11 @@ Setup
 #   Create Org  orgname=${operator_name_openstack}  orgtype=operator  address="123 main street"  phone=123-456-7890
 #   ${flavor_default}=  Get Default Flavor Name
 
-   Create Flavor  region=${region}  flavor_name=${flavor_name_small}  ram=1024  vcpus=1  disk=20    #Docker/K8s Flavor
-   Create Flavor  region=${region}  flavor_name=${flavor_name_medium}  ram=4096  vcpus=2  disk=20    #Docker/K8s Flavor
-   Create Flavor  region=${region}  flavor_name=${flavor_name_large}  ram=8192  vcpus=4  disk=20    #Docker/K8s Flavor
-   Create Flavor  region=${region}  flavor_name=${flavor_name_vm}  disk=80    #VM flavor
+   Create Flavor  region=${region}  flavor_name=${flavor_name_small}  ram=1024  vcpus=1  disk=20           #Docker/K8s Flavor
+   Create Flavor  region=${region}  flavor_name=${flavor_name_medium}  ram=4096  vcpus=2  disk=20          #Docker/K8s Flavor
+   Create Flavor  region=${region}  flavor_name=${flavor_name_large}  ram=8192  vcpus=4  disk=20           #Docker/K8s Flavor
+   Create Flavor  region=${region}  flavor_name=${flavor_name_vm}  disk=80                                 #VM flavor
+   Create Flavor  region=${region}  flavor_name=${flavor_name_gpu}  disk=80  optional_resources=gpu=gpu:1  #GPU flavor
 
 #   ${flavor_default}=  Get Default Flavor Name
    
