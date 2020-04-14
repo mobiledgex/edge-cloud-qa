@@ -18,7 +18,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack
 
    Log To Console  \nCreating Cloudlet
 
-   Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=MEX_SECURITY_GROUP=cloudletverifcation
+   Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=MEX_SECURITY_GROUP=${cloudlet_security_group}
 
    Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
    Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
