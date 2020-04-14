@@ -6,6 +6,7 @@ import subprocess
 import time
 import requests
 import re
+import CloudFlare
 
 import rootlb
 import kubernetes
@@ -15,6 +16,9 @@ class MexApp(object):
     def __init__(self):
         self.kubeconfig_dir = os.getenv('HOME') + '/.mobiledgex'
         self.rootlb = None
+        self.cf_token = '***REMOVED***'
+        self.cf_user = 'mobiledgex.ops@mobiledgex.com'
+        self.cf_zone_name = 'mobiledgex.net'
         
     def ping_udp_port(self, host, port):
         data = 'ping'
@@ -134,7 +138,7 @@ class MexApp(object):
             try:
                 addr = socket.gethostbyname(dns)
                 logging.info('dns is ready at ' + addr)
-                return
+                return  addr
             except OSError as err:
                 logging.debug(f'dns not ready yet:{err}')
                 time.sleep(1)
@@ -142,8 +146,7 @@ class MexApp(object):
                 logging.debug(f'dns not ready yet:{sys.exc_info()[0]}')
                 time.sleep(1)
 
-
-        return addr
+        raise Exception(f'DNS for {dns} not ready after {wait_time} seconds')
     
     def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_pods=1, wait_time=600):
 
@@ -353,3 +356,26 @@ class MexApp(object):
         container_name = rb.get_docker_container_id(name=container_name)
         return rb.run_command_on_container(container_name[0], command)
 
+    def get_dns_ip(self, dns_name):
+        cf = CloudFlare.CloudFlare(email=self.cf_user, token=self.cf_token)
+
+        try:
+            logging.info(f'getting cloudflare zoneid for zone={self.cf_zone_name}')
+            zoneid = cf.zones.get(params = {'name':self.cf_zone_name,'per_page':1})[0]['id']
+            logging.info(f'found zoneid={zoneid} for zone={self.cf_zone_name}')
+        except CloudFlare.exceptions.CloudFlareAPIError as e:
+            #raise Exception(r'/zones.get %d %s - api call failed' % (e, e))
+            raise Exception(f'cloudlflare exception get zones failed: {e}')
+        except Exception as e:
+            #exit('/zones.get - %s - api call failed' % (e))
+            raise Exception(f'exception get zones failed: {e}')
+
+        try:
+            logging.info(f'getting cloudflare dns record for dns={dns_name}')
+            dns_ip = cf.zones.dns_records.get(zoneid, params = {'name':dns_name})[0]['content']
+            logging.info(f'found name={dns_name} ip={dns_ip}')
+        except CloudFlare.exceptions.CloudFlareAPIError as e:
+            #exit('/zones/dns_records.get %d %s - api call failed' % (e, e))
+            raise Exception(f'cloudlflaire exception get dns record failed: {sys.exc_info()[0]}')
+
+        return dns_ip
