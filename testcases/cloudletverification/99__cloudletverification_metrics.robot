@@ -12,7 +12,7 @@ Test Timeout  ${test_timeout}
 *** Variables ***
 ${cloudlet_name_openstack}=   automationBonnCloudlet
 ${operator_name_openstack}=                       TDG
-${developer}=  mobiledgex
+${developer_organization_name}=  mobiledgex
 
 ${region}=  EU
 
@@ -66,7 +66,7 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/docker on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -90,7 +90,7 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/docker on opens
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -114,7 +114,7 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/docker on ope
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -138,7 +138,7 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/docker on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=tcp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -162,7 +162,7 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/docker on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=udp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -186,7 +186,7 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/docker on op
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -210,7 +210,7 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -234,7 +234,7 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/docker on openstac
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -258,7 +258,7 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/docker on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -282,7 +282,7 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=tcp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -306,7 +306,7 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=udp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -330,7 +330,7 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/docker on opens
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -354,7 +354,7 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -378,7 +378,7 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/k8s on openstac
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -402,7 +402,7 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/k8s on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -426,7 +426,7 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=tcp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -450,7 +450,7 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=udp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -474,7 +474,7 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/k8s on opens
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -498,7 +498,7 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -522,7 +522,7 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -546,7 +546,7 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -570,7 +570,7 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=tcp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -594,7 +594,7 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=udp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -618,7 +618,7 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/k8s on openstac
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -642,7 +642,7 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/docker on op
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -666,7 +666,7 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -690,7 +690,7 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -714,7 +714,7 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/docker on opensta
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -738,7 +738,7 @@ Metrics shall collect App Network metrics for IpAccessDedicated/docker on openst
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -762,7 +762,7 @@ Metrics shall collect App Connections metrics for IpAccessShared/docker on opens
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -786,7 +786,7 @@ Metrics shall collect App CPU metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -810,7 +810,7 @@ Metrics shall collect App Disk metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -834,7 +834,7 @@ Metrics shall collect App Memory metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -858,7 +858,7 @@ Metrics shall collect App Network metrics for IpAccessShared/docker on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -882,7 +882,7 @@ Metrics shall collect App Connections metrics for IpAccessShared/k8s on openstac
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -906,7 +906,7 @@ Metrics shall collect App CPU metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -930,7 +930,7 @@ Metrics shall collect App Disk metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -954,7 +954,7 @@ Metrics shall collect App Memory metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -978,7 +978,7 @@ Metrics shall collect App Network metrics for IpAccessShared/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1002,7 +1002,7 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/k8s on opens
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1026,7 +1026,7 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1050,7 +1050,7 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1074,7 +1074,7 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1098,7 +1098,7 @@ Metrics shall collect App Network metrics for IpAccessDedicated/k8s on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1122,7 +1122,7 @@ Metrics shall collect App CPU metrics for VM on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1146,7 +1146,7 @@ Metrics shall collect App Disk metrics for VM on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1170,7 +1170,7 @@ Metrics shall collect App Memory metrics for VM on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1194,7 +1194,7 @@ Metrics shall collect App Network metrics for VM on openstack
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
