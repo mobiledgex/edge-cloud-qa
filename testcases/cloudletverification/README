@@ -17,3 +17,8 @@ robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --ou
 # you can also use the '-i' option to only run tests that match a certain tag
 # do the following to only run the cloudlet and docker testscases
 robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --outputdir=cloudletverification/logs -i cloudlet -i docker  cloudletverification
+
+# This security rule needs to exist on openstack for privacy policy tests
+# Then delete the IPV4 egress rule
+openstack security group create cloudletverification
+openstack security group rule delete d35c4990-32d0-4471-b7f5-fc39ea53ac0c
