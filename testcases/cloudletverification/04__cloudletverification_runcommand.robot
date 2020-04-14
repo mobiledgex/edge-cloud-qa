@@ -14,7 +14,7 @@ ${operator_name_openstack}  TDG
 ${region}  EU
 
 ${app_version}=  1.0
-${developer}=  mobiledgex
+${developer_organization_name}=  mobiledgex
 
 ${test_timeout_crm}  32 min
 
@@ -25,7 +25,7 @@ User shall be able to do RunCommand k8s shared
    ...  verify RunCommand works 
    [Tags]  k8s  shared  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid[-1]}  root\r\n
 
@@ -35,7 +35,7 @@ User shall be able to do RunCommand on k8s dedicated
    ...  verify RunCommand works
    [Tags]  k8s  dedicated  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid[-1]}  root\r\n
 
@@ -45,7 +45,7 @@ User shall be able to do RunCommand on docker dedicated
    ...  verify RunCommand works
    [Tags]  docker  dedicated  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid[-1]}  root\r\n
 
@@ -55,7 +55,7 @@ User shall be able to do RunCommand on docker shared
    ...  verify RunCommand works
    [Tags]  docker  shared  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid[-1]}  root\r\n
 
