@@ -15,7 +15,7 @@ ${operator_name_openstack}  GDDT
 ${region}  EU
 
 ${app_version}=  1.0
-${developer}=  mobiledgex
+${developer_organization_name}=  mobiledgex
 
 ${test_timeout_crm}  32 min
 
@@ -26,7 +26,7 @@ User shall be able to do ShowLogs k8s shared
    ...  verify ShowLogs works 
    [Tags]  k8s  shared  showlogs
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token} 
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token} 
 
    List Should Contain Value  ${stdout_noid}  all threads started\r\n
 
@@ -36,7 +36,7 @@ User shall be able to do ShowLogs on k8s dedicated
    ...  verify ShowLogs works
    [Tags]  k8s  dedicated  showlogs
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
 
    List Should Contain Value  ${stdout_noid}  all threads started\r\n
 
@@ -49,7 +49,7 @@ User shall be able to do ShowLogs on docker dedicated
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockerdedicated}
    ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockerdedicated}*
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  container_id=${ids[0]}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  container_id=${ids[0]}
 
    List Should Contain Value  ${stdout_noid}  all threads started\r\n
 
@@ -62,7 +62,7 @@ User shall be able to do ShowLogs on docker shared
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockershared}
    ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockershared}*
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
 
    List Should Contain Value  ${stdout_noid}  all threads started\r\n
 
