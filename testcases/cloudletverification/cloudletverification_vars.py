@@ -25,6 +25,8 @@ cloudlet_latitude = '45.5017'
 cloudlet_longitude = '-73.5673'
 cloudlet_security_group = 'cloudletverification'
 
+developer_organization_name = 'MobiledgeX'
+
 # docker image used for docker/k8s deployments
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/openpose-docker:20200116'
