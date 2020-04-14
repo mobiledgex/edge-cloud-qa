@@ -614,3 +614,58 @@ Get cluster metrics with operator/developer only
    Should Be Equal As Integers  ${num_readings}  20
 
    [Return]  ${metrics}
+
+Get cluster metrics with developer only
+   [Arguments]  ${developer}  ${selector}
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=${region}  developer_org_name=${developer}  selector=${selector}  last=20
+   log to console  ${metricspre['data'][0]}
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   log to console  ${epochpre}
+   ${start}=  Evaluate  ${epochpre} - 3600
+   ${end}=    Evaluate  ${epochpre} - 30
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   log to console  ${start_date} ${end_date}
+
+   # get readings with starttime and endtime
+   ${metrics}=  Get Cluster Metrics  region=${region}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+
+   #log to console  ${epochpre}
+   #log to console  ${epoch_first}
+   #log to console  ${epoch_last}
+   #Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
+   #Should Be True  ${epoch_last} < ${epochpre}
+   #Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be Equal As Integers  ${num_readings}  20
+
+   [Return]  ${metrics}
+
+Get all cluster metrics with developer only
+   [Arguments]  ${developer}  ${selector}
+
+   # get last metric and set starttime = 1 hour earlier
+   ${metricspre}=  Get Cluster Metrics  region=${region}  developer_org_name=${developer}  selector=${selector}
+   log to console  ${metricspre['data'][0]}
+   
+   ${num_readings}=  Get Length  ${metricspre['data'][0]['Series'][0]['values']}
+   log to console  ${num_readings}
+
+   Should Be Equal As Integers  ${num_readings}  2000
+
+   [Return]  ${metricspre}
+
