@@ -261,7 +261,7 @@ User shall be able to access UDP/TCP/HTTP port on VM
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
    HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
 
-User shall be able to access UDP/TCP/HTTP port on VM with cloudconfig
+User shall be able to access UDP/TCP port on VM with cloudconfig
    [Documentation]
    ...  deploy app with 1 UDP port
    ...  verify the port as accessible via fqdn
@@ -277,7 +277,6 @@ User shall be able to access UDP/TCP/HTTP port on VM with cloudconfig
    Log To Console  \nChecking if port is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
 
 User shall be able to access the GPU on docker dedicated
    [Documentation]
@@ -289,7 +288,8 @@ User shall be able to access the GPU on docker dedicated
    Register Client  app_name=${app_name_dockerdedicatedgpu}
    ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
 
-   Wait For DNS  ${cloudlet['fqdn']}
+   #Wait For DNS  ${cloudlet['fqdn']}
+   ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
    Sleep  30 s
 
@@ -300,7 +300,7 @@ User shall be able to access the GPU on docker dedicated
    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
 
    # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
-   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+   Run Process  python3  ${facedetection_server_tester}   -s   ${ip}   -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
 #   Run Process  python3  ${facedetection_server_tester}   -s    cluster1586639345696343dockerdedicatedgpu.verificationcloudlet.gddt.mobiledgex.net  -e  /openpose/detect/   -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
 
    ${output}=  Get File  ${outfile}
@@ -369,7 +369,7 @@ Setup
    Create App  region=${region}  app_name=${app_name_k8ssharedvolumesize}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url_sharedvolumesize} 
 
    Create App  region=${region}  app_name=${app_name_vm}              deployment=vm  image_path=${qcow_centos_image}             access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}
-   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  deployment_manifest=${vm_cloudconfig}
+   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  deployment_manifest=${vm_cloudconfig}
 
    Create App  region=${region}  app_name=${app_name_dockerdedicatedgpu}  image_path=${docker_image_gpu}         access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=docker
    Create App  region=${region}  app_name=${app_name_k8ssharedgpu}        image_path=${docker_image_gpu}         access_ports=tcp:8008,tcp:8011  image_type=ImageTypeDocker  deployment=kubernetes
