@@ -30,7 +30,7 @@ from mex_master_controller.Flavor import Flavor
 from mex_master_controller.OperatorCode import OperatorCode
 from mex_master_controller.PrivacyPolicy import PrivacyPolicy
 from mex_master_controller.RunCommand import RunCommand
-from mex_master_controller.ShowDevice import ShowDevice
+#from mex_master_controller.ShowDevice import ShowDevice
 
 
 import shared_variables_mc
@@ -172,7 +172,7 @@ class MexMasterController(MexRest):
         self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.privacy_policy = PrivacyPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.run_cmd = RunCommand(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
-        self.show_device = ShowDevice(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.show_device = ShowDevice(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
