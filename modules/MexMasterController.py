@@ -172,7 +172,7 @@ class MexMasterController(MexRest):
         self.operatorcode = OperatorCode(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.privacy_policy = PrivacyPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.run_cmd = RunCommand(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
-#        self.show_device = ShowDevice(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.show_device = ShowDevice(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
