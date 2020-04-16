@@ -32,7 +32,8 @@ ${password}=  mextester06123
 ${test_timeout}=  32 min
 
 ${region}=  US
-	
+
+# ECQ-2055	
 *** Test Cases ***
 DMEMetrics - Shall be able to get the last DME RegisterClient metric on openstack
    [Documentation]
