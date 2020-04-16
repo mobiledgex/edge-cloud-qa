@@ -16,6 +16,7 @@ ${region}=  US
 ${app_key}      -----BEGIN PUBLIC KEY-----${\n}MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij${\n}TkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0${\n}VU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC${\n}GJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS${\n}z3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m${\n}QnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C${\n}/QIDAQAB${\n}-----END PUBLIC KEY-----
 
 *** Test Cases ***
+# ECQ-2050
 DMEMetrics - RegisterClient shall generate metrics
    [Documentation]
    ...  Send multiple RegisterClient messages
@@ -43,6 +44,7 @@ DMEMetrics - RegisterClient shall generate metrics
 
    Values Should Be In Range  ${metrics}
 
+# ECQ-2051
 DMEMetrics - RegisterClient with cellid shall generate metrics
    [Documentation]
    ...  Send multiple RegisterClient messages with cellid
@@ -70,6 +72,7 @@ DMEMetrics - RegisterClient with cellid shall generate metrics
 
    Values With Cellid Should Be In Range  ${metrics}
 
+# ECQ-2052
 DMEMetrics - RegisterClient with auth shall generate metrics
    [Documentation]
    ...  Send multiple RegisterClient messages auth
@@ -99,6 +102,7 @@ DMEMetrics - RegisterClient with auth shall generate metrics
 
    Values With Auth Should Be In Range  ${metrics}
 
+# ECQ-2053
 DMEMetrics - RegisterClient with error shall generate metrics
    [Documentation]
    ...  Send multiple RegisterClient messages with errors 
