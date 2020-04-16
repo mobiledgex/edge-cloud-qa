@@ -83,10 +83,10 @@ SSH to Iperf Client Side Docker Container and Run TCP Performance Test for 30s
 
    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase   ${rootlb}
+   ${cert}=    Find File  id_rsa_mex
 
    Open Connection                 ${rootlb}
-   login with public key           ubuntu   /Users/ashutoshbhatt/Downloads/id_rsa_mex
-
+   login with public key           ubuntu  ${cert}
 
 
 
