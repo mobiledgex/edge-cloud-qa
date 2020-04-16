@@ -13,12 +13,13 @@ token_global = None
 class RegisterClientObject():
     request = None
     
-    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True):
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_org_name
         self.app_name = app_name
         self.app_vers = app_version
         self.auth_token = auth_token
+        self.cell_id = cell_id
 
         global auth_token_global
         
@@ -38,6 +39,8 @@ class RegisterClientObject():
             client_dict['app_vers'] = self.app_vers
         if self.auth_token is not None:
             client_dict['auth_token'] = self.auth_token
+        if self.cell_id is not None:
+            client_dict['cell_id'] = int(self.cell_id)
 
         #self.request = app_client_pb2.RegisterClientRequest(**client_dict)
         self.request = json.dumps(client_dict)
