@@ -17,6 +17,7 @@ ${operator_org_name_dme}=  TDG
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2047
 DMEMetrics - FindCloudlet shall generate metrics
    [Documentation]
    ...  Send multiple FindCloudlet messages
@@ -45,6 +46,7 @@ DMEMetrics - FindCloudlet shall generate metrics
 
    Values Should Be In Range  ${metrics}  ${app}  ${tmus_cloudlet_name}  ${tmus_operator_name}
 
+# ECQ-2048
 DMEMetrics - FindCloudlet Not Found shall generate metrics
    [Documentation]
    ...  Send multiple FindCloudlet not found messages
@@ -73,6 +75,7 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
 
    Values Should Be In Range  ${metrics}  ${app}  ${None}  ${None}
 
+# ECQ-2049
 DMEMetrics - FindCloudlet with error shall generate metrics
    [Documentation]
    ...  Send multiple FindCloudlet messages with errors 
