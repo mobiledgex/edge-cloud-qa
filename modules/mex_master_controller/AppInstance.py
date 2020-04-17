@@ -196,17 +196,11 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.metrics_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_name=None, app_version=None, cluster_instance_name=None, operator_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, json_data=None, use_defaults=True, use_thread=False):
-        app_inst = self._build(app_name=app_name, developer_name=developer_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=True)
-        #app_inst_metric = app_inst
-        print('*WARN*', 'xxxx', app_inst)
+    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=True)
         app_inst_metric = {'appinstclientkey': app_inst}
-        print('*WARN*', 'xxxx2', app_inst_metric)
 
-        #del app_inst_metric['key']
+        return self.show(token=token, url=self.show_appinst_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=app_inst_metric, stream=True)
 
-        #msg_dict = self._build_metrics(type_dict=app_inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
-
-        return self.show(token=token, url=self.show_appinst_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=app_inst_metric)
-
-    
+    def get_show_app_instance_client_metrics(self):
+        return self.get_stream_output()
