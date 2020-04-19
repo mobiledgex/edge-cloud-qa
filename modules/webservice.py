@@ -49,7 +49,7 @@ class WebService() :
         #url_to_use = self._buildUrl(url)
         self.stream_output = []
         
-        timeout = (3.05)
+        timeout = None
         if stream:
             timeout = (3.05, stream_timeout)
         
