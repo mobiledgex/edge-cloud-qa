@@ -85,6 +85,18 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with developer 
 
    Memory Should be in Range  ${metrics}
 
+# ECQ-2042
+ClusterMetrics - Shall be able to get all cluster Memory metrics with developer only
+   [Documentation]
+   ...  request all cluster Memory metrics with developer only
+   ...  verify info is correct and only returns 2000 metrics
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Memory Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits

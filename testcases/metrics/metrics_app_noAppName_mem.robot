@@ -28,6 +28,7 @@ ${password}=  mextester06123
 ${orgname}=   metricsorg
 	
 *** Test Cases ***
+# ECQ-1980
 AppMetrics - Shall be able to get the app Memory metrics with cloudlet/operator/developer only
    [Documentation]
    ...  request all app Memory metrics with cloudlet/operator/developer on openstack
@@ -44,6 +45,7 @@ AppMetrics - Shall be able to get the app Memory metrics with cloudlet/operator/
    # removed since it is often the only cluster
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1981
 AppMetrics - Shall be able to get the app Memory metrics with cloudlet/developer only
    [Documentation]
    ...  request all app Memory metrics with cloudlet/developer on openstack
@@ -57,6 +59,7 @@ AppMetrics - Shall be able to get the app Memory metrics with cloudlet/developer
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1982
 AppMetrics - Shall be able to get the app Memory metrics with operator/developer only
    [Documentation]
    ...  request all app Memory metrics with operator/developer only
@@ -70,6 +73,7 @@ AppMetrics - Shall be able to get the app Memory metrics with operator/developer
 
    #Metrics Should Match Different Cluster Names  ${metrics}
 
+# ECQ-1983
 AppMetrics - Shall be able to get the app Memory metrics with developer only
    [Documentation]
    ...  request all app Memory metrics with developer only
@@ -81,10 +85,11 @@ AppMetrics - Shall be able to get the app Memory metrics with developer only
 
    Memory Should be in Range  ${metrics}
 
+# ECQ-2038
 AppMetrics - Shall be able to get all app Memory metrics with developer only
    [Documentation]
    ...  request all app memory metrics with developer only
-   ...  verify info is correct
+   ...  verify info is correct and only returns 2000 metrics
 
    ${metrics}=  Get all app metrics with developer only  ${developer_name}  mem 
 
