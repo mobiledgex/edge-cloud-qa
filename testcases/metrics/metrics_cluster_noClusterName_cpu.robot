@@ -85,6 +85,18 @@ ClusterMetrics - Shall be able to get the cluster CPU metrics with developer onl
 
    CPU Should be in Range  ${metrics}
 
+# ECQ-2041
+ClusterMetrics - Shall be able to get all cluster CPU metrics with developer only
+   [Documentation]
+   ...  request all cluster CPU metrics with developer only
+   ...  verify info is correct and only returns 2000 metrics
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   CPU Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits
