@@ -15,15 +15,16 @@ ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
-${developer}=  mobiledgex
+${developer}=  MobiledgeX
 
 ${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
-${developer_artifactory}  mobiledgex
+${developer_artifactory}  MobiledgeX
 
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 	
 *** Test Cases ***
+# ECQ-1878
 ShowLogs - shall return error with appname not found
     [Documentation]
     ...  execute Show Logs with app name not found 
@@ -34,8 +35,9 @@ ShowLogs - shall return error with appname not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_ap  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_ap","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}')
 
+# ECQ-1879
 ShowLogs - shall return error with app version not found
     [Documentation]
     ...  execute Show Logs with app version not found
@@ -46,8 +48,9 @@ ShowLogs - shall return error with app version not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.1  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.1"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}')
 
+# ECQ-1880
 ShowLogs - shall return error with developer not found
     [Documentation]
     ...  execute Show Logs with app developer not found
@@ -58,9 +61,10 @@ ShowLogs - shall return error with developer not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=automation_ap  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"automation_ap","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"automation_ap"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"automation_ap\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"automation_ap\\\\"}} not found"}') 
     #Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
 
+# ECQ-1881
 ShowLogs - shall return error with cluster not found
     [Documentation]
     ...  execute Show Logs with cluster not found
@@ -71,8 +75,9 @@ ShowLogs - shall return error with cluster not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluste  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autocluste"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autocluste\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}') 
 
+# ECQ-1882
 ShowLogs - shall return error with operator not found
     [Documentation]
     ...  execute Show Logs with operator not found
@@ -83,8 +88,9 @@ ShowLogs - shall return error with operator not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmu  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmu","name":"tmocloud-1"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmu\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}') 
 
+# ECQ-1883
 ShowLogs - shall return error with cloudlet not found
     [Documentation]
     ...  execute Show Logs with cloudlet not found
@@ -95,8 +101,9 @@ ShowLogs - shall return error with cloudlet not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-"},"organization":"${developer}"}} not found 
+    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}') 
 
+# ECQ-1884
 ShowLogs - shall return error with bad token 
     [Documentation]
     ...  execute Show Logs with token=xx
@@ -107,8 +114,9 @@ ShowLogs - shall return error with bad token
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=xx  
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Unauthorized (401), invalid or expired jwt 
+    Should Contain  ${error}  ('code=401', 'error={"message":"invalid or expired jwt"}')
 
+# ECQ-1885
 ShowLogs - shall return error without token
     [Documentation]
     ...  execute Show Logs with no token 
@@ -119,8 +127,9 @@ ShowLogs - shall return error without token
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1    use_defaults=${False}
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Unauthorized (401), invalid or expired jwt
+    Should Contain  ${error}  ('code=400', 'error={"message":"no bearer token found"}') 
 
+# ECQ-1886
 ShowLogs - shall return error without invalid parms 
     [Documentation]
     ...  execute Show Logs with no token
@@ -128,7 +137,7 @@ ShowLogs - shall return error without invalid parms
 
     EDGECLOUD-2081 - ShowLogs should give better error handling for invalid tail/timestamps/follow
 
-    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   since=x
+    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   smince=x
 
     ${error2}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=x
 
@@ -141,10 +150,13 @@ ShowLogs - shall return error without invalid parms
     Should Contain  ${error3}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
     Should Contain  ${error4}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
 
+# ECQ-2067
 ShowLogs - shall return error for VM apps
     [Documentation]
     ...  execute Show Logs for VM 
     ...  verify error is received
+
+    EDGECLOUD-2556 - ShowLogs for VM should show error consistent with RunCommand
 
     Create Flavor  region=US
 
@@ -153,4 +165,4 @@ ShowLogs - shall return error for VM apps
 
     ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=tmus 
 
-    Should Contain  ${error1}  Error: Bad Request (400), Unsupported deployment type
+    Should Contain  ${error1}  ('code=400', 'error={"message":"Unsupported deployment type"}')
