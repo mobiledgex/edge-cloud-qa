@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  ShowLogs with OperatorManager/OperatorContributer/OperatorViewer
+Documentation  RunConsole with OperatorManager/OperatorContributer/OperatorViewer
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 
@@ -22,63 +22,67 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
-# ECQ-1893
-ShowLogs - OperatorManager shall not be able to do ShowLogs
+# ECQ-2071
+RunConsole - OperatorManager shall not be able to do RunConsole
     [Documentation]
-    ...  execute ShowLogs as OperatorManager
+    ...  execute RunConsole as OperatorManager
     ...  verify error is received
 
-    #EDGECLOUD-1446 ShowLogs for unauthorized user returns "Forbidden, Forbidden"
+    #EDGECLOUD-1446 RunConsole for unauthorized user returns "Forbidden, Forbidden"
 
     Adduser Role  username=${username_epoch}  role=OperatorManager  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}') 
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
-# ECQ-1894
-ShowLogs - OperatorContributor shall not be able to do ShowLogs
+# ECQ-2072
+RunConsole - OperatorContributor shall not be able to do RunConsole
     [Documentation]
-    ...  execute ShowLogs as OperatorContributor
+    ...  execute RunConsole as OperatorContributor
     ...  verify error is received
 
-    #EDGECLOUD-1446 ShowLogs for unauthorized user returns "Forbidden, Forbidden"
+    #EDGECLOUD-1446 RunConsole for unauthorized user returns "Forbidden, Forbidden"
 
     Adduser Role  username=${username_epoch}  role=OperatorContributor  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}') 
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+
+    #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
-# ECQ-1895
-ShowLogs - OperatorViewer shall not be able to do ShowLogs
+# ECQ-2073
+RunConsole - OperatorViewer shall not be able to do RunConsole
     [Documentation]
-    ...  execute ShowLogs as OperatorViewer
+    ...  execute RunConsole as OperatorViewer
     ...  verify error is received
 
-    #EDGECLOUD-1446 ShowLogs for unauthorized user returns "Forbidden, Forbidden"	
+    #EDGECLOUD-1446 RunConsole for unauthorized user returns "Forbidden, Forbidden"	
 
     Adduser Role  username=${username_epoch}  role=OperatorViewer  #orgname=${docker_image_developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  developer_org_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  developer_org_name=${docker_image_developer}
 
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}') 
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+
+    #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
