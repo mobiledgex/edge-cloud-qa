@@ -22,6 +22,7 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
+# ECQ-1570
 RunCommand - OperatorManager shall not be able to do RunCommand
     [Documentation]
     ...  execute RunCommand as OperatorManager
@@ -37,10 +38,11 @@ RunCommand - OperatorManager shall not be able to do RunCommand
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}') 
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
+# ECQ-1571
 RunCommand - OperatorContributor shall not be able to do RunCommand
     [Documentation]
     ...  execute RunCommand as OperatorContributor
@@ -56,10 +58,13 @@ RunCommand - OperatorContributor shall not be able to do RunCommand
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+
+    #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
+# ECQ-1572
 RunCommand - OperatorViewer shall not be able to do RunCommand
     [Documentation]
     ...  execute RunCommand as OperatorViewer
@@ -75,7 +80,9 @@ RunCommand - OperatorViewer shall not be able to do RunCommand
 
     log to console  ${error}
 
-    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+
+    #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
