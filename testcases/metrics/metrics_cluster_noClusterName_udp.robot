@@ -85,6 +85,18 @@ ClusterMetrics - Shall be able to get the cluster UDP metrics with developer onl
 
    UDP Should be in Range  ${metrics}
 
+# ECQ-2045
+ClusterMetrics - Shall be able to get all cluster UDP metrics with developer only
+   [Documentation]
+   ...  request all cluster UDP metrics with developer only
+   ...  verify info is correct and only returns 2000 metrics
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   UDP Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits
