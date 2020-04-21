@@ -1553,9 +1553,17 @@ class MexMasterController(MexRest):
         """ Send region DeleteAppInst for all instances filter by cloudlet
         """
         appinstances = self.show_app_instances(region=region, cloudlet_name=cloudlet_name)
+        found_failure = False
         for app in appinstances:
             logging.info(f'deleting {app}')
-            self.app_instance.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_org_name=app['data']['key']['app_key']['organization'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_org_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=app['data']['key']['cluster_inst_key']['organization'], crm_override=crm_override)
+            try:
+                self.app_instance.delete_app_instance(region=region, app_name=app['data']['key']['app_key']['name'], app_version=app['data']['key']['app_key']['version'], developer_org_name=app['data']['key']['app_key']['organization'], cloudlet_name=cloudlet_name, cluster_instance_name=app['data']['key']['cluster_inst_key']['cluster_key']['name'], operator_org_name=app['data']['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=app['data']['key']['cluster_inst_key']['organization'], crm_override=crm_override)
+            except Exception as e:
+                found_failure = True
+                logging.error(f'error deleting appinst:{e}')
+
+        if found_failure:
+            raise Exception('deleting all app instances failed')
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, timeout=120, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread, timeout=timeout)
