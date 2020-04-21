@@ -22,6 +22,7 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
+# ECQ-1567
 RunCommand - DeveloperManager shall be able to do RunCommand
     [Documentation]
     ...  execute Run Command as DeveloperManager
@@ -31,10 +32,13 @@ RunCommand - DeveloperManager shall be able to do RunCommand
 
     ${token}=  Login
 
+#    ${stdout}=  Run Command  region=US  app_name=app1587252144-180521  app_version=1.0  developer_org_name=MobiledgeX  cluster_instance_name=cluster1587252144-180521  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=whoami
+
     ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  root\r\n
+    Should Be Equal  ${stdout}  root\r\n
 
+# ECQ-1568
 RunCommand - DeveloperContributor shall be able to do RunCommand
     [Documentation]
     ...  execute Run Command as DeveloperContributor
@@ -46,8 +50,9 @@ RunCommand - DeveloperContributor shall be able to do RunCommand
 
     ${stdout}=  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  root\r\n
+    Should Be Equal  ${stdout}  root\r\n
 
+# ECQ-1569
 RunCommand - DeveloperViewer shall not be able to do RunCommand
     [Documentation]
     ...  execute RunCommand as DeveloperViewer
@@ -61,9 +66,7 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
-    log to console  xxxxxxxxx ${error}
-
-    Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden 
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 *** Keywords ***
 Setup
