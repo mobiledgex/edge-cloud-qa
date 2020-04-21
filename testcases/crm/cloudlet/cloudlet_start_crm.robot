@@ -95,7 +95,7 @@ CreateCloudlet - User shall be able to create a fake cloudlet
         Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=att  cloudlet_name=attcloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-96
 
         Create App Instance  region=US  app_name=automation_api_app       app_version=1.0  cluster_instance_name=autoclusterAutomation      cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
-        Create App Instance  region=US  app_name=automation_api_auth_app  app_version=1.0  cluster_instance_name=autoclusterAutomationAuth  cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
+        #Create App Instance  region=US  app_name=automation_api_auth_app  app_version=1.0  cluster_instance_name=autoclusterAutomationAuth  cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
 
 DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hamburg
         [Documentation]

@@ -85,6 +85,18 @@ ClusterMetrics - Shall be able to get the cluster Network metrics with developer
 
    Network Should be in Range  ${metrics}
 
+# ECQ-2043
+ClusterMetrics - Shall be able to get all cluster Network metrics with developer only
+   [Documentation]
+   ...  request all cluster Network metrics with developer only
+   ...  verify info is correct and only returns 2000 metrics
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  network 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Network Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits
