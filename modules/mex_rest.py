@@ -12,7 +12,7 @@ class MexRest(WebService) :
 
         #self.root_cert = self._findFile(root_cert)
 
-    def post(self, url, data=None, bearer=None):
+    def post(self, url, data=None, bearer=None, stream=False):
         #logging.debug(f'url={url} data={data} cert={self.root_cert}')
         logging.debug(f'url={url} data={data}')
 
@@ -21,7 +21,7 @@ class MexRest(WebService) :
             headers['Authorization'] = 'Bearer ' + bearer
 
         #self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
-        self.resp = super().post(url=url, data=data, headers=headers)
+        self.resp = super().post(url=url, data=data, headers=headers, stream=stream)
         self._decode_content()
 
         if str(self.resp.status_code) != '200':
