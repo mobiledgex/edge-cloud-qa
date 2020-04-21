@@ -12,15 +12,20 @@ token_global = None
 
 class RegisterClientObject():
     request = None
-    
-    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, use_defaults=True):
+
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, unique_id=None, unique_id_type=None, first_seen=None, seconds=None, nanos=None, notify_id=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_org_name
         self.app_name = app_name
         self.app_vers = app_version
         self.auth_token = auth_token
         self.cell_id = cell_id
-
+        self.unique_id = unique_id
+        self.unique_id_type = unique_id_type
+        self.first_seen = first_seen
+        self.seconds = seconds
+        self.nanos = nanos
+        self.notify_id = notify_id
         global auth_token_global
         
         if use_defaults:
@@ -41,6 +46,18 @@ class RegisterClientObject():
             client_dict['auth_token'] = self.auth_token
         if self.cell_id is not None:
             client_dict['cell_id'] = int(self.cell_id)
+        if self.unique_id is not None:
+            client_dict['unique_id'] = self.unique_id
+        if self.unique_id_type is not None:
+            client_dict['unique_id_type'] = self.unique_id_type
+        if self.first_seen is not None:
+            client_dict['first_seen'] = self.first_seen
+        if self.seconds is not None:
+            client_dict['seconds'] = self.seconds
+        if self.nanos is not None:
+            client_dict['nanos'] = self.nanos
+        if self.notify_id is not None:
+            client_dict['notify_id'] = self.notify_id
 
         #self.request = app_client_pb2.RegisterClientRequest(**client_dict)
         self.request = json.dumps(client_dict)

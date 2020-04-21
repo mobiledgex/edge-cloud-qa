@@ -74,8 +74,8 @@ class MexDmeRest(MexRest):
     def token_server_uri(self):
         return self._token_server_uri
 
-    def register_client(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, use_defaults=True, use_thread=False):
-        client = mex_dme_classes.RegisterClientObject(developer_org_name=developer_org_name, app_name=app_name, app_version=app_version, auth_token=auth_token, cell_id=cell_id, use_defaults=use_defaults)
+    def register_client(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, unique_id=None, unique_id_type=None, first_seen=None, seconds=None, nanos=None, notify_id=None, use_defaults=True, use_thread=False):
+        client = mex_dme_classes.RegisterClientObject(developer_org_name=developer_org_name, app_name=app_name, app_version=app_version, auth_token=auth_token, unique_id=unique_id, unique_id_type=unique_id_type, first_seen=first_seen, seconds=seconds, nanos=nanos, notify_id=notify_id, use_defaults=use_defaults)
         
         url = self.root_url + '/v1/registerclient'
         #payload = MessageToJson(client.request)
