@@ -44,13 +44,13 @@ class MexOperation(MexRest):
     def delete(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None):
         return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message)
 
-    def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None):
-        return self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message)
+    def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False):
+        return self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream)
 
     def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None):
         return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, show_message=show_msg)
 
-    def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name'):
+    def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name', stream=False):
         url = self.root_url + url
     
         payload = None
@@ -74,7 +74,7 @@ class MexOperation(MexRest):
             self.counter_dict[message_type]['req_attempts'] += 1
         
             try:
-                self.post(url=url, bearer=token, data=payload)
+                self.post(url=url, bearer=token, data=payload, stream=stream)
                 logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
 
                 # failures return a 200 for http streaming, so have to check the output for failure
@@ -95,7 +95,6 @@ class MexOperation(MexRest):
                         pass
                     else:
                         raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
-                
             except Exception as e:
                 logging.info('operation failed:' + str(sys.exc_info()))
                 self.counter_dict[message_type]['req_fail'] += 1

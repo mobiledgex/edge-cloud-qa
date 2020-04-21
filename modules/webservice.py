@@ -19,6 +19,7 @@ class WebService() :
     #httpLogger = None
     debug = False
     trace_file = None
+    stream_output = []
     
     #def __init__(self, jid = None, password = None, sesid = None, http_or_https = None, output_format = None) :
     def __init__(self, debug = False, http_trace = False) :
@@ -42,17 +43,32 @@ class WebService() :
         #if output_format is not None:
         #    self.output_format = output_format
 
-    def post(self, url, data=None, verify_cert=False, headers=None, files=None):
-        logging.debug('url=' + url + ' data=' + str(data) + ' headers=' + str(headers) + ' verify_cert=' + str(verify_cert))
+    def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, stream_timeout=5):
+        logging.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} stream_timeout={stream_timeout}')
 
         #url_to_use = self._buildUrl(url)
-
-        self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files)
-        logging.debug('resp=' + str(self.resp.text))
+        self.stream_output = []
+        
+        timeout = None
+        if stream:
+            timeout = (3.05, stream_timeout)
+        
+        try:
+            self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
+            if stream:
+                for line in self.resp.iter_lines():
+                    self.stream_output.append(json.loads(line.decode("utf-8")))
+            else:
+                logging.debug('resp=' + str(self.resp.text))
+        except requests.exceptions.ConnectionError as e:
+            if stream and 'Read timed out' in str(e):
+                logging.info(f'Read timeout while steaming:{e}')
+        except Exception as e:
+            raise Exception(f'POST exception: {e}')
         
         if self.http_trace:
             self._print_trace()
-        
+
         return self.resp
 
     def delete(self, url, verify_cert=False, headers=None):
@@ -90,6 +106,9 @@ class WebService() :
 
         return self.resp
 
+    def get_stream_output(self):
+        return self.stream_output
+    
     def _build_parms(self, parms):
         s = ''
         for p in parms:
