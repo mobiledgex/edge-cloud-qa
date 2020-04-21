@@ -4,6 +4,8 @@ import jwt
 import threading
 import requests
 import sys
+import os
+import subprocess
 
 #from google.protobuf.json_format import MessageToJson
 
@@ -72,8 +74,8 @@ class MexDmeRest(MexRest):
     def token_server_uri(self):
         return self._token_server_uri
 
-    def register_client(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, use_defaults=True, use_thread=False):
-        client = mex_dme_classes.RegisterClientObject(developer_org_name=developer_org_name, app_name=app_name, app_version=app_version, auth_token=auth_token, use_defaults=use_defaults)
+    def register_client(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, unique_id=None, unique_id_type=None, use_defaults=True, use_thread=False):
+        client = mex_dme_classes.RegisterClientObject(developer_org_name=developer_org_name, app_name=app_name, app_version=app_version, auth_token=auth_token, cell_id=cell_id, unique_id=unique_id, unique_id_type=unique_id_type, use_defaults=use_defaults)
         
         url = self.root_url + '/v1/registerclient'
         #payload = MessageToJson(client.request)
@@ -225,6 +227,34 @@ class MexDmeRest(MexRest):
         shared_variables.token_default = token
         logger.debug('token={}'.format(token))
 
+        return token
+
+    def generate_auth_token(self, app_name, app_version, developer_name, key_file='authtoken_private.pem'):
+        global auth_token_global
+        
+        logger.info('generating token for {} {} {} {}'.format(app_name, app_version, developer_name, key_file))
+
+        key_file = self._findFile(key_file)
+
+        if not os.path.isfile(key_file):
+            logger.error(f'key_file={key_file} does not exist')
+            return None
+        
+        cmd = 'genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ' + key_file
+        logger.debug('cmd=' + cmd)
+        
+        process = subprocess.run(cmd,
+                                 shell=True,
+                                 text=True,
+                                 capture_output=True
+        )
+        
+        logger.debug('stdout=' + process.stdout)
+        token = process.stdout.lstrip('Token:').lstrip().rstrip()
+        logger.debug('generated token: ' + token)
+
+        auth_token_global = token
+        
         return token
 
     def wait_for_replies(self, *args):

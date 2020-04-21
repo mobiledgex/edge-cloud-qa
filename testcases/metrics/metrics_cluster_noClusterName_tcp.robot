@@ -85,6 +85,18 @@ ClusterMetrics - Shall be able to get the cluster TCP metrics with developer onl
 
    TCP Should be in Range  ${metrics}
 
+# ECQ-2044
+ClusterMetrics - Shall be able to get all cluster TCP metrics with developer only
+   [Documentation]
+   ...  request all cluster TCP metrics with developer only
+   ...  verify info is correct and only returns 2000 metrics
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  tcp 
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   TCP Should be in Range  ${metrics}
+
 *** Keywords ***
 Setup
    #${limits}=  Get Openstack limits

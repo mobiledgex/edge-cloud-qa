@@ -1,117 +1,43 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack
+Documentation  RunConsole on openstack VM 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
+Library  RequestsLibrary
 
-#Test Setup      Setup
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cluster_flavor_name}  x1.medium
-	
-${cloudlet_name_openstack_shared}  automationHawkinsCloudlet
-${cloudlet_name_openstack_dedicated}  automationHawkinsCloudlet
-${region}  EU
+${cloudlet_name_openstack_vm}  automationBuckhornCloudlet
 ${operator_name_openstack}  GDDT
+${developer_artifactory}  artifactory
 
-${docker_image}    docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
-${docker_command}  ./server_ping_threaded.py
+${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 	
 ${test_timeout_crm}  15 min
 
+${region}=  EU
+
 *** Test Cases ***
-RunCommand - k8s shared shall return command result on openstack
-    [Documentation]
-    ...  deploy k8s shared app 
-    ...  verify RunCommand works 
+# ECQ-2074
+RunConsole - console URL shall be returned on openstack
+   [Documentation]
+   ...  deploy VM app instance 
+   ...  verify RunConsole works and console url returns 200
 
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessShared
+   Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #developer_name=${developer_artifactory}  #default_flavor_name=${cluster_flavor_name}
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  #developer_name=${developer_artifactory}  cluster_instance_developer_name=${developer_artifactory}
 
-    Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
+   ${console}=  Run Console  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+   log to console  ${console} ${console['console']['url']}
 
-    log to console  ${app_inst}
-    ${token}=  Login
-
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
-
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]} command=whoami
-
-    ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
-	
-    Should Be Equal  ${stdout_noid[-1]}  root\r\n
-    Should Be Equal  ${stdout_id[-1]}  root\r\n
-    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
-
-RunCommand - k8s dedicated shall return command result on openstack
-    [Documentation]
-    ...  deploy k8s dedicated app
-    ...  verify RunCommand works
-
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=kubernetes  ip_access=IpAccessDedicated
-
-    Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
-
-    log to console  ${app_inst}
-    ${token}=  Login
-
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
-
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]} command=whoami
-
-    ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
-
-    log to console   ${stdout_noid}
-
-    Should Be Equal  ${stdout_noid[-1]}  root\r\n
-    Should Be Equal  ${stdout_id[-1]}  root\r\n
-    Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
-
-RunCommand - docker shall return command result on openstack
-    [Documentation]
-    ...  deploy docker app
-    ...  verify RunCommand works
-
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=docker  ip_access=IpAccessDedicated
-
-    Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
-
-    log to console  ${app_inst}
-    ${token}=  Login
-
-    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=whoami
-
-    log to console   aaa ${stdout_noid}\n
-
-    ${stdout_id}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]} command=whoami
-
-    ${error}=  Run Keyword and Expect Error  *  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  container_id=notfound command=whoami
-
-    Should Be Equal  ${stdout_noid[-1]}  root\r\n
-    Should Be Equal  ${stdout_id[-1]}  root\r\n
-    Should Contain   ${error}  Error: No such container: notfound 
+   Create Session  console  ${console['console']['url']} 
+   ${resp}=  Get Request  console  /                    #${console['console']['url']}
+   Should Be Equal As Strings  ${resp.status_code}  200
 
 *** Keywords ***
 Setup
-    #Create Developer
-    #Create Flavor
-    #Log To Console  Creating Cluster Instance
-    #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  #deployment=kubernetes  ip_access=IpAccessShared
-    #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Flavor  region=${region}  disk=80
 
-    #Log To Console  Done Creating Cluster Instance
-
-    #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
-    #${rootlb}=  Convert To Lowercase  ${rootlb}
-
-    #Set Suite Variable  ${rootlb}
