@@ -13,7 +13,7 @@ token_global = None
 class RegisterClientObject():
     request = None
 
-    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, unique_id=None, unique_id_type=None, first_seen=None, seconds=None, nanos=None, notify_id=None, use_defaults=True):
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, unique_id=None, unique_id_type=None, first_seen=None, seconds=None, nanos=None, notify_id=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_org_name
         self.app_name = app_name
