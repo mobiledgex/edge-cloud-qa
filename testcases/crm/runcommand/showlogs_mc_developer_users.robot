@@ -22,6 +22,7 @@ ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 	
 *** Test Cases ***
+# ECQ-1890
 ShowLogs - DeveloperManager shall be able to do ShowLogs
     [Documentation]
     ...  execute Show Logs as DeveloperManager
@@ -33,8 +34,9 @@ ShowLogs - DeveloperManager shall be able to do ShowLogs
 
     ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  here's some logs\r\n 
+    Should Be Equal  ${stdout}  here's some logs\r\n 
 
+# ECQ-1891
 ShowLogs - DeveloperContributor shall be able to do ShowLogs
     [Documentation]
     ...  execute Show Logs as DeveloperContributor
@@ -46,14 +48,13 @@ ShowLogs - DeveloperContributor shall be able to do ShowLogs
 
     ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  here's some logs\r\n 
+    Should Be Equal  ${stdout}  here's some logs\r\n 
 
+# ECQ-1892
 ShowLogs - DeveloperViewer shall be able to do ShowLogs
     [Documentation]
     ...  execute ShowLogs as DeveloperViewer
     ...  verify ShowLogs is successful
-
-    #EDGECLOUD-1446 ShowLogs for unauthorized user returns "Forbidden, Forbidden"	
 
     Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
 
@@ -61,7 +62,7 @@ ShowLogs - DeveloperViewer shall be able to do ShowLogs
 
     ${stdout}=  Show Logs  region=US  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${stdout[0]}  here's some logs\r\n
+    Should Be Equal  ${stdout}  here's some logs\r\n
 
 *** Keywords ***
 Setup
