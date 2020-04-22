@@ -57,6 +57,7 @@ ${azure_cloudlet_latitude}	  37
 ${azure_cloudlet longitude}	  -95
 
 *** Test Cases ***
+# ECQ-995
 FindCloudlet Samsung - findCloudlet shall return azure with with azure cloudlet provisioned and closer by more than 100km
     [Documentation]  
     ...  registerClient with samsung app 
@@ -92,9 +93,15 @@ FindCloudlet Samsung - findCloudlet shall return azure with with azure cloudlet 
 
       ${fqdn}=  Get App Official FQDN  latitude=37  longitude=-96
 
+      ${decoded_client_token}=  Decoded Client Token
+      Should Be Equal  ${decoded_client_token['AppKey']['organization']}  ${developer_name_default}
+      Should Be Equal  ${decoded_client_token['AppKey']['name']}  ${app_name_default}
+      Should Be Equal  ${decoded_client_token['AppKey']['version']}  ${app_version_default}
+      Should Be Equal As Numbers  ${decoded_client_token['Location']['latitude']}  37
+      Should Be Equal As Numbers  ${decoded_client_token['Location']['longitude']}  -96
+
       Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}	
       ${cloudlet}=  Platform Find Cloudlet  carrier_name=${tmus_operator_name}  client_token=${fqdn.client_token}  #latitude=36  longitude=-95
-
 #      ${cloudlet}=  Find Cloudlet  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  carrier_name=${tmus_operator_name}  latitude=37  longitude=-96
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
@@ -128,6 +135,7 @@ Setup
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_name_default}=        Get Default App Name
+    ${app_version_default}=     Get Default App Version
 
     #Create Developer            developer_name=${samsung_developer_name}
     Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri}
@@ -136,4 +144,5 @@ Setup
     Set Suite Variable  ${azure_appinst} 
     Set Suite Variable  ${developer_name_default}
     Set Suite Variable  ${app_name_default}
+    Set Suite Variable  ${app_version_default}
 

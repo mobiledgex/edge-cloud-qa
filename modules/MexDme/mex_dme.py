@@ -9,6 +9,8 @@ import requests
 import subprocess
 import math
 import time
+import base64
+import json
 
 from mex_grpc import MexGrpc
 
@@ -259,6 +261,9 @@ class Dme(MexGrpc):
         self._token_server_uri = None
         #self._auth_token = None
 
+        self.client_token = None
+        self._decoded_client_token = None
+
         if '127.0.0.1' in dme_address:
             super(Dme, self).__init__(address=dme_address, root_cert=root_cert, key=key, client_cert=client_cert)
         else:
@@ -275,6 +280,9 @@ class Dme(MexGrpc):
     #@property
     def decoded_session_cookie(self):
         return self._decoded_session_cookie
+
+    def decoded_client_token(self):
+        return self._decoded_client_token
 
     def token_server_uri(self):
         return self._token_server_uri
@@ -343,7 +351,7 @@ class Dme(MexGrpc):
         logger.info('platform find cloudlet on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
                     
         resp = self.match_engine_stub.PlatformFindCloudlet(request)
-
+        
         if resp.status != 1: # FIND_FOUND
             raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
 
@@ -362,6 +370,10 @@ class Dme(MexGrpc):
         logger.info('get app official fqdn request on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
                     
         resp = self.match_engine_stub.GetAppOfficialFqdn(request)
+        self.client_token = resp.client_token
+        self._decoded_client_token = resp.client_token
+
+        self._decoded_client_token = json.loads(base64.b64decode(self.client_token).decode('ascii'))
 
         if resp.status != 1: # FIND_FOUND
             raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
