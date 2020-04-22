@@ -5,7 +5,7 @@ Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 #Test Setup	Setup
-Test Teardown	Cleanup provisioning
+#Test Teardown	Cleanup provisioning
 
 *** Variables ***
 ${dmuus_operator_name}  dmuus
@@ -20,23 +20,21 @@ ${dmuus_cloudlet longitude}	  -95
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2091
 ShowAppInstClient - request shall return the FindCloudlet requests
    [Documentation]
    ...  send ShowAppInstClient 
-   
+   ...  verify FindCloudlet info is returned
+ 
    Register Client	app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
-
-   # posting {"appinstclientkey":{"key":{"app_key":{"name":"automation_api_app","organization":"MobiledgeX","version":"1.0"},"cluster_inst_key":{"cloudlet_key":{"name":"tmocloud-1","organization":"dmuus"},"cluster_key":{"name":"autoclusterautomation"},"organization":"MobiledgeX"}}},"region":"US"}
-
-   Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation
-   ${pre}=  Get Show App Instance Client Metrics Output
-   ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
-  
-   Values Should Be Valid  ${pre}
 
    ${t}=  Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation  use_thread=${True}
    Sleep  1 second
+
+   ${pre}=  Get Show App Instance Client Metrics Output
+   ${len_pre}=  Get Length  ${pre}
+   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
    MexMasterController.Wait For Replies  ${t}
@@ -48,9 +46,50 @@ ShowAppInstClient - request shall return the FindCloudlet requests
    Should Be True  ${len_metrics} == ${len_pre}+1
    Should Be True  ${metrics_last} > ${pre_last}  
 
+   Values Should Be Valid  ${pre}
+
+   Values Should Be Valid  ${metrics}
+
+# ECQ-2092
+ShowAppInstClient - request with unique_id shall return the FindCloudlet requests
+   [Documentation]
+   ...  send ShowAppInstClient
+   ...  verify FindCloudlet with unique_id is returned
+
+   Register Client      app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}  unique_id=123456789012345678901234567  unique_id_type=automation
+
+   ${t}=  Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation  use_thread=${True}
+   Sleep  1 second
+
+#   Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation
+   ${pre}=  Get Show App Instance Client Metrics Output
+   ${len_pre}=  Get Length  ${pre}
+   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+
+   ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
+
+   MexMasterController.Wait For Replies  ${t}
+
+   ${metrics}=  Get Show App Instance Client Metrics Output
+   ${len_metrics}=  Get Length  ${metrics}
+   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+
+   Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id']}  123456789012345678901234567
+   Should Be Equal  ${metrics[-1]['data']['client_key']['unique_id_type']}  automation
+
+   Should Be True  ${len_metrics} == ${len_pre}+1
+   Should Be True  ${metrics_last} > ${pre_last}
+
+   Values Should Be Valid  ${pre}
+
    Values Should Be Valid  ${metrics}
 
 *** Keywords ***
+Setup
+   Register Client      app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
+   ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
+
+
 Values Should Be Valid
    [Arguments]  ${metrics}
 
@@ -60,8 +99,10 @@ Values Should Be Valid
       Should Be Equal  ${m['data']['client_key']['key']['app_key']['version']}  ${app_version}
       Should Be Equal  ${m['data']['client_key']['key']['cluster_inst_key']['cloudlet_key']['organization']}  ${dmuus_operator_name}
       Should Be Equal  ${m['data']['client_key']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${dmuus_cloudlet_name}
-  
-      Length Should Be  ${m['data']['client_key']['uuid']}  27 
+
+      ${l}=  Get Length  ${m['data']['client_key']['unique_id']} 
+      Should Be True  '${l}' > '0'
+      Should Be True   '${m['data']['client_key']['unique_id_type']}' == 'dme-ksuid' or '${m['data']['client_key']['unique_id_type']}' == 'automation' 
 
       Should Be True  ${m['data']['location']['latitude']} > -90 and ${m['data']['location']['latitude']} < 90
       Should Be True  ${m['data']['location']['longitude']} > -180 and ${m['data']['location']['longitude']} < 180 
