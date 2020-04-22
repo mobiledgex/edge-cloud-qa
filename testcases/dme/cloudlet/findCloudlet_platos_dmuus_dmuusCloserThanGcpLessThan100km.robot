@@ -81,9 +81,16 @@ FindCloudlet platos - request shall return dmuus with gcp cloudlet provisioned a
     ...               location:
     ...                 lat: 37
     ...                 long: -95
+
+      Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
+
+      ${fqdn}=  Get App Official FQDN  latitude=35  longitude=-94
       
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
-      ${cloudlet}=  Find Cloudlet   carrier_name=${dmuus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  latitude=35  longitude=-94
+
+      ${cloudlet}=  Platform Find Cloudlet  carrier_name=${dmuus_operator_name}  client_token=${fqdn.client_token}
+
+      #${cloudlet}=  Find Cloudlet   carrier_name=${dmuus_operator_name}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  latitude=35  longitude=-94
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -109,7 +116,7 @@ Setup
     Create Cloudlet		cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  latitude=${gcp_cloudlet_latitude}  longitude=${gcp_cloudlet_longitude}
     #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     #Create Cluster
-    Create App                  access_ports=tcp:1  #permits_platform_apps=${True}
+    Create App                  access_ports=tcp:1  official_fqdn=${platos_uri}  #permits_platform_apps=${True}
     ${dmuus_appinst}=            Create App Instance         cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  cluster_instance_name=autocluster
     Create App Instance         cloudlet_name=${gcp_cloudlet_name}  operator_org_name=${gcp_operator_name}  cluster_instance_name=autocluster
 

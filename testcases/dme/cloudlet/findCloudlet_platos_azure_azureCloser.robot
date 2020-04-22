@@ -88,8 +88,14 @@ FindCloudlet platos - findCloudlet shall return azure with with azure cloudlet p
       #${developer_name_default}=  Get Default Developer Name
       #${app_name_default}=        Get Default App Name
 
+      Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}
+
+      ${fqdn}=  Get App Official FQDN  latitude=37  longitude=-96
+
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}	
-      ${cloudlet}=  Find Cloudlet  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  carrier_name=${dmuus_operator_name}  latitude=37  longitude=-96
+      ${cloudlet}=  Platform Find Cloudlet  carrier_name=${dmuus_operator_name}  client_token=${fqdn.client_token}  #latitude=36  longitude=-95
+
+#      ${cloudlet}=  Find Cloudlet  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  carrier_name=${dmuus_operator_name}  latitude=37  longitude=-96
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -113,7 +119,7 @@ Setup
     Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}  #crm_override=IGNORE_CRM
     #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
     #Create Cluster
-    Create App			access_ports=tcp:1  #official_fqdn=${platos_uri}   #permits_platform_apps=${True}
+    Create App			access_ports=tcp:1  official_fqdn=${platos_uri}   #permits_platform_apps=${True}
 
     # create operator app instance
     ${dmuus_appinst}=               Create App Instance  cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  cluster_instance_name=autocluster
