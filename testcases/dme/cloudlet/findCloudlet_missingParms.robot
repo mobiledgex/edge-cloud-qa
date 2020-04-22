@@ -32,6 +32,8 @@ FindCloudlet - request without lat/long should return 'Missing GpsLocation'
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Missing GpsLocation"
 
+# ECQ-965
+# this is supported now
 FindCloudlet - request without carrier name should return 'missing carrierName'
    [Documentation]
    ...  send FindCloudlet with no carrier name
@@ -46,27 +48,29 @@ FindCloudlet - request without carrier name should return 'missing carrierName'
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
    Should Contain  ${error_msg}   details = "Missing carrierName"
 
-FindCloudlet - request with latitude only should return 'missing carrierName'
+# ECQ-966
+FindCloudlet - request with latitude only should return error 
    [Documentation]
    ...  send FindCloudlet with latitude only
-   ...  verify 'missing carrierName' is received
+   ...  verify proper error is received
 
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Missing carrierName"
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
-FindCloudlet - request with longitude only should return 'missing carrierName'
+# ECQ-967
+FindCloudlet - request with longitude only should return error 
    [Documentation]
    ...  send FindCloudlet with longitude only
-   ...  verify 'missing carrierName' is received
+   ...  verify proper error is received
 
    Register Client
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  longitude=35  use_defaults=${False}
 
    Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Missing carrierName"
+   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 FindCloudlet - request with carrier_name and latitude only should fail
    [Documentation]
