@@ -2508,6 +2508,6 @@ class MexController(MexGrpc):
         shared_variables.app_name_default = 'app' + default_time_stamp
         shared_variables.app_version_default = '1.0'
         #shared_variables.developer_name_default = 'developer' + default_time_stamp
-        shared_variables.developer_name_default = 'mobiledgex'
+        shared_variables.developer_name_default = 'MobiledgeX'
         shared_variables.flavor_name_default = 'flavor' + default_time_stamp
         shared_variables.cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
