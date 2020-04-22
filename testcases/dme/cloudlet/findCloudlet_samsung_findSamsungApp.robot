@@ -51,7 +51,7 @@ FindCloudlet Samsung - request shall return FIND_NOTFOUND when registering samsu
 
       #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the samsung app - fixed
       Register Client	developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}
-      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_org_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  latitude=36  longitude=-95
+      ${error_msg}=  Run Keyword and Expect Error  *  Platform Find Cloudlet	app_name=${samsung_app_name}  app_version=1.0  developer_org_name=${samsung_developer_name}  carrier_name=${tmus_operator_name}  #latitude=36  longitude=-95
 
       Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
 

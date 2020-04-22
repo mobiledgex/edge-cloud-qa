@@ -56,15 +56,12 @@ class Client():
         self.client = app_client_pb2.RegisterClientRequest(**client_dict)
 
 class FindCloudletRequest():
-    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, app_name=None, app_version=None, developer_org_name=None, use_defaults=True):
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.carrier_name = carrier_name
         self.latitude = latitude
         self.longitude = longitude
-        self.app_name = app_name
-        self.app_version = app_version
-        self.developer_name = developer_org_name
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -83,18 +80,65 @@ class FindCloudletRequest():
             request_dict['session_cookie'] = self.session_cookie
         if self.carrier_name is not None:
             request_dict['carrier_name'] = self.carrier_name
-        if self.app_name is not None:
-            request_dict['app_name'] = self.app_name
-        if self.app_version is not None:
-            request_dict['app_vers'] = self.app_version
-        if self.developer_name is not None:
-            request_dict['org_name'] = self.developer_name
 
         if loc_dict:
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
 
         #print(loc_dict)
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
+
+class PlatformFindCloudletRequest():
+    def __init__(self, session_cookie=None, carrier_name=None, client_token=None, use_defaults=True):
+        request_dict = {}
+        self.session_cookie = session_cookie
+        self.carrier_name = carrier_name
+        self.client_token = client_token
+
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+            
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+            if not carrier_name: self.carrier_name = shared_variables.operator_name_default
+
+        if self.session_cookie is not None:
+            request_dict['session_cookie'] = self.session_cookie
+        if self.carrier_name is not None:
+            request_dict['carrier_name'] = self.carrier_name
+        if self.client_token is not None:
+            request_dict['client_token'] = self.client_token
+
+        self.request = app_client_pb2.PlatformFindCloudletRequest(**request_dict)
+
+class GetAppOfficialFqdnRequest():
+    def __init__(self, session_cookie=None, latitude=None, longitude=None, use_defaults=True):
+        request_dict = {}
+        self.session_cookie = session_cookie
+        self.latitude = latitude
+        self.longitude = longitude
+
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+            
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+
+        loc_dict = {}
+        if self.latitude is not None:
+            loc_dict['latitude'] = float(self.latitude)
+        if self.longitude is not None:
+            loc_dict['longitude'] = float(self.longitude)
+
+        if self.session_cookie is not None:
+            request_dict['session_cookie'] = self.session_cookie
+
+        if loc_dict:
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+
+        print('*WARN*', app_client_pb2)
+        self.request = app_client_pb2.AppOfficialFqdnRequest(**request_dict)
+
+        #print(loc_dict)
 
 class GetFqdnList():
     def __init__(self, session_cookie=None, use_defaults=True):
@@ -286,6 +330,45 @@ class Dme(MexGrpc):
 
         return resp
 
+    def platform_find_cloudlet(self, find_cloudlet_obj=None, **kwargs):
+        resp = None
+
+        if not find_cloudlet_obj:
+            #if len(kwargs) == 0:
+            #    kwargs = {'use_defaults': True}
+            #if 'session_cookie' not in kwargs:
+            #    kwargs['session_cookie'] = self.session_cookie
+            request = PlatformFindCloudletRequest(**kwargs).request
+
+        logger.info('platform find cloudlet on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+                    
+        resp = self.match_engine_stub.PlatformFindCloudlet(request)
+
+        if resp.status != 1: # FIND_FOUND
+            raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
+
+        return resp
+
+    def get_app_official_fqdn(self, get_app_official_fqdn_obj=None, **kwargs):
+        resp = None
+
+        if not get_app_official_fqdn_obj:
+            #if len(kwargs) == 0:
+            #    kwargs = {'use_defaults': True}
+            #if 'session_cookie' not in kwargs:
+            #    kwargs['session_cookie'] = self.session_cookie
+            request = GetAppOfficialFqdnRequest(**kwargs).request
+
+        logger.info('get app official fqdn request on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+                    
+        resp = self.match_engine_stub.GetAppOfficialFqdn(request)
+
+        if resp.status != 1: # FIND_FOUND
+            raise Exception('platform find cloudlet not found:{}'.format(str(resp)))
+
+        return resp
+
+    
     def get_fqdn_list(self, get_fqdn_list_obj=None, **kwargs):
         resp = None
 
