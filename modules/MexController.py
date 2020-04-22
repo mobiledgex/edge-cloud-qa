@@ -668,7 +668,7 @@ class Cloudlet():
         
 
 class App():
-    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
+    def __init__(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  access_type=None, scale_with_cluster=False, official_fqdn=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
 
@@ -689,7 +689,8 @@ class App():
         self.deployment_manifest = deployment_manifest
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
-
+        self.access_type = access_type
+        
         if self.image_type and isinstance(self.image_type, str):
             self.image_type = self.image_type.casefold()
             
@@ -739,6 +740,13 @@ class App():
         elif self.image_type == 'imagetypeunknown':
             self.image_type = 0
 
+        if self.access_type and self.access_type.lower() == 'default':
+            self.access_type = 0
+        elif self.access_type and self.access_type.lower() == 'direct':
+            self.access_type = 1
+        elif self.access_type and self.access_type.lower() == 'loadbalancer':
+            self.access_type = 2            
+
         #self.ip_access = 3 # default to shared
         #if ip_access == 'IpAccessDedicated':
         #    self.ip_access = 1
@@ -781,6 +789,10 @@ class App():
             app_dict['image_type'] = self.image_type
         if self.image_path is not None:
             app_dict['image_path'] = self.image_path
+
+        if self.access_type is not None:
+            app_dict['access_type'] = self.access_type
+            
         #if self.ip_access:
         #    app_dict['ip_access'] = self.ip_access
         #if self.cluster_name is not None:
