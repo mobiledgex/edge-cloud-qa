@@ -12,6 +12,8 @@ ${access_ports}    tcp:80,http:443,udp:10002
 ${operator_name}   tmus
 
 *** Test Cases ***
+# ECQ-1200
+# unsupported - FindCloudlet no longer supports appname
 FindCloudlet - request shall return error when FindCloudlet app does not match Registered App
     [Documentation]
     ...  Register Client with app1
