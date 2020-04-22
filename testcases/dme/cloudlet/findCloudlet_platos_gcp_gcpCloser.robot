@@ -59,6 +59,7 @@ ${gcp_cloudlet_latitude}	  37
 ${gcp_cloudlet longitude}	  -95
 
 *** Test Cases ***
+# ECQ-998
 FindCloudlet platos - request shall return gcp with dmuus farther and > 100km farther than gcp
     [Documentation]  
     ...  registerClient with platos app
@@ -89,6 +90,12 @@ FindCloudlet platos - request shall return gcp with dmuus farther and > 100km fa
       Register Client  developer_org_name=${developer_name_default}  app_name=${app_name_default}  
 
       ${fqdn}=  Get App Official FQDN  latitude=37  longitude=-96
+      ${decoded_client_token}=  Decoded Client Token
+      Should Be Equal  ${decoded_client_token['AppKey']['organization']}  ${developer_name_default}
+      Should Be Equal  ${decoded_client_token['AppKey']['name']}  ${app_name_default}
+      Should Be Equal  ${decoded_client_token['AppKey']['version']}  ${app_version_default}
+      Should Be Equal As Numbers  ${decoded_client_token['Location']['latitude']}  37
+      Should Be Equal As Numbers  ${decoded_client_token['Location']['longitude']}  -96
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
 
@@ -128,6 +135,9 @@ Setup
     #Create Developer            developer_name=${platos_developer_name}
     Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1
     #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+
+    ${app_version_default}=     Get Default App Version
+    Set Suite Variable  ${app_version_default}
 
     Set Suite Variable  ${gcp_appinst} 
     Set Suite Variable  ${developer_name_default}
