@@ -44,25 +44,6 @@ showDevice - request with id and type shall return device information
 
       Length Should Be   ${device}  1
 
-showDevice - request without id and type shall return device information
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display key.uniqueid
-    ...  verify returns 5 result
-
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=  unique_id_type=  first_seen=  seconds=  nanos=  notify_id=
-      ${device}=  Show Device  region=${region}
-
-      Should Not Be Equal  ${device[-1]['data']['key']['unique_id_type']}  unique_id
-      Should Not Be Equal  ${device[-1]['data']['key']['unique_id']}  None
-      Should Be True   ${device[-1]['data']['first_seen']['seconds']} > 0
-      Should Not Be True   ${device[-1]['data']['first_seen']['nanos']} < 0
-      Should Be True   ${device[-1]['data']['notify_id']} > 0
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
 showDevice - request with first_seen and seconds shall return device information
     [Documentation]
     ...  registerClient with samsung app
@@ -85,157 +66,122 @@ showDevice - request with first_seen and seconds shall return device information
 
       Length Should Be   ${device}  1
 
-showDevice - request without first_seen and seconds shall return device information
+showDevice - request without first_seen_seconds shall return device information
     [Documentation]
     ...  registerClient with samsung app
     ...  send showDevice display key.uniqueid
-    ...  verify returns 5 result
-
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=  unique_id_type=  first_seen=  seconds=  nanos=  notify_id=
-      ${device}=  Show Device  region=${region}
-
-      Should Not Be Equal  ${device[-1]['data']['key']['unique_id_type']}  unique_id
-      Should Not Be Equal  ${device[-1]['data']['key']['unique_id']}  None
-      Should Be True   ${device[-1]['data']['first_seen']['seconds']} > 0
-      Should Not Be True   ${device[-1]['data']['first_seen']['nanos']} < 0
-      Should Be True   ${device[-1]['data']['notify_id']} > 0
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
-showDevice - request with first_seen and nanos shall return device information
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen seconds
     ...  verify returns 1 result
 
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcde  first_seen=1234  seconds=1234  nanos=1234  notify_id=1
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen=1234  seconds=1234  nanos=1234  notify_id=1
+      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcd
+      ${device}=  Show Device  region=${region}
 
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      ${found}=  Find Device  ${device}  1234  abcd
+
+      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+      
+      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
+
+      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
 
       Length Should Be   ${device}  1
 
-showDevice - request without first_seen and nanos shall return device information
+
+
+showDevice - request with first_seen_nanos shall return device information
+
     [Documentation]
     ...  registerClient with samsung app
-    ...  send showDevice display time_seen nanos
-    ...  verify returns 1 result
+    ...  showDevice check display of first_seen
+    ...  verify returns 2 result
 
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=wofirsts  unique_id_type=wofirstsid  first_seen=  seconds=  nanos=  notify_id=
+      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcd
       ${device}=  Show Device  region=${region}
 
-      Should Be True   ${device[-1]['data']['first_seen']['nanos']} > 0
+      ${found}=  Find Device  ${device}  1234  abcd
 
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
+      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
 
-showDevice - request with notify_id shall return device information
+      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
+
+      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+
+      Length Should Be   ${device}  1
+
+
+
+showDevice - without first_seen_nanos shall return device information
+
     [Documentation]
     ...  registerClient with samsung app
-    ...  send showDevice display notify_id
-    ...  verify returns 1 result
+    ...  showDevice check display of time_seen_nanos
+    ...  verify returns 2 result
+
+      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcd
+      ${device}=  Show Device  region=${region}
+
+      ${found}=  Find Device  ${device}  1234  abcd
+
+      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+
+      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_nanos=${nsecs}  notify_id=1
+
+      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+
+      Length Should Be   ${device}  1
 
 
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=9876  unique_id_type=april  first_seen=1234  seconds=1234  nanos=1234  notify_id=1
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen=1234  seconds=1234  nanos=1234  notify_id=1
+showDevice - with notify_id shall return device information
 
-      Should Be True   ${device['data']['notify_id']} > 0
+   [Documentation]
+    ...  registerClient with samsung app
+    ...  showDevice check display of first_seen
+    ...  verify returns 2 result
+
+      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcd
+      ${device}=  Show Device  region=${region}
+
+      ${found}=  Find Device  ${device}  1234  abcd
+
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+      ${ntfy}=  Set Variable  ${found['data']['notify_id']}	
+      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  notify_id=${ntfy}
+
+#      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+      Should Be Equal   ${device['data']['notify_id']}  ${ntfy}
       
       Length Should Be   ${device}  1
 
-showDevice - request without notify_id shall return device information
+
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcd
+#      ${device}=  Show Device  notify_id=${notify_id}
+#
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  notify_id=2
+#      Should Be True  ${device['data']['notify_id']} > 0
+#      
+#      Length Should Be  ${device}  1
+
+showDevice - without notify_id shall return device information
     [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display notify_id
+    ...  showDevice display notify_id
     ...  verify returns 1 result
 
+      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd
+      Should Be True  ${device['data']['notify_id']} > 0
 
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=abcde  first_seen=1234  seconds=1234  nanos=1234  notify_id=
-      ${device}=  Show Device  region=${region}
-      ${device}=  Show Device  region=${region}
+      Length Should Be  ${device}  1
+  
 
-      Should Be True   ${device[-1]['data']['notify_id']} > 1
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
-showDevice - fail invalid format firstseen seconds
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen
-    ...  verify returns 1 result
-      
-      ${error}=  Run Keyword And Expect Error  *  Show Device  region=${region}  first_seen_seconds=-90xf
-      Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=int64, got=string, field=seconds, offset=45"}')
-
-showDevice - fail invalid format firstseen nanos
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen
-    ...  verify returns 1 result
-
-
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=ifirstn  unique_id_type=ifirstnid  first_seen=21:12  seconds=  nanos=  notify_id=0
-      ${device}=  Show Device  region=${region}
-      ${device}=  Show Device  region=${region}
-
-      Should Be True   ${device[-1]['data']['first_seen']['nanos']} > 1
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
-showDevice - fail invalid format seconds
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen nanos
-    ...  verify returns 1 result
-
-
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=iseconds  unique_id_type=isecondsid  first_seen=  seconds=x-221  nanos=  notify_id=0
-      ${device}=  Show Device  region=${region}
-      ${device}=  Show Device  region=${region}
-
-      Should Be True   ${device[-1]['data']['first_seen']['seconds']} > 1
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
-showDevice - fail invalid format nanos
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen seconds
-    ...  verify returns 1 result
-
-
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=inanos  unique_id_type=inanosid  #first_seen=  seconds=  nanos=xxxxx  notify_id=
-      ${device}=  Show Device  region=${region}  nanos=xxxxx
-
-      Should Be True   ${device[-1]['data']['first_seen']['nanos']} > 1
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1
-
-showDevice - fail invalid format notifyid
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display time_seen nanos
-    ...  verify returns 1 result
-
-
-      Register Client   developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=inotidyid  unique_id_type=inotifyidt  #first_seen=  seconds=  nanos=  notify_id=zzzzzzz
-      ${device}=  Show Device  region=${region}  first_seen=  seconds=  nanos=  notify_id=zzzzzzz 
-      ${device}=  Show Device  region=${region}
-
-      Should Be True   ${device[-1]['data']['notify_id']} > 1
-
-      ${len}=  Get Length  ${device}
-      Should Be True   ${len} > 1 
-
-showDevice - fail test for bad token
-    [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display notify_id
+showDevice - request with bad token
+  [Documentation]
+    ...  showDevice verify error for bad token
     ...  verify returns 1 result
 
       # robot function
@@ -248,9 +194,8 @@ showDevice - fail test for bad token
 
 showDevice - request token error jwt
     [Documentation]
-    ...  registerClient with samsung app
-    ...  send showDevice display token
-    ...  verify returns 1 result
+    ...  showDevice verify jwt error
+    ...  verify returns 2 result
 
       # robot function
 
