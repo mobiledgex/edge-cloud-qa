@@ -37,7 +37,7 @@ PlatformFindCloudlet - request with bad cookie shall return error
     Should Contain  ${error_msg}  status = StatusCode.UNAUTHENTICATED
     Should Contain  ${error_msg}  details = "token contains an invalid number of segments"
 
-# ECQ-2093
+# ECQ-2095
 PlatformFindCloudlet - request with bad client_token shall return error
     [Documentation]
     ...  send PlatformFindCloudlet with bad client_token
@@ -47,11 +47,12 @@ PlatformFindCloudlet - request with bad client_token shall return error
 
     ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${tmus_operator_name} 
     Should Contain  ${error_msg}  status = StatusCode.INVALID_ARGUMENT
-    Should Contain  ${error_msg}  details = "Invalid GpsLocation"
+    Should Contain  ${error_msg}  details = "Missing ClientToken"
 
+ #EDGECLOUD-2583 - PlatformFindCloudlet with bad client_token returns wrong status code
     ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${tmus_operator_name}  client_token=x
-    Should Contain  ${error_msg}  status = StatusCode.UNAUTHENTICATED
-    Should Contain  ${error_msg}  details = "token contains an invalid number of segments"
+    Should Contain  ${error_msg}  status = StatusCode.UNKNOWNxxx
+    Should Contain  ${error_msg}  details = "unable to decode token: illegal base64 data at input byte 0"
 
 *** Keywords ***
 Setup
