@@ -160,14 +160,15 @@ class GetFqdnList():
         self.request = app_client_pb2.FqdnListRequest(**request_dict)
 
 class GetAppInstList():
-    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, session_cookie=None, carrier_name=None, latitude=None, longitude=None, limit=None, use_defaults=True):
 
         request_dict = {}
         self.session_cookie = session_cookie
         self.latitude = latitude
         self.longitude = longitude
         self.carrier_name = carrier_name
-
+        self.limit = limit
+        
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
             
@@ -186,6 +187,8 @@ class GetAppInstList():
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
         if self.carrier_name is not None:
             request_dict['carrier_name'] = self.carrier_name    
+        if self.limit is not None:
+            request_dict['limit'] = int(self.limit)    
         
         print('dict', request_dict)
         self.request = app_client_pb2.AppInstListRequest(**request_dict)
