@@ -16,6 +16,7 @@ ${platos_uri}  automation.platos.com
 ${platos_unique_id}  12345
 ${platos_unique_id_type}  abcde
 ${platos_first_seen}  1234
+${platos_last_seen}  1234
 ${platos_seconds}  1234
 ${platos_nanos}  1234
 ${platos_notify_id}  1234
@@ -24,13 +25,12 @@ ${region}  US
 # add testcase for Developer and Operator user
 
 *** Test Cases ***
+#ECQ-2116
 showDevice - request with id and type shall return device information
     [Documentation]
-    ...  registerClient with platos app
-    ...  send showDevice display key.uniqueid 
-    ...  verify returns 5 result
-
-
+    ...  registerClient with platos app with unique_id and type
+    ...  verify showDevice returns all information supported
+    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd 
 
@@ -44,12 +44,12 @@ showDevice - request with id and type shall return device information
 
       Length Should Be   ${device}  1
 
+#ECQ-2117
 showDevice - request with first_seen and seconds shall return device information
     [Documentation]
-    ...  registerClient with platos app
-    ...  send showDevice display key.time_seen
-    ...  verify returns 1 result
-
+    ...  showDevice displays requested firstseen data
+    ...  verify returns time of first_seen seconds requested
+    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd  
       ${device}=  Show Device  region=${region}
@@ -66,11 +66,13 @@ showDevice - request with first_seen and seconds shall return device information
 
       Length Should Be   ${device}  1
 
+#ECQ-2118
 showDevice - request without first_seen_seconds shall return device information
     [Documentation]
-    ...  registerClient with platos app
-    ...  send showDevice display key.uniqueid
-    ...  verify returns 1 result
+    ...  showDevice displays firstseen data without requesting
+    ...  verify showDevice returns first_seen device information
+    ...  firstseen.seconds firstseen.nanos
+
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
       ${device}=  Show Device  region=${region}
@@ -87,14 +89,12 @@ showDevice - request without first_seen_seconds shall return device information
 
       Length Should Be   ${device}  1
 
-
-
+#ECQ-2119
 showDevice - request with first_seen_nanos shall return device information
 
     [Documentation]
-    ...  registerClient with platos app
-    ...  showDevice check display of first_seen
-    ...  verify returns 2 result
+    ...  showDevice check display of first_seen_nanos
+    ...  verify returns time of first_seen_nanos requested
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
       ${device}=  Show Device  region=${region}
@@ -112,13 +112,12 @@ showDevice - request with first_seen_nanos shall return device information
       Length Should Be   ${device}  1
 
 
-
+#ECQ-2120
 showDevice - without first_seen_nanos shall return device information
 
     [Documentation]
-    ...  registerClient with platos app
-    ...  showDevice check display of time_seen_nanos
-    ...  verify returns 2 result
+    ...  showDevice check display of time_seen_nanos without specifying time
+    ...  verify time_seen_nanos is displayed without being requested
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
       ${device}=  Show Device  region=${region}
@@ -135,13 +134,12 @@ showDevice - without first_seen_nanos shall return device information
 
       Length Should Be   ${device}  1
 
-
+#ECQ-2121
 showDevice - with notify_id shall return device information
 
    [Documentation]
-    ...  registerClient with platos app
-    ...  showDevice check display of first_seen
-    ...  verify returns 2 result
+    ...  showDevice check display of notify_id 
+    ...  verify notify_id is displayed as requested
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
       ${device}=  Show Device  region=${region}
@@ -159,30 +157,22 @@ showDevice - with notify_id shall return device information
       
       Length Should Be   ${device}  1
 
-
-#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
-#      ${device}=  Show Device  notify_id=${notify_id}
-#
-#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  notify_id=2
-#      Should Be True  ${device['data']['notify_id']} > 0
-#      
-#      Length Should Be  ${device}  1
-
+#ECQ-2122
 showDevice - without notify_id shall return device information
     [Documentation]
-    ...  showDevice display notify_id
-    ...  verify returns 1 result
+    ...  showDevice check display of notify_id
+    ...  verify notify_id is displayed without being requested
 
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd
       Should Be True  ${device['data']['notify_id']} > 0
 
       Length Should Be  ${device}  1
   
-
+#ECQ-2123
 showDevice - request with bad token
   [Documentation]
     ...  showDevice verify error for bad token
-    ...  verify returns 1 result
+    ...  verify no bearer token found
 
       # robot function
       Run Keyword And Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
@@ -191,11 +181,11 @@ showDevice - request with bad token
       #Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
       Should Contain  ${error}  no bearer token found
 
-
+#ECQ-2124
 showDevice - request token error jwt
     [Documentation]
     ...  showDevice verify jwt error
-    ...  verify returns 2 result
+    ...  verify invalid or expired jwt 
 
       # robot function
 
