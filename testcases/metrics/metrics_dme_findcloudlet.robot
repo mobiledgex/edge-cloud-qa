@@ -247,6 +247,9 @@ Setup
    ${developer_name}=  Get Default Developer Name 
 
    Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
+   Find Cloudlet	carrier_name=dmuus  latitude=36  longitude=-95
+   Sleep  30 seconds
+   Find Cloudlet	carrier_name=dmuus  latitude=36  longitude=-95
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
