@@ -117,6 +117,8 @@ class MexDmeRest(MexRest):
             
             shared_variables.token_server_uri_default = self.decoded_data['token_server_uri']
 
+            return self.decoded_data
+
         if use_thread is True:
             t = threading.Thread(target=send_message)
             t.start()
