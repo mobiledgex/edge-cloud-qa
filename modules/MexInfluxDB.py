@@ -78,7 +78,7 @@ class MexInfluxDB(WebService) :
         #return self.decoded_data['results'][0]['series'][0]['columns'], self.decoded_data['results'][0]['series'][0]['values']
         return value_list
 
-    def get_influx_app_metrics(self, table, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+    def get_influx_app_metrics(self, table, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
         query = f'select * from \"{table}\"'
         
         if cluster_instance_name:
@@ -87,6 +87,9 @@ class MexInfluxDB(WebService) :
         if app_name:
             query = query + ' and' if 'where' in query else query + ' where'
             query += f' app=\'{app_name}\''
+        if app_version:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' ver=\'{app_version}\''            
         if cloudlet_name:
             query = query + ' and' if 'where' in query else query + ' where'
             query += f' cloudlet=\'{cloudlet_name}\''
@@ -107,20 +110,20 @@ class MexInfluxDB(WebService) :
 
         return value_list
 
-    def get_influx_app_cpu_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
-        return self.get_influx_app_metrics(table=self.appinst_cpu_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+    def get_influx_app_cpu_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_cpu_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
 
-    def get_influx_app_disk_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
-        return self.get_influx_app_metrics(table=self.appinst_disk_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+    def get_influx_app_disk_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_disk_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
 
-    def get_influx_app_mem_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
-        return self.get_influx_app_metrics(table=self.appinst_memory_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+    def get_influx_app_mem_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_memory_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
 
-    def get_influx_app_network_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
-        return self.get_influx_app_metrics(table=self.appinst_network_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+    def get_influx_app_network_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_network_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
 
-    def get_influx_app_connections_metrics(self, cluster_instance_name=None, app_name=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
-        return self.get_influx_app_metrics(table=self.appinst_connections_table, cluster_instance_name=cluster_instance_name, app_name=app_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+    def get_influx_app_connections_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_connections_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
     
     def get_influx_cloudlet_metrics(self, selector=None, cloudlet_name=None, operator_org_name=None, condition=None):
         query = f'select * from '
@@ -273,7 +276,10 @@ class MexInfluxDB(WebService) :
 
     def get_influx_registerclient_metrics(self, app_name=None, app_version=None, developer_org_name=None, condition=None):
         return self.get_influx_dme_metrics(selector='RegisterClient', app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, condition=condition)
-    
+
+    def get_influx_findcloudlet_metrics(self, app_name=None, app_version=None, developer_org_name=None, condition=None):
+        return self.get_influx_dme_metrics(selector='FindCloudlet', app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, condition=condition)
+
     def _decode_content(self):
         logging.debug('content=' + self.resp.content.decode("utf-8"))
         
