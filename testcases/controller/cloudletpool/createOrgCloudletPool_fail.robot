@@ -67,7 +67,7 @@ CreateOrgCloudletPool - create with org name not found shall return error
    ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  org_name=myorg
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Specified Organization myorg does not exist"}
+   Should Contain   ${error}  error={"message":"code=400, message=org myorg not found"}
 
 CreateOrgCloudletPool - create with same name shall return error
    [Documentation]
