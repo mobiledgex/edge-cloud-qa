@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  MexApp
 
 Suite Setup  Setup
-Suite Teardown  Teardown 
+#Suite Teardown  Teardown 
 
 Test Timeout    ${test_timeout_crm}
 
@@ -37,15 +37,18 @@ Setup
  
    Create App  region=${region}  app_name=${appname}     deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
 
-   Create App Instance  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
+   ${appinst}=  Create App Instance  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
+
+   Create App  region=${region}  app_name=${appname}  app_version=2.0  default_flavor_name=${flavor_name}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2017,udp:2018
+   ${appinst2}=  Create App Instance  region=${region}  app_name=${appname}  app_version=2.0  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
 
    #${appname_k8s}=  Set Variable  app1576004798-848067k8s 
-   ${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
+   #${appinst}=  Show App Instances  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
 
    Log to Console  Wait and connect to TCP/UDP ports
    Sleep  7 mins
-   UDP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][1]['public_port']}
-   TCP Port Should Be Alive  ${appinst[0]['data']['uri']}  ${appinst[0]['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   UDP Port Should Be Alive  ${appinst['data']['uri']}  ${appinst['data']['mapped_ports'][1]['public_port']}
+   TCP Port Should Be Alive  ${appinst['data']['uri']}  ${appinst['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
    Sleep  3 mins
