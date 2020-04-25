@@ -150,7 +150,7 @@ ShowLogs - shall return error without invalid parms
     Should Contain  ${error3}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
     Should Contain  ${error4}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
 
-# ECQ-2067
+# ECQ-1896
 ShowLogs - shall return error for VM apps
     [Documentation]
     ...  execute Show Logs for VM 
