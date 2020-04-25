@@ -44,7 +44,27 @@ Get the last 5 app metrics on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
-   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 6  # last 5
+   log to console  ${metrics}
+   log to console  ${metrics_influx}
+   log to console  ${metrics['data'][0]['Series']}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+	
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   [Return]  ${metrics}  ${metrics_influx}
+
+Get the last 5 app metrics on openstack with version
+   [Arguments]  ${app}  ${version}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
+
+   ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
+	
+   ${version_influx}=  Remove String  ${version}  .	
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics_influx}
    log to console  ${metrics['data'][0]['Series']}
@@ -64,7 +84,7 @@ Get the last 5 app metrics on openstack for multiple selectors
    #${contains}=  Evaluate   "," in """${selector}""" or "*" in """${selector}"""
 
    ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5
-   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 6  # last 5
+   #${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 6  # last 5
    log to console  ${metrics}
    log to console  ${metrics['data'][0]['Series']}
 
@@ -81,7 +101,7 @@ Get the last 10 app metrics on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=10
-   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC LIMIT 11  # last 5
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 11  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -96,7 +116,7 @@ Get all app metrics on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
    ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
-   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC  # last 5
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -110,12 +130,12 @@ Get more app metrics than exist on openstack
    ${metricsall}=  Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
    ${num_readings_all}=  Get Length  ${metricsall['data'][0]['Series'][0]['values']}
 
-#   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC  #LIMIT 101  # last 5
+#   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC  #LIMIT 101  # last 5
 
    ${more_readings}=  Evaluate  ${num_readings_all} + 100
    ${metrics}=  Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=${more_readings}
 
-   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY * ORDER BY DESC  #LIMIT 101  # last 5
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC  #LIMIT 101  # last 5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -206,12 +226,12 @@ Get app metrics with endtime on openstack
    ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
 
    # get 1st reading from influx
-   #${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${developer_name}  condition=GROUP BY * ORDER BY ASC LIMIT ${num_readings} 
+   #${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  cluster_instance_name=${clustername_k8s_shared}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=${developer_name}  condition=ORDER BY ASC LIMIT ${num_readings} 
    
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 	
-   Should Be True  ${num_readings} < 20 
+   Should Be True  ${num_readings} < 30 
    Should Be True  ${epoch_first} <= ${end}
 
    [Return]  ${metrics}
@@ -219,7 +239,7 @@ Get app metrics with endtime on openstack
 Get app metrics with starttime=lastrecord on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   #${metrics_influx}=  MexInfluxDB.Get Influx App Disk Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=GROUP BY * ORDER BY DESC LIMIT 1  # last record
+   #${metrics_influx}=  MexInfluxDB.Get Influx App Disk Metrics  cloudlet_name=${cloudlet_name_openstack_metrics}  condition=ORDER BY DESC LIMIT 1  # last record
    #${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC LIMIT 2
 
 
@@ -392,7 +412,7 @@ Get app metrics with starttime and endtime on openstack
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be True  ${num_readings} < 15
+   Should Be True  ${num_readings} < 25
 
    [Return]  ${metrics}
 
@@ -434,7 +454,7 @@ Get vm app metrics with starttime and endtime on openstack
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be True  ${num_readings} < 15
+   Should Be True  ${num_readings} < 25
 
    [Return]  ${metrics}
 	
