@@ -134,9 +134,9 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
+   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
 
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -144,11 +144,11 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
    ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
    ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
-   @{cloudlets1}=  Create List  ${cloudlet0}
+   @{cloudlets1}=  Create List  ${cloudlets[0]}
    Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
    Length Should Be   ${show_return}  1
 
-   @{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}
+   @{cloudlets2}=  Create List  ${cloudlets[0]}  ${cloudlets[2]}
    Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
    Length Should Be   ${show_return2}  2
 
