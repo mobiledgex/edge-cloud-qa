@@ -269,7 +269,7 @@ CPU Should Be In Range
 	
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} < 101
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}

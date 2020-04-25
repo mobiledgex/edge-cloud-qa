@@ -120,12 +120,12 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  disk
 
 Disk Should Be In Range
@@ -134,21 +134,23 @@ Disk Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} >= 0 and ${reading[9]} <= 1000000
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop  
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop  
+   END
  
    #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
    #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
@@ -159,11 +161,11 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['disk']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['disk']}   ${reading[9]}
-   \  ${index}=  Evaluate  ${index}+1
-
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['disk']}   ${reading[9]}
+      ${index}=  Evaluate  ${index}+1
+   END
 Metrics Should Match Different Cluster Names
    [Arguments]  ${metrics}  
 
@@ -177,16 +179,17 @@ Metrics Should Match Different Cluster Names
    ${found_other_cluster}=  Set Variable  ${False}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  @{datesplit}=  Split String  ${reading[0]}  .
-   \  ${epoch}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Should Be True               ${epoch} <= ${epochlast}
-   \  Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
-   \  ${found_own_cluster}=  Run Keyword If  '${reading[1]}' == '${clustername_docker}'   Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_own_cluster}
-   \  ${found_other_cluster}=  Run Keyword If  '${reading[1]}' != '${clustername_docker}'   Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_other_cluster}
-   \  ${epochlast}=  Set Variable  ${epoch}
+   FOR  ${reading}  IN  @{values}
+      @{datesplit}=  Split String  ${reading[0]}  .
+      ${epoch}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Should Be True               ${epoch} <= ${epochlast}
+      Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
+      ${found_own_cluster}=  Run Keyword If  '${reading[1]}' == '${clustername_docker}'   Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_own_cluster}
+      ${found_other_cluster}=  Run Keyword If  '${reading[1]}' != '${clustername_docker}'   Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_other_cluster}
+      ${epochlast}=  Set Variable  ${epoch}
+   END
 
    Should Be True  ${found_own_cluster}  Didnot find own cluster
    Should Be True  ${found_other_cluster}  Didnot find other cluster

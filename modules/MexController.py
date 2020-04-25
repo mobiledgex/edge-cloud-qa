@@ -895,7 +895,7 @@ class AppInstance():
         self.longitude = longitude
         self.crm_override = crm_override
         self.autocluster_ipaccess = autocluster_ip_access
-        print('*WARN*', 'xxxx', self.developer_org_name, use_defaults)        
+
         if self.app_name == 'default':
             self.app_name = shared_variables.app_name_default
         if self.developer_org_name == 'default':
@@ -2055,7 +2055,6 @@ class MexController(MexGrpc):
 
         def sendMessage(thread_name='Thread'):
             time1 = time.time()
-            print("*WARN*", "thread_time1", time.time())
 
             try:
                 resp = self.appinst_stub.CreateAppInst(app_instance)
@@ -2073,7 +2072,6 @@ class MexController(MexGrpc):
                 success = True
 
             time2 = time.time()
-            print("*WARN*", "thread_time2", time.time())
             threadtime = time2 - time1
             self.thread_dict[thread_name]=(time1, time2, threadtime)
             threadtime = 0
@@ -2098,7 +2096,6 @@ class MexController(MexGrpc):
             t.start()
             return t
         else:
-            print('sending message')
             resp = sendMessage()
             return resp
 
