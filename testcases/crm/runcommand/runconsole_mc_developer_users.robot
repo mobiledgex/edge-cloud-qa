@@ -35,7 +35,8 @@ RunConsole - DeveloperManager shall be able to do RunConsole
 #    ${stdout}=  Run Console  region=US  app_name=app1587252144-180521  app_version=1.0  developer_org_name=MobiledgeX  cluster_instance_name=cluster1587252144-180521  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=whoami
 
     ${stdout}=  Run Console  region=US  developer_org_name=${docker_image_developer}  operator_org_name=dmuus  cloudlet_name=tmocloud-1
-    Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz 
+    Should Contain  ${stdout['console']['url']}  https://127.0.0.1
+    Should Contain  ${stdout['console']['url']}  token=xyz 
 
 # ECQ-2069
 RunConsole - DeveloperContributor shall be able to do RunConsole
@@ -49,7 +50,9 @@ RunConsole - DeveloperContributor shall be able to do RunConsole
 
     ${stdout}=  Run Console  region=US  developer_org_name=${docker_image_developer}  operator_org_name=dmuus  cloudlet_name=tmocloud-1
 
-    Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz
+    #Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz
+    Should Contain  ${stdout['console']['url']}  https://127.0.0.1
+    Should Contain  ${stdout['console']['url']}  token=xyz
 
 # ECQ-2070
 RunConsole - DeveloperViewer shall not be able to do RunConsole

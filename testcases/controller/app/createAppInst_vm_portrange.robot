@@ -79,6 +79,7 @@ Setup
     ${developer_name_default}=    Get Default Developer Name
     ${version_default}=           Get Default App Version
     ${version_default}=           Remove String  ${version_default}  .
+    ${developer_name_default}=  Convert To Lowercase  ${developer_name_default}
 
     Set Suite Variable  ${cluster_instance_default}
     Set Suite Variable  ${developer_name_default}
