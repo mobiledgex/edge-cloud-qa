@@ -1,20 +1,20 @@
 *** Settings ***
 Documentation  use FQDN to access VM app on openstack
 
-Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_VM_ENV}
 Library  MexApp
 Library  String
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
-	
+${region}  EU	
 ${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
 ${latitude}       32.7767
@@ -44,14 +44,16 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with n
     ...  delete existing VM image on openstack
     ...  deploy VM app with 1 UDP and 1 TCP port
     ...  verify all ports are accessible via fqdn
-
+	
+    # https://mobiledgex.atlassian.net/browse/ECQ-1386
+    
     Run Keyword and Ignore Error  Delete Image  ${qcow_centos_openstack_image}
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     # has been removed from appinst
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
@@ -69,6 +71,8 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with existing image
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1387
+
     ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Status']}   active 
@@ -76,8 +80,8 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085,tcp:22  auth_public_key=${vm_public_key}  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085,tcp:22  auth_public_key=${vm_public_key}  region=${region}  #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12} 
     #Should Match Regexp  https://hamedgecloud.telekom.de:6080/vnc_auto.html?token=a7a0df63-709e-4c21-b5ec-a718dc9df900  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
@@ -95,16 +99,51 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 #     TCP Port Should Be Alive  developer1570561247-819531app1570561247-81953110.automationmunichcloudlet.tdg.mobiledgex.net  2016
 
+User shall be able to access VM/LB deployment UDP and TCP ports on openstack with existing image
+    [Documentation]
+    ...  deploy VM app with a Load Balancer on openstack with 1 UDP and 1 TCP port with existing image
+    ...  verify all ports are accessible via fqdn
+
+    # https://mobiledgex.atlassian.net/browse/ECQ-2125
+
+    ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
+    Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
+    Should Be Equal  ${image_list[0]['Status']}   active 
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+
+    #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12} 
+    #Should Match Regexp  https://hamedgecloud.telekom.de:6080/vnc_auto.html?token=a7a0df63-709e-4c21-b5ec-a718dc9df900  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
+
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_version_default}=  Get Default App Version
+    # ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  key_file=id_rsa_mex 
+
+    Register Client 
+    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
+
 User shall be able to access VM deployment UDP and TCP ports on openstack with command
     [Documentation]
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with command
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1388	
+
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  command=${server_ping_threaded_command}   region=${region}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster   region=${region}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -121,11 +160,13 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with cloud-config
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1389
+
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015  deployment_manifest=${server_ping_threaded_cloudconfig}   region=${region}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -142,13 +183,15 @@ User shall be able to access VM deployment UDP and TCP ports on openstack withou
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port without clustername
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1459
+
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
     ${developer_name_default}=  Get Default Developer Name
     ${app_version_default}=  Get Default App Version
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #command=${server_ping_threaded_command}
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  use_defaults=${False}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #command=${server_ping_threaded_command}   region=${region}
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}   use_defaults=${False}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -165,13 +208,15 @@ User shall be able to access windows VM deployment UDP and TCP ports on openstac
     ...  deploy windows VM app on openstack with 1 UDP and 1 TCP port without clustername
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1477
+
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
     ${developer_name_default}=  Get Default Developer Name
     ${app_version_default}=  Get Default App Version
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_windows_image}  access_ports=tcp:2016,udp:2015  
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  use_defaults=${False}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_windows_image}  access_ports=tcp:2016,udp:2015    region=${region}
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}   use_defaults=${False}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -193,6 +238,8 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with p
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with port range
     ...  verify all ports are accessible via fqdn
 
+    # https://mobiledgex.atlassian.net/browse/ECQ-1735
+
     ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
     Should Be Equal  ${image_list[0]['Status']}   active
@@ -200,8 +247,8 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with p
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2000-3000,udp:2000-3000  #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2000-3000,udp:2000-3000   region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster   region=${region}
 
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -219,5 +266,5 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with p
 *** Keywords ***
 Setup
     #Create Developer
-    Create Flavor  disk=80
+    Create Flavor  disk=80  region=${region}
 	
