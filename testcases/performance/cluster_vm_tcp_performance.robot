@@ -19,8 +19,8 @@ ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
-${cluster_name_1}  vm_tcp_server
-${cluster_name_2}  vm_tcp_client
+${cluster_name_1}  vmtcpserver
+${cluster_name_2}  vmtcpclient
 
 
 ${test_timeout_crm}  15 min
