@@ -54,7 +54,9 @@ CRM shall be able to create a cluster instances with long name on azure
 
 *** Keywords ***
 Setup
-    Create Flavor
+    ${time}=  Get Time  epoch
+    Create Flavor  flavor_name=flavor${time}
+
     ${k8s_length}=  Get Length  ${k8s_name}
     ${k8s_cloudlet_name}=  Catenate  SEPARATOR=  ${cloudlet_name_openstack_shared}  -
     ${cloudlet_length}=  Get Length  ${k8s_cloudlet_name}

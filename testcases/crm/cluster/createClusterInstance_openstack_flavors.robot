@@ -34,7 +34,9 @@ Cluster with flavor less than 20g on openstack shall fail with size too small
    ...  create a cluster on openstack with flavor of ram=512  vcpus=1  disk=1
    ...  verify fails since it maps size=m4.tiny on openstack which has a disk of 10g. Must be at least 20g
 
-   Create Flavor  ram=512  vcpus=1  disk=1
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=512  vcpus=1  disk=1
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -49,7 +51,9 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1
    ...  verify it allocates size=m4.small on openstack
 
-   Create Flavor  ram=1024  vcpus=1  disk=1
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=1024  vcpus=1  disk=1
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -76,7 +80,9 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    ...  create a cluster on openstack with flavor of ram=2048  vcpus=2  disk=2
    ...  verify it allocates size=m4.small on openstack
 
-   Create Flavor  ram=2048  vcpus=2  disk=2
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=2048  vcpus=2  disk=2
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -103,7 +109,9 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ...  create a cluster on azure with flavor of ram=4096  vcpus=4  disk=4
    ...  verify it allocates size=sdwan-ESC on openstack
 
-   Create Flavor  ram=4096  vcpus=4  disk=4
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=4096  vcpus=4  disk=4
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -135,7 +143,9 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    ...  create a cluster on openstack with flavor of ram=8192  vcpus=4  disk=40
    ...  verify it allocates size=m4.large on openstack
 
-   Create Flavor  ram=8192  vcpus=4  disk=40
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=8192  vcpus=4  disk=40
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -162,7 +172,9 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    ...  create a cluster on openstack with flavor of ram=16384  vcpus=8  disk=160
    ...  verify it allocates size=m4.xlarge on openstack
 
-   Create Flavor  ram=16384  vcpus=8  disk=160
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=16384  vcpus=8  disk=160
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -189,7 +201,9 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    ...  create a cluster on openstack with flavor of ram=8192  vcpus=1  disk=1
    ...  verify it allocates size=sdwan-ESC on openstack
 
-   Create Flavor  ram=8192  vcpus=1  disk=1
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=8192  vcpus=1  disk=1
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -216,7 +230,9 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=160
    ...  verify it allocates size=sdwan-ESC on openstack
 
-   Create Flavor  ram=1024  vcpus=1  disk=160
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=1024  vcpus=1  disk=160
    #Create Cluster  #cluster_name=${cluster_name}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -284,7 +300,9 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    ...  create a cluster on openstack with flavor of ram=4096  vcpus=20  disk=4
    ...  verify it fails since it cannot find a suitable flavor
 
-   Create Flavor  ram=4096  vcpus=30  disk=4
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=4096  vcpus=30  disk=4
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -304,7 +322,9 @@ Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
    ...  create a cluster on openstack with flavor of ram=40960  vcpus=  disk=1
    ...  verify it fails since it cannot find a suitable flavor
 
-   Create Flavor  ram=40960  vcpus=1  disk=1
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=40960  vcpus=1  disk=1
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -324,7 +344,9 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    ...  create a cluster on openstack with flavor of ram=1024  vcpus=1  disk=1000
    ...  verify it fails since it cannot find a suitable flavor
 
-   Create Flavor  ram=1024  vcpus=1  disk=1000
+   ${time}=  Get Time  epoch
+
+   Create Flavor  flavor_name=flavor${time}  ram=1024  vcpus=1  disk=1000
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
