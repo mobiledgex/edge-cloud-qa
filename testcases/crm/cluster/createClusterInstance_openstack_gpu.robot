@@ -160,7 +160,9 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessShared on o
    ...  create a cluster on openstack without specifying the gpu option for k8s shared 
    ...  verify GPU is not allocated
 
-   Create Flavor  region=${region}  ram=8192  vcpus=4  disk=50 
+   ${time}=  Get Time  epoch
+
+   Create Flavor  region=${region}  flavor_name=flavor${time}  ram=8192  vcpus=4  disk=50 
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -196,7 +198,9 @@ GPU - no GPU shall be allocated if gpu not specified for K8s IpAccessDedicated o
    ...  create a cluster on openstack without specifying the gpu option for k8s dedicated
    ...  verify GPU is not allocated
 
-   Create Flavor  region=${region}  ram=8192  vcpus=4  disk=50
+   ${time}=  Get Time  epoch
+
+   Create Flavor  region=${region}  flavor_name=flavor${time}  ram=8192  vcpus=4  disk=50
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -231,7 +235,9 @@ GPU - No GPU shall be allocated if gpu not specified for Docker on openstack
    ...  create a cluster on openstack without specifying the gpu option for Docker
    ...  verify GPU is not allocated
 
-   Create Flavor  region=${region}  ram=8192  vcpus=4  disk=50
+   ${time}=  Get Time  epoch
+
+   Create Flavor  region=${region}  flavor_name=flavor${time}  ram=8192  vcpus=4  disk=50
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -256,7 +262,9 @@ GPU - No GPU shall be allocated if gpu not specified for VM on openstack
    ...  create a cluster on openstack with 1 GPU for VM
    ...  verify GPU is allocated
 
-   Create Flavor  region=${region}  disk=50 
+   ${time}=  Get Time  epoch
+
+   Create Flavor  region=${region}  flavor_name=flavor${time}  disk=50 
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -285,7 +293,9 @@ GPU - 1 GPU shall be allocated for each node for K8s IpAccessShared and nodes=2 
 
    #EDGECLOUD-1767 - GPU should not be allocated on master node and worker node for k8s h
 
-   Create Flavor  region=${region}  optional_resources=gpu=1
+   ${time}=  Get Time  epoch
+
+   Create Flavor  region=${region}  flavor_name=flavor${time}  optional_resources=gpu=1
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
