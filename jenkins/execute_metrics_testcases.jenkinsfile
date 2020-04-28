@@ -1,0 +1,91 @@
+project = "${project}"
+version = "${version}"
+cycle = "${cycle}"
+controller = "${controller}"
+dme = "${dme}"
+variables = "${variablefile}"
+mastercontroller = "${mastercontroller}"
+dmeresteu = "${DMERestEU}"
+dmerestcert = "${DMERestCert}"
+dmerestus = "${DMERestUS}"
+influxdbeu = "${InfluxDBEU}"
+influxdbus = "${InfluxDBUS}"
+
+//jobName = "${components}"
+
+currentBuild.displayName = cycle
+
+def jobList1ParallelEU = ["runMetricsCloudletTests" ,"runMetricsClusterInstTests", "runMetricsAppInstTests"]
+def jobList2ParallelUS = ["runMetricsDMETests"]
+ 
+builds1 = [:]
+builds2 = [:]
+
+node('jenkinsSlave1'){
+    stage('Checkout') {
+        dir('go/src/github.com/mobiledgex') {
+            checkout([$class: 'GitSCM', 
+                branches: [[name: 'master']],
+                doGenerateSubmoduleConfigurations: false,
+                extensions: [
+                    [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
+                        [$class:'SparseCheckoutPath', path:'modules/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/*']
+                    ]]
+                ],
+                submoduleCfg: [],
+                userRemoteConfigs: [[credentialsId: '79b116ea-d7ac-4d6c-928d-49b79e5f9bef',
+                url: 'https://github.com/mobiledgex/edge-cloud-qa.git']]])
+        }
+    }
+    
+   if(currentBuild.result != 'FAILURE') {
+      stage('run WS tests parallel batch 1') {
+         for(int i=0; i < jobList1ParallelEU.size(); ++i) {
+            def jobName = jobList1ParallelEU[i];
+            echo "i1=" + jobName
+            builds1[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variables), string(name: 'DMERest', value: dmeresteu), string(name: 'DMERestCert', value: dmerestcert), string(name: 'InfluxDB', value: influxdbeu)]
+	    }
+         }
+
+         for(int i=0; i < jobList1ParallelUS.size(); ++i) {
+            def jobName = jobList1ParallelUS[i];
+            echo "i1=" + jobName
+            builds1[jobName] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'VariableFile', value: variables), string(name: 'DMERest', value: dmerestus), string(name: 'DMERestCert', value: dmerestcert), string(name: 'InfluxDB', value: influxdbus)]
+            }
+         }
+
+         try {
+            parallel builds1
+         } catch(err) {
+            echo "Caught in run parallel batch 1: ${err}"
+            currentBuild.result = 'FAILURE'
+         }
+      }
+
+//      stage('run WS tests parallel batch 2') {
+//         for(int i=0; i < jobList2Parallel.size(); ++i) {
+//            def jobName = jobList2Parallel[i];
+//            echo "i1=" + jobName
+//            builds2[jobName] = {
+//               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'DME', value: dme), string(name: 'MasterController', value: mastercontroller), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert)]
+//	    }
+//         }
+//
+//         try {
+//            parallel builds2
+//         } catch(err) {
+//            echo "Caught in run parallel batch 2: ${err}"
+//            currentBuild.result = 'FAILURE'
+//         }
+//      }
+
+   } else {
+      echo "error: not running ws tests since currentBuild=Failure. copy tests to release failed"
+   }
+
+}
+
+    
