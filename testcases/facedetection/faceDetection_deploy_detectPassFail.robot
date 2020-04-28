@@ -50,7 +50,7 @@ Facedetection server shall recognize faces
 
     Log To Console  Creating App and App Instance
     Create App           app_name=${app_name}  image_path=${docker_image_facedetection}  access_ports=${facedetection_ports}  default_flavor_name=${cluster_flavor_name}  #default_flavor_name=flavor1550017240-694686
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  cluster_instance_name=${cluster_name}  flavor_name=${cluster_flavor_name} 
+    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  flavor_name=${cluster_flavor_name} 
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
