@@ -84,7 +84,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
 
     ${developer_name_default}=  Get Default Developer Name
     ${app_version_default}=  Get Default App Version
-    ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  key_file=id_rsa_mex 
+    ${token}=  Generate Auth Token  app_name=${app_name_default}  app_version=${app_version_default}  developer_name=${developer_name_default}  #key_file=id_rsa_mex 
 
     Register Client  auth_token=${token}
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
