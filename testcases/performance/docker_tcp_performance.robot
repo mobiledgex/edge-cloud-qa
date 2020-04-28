@@ -19,8 +19,8 @@ ${operator_name_openstack}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
-${cluster_name_1}  docker_tcp_server
-${cluster_name_2}  docker_tcp_client
+${cluster_name_1}  dockertcpserver
+${cluster_name_2}  dockertcpclient
 
 
 ${test_timeout_crm}  15 min
