@@ -50,7 +50,7 @@ SSH to RootLB VM
 
   SSH to Iperf Client Side Docker Container and Run TCP Performance Test for 30s
 
-  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c dockerserver.automationParadiseCloudlet.GDDT.mobiledgex.net -t 30   return_stderr=${True}  return_rc=${True}
+  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c dockertcpserver.automationParadiseCloudlet.GDDT.mobiledgex.net -t 30   return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
   Log  ${stdout}
   Log to console  ${stdout}
