@@ -19,8 +19,8 @@ ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
-${cluster_name_1}  vm_tcp_server
-${cluster_name_2}  vm_tcp_client
+${cluster_name_1}  vmtcpserver
+${cluster_name_2}  vmtcpclient
 
 
 ${test_timeout_crm}  15 min
@@ -57,7 +57,7 @@ SSH to RootLB VM
   ${stdout}  ${stderr}  ${rc}=  Execute Command  sudo apt-get install -y iperf3    return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
 
-  ${stdout}  ${stderr}  ${rc}=  Execute Command  iperf3 -c dockerserver.automationDusseldorfCloudlet.TDG.mobiledgex.net -t 30  return_stderr=${True}  return_rc=${True}
+  ${stdout}  ${stderr}  ${rc}=  Execute Command  iperf3 -c vmtcpserver.automationDusseldorfCloudlet.TDG.mobiledgex.net -t 30  return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
   Log  ${stdout}
   Log to console  ${stdout}
