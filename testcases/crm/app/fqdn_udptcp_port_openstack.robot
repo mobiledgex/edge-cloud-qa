@@ -227,7 +227,8 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
 *** Keywords ***
 Setup
     #Create Developer
-    Create Flavor
+    ${time}=  Get Time  epoch
+    Create Flavor  flavor_name=flavor${time}
     #Create Cluster   #default_flavor_name=${cluster_flavor_name}
     #Create Cloudlet  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name}  latitude=${latitude}  longitude=${longitude}
     Log To Console  Creating Cluster Instance
