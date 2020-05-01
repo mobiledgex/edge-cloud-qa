@@ -23,8 +23,9 @@ ${region}  US
 ${username}=  mextester06
 ${password}=  mextester06123
 
-
 *** Test Cases ***
+
+#ECQ-2141
 showDevice - developer viewer does not have permission to use command to return device information
 
     [Documentation]
@@ -50,12 +51,12 @@ showDevice - developer viewer does not have permission to use command to return 
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-
+#ECQ-2142
 showDeviceReport - developer viewer does not have permission to use command to return device information
 
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport does not return uuid device information for developere viewer
+    ...  verify showDeviceReport does not return uuid device information for developer viewer
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -74,11 +75,11 @@ showDeviceReport - developer viewer does not have permission to use command to r
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
+#ECQ-2143
 showDevice - developer manager does not have permission to use command to return device information
     [Documentation]
     ...  showDevice returns uuid for Admin only
-    ...  verify showDevice returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for developer manager
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -98,11 +99,11 @@ showDevice - developer manager does not have permission to use command to return
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
+#ECQ-2144
 showDeviceReport - developer manager does not have permission to use command to return device information
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for developer manager
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -122,11 +123,11 @@ showDeviceReport - developer manager does not have permission to use command to 
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
+#ECQ-2145
 showDevice - developer contributor does not have permission to use command to return device information
     [Documentation]
     ...  showDevice returns uuid for Admin only
-    ...  verify showDevice returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for developer contributor
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -146,11 +147,11 @@ showDevice - developer contributor does not have permission to use command to re
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
+#ECQ-2146
 showDeviceReport - developer contributor does not have permission to use command to return device information
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for developer contributor
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -170,11 +171,11 @@ showDeviceReport - developer contributor does not have permission to use command
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
-showDevice - developer admin has permission to use command to return device information
+#ECQ-2147
+showDevice - mexadmin has permission to use command to return device information from orgtype developer
     [Documentation]
-    ...  showDeviceReport returns uuid information
-    ...  verify showDevice returns uuid device information with specified parameters
+    ...  showDevice returns uuid information for mexadmin user
+    ...  verify showDevice returns uuid device information for mexadmin on a developer organization
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -195,11 +196,11 @@ showDevice - developer admin has permission to use command to return device info
 
       Should Be Larger Than  ${value_1}  ${value_2}
 
-#ECQ-
-showDeviceReport - developer admin has permission to use command to return device information
+#ECQ-2148
+showDeviceReport - mexadmin has permission to use command to return device information from orgtype developer
     [Documentation]
-    ...  showDeviceReport returns uuid information
-    ...  verify showDeviceReport returns uuid device information with specified parameters
+    ...  showDeviceReport returns uuid information for mexadmin user
+    ...  verify showDeviceReport returns uuid device information for mexadmin on a developer organization
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -220,12 +221,12 @@ showDeviceReport - developer admin has permission to use command to return devic
 
       Should Be Larger Than  ${value_1}  ${value_2}
 
-#ECQ-OPERATOR
+#ECQ-2149
 showDevice - operator viewer does not have permission to use command to return device information
 
     [Documentation]
     ...  showDevice returns uuid for Admin only
-    ...  verify showDevice does not return uuid device information for developer viewer
+    ...  verify showDevice does not return uuid device information for operator viewer
 
 
       ${supertoken}=  Get Super Token
@@ -246,12 +247,12 @@ showDevice - operator viewer does not have permission to use command to return d
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-OPERATOR
+#ECQ-2150
 showDeviceReport - operator viewer does not have permission to use command to return device information
 
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport does not return uuid device information for developere viewer
+    ...  verify showDeviceReport does not return uuid device information for operator viewer
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -270,11 +271,11 @@ showDeviceReport - operator viewer does not have permission to use command to re
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-OPERATOR
+#ECQ-2151
 showDevice - operator manager does not have permission to use command to return device information
     [Documentation]
     ...  showDevice returns uuid for Admin only
-    ...  verify showDevice returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for operator manager
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -294,11 +295,11 @@ showDevice - operator manager does not have permission to use command to return 
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-OPERATOR
+#ECQ-2152
 showDeviceReport - operator manager does not have permission to use command to return device information
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for operator manager
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -319,11 +320,11 @@ showDeviceReport - operator manager does not have permission to use command to r
       Should Be Equal As Integers  ${devicelength}  0
 
 
-#ECQ-OPERATOR
+#ECQ-2153
 showDevice - operator contributor does not have permission to use command to return device information
     [Documentation]
     ...  showDevice returns uuid for Admin only
-    ...  verify showDevice returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for operator contributor
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -343,11 +344,11 @@ showDevice - operator contributor does not have permission to use command to ret
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-OPERATOR
+#ECQ-2154
 showDeviceReport - operator contributor does not have permission to use command to return device information
     [Documentation]
     ...  showDeviceReport returns uuid for Admin only
-    ...  verify showDeviceReport returns uuid device information for authorized user
+    ...  verify showDeviceReport does not return uuid device information for operator contributor
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -367,11 +368,11 @@ showDeviceReport - operator contributor does not have permission to use command 
       ${devicelength}=  Get length  ${pool_return}
       Should Be Equal As Integers  ${devicelength}  0
 
-#ECQ-
-showDevice - admin org type operator has permission to use command to return device information
+#ECQ-2155
+showDevice - mexadmin has permission to use command to return device information from orgtype operator
     [Documentation]
-    ...  showDeviceReport returns uuid information
-    ...  verify showDevice returns uuid device information with specified parameters
+    ...  showDevice returns uuid information
+    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
@@ -392,11 +393,11 @@ showDevice - admin org type operator has permission to use command to return dev
 
       Should Be Larger Than  ${value_1}  ${value_2}
 
-#ECQ-
-showDeviceReport - admin org type operator has permission to use command to return device information
+#ECQ-2156
+showDeviceReport - mexadmin has permission to use command to return device information from orgtype operator
     [Documentation]
     ...  showDeviceReport returns uuid information
-    ...  verify showDeviceReport returns uuid device information with specified parameters
+    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
 
       ${supertoken}=  Get Super Token
       ${timestamp}=  Get Time  epoch
