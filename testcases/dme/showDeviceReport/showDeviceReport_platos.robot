@@ -28,11 +28,11 @@ ${count}  1
 # add testcase for Developer and Operator user
 
 *** Test Cases ***
-#ECQ-1
+#ECQ-2128
 showDeviceReport - request unique_id with only begin_nanos shall return device information
     [Documentation]
     ...  showDeviceReport returns uuid information
-    ...  verify showDeviceReport returns uuid device information with specified parameters
+    ...  verify showDeviceReport returns uuid device information with only begin_nanos specified parameters
 
       ${timestamp}=  Get Time  epoch
 
@@ -52,11 +52,11 @@ showDeviceReport - request unique_id with only begin_nanos shall return device i
       #Should Be True    ${found['data']['key']['unique_id']} > ${shit} -2
       #Should Be True    ${found['data']['key']['unique_id']} < ${shit} +2
 
-#ECQ-2
+#ECQ-2129
 showDeviceReport - request unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
     [Documentation]
     ...  showDeviceReport returns uuid information using begin_seconds and begin_nanos
-    ...  verify showDeviceReport returns uuid device information with specified parameters
+    ...  verify showDeviceReport returns uuid device information with unique_id unique_id_type begin_seconds and begin_nanos
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=id427912  unique_id_type=april 
       ${device}=  Show Device  region=${region}
@@ -74,11 +74,11 @@ showDeviceReport - request unique_id unique_id_type begin_seconds and begin_nano
      # Length Should Be  ${device}  1
 
 
-#ECQ-2a
+#ECQ-2130
 showDeviceReport - request unique_id and unique_id_type with begin_nanos shall return device information
     [Documentation]
-    ...  showDeviceReport returns uuid using only unique_id and begin_nanos
-    ...  verify showDeviceReport returns uuid device information with specified parameters
+    ...  showDeviceReport returns uuid using only with unique_id and unique_id_type with begin_nanos
+    ...  verify showDeviceReport returns uuid device information with unique_id and unique_id_type with begin_nanos
 
       Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=id427913  unique_id_type=october
       ${device}=  Show Device  region=${region}
@@ -96,12 +96,12 @@ showDeviceReport - request unique_id and unique_id_type with begin_nanos shall r
      # Length Should Be  ${device}  1
 
 
-#ECQ-3 
+#ECQ-2131 
 showDeviceReport - request with only begin_seconds and begin_nanos shall return device information
 
     [Documentation]
     ...  showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
-    ...  verify returned uuid returns uuid using begin_seconds and begin_nanos
+    ...  verify showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
 
       ${timestamp}=  Get Time  epoch
 
@@ -121,7 +121,7 @@ showDeviceReport - request with only begin_seconds and begin_nanos shall return 
       Should Be Equal   ${found['data']['key']['unique_id']}  ${uid} 
 
 
-#ECQ-4
+#ECQ-2132
 showDeviceReport - request uuid with only begin_nano shall return device information
 
     [Documentation]
@@ -146,7 +146,7 @@ showDeviceReport - request uuid with only begin_nano shall return device informa
      # Length Should Be  ${device}  1
 
 
-#ECQ-5
+#ECQ-2133
 showDeviceReport - request uuid with only begin_seconds shall returns device information 
 
     [Documentation]
@@ -170,12 +170,12 @@ showDeviceReport - request uuid with only begin_seconds shall returns device inf
 
      # Length Should Be  ${device}  1
 
-#ECQ-6 end_seconds
+#ECQ-2134
 showDeviceReport - request with only end_seconds and end_nanos shall return device information
 
     [Documentation]
     ...  showDeviceReport returns uuid device information with begin_seconds and begin_nanos
-    ...  verify returned uuid returns device information
+    ...  verify returned uuid returns device information with begin_seconds and begin_nanos
 
 
       ${timestamp}=  Get Time  epoch
@@ -205,12 +205,11 @@ showDeviceReport - request with only end_seconds and end_nanos shall return devi
 #      Should Be True   ${device['data']['notify_id']} > 0
 
 
-#ECQ-7  end_nanos
-showDeviceReport - request with unique_id end_seconds and end_nanos shall return device information
+#ECQ-2135
+showDeviceReport - request with added time to end_seconds shall return device data
     [Documentation]
-    ...  showDevice displays requested firstseen data
-    ...  verify returns time of first_seen seconds requested
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+    ...  showDeviceReport returns uuid device information with unique_id end_seconds and end_nanos
+    ...  verify returned uuid returns device information with unique_id end_seconds and end _nanos
 
       ${timestamp}=  Get Time  epoch
 
@@ -238,12 +237,12 @@ showDeviceReport - request with unique_id end_seconds and end_nanos shall return
      # Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}   
      # Length Should Be  ${device}  1
 
-#ECQ-8- working count for end
-showDeviceReport - request with end_seconds and end_nanos shall return device data
+#ECQ-2136
+showDeviceReport - request with added time to end_nanos shall return device data
 
     [Documentation]
-    ...  showDeviceReport returns uuid informtion with only end_seconds and end_nanos
-    ...  verify time_seen_nanos is displayed without being requested
+    ...  showDeviceReport returns uuid device information with end_seconds and end_nanos
+    ...  verify returned uuid returns device information with end_seconds and end _nanos
 
       ${timestamp}=  Get Time  epoch
 
@@ -272,12 +271,12 @@ showDeviceReport - request with end_seconds and end_nanos shall return device da
      # Should Be True    ${found['data']['key']['unique_id']} < ${count1}
      # Length Should Be   ${device}  1
 
-#ECQ-9
-showDeviceReport - returns uuid information with unique_id with end_seconds and end_nanos shall return device information
+#ECQ-2137
+showDeviceReport - request with unique_id_type with end_seconds and end_nanos shall return device information
 
     [Documentation]
-    ...  showDeviceReport display uuid using unique_id with end_seconds and end_nanos
-    ...  verify returned information 
+    ...  showDeviceReport display uuid using a specified unique_id_type end_seconds and end_nanos
+    ...  verify returned uuid returns device information using a specified unique_id_type end_seconds and end_nanos
 
       ${timestamp}=  Get Time  epoch
 
@@ -305,12 +304,11 @@ showDeviceReport - returns uuid information with unique_id with end_seconds and 
      
 
 
-#ECQ- 10 Return one specific record with begin_seconds
-showDeviceReport - equest unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
+#ECQ-2138
+showDeviceReport - request with unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
     [Documentation]
-    ...  showDeviceReport returns uuid information using end_seconds and end_nanos
-    ...  verify showDeviceReport returns uuid device information with specified parameters 
-
+    ...  showDeviceReport display uuid using a specified unique_id unique_id_type end_seconds and end_nanos
+    ...  verify returned uuid returns device information using a specified unique_id unique_id_type end_seconds and end_nanos
 
       ${timestamp}=  Get Time  epoch
 
@@ -341,7 +339,7 @@ showDeviceReport - equest unique_id unique_id_type begin_seconds and begin_nanos
 
 
   
-#ECQ-11
+#ECQ-2139
 showDeviceReport - request with bad token
   [Documentation]
     ...  showDevice verify error for bad token
@@ -354,7 +352,7 @@ showDeviceReport - request with bad token
       #Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
       Should Contain  ${error}  no bearer token found
 
-#ECQ-12
+#ECQ-2140
 showDeviceReport - request token error jwt
     [Documentation]
     ...  showDevice verify jwt error
