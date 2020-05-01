@@ -48,13 +48,6 @@ SSH to RootLB VM
   ...  SSH to RootLB VM
   ...  Copy Performance Repository from Github and measture bandwidth between master and worker nodes
 
-#   ${output}=  Execute Command    echo Hello World!
-#   should be equal   ${output}    Hello World!
-
-#   ${cluster_name}=  Get Default Cluster Name
-#
-#   ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
-
    Open Connection And Log In
 
    ${stdout}  ${stderr}=  Execute Command   git clone https://github.com/ashutoshbhatt1/k8sperf.git  return_stderr=${True}  #timeout=20 Seconds

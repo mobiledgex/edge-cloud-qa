@@ -34,7 +34,6 @@ from mex_master_controller.RunCommand import RunCommand
 from mex_master_controller.ShowDevice import ShowDevice
 from mex_master_controller.ShowDeviceReport import ShowDeviceReport
 
-
 import shared_variables_mc
 import shared_variables
 
@@ -2172,9 +2171,11 @@ class MexMasterController(MexRest):
     def remove_auto_provisioning_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.remove_autoprov_policy_cloudlet(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
-    
     def show_device(self, token=None, region=None, unique_id=None, unique_id_type=None, first_seen_seconds=None, first_seen_nanos=None, last_seen_seconds=None, last_seen_nanos=None, notify_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.showdevice.show_device(token=token, region=region, unique_id=unique_id, unique_id_type=unique_id_type, first_seen_seconds=first_seen_seconds, first_seen_nanos=first_seen_nanos, last_seen_seconds=last_seen_seconds, last_seen_nanos=last_seen_nanos, notify_id=notify_id, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def show_device_report(self, token=None, region=None, unique_id=None, unique_id_type=None, begin_seconds=None, begin_nanos=None, end_seconds=None, end_nanos=None, notify_id=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.showdevicereport.show_device_report(token=token, region=region, unique_id=unique_id, unique_id_type=unique_id_type, begin_seconds=begin_seconds, begin_nanos=begin_nanos, end_seconds=end_seconds, end_nanos=end_nanos, notify_id=notify_id, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
