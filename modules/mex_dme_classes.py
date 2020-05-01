@@ -43,7 +43,7 @@ class RegisterClientObject():
         if self.cell_id is not None:
             client_dict['cell_id'] = int(self.cell_id)
         if self.unique_id is not None:
-            client_dict['unique_id'] = self.unique_id
+            client_dict['unique_id'] = str(self.unique_id)
         if self.unique_id_type is not None:
             client_dict['unique_id_type'] = self.unique_id_type
 
