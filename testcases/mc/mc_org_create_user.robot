@@ -175,7 +175,9 @@ MC - User shall not be able to create an org named mobiledgex
 
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   #${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+   
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
