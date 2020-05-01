@@ -47,34 +47,48 @@ class AutoProvisioningPolicy(MexOperation):
         if policy_key_dict:
             policy_dict['key'] = policy_key_dict
 
-        rule_dict_list = []
-        for rule in rule_list:
-            rule_dict = {}
-            if 'protocol' in rule and rule['protocol'] is not None:
-                rule_dict['protocol'] = rule['protocol']
-                _fields_list.append(_protocol_field_number)
-                
-            if 'port_range_minimum' in rule and rule['port_range_minimum'] is not None:
-                try:
-                    rule_dict['port_range_min'] = int(rule['port_range_minimum'])
-                except:
-                    rule_dict['port_range_min'] = rule['port_range_minimum']
-                _fields_list.append(_port_range_min_field_number)
-                
-            if 'port_range_maximum' in rule and rule['port_range_maximum'] is not None:
-                try:
-                    rule_dict['port_range_max'] = int(rule['port_range_maximum'])
-                except:
-                    rule_dict['port_range_max'] = rule['port_range_maximum']
-                _fields_list.append(_port_range_max_field_number)
-                
-            if 'remote_cidr' in rule and rule['remote_cidr'] is not None:
-                rule_dict['remote_cidr'] = rule['remote_cidr']
-                _fields_list.append(_remote_cidr_field_number)
-                
-            if rule_dict:
-                rule_dict_list.append(rule_dict)    
-            policy_dict['outbound_security_rules'] = rule_dict_list
+        if deploy_client_count is not None:
+            try:
+                policy_dict['deploy_client_count'] = int(deploy_client_count)
+            except:
+                policy_dict['deploy_client_count'] = deploy_client_count
+            _fields_list.append(_deploy_client_count_field_number)
+
+        if deploy_interval_count is not None:
+            try:
+                policy_dict['deploy_interval_count'] = int(deploy_interval_count)
+            except:
+                policy_dict['deploy_interval_count'] = deploy_interval_count
+            _fields_list.append(_deploy_interval_count_field_number)
+            
+       # rule_dict_list = []
+       # for rule in rule_list:
+       #     rule_dict = {}
+       #     if 'protocol' in rule and rule['protocol'] is not None:
+       #         rule_dict['protocol'] = rule['protocol']
+       #         _fields_list.append(_protocol_field_number)
+       #         
+       #     if 'port_range_minimum' in rule and rule['port_range_minimum'] is not None:
+       #         try:
+       #             rule_dict['port_range_min'] = int(rule['port_range_minimum'])
+       #         except:
+       #             rule_dict['port_range_min'] = rule['port_range_minimum']
+       #         _fields_list.append(_port_range_min_field_number)
+       #         
+       #     if 'port_range_maximum' in rule and rule['port_range_maximum'] is not None:
+       #         try:
+       #             rule_dict['port_range_max'] = int(rule['port_range_maximum'])
+       #         except:
+       #             rule_dict['port_range_max'] = rule['port_range_maximum']
+       #         _fields_list.append(_port_range_max_field_number)
+       #         
+       #     if 'remote_cidr' in rule and rule['remote_cidr'] is not None:
+       #         rule_dict['remote_cidr'] = rule['remote_cidr']
+       #         _fields_list.append(_remote_cidr_field_number)
+       #         
+       #     if rule_dict:
+       #         rule_dict_list.append(rule_dict)    
+       #     policy_dict['outbound_security_rules'] = rule_dict_list
 
         if include_fields and _fields_list:
             policy_dict['fields'] = []
