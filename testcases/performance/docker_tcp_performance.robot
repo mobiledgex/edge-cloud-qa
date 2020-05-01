@@ -19,8 +19,8 @@ ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
-${cluster_name_1}  docker_tcp_server
-${cluster_name_2}  docker_tcp_client
+${cluster_name_1}  dockertcpserver
+${cluster_name_2}  dockertcpclient
 
 
 ${test_timeout_crm}  15 min
@@ -50,7 +50,7 @@ SSH to RootLB VM
 
   SSH to Iperf Client Side Docker Container and Run TCP Performance Test for 30s
 
-  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c dockerserver.automationDusseldorfCloudlet.TDG.mobiledgex.net -t 30   return_stderr=${True}  return_rc=${True}
+  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c dockertcpserver.automationDusseldorfCloudlet.TDG.mobiledgex.net -t 30   return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
   Log  ${stdout}
   Log to console  ${stdout}
