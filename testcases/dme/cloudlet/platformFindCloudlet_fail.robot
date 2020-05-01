@@ -49,10 +49,35 @@ PlatformFindCloudlet - request with bad client_token shall return error
     Should Contain  ${error_msg}  status = StatusCode.INVALID_ARGUMENT
     Should Contain  ${error_msg}  details = "Missing ClientToken"
 
- #EDGECLOUD-2583 - PlatformFindCloudlet with bad client_token returns wrong status code
+    #EDGECLOUD-2583 - PlatformFindCloudlet with bad client_token returns wrong status code
     ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${tmus_operator_name}  client_token=x
     Should Contain  ${error_msg}  status = StatusCode.UNKNOWNxxx
     Should Contain  ${error_msg}  details = "unable to decode token: illegal base64 data at input byte 0"
+
+# ECQ-2127
+PlatformFindCloudlet - request with non-samsung session cookie shall return error
+    [Documentation]
+    ...  send PlatformFindCloudlet with non-samsung session cookie
+    ...  verify proper error is received
+
+    ${t}=  Get Time  epoch
+
+    Create App  app_name=app${t}  developer_org_name=MobilegeX  access_ports=tcp:1  official_fqdn=${samsung_uri}   #permits_platform_apps=${True}
+
+    Register Client  app_name=app${t}  developer_org_name=MobilegeX
+
+    ${fqdn}=  Get App Official FQDN  latitude=37  longitude=-96
+
+    # send without token
+    ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${tmus_operator_name}
+    Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+    Should Contain  ${error_msg}  details = "API Not allowed for developer: MobilegeX app: app${t}"
+
+    # send with token
+    # EDGECLOUD-2640 DME panic when PlatformFindCloudlet is used on a non Samsung app
+    ${error_msg}=  Run Keyword And Expect Error  *  Platform Find Cloudlet  carrier_name=${tmus_operator_name}  client_token=${fqdn.client_token}
+    Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+    Should Contain  ${error_msg}  details = "API Not allowed for developer: MobilegeX app: app${t}"
 
 *** Keywords ***
 Setup
