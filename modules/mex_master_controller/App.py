@@ -44,9 +44,9 @@ class App(MexOperation):
             if access_ports is None: access_ports = 'tcp:1234'
             
             if deployment.lower() == 'docker':
-                if image_path is None:
+                if image_path is None and image_path.lower() != 'no_default':
                     image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-            if deployment.lower() == 'kubernetes':
+            if deployment.lower() == 'kubernetes' and image_path.lower() != 'no_default':
                 if image_path is None:
                     image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
             elif deployment == 'VM':
@@ -100,7 +100,7 @@ class App(MexOperation):
             app_dict['key'] = app_key_dict
         if image_type is not None:
             app_dict['image_type'] = image_type
-        if image_path is not None:
+        if image_path is not None and image_path != 'no_default':
             app_dict['image_path'] = image_path
         if default_flavor_name is not None:
             app_dict['default_flavor'] = {'name': default_flavor_name}
