@@ -47,7 +47,7 @@ User shall be able to deploy docker compose zip filed from artifactory
 
     Curl Image To Artifactory  username=${username1}  password=${password}  server=${artifactory_server}  org_name=${orgname}  image_name=${docker_compose_zip}
 
-    ${compose_artifactory}=  Set Variable  https://${artifactory_server}/artifactory/epo-${orgname}/${docker_compose_zip}
+    ${compose_artifactory}=  Set Variable  https://${artifactory_server}/artifactory/repo-${orgname}/${docker_compose_zip}
 
     Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${compose_artifactory}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=direct
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
@@ -101,3 +101,4 @@ Setup
     
     Set Suite Variable  ${rootlb}
     Set Suite Variable  ${orgname}
+    Set Suite Variable  ${username1}
