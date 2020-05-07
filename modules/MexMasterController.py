@@ -11,7 +11,6 @@ import os
 import imaplib
 import email
 import queue
-import sys
 
 from mex_rest import MexRest
 from mex_controller_classes import Organization
@@ -2180,16 +2179,18 @@ class MexMasterController(MexRest):
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
         """
-        logging.info('cleaning up provisioning')
-        print(self.prov_stack)
-        #temp_prov_stack = self.prov_stack
-        temp_prov_stack = list(self.prov_stack)
-        temp_prov_stack.reverse()
-        for obj in temp_prov_stack:
-            logging.debug('deleting obj' + str(obj))
-            obj()
-            del self.prov_stack[-1]
-
+        if not os.environ.get('AUTOMATION_NO_CLEANUP'):
+            logging.info('cleaning up provisioning')
+            print(self.prov_stack)
+            #temp_prov_stack = self.prov_stack
+            temp_prov_stack = list(self.prov_stack)
+            temp_prov_stack.reverse()
+            for obj in temp_prov_stack:
+                logging.debug('deleting obj' + str(obj))
+                obj()
+                del self.prov_stack[-1]
+        else:
+            logging.info('cleanup disable since AUTOMATION_NO_CLEANUP is set')
 
     def wait_for_replies(self, *args):
         """ Waits for operations that were sent in threaded mode to complete
