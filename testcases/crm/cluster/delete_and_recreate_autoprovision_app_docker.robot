@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create Dedicated Docker Reservable Cluster and Verify Auto-Provisioning
+Documentation   Delete and Create Docker App Instance and Verify Autoprovisioning work
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
@@ -30,7 +30,7 @@ Create docker based reservable cluster instnace
    ...  create a dedicated reservabe docker cluster instnace
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}
    Log to Console  DONE creating cluster instance
 
 Create Auto Provisioning Policy
