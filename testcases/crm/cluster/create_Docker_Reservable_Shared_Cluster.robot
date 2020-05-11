@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Create Dedicated Docker Reservable Cluster and Verify Auto-Provisioning
+Documentation   Create Shared Docker Reservable Cluster and Verify Auto-Provisioning
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
@@ -30,7 +30,7 @@ Create docker based reservable cluster instnace
    ...  create a dedicated reservabe docker cluster instnace
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}
    Log to Console  DONE creating cluster instance
 
 Create Auto Provisioning Policy
@@ -57,14 +57,21 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    Wait For App Instance To Be Ready   region=${region}   developer_org_name=testmonitor  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=testmonitor  app_version=v1  app_name=${app_name}
+   Register Client  developer_org_name=testmonitor  app_version=v1  app_name=AutoProvAppDocker
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
 *** Keywords ***
+Setup
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase   ${rootlb}
+    Set Suite Variable  ${rootlb}
+
 Cleanup
+
     delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=testmonitor  app_version=v1
     cleanup provisioning
 
