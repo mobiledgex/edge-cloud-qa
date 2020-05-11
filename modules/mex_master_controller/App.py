@@ -44,13 +44,13 @@ class App(MexOperation):
             if access_ports is None: access_ports = 'tcp:1234'
             
             if deployment.lower() == 'docker':
-                if image_path is None and image_path.lower() != 'no_default':
+                if image_path is None or image_path.lower() != 'no_default':
                     image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-            if deployment.lower() == 'kubernetes' and image_path.lower() != 'no_default':
-                if image_path is None:
+            if deployment.lower() == 'kubernetes':
+                if image_path is None or image_path.lower() != 'no_default':
                     image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-            elif deployment == 'VM':
-                if image_path is None:
+            elif deployment.lower() == 'vm':
+                if image_path is None or image_path.lower() != 'no_default':
                     image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
         shared_variables.app_name_default = app_name
