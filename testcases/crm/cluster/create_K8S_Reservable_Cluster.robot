@@ -3,14 +3,11 @@ Documentation   Create K8S Reservable Cluster and Verify Auto-Provisioning
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
-#Library         MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
-Library         String
-Library         SSHLibrary  10 Seconds
-Library         OperatingSystem
+Library         MexApp
 
 Test Timeout     15 minutes
 
-Test Setup      Setup
+#Test Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
@@ -23,6 +20,7 @@ ${default_flavor_name}   automation_api_flavor
 ${cluster_name}  k8sreservable
 ${docker_image}  docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1
 ${policy_name}  AutoProvPolicyTest
+${app_name}  AutoProvAppK8S
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 
 *** Test Cases ***
@@ -50,38 +48,24 @@ Add Cloudlet to Auto Provisioning Policy
 Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 
    log to console  Creating App and App Instance
-   create app  region=EU  app_name=AutoProvAppK8S  deployment=kubernetes  developer_org_name=testmonitor  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}
+   create app  region=EU  app_name=${app_name}  deployment=kubernetes  developer_org_name=testmonitor  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}
 
    log to console  Registering Client and Finding Cloudlet
    Register Client  developer_org_name=testmonitor  app_version=v1
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
-#   Should Be Equal As Numbers  ${cloudlet.status}  FIND_NOTFOUND
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   sleep  15s
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=testmonitor  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=testmonitor  app_version=v1  app_name=AutoProvAppK8S
+   Register Client  developer_org_name=testmonitor  app_version=v1  app_name=${app_name}
    ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
 
-   sleep  15s
-
-   log to console  show app instances status
-   show app instances  region=${region}  developer_org_name=testmonitor  app_version=v1  app_name=AutoProvAppK8S  operator_org_name=${operator_name_openstack}  cluster_instance_name=k8sreservable
-   log to console  App Instnace is running successfully!
 *** Keywords ***
-Setup
-
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb}=  Convert To Lowercase   ${rootlb}
-    Set Suite Variable  ${rootlb}
-
 Cleanup
-
-    sleep  30s
     delete app instance  region=${region}  app_name=AutoProvAppK8S  cluster_instance_name=k8sreservable  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=testmonitor  app_version=v1
     cleanup provisioning
 
