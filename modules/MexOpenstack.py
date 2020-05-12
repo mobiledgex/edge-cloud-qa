@@ -477,6 +477,22 @@ class MexOpenstack():
         
         return json.loads(o_out)
 
+    def get_server_show(self, name=None, env_file=None):
+        if env_file:
+            cmd = f'source {env_file}'
+        else:
+            cmd = f'source {self.env_file}'
+
+        cmd = f'{cmd};openstack server show -f json'
+
+        if name:
+            cmd += f' {name}'
+
+        logging.debug(f'getting openstack server show with cmd = {cmd}')
+        o_out = self._execute_cmd(cmd)
+        
+        return json.loads(o_out)
+
     def get_image_list(self, name=None):
         cmd = f'source {self.env_file};openstack image list -f json'
 
