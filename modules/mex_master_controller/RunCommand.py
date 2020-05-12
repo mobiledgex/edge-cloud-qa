@@ -94,10 +94,14 @@ class RunCommand(MexOperation):
         if since:
             show_dict['since'] = since
         if tail:
-            show_dict['tail'] = int(tail)
+            try:
+                show_dict['tail'] = int(tail)
+            except:
+                show_dict['tail'] = tail
         if time_stamps:
             show_dict['timestamps'] = time_stamps
         if follow:
+            print('*WARN*', 'follow', follow)
             show_dict['follow'] = follow
 
         if show_dict:
@@ -142,7 +146,7 @@ class RunCommand(MexOperation):
     def show_logs(self, mc_address=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, since=None, tail=None, time_stamps=None, follow=None, token=None, region=None, json_data=None, timeout=None, use_defaults=True, use_thread=False):
         msg = self._build(app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, use_defaults=use_defaults)
 
-        msg_show = self._build_show(type_dict=msg, since=since, tail=tail, time_stamps=time_stamps)
+        msg_show = self._build_show(type_dict=msg, since=since, tail=tail, time_stamps=time_stamps, follow=follow)
 
         return self._show(token=token, url=self.showLogs_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_show)
 

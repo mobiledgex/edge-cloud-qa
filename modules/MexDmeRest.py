@@ -150,7 +150,10 @@ class MexDmeRest(MexRest):
                 if str(self.resp.status_code) != '200':
                     self._number_findCloudlet_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                
+
+                if self.decoded_data['status'] != 'FIND_FOUND': # FIND_FOUND
+                    raise Exception(f'find cloudlet not found:{self.decoded_data}')
+
                 #for data in self.decoded_data:
                 #    print('*WARN*', 'xxx2',data)
                 #    print('*WARN*', 'xxx3',self.decoded_data[data])

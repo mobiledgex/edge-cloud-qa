@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Cluster size for openstack with IpAccessDedicated and Docker
+Documentation  Cluster for openstack with IpAccessDedicated and Docker
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
@@ -18,13 +18,13 @@ ${mobiledgex_domain}  mobiledgex.net
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-2164
 ClusterInst shall create with IpAccessDedicated/docker on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates lb only
 
    Create Flavor          ram=1024  vcpus=1  disk=1
-   #Create Cluster        
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
@@ -41,6 +41,21 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    ${server_info_node}=    Get Server List  name=${openstack_node_name}
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
    ${server_info_lb}=      Get Server List  name=${clusterlb}
+   ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf
+
+   # verify dedicated cluster as it own security group
+   ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
+   ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
+   ${server_show}=  Get Server Show  name=${clusterlb}
+   Security Groups Should Contain  ${server_show['security_groups']}  ${clusterlb}-sg
+   ${openstacksecgroup}=  Get Security Groups  name=${clusterlb}-sg
+   Should Be Equal  ${openstacksecgroup['name']}   ${clusterlb}-sg 
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='egress', ethertype='IPv4', id='.*', updated_at
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='443', port_range_min='443', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at 
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='${crm_ip}/32', updated_at= 
+
+   @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
+   Length Should Be  ${sec_groups}  2
 
    Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
@@ -71,3 +86,19 @@ Setup
     ${rootlb}=  Convert To Lowercase  ${rootlb}
 
     Set Suite Variable  ${rootlb}
+
+Security Groups Should Contain
+   [Arguments]  ${grouplist}  ${group}
+
+   ${found}=  Set Variable  ${False}
+
+   @{sec_groups}=  Split To Lines  ${grouplist}
+
+   FOR  ${g}  IN  @{sec_groups}
+      @{namelist}=  Split String  ${g}  =
+      ${name}=  Strip String  ${namelist[1]}  characters='
+      ${found}=  Run Keyword If  '${name}' == '${group}'  Set Variable  ${True}
+      ...  ELSE  Set Variable  ${found}
+   END
+
+   Should Be True  ${found}  Did not find security group ${group}
