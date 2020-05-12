@@ -590,7 +590,7 @@ class RunCommand():
         #self.run_command = runcommand_dict
 
 class AutoScalePolicy():
-    def __init__(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
+     def __init__(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
 
         self.policy = None
 
