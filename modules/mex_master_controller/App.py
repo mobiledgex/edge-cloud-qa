@@ -42,16 +42,20 @@ class App(MexOperation):
             if deployment is None: deployment = 'kubernetes'
             if default_flavor_name is None: default_flavor_name = shared_variables.flavor_name_default
             if access_ports is None: access_ports = 'tcp:1234'
-            
-            if deployment.lower() == 'docker':
-                if image_path is None or image_path.lower() != 'no_default':
-                    image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-            if deployment.lower() == 'kubernetes':
-                if image_path is None or image_path.lower() != 'no_default':
-                    image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
-            elif deployment.lower() == 'vm':
-                if image_path is None or image_path.lower() != 'no_default':
-                    image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+
+            if image_path and image_path.lower() == 'no_default':
+                # dont set the path
+                pass
+            else:
+                if deployment.lower() == 'docker':
+                    if image_path is None:
+                        image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                if deployment.lower() == 'kubernetes':
+                    if image_path is None:
+                        image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
+                elif deployment.lower() == 'vm':
+                    if image_path is None:
+                        image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
         shared_variables.app_name_default = app_name
         

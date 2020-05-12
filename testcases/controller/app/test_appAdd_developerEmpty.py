@@ -41,6 +41,7 @@ class tc(unittest.TestCase):
                                                     client_cert = mex_cert
                                                    )
 
+    # ECQ-804
     def test_CreateAppDeveloperEmpty_Docker(self):
         # [Documentation] App - User shall not be able to create app with empty developername and type Docker
         # ... Create an app with empty developername and type Docker
@@ -78,10 +79,12 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        expect_equal(error.details(), 'Invalid organization name', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
+    # ECQ-805
     def test_CreateAppDeveloperEmpty_QCOW(self):
         # [Documentation] App - User shall not be able to create app with empty developername and type QCOW
         # ... Create an app with empty developername and type QCOW
@@ -120,10 +123,12 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        expect_equal(error.details(), 'Invalid organization name', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
+    # ECQ-806
     def test_CreateAppDeveloperNotExist_Docker(self):
         # [Documentation] App - User shall not be able to create app with no developername and type Docker
         # ... Create an app with no developername and type Docker
@@ -161,10 +166,12 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        expect_equal(error.details(), 'Invalid organization name', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
+    # ECQ-807
     def test_CreateAppDeveloperNotExist_QCOW(self):
         # [Documentation] App - User shall not be able to create app with no developername and type QCOW
         # ... Create an app with no developername and type QCOW
@@ -203,7 +210,8 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'Invalid developer name', 'error details')
-        expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        #expect_equal(error.details(), 'Invalid developer name, name cannot be empty', 'error details')
+        expect_equal(error.details(), 'Invalid organization name', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
