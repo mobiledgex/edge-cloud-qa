@@ -787,7 +787,7 @@ class App():
             app_dict['key'] = app_pb2.AppKey(**app_key_dict)
         if self.image_type is not None:
             app_dict['image_type'] = self.image_type
-        if self.image_path is not None:
+        if self.image_path is not None and self.image_path != 'no_default':
             app_dict['image_path'] = self.image_path
 
         if self.access_type is not None:

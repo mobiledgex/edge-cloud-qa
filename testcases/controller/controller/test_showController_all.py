@@ -57,7 +57,9 @@ class tc(unittest.TestCase):
 #  buildhead: v1.0.2-4-gab9d724+
 #  hostname: controller-654688f58-chsrk
 
-        re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+        #re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+        re_master = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
+
         re_host = re.compile('^controller-')
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
 

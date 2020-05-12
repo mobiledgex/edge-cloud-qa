@@ -172,11 +172,17 @@ ShowLogs - docker dedicated shall return logs on openstack
 
     Should Match Regexp          ${stdout_timestamps}  ^\\d{1,4}\\-\\d{1,2}\\-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}
 
-    Length Should Be  ${stdout_noid} >= 9
-    Length Should Be  ${stdout_id}  9
-    Length Should Be  ${stdout_tail}  1
-    Length Should Be  ${stdout_timestamps}  3
-    Length Should Be  ${stdout_since}  1
+    ${stdout_noid_lines}=        Split To Lines  ${stdout_noid}
+    ${stdout_id_lines}=          Split To Lines  ${stdout_id}
+    ${stdout_tail_lines}=        Split To Lines  ${stdout_tail}
+    ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
+    ${stdout_since_lines}=       Split To Lines  ${stdout_since}
+
+    Length Should Be  ${stdout_noid_lines}  9
+    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_tail_lines}  1
+    Length Should Be  ${stdout_timestamps_lines}  3
+    Length Should Be  ${stdout_since_lines}  1
 
 # ECQ-2066
 ShowLogs - docker shared shall return logs on openstack
@@ -218,11 +224,17 @@ ShowLogs - docker shared shall return logs on openstack
 
     Should Match Regexp          ${stdout_timestamps}  ^\\d{1,4}\\-\\d{1,2}\\-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}
 
-    Length Should Be  ${stdout_noid} >= 9
-    Length Should Be  ${stdout_id}  9
-    Length Should Be  ${stdout_tail}  1
-    Length Should Be  ${stdout_timestamps}  3
-    Length Should Be  ${stdout_since}  1
+    ${stdout_noid_lines}=        Split To Lines  ${stdout_noid}
+    ${stdout_id_lines}=          Split To Lines  ${stdout_id}
+    ${stdout_tail_lines}=        Split To Lines  ${stdout_tail}
+    ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
+    ${stdout_since_lines}=       Split To Lines  ${stdout_since}
+
+    Length Should Be  ${stdout_noid_lines}  9
+    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_tail_lines}  1
+    Length Should Be  ${stdout_timestamps_lines}  3
+    Length Should Be  ${stdout_since_lines}  1
 
 *** Keywords ***
 Setup
