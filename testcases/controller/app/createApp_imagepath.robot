@@ -137,6 +137,7 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     #Should Contain  ${error_msg}   details = "Invalid registry path"
     Should Contain  ${error_msg}  details = "failed to validate VM registry image, path docker.registry.com/app#md5:12345678901234567890123456789012, Get docker.registry.com/app#md5:12345678901234567890123456789012: unsupported protocol scheme """ 
 
+# ECQ-1370 - removed from automation since qa vault now has access to artifactory and artifactory-qa. But retested bug manually
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
     [Documentation]
     ...  create app image_type=ImageTypeQCOW deployment=vm image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded and no credentials for docker-qa
