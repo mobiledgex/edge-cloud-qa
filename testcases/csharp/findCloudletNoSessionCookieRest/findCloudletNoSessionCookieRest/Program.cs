@@ -43,7 +43,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -83,7 +83,7 @@ namespace RestSample
                 me.sessionCookie = "";
                 //Console.WriteLine("sessionCookie = " + sessionCookie);
 
-                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, loc);
+                var findCloudletRequest = me.CreateFindCloudletRequest(loc, carrierName);
 
                 // Async:
                 var findCloudletTask = me.FindCloudlet(host, port, findCloudletRequest);
