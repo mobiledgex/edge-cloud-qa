@@ -6,6 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MobiledgeX.MatchingEngineSDKRestLibrary" Version="2.0.0" />
+    <PackageReference Include="MobiledgeX.MatchingEngineSDKRestLibrary" Version="2.0.3" />
   </ItemGroup>
 </Project>
