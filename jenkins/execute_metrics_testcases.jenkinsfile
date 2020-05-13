@@ -16,7 +16,7 @@ influxdbus = "${InfluxDBUS}"
 currentBuild.displayName = cycle
 
 def jobList1ParallelEU = ["runMetricsCloudletTests" ,"runMetricsClusterInstTests", "runMetricsAppInstTests"]
-def jobList2ParallelUS = ["runMetricsDMETests"]
+def jobList1ParallelUS = ["runMetricsDMETests"]
  
 builds1 = [:]
 builds2 = [:]
