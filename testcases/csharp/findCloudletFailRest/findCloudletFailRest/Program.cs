@@ -44,8 +44,8 @@ namespace RestSample
                 var locTask = Util.GetLocationFromDevice();
 
                 // Generate the authToken
-                //var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
-                var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                var pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
+                //var pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
                 psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
@@ -64,7 +64,7 @@ namespace RestSample
                 //developerAuthToken = "";
 
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -219,7 +219,7 @@ namespace RestSample
                     }
 
                 }
-                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, loc);
+                var findCloudletRequest = me.CreateFindCloudletRequest(loc, carrierName);
 
                 // Async:
                 var findCloudletTask = me.FindCloudlet(host, port, findCloudletRequest);
