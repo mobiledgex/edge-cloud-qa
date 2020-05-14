@@ -1,7 +1,7 @@
 cycle = "${cycle}"
 //components = "${components}"
 //controller = "${controller}"
-contoller = "controllerunset"
+controller = "controllerunset"
 mc = "mcunset"
 mccert = ""
 dme = "dmeunset"
