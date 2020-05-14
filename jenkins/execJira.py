@@ -353,6 +353,8 @@ def exec_testcases(z, l):
             update_single_defect(z, t)
 
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
+        status_s = json.dumps(status)
+
         if 'll execution(s) were successfully updated' in status_s:
             logging.info("tc status WIP updated successful")
         else:
@@ -443,6 +445,7 @@ def exec_testcases(z, l):
         try:
             r = subprocess.run(exec_cmd, shell=True, check=True)
             status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+            logging.debug(f'updatestatus={status}')
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             last_status = 'pass'
             if found_failure == -1:
