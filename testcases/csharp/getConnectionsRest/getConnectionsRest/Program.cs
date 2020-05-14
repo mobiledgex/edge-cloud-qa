@@ -137,7 +137,7 @@ namespace RestSample
                 // location in an Unity application should be from an application context
                 // LocationService.
                 var locTask = Util.GetLocationFromDevice();
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType(), tags);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType(), tags);
                 // APIs depend on Register client to complete successfully:
                 RegisterClientReply registerClientReply;
                 try
@@ -170,8 +170,8 @@ namespace RestSample
                 var loc = await locTask;
 
                 // Independent requests:
-                var verifyLocationRequest = me.CreateVerifyLocationRequest(carrierName, loc, cellID, tags);
-                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, loc, orgName, appName, appVers, cellID, tags);
+                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName, cellID, tags);
+                var findCloudletRequest = me.CreateFindCloudletRequest(loc);
                 var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
 
                 
