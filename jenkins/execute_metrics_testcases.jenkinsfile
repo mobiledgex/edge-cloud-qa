@@ -21,7 +21,7 @@ def jobList1ParallelUS = ["runMetricsDMETests"]
 builds1 = [:]
 builds2 = [:]
 
-node('jenkinsSlave1'){
+node('jenkinsGcpSlave1'){
     stage('Checkout') {
         dir('go/src/github.com/mobiledgex') {
             checkout([$class: 'GitSCM', 
