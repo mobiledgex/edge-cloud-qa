@@ -115,7 +115,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -152,7 +152,7 @@ namespace RestSample
                 // Store sessionCookie, for later use in future requests.
                 sessionCookie = registerClientReply.session_cookie;
 
-                var verifyLocationRequest = me.CreateVerifyLocationRequest(carrierName, loc);
+                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc);
                 var verfiyLocationTask = me.VerifyLocation(host, port, verifyLocationRequest);
 
                 // Awaits:

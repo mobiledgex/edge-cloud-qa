@@ -43,7 +43,7 @@ namespace RestSample
                 // Start location task:
                 var locTask = Util.GetLocationFromDevice();
 
-                var registerClientRequest = me.CreateRegisterClientRequest(carrierName, orgName, appName, appVers, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
@@ -198,10 +198,15 @@ namespace RestSample
                     }
 
                 }
-                var findCloudletRequest = me.CreateFindCloudletRequest(carrierName, loc);
+                var findCloudletRequest = me.CreateFindCloudletRequest(loc, carrierName);
 
                 // Async:
                 var findCloudletTask = me.FindCloudlet(host, port, findCloudletRequest);
+
+
+                // Had to change the test case since now carrier name is no longer required, this
+                // used to return FIND_NOTFOUND and now returns with FIND_FOUND with MobiledgeX
+                // Nuget package 2.0.3
 
                 // Awaits:
                 var findCloudletReply = await findCloudletTask;
@@ -211,13 +216,13 @@ namespace RestSample
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.fqdn);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
-                    Console.WriteLine("Test Case Failed!!!");
+                    Console.WriteLine("Test Case Passed!!!");
                     Environment.Exit(1);
                 }
                 if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.status);
-                    Console.WriteLine("Test Case Passed!!!");
+                    Console.WriteLine("Test Case Failed!!!");
                 }
             }
             catch (InvalidTokenServerTokenException itste)
@@ -227,7 +232,7 @@ namespace RestSample
             catch (Exception e)
             {
                 Console.WriteLine("Error Message: " + e.Message);
-                Console.WriteLine("Test Case Passed!");
+                Console.WriteLine("Test Case Failed!!");
                 Environment.Exit(0);
             }
 
