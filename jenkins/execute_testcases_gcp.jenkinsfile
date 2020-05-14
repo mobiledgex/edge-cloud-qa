@@ -13,7 +13,8 @@ openstack_shared_env = "openstackenvunset"
 openstack_vm_env = "openstackenvunset"
 openstack_gpu_env = "openstackenvunset"
 
-commit_version = "${CommitVersion}"
+//commit_version = "${CommitVersion}"
+commit_version = "commitversionunset"
 
 if (env.dme) {
     dme = "${DME}"
@@ -50,6 +51,9 @@ if (env.mastercontrollercert) {
 }
 if (env.controller) {
    controller = "${controller}" 
+}
+if (env.commit_version) {
+   commit_version = "${CommitVersion}"
 }
 
 
