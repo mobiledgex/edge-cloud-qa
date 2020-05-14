@@ -1,6 +1,7 @@
 cycle = "${cycle}"
 //components = "${components}"
-controller = "${controller}"
+//controller = "${controller}"
+contoller = "controllerunset"
 mc = "mcunset"
 mccert = ""
 dme = "dmeunset"
@@ -46,6 +47,9 @@ if (env.mastercontroller) {
 }
 if (env.mastercontrollercert) {
     mccert = "${MasterControllerCert}"
+}
+if (env.controller) {
+   controller = "${controller}" 
 }
 
 
