@@ -24,7 +24,7 @@ ${operator_name_openstack_frankfurt}  TDG
 ${physical_name_openstack_frankfurt}  frankfurt 
 ${cloudlet_name_openstack_packet}  automationPacketOrd2Cloudlet
 ${operator_name_openstack_packet}  TDG
-${physical_name_openstack_packet}  packet-ord2 
+${physical_name_openstack_packet}  packetcloudlet 
 ${cloudlet_name_openstack_dusseldorf}  automationDusseldorfCloudlet
 ${operator_name_openstack_dusseldorf}  TDG
 ${physical_name_openstack_dusseldorf}  dusseldorf 
@@ -202,6 +202,12 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Dusseldo
         ...  do UpdateCloudlet to upgrade a CRM on dusseldorf openstack
 
         Update Cloudlet  region=EU  operator_org_name=${operator_name_openstack_dusseldorf}  cloudlet_name=${cloudlet_name_openstack_dusseldorf}  container_version=${version}   use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Packet
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on packet openstack
+
+        Update Cloudlet  region=EU  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}  container_version=${version}   use_defaults=${False}
 
 *** Keywords ***
 Setup
