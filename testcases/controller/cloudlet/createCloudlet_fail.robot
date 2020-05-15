@@ -51,7 +51,7 @@ CreateCloudlet without a location
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_org_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Location is missing; 0,0 is not a valid location"
 
 CreateCloudlet with a location of 0 0
 	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of 0 0
@@ -60,7 +60,7 @@ CreateCloudlet with a location of 0 0
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Create Cloudlet	      operator_org_name=${oper}      cloudlet_name=${cldlet}     number_of_dynamic_ips=default     latitude=0      longitude=0    use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "location is missing; 0,0 is not a valid location"
+	Should Contain  ${error_msg}   details = "Location is missing; 0,0 is not a valid location"
 
 CreateCloudlet with a location of 100 200
 	[Documentation]   CreateCloudlet - Tries to create a cloudlet with location of 100 200

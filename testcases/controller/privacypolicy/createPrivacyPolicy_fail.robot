@@ -90,23 +90,23 @@ CreatePrivacyPolicy - create with invalid CIDR shall return error
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=x 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: x"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: x"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=1.1.1.1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 1.1.1.1"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=256.1.1.1/1
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 256.1.1.1/1"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 256.1.1.1/1"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=1.1.1.1/33
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 1.1.1.1/33"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1/33"}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: "}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: "}')  Create Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
 CreatePrivacyPolicy - create with invalid minport shall return error
    [Documentation]
