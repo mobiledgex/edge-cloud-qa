@@ -51,7 +51,7 @@ class tc(unittest.TestCase):
         resp = self.controller.update_cluster_instance(self.cluster_instance.cluster_instance)
 
         expect_equal(resp.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(resp.details(), 'nothing specified to update', 'error details')
+        expect_equal(resp.details(), 'Nothing specified to update', 'error details')
         assert_expectations()
 
 #    def tearDown(self):
