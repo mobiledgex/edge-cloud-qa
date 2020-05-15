@@ -24,7 +24,7 @@ ${operator_name_openstack_fairview}  GDDT
 ${physical_name_openstack_fairview}  fairview 
 ${cloudlet_name_openstack_packet}  automationPacketOrd2Cloudlet
 ${operator_name_openstack_packet}  GDDT
-${physical_name_openstack_packet}  packet-ord2 
+${physical_name_openstack_packet}  packetcloudlet 
 ${cloudlet_name_openstack_paradise}  automationParadiseCloudlet
 ${operator_name_openstack_paradise}  GDDT
 ${physical_name_openstack_paradise}  paradise 
@@ -202,6 +202,12 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Paradise
         ...  do UpdateCloudlet to upgrade a CRM on paradise openstack
 
         Update Cloudlet  region=EU  operator_org_name=${operator_name_openstack_paradise}  cloudlet_name=${cloudlet_name_openstack_paradise}  container_version=${version}   use_defaults=${False}
+
+UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Packet
+        [Documentation]
+        ...  do UpdateCloudlet to upgrade a CRM on packet openstack
+
+        Update Cloudlet  region=EU  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}  container_version=${version}   use_defaults=${False}
 
 *** Keywords ***
 Setup
