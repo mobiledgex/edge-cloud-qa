@@ -113,7 +113,7 @@ UpdateCloudlet with a ipsupport of -1
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}      use_defaults=False             
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "invalid IpSupport"
+	Should Contain  ${error_msg}   details = "Invalid IpSupport"
        
         [Teardown]  Cleanup provisioning
  
@@ -126,7 +126,7 @@ UpdateCloudlet with a ipsupport of -8
 
 	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}    ipsupport=${ipsup}        use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "invalid IpSupport"
+	Should Contain  ${error_msg}   details = "Invalid IpSupport"
 
 UpdateCloudlet with a location of 0 0 
 	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
