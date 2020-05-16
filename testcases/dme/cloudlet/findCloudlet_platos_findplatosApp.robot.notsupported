@@ -1,0 +1,79 @@
+*** Settings ***
+Documentation   FindCloudlet platos - send findCloudlet requesting platos app
+...  verify FIND_NOTFOUND is received
+
+
+Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+
+Suite Setup	Setup
+Suite Teardown	Cleanup provisioning
+
+*** Variables ***
+${azure_operator_name}  azure
+${dmuus_operator_name}  dmuus
+${dmuus_cloudlet_name}  tmocloud-2  #has to match crm process startup parms
+${azure_cloudlet_name}  azurecloud-1  #has to match crm process startup parms
+${platos_app_name}  platosEnablingLayer
+${platos_developer_name}  platos
+${platos_cloudlet_name}  default
+${platos_operator_name}  developer
+${platos_uri}  automation.platos.com
+${app_version}  1.0
+${flavor}	  x1.medium
+${number_nodes}	  3
+${max_nodes}	  4
+${num_masters}	  1
+
+${azure_cloudlet_latitude}	  35
+${azure_cloudlet longitude}	  -95
+${dmuus_cloudlet_latitude}	  35
+${dmuus_cloudlet longitude}	  -95
+
+*** Test Cases ***
+FindCloudlet platos - request shall return FIND_NOTFOUND when registering platos app and sending findCloudlet without overriding the appname
+    [Documentation]
+    ...  registerClient with platos app
+    ...  findCloudlet with no app name
+    ...  verify FIND_NOTFOUND is returned since cant search for own app 
+    
+      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the platos app - fixed
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${error_msg}=  Run Keyword and Expect Error  *  Find Cloudlet	carrier_name=${dmuus_operator_name}  latitude=36  longitude=-95
+
+      Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
+
+FindCloudlet platos - request shall return FIND_NOTFOUND when registering platos app and sending findCloudlet overriding the appname with platos app
+    [Documentation]
+    ...  registerClient with platos app
+    ...  findCloudlet with platos app name
+    ...  verify FIND_NOTFOUND is returned since cant search for own app
+
+      #  EDGECLOUD-352 - FindCloudlet - request should return FIND_NOTFOUND when searching for the platos app - fixed
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${error_msg}=  Run Keyword and Expect Error  *  Platform Find Cloudlet	app_name=${platos_app_name}  app_version=1.0  developer_org_name=${platos_developer_name}  carrier_name=${dmuus_operator_name}  #latitude=36  longitude=-95
+
+      Should Be Equal  ${error_msg}  find cloudlet not found:status: FIND_NOTFOUND\ncloudlet_location {\n}\n
+
+*** Keywords ***
+Setup
+    ${epoch}=  Get Time  epoch
+
+    ${azure_cloudlet_name}=  Catenate  SEPARATOR=  ${azure_cloudlet_name}  ${epoch}
+
+    #Create Developer            
+    Create Flavor
+    #Create Cloudlet		cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  latitude=${dmuus_cloudlet_latitude}  longitude=${dmuus_cloudlet_longitude}
+    Create Cloudlet		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  latitude=${azure_cloudlet_latitude}  longitude=${azure_cloudlet_longitude}
+    #Create Cluster	
+    Create Cluster Instance	
+    Create App			access_ports=tcp:1
+    ${dmuus_appinst}=            Create App Instance		cloudlet_name=${dmuus_cloudlet_name}  operator_org_name=${dmuus_operator_name}  cluster_instance_name=autocluster
+    Create App Instance		cloudlet_name=${azure_cloudlet_name}  operator_org_name=${azure_operator_name}  cluster_instance_name=autocluster
+
+    #Create Developer            developer_name=${platos_developer_name}
+    Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  #official_fqdn=${platos_uri} 
+    #${platos_appinst}=         Create App Instance  app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+
+    Set Suite Variable  ${dmuus_appinst} 
+    #Set Suite Variable  ${platos_appinst} 

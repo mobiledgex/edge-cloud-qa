@@ -1,0 +1,70 @@
+*** Settings ***
+Documentation   FindCloudlet platos - send findCloudlet with various missing override parms
+...  verify correct error is received
+
+Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+
+Suite Setup	Setup
+Suite Teardown	Cleanup provisioning
+
+*** Variables ***
+${dmuus_operator_name}  dmuus
+${platos_app_name}  platosEnablingLayer
+${platos_developer_name}  platos
+${platos_cloudlet_name}  default
+${platos_operator_name}  developer
+${platos_uri}  automation.platos.com
+${app_version}  1.0
+
+*** Test Cases ***
+FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding appname only
+    [Documentation]
+    ...  send FindCloudlet request overriding appname only. dont send appversion or developer name
+    ...  verify "Access to requested app not allowed" error is received
+
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_name=${platos_app_name}  carrier_name=${dmuus_operator_name}  latitude=36  longitude=-95
+
+#      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+#      Should Contain  ${error_msg}  details = "Access to requested app: Devname: \ Appname: platosEnablingLayer AppVers: \ not allowed for the registered app: Devname: platos Appname: platosEnablingLayer Appvers: 1.0"
+
+      Should Contain  ${error_msg}  status = StatusCode.NOT_FOUND
+      Should Contain  ${error_msg}  details =  "Requested app: OrgName:  Appname: platosEnablingLayer AppVers:  not found"
+
+FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding appvers only
+    [Documentation]
+    ...  send FindCloudlet request overriding appvers only. dont send appname or developer name
+    ...  verify "Access to requested app not allowed" error is received
+
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  app_version=${app_version}  carrier_name=${dmuus_operator_name}  latitude=36  longitude=-95
+
+#      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+#      Should Contain  ${error_msg}  details = "Access to requested app: Devname: \ Appname: \ AppVers: 1.0 not allowed for the registered app: Devname: platos Appname: platosEnablingLayer Appvers: 1.0"
+
+      Should Contain  ${error_msg}  status = StatusCode.NOT_FOUND
+      Should Contain  ${error_msg}  details =  "Requested app: OrgName:  Appname:  AppVers: 1.0 not found"
+
+FindCloudlet platos - request shall return error when registering platos app and sending findCloudlet overriding developername only
+    [Documentation]
+    ...  send FindCloudlet request overriding developername only. dont send appname or appvers
+    ...  verify "Access to requested app not allowed" error is received
+
+      Register Client	developer_org_name=${platos_developer_name}  app_name=${platos_app_name}
+      ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  developer_org_name=${platos_developer_name}  carrier_name=${dmuus_operator_name}  latitude=36  longitude=-95
+
+#      Should Contain  ${error_msg}  status = StatusCode.PERMISSION_DENIED
+#      Should Contain  ${error_msg}  details = "Access to requested app: Devname: platos Appname: \ AppVers: \ not allowed for the registered app: Devname: platos Appname: platosEnablingLayer Appvers: 1.0"
+
+      Should Contain  ${error_msg}  status = StatusCode.NOT_FOUND
+      Should Contain  ${error_msg}  details =  "Requested app: OrgName: \ Appname: \ AppVers: \ not found"
+
+*** Keywords ***
+Setup
+    Create Flavor
+    #Create Cluster	
+    #Create Developer            developer_name=${platos_developer_name}
+    Create App			developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  official_fqdn=${platos_uri} 
+    #Create App Instance         app_name=${platos_app_name}  developer_name=${platos_developer_name}  cloudlet_name=${platos_cloudlet_name}  operator_org_name=${platos_operator_name}  uri=${platos_uri}  cluster_instance_name=autocluster
+
