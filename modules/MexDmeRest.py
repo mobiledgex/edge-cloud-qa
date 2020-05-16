@@ -37,6 +37,10 @@ class MexDmeRest(MexRest):
         self._number_findCloudlet_requests_success = 0
         self._number_findCloudlet_requests_fail = 0
 
+        self._number_getqospositionkpi_requests = 0
+        self._number_getqospositionkpi_requests_success = 0
+        self._number_getqospositionkpi_requests_fail = 0
+
         self._number_getappofficialfqdn_requests = 0
         self._number_getappofficialfqdn_requests_success = 0
         self._number_getappofficialfqdn_requests_fail = 0
@@ -172,6 +176,47 @@ class MexDmeRest(MexRest):
             return t
         else:
             print('sending message')
+            resp = send_message()
+            return resp
+
+    def get_qos_position_kpi(self, session_cookie=None, latitude=None, longitude=None, cell_id=None, use_defaults=True, use_thread=False):
+        
+        client = mex_dme_classes.GetQosPositionKpiRequestObject(session_cookie=session_cookie, latitude=latitude, longitude=longitude, cell_id=cell_id, use_defaults=use_defaults)
+
+        url = self.root_url + '/v1/getqospositionkpi'
+        #payload = MessageToJson(client.request)
+        payload = client.request
+        
+        logger.info('getqospositionkpi rest client on {}. \n\t{}'.format(url, payload))
+
+        def send_message():
+            self._number_getqospositionkpi_requests += 1
+
+            try:
+                self.post(url=url, data=payload)
+                
+                logger.info('response:\n' + str(self.resp.text))
+                
+                if str(self.resp.status_code) != '200':
+                    self._number_qospositionkpi_requests_fail += 1
+                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+
+                if self.decoded_data['result']['status'] != 'RS_SUCCESS': 
+                    raise Exception(f'get qos position kpi failed:{self.decoded_data}')
+
+            except Exception as e:
+                self._number_qospositionkpi_requests_fail += 1
+                raise Exception("post failed:", e)
+
+            self._number_getqospositionkpi_requests_success += 1
+
+            return self.decoded_data
+        
+        if use_thread is True:
+            t = threading.Thread(target=send_message)
+            t.start()
+            return t
+        else:
             resp = send_message()
             return resp
 
