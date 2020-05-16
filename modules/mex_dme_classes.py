@@ -151,3 +151,42 @@ class VerifyLocationRequestObject():
         print(request_dict)
         #self.request = app_client_pb2.VerifyLocationRequest(**request_dict)
         self.request = json.dumps(request_dict)
+
+class GetQosPositionKpiRequestObject():
+    request_dict = None
+    request_dict_string = None
+    request = None
+    
+    def __init__(self, session_cookie=None, latitude=None, longitude=None, cell_id=None, use_defaults=True):
+        request_dict = {}
+        self.session_cookie = session_cookie
+        self.latitude = latitude
+        self.longitude = longitude
+        self.cell_id = cell_id
+        
+        if session_cookie == 'default':
+            self.session_cookie = shared_variables.session_cookie_default
+            
+        if use_defaults:
+            if not session_cookie: self.session_cookie = shared_variables.session_cookie_default
+
+        loc_dict = {}
+        if self.latitude is not None:
+            loc_dict['latitude'] = float(self.latitude)
+        if self.longitude is not None:
+            loc_dict['longitude'] = float(self.longitude)
+
+        if self.session_cookie is not None:
+            request_dict['session_cookie'] = self.session_cookie
+        if self.cell_id is not None:
+            request_dict['cell_id'] = int(self.cell_id)
+
+        if loc_dict:
+            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+            request_dict['gps_location'] = loc_dict
+
+        #self.request_dict = request_dict
+        #self.request_dict_string = str(request_dict).replace('\n', ',')
+        #self.request = app_client_pb2.FindCloudletRequest(**request_dict)
+        self.request = json.dumps(request_dict)
+        #print('*WARN*', 'aa', str(self.request_dict['GpsLocation'].__dict__))
