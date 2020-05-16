@@ -43,7 +43,7 @@ GetAppInstList - request shall return 10 cloudlets
     ...  verify returns 10 cloudlets
 
       Register Client
-      ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}
+      ${appfqdns}=  Get App Instance List  carrier_name=${operator_name}  latitude=${mobile_latitude}  longitude=${mobile_longitude}  limit=10
 
       @{origin}=  Create List  ${mobile_latitude}  ${mobile_longitude}
       @{dest_1}=    Create List  ${appfqdns[0].gps_location.latitude}  ${appfqdns[0].gps_location.longitude}

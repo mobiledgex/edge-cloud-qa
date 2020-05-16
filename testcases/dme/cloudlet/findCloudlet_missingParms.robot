@@ -34,19 +34,19 @@ FindCloudlet - request without lat/long should return 'Missing GpsLocation'
 
 # ECQ-965
 # this is supported now
-FindCloudlet - request without carrier name should return 'missing carrierName'
-   [Documentation]
-   ...  send FindCloudlet with no carrier name
-   ...  verify 'missing carrierName' is received
-
-#EDGECLOUD-285
-   #${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
-
-   Register Client
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
-
-   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Missing carrierName"
+#FindCloudlet - request without carrier name should return 'missing carrierName'
+#   [Documentation]
+#   ...  send FindCloudlet with no carrier name
+#   ...  verify 'missing carrierName' is received
+#
+##EDGECLOUD-285
+#   #${token}=  Generate Auth Token  app_name=${app_name}  app_version=${app_version}  developer_name=${developer_name}
+#
+#   Register Client
+#   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  longitude=-90  use_defaults=${False}
+#
+#   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+#   Should Contain  ${error_msg}   details = "Missing carrierName"
 
 # ECQ-966
 FindCloudlet - request with latitude only should return error 
