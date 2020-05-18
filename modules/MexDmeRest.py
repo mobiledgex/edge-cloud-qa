@@ -179,9 +179,9 @@ class MexDmeRest(MexRest):
             resp = send_message()
             return resp
 
-    def get_qos_position_kpi(self, session_cookie=None, latitude=None, longitude=None, cell_id=None, use_defaults=True, use_thread=False):
+    def get_qos_position_kpi(self, session_cookie=None, position_list=[] , lte_category=None, band_selection=None, cell_id=None, use_defaults=True, use_thread=False):
         
-        client = mex_dme_classes.GetQosPositionKpiRequestObject(session_cookie=session_cookie, latitude=latitude, longitude=longitude, cell_id=cell_id, use_defaults=use_defaults)
+        client = mex_dme_classes.GetQosPositionKpiRequestObject(session_cookie=session_cookie, position_list=position_list, lte_category=lte_category, band_selection=band_selection, cell_id=cell_id, use_defaults=use_defaults)
 
         url = self.root_url + '/v1/getqospositionkpi'
         #payload = MessageToJson(client.request)
