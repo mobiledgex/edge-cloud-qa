@@ -354,6 +354,7 @@ def exec_testcases(z, l):
 
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
         status_s = json.dumps(status)
+        logging.debug('update WIP returned:' + status_s)
 
         if 'll execution(s) were successfully updated' in status_s:
             logging.info("tc status WIP updated successful")
