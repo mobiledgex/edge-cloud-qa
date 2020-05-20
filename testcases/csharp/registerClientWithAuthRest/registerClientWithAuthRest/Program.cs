@@ -35,7 +35,7 @@ namespace RestSample
             {
                 carrierName = await getCurrentCarrierName();
 
-                Console.WriteLine("RegisterClientWrongAppRest Testcase");
+                Console.WriteLine("RegisterClientWithAuthRest Testcase");
 
                 MatchingEngine me = new MatchingEngine();
                 //port = MatchingEngine.defaultDmeRestPort;
@@ -47,7 +47,9 @@ namespace RestSample
                 psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
                 System.Diagnostics.Process genauthtoken;
+                //Console.WriteLine("Before the genauth call");
                 genauthtoken = System.Diagnostics.Process.Start(psi);
+                //Console.WriteLine("After the genauth call");
                 genauthtoken.WaitForExit();
                 System.IO.StreamReader reader = genauthtoken.StandardOutput;
                 genauthtoken.WaitForExit();
