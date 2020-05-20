@@ -174,6 +174,7 @@ namespace RestSample
                 else
                 {
                     Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
 
 
