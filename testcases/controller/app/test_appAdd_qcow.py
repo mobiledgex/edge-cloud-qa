@@ -90,7 +90,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'imagepath is required for imagetype IMAGE_TYPE_QCOW', 'error details')
-        expect_equal(error.details(), 'md5sum should be provided if imagepath is not specified', 'error details')
+        expect_equal(error.details(), 'Md5sum should be provided if imagepath is not specified', 'error details')
         expect_equal(found_app, False, 'find app')
 
         assert_expectations()
@@ -132,7 +132,7 @@ class tc(unittest.TestCase):
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'imagepath is required for imagetype IMAGE_TYPE_QCOW', 'error details')
-        expect_equal(error.details(), 'md5sum should be provided if imagepath is not specified', 'error details')
+        expect_equal(error.details(), 'Md5sum should be provided if imagepath is not specified', 'error details')
         expect_equal(found_app, False, 'find app')
 
         assert_expectations()
