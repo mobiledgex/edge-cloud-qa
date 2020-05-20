@@ -57,7 +57,7 @@ CreateApp - shall be to create with image_type=ImageTypeDocker deployment=docker
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  region=${region}  developer_org_name=${orgname}  image_type=ImageTypeDocker  deployment=docker  image_path=docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0
 
     Should Contain  ${error_msg}  code=400
-    Should Contain  ${error_msg}  error={"message":"failed to validate docker registry image, path docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0, Access denied to registry path"}
+    Should Contain  ${error_msg}  error={"message":"Failed to validate docker registry image, path docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0, Access denied to registry path"}
 
 CreateApp - shall be to create with image_type=ImageTypeDocker deployment=kubernetes and org does match
     [Documentation]
@@ -69,7 +69,7 @@ CreateApp - shall be to create with image_type=ImageTypeDocker deployment=kubern
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  region=${region}  developer_org_name=${orgname}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0
 
     Should Contain  ${error_msg}  code=400
-    Should Contain  ${error_msg}  error={"message":"failed to validate docker registry image, path docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0, Access denied to registry path"}
+    Should Contain  ${error_msg}  error={"message":"Failed to validate docker registry image, path docker-qa.mobiledgex.net/${orgname}/images/server_ping_threaded:5.0, Access denied to registry path"}
 
 CreateApp - shall be to create with image_type=ImageTypeQcow deployment=vm and org does match
     [Documentation]
@@ -81,7 +81,7 @@ CreateApp - shall be to create with image_type=ImageTypeQcow deployment=vm and o
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  region=${region}  developer_org_name=${orgname}  image_type=ImageTypeQcow  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d
 
     Should Contain  ${error_msg}  code=400
-    Should Contain  ${error_msg}  error={"message":"failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Invalid URL: https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Not Found"}
+    Should Contain  ${error_msg}  error={"message":"Failed to validate VM registry image, path https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Invalid URL: https://artifactory-qa.mobiledgex.net/artifactory/repo-${orgname}/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d, Not Found"}
 
 *** Keywords ***
 Setup
