@@ -28,9 +28,9 @@ namespace RestSample
         static string sessionCookie;
 
         // Get the ephemerial carriername from device specific properties.
-        async static Task<string> getCurrentCarrierName()
+         async static Task<string> getCurrentCarrierName()
         {
-            var dummy = await Task.FromResult(0);
+            carrierName = "";
             return carrierName;
         }
 
@@ -167,11 +167,13 @@ namespace RestSample
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.gps_location_accuracy_km + "KM");
                     Console.WriteLine("Test Case Passed!!!");
+                    Environment.Exit(0);
 
                 }
                 else
                 {
                     Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
 
 
@@ -181,10 +183,12 @@ namespace RestSample
             catch (InvalidTokenServerTokenException itste)
             {
                 Console.WriteLine(itste.StackTrace);
+                Environment.Exit(1);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Environment.Exit(1);
             }
 
         }
