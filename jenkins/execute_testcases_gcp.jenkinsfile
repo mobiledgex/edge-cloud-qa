@@ -14,6 +14,7 @@ openstack_dedicated_env = "openstackenvunset"
 openstack_shared_env = "openstackenvunset"
 openstack_vm_env = "openstackenvunset"
 openstack_gpu_env = "openstackenvunset"
+influx = "influxnotset"
 
 //commit_version = "${CommitVersion}"
 commit_version = "commitversionunset"
@@ -60,6 +61,9 @@ if (env.controller) {
 }
 if (env.commit_version) {
    commit_version = "${CommitVersion}"
+}
+if (env.influxdb) {
+   influx = "${InfluxDB}"
 }
 
 
@@ -161,7 +165,7 @@ node('jenkinsGcpSlave1'){
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_KUBECONFIG=$WORKSPACE/' + kubeconfig + ';export AUTOMATION_CRM_AZURE_POD_NAME=' + crm_azure_pod_name + ';export AUTOMATION_CRM_GCP_POD_NAME=' + crm_gcp_pod_name + ';export AUTOMATION_OPENSTACK_DEDICATED_ENV=' + openstack_dedicated_env + ';export AUTOMATION_OPENSTACK_SHARED_ENV=' + openstack_shared_env + ';export AUTOMATION_OPENSTACK_VM_ENV=' + openstack_vm_env + ';export AUTOMATION_OPENSTACK_GPU_ENV=' + openstack_gpu_env + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';./execJira_parallel.py', returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_KUBECONFIG=$WORKSPACE/' + kubeconfig + ';export AUTOMATION_CRM_AZURE_POD_NAME=' + crm_azure_pod_name + ';export AUTOMATION_CRM_GCP_POD_NAME=' + crm_gcp_pod_name + ';export AUTOMATION_OPENSTACK_DEDICATED_ENV=' + openstack_dedicated_env + ';export AUTOMATION_OPENSTACK_SHARED_ENV=' + openstack_shared_env + ';export AUTOMATION_OPENSTACK_VM_ENV=' + openstack_vm_env + ';export AUTOMATION_OPENSTACK_GPU_ENV=' + openstack_gpu_env + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_INFLUXDB_ADDRESS=' + influx + ';./execJira_parallel.py', returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
