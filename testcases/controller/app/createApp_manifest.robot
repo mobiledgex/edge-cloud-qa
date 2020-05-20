@@ -25,7 +25,7 @@ CreateApp - error shall be received with ImageTypeQCOW and no manifest md5
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "md5 checksum of image is required. Please append checksum to imagepath: "<url>#md5:checksum"
+    Should Contain  ${error_msg}   details = "Md5 checksum of image is required. Please append checksum to imagepath: "<url>#md5:checksum"
 
 #ECQ-1356
 CreateApp - error shall be received with ImageTypeQCOW and manifest md5 too short
@@ -36,7 +36,7 @@ CreateApp - error shall be received with ImageTypeQCOW and manifest md5 too shor
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath#md5:checksum
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "md5 checksum must be at least 32 characters"
+    Should Contain  ${error_msg}   details = "Md5 checksum must be at least 32 characters"
 
 #ECQ-1357
 CreateApp - error shall be received with ImageTypeQCOW and manifest md5 invalid 
@@ -200,7 +200,7 @@ CreateApp - error shall be received with deployment=kubernetes and invalid artif
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=http:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
+    Should Contain  ${error_msg}   details = "Cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
 
 #ECQ-2161
 CreateApp - error shall be received with deployment=docker and invalid artifactory docker compose 
@@ -211,7 +211,7 @@ CreateApp - error shall be received with deployment=docker and invalid artifacto
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
+    Should Contain  ${error_msg}   details = "Cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
 
 *** Keywords ***
 Setup
