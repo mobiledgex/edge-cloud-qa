@@ -22,7 +22,7 @@ ${physical_name_openstack_munich}  munich
 ${cloudlet_name_openstack_frankfurt}  automationFrankfurtCloudlet
 ${operator_name_openstack_frankfurt}  TDG
 ${physical_name_openstack_frankfurt}  frankfurt 
-${cloudlet_name_openstack_packet}  automationPacketOrd2Cloudlet
+${cloudlet_name_openstack_packet}  packetcloudlet 
 ${operator_name_openstack_packet}  TDG
 ${physical_name_openstack_packet}  packetcloudlet 
 ${cloudlet_name_openstack_dusseldorf}  automationDusseldorfCloudlet
