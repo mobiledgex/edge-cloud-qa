@@ -301,7 +301,7 @@ namespace RestSample
                 string receiveMessage = "";
                 try
                 {
-                    Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, 2015, 10000);
+                    Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, 2016, 10000);
                     //Assert.ByVal(tcpConnection, Is.Not.Null);
 
                     tcpConnection.Send(bytesMessage);
@@ -344,7 +344,7 @@ namespace RestSample
                 receiveMessage = "";
                 try
                 {
-                    Socket udpConnection = await me.GetUDPConnection(aWebSocketServerFqdn, 2016, 10000);
+                    Socket udpConnection = await me.GetUDPConnection(aWebSocketServerFqdn, 2015, 10000);
                     //Assert.ByVal(tcpConnection, Is.Not.Null);
 
                     udpConnection.Send(bytesMessage);

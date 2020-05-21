@@ -166,6 +166,7 @@ namespace RestSample
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("VerifyLocation Reply - Accuracy: " + verifyLocationReply.gps_location_accuracy_km + "KM");
                     Console.WriteLine("Test Case Passed!!!");
+                    Environment.Exit(0);
 
                 }
                 else
@@ -173,6 +174,7 @@ namespace RestSample
 
                     Console.WriteLine("VerifyLocation Reply - Status: " + verifyLocationReply.gps_location_status);
                     Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
 
 

@@ -217,7 +217,7 @@ namespace RestSample
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.latitude);
                     Console.WriteLine("FindCloudlet Reply: " + findCloudletReply.cloudlet_location.longitude);
                     Console.WriteLine("Test Case Passed!!!");
-                    Environment.Exit(1);
+                    Environment.Exit(0);
                 }
                 if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                 {
@@ -233,7 +233,7 @@ namespace RestSample
             {
                 Console.WriteLine("Error Message: " + e.Message);
                 Console.WriteLine("Test Case Failed!!");
-                Environment.Exit(0);
+                Environment.Exit(1);
             }
 
         }
