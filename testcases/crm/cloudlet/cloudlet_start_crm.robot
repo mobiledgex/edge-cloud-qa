@@ -22,7 +22,7 @@ ${physical_name_openstack_sunnydale}  sunnydale
 ${cloudlet_name_openstack_fairview}  automationFairviewCloudlet
 ${operator_name_openstack_fairview}  GDDT
 ${physical_name_openstack_fairview}  fairview 
-${cloudlet_name_openstack_packet}  automationPacketOrd2Cloudlet
+${cloudlet_name_openstack_packet}  packetcloudlet 
 ${operator_name_openstack_packet}  GDDT
 ${physical_name_openstack_packet}  packetcloudlet 
 ${cloudlet_name_openstack_paradise}  automationParadiseCloudlet
