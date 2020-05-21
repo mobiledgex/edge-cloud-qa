@@ -2194,7 +2194,8 @@ class MexMasterController(MexRest):
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
         """
-        if not os.environ.get('AUTOMATION_NO_CLEANUP'):
+
+        if not os.environ.get('AUTOMATION_NO_CLEANUP') or os.environ.get('AUTOMATION_NO_CLEANUP') != '1':
             logging.info('cleaning up provisioning')
             print(self.prov_stack)
             #temp_prov_stack = self.prov_stack
