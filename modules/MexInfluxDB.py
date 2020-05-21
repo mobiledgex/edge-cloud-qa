@@ -28,6 +28,8 @@ class MexInfluxDB(WebService) :
     appinst_network_table = 'appinst-network'
     appinst_connections_table = 'appinst-connections'
 
+    auto_prov_counts_table = 'auto-prov-counts'
+
     metrics_db = 'metrics'
     cloudlet_utilization_table = 'cloudlet-utilization'
     cloudlet_ipusage_table = 'cloudlet-ipusage'
@@ -256,6 +258,38 @@ class MexInfluxDB(WebService) :
                               
         return value_list
 
+    def get_influx_auto_prov_counts(self, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, dme_id=None, condition=None):
+        query = f'select * from \"{self.auto_prov_counts_table}\"'
+        
+        if app_name:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' app=\'{app_name}\''
+        if app_version:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' ver=\'{app_version}\''            
+        if cloudlet_name:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' cloudlet=\'{cloudlet_name}\''
+        if developer_org_name:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' apporg=\'{developer_org_name}\''
+        if operator_org_name:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' cloudletorg=\'{operator_org_name}\''
+        if dme_id:
+            query = query + ' and' if 'where' in query else query + ' where'
+            query += f' dmeid=\'{dme_id}\''            
+        if condition:
+            query += f' {condition}'
+
+        logger.info('query=' + query)
+
+        resp = self.query_db(db=self.metrics_db, query=query)
+        self._decode_content()
+        value_list = self._parse_data()
+
+        return value_list
+
     def get_influx_cluster_cpu_metrics(self, cluster_instance_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, condition=None):
         return self.get_influx_cluster_metrics(selector='cpu', cluster_instance_name=cluster_instance_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, condition=condition)
 
@@ -286,12 +320,16 @@ class MexInfluxDB(WebService) :
         self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
 
     def _parse_data(self):
-        num_columns = len(self.decoded_data['results'][0]['series'][0]['columns'])
         value_list = []
-        value_dict = {}
-        for value in self.decoded_data['results'][0]['series'][0]['values']:
-            for header in range(0,num_columns):
-                value_dict[self.decoded_data['results'][0]['series'][0]['columns'][header]] = value[header]
-            value_list.append(value_dict.copy())
+        try:
+            num_columns = len(self.decoded_data['results'][0]['series'][0]['columns'])
+            value_dict = {}
+            for value in self.decoded_data['results'][0]['series'][0]['values']:
+                for header in range(0,num_columns):
+                    value_dict[self.decoded_data['results'][0]['series'][0]['columns'][header]] = value[header]
+                value_list.append(value_dict.copy())
+        except:
+            logging.info('not data found to parse')
 
         return value_list
+        
