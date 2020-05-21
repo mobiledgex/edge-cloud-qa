@@ -157,11 +157,12 @@ class GetQosPositionKpiRequestObject():
     request_dict_string = None
     request = None
     
-    def __init__(self, session_cookie=None, latitude=None, longitude=None, cell_id=None, use_defaults=True):
+    def __init__(self, session_cookie=None, position_list=[], lte_category=None, band_selection=None, cell_id=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
-        self.latitude = latitude
-        self.longitude = longitude
+        self.position_list = position_list
+        self.lte_category = lte_category
+        self.band_selection = band_selection
         self.cell_id = cell_id
         
         if session_cookie == 'default':
@@ -170,23 +171,33 @@ class GetQosPositionKpiRequestObject():
         if use_defaults:
             if not session_cookie: self.session_cookie = shared_variables.session_cookie_default
 
-        loc_dict = {}
-        if self.latitude is not None:
-            loc_dict['latitude'] = float(self.latitude)
-        if self.longitude is not None:
-            loc_dict['longitude'] = float(self.longitude)
+        position_dict_list = []
+        for position in position_list:
+            position_dict = {}
+            loc_dict = {}
+            if 'position_id' in position and position['position_id'] is not None:
+                position_dict['positionid'] = position['position_id']
+            if 'latitude' in position and position['latitude'] is not None:
+                loc_dict['latitude'] = float(position['latitude'])
+            if 'longitude' in position and position['longitude'] is not None:
+                loc_dict['longitude'] = float(position['longitude'])
+            if loc_dict is not None:
+                position_dict['gps_location'] = loc_dict
+                
+            if position_dict:
+                position_dict_list.append(position_dict)    
+
 
         if self.session_cookie is not None:
             request_dict['session_cookie'] = self.session_cookie
         if self.cell_id is not None:
             request_dict['cell_id'] = int(self.cell_id)
+        if self.lte_category is not None:
+            request_dict['lte_category'] = int(self.lte_category)
+        if self.band_selection is not None:  # this isnt right
+            request_dict['band_selection'] = int(self.band_selection)
 
-        if loc_dict:
-            #request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
-            request_dict['gps_location'] = loc_dict
+        if position_dict_list:
+            request_dict['positions'] = position_dict_list
 
-        #self.request_dict = request_dict
-        #self.request_dict_string = str(request_dict).replace('\n', ',')
-        #self.request = app_client_pb2.FindCloudletRequest(**request_dict)
         self.request = json.dumps(request_dict)
-        #print('*WARN*', 'aa', str(self.request_dict['GpsLocation'].__dict__))

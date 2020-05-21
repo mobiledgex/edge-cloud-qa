@@ -75,7 +75,7 @@ class tc(unittest.TestCase):
         found_app = self.app.exists(apps_post)
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'invalid ImageType', 'error details')
+        expect_equal(error.details(), 'Invalid ImageType', 'error details')
         expect_equal(found_app, False, 'find app')
         #expect_equal(len(apps_post), len(apps_pre), 'num developer')
                 

@@ -429,7 +429,8 @@ def exec_testcase(z, t):
         if robot_tcname:
             exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
         else:
-            exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
+            #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
+            exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' ' + robot_file
         #file_output = '/tmp/log.html'
         file_extension = '.html'
     elif tc_type == 'python':
@@ -448,12 +449,14 @@ def exec_testcase(z, t):
         r = subprocess.run(exec_cmd, shell=True, check=True)
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+        logging.info('test passed:' + t['issue_key'] + ' number_passed=' + number_passed + ' number_failed=' + number_failed)
         last_status = 'pass'
         if found_failure == -1:
             found_failure = 0
-            number_passed += 1
+        number_passed += 1
     except subprocess.CalledProcessError as err:
         #print(err)
+        logging.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
         logging.info("exec cmd failed. return code=: " + str(err.returncode))
