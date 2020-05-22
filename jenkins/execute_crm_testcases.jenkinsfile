@@ -13,7 +13,7 @@ commit_version = "${CommitVersion}"
 currentBuild.displayName = cycle
 
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
-def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests"]
+def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
