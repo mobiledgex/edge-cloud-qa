@@ -1,4 +1,3 @@
-RunDebug_userroles.robot
 *** Settings ***
 
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
@@ -25,7 +24,7 @@ ${triggered_refresh}=  triggered refresh
 *** Test Cases ***
 
 
-#ECQ-1
+#ECQ-2215
 RunDebug - developer viewer does not have permission to use command to return device information
 
     [Documentation]
@@ -46,7 +45,7 @@ RunDebug - developer viewer does not have permission to use command to return de
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-2
+#ECQ-2216
 RunDebug - developer manager does not have permission to use command to return device information
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -66,7 +65,7 @@ RunDebug - developer manager does not have permission to use command to return d
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-3
+#ECQ-2217
 RunDebug - developer contributor does not have permission to use command to return device information
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -86,7 +85,7 @@ RunDebug - developer contributor does not have permission to use command to retu
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-4
+#ECQ-2218
 RunDebug - mexadmin has permission to use command to return device information from orgtype developer
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -111,7 +110,7 @@ RunDebug - mexadmin has permission to use command to return device information f
       Should Contain  ${refresh}  ${triggered_refresh}
       Should Contain  ${refresh2}  ${triggered_refresh}
 
-#ECQ-5
+#ECQ-2219
 RunDebug - operator viewer does not have permission to use command to return device information
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -131,7 +130,7 @@ RunDebug - operator viewer does not have permission to use command to return dev
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-6
+#ECQ-2220
 RunDebug - operator manager does not have permission to use command to return device information
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -151,7 +150,7 @@ RunDebug - operator manager does not have permission to use command to return de
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-7
+#ECQ-2221
 RunDebug - operator contributor does not have permission to use command to return device information
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
@@ -171,7 +170,7 @@ RunDebug - operator contributor does not have permission to use command to retur
       Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
 
 
-#ECQ-8
+#ECQ-2222
 RunDebug - mexadmin has permission to use command to return device information from orgtype operator
     [Documentation]
     ...  RunDebug returns cmd=oscmd request for Admin only
