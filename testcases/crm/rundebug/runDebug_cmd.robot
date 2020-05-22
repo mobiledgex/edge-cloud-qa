@@ -60,7 +60,7 @@ ${mcctlcmd}=  mcctl  --addr https://console-qa.mobiledgex.net:443  --skipverify 
 
 
 *** Test Cases ***
-#ECQ1
+#ECQ-2187
 RunDebug - cmd node_type set to shepherd and cmd stop-cpu-profile timeout 5s
     [Documentation]
     ...  send runDebug specifying node_type shepherd
@@ -85,7 +85,7 @@ RunDebug - cmd node_type set to shepherd and cmd stop-cpu-profile timeout 5s
 
       Should Contain  ${check_invalid}  ${unknown_cmd}
 
-#ECQ2      
+#ECQ-2188      
 RunDebug - cmd stop-cpu-profile without specifying node_type timeout 8s
     [Documentation]
     ...  send runDebug without specifying node_type
@@ -114,7 +114,8 @@ RunDebug - cmd stop-cpu-profile without specifying node_type timeout 8s
       ${check_invalid}=  Set Variable  ${cmd_invalid}[0][data][output]
 
       Should Contain  ${check_invalid}  ${unknown_cmd}
-#3
+
+#ECQ-2189
 RunDebug - cmd disable-debug-levels request should return information
     [Documentation]
     ...  send runDebug cmd disable-debug-levels
@@ -126,33 +127,33 @@ RunDebug - cmd disable-debug-levels request should return information
 
       Should Contain  ${type}  disabled debug levels 
 
-#4
+#ECQ-2190
 RunDebug - cmd disable-debug-levels second request should return information
     [Documentation]
     ...  send runDebug cmd disable-debug-levels
-    ...  verify type output disable-debug-levels is returned
+    ...  verify output disable-debug-levels is returned
 
       ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-debug-levels  node_type=shepherd
 
       ${type}=  Set Variable  ${node}[data][output]
 
       Should Contain  ${type}  disabled debug levels
-#5
+#ECQ-2191
 RunDebug - cmd enable-debug-levels request should return information
     [Documentation]
     ...  send runDebug cmd enable-debug-levels
-    ...  verify type output enable-debug-levels is returned
+    ...  verify output enable-debug-levels is returned
 
       ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd
 
       ${type}=  Set Variable  ${node}[data][output]
 
       Should Contain  ${type}  enabled debug levels
-#6
+#ECQ-2192
 RunDebug - cmd enable-debug-levels a second time should return information
     [Documentation]
     ...  send runDebug cmd enable-debug-levels a second time
-    ...  verify type output enable-debug-levels is returned
+    ...  verify output enable-debug-levels is returned
 
       ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-debug-levels  node_type=shepherd
 
@@ -160,7 +161,7 @@ RunDebug - cmd enable-debug-levels a second time should return information
 
       Should Contain  ${type}  enabled debug levels
 
-#ECQ7
+#ECQ-2193
 RunDebug - cmd get-mem-profile request should return information
     [Documentation]
     ...  send runDebug cmd get-mem-profile
@@ -182,7 +183,7 @@ RunDebug - cmd get-mem-profile request should return information
       Should Contain  ${results.stdout}  ${go_top_sum}
       Should Contain  ${results.stdout}  ${go_top_nodes}
 
-#8
+#ECQ-2194
 RunDebug - cmd get-mem-profile request twice in a row should return information
     [Documentation]
     ...  send runDebug cmd get-mem-profile twice in a row
@@ -205,11 +206,11 @@ RunDebug - cmd get-mem-profile request twice in a row should return information
       Should Contain  ${results.stdout}  ${go_top_showing}
       Should Contain  ${results.stdout}  ${go_top_100}
       Should Contain  ${results.stdout}  ${go_top_total}
-#9
+#ECQ-2195
 RunDebug - cmd refresh-internal-certs request should return information
     [Documentation]
     ...  send runDebug cmd refresh-internal-certs
-    ...  verify refresh-internal-certs returns itriggered refresh for both node types
+    ...  verify refresh-internal-certs returns triggered refresh for both node types
     ...  verify type crm and shepherd return triggered refresh
 
       ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  #node_type=shepherd
@@ -224,7 +225,7 @@ RunDebug - cmd refresh-internal-certs request should return information
       Should Contain  ${refresh}  triggered refresh
       Should Contain  ${refresh2}  triggered refresh
 
-#10
+#ECQ-2196
 RunDebug - cmd refresh-internal-certs for node type shepherd
     [Documentation]
     ...  send runDebug cmd refresh-internal-certs for node tyep shepherd
@@ -238,7 +239,7 @@ RunDebug - cmd refresh-internal-certs for node type shepherd
 
       Should Contain  ${refresh}  triggered refresh
       Should Contain  ${type}  ${ntype_shep}
-#11
+#ECQ-2197
 RunDebug - cmd refresh-internal-certs for node type crm
     [Documentation]
     ...  send runDebug cmd refresh-internal-certs on node tyep crm
@@ -253,7 +254,7 @@ RunDebug - cmd refresh-internal-certs for node type crm
       Should Contain  ${refresh}  triggered refresh
       Should Contain  ${type}  ${ntype_crm}
 
-#12
+#ECQ-2198
 RunDebug - cmd show-debug-levels for node type shepherd should return information
     [Documentation]
     ...  send runDebug cmd show-debug-levels for node type shepherd
@@ -266,7 +267,7 @@ RunDebug - cmd show-debug-levels for node type shepherd should return informatio
 
       Should Contain  ${type}  ${ntype_shep}
       Should Contain Any  ${levels}  api  notify  infra  metric  mongoose
-#13
+#ECQ-2199
 RunDebug - cmd show-debug-levels for node type crm should return information
     [Documentation]
     ...  send runDebug cmd show-debug-levels for node type crm
@@ -280,7 +281,7 @@ RunDebug - cmd show-debug-levels for node type crm should return information
       Should Contain  ${type}  ${ntype_crm}
       Should Contain Any  ${levels}  api  notify  infra  metric  other
 
-#14
+#ECQ-2200
 RunDebug - cmd start-cpu-profile for node type shepherd from already started state
     [Documentation]
     ...  send runDebug cmd start-cpu-profile when profile is already started for node type shepherd
@@ -294,7 +295,8 @@ RunDebug - cmd start-cpu-profile for node type shepherd from already started sta
 
       Should Contain  ${type}  ${ntype_shep}
       Should Contain  ${pprof}  ${in_progress_base64}
-#15
+
+#ECQ-2201
 RunDebug - cmd start-cpu-profile for node type shepherd from stop state
     [Documentation]
     ...  send runDebug cmd stop-cpu-profile for node type shepherd to setup test
@@ -310,7 +312,7 @@ RunDebug - cmd start-cpu-profile for node type shepherd from stop state
       Should Contain  ${type}  ${ntype_shep}
       Should Contain  ${pprof}  ${started_base64}
 
-#16
+#ECQ-2202
 RunDebug - cmd show-stop-cpu-profile that is already in progress for node type shepherd
     [Documentation]
     ...  send runDebug cmd start-cpu-profil for node type shepherd to setup test
@@ -325,7 +327,8 @@ RunDebug - cmd show-stop-cpu-profile that is already in progress for node type s
 
       Should Contain  ${type}  ${ntype_shep}
       Should Contain  ${pprof}  ${mem_prof_64base}
-#17
+
+#ECQ-2204
 RunDebug - cmd show-stop-cpu-profile for already stopped cpu profile for node type shepherd
     [Documentation]
     ...  send runDebug cmd stop-cpu-profile for node type shepherd
@@ -340,8 +343,7 @@ RunDebug - cmd show-stop-cpu-profile for already stopped cpu profile for node ty
       Should Contain  ${type}  ${ntype_shep}
       Should Contain  ${pprof}  ${not_progress_base64}
 
-
-#18
+#ECQ-2203
 RunDebug - cmd show-stop-cpu-profile not already in progress for node type crm
     [Documentation]
     ...  send runDebug cmd stop-cpu-profile
@@ -355,13 +357,13 @@ RunDebug - cmd show-stop-cpu-profile not already in progress for node type crm
 
       Should Contain  ${type}  ${ntype_crm}
       Should Contain  ${pprof}  ${not_progress_base64}
-# oscmd 1
+
 #  output: |
 #    +--------------------------------------+---------------+-------+------+-----------+-------+-----------+
 #    | ID                                   | Name          |   RAM | Disk | Ephemeral | VCPUs | Is Public |
 #    +--------------------------------------+---------------+-------+------+-----------+-------+-----------+
 #    | 0bb494c8-adf0-47a7-a408-8b666311bfb2 | m4.xxlarge16  | 65536 |  120 |         0 |    16 | True
-#19
+#ECQ-2205
 RunDebug - cmd=oscmd args openstack flavor list node type crm on targeted crm should return information
     [Documentation]
     ...  send runDebug cmd=oscmd  args openstack flavor list node type crm cloudlet automationDusseldorfCloudlet
@@ -379,13 +381,13 @@ RunDebug - cmd=oscmd args openstack flavor list node type crm on targeted crm sh
       Should Contain  ${output}  ${server_vcpus}
       Should Contain  ${output}  ${server_ispublic}
 
-# oscmd 2
+
 #  output: |
 #    +--------------------------------------+---------------+-------+------+-----------+-------+-----------+
 #    | ID                                   | Name          |   RAM | Disk | Ephemeral | VCPUs | Is Public |
 #    +--------------------------------------+---------------+-------+------+-----------+-------+-----------+
 #    | 0bb494c8-adf0-47a7-a408-8b666311bfb2 | m4.xxlarge16  | 65536 |  120 |         0 |    16 | True
-#20
+#ECQ-2206
 RunDebug - blanket cmd=oscmd args openstack flavor list EU only node type crm cloudlets should return information timeout 9s
     [Documentation]
     ...  send runDebug cmd args openstack flavor list query to all EU crm cloudlets
@@ -412,7 +414,7 @@ RunDebug - blanket cmd=oscmd args openstack flavor list EU only node type crm cl
 #    +--------------------------------------+---------------------------------------------------------------------------------------------+--------+-----------------------------------------------------------------------------------------+------------------------------------+---------------+
 #    | 7bf4d000-b9db-4abd-b7e7-c3f8f177d096 | mex-k8s-master-mw-k8s-cld60-mw-k8-cluster-mobiledgex                                        | ACTIVE | mex-k8s-net-1=10.101.6.10                                                               | mobiledgex-4.0-beta2               | m4.medium     |
 #    | b3b9217d-c9b0-4f40-8a5e-46143dbafcc5 | mex-k8s-node-1-mw-k8s-cld60-mw-k8-cluster-mobiledgex                                        | ACTIVE | mex-k8s-net-1=10.101.6.101                                                              | mobiledgex-4.0-beta2
-#21
+#ECQ-2207
 RunDebug - targeted cmd=oscmd args openstack server list on dedicated cloudlet node type crm should return information
     [Documentation]
     ...  send runDebug cmd args openstack server list on automationDusseldorfCloudlet 
@@ -436,7 +438,7 @@ RunDebug - targeted cmd=oscmd args openstack server list on dedicated cloudlet n
 #    +--------------------------------------+---------------------------------------------------------------------------------------------+--------+-----------------------------------------------------------------------------------------+------------------------------------+---------------+
 #    | 7bf4d000-b9db-4abd-b7e7-c3f8f177d096 | mex-k8s-master-mw-k8s-cld60-mw-k8-cluster-mobiledgex                                        | ACTIVE | mex-k8s-net-1=10.101.6.10                                                               | mobiledgex-4.0-beta2               | m4.medium     |
 #    | b3b9217d-c9b0-4f40-8a5e-46143dbafcc5 | mex-k8s-node-1-mw-k8s-cld60-mw-k8-cluster-mobiledgex                                        | ACTIVE | mex-k8s-net-1=10.101.6.101                                                              | mobiledgex-4.0-beta2
-#22
+#ECQ-2208
 RunDebug - cmd=oscmd args openstack server list on all cloudlets node type crm should return information
     [Documentation]
     ...  send runDebug cmd args openstack server list on all cloudlets
@@ -458,8 +460,7 @@ RunDebug - cmd=oscmd args openstack server list on all cloudlets node type crm s
       END
 
 
-#23
-
+#ECQ-2209
 RunDebug - cmd=oscmd args openstack flavor list on all cloudlets node type shepherd is invalid
     [Documentation]
     ...  send runDebug cmd args openstack flavor list on all cloudlets
@@ -471,7 +472,7 @@ RunDebug - cmd=oscmd args openstack flavor list on all cloudlets node type sheph
       Request Should Be Invalid  ${stack}
 
 
-#24
+#ECQ-2210
 RunDebug - cmd=oscmd args openstack server list on targeted cloudlet node type shepherd is invalid
     [Documentation]
     ...  send runDebug cmd args openstack server list on all cloudlets
@@ -486,7 +487,7 @@ RunDebug - cmd=oscmd args openstack server list on targeted cloudlet node type s
       Should Contain  ${output}  ${unknown_cmd_oscmd}
 
 
-#25
+#ECQ-2211
 RunDebug - cmd=crmcmd args ls on targeted cloudlet node type crm is valid
     [Documentation]
     ...  send runDebug cmd=crmcmd ls on targeted cloudlet
@@ -501,7 +502,7 @@ RunDebug - cmd=crmcmd args ls on targeted cloudlet node type crm is valid
       Should Contain  ${output}  ${yaml}
       Should Contain  ${output}  ${bin}
 
-#26
+#ECQ-2212
 RunDebug - cmd=crmcmd args ls on targeted cloudlet node type shepherd is invalid
     [Documentation]
     ...  send runDebug cmd=crmcmd ls on targeted node tyep shepherd cloudlet
@@ -515,13 +516,12 @@ RunDebug - cmd=crmcmd args ls on targeted cloudlet node type shepherd is invalid
       Should Contain  ${type}  ${ntype_shep}
       Should Contain  ${output}  ${unknown_cmd_crmcmd}
 
-#27
-#  output: request timed out
+#ECQ-2213
 RunDebug - timeout option test for request times out on blanket request oscmd server list
     [Documentation]
     ...  send runDebug cmd args openstack server list on all cloudlets timeout=5ms
     ...  verify args openstack server list output returns request timed out for all cloudlets
-    ...  verify RunDebug returns list of cloudlets quiried despite timeout
+    ...  verify RunDebug returns list of cloudlets queried despite timeout
 
       ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=5ms
 
@@ -530,8 +530,7 @@ RunDebug - timeout option test for request times out on blanket request oscmd se
       
       Request Should Be Timedout  ${stack}
 
-#28
-#  output: request timed out
+#ECQ-2214
 RunDebug - timeout option test for request times out on target cloudlet request oscmd server list
     [Documentation]
     ...  send runDebug cmd args openstack server list on targeted cloudlet timeout=5ms
