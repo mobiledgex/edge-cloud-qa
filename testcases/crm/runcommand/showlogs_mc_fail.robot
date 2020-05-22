@@ -135,9 +135,9 @@ ShowLogs - shall return error without invalid parms
     ...  execute Show Logs with no token
     ...  verify error is received
 
-    EDGECLOUD-2081 - ShowLogs should give better error handling for invalid tail/timestamps/follow
+#    EDGECLOUD-2081 - ShowLogs should give better error handling for invalid tail/timestamps/follow
 
-    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   smince=x
+    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   since=x
 
     ${error2}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=x
 
@@ -145,10 +145,13 @@ ShowLogs - shall return error without invalid parms
 
     ${error4}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   follow=x
 
-    Should Contain  ${error1}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
-    Should Contain  ${error2}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
-    Should Contain  ${error3}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
-    Should Contain  ${error4}  Error: Bad Request (400), Unable to parse Since field as duration or RFC3339 formatted time
+    ${error5}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=999999999999999
+
+    Should Be Equal  ${error1}  ('code=400', 'error={"message":"Unable to parse Since field as duration or RFC3339 formatted time"}') 
+    Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=tail, offset=
+    Should Contain  ${error3}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=bool, got=string, field=timestamps, offset= 
+    Should Contain  ${error4}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=bool, got=string, field=follow, offset= 
+    Should Contain  ${error5}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 999999999999999, field=tail, offset 
 
 # ECQ-1896
 ShowLogs - shall return error for VM apps

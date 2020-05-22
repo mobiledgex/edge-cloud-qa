@@ -40,7 +40,9 @@ class tc(unittest.TestCase):
         # ... show controller by address
         # ... verify controller is shown
 
-        re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+#        re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+        re_master = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
+
         re_host = re.compile('^controller-')
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
 
