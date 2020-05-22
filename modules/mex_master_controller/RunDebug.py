@@ -17,27 +17,29 @@ class RunDebug(MexOperation):
 
         self.runDebug_url = '/auth/ctrl/RunDebug'
 
-    def _build(self, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, region=None, args=None, command=None, pretty=None, use_defaults=True):
+    def _build(self, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, timeout=None, use_defaults=True):
 
         #  {"debugrequest":{"cmd":"stop-cpu-profile","node":{"cloudlet_key":{"name":"automationDusseldorfCloudlet","organization":"TDG"},"name":"automationdusseldorfcloudlet","region":"EU","type":"crm"},"pretty":true}}
         rundebug_dict = {}
         cloudlet_key_dict = {}
         node_dict = {}
- 
+         
         if command:
             rundebug_dict['cmd'] = command
         if pretty:
             rundebug_dict['pretty'] = pretty
         if args:
             rundebug_dict['args'] = args
+        if timeout:
+            rundebug_dict['timeout'] = timeout
 
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
         if operator_org_name is not None:
             cloudlet_key_dict['organization'] = operator_org_name
-            
         if cloudlet_key_dict:
             node_dict['cloudlet_key'] = cloudlet_key_dict
+
         if region:
             node_dict['region'] = region
         if node_name:
@@ -50,8 +52,8 @@ class RunDebug(MexOperation):
 
         return rundebug_dict
 
-    def run_debug(self, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(node_name=node_name, node_type=node_type, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, use_defaults=use_defaults)
+    def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, use_defaults=use_defaults)
 
         msg_dict = {'debugrequest': msg}
 
