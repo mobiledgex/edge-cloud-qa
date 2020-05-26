@@ -207,7 +207,7 @@ UpgradeCloudlet - User shall be able to upgrade a cloudlet on Openstack Packet
         [Documentation]
         ...  do UpdateCloudlet to upgrade a CRM on packet openstack
 
-        Update Cloudlet  region=EU  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}  container_version=${version}   use_defaults=${False}
+        Update Cloudlet  region=US  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}  container_version=${version}   use_defaults=${False}
 
 *** Keywords ***
 Setup
