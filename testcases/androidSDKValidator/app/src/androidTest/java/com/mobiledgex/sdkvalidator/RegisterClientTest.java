@@ -29,6 +29,7 @@ import android.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.DecodeException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.mobiledgex.matchingengine.DmeDnsException;
@@ -40,6 +41,7 @@ import org.junit.runner.RunWith;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -168,6 +170,19 @@ public class RegisterClientTest {
         AppClient.RegisterClientReply reply = null;
         String appName = applicationName;
 
+        class jwtkey<T> {
+            String peerip;
+            String orgname;
+            String appname;
+            String appvers;
+            String uniquieidtype;
+            String uniqueid;
+            String kid;
+        }
+
+        class jwtclass<T> {
+            T t;
+        }
 
         try {
             Location location = getTestLocation( 47.6062,122.3321);
@@ -194,9 +209,16 @@ public class RegisterClientTest {
             boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
             assertTrue(!isExpired);
 
-            
+            // verify expire timer
             long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
             assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+
+            // verify orgname
+            //Map<String, Claim> allc = jwt.getClaims();
+            Claim c = jwt.getClaim("key");
+            jwtclass<String> jwtclaim = new jwtclass<String>();
+            List<String> claimString = c.asList(jwtclaim);
+
             // TODO: Validate JWT
             Log.i(TAG, "registerReply.getSessionCookie()="+reply.getSessionCookie());
             assertTrue(reply != null);
