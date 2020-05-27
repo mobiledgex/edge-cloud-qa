@@ -1,0 +1,113 @@
+*** Settings ***
+Documentation   Create Docker Reservable Cluster and Verify Auto-Provisioning  with more internval counts
+
+Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
+Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
+Library         MexInfluxDB  influxdb_address=%{AUTOMATION_INFLUXDB_ADDRESS}
+#Library         MexApp
+
+Test Timeout     30 minutes
+
+Suite Setup     Setup
+Suite Teardown  Cleanup
+
+*** Variables ***
+${cloudlet_name_openstack_dedicated}  automationDusseldorfCloudlet
+${operator_name_openstack}  TDG
+${mobiledgex_domain}  mobiledgex.net
+${region}  EU
+${flavor}  automation_api_flavor
+${default_flavor_name}   automation_api_flavor
+${cluster_name}  dockerreservable
+${docker_image}  docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1
+${policy_name}  AutoProvPolicyTest
+${app_name}  AutoProvAppDocker
+${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
+
+*** Test Cases ***
+
+Create one k8s and one docker based reservable cluster instnace
+   [Documentation]
+   ...  create a dedicated reservabe cluster instnace for docer and kubernetes
+   ...  verify it creates 1 lb and 2 nodes and 1 master
+
+   Log to Console  START creating cluster instance
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}
+   Log to Console  DONE creating cluster instance
+
+Create Auto Provisioning Policy
+
+   Log to Console  Create Auto Provisioning Policy
+   ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  deploy_client_count=10  deploy_interval_count=3  developer_org_name=testmonitor
+   log to console  ${policy_return}
+
+Add Cloudlet to Auto Provisioning Policy
+
+   log to console  Add Cloudlet to Auto Provisioning Policy
+   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=testmonitor
+
+Create App, Add Autoprovisioning Polivy and Deploy an App Instance
+
+   ${count_pre}=  Get Influx Auto Prov Counts  app_name=${app_name}  condition=order by desc limit 1   # get last count
+
+   log to console  Creating App and App Instance
+   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=testmonitor  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}
+
+   log to console  Registering Client and Finding Cloudlet
+   Register Client  app_name=${app_name}  developer_org_name=testmonitor  app_version=v1
+   FOR  ${i}  IN RANGE  3
+     Loop FindCloudlet
+     Sleep  5 mins
+   END
+#   :FOR  ${i}  IN RANGE  1  11
+#   \  ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+#      Should Contain  ${error_msg}  FIND_NOTFOUND
+#    sleep  3s
+#   :FOR  ${i}  IN RANGE  1  11
+#   \  ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+#      Should Contain  ${error_msg}  FIND_NOTFOUND
+#   sleep  3s
+#   :FOR  ${i}  IN RANGE  1  11
+#   \  ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+#      Should Contain  ${error_msg}  FIND_NOTFOUND
+#   sleep   3s
+
+   Sleep  11 mins   # wait for FindCloudlets to be counted
+
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=testmonitor  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+
+   ${count_post}=  Get Influx Auto Prov Counts  app_name=${app_name}  condition=order by desc limit 1   # get last count
+
+   #Should Be True  ${count_post[0]['count']} == ${count_pre[0]['count']+30}
+   Should Be True  ${count_post[0]['count']} == 30
+
+#   sleep  30s
+#
+#   log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
+#   Register Client  developer_org_name=testmonitor  app_version=v1  app_name=${app_name}
+#   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
+#   log to console  Deployed Autoprovision App Successfully!
+#
+#   Should Be Equal As Numbers  ${cloudlet.status}  1
+
+*** Keywords ***
+Setup
+   ${time}=  Get Time  epoch
+   ${app_name}=  Set Variable  ${app_name}${time}
+   ${cluster_name}=  Set Variable  ${cluster_name}${time}
+   ${policy_name}=  Set Variable  ${policy_name}${time}
+
+   Set Suite Variable  ${app_name}
+   Set Suite Variable  ${cluster_name}
+   Set Suite Variable  ${policy_name}
+
+Loop FindCloudlet
+   FOR  ${i}  IN RANGE  10
+      ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
+      Should Contain  ${error_msg}  FIND_NOTFOUND
+   END
+
+Cleanup
+    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=testmonitor  app_version=v1
+    cleanup provisioning
+
