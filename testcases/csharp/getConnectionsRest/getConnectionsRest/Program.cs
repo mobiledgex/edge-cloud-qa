@@ -43,7 +43,7 @@ namespace RestSample
     }
     class Program
     {
-        static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        //static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         static string carrierName = "TDG";
         static string orgName = "MobiledgeX";
         static string appName = "automation-api-app";
@@ -58,9 +58,9 @@ namespace RestSample
         static Tag[] tags = new Tag[0];
         //const string connectionTestFqdn = "mextest-app-cluster.frankfurt-main.tdg.mobiledgex.net";
         //const string aWebSocketServerFqdn = "pingpong-tcp.frankfurt-main.tdg.mobiledgex.net"; // or, localhost.
-        const string connectionTestFqdn = "autoclusterautomation-api-app.automationdusseldorfcloudlet.tdg.mobiledgex.net";
-        const string aWebSocketServerFqdn = "automation-api-app-tcp.automationdusseldorfcloudlet.tdg.mobiledgex.net"; // or, localhost.
-        
+        //const string connectionTestFqdn = "autoclusterautomation-api-app.automationdusseldorfcloudlet.tdg.mobiledgex.net";
+        static string aWebSocketServerFqdn = "";
+
 
 
         // For SDK purposes only, this allows continued operation against default app insts.
@@ -217,6 +217,7 @@ namespace RestSample
                                   ", end_port: " + p.end_port);
                         }
                     }
+                    aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
                 }
                 catch (HttpException httpe)
                 {
