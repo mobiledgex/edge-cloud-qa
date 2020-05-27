@@ -23,7 +23,7 @@ ${cloudlet_name_openstack_fairview}  automationFairviewCloudlet
 ${operator_name_openstack_fairview}  GDDT
 ${physical_name_openstack_fairview}  fairview 
 ${cloudlet_name_openstack_packet}  packetcloudlet 
-${operator_name_openstack_packet}  GDDT
+${operator_name_openstack_packet}  packet 
 ${physical_name_openstack_packet}  packetcloudlet 
 ${cloudlet_name_openstack_paradise}  automationParadiseCloudlet
 ${operator_name_openstack_paradise}  GDDT
