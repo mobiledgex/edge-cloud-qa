@@ -224,6 +224,7 @@ public class RegisterClientTest {
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
 
+
     @Test
     public void registerClientNoContext() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -707,10 +708,13 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -720,11 +724,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            // This is expected when AppVers is empty.
-            assertEquals("INVALID_ARGUMENT: AppName cannot be empty", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: AppName cannot be empty", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
@@ -749,10 +749,13 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -762,11 +765,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            // This is expected when AppVers is empty.
-            assertEquals("INVALID_ARGUMENT: No authtoken received", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: No authtoken received", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
@@ -791,10 +790,13 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -804,10 +806,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
@@ -832,10 +831,13 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -845,10 +847,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
@@ -873,10 +872,14 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
             assertFalse("ExecutionException registering using PackageManager.", true);
@@ -885,11 +888,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            // This is expected when appName is wrong.
-            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
@@ -914,10 +913,15 @@ public class RegisterClientTest {
                     .setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture
+                        (request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
             }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
             assertFalse("ExecutionException registering using PackageManager.", true);
@@ -926,11 +930,7 @@ public class RegisterClientTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            // This is expected when appVersion is wrong.
-            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
         } catch (InterruptedException ie) {
             Log.e(TAG, Log.getStackTraceString(ie));
             assertFalse("registerClientTest: InterruptedException!", true);
