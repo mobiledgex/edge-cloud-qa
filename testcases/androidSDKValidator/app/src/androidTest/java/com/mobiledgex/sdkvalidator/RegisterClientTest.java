@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -41,10 +42,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -54,6 +57,7 @@ import com.auth0.android.jwt.JWT;
 import distributed_match_engine.AppClient;
 import io.grpc.StatusRuntimeException;
 
+import static java.lang.System.getProperty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -100,6 +104,21 @@ public class RegisterClientTest {
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         return location;
+    }
+
+    public static String getSystemProperty(String property, String defaultValue) {
+        try {
+            Class sysPropCls = Class.forName("android.os.SystemProperties");
+            Method getMethod = sysPropCls.getDeclaredMethod("get", String.class);
+            String value = (String)getMethod.invoke(null, property);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to read system properties.");
+            e.printStackTrace();
+        }
+        return defaultValue;
     }
 
     @Before
