@@ -23,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -33,6 +34,7 @@ import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.DecodeException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.gson.JsonObject;
+import com.google.protobuf.ByteString;
 import com.mobiledgex.matchingengine.DmeDnsException;
 import com.mobiledgex.matchingengine.MatchingEngine;
 
@@ -40,10 +42,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +57,7 @@ import com.auth0.android.jwt.JWT;
 import distributed_match_engine.AppClient;
 import io.grpc.StatusRuntimeException;
 
+import static java.lang.System.getProperty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -63,15 +68,19 @@ public class RegisterClientTest {
     public static final long GRPC_TIMEOUT_MS = 21000;
 
     public static final String organizationName = "MobiledgeX";
+    public static final String organizationNameSamsung = "Samsung";
     // Other globals:
     public static final String applicationName = "automation_api_app";
     public static final String applicationNameAuth = "automation_api_auth_app";
+    public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
     public static final String appVersion = "1.0";
 
     FusedLocationProviderClient fusedLocationClient;
 
     public static String hostOverride = "us-qa.dme.mobiledgex.net";
+    public static String hostOverrideSamsung = "eu-qa.dme.mobiledgex.net";
+
     public static int portOverride = 50051;
     public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
 
@@ -95,6 +104,21 @@ public class RegisterClientTest {
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         return location;
+    }
+
+    public static String getSystemProperty(String property, String defaultValue) {
+        try {
+            Class sysPropCls = Class.forName("android.os.SystemProperties");
+            Method getMethod = sysPropCls.getDeclaredMethod("get", String.class);
+            String value = (String)getMethod.invoke(null, property);
+            if (!TextUtils.isEmpty(value)) {
+                return value;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to read system properties.");
+            e.printStackTrace();
+        }
+        return defaultValue;
     }
 
     @Before
@@ -202,6 +226,12 @@ public class RegisterClientTest {
             assertTrue(reply.getStatus() == AppClient.ReplyStatus.RS_SUCCESS);
             assertTrue( reply.getSessionCookie().length() > 0);
 
+            // verify uuid has DME generated values since we didnt send any values in RegisterClient
+            assertEquals("uuid type doesn't match!", "dme-ksuid", reply.getUniqueIdType());
+            assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+            assertEquals("uuid bytes type doesn't match!", "dme-ksuid", reply.getUniqueIdTypeBytes().toStringUtf8());
+            assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
             assertFalse("ExecutionException registering using PackageManager.", true);
@@ -224,6 +254,413 @@ public class RegisterClientTest {
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
 
+    @Test
+    public void registerClientUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationName)
+                    .setAppVers(appVersion)
+                    .setUniqueId("1234")
+                    .setUniqueIdType("samsung")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            JWT jwt = null;
+            try {
+                jwt = new JWT(reply.getSessionCookie());
+            } catch (DecodeException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+                assertFalse("registerClientTest: DecodeException!", true);
+            }
+
+            // verify expire timer
+            long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+            assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+            boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+            assertTrue(!isExpired);
+
+            // verify claim
+            Claim c = jwt.getClaim("key");
+            JsonObject claimJson = c.asObject(JsonObject.class);
+            assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
+            assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
+            assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+            assertEquals("uuid type not empty!", "1234", claimJson.get("uniqueid").getAsString());
+            assertEquals("uuid not empty!", "samsung", claimJson.get("uniqueidtype").getAsString());
+            assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+            // verify success
+            Log.i(TAG, "registerReply.getSessionCookie()="+reply.getSessionCookie());
+            assertTrue(reply != null);
+            assertTrue(reply.getStatus() == AppClient.ReplyStatus.RS_SUCCESS);
+            assertTrue( reply.getSessionCookie().length() > 0);
+
+            // verify UUID and Type is empty since we sent values in RegisterClient
+            assertEquals("unique_id is not empty", "", reply.getUniqueId());
+            assertEquals("unique_id_type is not empty", "", reply.getUniqueIdType());
+            assertEquals("uuid bytes type not empty!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+            assertEquals("uuid bytes not empty!", "", reply.getUniqueIdBytes().toStringUtf8());
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("registerClientTest: StatusRuntimeException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+
+        Log.i(TAG, "registerClientTest reply: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+    }
+
+    @Test
+    public void registerClientSamsungUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .setUniqueIdType("applicationInstallId")
+                    .setUniqueId(me.getUniqueId(context))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is empty since we sent values in RegisterClient
+        assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+        assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
+    }
+
+    @Test
+    public void registerClientSamsungAppEmptyUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .setUniqueIdType("")
+                    .setUniqueId("")
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is org:app since we sent app is samsung app
+        assertEquals("uuid type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+        assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+    }
+
+    @Test
+    public void registerClientSamsungAppNoUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is org:app since we sent app is samsung app
+        assertEquals("uuid type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+        assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+    }
+
+    @Test
+    public void registerClientSamsungUuidOnly() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setUniqueId("xxxx")
+                    .setCellId(getCellId(context, me))
+                    .build();
+
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+
+            assertFalse("registerClient was successful!", true);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertEquals("INVALID_ARGUMENT: Both, or none of UniqueId and UniqueIdType should be set", sre.getLocalizedMessage());
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when OrgName is empty.
+            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientSamsungUuidTypeOnly() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setUniqueIdType("xxxx")
+                    .setCellId(getCellId(context, me))
+                    .build();
+
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+
+            assertFalse("registerClient was successful!", true);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertEquals("INVALID_ARGUMENT: Both, or none of UniqueId and UniqueIdType should be set", sre.getLocalizedMessage());
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when OrgName is empty.
+            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+    }
 
     @Test
     public void registerClientNoContext() {
@@ -619,6 +1056,82 @@ public class RegisterClientTest {
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
                     .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", "dme-ksuid", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        // TODO: Validate JWT
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is empty since we sent values in RegisterClient
+        assertEquals("uuid type doesn't match!", "dme-ksuid", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+        assertEquals("uuid bytes type doesn't match!", "dme-ksuid", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+    }
+
+    @Test
+    public void registerClientFutureUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationName)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
                     .setUniqueIdType("applicationInstallId")
                     .setUniqueId(me.getUniqueId(context))
                     .build();
@@ -643,12 +1156,374 @@ public class RegisterClientTest {
             assertFalse("registerClientFutureTest: InterruptedException!", true);
         }
 
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
         // TODO: Validate JWT
         Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
         assertEquals(0, reply.getVer());
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is empty since we sent values in RegisterClient
+        assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+        assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
     }
 
+    @Test
+    public void registerClientFutureSamsungUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .setUniqueIdType("applicationInstallId")
+                    .setUniqueId(me.getUniqueId(context))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        // TODO: Validate JWT
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is empty since we sent values in RegisterClient
+        assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+        assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
+    }
+
+    @Test
+    public void registerClientFutureSamsungAppEmptyUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .setUniqueIdType("")
+                    .setUniqueId("")
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is org:app since we sent app is samsung app
+        assertEquals("uuid type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+        assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+    }
+
+    @Test
+    public void registerClientFutureSamsungAppNoUuidAndType() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is org:app since we sent app is samsung app
+        assertEquals("uuid type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
+        assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+    }
+
+    @Test
+    public void registerClientFutureSamsungUuidOnly() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setUniqueId("xxxx")
+                    .setCellId(getCellId(context, me))
+                    .build();
+
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+
+            assertFalse("registerClient was successful!", true);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("registerClientFutureTest: StatusRuntimeException!", true);
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            assertFalse("registerClientFutureTest: IllegalArgumentException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Both, or none of UniqueId and UniqueIdType should be set", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureSamsungUuidTypeOnly() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppName(applicationNameSamsung)
+                    .setAppVers(appVersion)
+                    .setUniqueIdType("xxxx")
+                    .setCellId(getCellId(context, me))
+                    .build();
+
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+
+            assertFalse("registerClient was successful!", true);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertEquals("INVALID_ARGUMENT: Both, or none of UniqueId and UniqueIdType should be set", sre.getLocalizedMessage());
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when OrgName is empty.
+            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: Both, or none of UniqueId and UniqueIdType should be set", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+    }
 
     @Test
     public void registerClientFutureEmptyAppVersion() {
