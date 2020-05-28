@@ -29,8 +29,10 @@ import android.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.DecodeException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.gson.JsonObject;
 import com.mobiledgex.matchingengine.DmeDnsException;
 import com.mobiledgex.matchingengine.MatchingEngine;
 
@@ -39,7 +41,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -60,12 +64,14 @@ public class RegisterClientTest {
 
     public static final String organizationName = "MobiledgeX";
     // Other globals:
-    public static final String applicationName = "MobiledgeX SDK Demo";
-    public static final String appVersion = "2.0";
+    public static final String applicationName = "automation_api_app";
+    public static final String applicationNameAuth = "automation_api_auth_app";
+
+    public static final String appVersion = "1.0";
 
     FusedLocationProviderClient fusedLocationClient;
 
-    public static String hostOverride = "wifi.dme.mobiledgex.net";
+    public static String hostOverride = "us-qa.dme.mobiledgex.net";
     public static int portOverride = 50051;
     public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
 
@@ -127,23 +133,8 @@ public class RegisterClientTest {
         try {
             Location location = getTestLocation( 47.6062,122.3321);
 
-            AppClient.RegisterClientRequest registerClientRequest = me.createDefaultRegisterClientRequest(context, organizationName).build();
+            AppClient.RegisterClientRequest.Builder registerClientRequest = me.createDefaultRegisterClientRequest(context, organizationName); //.build();
             assertTrue(registerClientRequest == null);
-
-            AppClient.FindCloudletRequest findCloudletRequest;
-            findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
-                .setCarrierName(findCloudletCarrierOverride)
-                .build();
-            assertTrue(findCloudletRequest == null);
-
-            AppClient.GetLocationRequest locationRequest = me.createDefaultGetLocationRequest(context).build();
-            assertTrue(locationRequest == null);
-
-            AppClient.VerifyLocationRequest verifyLocationRequest = me.createDefaultVerifyLocationRequest(context, location).build();
-            assertTrue(verifyLocationRequest == null);
-
-            AppClient.AppInstListRequest appInstListRequest = me.createDefaultAppInstListRequest(context, location).build();
-            assertTrue(appInstListRequest == null);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -166,8 +157,6 @@ public class RegisterClientTest {
         me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
-        String appName = applicationName;
-
 
         try {
             Location location = getTestLocation( 47.6062,122.3321);
@@ -191,18 +180,28 @@ public class RegisterClientTest {
                 assertFalse("registerClientTest: DecodeException!", true);
             }
 
+            // verify expire timer
+            long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+            assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
             boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
             assertTrue(!isExpired);
 
-            
-            long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
-            assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
-            // TODO: Validate JWT
+            // verify claim
+            Claim c = jwt.getClaim("key");
+            JsonObject claimJson = c.asObject(JsonObject.class);
+            assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
+            assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
+            assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+            assertEquals("uuid type doesn't match!", "dme-ksuid", claimJson.get("uniqueidtype").getAsString());
+            assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+            assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+            // verify success
             Log.i(TAG, "registerReply.getSessionCookie()="+reply.getSessionCookie());
             assertTrue(reply != null);
             assertTrue(reply.getStatus() == AppClient.ReplyStatus.RS_SUCCESS);
-            assertTrue( !reply.getUniqueId().isEmpty());
             assertTrue( reply.getSessionCookie().length() > 0);
+
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
             assertFalse("ExecutionException registering using PackageManager.", true);
@@ -223,6 +222,100 @@ public class RegisterClientTest {
         Log.i(TAG, "registerClientTest reply: " + reply.toString());
         assertEquals(0, reply.getVer());
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+    }
+
+
+    @Test
+    public void registerClientNoContext() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(null,"")
+                    .setAppName(applicationName)
+                    .setAppVers("")
+                    .setCellId(getCellId(context, me))
+                    .build();
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            // This is expected when AppVers is empty.
+            assertEquals("INVALID_ARGUMENT: AppVers cannot be empty", sre.getLocalizedMessage());
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when context is null
+            assertEquals("MatchingEngine requires a working application context.", iae.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void registerClientEmptyOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "")
+                    .setAppName(applicationName)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("registerClientTest: StatusRuntimeException!", true);
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when OrgName is empty.
+            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void registerClientNoOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, null)
+                    .setAppName(applicationName)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("registerClientTest: StatusRuntimeException!", true);
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            // This is expected when OrgName is empty.
+            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+        }
     }
 
     @Test
@@ -267,7 +360,7 @@ public class RegisterClientTest {
     }
 
     @Test
-    public void registerClientEmptyOrgName() {
+    public void registerClientEmptyAppName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
         me.setUseWifiOnly(useWifiOnly);
@@ -277,23 +370,154 @@ public class RegisterClientTest {
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName("")
+                    .setAppVers("1.0")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
 
-            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "")
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            // This is expected when AppVers is empty.
+            assertEquals("INVALID_ARGUMENT: AppName cannot be empty", sre.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientEmptyAuth() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationNameAuth)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            // This is expected when AppVers is empty.
+            assertEquals("INVALID_ARGUMENT: No authtoken received", sre.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientBadOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
                     .setCellId(getCellId(context, me))
                     .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
             assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
         } catch (StatusRuntimeException sre) {
             Log.e(TAG, Log.getStackTraceString(sre));
-            assertFalse("registerClientTest: StatusRuntimeException!", true);
-        } catch (IllegalArgumentException iae) {
-            Log.e(TAG, Log.getStackTraceString(iae));
-            // This is expected when OrgName is empty.
-            assertEquals("RegisterClientRequest requires a organization name.", iae.getLocalizedMessage());
+            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientBadAppVersionOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
+                    .setAppName("badapp")
+                    .setAppVers("badversion")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertEquals("NOT_FOUND: app not found", sre.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
         }
     }
 
@@ -424,6 +648,295 @@ public class RegisterClientTest {
         assertEquals(0, reply.getVer());
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
+
+
+    @Test
+    public void registerClientFutureEmptyAppVersion() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationName)
+                    .setAppVers("")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: AppVers cannot be empty", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureEmptyAppName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName("")
+                    .setAppVers("1.0")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: AppName cannot be empty", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureEmptyAuth() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationNameAuth)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: INVALID_ARGUMENT: No authtoken received", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureBadOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
+                    .setAppName(applicationName)
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureBadAppVersionOrgName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
+                    .setAppName("badapp")
+                    .setAppVers("badversion")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureBadAppName() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName("Leon's Bogus App")
+                    .setAppVers(appVersion)
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
+    @Test
+    public void registerClientFutureBadAppVersion() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        Future<AppClient.RegisterClientReply> registerReplyFuture;
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationName)
+                    .setAppVers("-999")
+                    .setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                registerReplyFuture = me.registerClientFuture
+                        (request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+            }
+
+            reply = registerReplyFuture.get();
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertEquals("io.grpc.StatusRuntimeException: NOT_FOUND: app not found", ee.getLocalizedMessage());
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+    }
+
 
 }
 
