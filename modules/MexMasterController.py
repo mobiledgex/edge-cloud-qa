@@ -33,6 +33,7 @@ from mex_master_controller.RunCommand import RunCommand
 from mex_master_controller.ShowDevice import ShowDevice
 from mex_master_controller.ShowDeviceReport import ShowDeviceReport
 from mex_master_controller.RunDebug import RunDebug
+from mex_master_controller.Config import Config
 
 import shared_variables_mc
 import shared_variables
@@ -178,6 +179,7 @@ class MexMasterController(MexRest):
         self.showdevicereport = ShowDeviceReport(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.autoprov_policy = AutoProvisioningPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.rundebug = RunDebug(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -2195,6 +2197,9 @@ class MexMasterController(MexRest):
 
     def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.rundebug.run_debug(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def skip_verify_config(self, skip_verify_email=None, token=None, use_defaults=True, use_thread=False):
+        return self.config.skip_verify_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
