@@ -204,6 +204,7 @@ CleanUp
    MexMasterController.Cleanup Provisioning
 
 Setup
+
    ${epoch}=  Get Time  epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
@@ -212,14 +213,15 @@ Setup
 
    ${supertoken}=  Get Super Token
 
-
+#  No longer need to verify email to create user accounts EDC-2163 has been added using Skip Verify Config
+   Skip Verify Config  skip_verify_email=${True}  token=${supertoken}
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Verify Email  email_address=${emailepoch}
+#   Verify Email  email_address=${emailepoch}
    Unlock User
    ${user_token}=  Login  username=${epochusername}  password=${password}
 
    Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
-   Verify Email  email_address=${emailepoch2}
+#   Verify Email  email_address=${emailepoch2}
    Unlock User
    ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
