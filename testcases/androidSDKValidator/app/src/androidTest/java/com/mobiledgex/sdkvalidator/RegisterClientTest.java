@@ -415,6 +415,82 @@ public class RegisterClientTest {
     }
 
     @Test
+    public void registerClientSamsungUuidAndTypeBytes() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
+                    .setAppNameBytes(ByteString.copyFromUtf8(applicationNameSamsung))
+                    .setAppVersBytes(ByteString.copyFromUtf8(appVersion))
+                    .setCellId(getCellId(context, me))
+                    .setUniqueIdTypeBytes(ByteString.copyFromUtf8("applicationInstallId"))
+                    .setUniqueIdBytes(ByteString.copyFromUtf8(me.getUniqueId(context)))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            }
+            assert(reply != null);
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("ExecutionException registering client.", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientFutureTest: ExecutionException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientFutureTest: InterruptedException!", true);
+        }
+
+        JWT jwt = null;
+        try {
+            jwt = new JWT(reply.getSessionCookie());
+        } catch (DecodeException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+            assertFalse("registerClientTest: DecodeException!", true);
+        }
+
+        // verify expire timer
+        long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+        assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+        boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+        assertTrue(!isExpired);
+
+        // verify claim
+        Claim c = jwt.getClaim("key");
+        JsonObject claimJson = c.asObject(JsonObject.class);
+        assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
+        assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
+        assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+        Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+
+        // verify uuid and type is empty since we sent values in RegisterClient
+        assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+        assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
+    }
+
+    @Test
     public void registerClientSamsungAppEmptyUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
