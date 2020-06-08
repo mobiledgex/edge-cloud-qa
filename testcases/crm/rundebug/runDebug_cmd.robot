@@ -544,6 +544,158 @@ RunDebug - timeout option test for request times out on target cloudlet request 
       Should Be Equal  ${stack}[data][output]  ${timeout_request}
       Should Be True   ${cnt} > 0
 
+#Adding 9 new test cases to cover cmd enable or disable sample logging added June 6th 2020
+#mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region  RunDebug region=EU cloudlet=automationDusseldorfCloudlet cmd=disable-sample-logging
+#ECQ-
+RunDebug - cmd disable-sample-logging node_type shepherd request should return information
+    [Documentation]
+    ...  send runDebug cmd disable-sample-logs for node type shepherd
+    ...  verify output disabled log sampling for node type shepherd is returned
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  disabled log sampling
+      Should Contain  ${type2}  shepherd 
+
+#ECQ-
+RunDebug - cmd disable-sample-logging node_type shepherd second request should return information
+    [Documentation]
+    ...  send runDebug cmd disable-sample-logging more than once for node type shepherd
+    ...  verify output sends disabled log sampling for each request for node type shepherd
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  disabled log sampling
+      Should Contain  ${type2}  shepherd
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=shepherd
+
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  disabled log sampling
+      Should Contain  ${type2}  shepherd
+
+#ECQ-
+RunDebug - cmd enable-sample-logging request node_type shepherd should return information
+    [Documentation]
+    ...  send runDebug cmd enable-sample-logging for node type shepherd
+    ...  verify output enabled log sampling for node type shepherd is returned
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  enabled log sampling
+      Should Contain  ${type2}  shepherd
+#ECQ-
+RunDebug - cmd enable-sample-logging node_type shepherd second request should return information
+    [Documentation]
+    ...  send runDebug cmd enable-sample-logging more than once for node tyep shepherd
+    ...  verify output sends enabled log sampling for each request for node type shepherd
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  enabled log sampling
+      Should Contain  ${type2}  shepherd
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=shepherd
+
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  enabled log sampling
+      Should Contain  ${type2}  shepherd
+
+#ECQ-
+RunDebug - cmd enable-sample-logging node_type not specified will set crm and shepherd
+    [Documentation]
+    ...  send runDebug cmd enable-sample-logging a second time
+    ...  verify output enabled log sampling for both node types is returned
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging
+
+      ${type}=  Set Variable  ${node}[0][data][output]
+      ${type2}=  Set Variable  ${node}[0][data][node][type]
+
+      ${type3}=  Set Variable  ${node}[-1][data][output]}
+      ${type4}=  Set Variable  ${node}[-1][data][node][type]
+
+      Should Contain  ${type}  enabled log sampling
+      Should Contain Any  ${type2}  crm  shepherd 
+      Should Contain  ${type3}  enabled log sampling
+      Should Contain Any  ${type4}  crm  shepherd
+
+#ECQ-
+RunDebug - cmd enable-sample-logging request node_type crm should return information
+    [Documentation]
+    ...  send runDebug cmd enable-sample-logging
+    ...  verify output log sampling enabled for node type crm is returned
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=crm
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  enabled log sampling
+      Should Contain  ${type2}  crm
+
+#ECQ-
+RunDebug - cmd disable-sample-logging request node_type crm should return information
+    [Documentation]
+    ...  send runDebug cmd disable-sample-logging
+    ...  verify output log sampling disabled for node type crm is returned
+
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=disable-sample-logging  node_type=crm
+
+      ${type}=  Set Variable  ${node}[data][output]
+      ${type2}=  Set Variable  ${node}[data][node][type]
+
+      Should Contain  ${type}  disabled log sampling
+      Should Contain  ${type2}  crm
+
+#ECQ-
+RunDebug - blanket request to enable-sample-logging will set all cloudlet node type shepherd
+    [Documentation]
+    ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
+    ...  verify  output is returned for all crm node type shepherd and unknown cmd for non os crm
+
+      ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_shep}
+
+      ${cnt}=  Get Length  ${sample}
+
+      FOR  ${key}  IN RANGE  ${cnt}
+         Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging
+         Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_shep}
+      END
+
+#ECQ-
+RunDebug - blanket request to enable-sample-logging will set all cloudlet node type crm
+    [Documentation]
+    ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
+    ...  verify  output is returned for all crm node type shepherd and unknown cmd for non os crm
+
+      ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}
+
+      ${cnt}=  Get Length  ${sample}
+
+      FOR  ${key}  IN RANGE  ${cnt}
+         Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging
+         Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_crm}
+      END
+
 *** Keywords ***
 
 Setup
