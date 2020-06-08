@@ -546,7 +546,7 @@ RunDebug - timeout option test for request times out on target cloudlet request 
 
 #Adding 9 new test cases to cover cmd enable or disable sample logging added June 6th 2020
 #mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region  RunDebug region=EU cloudlet=automationParadiseCloudlet cmd=disable-sample-logging
-#ECQ-
+#ECQ-2225
 RunDebug - cmd disable-sample-logging node_type shepherd request should return information
     [Documentation]
     ...  send runDebug cmd disable-sample-logs for node type shepherd
@@ -560,7 +560,7 @@ RunDebug - cmd disable-sample-logging node_type shepherd request should return i
       Should Contain  ${type}  disabled log sampling
       Should Contain  ${type2}  shepherd 
 
-#ECQ-
+#ECQ-2226
 RunDebug - cmd disable-sample-logging node_type shepherd second request should return information
     [Documentation]
     ...  send runDebug cmd disable-sample-logging more than once for node type shepherd
@@ -583,7 +583,7 @@ RunDebug - cmd disable-sample-logging node_type shepherd second request should r
       Should Contain  ${type}  disabled log sampling
       Should Contain  ${type2}  shepherd
 
-#ECQ-
+#ECQ-2227
 RunDebug - cmd enable-sample-logging request node_type shepherd should return information
     [Documentation]
     ...  send runDebug cmd enable-sample-logging for node type shepherd
@@ -596,7 +596,7 @@ RunDebug - cmd enable-sample-logging request node_type shepherd should return in
 
       Should Contain  ${type}  enabled log sampling
       Should Contain  ${type2}  shepherd
-#ECQ-
+#ECQ-2228
 RunDebug - cmd enable-sample-logging node_type shepherd second request should return information
     [Documentation]
     ...  send runDebug cmd enable-sample-logging more than once for node tyep shepherd
@@ -619,7 +619,7 @@ RunDebug - cmd enable-sample-logging node_type shepherd second request should re
       Should Contain  ${type}  enabled log sampling
       Should Contain  ${type2}  shepherd
 
-#ECQ-
+#ECQ-2229
 RunDebug - cmd enable-sample-logging node_type not specified will set crm and shepherd
     [Documentation]
     ...  send runDebug cmd enable-sample-logging a second time
@@ -638,7 +638,7 @@ RunDebug - cmd enable-sample-logging node_type not specified will set crm and sh
       Should Contain  ${type3}  enabled log sampling
       Should Contain Any  ${type4}  crm  shepherd
 
-#ECQ-
+#ECQ-2230
 RunDebug - cmd enable-sample-logging request node_type crm should return information
     [Documentation]
     ...  send runDebug cmd enable-sample-logging
@@ -652,7 +652,7 @@ RunDebug - cmd enable-sample-logging request node_type crm should return informa
       Should Contain  ${type}  enabled log sampling
       Should Contain  ${type2}  crm
 
-#ECQ-
+#ECQ-2231
 RunDebug - cmd disable-sample-logging request node_type crm should return information
     [Documentation]
     ...  send runDebug cmd disable-sample-logging
@@ -666,7 +666,7 @@ RunDebug - cmd disable-sample-logging request node_type crm should return inform
       Should Contain  ${type}  disabled log sampling
       Should Contain  ${type2}  crm
 
-#ECQ-
+#ECQ-2232
 RunDebug - blanket request to enable-sample-logging will set all cloudlet node type shepherd
     [Documentation]
     ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
@@ -681,7 +681,7 @@ RunDebug - blanket request to enable-sample-logging will set all cloudlet node t
          Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_shep}
       END
 
-#ECQ-
+#ECQ-2233
 RunDebug - blanket request to enable-sample-logging will set all cloudlet node type crm
     [Documentation]
     ...  send runDebug enable-sample-logging node type shepherd on all cloudlets
