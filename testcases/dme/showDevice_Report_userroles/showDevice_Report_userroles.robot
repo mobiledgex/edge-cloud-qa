@@ -433,7 +433,7 @@ Setup
 
    ${supertoken}=  Get Super Token
 
-   Skip Verify Config  skip_verify_email=${True}  token=${supertoken}
+   Skip Verify Email  token=${supertoken}
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
 #   Verify Email  email_address=${emailepoch}
    Unlock User
