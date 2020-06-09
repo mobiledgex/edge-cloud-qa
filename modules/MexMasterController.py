@@ -365,7 +365,7 @@ class MexMasterController(MexRest):
             self._create_classes()
             return self.token
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=True, json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -2198,7 +2198,7 @@ class MexMasterController(MexRest):
     def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.rundebug.run_debug(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def skip_verify_config(self, skip_verify_email=None, token=None, use_defaults=True, use_thread=False):
+    def skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         return self.config.skip_verify_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):

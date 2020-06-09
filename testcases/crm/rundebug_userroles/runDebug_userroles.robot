@@ -214,7 +214,7 @@ Setup
    ${supertoken}=  Get Super Token
 
 #  No longer need to verify email to create user accounts EDC-2163 has been added using Skip Verify Config
-   Skip Verify Config  skip_verify_email=${True}  token=${supertoken}
+   Skip Verify Email  token=${supertoken}
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
 #   Verify Email  email_address=${emailepoch}
    Unlock User
