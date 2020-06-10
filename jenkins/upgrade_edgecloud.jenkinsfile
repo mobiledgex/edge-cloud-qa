@@ -1,0 +1,62 @@
+import java.text.SimpleDateFormat
+
+dateParm = "${BuildDate}"
+
+node('jenkinsSlave1'){
+    date = new Date()
+    sdate = new SimpleDateFormat("yyy-MM-dd")
+    Calendar cal = Calendar.getInstance()
+
+    dateValue = "notset"
+    if(dateParm == "today") {
+       dateValue = sdate.format(date)
+    } else {
+       dateValue = dateParm
+    }
+    cycle = Version + '_automation_' + dateValue
+    tag = dateValue
+    
+    currentBuild.displayName = cycle
+
+    try {
+       stage('Check Load Exists') {
+          def s = 'curl -s https://mobiledgex:sandhill@registry.mobiledgex.net:5000/v2/mobiledgex/edge-cloud/tags/list | jq ".tags | index(\\"' + tag + '\\")"'
+          def index  = sh(script: s, returnStdout: true);
+	  int indexnum = index as Integer
+          if(indexnum < 1) {
+             println "${s} failed"
+             currentBuild.result = 'FAILURE'
+          }
+
+       }
+    }  catch (e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {
+       stage('deploy processes in k8s') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra/ansible') {
+             // fix known_hosts file since recreating the server causes a mismatch in the file
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationbonncloudlet.tdg.mobiledgex.net"'
+             sh 'ssh-keygen -f "/home/jenkins/.ssh/known_hosts" -R "automationhamburgcloudlet.tdg.mobiledgex.net"'
+	     
+             sh 'export GITHUB_USER=andya072071;export GITHUB_TOKEN=16a8cf8e79fad4a98bba2e59544d8faf78fca71d;export VAULT_ROLE_ID="22c16b60-1ac5-4a32-cc07-05037475a717";export VAULT_SECRET_ID="67c96872-878e-9442-4440-ff76ce65cea5";./deploy.sh -V ' + tag + ' qa' 
+             //sh 'docker system prune -af'  //remove all docker stuff without prompting
+
+             sleep 60  // wait for all pods to come up
+	  }
+       }
+    } catch(e) {
+       dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "deploy to k8s for Build ' + tag + ' failed. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+}
