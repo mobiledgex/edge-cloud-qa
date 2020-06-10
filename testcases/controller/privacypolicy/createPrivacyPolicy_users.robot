@@ -54,8 +54,10 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   # No longer need to verify email to create user accounts EDC-2163 has been added using Skip Verify Config
+   Skip Verify Email 
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Verify Email  email_address=${emailepoch}
+   # Verify Email  email_address=${emailepoch}
    Unlock User
 
    ${userToken}=  Login  username=${epochusername}  password=${password}
