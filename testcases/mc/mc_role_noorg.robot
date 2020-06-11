@@ -177,7 +177,7 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}    email_check=True
    Unlock User
    Verify Email  email_address=${emailepoch}
    ${userToken}=  Login  username=${epochusername}  password=${password}
