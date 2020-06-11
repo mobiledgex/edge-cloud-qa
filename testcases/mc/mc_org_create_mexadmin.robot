@@ -140,13 +140,14 @@ MC - Admin shall be able to see orgs created by other users
         ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
         ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
 
+        Skip Verify Email
         Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
         Unlock User
-        Verify Email  email_address=${emailepoch}
+        #Verify Email  email_address=${emailepoch}
 
-        Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
+        Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2} 
         Unlock User
-        Verify Email  email_address=${emailepoch2}
+        #Verify Email  email_address=${emailepoch2}
 
         ${userToken}=  Login  username=${epochusername}  password=${password}
         ${user2Token}=  Login  username=${epochusername2}  password=${password}
