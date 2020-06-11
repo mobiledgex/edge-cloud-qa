@@ -34,7 +34,8 @@ MC - User shall be able to curl artifactory image as Developer Manager
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
+
+    Skip Verify Email	
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # curl should fail since user is locked
@@ -47,7 +48,7 @@ MC - User shall be able to curl artifactory image as Developer Manager
     ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror2}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden 
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -82,7 +83,7 @@ MC - User shall be able to curl artifactory image as Developer Contributor
     ${pusherror2}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -116,7 +117,7 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -151,7 +152,7 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -186,7 +187,7 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
-    Verify Email
+    #Verify Email
 
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -221,7 +222,7 @@ MC - User shall not be able to curl artifactory image as Operator Viewer
     ${pusherror1}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
     
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
