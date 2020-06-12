@@ -9,6 +9,12 @@ import http.server
 import socketserver
 import ssl
 import pprint
+import tornado.ioloop
+from tornado.iostream import IOStream
+import tornado.httpserver
+import tornado.websocket
+import tornado.ioloop
+import tornado.web
 
 http_port = 8085
 
@@ -137,6 +143,30 @@ def xstart_tls_tcp_ping(thread_name, port):
                 swrap.sendall(bytes('pong', encoding='utf-8'))
     #    print('recved', data)
 
+
+class WSHandler(tornado.websocket.WebSocketHandler):
+    def open(self):
+        print('new connection')
+      
+    def on_message(self, message):
+        print('message received:  %s' % message)
+        # Reverse Message and send it back
+        print('sending back message: %s' % message[::-1])
+        self.write_message(message[::-1])
+ 
+    def on_close(self):
+        print('connection closed')
+ 
+    def check_origin(self, origin):
+        return True
+ 
+application = tornado.web.Application([
+    (r'/ws', WSHandler)
+])
+
+
+
+    
 #if protocol == 'udp':
 #   _thread.start_new_thread(start_udp_ping, ("Thread-1", 2015))
 #   _thread.start_new_thread(start_udp_ping, ("Thread-2", 2016))
@@ -155,6 +185,11 @@ writefile('starting tcp thread')
 _thread.start_new_thread(start_tcp_ping, ("Thread-1", 2015))
 _thread.start_new_thread(start_tcp_ping, ("Thread-2", 2016))
 _thread.start_new_thread(start_tls_tcp_ping, ("Thread-1", 3015))
+writefile('starting websocket server')
+http_server = tornado.httpserver.HTTPServer(application)
+http_server.listen(3765)
+myIP = socket.gethostbyname(socket.gethostname())
+print('*** Websocket Server Started at %s***' % myIP)
 
 writefile('all threads started')
 
