@@ -190,6 +190,7 @@ http_server = tornado.httpserver.HTTPServer(application)
 http_server.listen(3765)
 myIP = socket.gethostbyname(socket.gethostname())
 print('*** Websocket Server Started at %s***' % myIP)
+tornado.ioloop.IOLoop.instance().start()
 
 writefile('all threads started')
 
