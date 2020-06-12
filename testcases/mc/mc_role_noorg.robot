@@ -4,7 +4,7 @@ Documentation   MasterController assign roles with no org
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
 Test Setup	Setup
-Test Teardown	Cleanup Provisioning
+Test Teardown	Teardown
 
 *** Variables ***
 ${username}=  mextester06
@@ -177,6 +177,7 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email   skip_verify_email=False
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}    email_check=True
    Unlock User
    Verify Email  email_address=${emailepoch}
@@ -185,3 +186,6 @@ Setup
    Set Suite Variable  ${adminToken}
    Set Suite Variable  ${userToken}
    Set Suite Variable  ${epochusername}
+
+Teardown
+   Skip Verify Email   skip_verify_email=True
