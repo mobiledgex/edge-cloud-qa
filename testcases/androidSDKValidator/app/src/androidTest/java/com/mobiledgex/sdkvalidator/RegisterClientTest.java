@@ -53,6 +53,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import com.auth0.android.jwt.JWT;
+import com.mobiledgex.mel.MelMessaging;
 
 import distributed_match_engine.AppClient;
 import io.grpc.StatusRuntimeException;
@@ -70,7 +71,7 @@ public class RegisterClientTest {
     public static final String organizationName = "MobiledgeX";
     public static final String organizationNameSamsung = "Samsung";
     // Other globals:
-    public static final String applicationName = "automation_api_app";
+    public static final String applicationName = "automation-sdk-app";
     public static final String applicationNameAuth = "automation_api_auth_app";
     public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
@@ -89,6 +90,9 @@ public class RegisterClientTest {
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
     // Must be set to true if you are running tests without a SIM card.
     public boolean useWifiOnly = true;
+
+    String meluuid = MelMessaging.getUid();
+    String uuidType = "Samsung:SamsungEnablingLayer";
 
     private int getCellId(Context context, MatchingEngine me) {
         int cellId = 0;
@@ -139,6 +143,11 @@ public class RegisterClientTest {
             uiAutomation.grantRuntimePermission(
                     InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
                     "android.permission.ACCESS_COARSE_LOCATION");
+/*
+            uiAutomation.grantRuntimePermission(
+                    InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
+                    "android.permission.INTERNET");
+*/
             uiAutomation.grantRuntimePermission(
                     InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
                     "android.permission.ACCESS_FINE_LOCATION"
@@ -150,9 +159,9 @@ public class RegisterClientTest {
     public void mexDisabledTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(false);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         try {
             Location location = getTestLocation( 47.6062,122.3321);
@@ -176,24 +185,34 @@ public class RegisterClientTest {
     public void registerClientTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    .setCarrierName("TDG")
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
+                String host = me.generateDmeHostAddress();
+                int port = me.getPort();
+                Log.i(TAG, "registerClientRequest: host="+host+" port="+port
+                        +" getAppName()="+request.getAppName()
+                        +" getAppVers()="+request.getAppVers()
+                        +" getOrgName()="+request.getOrgName()
+                        +" getCarrierName()="+request.getCarrierName());
+
                 reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                //reply = me.registerClient(request, "eu-mexdemo.dme.mobiledgex.net", port, GRPC_TIMEOUT_MS);
             }
 
             JWT jwt = null;
@@ -216,7 +235,7 @@ public class RegisterClientTest {
             assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
             assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
             assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-            assertEquals("uuid type doesn't match!", "dme-ksuid", claimJson.get("uniqueidtype").getAsString());
+            assertEquals("uuid type doesn't match!", uuidType, claimJson.get("uniqueidtype").getAsString());
             assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
             assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
@@ -227,10 +246,10 @@ public class RegisterClientTest {
             assertTrue( reply.getSessionCookie().length() > 0);
 
             // verify uuid has DME generated values since we didnt send any values in RegisterClient
-            assertEquals("uuid type doesn't match!", "dme-ksuid", reply.getUniqueIdType());
-            assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
-            assertEquals("uuid bytes type doesn't match!", "dme-ksuid", reply.getUniqueIdTypeBytes().toStringUtf8());
-            assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+            assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+            assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+            assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+            assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -254,13 +273,15 @@ public class RegisterClientTest {
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
 
+/*
     @Test
     public void registerClientUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+
 
         AppClient.RegisterClientReply reply = null;
 
@@ -272,7 +293,7 @@ public class RegisterClientTest {
                     .setAppVers(appVersion)
                     .setUniqueId("1234")
                     .setUniqueIdType("samsung")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -300,8 +321,8 @@ public class RegisterClientTest {
             assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
             assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
             assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-            assertEquals("uuid type not empty!", "1234", claimJson.get("uniqueid").getAsString());
-            assertEquals("uuid not empty!", "samsung", claimJson.get("uniqueidtype").getAsString());
+            assertEquals("uuid type not empty!", meluuid, claimJson.get("uniqueid").getAsString());
+            assertEquals("uuid not empty!", uuidType, claimJson.get("uniqueidtype").getAsString());
             assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
             // verify success
@@ -337,26 +358,27 @@ public class RegisterClientTest {
         assertEquals(0, reply.getVer());
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
+*/
 
     @Test
     public void registerClientSamsungUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
                     .setAppName(applicationNameSamsung)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
-                    .setUniqueIdType("applicationInstallId")
-                    .setUniqueId(me.getUniqueId(context))
+                    //.setCellId(getCellId(context, me))
+                    //.setUniqueIdType("applicationInstallId")
+                    //.setUniqueId(me.getUniqueId(context))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
@@ -399,8 +421,8 @@ public class RegisterClientTest {
         assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
         assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
         assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
-        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertEquals("uuid type in claim doesn't match!",  uuidType, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid in claim doesn't match!", meluuid, claimJson.get("uniqueid").getAsString());
         assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
         Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
@@ -418,21 +440,21 @@ public class RegisterClientTest {
     public void registerClientSamsungUuidAndTypeBytes() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
                     .setAppNameBytes(ByteString.copyFromUtf8(applicationNameSamsung))
                     .setAppVersBytes(ByteString.copyFromUtf8(appVersion))
-                    .setCellId(getCellId(context, me))
-                    .setUniqueIdTypeBytes(ByteString.copyFromUtf8("applicationInstallId"))
-                    .setUniqueIdBytes(ByteString.copyFromUtf8(me.getUniqueId(context)))
+                    //.setCellId(getCellId(context, me))
+                    //.setUniqueIdTypeBytes(ByteString.copyFromUtf8("applicationInstallId"))
+                    //.setUniqueIdBytes(ByteString.copyFromUtf8(me.getUniqueId(context)))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
@@ -475,8 +497,8 @@ public class RegisterClientTest {
         assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
         assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
         assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
-        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung + ":" + applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
         assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
         Log.i(TAG, "registerClientFutureTest() response: " + reply.toString());
@@ -490,13 +512,14 @@ public class RegisterClientTest {
         assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
     }
 
+/*
     @Test
     public void registerClientSamsungAppEmptyUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -564,14 +587,17 @@ public class RegisterClientTest {
         assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
         assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
     }
+*/
 
+/*
+can no longer send without uuid and type since it pulls it from mel
     @Test
     public void registerClientSamsungAppNoUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -637,14 +663,16 @@ public class RegisterClientTest {
         assertEquals("uuid bytes type doesn't match!", organizationNameSamsung+":"+applicationNameSamsung, reply.getUniqueIdTypeBytes().toStringUtf8());
         assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
     }
+*/
 
+/*
     @Test
     public void registerClientSamsungUuidOnly() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -692,9 +720,9 @@ public class RegisterClientTest {
     public void registerClientSamsungUuidTypeOnly() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -737,14 +765,15 @@ public class RegisterClientTest {
             assertFalse("registerClientFutureTest: InterruptedException!", true);
         }
     }
+*/
 
     @Test
     public void registerClientNoContext() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -773,19 +802,19 @@ public class RegisterClientTest {
     public void registerClientEmptyOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "")
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -804,19 +833,19 @@ public class RegisterClientTest {
     public void registerClientNoOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, null)
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -835,9 +864,9 @@ public class RegisterClientTest {
     public void registerClientEmptyAppVersion() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -845,7 +874,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers("")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -876,9 +905,9 @@ public class RegisterClientTest {
     public void registerClientEmptyAppName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -886,7 +915,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName("")
                     .setAppVers("1.0")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -917,9 +946,9 @@ public class RegisterClientTest {
     public void registerClientEmptyAuth() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -927,7 +956,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationNameAuth)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -958,9 +987,9 @@ public class RegisterClientTest {
     public void registerClientBadOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -968,7 +997,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -998,9 +1027,9 @@ public class RegisterClientTest {
     public void registerClientBadAppVersionOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -1008,7 +1037,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
                     .setAppName("badapp")
                     .setAppVers("badversion")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1038,9 +1067,9 @@ public class RegisterClientTest {
     public void registerClientBadAppName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -1048,7 +1077,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName("Leon's Bogus App")
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1078,9 +1107,9 @@ public class RegisterClientTest {
     public void registerClientBadAppVersion() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
@@ -1088,7 +1117,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers("-999")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1118,20 +1147,20 @@ public class RegisterClientTest {
     public void registerClientFutureTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1174,7 +1203,7 @@ public class RegisterClientTest {
         assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
         assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
         assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-        assertEquals("uuid type in claim doesn't match!", "dme-ksuid", claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid type in claim doesn't match!", uuidType, claimJson.get("uniqueidtype").getAsString());
         assertEquals("uuid in claim doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
         assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
@@ -1184,19 +1213,20 @@ public class RegisterClientTest {
         assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
 
         // verify uuid and type is empty since we sent values in RegisterClient
-        assertEquals("uuid type doesn't match!", "dme-ksuid", reply.getUniqueIdType());
-        assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
-        assertEquals("uuid bytes type doesn't match!", "dme-ksuid", reply.getUniqueIdTypeBytes().toStringUtf8());
-        assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+        assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+        assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+        assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+        assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
     }
 
+/*
     @Test
     public void registerClientFutureUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1267,27 +1297,28 @@ public class RegisterClientTest {
         assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
         assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
     }
+*/
 
     @Test
     public void registerClientFutureSamsungUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 47.6062,122.3321);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
                     .setAppName(applicationNameSamsung)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
-                    .setUniqueIdType("applicationInstallId")
-                    .setUniqueId(me.getUniqueId(context))
+                    //.setCellId(getCellId(context, me))
+                    //.setUniqueIdType("applicationInstallId")
+                    //.setUniqueId(me.getUniqueId(context))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverrideSamsung, portOverride, GRPC_TIMEOUT_MS);
@@ -1330,8 +1361,8 @@ public class RegisterClientTest {
         assertEquals("orgname doesn't match!", organizationNameSamsung, claimJson.get("orgname").getAsString());
         assertEquals("appname doesn't match!", applicationNameSamsung, claimJson.get("appname").getAsString());
         assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-        assertEquals("uuid type in claim doesn't match!", "applicationInstallId", claimJson.get("uniqueidtype").getAsString());
-        assertEquals("uuid in claim doesn't match!", me.getUniqueId(context), claimJson.get("uniqueid").getAsString());
+        assertEquals("uuid type in claim doesn't match!", organizationNameSamsung + ":" + applicationNameSamsung, claimJson.get("uniqueidtype").getAsString());
+        assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
         assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
 
         // TODO: Validate JWT
@@ -1346,13 +1377,14 @@ public class RegisterClientTest {
         assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
     }
 
+/*
     @Test
     public void registerClientFutureSamsungAppEmptyUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1427,9 +1459,9 @@ public class RegisterClientTest {
     public void registerClientFutureSamsungAppNoUuidAndType() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1502,9 +1534,9 @@ public class RegisterClientTest {
     public void registerClientFutureSamsungUuidOnly() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1553,9 +1585,9 @@ public class RegisterClientTest {
     public void registerClientFutureSamsungUuidTypeOnly() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1600,14 +1632,15 @@ public class RegisterClientTest {
             assertFalse("registerClientFutureTest: InterruptedException!", true);
         }
     }
+*/
 
     @Test
     public void registerClientFutureEmptyAppVersion() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1616,7 +1649,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers("")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1645,9 +1678,9 @@ public class RegisterClientTest {
     public void registerClientFutureEmptyAppName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1656,7 +1689,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName("")
                     .setAppVers("1.0")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1686,9 +1719,9 @@ public class RegisterClientTest {
     public void registerClientFutureEmptyAuth() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1697,12 +1730,13 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationNameAuth)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
             } else {
-                registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                //registerReplyFuture = me.registerClientFuture(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                registerReplyFuture = me.registerClientFuture(request, GRPC_TIMEOUT_MS);
             }
 
             reply = registerReplyFuture.get();
@@ -1727,9 +1761,9 @@ public class RegisterClientTest {
     public void registerClientFutureBadOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1738,7 +1772,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1768,9 +1802,9 @@ public class RegisterClientTest {
     public void registerClientFutureBadAppVersionOrgName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1779,7 +1813,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, "badorg")
                     .setAppName("badapp")
                     .setAppVers("badversion")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1809,9 +1843,9 @@ public class RegisterClientTest {
     public void registerClientFutureBadAppName() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1820,7 +1854,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName("Leon's Bogus App")
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
@@ -1850,9 +1884,9 @@ public class RegisterClientTest {
     public void registerClientFutureBadAppVersion() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         Future<AppClient.RegisterClientReply> registerReplyFuture;
         AppClient.RegisterClientReply reply = null;
@@ -1861,7 +1895,7 @@ public class RegisterClientTest {
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers("-999")
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
             if (useHostOverride) {
                 registerReplyFuture = me.registerClientFuture(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
