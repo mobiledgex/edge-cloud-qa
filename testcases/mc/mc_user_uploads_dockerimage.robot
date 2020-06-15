@@ -35,7 +35,8 @@ MC - User shall be able to upload docker image as Developer Manager
  
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
+
+    Skip Verify Email	
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
 
     # docker push/pull should fail since user is locked
@@ -52,7 +53,7 @@ MC - User shall be able to upload docker image as Developer Manager
     Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -92,7 +93,7 @@ MC - User shall be able to upload docker image as Developer Contributor
     Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -131,7 +132,7 @@ MC - User shall not be able to upload docker image as Developer Viewer
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -175,7 +176,7 @@ MC - User shall not be able to upload docker image as Operator Manager
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -219,7 +220,7 @@ MC - User shall not be able to upload docker image as Operator Contributor
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -263,7 +264,7 @@ MC - User shall not be able to upload docker image as Operator Viewer
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    Verify Email
+    #Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
