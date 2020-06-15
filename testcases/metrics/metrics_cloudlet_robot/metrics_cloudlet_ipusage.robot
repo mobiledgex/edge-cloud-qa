@@ -469,9 +469,10 @@ Metrics - OperatorManager shall be able to get cloudlet ipusage metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    #Create Org  orgname=${orgname}  orgtype=operator
 
@@ -509,9 +510,10 @@ Metrics - OperatorViewer shall be able to get cloudlet ipusage metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    #Create Org  orgname=${orgname}  orgtype=operator
 
@@ -549,9 +551,10 @@ Metrics - OperatorContributor shall be able to get cloudlet ipusage metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    #Create Org  orgname=${orgname}  orgtype=operator
 

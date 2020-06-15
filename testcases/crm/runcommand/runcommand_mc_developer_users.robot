@@ -81,9 +81,10 @@ Setup
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
     ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
 
+    Skip Verify Email
     Create User  username=${username_epoch}  password=${password}  email_address=${email}
     Unlock User
-    Verify Email
+    #Verify Email
 
     Set Suite Variable  ${username_epoch}
 
