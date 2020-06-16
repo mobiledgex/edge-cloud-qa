@@ -7,7 +7,7 @@ android {
 
 
     defaultConfig {
-        applicationId "com.mobiledgex.sdkexerciser"
+        applicationId "com.mobiledgex.sdkvalidator"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.auth0.android:jwtdecode:2.0.0'
 
     // Matching Engine SDK
-    implementation 'com.mobiledgex:matchingengine:2.0.11'
+    implementation 'com.mobiledgex:matchingengine:2.0.13'
     implementation "io.grpc:grpc-okhttp:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf-lite:${grpcVersion}"
