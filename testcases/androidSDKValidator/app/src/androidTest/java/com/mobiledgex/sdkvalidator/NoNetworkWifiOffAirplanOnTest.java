@@ -51,6 +51,9 @@ import static org.junit.Assert.assertTrue;
 
 /*
    These test that MEL is disabled and the RegisterClient/FindCloudlet give error
+
+   1) Insert SIM card and turn off wifi and turn on airplane mode
+
  */
 @RunWith(AndroidJUnit4.class)
 public class NoNetworkWifiOffAirplanOnTest {
@@ -152,6 +155,7 @@ public class NoNetworkWifiOffAirplanOnTest {
         MatchingEngine me = new MatchingEngine(context);
         //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
+        me.setNetworkSwitchingEnabled(false);
         //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;

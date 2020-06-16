@@ -59,6 +59,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/*
+   run in 2 configurations:
+   1) Remove SIM card and turn off wifi
+   2) Remove SIM card and turn on wifi but dont connect to a network(turn off auto-reconnect)
+ */
 @RunWith(AndroidJUnit4.class)
 public class NoSimCardTest {
     public static final String TAG = "EngineCallTest";
@@ -180,10 +185,11 @@ public class NoSimCardTest {
             assertFalse("ExecutionException registering using PackageManager.", true);
         } catch (DmeDnsException dde) {
             Log.e(TAG, Log.getStackTraceString(dde));
-            assertEquals("SIM not in ready state.", dde.getLocalizedMessage());
+            //assertEquals("SIM not in ready state.", dde.getLocalizedMessage());
+            assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
+            assertEquals("com.mobiledgex.matchingengine.NetworkRequestTimeoutException: NetworkRequest timed out with no availability.", ee.getLocalizedMessage());
         } catch (StatusRuntimeException sre) {
             Log.e(TAG, Log.getStackTraceString(sre));
             assertFalse("registerClientTest: StatusRuntimeException!", true);
