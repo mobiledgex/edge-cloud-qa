@@ -56,6 +56,14 @@ import static org.junit.Assert.assertTrue;
    These tests run on
    verizon: 311-480.dme.mobiledgex.net -> us-qa.dme.mobiledgex.net
 
+   1) turn off wifi and turn off airplane mode
+   2) turn on wifi but dont connect to a network and turn off airplane mode
+
+  edgectl controller --addr mexdemo-eu.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateCloudlet cloudlet=telusfake cloudlet-org=TELUS location.latitude=1 location.longitude=1 numdynamicips=254 platformtype=PlatformTypeFake
+  edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateApp appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 imagepath=docker.mobiledgex.net/adevorg/images/server-ping-threaded:6.0 accessports=tcp:1234,udp:1,tcp:1-5:tls,tcp:8080 deployment=docker defaultflavor=x1.medium androidpackagename=com.mobiledgex.sdkvalidator officialfqdn=stackoverflow.com
+  edgectl controller --addr mexdemo-eu.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateAppInst appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 cloudlet=telusfake cloudlet-org=TELUS  cluster-org=MobiledgeX cluster=autoclustersdkdocker
+
+
  */
 @RunWith(AndroidJUnit4.class)
 public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
@@ -68,6 +76,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
     public static final String applicationName = "automation-sdk-docker-app";
     public static final String appVersion = "1.0";
 
+
     //public static final String applicationName = "MobiledgeX SDK Demo";
     //public static final String appVersion = "2.0";
 
@@ -78,6 +87,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
     public static String findCloudletCarrierOverride = "tmus"; // Allow "Any" if using "", but this likely breaks test cases.
     public static String foundCloudletFqdn = "autoclustersdkdocker.telusfake.telus.mobiledgex.net";
     public static String officialFqdn = "stackoverflow.com";
+    //public static String officialFqdn = "a";
     public boolean useHostOverride = false;
 
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
@@ -240,6 +250,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
         //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
         //me.setAllowSwitchIfNoSubscriberInfo(true);
+        //me.setNetworkSwitchingEnabled(false);
 
         try {
             Location location = getTestLocation( 47.6062,122.3321);
@@ -289,6 +300,364 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
         //} catch (PackageManager.NameNotFoundException ee) {
         //    Log.e(TAG, Log.getStackTraceString(ee));
         //    assertFalse("FindCloudlet: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, sre.getMessage());
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("FindCloudlet: StatusRunTimeException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("FindCloudlet: InterruptedException!", true);
+        }
+
+        try {
+            String cloudletAddress = InetAddress.getByName(foundCloudletFqdn).getHostAddress();
+            String findCloudletReplyFqdn = findCloudletReply1.getFqdn();
+            String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+            String xx = InetAddress.getByName("google.com").getHostAddress();
+
+            InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+
+            InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+
+            InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+
+            String findCloudletReplyFqdn2 = findCloudletReply2.getFqdn();
+            String officialAddress2 = InetAddress.getByName(findCloudletReplyFqdn2).getHostAddress();
+
+            assertEquals("App's 1 expected DNS resolutaion doesn't match.", cloudletAddress, officialAddress);
+            assertEquals("App's 2 expected DNS resolutaion doesn't match.", cloudletAddress, officialAddress2);
+        } catch (UnknownHostException var6) {
+            assertFalse("InetAddressFailed!", true);
+        }
+        assertNotNull("FindCloudletReply1 is null!", findCloudletReply1);
+        assertNotNull("FindCloudletReply2 is null!", findCloudletReply2);
+
+        // Might also fail, since the network is not under test control:
+        assertEquals("App's expected test cloudlet FQDN doesn't match.", officialFqdn, findCloudletReply1.getFqdn());
+        assertEquals("App's expected test cloudlet FQDN Bytes doesn't match.", officialFqdn, findCloudletReply1.getFqdnBytes().toStringUtf8());
+        assertEquals("App's expected test cloudlet Ports Count doesn't match.", 1, findCloudletReply1.getPortsCount());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(0).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(0).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 0, findCloudletReply1.getPorts(0).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 0, findCloudletReply1.getPorts(0).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_UNKNOWN, findCloudletReply1.getPorts(0).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(0).getTls());
+        assertEquals("App's expected test cloudlet Ports Count doesn't match.", 1, findCloudletReply1.getPortsCount());
+        assertEquals("App's expected test cloudlet Status doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND, findCloudletReply1.getStatus());
+        assertEquals("App's expected test cloudlet Status Value doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND_VALUE, findCloudletReply1.getStatusValue());
+
+        assertEquals("App's expected test cloudlet FQDN doesn't match.", officialFqdn, findCloudletReply2.getFqdn());
+        assertEquals("App's expected test cloudlet FQDN Bytes doesn't match.", officialFqdn, findCloudletReply2.getFqdnBytes().toStringUtf8());
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply2.getPorts(0).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply2.getPorts(0).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 0, findCloudletReply2.getPorts(0).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 0, findCloudletReply2.getPorts(0).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_UNKNOWN, findCloudletReply2.getPorts(0).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply2.getPorts(0).getTls());
+        assertEquals("App's expected test cloudlet Ports Count doesn't match.", 1, findCloudletReply2.getPortsCount());
+        assertEquals("App's expected test cloudlet Status doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND, findCloudletReply2.getStatus());
+        assertEquals("App's expected test cloudlet Status Value doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND_VALUE, findCloudletReply2.getStatusValue());
+
+    }
+
+    /*
+    remove officialfqdn. should do normal findcloudlet
+    edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt UpdateApp appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 officialfqdn=""
+     */
+    @Test
+    public void findCloudletNoOfficialFqdnTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        AppClient.FindCloudletReply findCloudletReply1 = null;
+        AppClient.FindCloudletReply findCloudletReply2 = null;
+        final MatchingEngine me = new MatchingEngine(context);
+        //me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            //String carrierName = me.getCarrierName(context);
+            //rc r = new rc(me).execute();
+            registerClient(me);
+            //AsyncTask.execute(new Runnable() {
+            //                      @Override
+            //                      public void run() {
+            //                         registerClient(me);
+            //                      }
+            //                  });
+
+            //Object aMon = new Object(); // Some arbitrary object Monitor.
+            //synchronized (aMon) {
+            //    aMon.wait(1000);
+            // }
+
+
+            //wait(3000);
+
+            // Set orgName and location, then override the rest for testing:
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    //.setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            if (useHostOverride) {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            }
+
+            // Second try:
+            //me.setThreadedPerformanceTest(true);
+            //if (useHostOverride) {
+            //    findCloudletReply2 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            //} else {
+            //    findCloudletReply2 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            //}
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("FindCloudlet: DmeDnsException", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("FindCloudlet: ExecutionException!", true);
+            //} catch (PackageManager.NameNotFoundException ee) {
+            //    Log.e(TAG, Log.getStackTraceString(ee));
+            //    assertFalse("FindCloudlet: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, sre.getMessage());
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("FindCloudlet: StatusRunTimeException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("FindCloudlet: InterruptedException!", true);
+        }
+
+        try {
+            String cloudletAddress = InetAddress.getByName(foundCloudletFqdn).getHostAddress();
+            String findCloudletReplyFqdn = findCloudletReply1.getFqdn();
+            String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+            assertEquals("App's expected DNS resolutaion doesn't match.", cloudletAddress, officialAddress);
+        } catch (UnknownHostException var6) {
+            assertFalse("InetAddressFailed!", true);
+        }
+        assertNotNull("FindCloudletReply1 is null!", findCloudletReply1);
+        //assertNotNull("FindCloudletReply2 is null!", findCloudletReply2);
+
+        // Might also fail, since the network is not under test control:
+        assertEquals("App's expected test cloudlet FQDN doesn't match.", foundCloudletFqdn, findCloudletReply1.getFqdn());
+        assertEquals("App's expected test cloudlet FQDN Bytes doesn't match.", foundCloudletFqdn, findCloudletReply1.getFqdnBytes().toStringUtf8());
+        assertEquals("App's expected test cloudlet Ports Count doesn't match.", 4, findCloudletReply1.getPortsCount());
+        assertEquals("App's expected test cloudlet Status doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND, findCloudletReply1.getStatus());
+        assertEquals("App's expected test cloudlet Status Value doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND_VALUE, findCloudletReply1.getStatusValue());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(0).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(0).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1234, findCloudletReply1.getPorts(0).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1234, findCloudletReply1.getPorts(0).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(0).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(0).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(1).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(1).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1, findCloudletReply1.getPorts(1).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1, findCloudletReply1.getPorts(1).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_UDP, findCloudletReply1.getPorts(1).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(1).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(2).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 5, findCloudletReply1.getPorts(2).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1, findCloudletReply1.getPorts(2).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1, findCloudletReply1.getPorts(2).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(2).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", true, findCloudletReply1.getPorts(2).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(3).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(3).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 8080, findCloudletReply1.getPorts(3).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 8080, findCloudletReply1.getPorts(3).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(3).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(3).getTls());
+
+    }
+
+    /*
+       remove androidpackagename. should do normal findcloudlet
+       edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt UpdateApp appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 androidpackagename=""
+    */
+    @Test
+    public void findCloudletNoAndroidPackageNameTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        AppClient.FindCloudletReply findCloudletReply1 = null;
+        AppClient.FindCloudletReply findCloudletReply2 = null;
+        final MatchingEngine me = new MatchingEngine(context);
+        //me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            //String carrierName = me.getCarrierName(context);
+            //rc r = new rc(me).execute();
+            registerClient(me);
+            //AsyncTask.execute(new Runnable() {
+            //                      @Override
+            //                      public void run() {
+            //                         registerClient(me);
+            //                      }
+            //                  });
+
+            //Object aMon = new Object(); // Some arbitrary object Monitor.
+            //synchronized (aMon) {
+            //    aMon.wait(1000);
+            // }
+
+
+            //wait(3000);
+
+            // Set orgName and location, then override the rest for testing:
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    //.setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            if (useHostOverride) {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            }
+
+            // Second try:
+            //me.setThreadedPerformanceTest(true);
+            //if (useHostOverride) {
+            //    findCloudletReply2 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            //} else {
+            //    findCloudletReply2 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            //}
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("FindCloudlet: DmeDnsException", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("FindCloudlet: ExecutionException!", true);
+            //} catch (PackageManager.NameNotFoundException ee) {
+            //    Log.e(TAG, Log.getStackTraceString(ee));
+            //    assertFalse("FindCloudlet: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, sre.getMessage());
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("FindCloudlet: StatusRunTimeException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("FindCloudlet: InterruptedException!", true);
+        }
+
+        try {
+            String cloudletAddress = InetAddress.getByName(foundCloudletFqdn).getHostAddress();
+            String findCloudletReplyFqdn = findCloudletReply1.getFqdn();
+            String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
+            assertEquals("App's expected DNS resolutaion doesn't match.", cloudletAddress, officialAddress);
+        } catch (UnknownHostException var6) {
+            assertFalse("InetAddressFailed!", true);
+        }
+        assertNotNull("FindCloudletReply1 is null!", findCloudletReply1);
+        //assertNotNull("FindCloudletReply2 is null!", findCloudletReply2);
+
+        // Might also fail, since the network is not under test control:
+        assertEquals("App's expected test cloudlet FQDN doesn't match.", foundCloudletFqdn, findCloudletReply1.getFqdn());
+        assertEquals("App's expected test cloudlet FQDN Bytes doesn't match.", foundCloudletFqdn, findCloudletReply1.getFqdnBytes().toStringUtf8());
+        assertEquals("App's expected test cloudlet Ports Count doesn't match.", 4, findCloudletReply1.getPortsCount());
+        assertEquals("App's expected test cloudlet Status doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND, findCloudletReply1.getStatus());
+        assertEquals("App's expected test cloudlet Status Value doesn't match.", AppClient.FindCloudletReply.FindStatus.FIND_FOUND_VALUE, findCloudletReply1.getStatusValue());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(0).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(0).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1234, findCloudletReply1.getPorts(0).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1234, findCloudletReply1.getPorts(0).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(0).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(0).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(1).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(1).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1, findCloudletReply1.getPorts(1).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1, findCloudletReply1.getPorts(1).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_UDP, findCloudletReply1.getPorts(1).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(1).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(2).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 5, findCloudletReply1.getPorts(2).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 1, findCloudletReply1.getPorts(2).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 1, findCloudletReply1.getPorts(2).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(2).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", true, findCloudletReply1.getPorts(2).getTls());
+
+        assertEquals("App's expected test Port fqdn prefix doesn't match.", "", findCloudletReply1.getPorts(3).getFqdnPrefix());
+        assertEquals("App's expected test Port endport doesn't match.", 0, findCloudletReply1.getPorts(3).getEndPort());
+        assertEquals("App's expected test Port internalport doesn't match.", 8080, findCloudletReply1.getPorts(3).getInternalPort());
+        assertEquals("App's expected test Port publicport doesn't match.", 8080, findCloudletReply1.getPorts(3).getPublicPort());
+        assertEquals("App's expected test Port proto doesn't match.", Appcommon.LProto.L_PROTO_TCP, findCloudletReply1.getPorts(3).getProto());
+        assertEquals("App's expected test Port tls doesn't match.", false, findCloudletReply1.getPorts(3).getTls());
+
+    }
+
+    @Test
+    public void findCloudletNetworkSwitchingFalseTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        AppClient.FindCloudletReply findCloudletReply1 = null;
+        AppClient.FindCloudletReply findCloudletReply2 = null;
+        final MatchingEngine me = new MatchingEngine(context);
+        //me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setNetworkSwitchingEnabled(false);
+
+        try {
+            Location location = getTestLocation( 47.6062,122.3321);
+
+            //String carrierName = me.getCarrierName(context);
+            //rc r = new rc(me).execute();
+            registerClient(me);
+            //AsyncTask.execute(new Runnable() {
+            //                      @Override
+            //                      public void run() {
+            //                         registerClient(me);
+            //                      }
+            //                  });
+
+            //Object aMon = new Object(); // Some arbitrary object Monitor.
+            //synchronized (aMon) {
+            //    aMon.wait(1000);
+            // }
+
+
+            //wait(3000);
+
+            // Set orgName and location, then override the rest for testing:
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    //.setCarrierName(findCloudletCarrierOverride)
+                    .build();
+            if (useHostOverride) {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                findCloudletReply1 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            }
+
+            // Second try:
+            me.setThreadedPerformanceTest(true);
+            if (useHostOverride) {
+                findCloudletReply2 = me.findCloudlet(findCloudletRequest, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                findCloudletReply2 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            }
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("FindCloudlet: DmeDnsException", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("FindCloudlet: ExecutionException!", true);
+            //} catch (PackageManager.NameNotFoundException ee) {
+            //    Log.e(TAG, Log.getStackTraceString(ee));
+            //    assertFalse("FindCloudlet: ExecutionException!", true);
         } catch (StatusRuntimeException sre) {
             Log.e(TAG, sre.getMessage());
             Log.e(TAG, Log.getStackTraceString(sre));

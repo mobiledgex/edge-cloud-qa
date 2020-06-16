@@ -59,10 +59,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /*
+  these tests are for when wifi is connected (mel disabled) for:
+  1) without SIM card
+  2) with SIM card
+
   these tests go to wifi.dme.mobiledgex.net which is mapped to mexdemo-eu.dme.mobiledgex.net
 
   edgectl controller --addr mexdemo-eu.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateCloudlet cloudlet=telusfake cloudlet-org=TELUS location.latitude=1 location.longitude=1 numdynamicips=254 platformtype=PlatformTypeFake
-  edgectl controller --addr mexdemo-eu.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateApp appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 imagepath=docker.mobiledgex.net/adevorg/images/server-ping-threaded:6.0 accessports=tcp:1234 deployment=docker defaultflavor=x1.medium
+  edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateApp appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 imagepath=docker.mobiledgex.net/adevorg/images/server-ping-threaded:6.0 accessports=tcp:1234,udp:1,tcp:1-5:tls,tcp:8080 deployment=docker defaultflavor=x1.medium androidpackagename=com.mobiledgex.sdkexerciser officialfqdn=stackoverflow.com
   edgectl controller --addr mexdemo-eu.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateAppInst appname=automation-sdk-docker-app app-org=MobiledgeX appvers=1.0 cloudlet=telusfake cloudlet-org=TELUS  cluster-org=MobiledgeX cluster=autoclustersdkdocker
 
  */
