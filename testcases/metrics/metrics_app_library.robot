@@ -548,9 +548,10 @@ DeveloperManager shall be able to get app metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
@@ -582,9 +583,10 @@ DeveloperContributor shall be able to get app metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
@@ -616,9 +618,10 @@ DeveloperViewer shall be able to get app metrics
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
