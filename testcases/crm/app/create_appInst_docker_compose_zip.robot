@@ -81,9 +81,10 @@ Setup
 
     Create Flavor  region=${region}
 
+    Skip Verify Email
     Create user  username=${username1}  password=${password}  email_address=${email1}  
     Unlock User  username=${username1}
-    Verify Email
+    #Verify Email
 
     Create Org  orgname=${orgname}  orgtype=developer
 

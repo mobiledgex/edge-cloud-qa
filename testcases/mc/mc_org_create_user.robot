@@ -5,8 +5,8 @@ Library		MexMasterController   mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%
 Library         DateTime
 
 Suite Setup	Setup
-Suite Teardown	Cleanup Provisioning
-Test Teardown  Cleanup Provisioning
+Suite Teardown	Teardown
+#Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${dev_orgname}=    DevOrg
@@ -181,13 +181,18 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Skip Verify Email   skip_verify_email=False
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}   email_check=True
    Unlock User
    Verify Email  email_address=${emailepoch}
 
    ${userToken}=  Login  username=${epochusername}  password=${password}
 	
    Set Suite Variable  ${userToken}
+
+Teardown
+   Skip Verify Email   skip_verify_email=True
+   Cleanup Provisioning
 
 Verify Dev Org
         [Arguments]  ${org}
