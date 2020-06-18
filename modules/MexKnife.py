@@ -13,20 +13,20 @@ class MexKnife:
     def upgrade_cloudlet(self, cloudlet_names=None, container_version=None):
         for i in cloudlet_names:
             logging.info('cloudlet name is ' + i)
-        self.before_upgrade(cloudlet_names)
-        self.start_upgrade()
-        self.verify_upgrade(cloudlet_names,container_version)
+        self._before_upgrade(cloudlet_names)
+        self._start_upgrade()
+        self._verify_upgrade(cloudlet_names,container_version)
 
 
-    def before_upgrade(self, cloudlets):
+    def _before_upgrade(self, cloudlets):
         cmd_knife = 'knife exec -E \'nodes.find("name:qa*pf") {|n| puts n.name+"="+n["edgeCloudVersion"]}\''
-        output = self.run_cmd(cmd_knife)
+        output = self._run_cmd(cmd_knife)
         crm_list = output.splitlines()
         for line in crm_list:
             logging.info(str(line))
 
  
-    def start_upgrade(self):
+    def _start_upgrade(self):
         policy_group = self.policy_group
         workdir = os.environ.get("WORKSPACE")
         if not workdir:
@@ -36,7 +36,7 @@ class MexKnife:
         retval = os.getcwd() 
         logging.info('Current directory is ' + str(retval))
         cmdchef = f'chef push {policy_group} docker_crm.rb'
-        output = self.run_cmd(cmdchef)
+        output = self._run_cmd(cmdchef)
         list1 = output.splitlines()
         for line in list1:
             if 'Failed to upload policy' in line:
@@ -44,7 +44,7 @@ class MexKnife:
                 raise Exception('ERROR: line')  
 
 
-    def run_cmd(self, command):
+    def _run_cmd(self, command):
         logging.info(f'running cmd: {command}')
         cmd_return = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         cmd_out = cmd_return.stdout.decode('utf-8')
@@ -54,22 +54,22 @@ class MexKnife:
         return cmd_out
 
 
-    def verify_upgrade(self, cloudlets, version):
+    def _verify_upgrade(self, cloudlets, version):
         logging.info('version to be upgraded to is ' + str(version))
         cmd_knife = 'knife exec -E \'nodes.find("name:qa*pf") {|n| puts n.name+"="+n["edgeCloudVersion"]}\''
-        output = self.run_cmd(cmd_knife)
+        output = self._run_cmd(cmd_knife)
         crm_list = output.splitlines() 
         logging.debug(output)
 
         cloudlet_list = []
         x = 0
-        while((x < 30) and (len(cloudlet_list) < 4)):            
+        while((x < 5) and (len(cloudlet_list) < 4)):            
             for i in cloudlets:
                 for line in crm_list:
                     if i in line and version in line:
                         logging.info(i + ' has been upgraded to ' + version)
-                        cloudlet_list.append(i)
-            time.sleep(30)
+                        cloudlet_list.append(i)                    
+            time.sleep(10)
             x+=1
 
         length = len(cloudlet_list)            
@@ -78,8 +78,12 @@ class MexKnife:
         if not cloudlet_list:
             raise Exception('ERROR: None of the cloudlets got upgraded to ' + version)
         
-        elif(len(cloudlet_list) < 4):            
-             raise Exception('ERROR: Not all the cloudlets not upgraded to ' + version) 
+        elif(len(cloudlet_list) < 4): 
+            for j in cloudlets:
+               for names in cloudlet_list:
+                   if j not in names:
+                       logging.error(j + ' failed to upgrade to ' + version)           
+            raise Exception('ERROR: Not all the cloudlets not upgraded to ' + version) 
 
         else:
              logging.info('All the cloudlets got upgraded to ' + version)
