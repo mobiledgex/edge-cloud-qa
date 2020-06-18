@@ -63,13 +63,13 @@ class MexKnife:
 
         cloudlet_list = []
         x = 0
-        while((x < 5) and (len(cloudlet_list) < 4)):            
+        while((x < 30) and (len(cloudlet_list) < 4)):            
             for i in cloudlets:
                 for line in crm_list:
                     if i in line and version in line:
                         logging.info(i + ' has been upgraded to ' + version)
                         cloudlet_list.append(i)                    
-            time.sleep(10)
+            time.sleep(30)
             x+=1
 
         length = len(cloudlet_list)            
