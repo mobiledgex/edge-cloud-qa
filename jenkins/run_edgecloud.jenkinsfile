@@ -100,7 +100,24 @@ node('jenkinsSlave1'){
     }  catch (e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
           def status = -1
-	  def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
+          def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "load=' + tag + ' doesnt exist in registry. Aborting"'
+          status = sh(script: s, returnStatus: true);
+       }
+       error('Aborting the build')
+    }
+
+    try {
+        stage('Chef deploy') {
+          dir('go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles') {
+          def status = -1
+          def s = "echo \"override['qa']['edgeCloudVersion'] = '" + tag + "'\" >> docker_crm.rb && rm docker_crm.lock.json && chef install docker_crm.rb "
+          status = sh(script: s, returnStatus: true);
+          }
+       }
+    } catch (e) {
+      dir('go/src/github.com/mobiledgex/jenkins') {
+          def status = -1
+	      def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackMessage.py "Chef deploy failed. Aborting"'		
           status = sh(script: s, returnStatus: true);
        }
        error('Aborting the build')
