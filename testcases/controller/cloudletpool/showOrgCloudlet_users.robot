@@ -440,8 +440,10 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
    # create new user
    ${user_new}=  Catenate  SEPARATOR=  ${epochusername}  new
    ${email_new}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
+
+   Skip Verify Email
    Create User  username=${user_new}   password=${password}   email_address=${email_new}
-   Verify Email  email_address=${email_new}
+   #Verify Email  email_address=${email_new}
    Unlock User
    ${user_token_new}=  Login  username=${user_new}  password=${password}
 
@@ -487,7 +489,7 @@ Setup
    END
 
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
    Unlock User 
    ${user_token}=  Login  username=${epochusername}  password=${password}
 
