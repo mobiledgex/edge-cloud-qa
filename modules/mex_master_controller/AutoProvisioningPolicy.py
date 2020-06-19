@@ -19,17 +19,19 @@ class AutoProvisioningPolicy(MexOperation):
         self.addcloudlet_url = '/auth/ctrl/AddAutoProvPolicyCloudlet'
         self.removecloudlet_url = '/auth/ctrl/RemoveAutoProvPolicyCloudlet'
 
-    def _build(self, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, cloudlet_name=None, operator_org_name=None, include_fields=False, use_defaults=True):
+    def _build(self, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, cloudlet_name=None, operator_org_name=None, min_active_instances=None, max_instances=None, cloudlet_list=[], include_fields=False, use_defaults=True):
         _fields_list = []
         _policy_name_field_number = "2.1"
         _developer_name_field_number = "2.2"
         _deploy_client_count_field_number = "3"
         _deploy_interval_count_field_number = "4"
-        _cloudlet_org_field_number = "5.1.1"  #???
-        _cloudlet_name_field_number = "5.1.2" #???
-        _lat_field_number = "6.1.1" #???
-        _long_name_field_number = "6.1.2" #???
-
+        _cloudlet_org_field_number = "5.1.1"  
+        _cloudlet_name_field_number = "5.1.2" 
+        _lat_field_number = "5.2.1" 
+        _long_field_number = "5.2.2"
+        _min_active_instances_field_number = '6'
+        _max_instances_field_number = '7'
+        
         if use_defaults:
             if policy_name is None: policy_name = shared_variables.autoprov_policy_name_default
             if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
@@ -75,6 +77,55 @@ class AutoProvisioningPolicy(MexOperation):
             cloudlet_key_dict['organization'] = operator_org_name
             _fields_list.append(_cloudlet_org_field_number)
 
+        if min_active_instances is not None:
+            try:
+                policy_dict['min_active_instances'] = int(min_active_instances)
+            except:
+                policy_dict['min_active_instances'] = min_active_instances
+            _fields_list.append(_min_active_instances_field_number)
+        if max_instances is not None:
+            try:
+                policy_dict['max_instances'] = int(max_instances)
+            except:
+                policy_dict['max_instances'] = max_instances
+            _fields_list.append(_max_instances_field_number)
+
+        cloudlet_dict_list = []
+        for cloudlet in cloudlet_list:
+            cloudlet_dict = {}
+            cloudlet_key_dict = {}
+            cloudlet_loc_dict = {}
+            if 'cloudlet_org_name' in cloudlet and cloudlet['cloudlet_org_name'] is not None:
+                cloudlet_key_dict['organization'] = cloudlet['cloudlet_org_name']
+                _fields_list.append(_cloudlet_org_field_number)
+
+            if 'cloudlet_name' in cloudlet and cloudlet['cloudlet_name'] is not None:
+                cloudlet_key_dict['name'] = cloudlet['cloudlet_name']
+                _fields_list.append(_cloudlet_name_field_number)
+
+                
+            if 'latitude' in cloudlet and cloudlet['latitude'] is not None:
+                try:
+                    cloudlet_loc_dict['latitude'] = int(cloudlet['latitude'])
+                except:
+                    cloudlet_loc_dict['latitude'] = cloudlet['latitude']
+                _fields_list.append(_lat_field_number)
+            if 'longitude' in cloudlet and cloudlet['longitude'] is not None:
+                try:
+                    cloudlet_loc_dict['longitude'] = int(cloudlet['longitude'])
+                except:
+                    cloudlet_loc_dict['longitude'] = cloudlet['longitude']
+                _fields_list.append(_long_field_number)
+
+            if cloudlet_key_dict:
+                cloudlet_dict['key'] = cloudlet_key_dict
+            if cloudlet_loc_dict:
+                cloudlet_dict['loc'] = cloudlet_loc_dict
+
+            if cloudlet_dict:
+                cloudlet_dict_list.append(cloudlet_dict)    
+            policy_dict['cloudlets'] = cloudlet_dict_list
+
         if cloudlet_key_dict:
             policy_dict['cloudlet_key'] = cloudlet_key_dict
             
@@ -85,8 +136,8 @@ class AutoProvisioningPolicy(MexOperation):
 
         return policy_dict
 
-    def create_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, use_defaults=use_defaults)
+    def create_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicy': msg}
 
         msg_dict_delete = None
