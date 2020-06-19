@@ -108,7 +108,7 @@ node('jenkinsSlave1'){
 
     try {
         stage('Chef deploy') {
-          dir('go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles') {
+          dir('/home/jenkins/workspace/upgradeEdgecloud/go/src/github.com/mobiledgex/edge-cloud-infra/chef/policyfiles') {
           def status = -1
           def s = "echo \"override['qa']['edgeCloudVersion'] = '" + tag + "'\" >> docker_crm.rb && rm docker_crm.lock.json && chef install docker_crm.rb "
           status = sh(script: s, returnStatus: true);

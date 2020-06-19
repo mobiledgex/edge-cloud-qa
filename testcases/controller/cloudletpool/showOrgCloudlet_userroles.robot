@@ -196,13 +196,14 @@ Setup
       Append To List  ${cloudlets}  ${cloudlet_key}
    END
       
+   Skip Verify Email  token=${super_token} 
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Verify Email  email_address=${emailepoch}
+   #Verify Email  email_address=${emailepoch}
    Unlock User 
    ${user_token}=  Login  username=${epochusername}  password=${password}
 
    Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
-   Verify Email  email_address=${emailepoch2}
+   #Verify Email  email_address=${emailepoch2}
    Unlock User 
    ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
