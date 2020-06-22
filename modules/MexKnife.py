@@ -56,14 +56,15 @@ class MexKnife:
 
     def _verify_upgrade(self, cloudlets, version):
         logging.info('version to be upgraded to is ' + str(version))
-        cmd_knife = 'knife exec -E \'nodes.find("name:qa*pf") {|n| puts n.name+"="+n["edgeCloudVersion"]}\''
-        output = self._run_cmd(cmd_knife)
-        crm_list = output.splitlines() 
-        logging.debug(output)
 
         cloudlet_list = []
         x = 0
-        while((x < 30) and (len(cloudlet_list) < 4)):            
+        while((x < 30) and (len(cloudlet_list) < 4)): 
+            cmd_knife = 'knife exec -E \'nodes.find("name:qa*pf") {|n| puts n.name+"="+n["edgeCloudVersion"]}\''
+            output = self._run_cmd(cmd_knife)
+            crm_list = output.splitlines()
+            logging.debug(output)           
+
             for i in cloudlets:
                 for line in crm_list:
                     if i in line and version in line:
