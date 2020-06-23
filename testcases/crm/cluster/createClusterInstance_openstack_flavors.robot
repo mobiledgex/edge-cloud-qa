@@ -314,17 +314,17 @@ Cluster with vcpus=20 and ram=4096 on openstack shall fail with no flavor found
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   ${flavor_msg}=  Catenate  SEPARATOR=  no suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
+   ${flavor_msg}=  Catenate  SEPARATOR=  No suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
    Should Contain  ${error_msg}   ${flavor_msg}
 
-Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
+Cluster with vcpus=1 and ram=409600 on openstack shall fail with no flavor found
    [Documentation]
-   ...  create a cluster on openstack with flavor of ram=40960  vcpus=  disk=1
+   ...  create a cluster on openstack with flavor of ram=409600  vcpus=  disk=1
    ...  verify it fails since it cannot find a suitable flavor
 
    ${time}=  Get Time  epoch
 
-   Create Flavor  flavor_name=flavor${time}  ram=40960  vcpus=1  disk=1
+   Create Flavor  flavor_name=flavor${time}  ram=409600  vcpus=1  disk=1
    #Create Cluster  
 
    ${cluster_name}=  Get Default Cluster Name
@@ -336,7 +336,7 @@ Cluster with vcpus=1 and ram=40960 on openstack shall fail with no flavor found
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   ${flavor_msg}=  Catenate  SEPARATOR=  no suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
+   ${flavor_msg}=  Catenate  SEPARATOR=  No suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
    Should Contain  ${error_msg}   ${flavor_msg}
 
 Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no flavor found
@@ -358,7 +358,7 @@ Cluster with vcpus=1 and ram=1024 and disk=1000 on openstack shall fail with no 
    Cluster Instance Should Not Exist  cluster_name=${cluster_name}
 
    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-   ${flavor_msg}=  Catenate  SEPARATOR=  no suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
+   ${flavor_msg}=  Catenate  SEPARATOR=  No suitable platform flavor found for  ${SPACE}  ${flavor_name}  , please try a smaller flavor
    Should Contain  ${error_msg}   ${flavor_msg}
 
 *** Keywords ***
