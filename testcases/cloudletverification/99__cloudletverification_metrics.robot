@@ -1,10 +1,10 @@
 *** Settings ***
 Documentation   Metrics
 
-Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
 Library  Collections
 
-#Test Setup       Setup
+Test Setup       Setup
 #Test Teardown    Cleanup provisioning
 
 Test Timeout  ${test_timeout}
@@ -1209,6 +1209,8 @@ Metrics shall collect App Network metrics for VM on openstack
 
 *** Keywords ***
 Setup
+   Login  username=${username}  password=${password}
+
    ${limits}=  Get limits
    Set Suite Variable  ${limits}
 

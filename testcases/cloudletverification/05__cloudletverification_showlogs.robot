@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation  ShowLogs 
 
-Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
+Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  auto_login=${False}
 Library  Collections
 
 Suite Setup      Setup
@@ -28,7 +28,8 @@ User shall be able to do ShowLogs k8s shared
 
    ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token} 
 
-   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+#   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+   Should Contain  ${stdout_noid}  all threads started
 
 User shall be able to do ShowLogs on k8s dedicated
    [Documentation]
@@ -38,7 +39,8 @@ User shall be able to do ShowLogs on k8s dedicated
 
    ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
 
-   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+#   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+   Should Contain  ${stdout_noid}  all threads started
 
 User shall be able to do ShowLogs on docker dedicated
    [Documentation]
@@ -51,7 +53,8 @@ User shall be able to do ShowLogs on docker dedicated
 
    ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  container_id=${ids[0]}
 
-   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+#   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+   Should Contain  ${stdout_noid}  all threads started
 
 User shall be able to do ShowLogs on docker shared
    [Documentation]
@@ -64,10 +67,11 @@ User shall be able to do ShowLogs on docker shared
 
    ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
 
-   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+#   List Should Contain Value  ${stdout_noid}  all threads started\r\n
+   Should Contain  ${stdout_noid}  all threads started
 
 *** Keywords ***
 Setup
-   ${token}=  Login
+   ${token}=  Login  username=${username_developer}  password=${password_developer}
 
    Set Suite Variable  ${token}   
