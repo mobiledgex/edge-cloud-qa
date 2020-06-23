@@ -190,8 +190,8 @@ User shall be able to access VM deployment UDP and TCP ports on openstack withou
     ${developer_name_default}=  Get Default Developer Name
     ${app_version_default}=  Get Default App Version
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  #command=${server_ping_threaded_command}   region=${region}
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}   use_defaults=${False}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  region=${region}  #command=${server_ping_threaded_command}   
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
@@ -216,7 +216,7 @@ User shall be able to access windows VM deployment UDP and TCP ports on openstac
     ${app_version_default}=  Get Default App Version
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_windows_image}  access_ports=tcp:2016,udp:2015    region=${region}
-    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}   use_defaults=${False}
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}   region=${region}   
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
 
