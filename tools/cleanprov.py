@@ -69,12 +69,16 @@ def clean_app():
         print('nothing to delete')
     else:
         for a in app_list:
-            print('aaa',a.key.name, a.key.version, a.key.developer_key.name)
+            print('aaa',a.key.name, a.key.version, a.key.organization)
             if in_app_list(a):
                 print('keeping', a.key.name)
             else:
                 print('deleting', a.key.name)
-                controller.delete_app(a)
+                try:
+                   controller.delete_app(a)
+                except:
+                    print('error deleting.continuing to next item')
+
 
 def clean_clusterinst():
     print('clean cluster instance')
