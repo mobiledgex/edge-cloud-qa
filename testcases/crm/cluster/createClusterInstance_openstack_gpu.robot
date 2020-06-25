@@ -114,7 +114,7 @@ GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    ${server_info}=    Get Server List  name=${clusterlb}
 
    # verify master and node have gpu_flavor
-   Should Be Equal  ${server_info[0]['Flavor']}             ${openstack_flavor_name} 
+   Should Be Equal  ${server_info[0]['Flavor']}             m4.medium 
    Should Be Equal  ${server_info[0]['Status']}             ACTIVE
    Should Be Equal  ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name} 
    Should Be Equal  ${cluster_inst['data']['deployment']}   docker 
