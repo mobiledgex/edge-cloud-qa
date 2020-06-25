@@ -33,6 +33,7 @@ ${region}=  EU
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-1383
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=direct
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker compose
@@ -44,6 +45,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=direct
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
 
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
     Register Client  developer_org_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -59,6 +62,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
+# ECQ-1998
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and no access_type
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker compose dedicated and no access_type
@@ -70,6 +74,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
 
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
     Register Client  developer_org_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -85,7 +91,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
-# not supported should return an error. There is an error tests in controller/app directory
+# ECQ-1999
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=loadbalancer
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker compose dedicated and access_type=loadbalancer
@@ -96,6 +102,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
 
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0  access_type=loadbalancer
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
+  
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Register Client  developer_org_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -112,6 +120,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
+# ECQ-2000
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=default
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with docker compose dedicated and access_type=default
@@ -122,6 +131,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
 
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0  access_type=default
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Register Client  developer_org_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
