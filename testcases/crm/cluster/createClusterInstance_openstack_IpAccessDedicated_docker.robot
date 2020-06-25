@@ -57,7 +57,7 @@ ClusterInst shall create with IpAccessDedicated/docker on openstack
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
