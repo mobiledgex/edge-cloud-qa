@@ -74,7 +74,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -228,7 +228,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=12 on openstack
 
    Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -315,7 +315,7 @@ ClusterInst shall create clusterInst with IpAccessDedicated and 0 masters and 4 
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
    ${server_info_lb}=      Get Server List  name=${clusterlb}
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -361,7 +361,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
    ${server_info_lb}=      Get Server List  name=${clusterlb}
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
