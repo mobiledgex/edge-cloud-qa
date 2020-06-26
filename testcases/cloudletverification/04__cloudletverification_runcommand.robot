@@ -27,7 +27,7 @@ User shall be able to do RunCommand k8s shared
 
    ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
 
-   Should Be Equal  ${stdout_noid[-1]}  root\r\n
+   Should Be Equal  ${stdout_noid}  root\r\n
 
 User shall be able to do RunCommand on k8s dedicated
    [Documentation]
