@@ -18,13 +18,15 @@ test_timeout = '32 min'
 region = 'EU'
 
 # account information
-username = 'mexadmin'
-password = 'rf45E2ziSa'
+username_mexadmin = 'mexadmin'
+password_mexadmin = 'rf45E2ziSa'
 username_developer = 'andyanderson'
 password_developer = 'andya123'
+username_operator = 'andyanderson'
+password_operator = 'andya123'
 
 # cloudlet variables
-cloudlet_name_openstack = 'edge1'
+cloudlet_name_openstack = 'edge2-galicia-spain'
 operator_name_openstack = 'Sonoral'
 physical_name_openstack = 'paradise'
 cloudlet_latitude = '45.5017'
@@ -38,7 +40,9 @@ docker_image = f'docker-tef.mobiledgex.net/{developer_organization_name}/images/
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/openpose-docker:20200116'
 
 # QCOW image used for VM deployments which has the test app running on it
-qcow_centos_image = 'https://artifactory.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
+#qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_http.qcow2#md5:c7f7e312dd18b1c9ea586650721c75ba'
+qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
+#qcow_centos_image = 'https://artifactory.mobiledgex.net/mobiledgex/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
 # QCOW image used for VM deployments which does NOT have the test app running on it. This is used for cloudconfig tests with starts the app via a manifest file
 qcow_centos_image_notrunning = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_notrunning_centos7.qcow2#md5:7a08091f71f1e447ce291e467cc3926c'
 # QCOW image used for GPU testing. This has the openpose app installed
@@ -46,6 +50,9 @@ qcow_gpu_ubuntu16_image = 'https://artifactory-qa.mobiledgex.net/artifactory/rep
 
 # cloudconfig to use for VM deploymenst
 vm_cloudconfig = 'http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml'
+
+# manifest for shared volume mounts
+manifest_url_sharedvolumesize = 'http://35.199.188.102/apps/server_ping_threaded_udptcphttp_shared_volumemount_tef.yml'
 
 # http page to request when testing http app inst acces
 http_page = 'automation.html'
@@ -78,8 +85,11 @@ flavor_name_medium = 'm4.medium'
 flavor_name_large = 'm4.large'
 flavor_name_vm = 'm4.large'
 flavor_name_gpu = flavor_name + 'gpu'
-master_flavor_name = 'm1.small'
-node_flavor_name_small = 'm1.small'
+master_flavor_name_small = 'm1.medium'
+master_flavor_name_medium = 'm1.medium'
+master_flavor_name_large = 'm1.large'
+master_flavor_name_gpu = 'm1.large-gpu'
+node_flavor_name_small = 'm1.medium'
 node_flavor_name_medium = 'm1.medium'
 node_flavor_name_large = 'm1.large'
 node_flavor_name_gpu = 'm1.large-gpu'
