@@ -27,7 +27,7 @@ class WebService() :
 
         #logging.config.fileConfig('logging.ini')
 
-        logging.debug("init")
+        #logging.debug("init")
 
         self.debug = debug
         self.http_trace = http_trace
