@@ -56,7 +56,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_n
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -126,7 +126,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=1 and num_n
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -190,7 +190,7 @@ ClusterInst shall create with IpAccessDedicated/helm and num_masters=0 and num_n
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
