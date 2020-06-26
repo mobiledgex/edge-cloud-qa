@@ -35,7 +35,7 @@ ShowLogs - shall return error with appname not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_ap  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
 
 # ECQ-1879
 ShowLogs - shall return error with app version not found
@@ -48,7 +48,7 @@ ShowLogs - shall return error with app version not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.1  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"} not found"}')
 
 # ECQ-1880
 ShowLogs - shall return error with developer not found
@@ -61,7 +61,8 @@ ShowLogs - shall return error with developer not found
     ${error}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=automation_ap  cluster_instance_name=autoclusterautomation  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  
     log to console  ${error}
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"automation_ap\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autoclusterautomation\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"automation_ap\\\\"}} not found"}') 
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"automation_ap\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
+
     #Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
 
 # ECQ-1881
@@ -159,7 +160,7 @@ ShowLogs - shall return error for VM apps
     ...  execute Show Logs for VM 
     ...  verify error is received
 
-    EDGECLOUD-2556 - ShowLogs for VM should show error consistent with RunCommand
+#    EDGECLOUD-2556 - ShowLogs for VM should show error consistent with RunCommand
 
     Create Flavor  region=US
 
@@ -168,4 +169,4 @@ ShowLogs - shall return error for VM apps
 
     ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus 
 
-    Should Contain  ${error1}  ('code=400', 'error={"message":"Unsupported deployment type"}')
+    Should Contain  ${error1}  ('code=400', 'error={"message":"ShowLogs not available for vm deployments"}')
