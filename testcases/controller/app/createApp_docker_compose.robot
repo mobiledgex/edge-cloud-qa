@@ -55,7 +55,7 @@ CreateApp - User shall be able to create an app with docker compose and access_t
 
     ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=default
 
-    Should Not Contain          ${app['data']['access_type']}          2  #ACCESS_TYPE_LOAD_BALANCER               
+    Should Be Equal As Numbers  ${app['data']['access_type']}          2  #ACCESS_TYPE_LOAD_BALANCER               
     Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
     Should Contain              ${app['data']['deployment_manifest']}  image
 
