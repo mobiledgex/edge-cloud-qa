@@ -76,6 +76,30 @@ User shall be able to deploy App Instance on docker shared
 
    Log To Console  \nCreate app instance done
 
+User shall be able to create an App on k8s shared
+   [Documentation]
+   ...  create app on k8s shared with TCP/UDP/HTTP port
+   ...  Verify app is created successfull
+   [Tags]  app  k8s  shared  app
+
+   Create App  region=${region}  app_name=${app_name_k8sshared}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  developer_org_name=${developer_organization_name}
+
+User shall be able to create an App on k8s dedicated
+   [Documentation]
+   ...  create app on k8s dedicated with TCP/UDP/HTTP port
+   ...  Verify app is created successfull
+   [Tags]  app  k8s  dedicated  app
+
+   Create App  region=${region}  app_name=${app_name_k8sdedicated}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  developer_org_name=${developer_organization_name}
+
+User shall be able to create an App on k8s shared with sharedvolumesize 
+   [Documentation]
+   ...  create app on k8s shared with TCP/UDP/HTTP port and sharedvolumesize
+   ...  Verify app is created successfull
+   [Tags]  app  k8s  shared  app  sharedvolumesize
+
+   Create App  region=${region}  app_name=${app_name_k8ssharedvolumesize}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015  deployment_manifest=${manifest_url_sharedvolumesize}   developer_org_name=${developer_organization_name}
+
 User shall be able to deploy App Instance on k8s shared 
    [Documentation]
    ...  deploy app instance on k8s shared with TCP/UDP/HTTP port
@@ -112,6 +136,22 @@ User shall be able to deploy App Instance on k8s shared with sharedvolumesize
 
    Log To Console  \nCreate app instance done
 
+User shall be able to create a VM App
+   [Documentation]
+   ...  create a VM app 
+   ...  Verify app is created successfull
+   [Tags]  app  vm  app
+
+   Create App  region=${region}  app_name=${app_name_vm}  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
+
+User shall be able to create a VM with cloud-config
+   [Documentation]
+   ...  create a VM app with cloud-config
+   ...  Verify app is created successfull
+   [Tags]  app  vm  app
+
+   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  deployment_manifest=${vm_cloudconfig}  developer_org_name=${developer_organization_name}
+
 User shall be able to deploy a VM App Instance
    [Documentation]
    ...  deploy a VM app instance with TCP/UDP/HTTP port
@@ -121,12 +161,13 @@ User shall be able to deploy a VM App Instance
    Log To Console  \nCreate VM app instance
 
    ${vm_starttime}=  Get Time  epoch
+   Set Global Variable  ${vm_starttime}
+
    Create App Instance  region=${region}  app_name=${app_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
    ${vm_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate app instance done
 
-   Set Global Variable  ${vm_starttime}
    Set Global Variable  ${vm_endtime}
 
 User shall be able to deploy VM App Instance with cloud-config
@@ -138,12 +179,13 @@ User shall be able to deploy VM App Instance with cloud-config
    Log To Console  \nCreate VM app instance with cloud-config
 
    ${vmcloudconfig_starttime}=  Get Time  epoch
+   Set Global Variable  ${vmcloudconfig_starttime}
+
    ${app_inst}=  Create App Instance  region=${region}  app_name=${app_name_vm_cloudconfig}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
    ${vmcloudconfig_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate app instance done
 
-   Set Global Variable  ${vmcloudconfig_starttime}
    Set Global Variable  ${vmcloudconfig_endtime}
 
 User shall be able to deploy GPU App Instance on docker dedicated

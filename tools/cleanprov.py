@@ -142,7 +142,10 @@ def clean_cloudlet():
                 print('keeping', a.key.name)
             else:
                 print('deleting', a.key.name)
-                controller.delete_cloudlet(a)
+                try:
+                    controller.delete_cloudlet(a)
+                except:
+                    print('error deleting.continuing to next item')
 
 def clean_flavor():
     print('clean flavor')
@@ -227,8 +230,8 @@ def in_flavor_list(app):
 
 def in_cloudlet_list(app):
     for a in cloudlet_keep:
-        if a['cloudlet_name'] == app.key.name and a['operator_name'] == app.key.operator_key.name:
-            print('found cloudlet in cloudlet_keep list', app.key.name, app.key.operator_key.name)
+        if a['cloudlet_name'] == app.key.name and a['operator_name'] == app.key.organization:
+            print('found cloudlet in cloudlet_keep list', app.key.name, app.key.organization)
             return True
 
 def in_developer_list(app):
