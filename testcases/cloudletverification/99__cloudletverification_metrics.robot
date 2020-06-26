@@ -3,6 +3,7 @@ Documentation   Metrics
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
 Library  Collections
+Library  String
 
 Test Setup       Setup
 #Test Teardown    Cleanup provisioning
@@ -23,7 +24,7 @@ Metrics shall collect cloudlet ipusage metric on openstack
    ...  verify info is correct
    [Tags]  cloudlet  metrics
 
-   ${metrics}=         Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  selector=ipusage  last=5
+   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  selector=ipusage  last=5
 
    Cloudlet IPUsage Metrics Headings Should Be Correct  ${metrics}
 
@@ -61,8 +62,10 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/docker on openst
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Run Keyword If  (${starttime} - ${cluster_name_dockerdedicated_endtime}) < ${metrics_wait_docker}  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})  ELSE  Set Variable  0
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -85,8 +88,9 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/docker on opens
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -109,8 +113,9 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/docker on ope
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -133,8 +138,9 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/docker on openst
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -157,8 +163,9 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/docker on openst
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -181,8 +188,9 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/docker on op
    ...  verify info is correct
    [Tags]  cluster  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -205,8 +213,9 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -229,8 +238,9 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/docker on openstac
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -253,8 +263,9 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/docker on openst
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -277,8 +288,9 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -301,8 +313,9 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -325,8 +338,9 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/docker on opens
    ...  verify info is correct
    [Tags]  cluster  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -349,8 +363,9 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -373,8 +388,9 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/k8s on openstac
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -397,8 +413,9 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/k8s on openst
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -421,8 +438,9 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -445,8 +463,9 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -469,8 +488,9 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/k8s on opens
    ...  verify info is correct
    [Tags]  cluster  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -493,8 +513,9 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -517,8 +538,9 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -541,8 +563,9 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -565,8 +588,9 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -589,8 +613,9 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -613,8 +638,9 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/k8s on openstac
    ...  verify info is correct
    [Tags]  cluster  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -637,8 +663,9 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/docker on op
    ...  verify info is correct
    [Tags]  app  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -661,8 +688,9 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -685,8 +713,9 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -709,8 +738,9 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/docker on opensta
    ...  verify info is correct
    [Tags]  app  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -733,8 +763,9 @@ Metrics shall collect App Network metrics for IpAccessDedicated/docker on openst
    ...  verify info is correct
    [Tags]  app  docker  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -757,8 +788,9 @@ Metrics shall collect App Connections metrics for IpAccessShared/docker on opens
    ...  verify info is correct
    [Tags]  app  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -781,8 +813,9 @@ Metrics shall collect App CPU metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -805,8 +838,9 @@ Metrics shall collect App Disk metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -829,8 +863,9 @@ Metrics shall collect App Memory metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -853,8 +888,9 @@ Metrics shall collect App Network metrics for IpAccessShared/docker on openstack
    ...  verify info is correct
    [Tags]  app  docker  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -877,8 +913,9 @@ Metrics shall collect App Connections metrics for IpAccessShared/k8s on openstac
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -901,8 +938,9 @@ Metrics shall collect App CPU metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -925,8 +963,9 @@ Metrics shall collect App Disk metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -949,8 +988,9 @@ Metrics shall collect App Memory metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -973,8 +1013,9 @@ Metrics shall collect App Network metrics for IpAccessShared/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -997,8 +1038,9 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/k8s on opens
    ...  verify info is correct
    [Tags]  app  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1021,8 +1063,9 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1045,8 +1088,9 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1069,8 +1113,9 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  shared  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1093,8 +1138,9 @@ Metrics shall collect App Network metrics for IpAccessDedicated/k8s on openstack
    ...  verify info is correct
    [Tags]  app  k8s  dedicated  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1117,8 +1163,9 @@ Metrics shall collect App CPU metrics for VM on openstack
    ...  verify info is correct
    [Tags]  app  vm  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1141,8 +1188,9 @@ Metrics shall collect App Disk metrics for VM on openstack
    ...  verify info is correct
    [Tags]  app  vm  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1165,8 +1213,9 @@ Metrics shall collect App Memory metrics for VM on openstack
    ...  verify info is correct
    [Tags]  app  vm  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1189,8 +1238,9 @@ Metrics shall collect App Network metrics for VM on openstack
    ...  verify info is correct
    [Tags]  app  vm  metrics
 
-   ${starttime}=  Get Time  epoch
-   ${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   #${starttime}=  Get Time  epoch
+   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
+   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
@@ -1209,27 +1259,41 @@ Metrics shall collect App Network metrics for VM on openstack
 
 *** Keywords ***
 Setup
-   Login  username=${username}  password=${password}
+   Login  username=${username_mexadmin}  password=${password_mexadmin}
 
-   ${limits}=  Get limits
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack limits show -f json --absolute
+   ${limits}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
+   #${limits}=  Get limits
    Set Suite Variable  ${limits}
 
-   ${subnet}=  Get Subnet Details  external-subnet
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack subnet show extinternet-subnet -f json
+   ${subnet}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
+   #${subnet}=  Get Subnet Details  external-subnet
    Set Suite Variable  ${subnet}
 
    @{iprange}=  Split String  ${subnet['allocation_pools']}  separator=-
    ${maxips}=  Evaluate  int(ipaddress.IPv4Address('${iprange[1]}')) - int(ipaddress.IPv4Address('${iprange[0]}')) + 1  modules=ipaddress
    Set Suite Variable  ${maxips}
 
-   @{servers}=  Get Server List
-   log to console  ${servers}
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack server list -f json
+   @{servers}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
+   #@{servers}=  Get Server List
    ${networkcount}=  Set Variable  0
    : FOR  ${server}  IN  @{servers}
    \  ${contains}=  Evaluate  'external-network-shared' in '${server['Networks']}'
-   \  log to console  ${contains}
+   #\  log to console  ${contains}
    \  ${networkcount}=  Run Keyword If  ${contains} == ${True}  Evaluate  ${networkcount} + 1  ELSE  Set Variable  ${networkcount}
-   log to console  ${networkcount}
+   #log to console  ${networkcount}
    Set Suite Variable  ${networkcount}
+
+   ${operator_token}=  Login  username=${username_operator}  password=${password_operator}
+   Set Suite Variable  ${operator_token}
+
+Calculate Wait Time
+  [Arguments]  ${endtime}  ${metrics_waittime} 
+  ${starttime}=  Get Time  epoch
+  ${waittime}=  Run Keyword If  (${starttime} - ${endtime}) < ${metrics_waittime}  Evaluate  ${metrics_waittime} - (${starttime} - ${endtime})  ELSE  Set Variable  0
+  [return]  ${waittime}
 
 Cloudlet IPUsage Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
@@ -1334,28 +1398,27 @@ App Connections Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  port
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  active
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  handled
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  accepts
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  bytesSent
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  bytesRecvd
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  P0
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  P25
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  P50
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  P75
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  P90
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][20]}  P95
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][21]}  P99
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][22]}  P99.5
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][23]}  P99.9
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][24]}  P100
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  active
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  handled
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  accepts
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  bytesSent
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  bytesRecvd
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  P0
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  P25
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  P50
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  P75
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  P90
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  P95
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][20]}  P99
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][21]}  P99.5
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][22]}  P99.9
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][23]}  P100
 
 App CPU Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
@@ -1364,12 +1427,12 @@ App CPU Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cpu
 
 App Disk Metrics Headings Should Be Correct
@@ -1379,12 +1442,12 @@ App Disk Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  disk
 
 App Memory Metrics Headings Should Be Correct
@@ -1394,12 +1457,12 @@ App Memory Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  mem
 
 App Network Metrics Headings Should Be Correct
@@ -1409,12 +1472,12 @@ App Network Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
 
@@ -1437,12 +1500,12 @@ Cloudlet Utilization Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[3]} > 0
-   \  Should Be True               ${reading[4]} > 0
-   \  Should Be True               ${reading[5]} > 0
-   \  Should Be True               ${reading[6]} > 0
-   \  Should Be True               ${reading[7]} > 0
-   \  Should Be True               ${reading[8]} > 0
+   \  Should Be True               ${reading[3]} >= 0
+   \  Should Be True               ${reading[4]} >= -1 
+   \  Should Be True               ${reading[5]} >= 0
+   \  Should Be True               ${reading[6]} >= -1
+   \  Should Be True               ${reading[7]} >= 0
+   \  Should Be True               ${reading[8]} >= -1 
 
 CPU Should Be In Range
   [Arguments]  ${metrics}
@@ -1505,6 +1568,7 @@ App Connections Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
+   \  Should Be True               ${reading[9]} >= 0
    \  Should Be True               ${reading[10]} >= 0
    \  Should Be True               ${reading[11]} >= 0
    \  Should Be True               ${reading[12]} >= 0
@@ -1519,7 +1583,6 @@ App Connections Should Be In Range
    \  Should Be True               ${reading[21]} >= 0
    \  Should Be True               ${reading[22]} >= 0
    \  Should Be True               ${reading[23]} >= 0
-   \  Should Be True               ${reading[24]} >= 0
 
 App CPU Should Be In Range
   [Arguments]  ${metrics}
@@ -1537,7 +1600,7 @@ App Disk Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 1000000
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000
 
 App Memory Should Be In Range
   [Arguments]  ${metrics}
