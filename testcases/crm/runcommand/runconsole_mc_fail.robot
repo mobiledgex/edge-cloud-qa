@@ -26,7 +26,7 @@ RunConsole - shall return error with appname not found
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_ap  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autocluster\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"MobiledgeX\\\\"}} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
 
 # ECQ-2076
 RunConsole - shall return error with app version not found
@@ -38,7 +38,7 @@ RunConsole - shall return error with app version not found
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.1  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autocluster\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"${developer}\\\\"}} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"${developer}\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"} not found"}')
 
 # ECQ-2077
 RunConsole - shall return error with developer not found
@@ -50,7 +50,7 @@ RunConsole - shall return error with developer not found
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=automation_ap  cluster_instance_name=autocluster  operator_org_name=tmus  cloudlet_name=tmocloud-1  token=${token}  command=ls
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"AppInst key {\\\\"app_key\\\\":{\\\\"organization\\\\":\\\\"automation_ap\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"},\\\\"cluster_inst_key\\\\":{\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"autocluster\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"tmocloud-1\\\\"},\\\\"organization\\\\":\\\\"automation_ap\\\\"}} not found"}') 
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"automation_ap\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
     #Should Contain  ${error}  Error: Forbidden, code=403, message=Forbidden
 
 # ECQ-2078
