@@ -38,13 +38,15 @@ CreateApp - User shall be able to create an app with docker compose and no acces
     Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
     Should Contain              ${app['data']['deployment_manifest']}  image
 
-CreateApp - User shall not be able to create an app with docker compose and access_type=loadbalancer
-    [Documentation]
-    ...  create app with docker compose access_type=loadbalancer
-    ...  verify error is received 
-
+# ECQ-1996
+# removed test since this supported now
+#CreateApp - User shall not be able to create an app with docker compose and access_type=loadbalancer
+#    [Documentation]
+#    ...  create app with docker compose access_type=loadbalancer
+#    ...  verify error is received 
+#
 #   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=loadbalancer
-
+#
 #   Should Contain  ${error}  code=400
 #   Should Contain  ${error}  "message":"ACCESS_TYPE_LOAD_BALANCER not supported for docker deployment type: docker-compose" 
 
