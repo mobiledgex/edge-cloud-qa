@@ -20,6 +20,7 @@ ${cloudlet_name_gcp}=  automationGcpCentralCloudlet
 
 
 *** Test Cases ***
+# ECQ-1840
 UpdatePrivacyPolicy - update without region shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy without region
@@ -27,6 +28,7 @@ UpdatePrivacyPolicy - update without region shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Update Privacy Policy  token=${token}  use_defaults=${False}
 
+# ECQ-1862
 UpdatePrivacyPolicy - update without token shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy without token
@@ -34,6 +36,7 @@ UpdatePrivacyPolicy - update without token shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Update Privacy Policy  region=${region}  use_defaults=${False}
 
+# ECQ-1841
 UpdatePrivacyPolicy - update without parms shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with no parms 
@@ -41,12 +44,13 @@ UpdatePrivacyPolicy - update without parms shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {} not found"}')  Update Privacy Policy  region=${region}  token=${token}  use_defaults=${False}
 
+# ECQ-1842
 UpdatePrivacyPolicy - update without policy name shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with no policy name 
    ...  verify error is returned
-   EDGECLOUD-1953 - PrivacyPolicy - update without a policy name returns wrong error
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"developer\\\\":\\\\"mobiledgex\\\\"} not found"}')  Update Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
+   #EDGECLOUD-1953 - PrivacyPolicy - update without a policy name returns wrong error
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"mobiledgex\\\\"} not found"}')  Update Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
 UpdatePrivacyPolicy - update with unknown org name shall return error
    [Documentation]
@@ -56,6 +60,7 @@ UpdatePrivacyPolicy - update with unknown org name shall return error
    #Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Update Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"xxxx\\\\"} not found"}')  Update Privacy Policy  developer_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
+# ECQ-1844
 UpdatePrivacyPolicy - update without developer name shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with no developer name
@@ -63,6 +68,7 @@ UpdatePrivacyPolicy - update without developer name shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"name\\\\":\\\\"x\\\\"} not found"}')  Update Privacy Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
+# ECQ-1845
 UpdatePrivacyPolicy - update without protocol shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy without protocol
@@ -78,6 +84,7 @@ UpdatePrivacyPolicy - update without protocol shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Privacy Policy  region=${region}  rule_list=${rulelist} 
 
+# ECQ-1846
 UpdatePrivacyPolicy - update with invalid CIDR shall return error 
    [Documentation]
    ...  send UpdatePrivacyPolicy with invalid CIDR 
@@ -108,6 +115,7 @@ UpdatePrivacyPolicy - update with invalid CIDR shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: "}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
+# ECQ-1847
 UpdatePrivacyPolicy - update with invalid minport shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with invalid min port 
@@ -137,6 +145,7 @@ UpdatePrivacyPolicy - update with invalid minport shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 65536"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
+# ECQ-1848
 UpdatePrivacyPolicy - update with invalid maxport shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with invalid max port
@@ -158,6 +167,7 @@ UpdatePrivacyPolicy - update with invalid maxport shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid max port range: 65536"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
+# ECQ-1849
 UpdatePrivacyPolicy - update with icmp and port range shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with icmp and port range
@@ -183,6 +193,7 @@ UpdatePrivacyPolicy - update with icmp and port range shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Port range must be empty for icmp"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
+# ECQ-1850
 UpdatePrivacyPolicy - update with minport>maxport shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with minport>maxport
@@ -200,6 +211,7 @@ UpdatePrivacyPolicy - update with minport>maxport shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Min port range: 10 cannot be higher than max: 1"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
+# ECQ-1851
 UpdatePrivacyPolicy - update with policy not found shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with a policy that does not exist 
@@ -213,6 +225,7 @@ UpdatePrivacyPolicy - update with policy not found shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"${dev}\\\\",\\\\"name\\\\":\\\\"${name}\\\\"} not found"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
+# ECQ-1852
 UpdatePrivacyPolicy - updating a policy in use by a cluster shall return error
    [Documentation]
    ...  create a clusterinst pointing to a privacy policy
