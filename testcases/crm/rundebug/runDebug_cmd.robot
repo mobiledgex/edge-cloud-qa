@@ -174,7 +174,7 @@ RunDebug - cmd get-mem-profile request should return information
        
       Create File  /tmp/output.base64  ${memtype} 
       Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes 
-      ${results}=  Run Process  go  tool  pprof  --top  /tmp/mem.pprof 
+      ${results}=  Run Process  go  tool  pprof  --top  /tmp/mem.pprof  shell=yes 
 
       Should Contain  ${memtype}  ${mem_prof_64base}
       Should Contain  ${results.stdout}  ${go_top_kb}
@@ -197,7 +197,7 @@ RunDebug - cmd get-mem-profile request twice in a row should return information
 
       Create File  /tmp/output.base64  ${memtype}
       Run Process  cat /tmp/output.base64 | base64 --decode  stdout=/tmp/mem.pprof  shell=yes
-      ${results}=  Run Process  go  tool  pprof  --top  /tmp/mem.pprof
+      ${results}=  Run Process  go  tool  pprof  --top  /tmp/mem.pprof  shell=yes
 
       Should Contain  ${memtype}  ${mem_prof_64base}
       Should Contain  ${results.stdout}  ${go_top_build}
