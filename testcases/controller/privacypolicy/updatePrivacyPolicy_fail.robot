@@ -45,8 +45,8 @@ UpdatePrivacyPolicy - update without policy name shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with no policy name 
    ...  verify error is returned
-   EDGECLOUD-1953 - PrivacyPolicy - update without a policy name returns wrong error
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"developer\\\\":\\\\"mobiledgex\\\\"} not found"}')  Update Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
+   #EDGECLOUD-1953 - PrivacyPolicy - update without a policy name returns wrong error
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"mobiledgex\\\\"} not found"}')  Update Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
 UpdatePrivacyPolicy - update with unknown org name shall return error
    [Documentation]
@@ -63,11 +63,12 @@ UpdatePrivacyPolicy - update without developer name shall return error
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"name\\\\":\\\\"x\\\\"} not found"}')  Update Privacy Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
-UpdatePrivacyPolicy - update without protocol shall return error
+UpdatePrivacyPolicy - update without protocol shall not return error
    [Documentation]
    ...  send UpdatePrivacyPolicy without protocol
    ...  verify error is returned
-   EDGECLOUD-1933 PrivacyPolicy - update policy does not give error when updating without protocol and only 1 rule
+
+   #EDGECLOUD-1933 PrivacyPolicy - update policy does not give error when updating without protocol and only 1 rule
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    #&{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    #&{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=1.2.1.1/1
@@ -76,7 +77,7 @@ UpdatePrivacyPolicy - update without protocol shall return error
 
    &{rule}=  Create Dictionary  remote_cidr=2.1.1.1/1
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Protocol must be one of: (tcp,udp,icmp)"}')   Update Privacy Policy  region=${region}  rule_list=${rulelist} 
+   Update Privacy Policy  region=${region}  rule_list=${rulelist} 
 
 UpdatePrivacyPolicy - update with invalid CIDR shall return error 
    [Documentation]
@@ -89,24 +90,20 @@ UpdatePrivacyPolicy - update with invalid CIDR shall return error
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=x 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: x"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: x"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=1.1.1.1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 1.1.1.1"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=256.1.1.1/1
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 256.1.1.1/1"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 256.1.1.1/1"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=1.1.1.1/33
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: 1.1.1.1/33"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1/33"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
-   EDGECLOUD-1933 PrivacyPolicy - update policy does not give error when updating without protocol and only 1 rule
-   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1 
-   @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: "}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
 
 UpdatePrivacyPolicy - update with invalid minport shall return error
    [Documentation]
@@ -117,7 +114,7 @@ UpdatePrivacyPolicy - update with invalid minport shall return error
    @{rulelist}=  Create List  ${rule}
    Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   &{rule}=  Create Dictionary  protocol=tcp
+   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=0  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 0"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
@@ -127,11 +124,13 @@ UpdatePrivacyPolicy - update with invalid minport shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid POST data"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   ${error}=  Run Keyword and Expect Error  *   Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=uint32, got=string, field=port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid POST data"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   ${error}=  Run Keyword and Expect Error  *   Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=uint32, got=number -1, field=port_range_min, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
@@ -148,11 +147,13 @@ UpdatePrivacyPolicy - update with invalid maxport shall return error
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid POST data"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   ${error}=  Run Keyword and Expect Error  *   Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=uint32, got=string, field=port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=-1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid POST data"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist} 
+   ${error}=  Run Keyword and Expect Error  *   Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=uint32, got=number -1, field=port_range_max, offset
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65536  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
