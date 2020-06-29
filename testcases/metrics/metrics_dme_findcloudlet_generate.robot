@@ -54,16 +54,16 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
 
    Register Client  app_name=${app}
 
-   Find Cloudlet       carrier_name=x  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=y  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=1  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=2  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=3  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=4  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=5  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=6  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=7  latitude=35  longitude=-94
-   Find Cloudlet       carrier_name=8  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=x  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=y  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=1  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=2  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=3  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=4  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=5  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=6  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=7  latitude=35  longitude=-94
+   Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=8  latitude=35  longitude=-94
    Sleep  10 seconds  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
