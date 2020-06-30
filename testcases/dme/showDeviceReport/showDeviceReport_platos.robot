@@ -373,7 +373,8 @@ Setup
    # ShowDevice  uniqueid=${uniqueid}  
 #ShowDevice  uniqueid=${uniqueid}    
     #ShowDevice  uniqueidtype=${uniqueidtype}
-    Create App  region=${region}  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/platos/images/server_ping_threaded:6.0
+    # ignore error since sometimes the platos app already exists
+    Run Keyword and Ignore Error  Create App  region=${region}  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/platos/images/server_ping_threaded:6.0
 
 
 {count}  Evaluate  ${count}+1
