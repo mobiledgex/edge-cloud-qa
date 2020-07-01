@@ -57,6 +57,7 @@ User shall be able to access UDP and TCP ports on openstack with IpAccessDedicat
 	
     Mount Should Exist on Pod  root_loadbalancer=${rootlb}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client  #app_name=app1579992291-485193  developer_org_name=mobiledgex  app_version=1.0
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  #carrier_name=TDG  latitude=32.7767  longitude=-96.797
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
