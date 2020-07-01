@@ -449,7 +449,7 @@ def exec_testcase(z, t):
         r = subprocess.run(exec_cmd, shell=True, check=True)
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
-        logging.info(f'test passed:{t['issue_key']} number_passed={number_passed} number_failed={number_failed}')
+        logging.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')
         last_status = 'pass'
         if found_failure == -1:
             found_failure = 0
