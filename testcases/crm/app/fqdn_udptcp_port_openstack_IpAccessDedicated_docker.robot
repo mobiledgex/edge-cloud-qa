@@ -39,6 +39,8 @@ User shall be able to access 1 UDP port on openstack with docker
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
