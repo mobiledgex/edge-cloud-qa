@@ -57,6 +57,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with volume mou
 	
     Mount Should Exist on Pod  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack} 
 
+    Wait For App Instance Health Check OK
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}

@@ -39,6 +39,8 @@ User shall be able to access 1 UDP port on azure
     Create App  cluster_name=${cluster_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
 
+    Wait For App Instance Health Check OK
+
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -59,6 +61,8 @@ User shall be able to access 2 UDP ports on azure
     Log To Console  Creating App and App Instance
     Create App  cluster_name=${cluster_name}  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
+
+    Wait For App Instance Health Check OK
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -84,6 +88,8 @@ User shall be able to access 1 TCP port on azure
     Create App  cluster_name=${cluster_name}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
 
+    Wait For App Instance Health Check OK
+
     Log To Console  Register Client and Find Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -106,6 +112,8 @@ User shall be able to access 2 TCP ports on azure
     Log To Console  Creating App and App Instance
     Create App  cluster_name=${cluster_name}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
+
+    Wait For App Instance Health Check OK
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
@@ -132,6 +140,8 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
     Log To Console  Creating App and App Instance
     Create App  cluster_name=${cluster_name}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  
     Create App Instance  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name} 
+
+    Wait For App Instance Health Check OK
 
     Log To Console  Register Client and Find Cloudlet
     Register Client
