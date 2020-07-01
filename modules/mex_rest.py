@@ -28,19 +28,21 @@ class MexRest(WebService) :
             raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
     def _decode_content(self):
-        logging.debug('content=' + self.resp.content.decode("utf-8"))
-
         try:
+            logging.debug('content=' + self.resp.content.decode("utf-8"))
             self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
         except:
-            datasplit = self.resp.content.decode("utf-8").splitlines()
-            if len(datasplit) == 1:
-                self.decoded_data = self.resp.content.decode("utf-8")
-            else:
-                data_list = []
-                for data in datasplit:
-                    data_list.append(json.loads(data))
-                self.decoded_data = data_list
+            try:
+                datasplit = self.resp.content.decode("utf-8").splitlines()
+                if len(datasplit) == 1:
+                    self.decoded_data = self.resp.content.decode("utf-8")
+                else:
+                    data_list = []
+                    for data in datasplit:
+                        data_list.append(json.loads(data))
+                    self.decoded_data = data_list
+            except:
+                logging.debug('error decoding response content')
 
 #        datasplit = self.resp.content.decode("utf-8").splitlines()
 #        print('*WARN*', 'datasplit',datasplit)
