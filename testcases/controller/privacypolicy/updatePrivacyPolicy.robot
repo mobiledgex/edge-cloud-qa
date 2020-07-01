@@ -12,6 +12,7 @@ ${region}=  US
 ${developer}=  mobiledgex
 
 *** Test Cases ***
+# ECQ-1842
 UpdatePrivacyPolicy - shall be able to add rules
    [Documentation]
    ...  send CreatePrivacyPolicy without rules
@@ -20,9 +21,9 @@ UpdatePrivacyPolicy - shall be able to add rules
 
    ${policy_return}=  Create Privacy Policy  region=${region}
 
-   Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${developer_name}
-   Should Not Contain  ${policy_return['data']  outbound_security_rules
+   Should Be Equal  ${policy_return['data']['key']['name']}              ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}      ${developer_name}
+   Should Be Equal  ${policy_return['data']['outbound_security_rules']}  ${None}
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
