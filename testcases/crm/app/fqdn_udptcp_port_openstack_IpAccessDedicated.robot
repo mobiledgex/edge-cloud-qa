@@ -42,6 +42,8 @@ User shall be able to access 1 UDP port on openstack with IpAccessDedicated
     Create App  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 	
+    Wait For App Instance Health Check OK
+
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
@@ -67,6 +69,8 @@ User shall be able to access 2 UDP ports on openstack with IpAccessDedicated
     Create App  image_path=${docker_image}  access_ports=udp:2015,udp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK
+
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -90,6 +94,8 @@ User shall be able to access 1 TCP port on openstack with IpAccessDedicated
     Create App  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK
+
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -110,6 +116,8 @@ User shall be able to access 2 TCP ports on openstack with IpAccessDedicated
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -133,6 +141,8 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with IpAccessDed
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -160,6 +170,8 @@ User shall be able to access HTTP port on openstack with IpAccessDedicated
     Log To Console  Creating App and App Instance
     Create App  image_path=${docker_image}  access_ports=http:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
@@ -182,6 +194,8 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with IpAccessDe
 
     Create App  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,http:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 
     Register Client
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
@@ -206,6 +220,8 @@ User shall be able to access UDP,TCP ports with port range on openstack with IpA
 
     Create App  image_path=${docker_image}  access_ports=tcp:2000-3000,udp:2000-3000  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
 
     Register Client
     ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
