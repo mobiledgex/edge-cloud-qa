@@ -2099,6 +2099,28 @@ class MexController(MexGrpc):
             resp = sendMessage()
             return resp
 
+    def wait_for_app_instance_health_check_ok(self, app_instance=None, timeout=180, **kwargs):
+        if app_instance is None:
+            if len(kwargs) == 0:
+                kwargs['app_name'] = shared_variables.app_name_default
+            kwargs['use_defaults'] = False
+            app_instance = AppInstance(**kwargs).app_instance
+
+        for x in range(1, timeout):
+            resp = self.show_app_instances(app_instance)
+            logger.info(resp)
+
+            if resp:
+                if resp and resp[0].health_check == 3:
+                    logging.info(f'App Instance is health check OK')
+                    return resp
+                else:
+                    logging.debug(f'app instance health check not OK. got {resp[0].health_check}. sleeping and trying again')
+                    time.sleep(1)
+            else:
+                raise Exception(f'app instance is NOT found.')
+            
+        raise Exception(f'app instance health check is NOT OK. Got {resp[0].health_check} but expected 3')
 
 
     def app_instance_should_exist(self, app_instance=None, **kwargs):
