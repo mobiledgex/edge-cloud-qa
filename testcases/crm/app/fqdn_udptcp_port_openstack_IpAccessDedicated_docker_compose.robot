@@ -45,8 +45,6 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack with docker comp
     Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=mobiledgex  app_version=1.0   access_type=direct
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=mobiledgex  cluster_instance_developer_org_name=mobiledgex
 
-    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
-
     Register Client  developer_org_name=mobiledgex
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
