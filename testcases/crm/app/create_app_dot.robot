@@ -46,6 +46,8 @@ User shall be able to create an app instance on openstack with a dot in the app 
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #   default_flavor_name=flavor1550592128-673488   cluster_name=cl1550691984-633559 
     Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
 
+    Wait For App Instance Health Check OK
+
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
     ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
