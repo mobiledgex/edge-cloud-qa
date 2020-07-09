@@ -7,11 +7,11 @@ Test Timeout   1 min
 
 *** Variables ***
 ${udp_fqdn}       server-ping-theaded3-udp.buckhorncluster.automationbuckhorncloudlet.gddt.mobiledgex.net
-${tcp_fqdn}       server-ping-theaded3-tcp.buckhorncluster.automationbuckhorncloudlet.gddt.mobiledgex.net 
+${tcp_fqdn}       app1593527760-171843-tcp.cluster1593527760-171843.automationfairviewcloudlet.gddt.mobiledgex.net 
 ${http_fqdn}       my
 
 ${udp_port}   2016
-${tcp_port}   2015
+${tcp_port}   2016
 ${http_port}  8080
 
 ${http_page}  xx
@@ -22,7 +22,7 @@ User shall be able to access port on openstack
     ...  deploy app with 1 UDP port
     ...  verify the port as accessible via fqdn
 
-    UDP Port Should Be Alive  ${udp_fqdn}  ${udp_port}
-    TCP Port Should Be Alive  ${tcp_fqdn}  ${tcp_port}
+    #UDP Port Should Be Alive  ${udp_fqdn}  ${udp_port}
+    TCP Port Should Be Alive  ${tcp_fqdn}  ${tcp_port}  #tls=${True}
     #HTTP Port Should Be Alive  ${http_fqdn}  ${http_port}  ${http_page}
 

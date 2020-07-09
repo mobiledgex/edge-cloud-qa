@@ -21,4 +21,20 @@ robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py --ou
 # This security rule needs to exist on openstack for privacy policy tests
 # Then delete the IPV4 egress rule
 openstack security group create cloudletverification
+openstack security group rule create --protocol tcp  --ingress  --remote-group cloudletverification  cloudletverification
+openstack security group rule create --protocol tcp  --egress  --remote-group cloudletverification  cloudletverification
+openstack security group rule create --protocol icmp  --ingress  --remote-group cloudletverification  cloudletverification
+#openstack security group rule create --protocol tcp  --ingress --remote-ip 80.187.140.28/32 cloudletverification    # this is the IP of the CRM. This is only needed for cluster creation when using privacy policy
 openstack security group rule delete d35c4990-32d0-4471-b7f5-fc39ea53ac0c
+openstack server add security group verificationCloudlet-GDDT-pf cloudletverification  # this is needed until the bug is fixed to automatically add it
+
+openstack security group show cloudletverification
+| rules           | created_at='2020-06-30T17:52:49Z', direction='ingress', ethertype='IPv4', id='3b693af7-73d9-4b33-bfe6-4554de8c37d0', protocol='icmp', remote_group_id='16d390e3-cc18-4072-b5cb-3cdd8f1735e3', updated_at='2020-06-30T17:52:49Z' |
+|                 | created_at='2020-06-30T14:30:30Z', direction='egress', ethertype='IPv6', id='55d73404-996f-4eee-8da1-08320790bb09', updated_at='2020-06-30T14:30:30Z'                                                                           |
+|                 | created_at='2020-06-30T20:14:05Z', direction='ingress', ethertype='IPv4', id='f3641be1-9d63-4127-807c-fec01fd35a08', protocol='tcp', remote_group_id='16d390e3-cc18-4072-b5cb-3cdd8f1735e3', updated_at='2020-06-30T20:14:05Z'  |
+
+| rules           | created_at='2020-07-05T22:36:39Z', direction='ingress', ethertype='IPv4', id='2690ab01-6cca-46a2-a692-cfa7b824a0c7', protocol='tcp', remote_group_id='19f6e651-13a4-40d3-b798-560081bb028b', updated_at='2020-07-05T22:36:39Z'                        |
+|                 | created_at='2020-07-05T22:36:28Z', direction='egress', ethertype='IPv6', id='3e1e451d-8172-4f47-8825-69496bf59709', updated_at='2020-07-05T22:36:28Z'                                                                                                 |
+|                 | created_at='2020-07-06T22:54:19Z', direction='egress', ethertype='IPv4', id='4b35dd9b-bb0e-41c2-a515-16b611c505a6', protocol='tcp', remote_group_id='19f6e651-13a4-40d3-b798-560081bb028b', updated_at='2020-07-06T22:54:19Z'                         |
+|                 | created_at='2020-07-05T22:36:52Z', direction='ingress', ethertype='IPv4', id='b078b9a4-51e6-4fe1-95aa-592fc92aa29d', protocol='icmp', remote_group_id='19f6e651-13a4-40d3-b798-560081bb028b', updated_at='2020-07-05T22:36:52Z'                       |
+
