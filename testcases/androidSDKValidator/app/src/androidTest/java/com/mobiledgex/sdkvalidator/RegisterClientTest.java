@@ -77,6 +77,13 @@ public class RegisterClientTest {
 
     public static final String appVersion = "1.0";
 
+    /*
+    andy-mac:cloudletverification andyanderson$ genauthtoken -appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX  -privkeyfile ../../certs/authtoken_private.pem
+    Token:
+       eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTQzMTg1NjQsImlhdCI6MTU5NDMxODUwNCwib3JnbmFtZSI6Ik1vYmlsZWRnZVgiLCJhcHBuYW1lIjoiYXV0b21hdGlvbl9hcGlfYXV0aF9hcHAiLCJhcHB2ZXJzIjoiMS4wIn0.cCdAhAsi4SIGiLEAuD4ire4kmeQ4VI01Mhg4Ho8uMicT3qd9TyX4ntdsVfY2spDK40rqhtZjlaunKBbrv1l1QUrZ3r-7VFskm73sx4_czNJPqu637BhdFOvq1iXptLbB3IB0OrczZhuXhgAT6dyqatHjJvj9bC-v4tdMCWYVd3C8cVoKylAqwvnGjilr5r_exnM_HxZGki_QzjBB_eQ0YJNMfJMW0VBZZbpYjriepjxj4Esg222tv0xYUVRoklTrpy92KTP3plv-3ZlDSR3PcB3KIDvV2ltSP7nvxZiKNrCLqOiW2P3NIcHa9gG000wzNM8qY7saQ6VcLzV9aF0_vQ
+     */
+    public static final String appAuthKey = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTQzMTg1NjQsImlhdCI6MTU5NDMxODUwNCwib3JnbmFtZSI6Ik1vYmlsZWRnZVgiLCJhcHBuYW1lIjoiYXV0b21hdGlvbl9hcGlfYXV0aF9hcHAiLCJhcHB2ZXJzIjoiMS4wIn0.cCdAhAsi4SIGiLEAuD4ire4kmeQ4VI01Mhg4Ho8uMicT3qd9TyX4ntdsVfY2spDK40rqhtZjlaunKBbrv1l1QUrZ3r-7VFskm73sx4_czNJPqu637BhdFOvq1iXptLbB3IB0OrczZhuXhgAT6dyqatHjJvj9bC-v4tdMCWYVd3C8cVoKylAqwvnGjilr5r_exnM_HxZGki_QzjBB_eQ0YJNMfJMW0VBZZbpYjriepjxj4Esg222tv0xYUVRoklTrpy92KTP3plv-3ZlDSR3PcB3KIDvV2ltSP7nvxZiKNrCLqOiW2P3NIcHa9gG000wzNM8qY7saQ6VcLzV9aF0_vQ";
+
     FusedLocationProviderClient fusedLocationClient;
 
     public static String hostOverride = "us-qa.dme.mobiledgex.net";
@@ -234,6 +241,99 @@ public class RegisterClientTest {
             JsonObject claimJson = c.asObject(JsonObject.class);
             assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
             assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
+            assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
+            assertEquals("uuid type doesn't match!", uuidType, claimJson.get("uniqueidtype").getAsString());
+            assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
+            assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
+
+            // verify success
+            Log.i(TAG, "registerReply.getSessionCookie()="+reply.getSessionCookie());
+            assertTrue(reply != null);
+            assertTrue(reply.getStatus() == AppClient.ReplyStatus.RS_SUCCESS);
+            assertTrue( reply.getSessionCookie().length() > 0);
+
+            // verify uuid has DME generated values since we didnt send any values in RegisterClient
+            assertEquals("uuid type doesn't match!", "", reply.getUniqueIdType());
+            assertEquals("uuid doesn't match!", "", reply.getUniqueId());
+            assertEquals("uuid bytes type doesn't match!", "", reply.getUniqueIdTypeBytes().toStringUtf8());
+            assertEquals("uuid bytes doesn't match!", "", reply.getUniqueIdBytes().toStringUtf8());
+
+        } catch (PackageManager.NameNotFoundException nnfe) {
+            Log.e(TAG, Log.getStackTraceString(nnfe));
+            assertFalse("ExecutionException registering using PackageManager.", true);
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("registerClientTest: DmeDnsException!", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("registerClientTest: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("registerClientTest: StatusRuntimeException!", true);
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("registerClientTest: InterruptedException!", true);
+        }
+
+        Log.i(TAG, "registerClientTest reply: " + reply.toString());
+        assertEquals(0, reply.getVer());
+        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
+    }
+
+    @Test
+    public void registerClientTestAuth() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        MatchingEngine me = new MatchingEngine(context);
+        //me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        AppClient.RegisterClientReply reply = null;
+
+        try {
+            //Location location = getTestLocation( 47.6062,122.3321);
+
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationNameAuth)
+                    .setAppVers(appVersion)
+                    .setAuthToken(appAuthKey)
+                    .setCarrierName("TDG")
+                    //.setCellId(getCellId(context, me))
+                    .build();
+            if (useHostOverride) {
+                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
+            } else {
+                String host = me.generateDmeHostAddress();
+                int port = me.getPort();
+                Log.i(TAG, "registerClientRequest: host="+host+" port="+port
+                        +" getAppName()="+request.getAppName()
+                        +" getAppVers()="+request.getAppVers()
+                        +" getOrgName()="+request.getOrgName()
+                        +" getCarrierName()="+request.getCarrierName());
+
+                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
+                //reply = me.registerClient(request, "eu-mexdemo.dme.mobiledgex.net", port, GRPC_TIMEOUT_MS);
+            }
+
+            JWT jwt = null;
+            try {
+                jwt = new JWT(reply.getSessionCookie());
+            } catch (DecodeException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+                assertFalse("registerClientTest: DecodeException!", true);
+            }
+
+            // verify expire timer
+            long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
+            assertEquals("Token expires failed:",24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
+            boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
+            assertTrue(!isExpired);
+
+            // verify claim
+            Claim c = jwt.getClaim("key");
+            JsonObject claimJson = c.asObject(JsonObject.class);
+            assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
+            assertEquals("appname doesn't match!", applicationNameAuth, claimJson.get("appname").getAsString());
             assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
             assertEquals("uuid type doesn't match!", uuidType, claimJson.get("uniqueidtype").getAsString());
             assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
