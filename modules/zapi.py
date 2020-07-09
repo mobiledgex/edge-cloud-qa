@@ -708,6 +708,7 @@ class Zapi(WebService):
 
     def post(self, url, headers, data=None, files=None, retries=10):
         for x in range(retries):
+            logging.info(f'sending files={files}')
             super().post(url, headers=headers, data=data,files=files)
             if str(self.resp.status_code) != '200':
                 logging.warning(f'post {url} returned {self.resp.status_code}. Try again')
