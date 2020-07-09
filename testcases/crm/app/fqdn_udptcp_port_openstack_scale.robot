@@ -47,6 +47,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK
     Register Client
     ${cloudlet}=  Find Cloudlet	 latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -72,6 +73,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
@@ -98,6 +100,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with scaling an
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=${True}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
+    Wait For App Instance Health Check OK
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
