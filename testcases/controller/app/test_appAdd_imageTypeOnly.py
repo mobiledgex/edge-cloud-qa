@@ -86,7 +86,7 @@ class tc(unittest.TestCase):
         app = mex_controller.App(image_type='ImageTypeDocker',
                                  developer_org_name=developer_name,
                                  app_name=app_name,
-                                 image_path=docker,
+                                 #image_path=docker,
                                  app_version=app_version,
                                  use_defaults=False
         )
@@ -103,7 +103,8 @@ class tc(unittest.TestCase):
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
         #expect_equal(error.details(), 'DefaultFlavor is required if Cluster is not specified', 'error details')
         #expect_equal(error.details(), 'Specified default flavor not found', 'error details')
-        expect_equal(error.details(), 'Flavor key {} not found', 'error details')
+        #expect_equal(error.details(), 'Flavor key {} not found', 'error details')
+        expect_equal(error.details(), f'Failed to validate docker registry image, path docker-qa.mobiledgex.net/{developer_name}/images/{app_name}:{app_version}, Access denied to registry path', 'error details')
         #expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 
