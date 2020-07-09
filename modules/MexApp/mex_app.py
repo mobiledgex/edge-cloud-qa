@@ -1,5 +1,6 @@
 import logging
 import socket
+import ssl
 import sys
 import os
 import subprocess
@@ -45,38 +46,51 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def ping_tcp_port(self, host, port, wait_time=0):
+    def ping_tcp_port(self, host, port, wait_time=0, tls=False):
         data = 'ping'
         exp_return_data = 'pong'
         data_size = sys.getsizeof(bytes(data, 'utf-8'))
         
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect((host, int(port)))
-        print('cccccc')
+        client_socket.settimeout(10)
+        sock = client_socket
+
+        if tls:
+            logging.info('creating ssl connection')
+            context = ssl.SSLContext()
+            context.verify_mode = ssl.CERT_NONE
+            context.check_hostname = False
+
+            sock = context.wrap_socket(client_socket)
+
+        sock.connect((host, int(port)))
+        
         return_data = ''
         try:
             logging.debug('sending data')
-            client_socket.sendall(bytes(data, encoding='utf-8'))
-            return_data = client_socket.recv(data_size)
+            sock.sendall(bytes(data, encoding='utf-8'))
+            return_data = sock.recv(data_size)
+
             logging.debug('data recevied back:' + return_data.decode('utf-8'))
             logging.info(f'holding port for {wait_time}s')
             time.sleep(wait_time)
-            client_socket.close()
+            sock.close()
         except Exception as e:
             print('caught exception')
-            #print(sys.exc_info())
-            #e = sys.exc_info()[0]
-            client_socket.close()
+            sock.close()
             raise Exception('error=', e)
             
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def make_http_request(self, host, port, page):
+    def make_http_request(self, host, port, page, tls=False):
         url = f'http://{host}:{port}/{page}'
+        if tls:
+            url = f'https://{host}:{port}/{page}'
+
         logging.info(f'checking for {url}')
 
-        resp = requests.get(url)
+        resp = requests.get(url, verify=tls)
         logging.info(f'recieved status_code={resp.status_code}')
         logging.info(f'recieved body={resp.text}')
         
@@ -105,15 +119,15 @@ class MexApp(object):
                 else:
                     time.sleep(1)
                 
-    def tcp_port_should_be_alive(self, host, port, wait_time=0):
-        logging.info('host:' + host + ' port:' + str(port))
+    def tcp_port_should_be_alive(self, host, port, wait_time=0, tls=False):
+        logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls}')
 
         self.wait_for_dns(host)
 
         for attempt in range(1,4):
             logging.debug(f'TCP port attempt {attempt}')
             try:
-                self.ping_tcp_port(host, port, wait_time)
+                self.ping_tcp_port(host, port, wait_time, tls)
                 return True
             except Exception as e:
                 logging.debug(f'tcp exception caught:{e}')
@@ -122,13 +136,69 @@ class MexApp(object):
                 else:
                     time.sleep(1)
 
-    def http_port_should_be_alive(self, host, port, page):
-        logging.info('host:' + host + ' port:' + str(port))
+    def http_port_should_be_alive(self, host, port, page, tls=False):
+        logging.info(f'host:{host} port:{port} tls:{tls}')
 
         self.wait_for_dns(host)
         
-        resp = self.make_http_request(host, port, page)
+        resp = self.make_http_request(host, port, page, tls)
         return True          
+
+    def _send_tcp_data(self, host, port, data):
+        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect((host, int(port)))
+
+        return_data = ''
+        try:
+            logging.debug('sending data')
+            client_socket.sendall(bytes(data, encoding='utf-8'))
+            return_data = client_socket.recv(data_size)
+            logging.debug('data recevied back:' + return_data.decode('utf-8'))
+            client_socket.close()
+            return return_data
+        except Exception as e:
+            print('caught exception')
+            client_socket.close()
+            raise Exception('error=', e)
+
+    def egress_port_should_be_accessible(self, vm, host, protocol, port, vm_port=3015, wait_time=0):
+        data = f'{host}:{protocol}:{port}'
+        logging.info(f'vm:{vm}:{vm_port} host:{host}:{port} data={data}')
+
+        self.wait_for_dns(vm)
+
+        return_data = None
+        for attempt in range(1,4):
+            logging.debug(f'TCP port attempt {attempt}')
+            try:
+                return_data = self._send_tcp_data(vm, vm_port, data).decode('utf-8')
+            except Exception as e:
+                logging.debug(f'tcp exception caught:{e}')
+                if attempt == 3:
+                    raise Exception(e)
+                else:
+                    time.sleep(1)
+            if return_data == 'success':
+                logging.debug('request was success')
+                break
+
+        if return_data == 'success':
+            return True
+        else:
+            raise Exception(f'Egress port is not accessible. Data returned is {return_data}')
+
+    def egress_port_should_not_be_accessible(self, vm, host, protocol, port, vm_port=3015, wait_time=0):
+        accessible = False
+        try:
+            accessible = self.egress_port_should_be_accessible(vm=vm, host=host, protocol=protocol, port=port, vm_port=vm_port, wait_time=wait_time)
+        except Exception as e:
+            print(e)
+            if 'Egress port is not accessible' in str(e):
+                return True
+
+        raise Exception('Error: Egress port is accessible')
 
     def wait_for_dns(self, dns, wait_time=900):
         logging.info('waiting for dns=' + dns + ' to be ready')

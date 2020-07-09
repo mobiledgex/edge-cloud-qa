@@ -15,6 +15,7 @@ RUN pip3 install requests
 #RUN pip3 install grpcio
 #RUN pip3 install grpcio-tools
 RUN pip3 install paramiko
+RUN pip3 install opencv-python  # used for facedetection client
 
 #RUN git clone --depth 1 https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git modules 
 #RUN cd modules 
