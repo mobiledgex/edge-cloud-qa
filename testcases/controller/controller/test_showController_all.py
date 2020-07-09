@@ -57,8 +57,8 @@ class tc(unittest.TestCase):
 #  buildhead: v1.0.2-4-gab9d724+
 #  hostname: controller-654688f58-chsrk
 
-        #re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
-        re_master = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
+        re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
+        re_master2 = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
 
         re_host = re.compile('^controller-')
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
@@ -75,7 +75,7 @@ class tc(unittest.TestCase):
         foundhost1 = False
         foundip1 = False
 
-        if re_master.match(resp[0].build_master):
+        if re_master.match(resp[0].build_master) or re_master2.match(resp[0].build_master):
            foundmaster0=True
         if re_host.match(resp[0].hostname):
            foundhost0=True
