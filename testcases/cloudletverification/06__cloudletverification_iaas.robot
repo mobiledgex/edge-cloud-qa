@@ -2,7 +2,7 @@
 Documentation  IaaS 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
-Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
+#Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  MexApp
 Library  String
 
@@ -34,7 +34,11 @@ User shall be able to access block storage to a VM
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_k8ssharedvolumesize}  ${rootlb}
 
    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_k8ssharedvolumesize}
-   ${server_info_node}=    Get Server List  name=${openstack_node_name}
+
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack server list --name ${openstack_node_name} -f json
+   @{server_info_node}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
+
+   #${server_info_node}=    Get Server List  name=${openstack_node_name}
 
    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=${cluster_name_k8ssharedvolumesize}  mount=/share
 
@@ -42,6 +46,6 @@ User shall be able to access block storage to a VM
 
 *** Keywords ***
 Setup
-   ${token}=  Login
+   ${token}=  Login  username=${username_mexadmin}  password=${password_mexadmin}
 
    Set Suite Variable  ${token}   

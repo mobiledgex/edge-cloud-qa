@@ -1591,12 +1591,15 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if appinstance and appinstance['data']['health_check'] == 3:
-                    logging.info(f'App Instance is health check OK')
-                    return appinstance
+                if 'health_check' in appinstance['data']:
+                    if appinstance['data']['health_check'] == 3:
+                        logging.info(f'App Instance is health check OK')
+                        return appinstance
+                    else:
+                        logging.debug(f'app instance health check not OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
+                        time.sleep(1)
                 else:
-                    logging.debug(f'app instance health check not OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
-                    time.sleep(1)
+                    raise Exception(f'health check not found')
             else:
                 raise Exception(f'app instance is NOT found.')
             
