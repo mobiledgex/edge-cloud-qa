@@ -111,10 +111,6 @@ UpdatePrivacyPolicy - update with invalid CIDR shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1/33"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
-   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1 
-   @{rulelist}=  Create List  ${rule}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"invalid CIDR address: "}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
-
 # ECQ-1847
 UpdatePrivacyPolicy - update with invalid minport shall return error
    [Documentation]
