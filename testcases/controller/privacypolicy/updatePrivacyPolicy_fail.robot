@@ -111,17 +111,22 @@ UpdatePrivacyPolicy - update with invalid CIDR shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: 1.1.1.1/33"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
+   #EDGECLOUD-1933 PrivacyPolicy - update policy does not give error when updating without protocol and only 1 rule
+   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1
+   @{rulelist}=  Create List  ${rule}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid CIDR address: "}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
+
 # ECQ-1847
 UpdatePrivacyPolicy - update with invalid minport shall return error
    [Documentation]
    ...  send UpdatePrivacyPolicy with invalid min port 
    ...  verify error is returned
 
-   &{rule}=  Create Dictionary  protocol=tcp
+   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
    Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=0  port_range_maximum=2  remote_cidr=1.1.1.1/1
+   &{rule}=  Create Dictionary  protocol=tcp
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid min port range: 0"}')  Update Privacy Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
