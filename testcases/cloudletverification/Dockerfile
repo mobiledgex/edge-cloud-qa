@@ -6,6 +6,7 @@ RUN apt-get update
 #RUN apt-get update
 
 RUN apt-get -y install vim
+RUN apt-get -y dnsutils
 #RUN apt-get install git 
 
 RUN python -m pip install --upgrade pip
@@ -16,6 +17,9 @@ RUN pip3 install requests
 #RUN pip3 install grpcio-tools
 RUN pip3 install paramiko
 RUN pip3 install opencv-python  # used for facedetection client
+RUN pip3 install websockets
+RUN pip3 install cloudflare
+RUN pip3 install websocket-client
 
 #RUN git clone --depth 1 https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git modules 
 #RUN cd modules 
@@ -30,6 +34,8 @@ RUN cd edge-cloud-qa;git config core.sparseCheckout true
 RUN cd edge-cloud-qa;echo "modules\ntestcases/cloudletverification" >> .git/info/sparse-checkout
 RUN cd edge-cloud-qa;git pull origin master
 RUN mkdir edge-cloud-qa/testcases/cloudletverification/logs
+
+RUN cd /home/automation; cp edge-cloud-qa/testcases/cloudletverification/README README
 
 #RUN git clone https://16a8cf8e79fad4a98bba2e59544d8faf78fca71d:@github.com/mobiledgex/edge-cloud-qa.git
 
