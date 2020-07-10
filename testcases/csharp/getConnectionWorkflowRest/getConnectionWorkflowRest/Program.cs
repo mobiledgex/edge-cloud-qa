@@ -529,7 +529,7 @@ namespace RestSample
                     }
                 }
 
-                static string ReadMessage(SslStream sslStream)
+                 string ReadMessage(SslStream sslStream)
                 {
                     // Read the  message sent by the server.
                     // The end of the message is signaled using the
