@@ -100,8 +100,10 @@ class Cloudlet(MexOperation):
             
         env_dict = {}
         if env_vars is not None:
-            key,value = env_vars.split('=')
-            env_dict[key] = value
+            var_list = env_vars.split(',')
+            for var in var_list:
+                key,value = var.split('=')
+                env_dict[key] = value
             cloudlet_dict['env_var'] = env_dict
             
         if include_fields and _fields_list:
