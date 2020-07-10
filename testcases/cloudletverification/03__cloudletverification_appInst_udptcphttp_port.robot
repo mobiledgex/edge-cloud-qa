@@ -503,11 +503,14 @@ User shall be able to access the GPU on k8s shared
    ...  verify the port as accessible via fqdn
    [Tags]  app  k8s  shared  gpu  gpuaccess
 
+   # EDGECLOUD-2415  need a way to run docker images with gpu enabled
+
    Log To Console  \nRegistering Client and Finding Cloudlet for GPU k8s shared
    Register Client  app_name=${app_name_k8ssharedgpu}  developer_org_name=${developer_organization_name}
    ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
 
-   Wait For DNS  ${cloudlet['fqdn']}
+   #Wait For DNS  ${cloudlet['fqdn']}
+   ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
    Sleep  30 s
 
@@ -516,7 +519,7 @@ User shall be able to access the GPU on k8s shared
 
    # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
    # python3 multi_client.py -s localhost -e /object/detect/ -c rest -f objects_001.jpg --show-responses
-   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+   Run Process  python3  ${facedetection_server_tester}   -s   ${ip}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
    #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
 
    ${output}=  Get File  ${outfile}
@@ -534,7 +537,8 @@ User shall be able to access the GPU on VM
    Register Client  app_name=${app_name_vmgpu}  developer_org_name=${developer_organization_name}
    ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
 
-   Wait For DNS  ${cloudlet['fqdn']}  wait_time=1800
+   #Wait For DNS  ${cloudlet['fqdn']}  wait_time=1800
+   ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
    Sleep  30 s
 
@@ -542,7 +546,7 @@ User shall be able to access the GPU on VM
    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
 
    # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
-   Run Process  python3  ${facedetection_server_tester}   -s   ${cloudlet['fqdn']}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
+   Run Process  python3  ${facedetection_server_tester}   -s   ${ip}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
    #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
 
    ${output}=  Get File  ${outfile}
