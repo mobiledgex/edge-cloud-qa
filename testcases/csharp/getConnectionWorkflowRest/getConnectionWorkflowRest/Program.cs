@@ -21,13 +21,15 @@ using System;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Json;
-using System.IO;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DistributedMatchEngine;
 using System.Net.Http;
+using System.Net.WebSockets;
+using System.Net.Security;
+using System.Security.Authentication;
+using System.Linq;
 
 namespace RestSample
 {
@@ -36,7 +38,7 @@ namespace RestSample
     {
         string UniqueID.GetUniqueIDType()
         {
-            return "Mine";
+                return "Mine";
         }
 
         string UniqueID.GetUniqueID()
@@ -50,14 +52,17 @@ namespace RestSample
         static string carrierName = "TDG";
 
         // QA env
-        static string orgName = "MobiledgeX";
-        static string appName = "automation-api-app";
+        //static string orgName = "MobiledgeX";
+        //static string appName = "automation-api-app";
+        //static string appVersion = "1.0";
+        static string orgName = "ladevorg";
+        static string appName = "porttestapp";
         static string appVersion = "1.0";
 
         // Production env
-        //static string orgName = "adevorg";
-        //static string appName = "server-ping-threaded";
-        //static string appVersion = "1.0";
+        //static string orgName = "MobiledgeX";
+        //static string appName = "automation-sdk-k8-app";
+        //static string appVersion = "7.0";
 
         // For SDK purposes only, this allows continued operation against default app insts.
         // A real app will get exceptions, and need to skip the DME, and fallback to public cloud.
@@ -65,15 +70,15 @@ namespace RestSample
 
         // QA env 
         static string host = "eu-qa.dme.mobiledgex.net";
-        static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
+        //static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
 
         // Production env
-        //static string host = "eu-mexdemo.dme.mobiledgex.net";
-        //static string fallbackDmeHost = "eu-mexdemo.dme.mobiledgex.net";
+        //static string host = "us-mexdemo.dme.mobiledgex.net";
+        //static string fallbackDmeHost = "us-mexdemo.dme.mobiledgex.net";
 
 
         static UInt32 port = 38001;
-        static string developerAuthToken = "";
+        //static string developerAuthToken = "";
         static string sessionCookie;
 
         static Timestamp createTimestamp(int futureSeconds)
@@ -134,11 +139,14 @@ namespace RestSample
 
         async static Task Main(string[] args)
         {
+            // Flag for connections
+            bool check = false;
+
             try
             {
                 Console.WriteLine("GetConnectionWorkflowRest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()));
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
@@ -146,11 +154,18 @@ namespace RestSample
                 var locTask = Util.GetLocationFromDevice();
 
                 // var registerClientRequest = me.CreateRegisterClientRequest( devName, appName, appVers, developerAuthToken);
-                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVersion, developerAuthToken);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVersion);
 
                 // Await synchronously.
                 //Console.WriteLine("Port: " + port);
                 var registerClientReply = await me.RegisterClient(host, port, registerClientRequest);
+
+                if (registerClientReply.status.ToString() != "RS_SUCCESS")
+                {
+                    Console.WriteLine("RegisterClient Failed!!!" + registerClientReply.status.ToString());
+                    Console.WriteLine("Test Case Failed!!!");
+                    Environment.Exit(1);
+                }
 
                 //var loc = await locTask;
                 long timeLongMs = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
@@ -329,8 +344,8 @@ namespace RestSample
                 }
 
 
-                // The app has 3 ports 2015 UDP, 2016 TCP, and a HTTP port 8085 TCP
-                // To test the UDP and TCP ports send a "ping" to each port and recieve a "pong"
+                // The app has 4 ports 2015 UDP, 2016 TCP, 3015 TLS, and a HTTP port 8085 TCP
+                // To test the UDP, TCP, and TLS ports send a "ping" to each port and recieve a "pong"
                 // To test the HTTP port send "automation.html" and get the automation.html file
                 string message = "";
                 string test = "{\"Data\": \"ping\"}";
@@ -341,12 +356,14 @@ namespace RestSample
 
                 Dictionary<int, DistributedMatchEngine.AppPort> udpAppPortDict = new Dictionary<int, DistributedMatchEngine.AppPort>();
 
-                Console.WriteLine("Starting TCP Testing\n");
+                Console.WriteLine("TCP Port Testing\n");
                 tcpAppPortDict = me.GetTCPAppPorts(findCloudletReply);
                 foreach (KeyValuePair<int, DistributedMatchEngine.AppPort> kvp in tcpAppPortDict)
                 {
+                    check = false;
                     if (kvp.Key == 8085)
                     {
+                        Console.WriteLine("Starting HTTP Port Testing");
                         Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                         message = "/automation.html";
                         string uriString = aWebSocketServerFqdn;
@@ -370,18 +387,76 @@ namespace RestSample
                             Console.WriteLine("Test Case Failed!!!");
                             Environment.Exit(1);
                         }
-                        Console.WriteLine("Test Http Connection finished.\n");
+                        check = true;
+                        Console.WriteLine("Http Connection Port " + kvp.Key + " finished.\n");
 
                     }
-                    else
+                    check = false;
+                    if (kvp.Key == 3765)
                     {
                         try
                         {
+                            Console.WriteLine("Starting WEBSocket Testing");
+                            Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                            message = "noeL";
+                            string path = "/ws";
+                            byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
+                            System.Threading.CancellationToken cToken;
+                            var buffer = new ArraySegment<byte>(new byte[128]);
+                            WebSocketReceiveResult wsResult;
+
+                            ClientWebSocket webSocket = await me.GetWebsocketConnection(findCloudletReply, kvp.Value, kvp.Key, 10000, path);
+
+                            await webSocket.SendAsync(bytesMessage, WebSocketMessageType.Text, true, cToken);
+                            wsResult = await webSocket.ReceiveAsync(buffer, cToken);
+                            byte[] msgBytes = buffer.Skip(buffer.Offset).Take(wsResult.Count).ToArray();
+                            string rcvMsg = Encoding.UTF8.GetString(msgBytes);
+
+
+                            //receiveMessage = ms.Write(buffer.Array, buffer.Offset, wsResult.Count);
+
+                            if (rcvMsg == "Leon")
+                            {
+                                Console.WriteLine("Sent: " + message);
+                                Console.WriteLine("Received: " + rcvMsg);
+                                Console.WriteLine("GetWebSocket Connection worked!:");
+
+                            }
+                            else
+                            {
+
+                                Console.WriteLine("GetWebSocket Connection DID NOT work!: " + rcvMsg);
+                                Environment.Exit(1);
+                            }
+                        }
+                        catch (GetConnectionException e)
+                        { 
+                            Console.WriteLine("GetWebSocket Connection Exception is " + e.Message);
+                            Console.WriteLine("Test Case Failed!!!");
+                            Environment.Exit(1);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("GetWebSocket Connection exception is " + e);
+                            Console.WriteLine("Test Case Failed!!!");
+                            Environment.Exit(1);
+                        }
+                        check = true;
+                        //Assert.True(receiveMessage.Contains("tcp test string"));
+                        Console.WriteLine("GetWebSocket Connection Port " + kvp.Key + " finished.\n");
+
+                    }
+                    check = false;
+                    if (kvp.Key == 2016)
+                    {
+
+                        try
+                        {
+                            Console.WriteLine("Starting TCP Port Testing");
                             Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                             message = test;
                             byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
                             Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, kvp.Key, 10000);
-                            //Assert.ByVal(tcpConnection, Is.Not.Null);
 
                             tcpConnection.Send(bytesMessage);
 
@@ -415,18 +490,79 @@ namespace RestSample
                             Console.WriteLine("Test Case Failed!!!");
                             Environment.Exit(1);
                         }
+                        check = true;
                         //Assert.True(receiveMessage.Contains("tcp test string"));
-                        Console.WriteLine("Test TCP Connection finished.\n");
+                        Console.WriteLine("TCP Connection Port " + kvp.Key + " finished.\n");
+                    }
+                    check = false;
+                    if(kvp.Key == 2015)
+                    {
+                        Console.WriteLine("Starting TLS Port Testing");
+                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                        message = test;
+                        byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
+                        //SslStream stream = await me.GetTCPTLSConnection(aWebSocketServerFqdn, kvp.Key, 10000);
+                        //try
+                        //{
+                            //Console.WriteLine("Starting Authentication");
+                            //stream.AuthenticateAsClient(aWebSocketServerFqdn);
+                            //Console.WriteLine("Endinging Authentication");
+                        //}
+                        //catch (AuthenticationException e)
+                        //{
+                            //Console.WriteLine("Exception: {0}", e.Message);
+                            //if (e.InnerException != null)
+                            //{
+                                //Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
+                            //}
+                            //Console.WriteLine("Auth failed - closing the connection.");
+                            //stream.Close();
+                            //return;
+                        //}
 
-
+                        //stream.Write(bytesMessage);
+                        //stream.Flush();
+                        //string serverMessage = ReadMessage(stream);
+                        //Console.WriteLine("\n\nReceived: " + serverMessage);
+                        check = true;
+                        Console.WriteLine("TLS Connection Port " + kvp.Key + " finished.\n");
                     }
                 }
 
-                Console.WriteLine("Starting UDP Testing\n");
+                static string ReadMessage(SslStream sslStream)
+                {
+                    // Read the  message sent by the server.
+                    // The end of the message is signaled using the
+                    // "<EOF>" marker.
+                    byte[] buffer = new byte[2048];
+                    StringBuilder messageData = new StringBuilder();
+                    int bytes = -1;
+                    do
+                    {
+                        bytes = sslStream.Read(buffer, 0, buffer.Length);
+
+                        // Use Decoder class to convert from bytes to UTF8
+                        // in case a character spans two buffers.
+                        Decoder decoder = Encoding.UTF8.GetDecoder();
+                        char[] chars = new char[decoder.GetCharCount(buffer, 0, bytes)];
+                        decoder.GetChars(buffer, 0, bytes, chars, 0);
+                        messageData.Append(chars);
+                        // Check for EOF.
+                        if (messageData.ToString().IndexOf("<EOF>") != -1)
+                        {
+                            break;
+                        }
+                    } while (bytes != 0);
+
+                    return messageData.ToString();
+                }
+
+                Console.WriteLine("Starting UDP Port Testing");
                 aWebSocketServerFqdn = appName + "-udp." + findCloudletReply.fqdn;
                 udpAppPortDict = me.GetUDPAppPorts(findCloudletReply);
                 foreach (KeyValuePair<int, DistributedMatchEngine.AppPort> kvp in udpAppPortDict)
                 {
+                    check = false;
                     try
                     {
                         Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
@@ -466,13 +602,11 @@ namespace RestSample
                         Console.WriteLine("Test Case Failed!!!");
                         Environment.Exit(1);
                     }
+                    check = true;
                     //Assert.True(receiveMessage.Contains("tcp test string"));
-                    Console.WriteLine("Test UDP Connection finished.\n");
+                    Console.WriteLine("Test UDP Connection Port " + kvp.Key + " finished.\n");
 
                 }
-
-
-
             }
             catch (InvalidTokenServerTokenException itste)
             {
@@ -482,7 +616,16 @@ namespace RestSample
             {
                 Console.WriteLine(e.Message);
             }
-            Console.WriteLine("\nGetConnectionWorkflowRest Testcase Passed!!");
+            if (check == true)
+            {
+                Console.WriteLine("\nGetConnectionWorkflowRest Testcase Passed!!");
+                Environment.Exit(0);
+            }
+            else
+            {
+                Console.WriteLine("\nGetConnectionWorkflowRest Testcase Failed!!");
+                Environment.Exit(1);
+            }
         }        
     };
 }
