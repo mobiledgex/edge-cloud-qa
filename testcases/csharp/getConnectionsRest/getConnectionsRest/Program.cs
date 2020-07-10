@@ -44,15 +44,23 @@ namespace RestSample
     class Program
     {
         //static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
+        //QA env
         static string carrierName = "TDG";
-        static string orgName = "MobiledgeX";
-        static string appName = "automation-api-app";
+        static string orgName = "ladevorg";
+        static string appName = "porttestapp";
         static string appVers = "1.0";
         static string host = "eu-qa.dme.mobiledgex.net";
-        //static string carrierName = "TDG";
-        //static string devName = "MobiledgeX";
-        //static string appName = "PingPong";
-        //static string appVers = "2020-02-03";
+        static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
+
+        //Main
+        // Production env
+        //static string orgName = "ladevorg";
+        //static string appName = "porttestapp";
+        //static string appVers = "1.0";
+        //static string host = "us-mexdemo.dme.mobiledgex.net";
+        //static string fallbackDmeHost = "eu-mexdemo.dme.mobiledgex.net";
+
+
         static string developerAuthToken = "";
         static UInt32 cellID = 0;
         static Tag[] tags = new Tag[0];
@@ -65,7 +73,7 @@ namespace RestSample
 
         // For SDK purposes only, this allows continued operation against default app insts.
         // A real app will get exceptions, and need to skip the DME, and fallback to public cloud.
-        static string fallbackDmeHost = "wifi.dme.mobiledgex.net";
+        //static string fallbackDmeHost = "wifi.dme.mobiledgex.net";
 
         static Timestamp createTimestamp(int futureSeconds)
         {
@@ -172,7 +180,7 @@ namespace RestSample
                 // Independent requests:
                 var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName, cellID, tags);
                 var findCloudletRequest = me.CreateFindCloudletRequest(loc);
-                var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
+                //var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
 
                 
                 // These are asynchronious calls, of independent REST APIs.
@@ -227,33 +235,8 @@ namespace RestSample
                 }
 
                 // Get Location:
-                GetLocationReply getLocationReply = null;
+                //GetLocationReply getLocationReply = null;
 
-                try
-                {
-                    try
-                    {
-                        getLocationReply = await me.GetLocation(host, MatchingEngine.defaultDmeRestPort, getLocationRequest);
-                    }
-                    catch (DmeDnsException)
-                    {
-                        getLocationReply = await me.GetLocation(fallbackDmeHost, MatchingEngine.defaultDmeRestPort, getLocationRequest);
-                    }
-                    catch (NotImplementedException)
-                    {
-                        getLocationReply = await me.GetLocation(fallbackDmeHost, MatchingEngine.defaultDmeRestPort, getLocationRequest);
-                    }
-                    Console.WriteLine("\nGetLocation Reply: " + getLocationReply);
-
-                    var location = getLocationReply.network_location;
-                    Console.WriteLine("GetLocationReply: longitude: " + location.longitude + ", latitude: " + location.latitude);
-                }
-                catch (HttpException httpe)
-                {
-                    Console.WriteLine("\nGetLocation Exception: " + httpe.Message + ", HTTP StatusCode: " + httpe.HttpStatusCode + ", API ErrorCode: " + httpe.ErrorCode + "\nStack: " + httpe.StackTrace);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
 
                 // Verify Location:
                 try
@@ -292,7 +275,7 @@ namespace RestSample
                 }
 
 
-                Console.WriteLine("\nTest TCP 2015 Connection Starting.");
+                Console.WriteLine("\nTest TCP 2016 Connection Starting.");
 
                 string test = "{\"Data\": \"ping\"}";
                 string message = test;
@@ -340,7 +323,7 @@ namespace RestSample
                 //Assert.True(receiveMessage.Contains("tcp test string"));
                 Console.WriteLine("Test TCP Connection finished.\n");
 
-                Console.WriteLine("Test UDP 2016 Connection Starting.");
+                Console.WriteLine("Test UDP 2015 Connection Starting.");
                 // UDP Connection Test
                 receiveMessage = "";
                 try
