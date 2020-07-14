@@ -488,6 +488,7 @@ Setup
       Append To List  ${cloudlets}  ${cloudlet_key}
    END
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    #Verify Email  email_address=${emailepoch}
    Unlock User 
