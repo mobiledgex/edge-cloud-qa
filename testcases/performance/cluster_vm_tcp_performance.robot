@@ -57,7 +57,7 @@ SSH to RootLB VM
   ${stdout}  ${stderr}  ${rc}=  Execute Command  sudo apt-get install -y iperf3    return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
 
-  ${stdout}  ${stderr}  ${rc}=  Execute Command  iperf3 -c vmtcpserver.automationDusseldorfCloudlet.TDG.mobiledgex.net -t 30  return_stderr=${True}  return_rc=${True}
+  ${stdout}  ${stderr}  ${rc}=  Execute Command  iperf3 -c ${rootlb} -t 30  return_stderr=${True}  return_rc=${True}
   Should Be Equal As Integers	${rc}	0
   Log  ${stdout}
   Log to console  ${stdout}
