@@ -16,7 +16,7 @@ ${run_test_teardown}=  ${True}
 
 *** Keywords ***
 Setup
-#   Create Org  orgname=${operator_name_openstack}  orgtype=operator  address="123 main street"  phone=123-456-7890
+#   Create Org  orgname=${operator_name}  orgtype=operator  address="123 main street"  phone=123-456-7890
 #   ${flavor_default}=  Get Default Flavor Name
 
    Run Keyword If  ${create_flavors}  Create Flavors
