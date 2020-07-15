@@ -1,1 +1,1 @@
-docker build --no-cache -t robot-docker .
+docker build --no-cache -t cloudletpoc .
