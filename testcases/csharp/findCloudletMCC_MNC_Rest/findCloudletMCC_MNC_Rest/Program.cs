@@ -6,6 +6,20 @@ using System.Security.Claims;
 
 namespace RestSample
 {
+    // This interface is optional but is used in the sample.
+    class DummyUniqueID : UniqueID
+    {
+        string UniqueID.GetUniqueIDType()
+        {
+            return "";
+        }
+
+        string UniqueID.GetUniqueID()
+        {
+            return "";
+        }
+    }
+
     class Program
     {
         static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
@@ -35,7 +49,7 @@ namespace RestSample
             {
                 Console.WriteLine("FindCloudletMCC_MNC_Rest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()));
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
