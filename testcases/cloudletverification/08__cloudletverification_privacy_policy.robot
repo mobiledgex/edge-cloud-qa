@@ -12,8 +12,8 @@ Suite Setup      Setup
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationSunnydaleCloudlet
-${operator_name_openstack}  GDDT
+${cloudlet_name}  automationSunnydaleCloudlet
+${operator_name}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 
@@ -45,15 +45,15 @@ User shall be able to use privacy policy on docker dedicated
    ${policy_return}=  Create Privacy Policy  region=${region}  policy_name=${privacy_policy_name}  rule_list=${rulelist}
 
    Log To Console  \nCreate cluster instance for docker dedicated with privacy policy
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicated_privacypolicy}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicated_privacypolicy}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  privacy_policy=${policy_return['data']['key']['name']}
    Log To Console  \nCreate cluster instance done
 
    Log To Console  \nCreate app instance for docker dedicated
-   Create App Instance  region=${region}  app_name=${app_name_dockerdedicated_privacypolicy}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockerdedicated_privacypolicy}
+   Create App Instance  region=${region}  app_name=${app_name_dockerdedicated_privacypolicy}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicated_privacypolicy}
    Log To Console  \nCreate app instance done
 
    Register Client  app_name=${app_name_dockerdedicated_privacypolicy}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
 
    #${fqdn_0}=  Set Variable  clusterpoc15940664427732968dockerprivacypolicy.verificationcloudlet.gddt.mobiledgex.net

@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use FQDN to access app on openstack
+Documentation  use FQDN to access app
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
@@ -16,8 +16,8 @@ Test Timeout    ${test_timeout}
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
 	
-${cloudlet_name_openstack}  automationSunnydaleCloudlet
-${operator_name_openstack}  GDDT
+${cloudlet_name}  automationSunnydaleCloudlet
+${operator_name}  GDDT
 ${cloudlet_latitude}       32.7767
 ${cloudlet_longitude}      -96.7970
 
@@ -68,7 +68,7 @@ User shall be able to deploy a direct access App Instance on docker dedicated
 
    Log To Console  \nCreate direct access app instance for docker dedicated 
 
-   Create App Instance  region=${region}  app_name=${app_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockerdedicateddirect}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockerdedicateddirect}
@@ -83,7 +83,7 @@ User shall be able to deploy a lb access App Instance on docker shared
 
    Log To Console  \nCreate lb access app instance for docker shared
 
-   Create App Instance  region=${region}  app_name=${app_name_dockersharedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockersharedlb}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockersharedlb}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockersharedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockersharedlb}
@@ -98,7 +98,7 @@ User shall be able to deploy a lb access App Instance on docker dedicated
 
    Log To Console  \nCreate lb access app instance for docker dedicated
 
-   Create App Instance  region=${region}  app_name=${app_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockerdedicatedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockerdedicatedlb}
@@ -137,7 +137,7 @@ User shall be able to deploy a lb access App Instance on k8s shared
 
    Log To Console  \nCreate app instance for k8s shared 
 
-   Create App Instance  region=${region}  app_name=${app_name_k8ssharedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8ssharedlb}  developer_org_name=${developer_organization_name
+   Create App Instance  region=${region}  app_name=${app_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  developer_org_name=${developer_organization_name
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8ssharedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8ssharedlb}
@@ -152,7 +152,7 @@ User shall be able to deploy a lb access App Instance on k8s dedicated
 
    Log To Console  \nCreate app instance for k8s dedicated
 
-   Create App Instance  region=${region}  app_name=${app_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8sdedicatedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8sdedicatedlb}
@@ -167,7 +167,7 @@ User shall be able to deploy App Instance on k8s shared with sharedvolumesize
 
    Log To Console  \nCreate app instance for k8s shared with sharedvolumesize
 
-   Create App Instance  region=${region}  app_name=${app_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8ssharedvolumesize}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedvolumesize}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8ssharedvolumesize}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8ssharedvolumesize}
@@ -217,7 +217,7 @@ User shall be able to deploy a VM direct App Instance
    ${vmdirect_starttime}=  Get Time  epoch
    Set Global Variable  ${vmdirect_starttime}
 
-   Create App Instance  region=${region}  app_name=${app_name_vmdirect}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_vmdirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
    ${vmdirect_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate app instance done
@@ -235,7 +235,7 @@ User shall be able to deploy a VM lb App Instance
    ${vmlb_starttime}=  Get Time  epoch
    Set Global Variable  ${vmlb_starttime}
 
-   Create App Instance  region=${region}  app_name=${app_name_vmlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_vmlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
    ${vmlb_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate app instance done
@@ -244,7 +244,7 @@ User shall be able to deploy a VM lb App Instance
 
 User shall be able to deploy VM App Instance with cloud-config
    [Documentation]
-   ...  deploy VM app on openstack with 1 UDP and 1 TCP port with cloud-config
+   ...  deploy VM app with 1 UDP and 1 TCP port with cloud-config
    ...  verify all ports are accessible via fqdn
    [Tags]  app  vm  appinst
 
@@ -253,7 +253,7 @@ User shall be able to deploy VM App Instance with cloud-config
    ${vmcloudconfig_starttime}=  Get Time  epoch
    Set Global Variable  ${vmcloudconfig_starttime}
 
-   ${app_inst}=  Create App Instance  region=${region}  app_name=${app_name_vm_cloudconfig}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
+   ${app_inst}=  Create App Instance  region=${region}  app_name=${app_name_vm_cloudconfig}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_vm}  developer_org_name=${developer_organization_name}
    ${vmcloudconfig_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate app instance done
@@ -284,7 +284,7 @@ User shall be able to deploy GPU App Instance on docker dedicated
 
    Log To Console  \nCreate GPU app instance for docker dedicated
 
-   Create App Instance  region=${region}  app_name=${app_name_dockerdedicatedgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_dockerdedicatedgpu}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_dockerdedicatedgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicatedgpu}  developer_org_name=${developer_organization_name}
 
    Log To Console  \nCreate GPU app instance done
 
@@ -296,7 +296,7 @@ User shall be able to deploy GPU App Instance on k8s shared
 
    Log To Console  \nCreate GPU app instance for k8s shared
 
-   Create App Instance  region=${region}  app_name=${app_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8ssharedgpu}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedgpu}  developer_org_name=${developer_organization_name}
 
    Log To Console  \nCreate GPU app instance done
 
@@ -309,7 +309,7 @@ User shall be able to deploy a GPU VM App Instance
    Log To Console  \nCreate GPU VM app instance
 
    ${vmgpu_starttime}=  Get Time  epoch
-   Create App Instance  region=${region}  app_name=${app_name_vmgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_vmgpu}  developer_org_name=${developer_organization_name}
+   Create App Instance  region=${region}  app_name=${app_name_vmgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_vmgpu}  developer_org_name=${developer_organization_name}
    ${vmgpu_endtime}=  Get Time  epoch
 
    Log To Console  \nCreate GPU app instance done
@@ -325,7 +325,7 @@ User shall be able to access UDP/TCP port on docker dedicated direct app
 
    Log To Console  \nRegistering Client and Finding Cloudlet for docker dedicated direct app
    Register Client  app_name=${app_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet	 latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet	 latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
@@ -347,7 +347,7 @@ User shall be able to access UDP/TCP port on docker dedicated lb app
 
    Log To Console  \nRegistering Client and Finding Cloudlet for docker dedicated direct app
    Register Client  app_name=${app_name_dockerdedicatedlb}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
@@ -369,7 +369,7 @@ User shall be able to access UDP/TCP port on docker shared lb app
 
    Log To Console  \nRegistering Client and Finding Cloudlet for docker shared
    Register Client  app_name=${app_name_dockersharedlb}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
@@ -387,7 +387,7 @@ User shall be able to access UDP/TCP/HTTP port on LB App on k8s dedicated
 
    Log To Console  \nRegistering Client and Finding Cloudlet for k8s dedicated
    Register Client  app_name=${app_name_k8sdedicatedlb}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
@@ -405,7 +405,7 @@ User shall be able to access UDP/TCP/HTTP port on LB App on k8s shared
 
    Log To Console  \nRegistering Client and Finding Cloudlet for k8s shared 
    Register Client  app_name=${app_name_k8ssharedlb}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
@@ -423,7 +423,7 @@ User shall be able to access UDP/TCP/HTTP port on VM LB App
 
    Log To Console  \nRegistering Client and Finding Cloudlet for VM 
    Register Client  app_name=${app_name_vmlb}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
@@ -441,7 +441,7 @@ User shall be able to access UDP/TCP/HTTP port on VM direct App
 
    Log To Console  \nRegistering Client and Finding Cloudlet for VM
    Register Client  app_name=${app_name_vmdirect}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
@@ -459,7 +459,7 @@ User shall be able to access UDP/TCP port on VM with cloudconfig
 
    Log To Console  \nRegistering Client and Finding Cloudlet for VM with cloudconfig
    Register Client  app_name=${app_name_vm_cloudconfig}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
@@ -476,7 +476,7 @@ User shall be able to access the GPU on docker dedicated
 
    Log To Console  \nRegistering Client and Finding Cloudlet for GPU docker dedicated
    Register Client  app_name=${app_name_dockerdedicatedgpu}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
 
    #Wait For DNS  ${cloudlet['fqdn']}
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
@@ -507,7 +507,7 @@ User shall be able to access the GPU on k8s shared
 
    Log To Console  \nRegistering Client and Finding Cloudlet for GPU k8s shared
    Register Client  app_name=${app_name_k8ssharedgpu}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
 
    #Wait For DNS  ${cloudlet['fqdn']}
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
@@ -535,7 +535,7 @@ User shall be able to access the GPU on VM
 
    Log To Console  \nRegistering Client and Finding Cloudlet for GPU VM
    Register Client  app_name=${app_name_vmgpu}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name_openstack}
+   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
 
    #Wait For DNS  ${cloudlet['fqdn']}  wait_time=1800
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
