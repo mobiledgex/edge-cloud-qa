@@ -4,35 +4,26 @@ Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Test Timeout    ${test_timeout}
 
 *** Variables ***
-${cloudlet_name_openstack}  automationHamburgCloudlet
-${operator_name_openstack}  TDG
-${physical_name_openstack}  hamburg
+${cloudlet_name}  automationHamburgCloudlet
+${operator_name}  TDG
+${physical_name}  hamburg
 
 ${test_timeout}  32 min
 
 *** Test Cases ***
 CreateCloudlet - User shall be able to create a cloudlet on Openstack 
    [Documentation]  
-   ...  do CreateCloudlet to start a CRM on openstack 
+   ...  do CreateCloudlet to start a CRM 
    [Tags]  cloudlet  create
 
    Log To Console  \nCreating Cloudlet
 
-   Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=${cloudlet_env_vars}
+   Create Cloudlet  region=EU  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=${cloudlet_env_vars}
 
-   Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  mapping=gpu=${gpu_resource_name}
-   Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack}  tags=pci=t4gpu:1
+   Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+   Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 
    Log To Console  \nCreating Cloudlet Done
-
-#DeleteCloudlet - User shall be able to delete a cloudlet on Openstack Hamburg
-#        [Documentation]
-#        ...  do DeleteCloudlet to delete a CRM on hamburg openstack 
-#
-#        Delete All App Instances      region=EU  cloudlet_name=${cloudlet_name_openstack}
-#        Delete All Cluster Instances  region=EU  cloudlet_name=${cloudlet_name_openstack}
-#
-#        Delete Cloudlet  region=EU  operator_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}
 
 #*** Keywords ***
 #Cleanup Clusters and Apps

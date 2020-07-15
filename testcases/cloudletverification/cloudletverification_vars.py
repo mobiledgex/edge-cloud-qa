@@ -29,9 +29,10 @@ password_operator = 'password'
 create_flavors = True 
 
 # cloudlet variables
-cloudlet_name_openstack = 'verificationCloudlet'
-operator_name_openstack = 'TDG'
-physical_name_openstack = 'munich'
+cloudlet_name = 'verificationCloudlet'
+operator_name = 'TDG'
+physical_name = 'munich'
+cloudlet_platform_type = 'PlatformTypeOpenstack'
 cloudlet_latitude = '45.5017'
 cloudlet_longitude = '-73.5673'
 cloudlet_security_group = 'cloudletverification'

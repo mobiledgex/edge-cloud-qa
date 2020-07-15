@@ -11,8 +11,8 @@ Test Setup      Setup
 Test Timeout     ${test_timeout} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationBonnCloudlet
-${operator_name_openstack}  TDG 
+${cloudlet_name}  automationBonnCloudlet
+${operator_name}  TDG 
 ${mobiledgex_domain}  mobiledgex.net
 ${cluster_name}  cluster
 
@@ -21,9 +21,9 @@ ${test_timeout_crm}  32 min
 ${region}=  EU
 	
 *** Test Cases ***
-ClusterInst shall create with IpAccessDedicated/docker for Direct App on openstack
+ClusterInst shall create with IpAccessDedicated/docker for Direct App
    [Documentation]
-   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
+   ...  create a cluster with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates lb only
    [Tags]  cluster  docker  dedicated  direct  create
 
@@ -32,7 +32,7 @@ ClusterInst shall create with IpAccessDedicated/docker for Direct App on opensta
    ${cluster_name_dockerdedicateddirect_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicateddirect_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
    ${cluster_name_dockerdedicateddirect_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicateddirect_endtime}
 
@@ -44,9 +44,9 @@ ClusterInst shall create with IpAccessDedicated/docker for Direct App on opensta
    Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
    Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_small}
 
-ClusterInst shall create with IpAccessDedicated/docker for LB App on openstack
+ClusterInst shall create with IpAccessDedicated/docker for LB App
    [Documentation]
-   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
+   ...  create a cluster with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates lb only
    [Tags]  cluster  docker  dedicated  loadbalancer  create
 
@@ -55,7 +55,7 @@ ClusterInst shall create with IpAccessDedicated/docker for LB App on openstack
    ${cluster_name_dockerdedicatedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
    ${cluster_name_dockerdedicatedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedlb_endtime}
 
@@ -67,9 +67,9 @@ ClusterInst shall create with IpAccessDedicated/docker for LB App on openstack
    Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
    Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_small}
 
-ClusterInst shall create with IpAccessShared/docker for LB App on openstack
+ClusterInst shall create with IpAccessShared/docker for LB App
    [Documentation]
-   ...  create a cluster on openstack with IpAccessShared and deploymenttype=docker
+   ...  create a cluster with IpAccessShared and deploymenttype=docker
    ...  verify it creates lb only
    [Tags]  cluster  docker  shared  loadbalancer  create
 
@@ -78,7 +78,7 @@ ClusterInst shall create with IpAccessShared/docker for LB App on openstack
    ${cluster_name_dockershared_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockersharedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}
    ${cluster_name_dockersharedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockersharedlb_endtime}
 
@@ -90,9 +90,9 @@ ClusterInst shall create with IpAccessShared/docker for LB App on openstack
    Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
    Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_medium}
 
-ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1 and num_nodes=1 on openstack
+ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1 and num_nodes=1
    [Documentation]
-   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=k8s and num_nodes=1
+   ...  create a cluster with IpAccessDedicated and deploymenttype=k8s and num_nodes=1
    ...  verify it creates 1 lb and 1 node and 1 master
    [Tags]  cluster  k8s  dedicated  loadbalancer  create
 
@@ -101,7 +101,7 @@ ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1
    ${cluster_name_k8sdedicatedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8sdedicatedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor_name_large}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor_name_large}  developer_org_name=${developer_organization_name}
    ${cluster_name_k8sdedicatedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8sdedicatedlb_endtime}
 
@@ -116,9 +116,9 @@ ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1
    Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_large}
    Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_large}
 
-ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 and num_nodes=1 on openstack
+ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 and num_nodes=1
    [Documentation]
-   ...  create a cluster on openstack with IpAccessShared and deploymenttype=k8s and num_nodes=1
+   ...  create a cluster with IpAccessShared and deploymenttype=k8s and num_nodes=1
    ...  verify it creates 1 lb and 1 node and 1 master
    [Tags]  cluster  k8s  shared  loadbalancer  create
 
@@ -127,7 +127,7 @@ ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 an
    ${cluster_name_k8ssharedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
    ${cluster_name_k8ssharedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedlb_endtime}
 
@@ -142,9 +142,9 @@ ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 an
    Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}
    Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_small}
 
-ClusterInst shall create with K8s and sharedvolumesize on openstack
+ClusterInst shall create with K8s and sharedvolumesize
    [Documentation]
-   ...  create a cluster on openstack with IpAccessShared and deploymenttype=k8s and num_nodes=1
+   ...  create a cluster with IpAccessShared and deploymenttype=k8s and num_nodes=1
    ...  verify it creates 1 lb and 1 node and 1 master
    [Tags]  cluster  k8s  shared  create  sharedvolumesize
 
@@ -153,7 +153,7 @@ ClusterInst shall create with K8s and sharedvolumesize on openstack
    ${cluster_name_k8ssharedvolumesize_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  shared_volume_size=1  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  shared_volume_size=1  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
    ${cluster_name_k8ssharedvolumesize_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_endtime}
 
@@ -169,9 +169,9 @@ ClusterInst shall create with K8s and sharedvolumesize on openstack
    Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}
    Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_small}
 
-ClusterInst shall create with IpAccessDedicated/docker and GPU on openstack
+ClusterInst shall create with IpAccessDedicated/docker and GPU
    [Documentation]
-   ...  create a gpu cluster on openstack with IpAccessDedicated and deploymenttype=docker
+   ...  create a gpu cluster with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates vm with gpu flavor
    [Tags]  cluster  docker  dedicated  gpu  create
 
@@ -180,7 +180,7 @@ ClusterInst shall create with IpAccessDedicated/docker and GPU on openstack
    ${cluster_name_dockerdedicatedgpu_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedgpu_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedgpu}   cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedgpu}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
    ${cluster_name_dockerdedicatedgpu_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedgpu_endtime}
 
@@ -193,9 +193,9 @@ ClusterInst shall create with IpAccessDedicated/docker and GPU on openstack
    Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
    Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_gpu}
 
-ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and num_nodes=1 on openstack
+ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and num_nodes=1
    [Documentation]
-   ...  create a GPU cluster on openstack with IpAccessShared and deploymenttype=k8s and num_nodes=1
+   ...  create a GPU cluster with IpAccessShared and deploymenttype=k8s and num_nodes=1
    ...  verify it creates 1 lb and 1 node and 1 master
    [Tags]  cluster  k8s  shared  gpu  create
 
@@ -204,7 +204,7 @@ ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and n
    ${cluster_name_k8ssharedgpu_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedgpu_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
    ${cluster_name_k8ssharedgpu_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedgpu_endtime}
 

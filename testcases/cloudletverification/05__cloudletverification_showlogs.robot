@@ -9,8 +9,8 @@ Suite Setup      Setup
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationMunichCloudlet
-${operator_name_openstack}  TDG
+${cloudlet_name}  automationMunichCloudlet
+${operator_name}  TDG
 
 ${region}  EU
 
@@ -26,7 +26,7 @@ User shall be able to do ShowLogs k8s shared lb app
    ...  verify ShowLogs works 
    [Tags]  k8s  shared  loadbalancer  showlogs
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8ssharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token} 
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8ssharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token} 
 
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
@@ -37,7 +37,7 @@ User shall be able to do ShowLogs on k8s dedicated lb app
    ...  verify ShowLogs works
    [Tags]  k8s  dedicated  loadbalancer  showlogs
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_k8sdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}
 
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
@@ -51,7 +51,7 @@ User shall be able to do ShowLogs on docker dedicated/direct
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockerdedicateddirect}
    ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockerdedicateddirect}*
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  container_id=${ids[0]}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  container_id=${ids[0]}
 
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
@@ -65,7 +65,7 @@ User shall be able to do ShowLogs on docker dedicated/loadbalancer
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockerdedicatedlb}
    ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockerdedicatedlb}*
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  container_id=${ids[0]}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  container_id=${ids[0]}
 
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
@@ -79,7 +79,7 @@ User shall be able to do ShowLogs on docker shared/lb
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockersharedlb}
    ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockersharedlb}*
 
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockersharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockersharedlb}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}
+   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockersharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockersharedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}
 
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
