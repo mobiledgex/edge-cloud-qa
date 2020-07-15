@@ -156,8 +156,8 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.large
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.small
+   Should Be Equal   ${server_info[0]['Flavor']}  m4.small
+   Should Be Equal   ${server_info[1]['Flavor']}  m4.large
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
