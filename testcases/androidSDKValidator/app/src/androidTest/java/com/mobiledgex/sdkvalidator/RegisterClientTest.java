@@ -71,7 +71,8 @@ public class RegisterClientTest {
     public static final String organizationName = "MobiledgeX";
     public static final String organizationNameSamsung = "Samsung";
     // Other globals:
-    public static final String applicationName = "automation-sdk-app";
+    //public static final String applicationName = "automation-sdk-app";
+    public static final String applicationName = "automation-sdk-docker-app";
     public static final String applicationNameAuth = "automation_api_auth_app";
     public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
@@ -92,7 +93,7 @@ public class RegisterClientTest {
     public static int portOverride = 50051;
     public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
 
-    public boolean useHostOverride = true;
+    public boolean useHostOverride = false;
 
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
     // Must be set to true if you are running tests without a SIM card.
@@ -142,23 +143,35 @@ public class RegisterClientTest {
     @Before
     public void grantPermissions() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT == 24) {
             UiAutomation uiAutomation = InstrumentationRegistry.getInstrumentation().getUiAutomation();
-            uiAutomation.grantRuntimePermission(
-                    InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
-                    "android.permission.READ_PHONE_STATE");
-            uiAutomation.grantRuntimePermission(
-                    InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
-                    "android.permission.ACCESS_COARSE_LOCATION");
+
+            uiAutomation.executeShellCommand(
+                    "pm grant " + InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName()
+                            + " android.permission.READ_PHONE_STATE");
+            uiAutomation.executeShellCommand(
+                    "pm grant " + InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName()
+                            + " android.permission.ACCESS_COARSE_LOCATION");
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                UiAutomation uiAutomation = InstrumentationRegistry.getInstrumentation().getUiAutomation();
+
+                uiAutomation.grantRuntimePermission(
+                        InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
+                        "android.permission.READ_PHONE_STATE");
+                uiAutomation.grantRuntimePermission(
+                        InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
+                        "android.permission.ACCESS_COARSE_LOCATION");
 /*
             uiAutomation.grantRuntimePermission(
                     InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
                     "android.permission.INTERNET");
 */
-            uiAutomation.grantRuntimePermission(
-                    InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
-                    "android.permission.ACCESS_FINE_LOCATION"
-            );
+                uiAutomation.grantRuntimePermission(
+                        InstrumentationRegistry.getInstrumentation().getTargetContext().getPackageName(),
+                        "android.permission.ACCESS_FINE_LOCATION"
+                );
+            }
         }
     }
 
