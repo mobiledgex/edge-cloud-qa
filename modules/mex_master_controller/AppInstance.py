@@ -20,8 +20,10 @@ class AppInstance(MexOperation):
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, use_defaults=True):
+    def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None,  use_defaults=True, include_fields=False):
 
+        _fields_list = []
+        _power_state_field_number = "31"
         if app_name == 'default':
             app_name = shared_variables.app_name_default
         if developer_org_name == 'default':
@@ -55,6 +57,14 @@ class AppInstance(MexOperation):
             autocluster_ip_access = 2
         elif autocluster_ip_access == 'IpAccessShared':
             autocluster_ip_access = 3
+        
+        if powerstate is not None:
+            if powerstate == 'PowerOn':
+                power_state = 3
+            elif powerstate == 'PowerOff':
+                power_state = 6
+            else:
+                power_state = 9
 
         shared_variables.operator_name_default = operator_org_name
 
@@ -110,7 +120,9 @@ class AppInstance(MexOperation):
             appinst_dict['privacy_policy'] = privacy_policy
         if shared_volume_size is not None:
             appinst_dict['shared_volume_size'] = int(shared_volume_size) 
-
+        if powerstate is not None:
+            appinst_dict['power_state'] = power_state
+            _fields_list.append(_power_state_field_number)
             
         if crm_override:
             if crm_override.lower() == "ignorecrm":
@@ -118,6 +130,11 @@ class AppInstance(MexOperation):
             elif crm_override.lower() == "IgnoreCrmAndTransientState":
                 crm_override = 4
             appinst_dict['crm_override'] = crm_override  # ignore errors from CRM
+
+        if include_fields and _fields_list:
+            appinst_dict['fields'] = []
+            for field in _fields_list:
+                appinst_dict['fields'].append(field) 
             
         return appinst_dict
 
@@ -170,6 +187,17 @@ class AppInstance(MexOperation):
         msg_dict = {'appinst': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def update_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, powerstate=powerstate, use_defaults=use_defaults, include_fields=True)
+        msg_dict = {'appinst': msg}
+
+        msg_dict_show = None
+        if 'key' in msg:
+            msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
+            msg_dict_show = {'appinst': msg_show}
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show) 
 
     def show_app_instance(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults)
