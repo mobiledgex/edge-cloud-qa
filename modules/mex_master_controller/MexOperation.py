@@ -81,6 +81,9 @@ class MexOperation(MexRest):
                 if 'CreateAppInst' in url:
                     if 'Created AppInst successfully' not in str(self.resp.text):
                         raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
+                if 'UpdateAppInst' in url:
+                    if 'Ready' not in str(self.resp.text):
+                        raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp.text))
                 if 'CreateClusterInst' in url:
                     if 'Created ClusterInst successfully' not in str(self.resp.text):
                         raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
