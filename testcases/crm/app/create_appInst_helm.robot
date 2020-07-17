@@ -38,7 +38,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
     Log To Console  Done Creating Cluster Instance
 
-    #EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
+    EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
     Sleep  60secs
 
     Log To Console  Creating App and App Instance
@@ -61,7 +61,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     ...  create an app instance on openstack with deployment=helm and IpAccessDedicated
     ...  verify the app is created
 
-    #EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
+    EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
     
     Log To Console  Creating Cluster Instance
     ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated
@@ -94,7 +94,7 @@ User shall be able to create an app instance on openstack with deployment=helm a
     ...  create an app instance on openstack with deployment=helm and a dot in the app name. Such as 'my.app'
     ...  verify the app is create with the dot removed. Such as 'myapp'
 
-    #EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
+    EDGECLOUD-1444 helm app not created when CreateClusterInst and CreateAppInst is done quickly
 
     Log To Console  Creating Cluster Instance
     ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessShared
