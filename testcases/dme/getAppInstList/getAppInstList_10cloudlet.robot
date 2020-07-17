@@ -36,6 +36,7 @@ ${mobile_latitude}  1
 ${mobile_longitude}  1
 
 *** Test Cases ***
+# ECQ-1054
 GetAppInstList - request shall return 10 cloudlets
     [Documentation]
     ...  registerClient
