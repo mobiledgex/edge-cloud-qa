@@ -18,6 +18,7 @@ ${operator_name_azure}  TDG
 
 ${flavor_name}	  x1.medium
 ${cluster_name_long}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+${cluster_name_openstack}=  longnameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
 ${test_timeout_crm}  15 min
 
@@ -37,8 +38,10 @@ CRM shall be able to create a cluster instances with long name on openstack
     ...  Create a clusters and cluster instances with a clustername of long name on openstack
     ...  Verify created successfully
 
+    ${cluster_name_openstack_length}=  Get Length   ${cluster_name_openstack}
+    log to console   Length of cluster name=${cluster_name_openstack_length}
     #Create Cluster              cluster_name=${cluster_name_long}  default_flavor_name=${flavor_name}
-    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_long}  #flavor_name=${flavor_name}
+    Create Cluster Instance     cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_name=${cluster_name_openstack}  #flavor_name=${flavor_name}
 
     #Sleep  120 s
 
@@ -70,4 +73,5 @@ Setup
     log to console  az=${cluster_name_azure} os=${cluster_name}
     Set Suite Variable  ${cluster_name}
     Set Suite Variable  ${cluster_name_azure}
+
 
