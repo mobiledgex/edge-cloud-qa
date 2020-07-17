@@ -13,15 +13,16 @@ ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-a
 
 *** Test Cases ***
 # ECQ-2244
-CreateApp - Create shall fail with docker access_type=direct and TCP TLS
-   [Documentation]
-   ...  deploy app with docker and access_type=direct and TCP TLS port
-   ...  verify error is received
-
-   # EDGECLOUD-2797 error should be given for CreateApp with docker direct access and tls
-
-   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"???Deployment Type and HTTP access ports are incompatible"}')
+# now supported
+#CreateApp - Create shall fail with docker access_type=direct and TCP TLS
+#   [Documentation]
+#   ...  deploy app with docker and access_type=direct and TCP TLS port
+#   ...  verify error is received
+#
+#   # EDGECLOUD-2797 error should be given for CreateApp with docker direct access and tls
+#
+#   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   Should Be Equal  ${error}  ('code=400', 'error={"message":"???Deployment Type and HTTP access ports are incompatible"}')
 
 # ECQ-2245
 CreateApp - Create shall fail with docker access_type=direct and HTTP TLS
@@ -38,7 +39,7 @@ CreateApp - Create shall fail with VM access_type=direct and TCP TLS
    ...  deploy app with VM and access_type=direct and TCP TLS port
    ...  verify error is received
 
-   # EDGECLOUD-2797 error should be given for CreateApp with docker direct access and tls
+   # EDGECLOUD-3233 error should be given for CreateApp with VM direct access and tls
 
    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2016:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"???Deployment Type and HTTP access ports are incompatible"}')
