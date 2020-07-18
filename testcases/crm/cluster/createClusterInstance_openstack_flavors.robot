@@ -116,6 +116,8 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
+   ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
+   ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
@@ -124,12 +126,14 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    ${server_info}=  Get Server List  name=${cluster_name}
    #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
    #Should Be Equal   ${server_info[0]['Flavor']}  flavor_ESC_ESC
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.large 
-
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
+
+   FOR  ${x}  IN RANGE  0  ${num_servers}
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
+       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.large
+   END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    #Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC 
@@ -247,17 +251,22 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
 
    ${cluster_name}=  Get Default Cluster Name
    ${flavor_name}=   Get Default Flavor Name
+   ${cloudlet_lowercase}=  Convert to Lowercase  ${cloudlet_name_openstack_shared}
+   ${server_info_node}=   Set Variable   mex-k8s-master-${cloudlet_lowercase}-${cluster_name}-mobiledgex
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.xlarge
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.small
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
+
+   FOR  ${x}  IN RANGE  0  ${num_servers}
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
+       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.xlarge
+   END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
