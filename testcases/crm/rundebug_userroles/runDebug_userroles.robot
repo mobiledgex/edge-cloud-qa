@@ -39,10 +39,10 @@ RunDebug - developer viewer does not have permission to use command to return de
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd 
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2216
@@ -59,10 +59,10 @@ RunDebug - developer manager does not have permission to use command to return d
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2217
@@ -79,10 +79,10 @@ RunDebug - developer contributor does not have permission to use command to retu
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2218
@@ -124,10 +124,10 @@ RunDebug - operator viewer does not have permission to use command to return dev
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2220
@@ -144,10 +144,10 @@ RunDebug - operator manager does not have permission to use command to return de
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2221
@@ -164,10 +164,10 @@ RunDebug - operator contributor does not have permission to use command to retur
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
       ${error}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=refresh-internal-certs  node_type=shepherd
-      Should Contain  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
       ${error2}=  Run Keyword And Expect Error  *  Run Debug  token=${user_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=shepherd
-      Should Contain  ${error2}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+      Should Contain  ${error2}  ('code=403', 'error={"message":"Forbidden"}')
 
 
 #ECQ-2222
