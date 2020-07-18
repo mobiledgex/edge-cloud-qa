@@ -68,7 +68,7 @@ RunConsole - DeveloperViewer shall not be able to do RunConsole
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
 *** Keywords ***
 Setup
