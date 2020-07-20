@@ -29,23 +29,23 @@ AppMetrics - OperatorManager shall not be able to get app metrics
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}  last=5
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=mobiledgex  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 AppMetrics - OperatorContributor shall not be able to get app metrics
    [Documentation]
@@ -58,23 +58,23 @@ AppMetrics - OperatorContributor shall not be able to get app metrics
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 AppMetrics - OperatorViewer shall not be able to get app metrics
    [Documentation]
@@ -87,23 +87,23 @@ AppMetrics - OperatorViewer shall not be able to get app metrics
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=EU  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 AppMetrics - DeveloperManager shall not be able to get app metrics from another org
    [Documentation]
@@ -116,23 +116,23 @@ AppMetrics - DeveloperManager shall not be able to get app metrics from another 
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 AppMetrics - DeveloperContributor shall not be able to get app metrics from another org
    [Documentation]
@@ -145,23 +145,23 @@ AppMetrics - DeveloperContributor shall not be able to get app metrics from anot
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 AppMetrics - DeveloperViewer shall not be able to get app metrics from another org
    [Documentation]
@@ -174,23 +174,23 @@ AppMetrics - DeveloperViewer shall not be able to get app metrics from another o
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=cpu  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=disk  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=mem  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=connections  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword and Expect Error  *   Get App Metrics  region=US  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  selector=network  token=${userToken}
    Should Contain  ${error}  code=403
-   Should Contain  ${error}  message=Forbidden
+   Should Contain  ${error}  error={"message":"Forbidden"}
 
 *** Keywords ***
 Setup
