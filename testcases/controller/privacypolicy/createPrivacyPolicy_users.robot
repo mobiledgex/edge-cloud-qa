@@ -23,7 +23,7 @@ CreatePrivacyPolicy - user not in an org shall get an error when creating a priv
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  token=${user_token}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  token=${user_token}  region=${region}  rule_list=${rulelist}
 
 DeletePrivacyPolicy - user not in an org shall get an error when deleting a privacy policy
    [Documentation]
@@ -35,7 +35,7 @@ DeletePrivacyPolicy - user not in an org shall get an error when deleting a priv
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Delete Privacy Policy  token=${user_token}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Privacy Policy  token=${user_token}  region=${region}  rule_list=${rulelist}
 
 ShowPrivacyPolicy - user not in an org shall get an empty list when showing a privacy policy
    [Documentation]
