@@ -104,7 +104,7 @@ CreatePrivacyPolicy - DeveloperViewer shall not be able to create a privacy poli
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
 
 CreatePrivacyPolicy - OperatorManager shall not be able to create a privacy policy
    [Documentation]
@@ -120,7 +120,7 @@ CreatePrivacyPolicy - OperatorManager shall not be able to create a privacy poli
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
 
 CreatePrivacyPolicy - OperatorContributor shall not be able to create a privacy policy
    [Documentation]
@@ -136,7 +136,7 @@ CreatePrivacyPolicy - OperatorContributor shall not be able to create a privacy 
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
 
 CreatePrivacyPolicy - OperatorViewer shall not be able to create a privacy policy
    [Documentation]
@@ -152,7 +152,7 @@ CreatePrivacyPolicy - OperatorViewer shall not be able to create a privacy polic
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"code=403, message=Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
 
 *** Keywords ***
 Setup

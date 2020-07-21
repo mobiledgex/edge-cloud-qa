@@ -11,20 +11,22 @@ Test Setup       Setup
 Test Timeout  ${test_timeout}
 
 *** Variables ***
-${cloudlet_name_openstack}=   automationBuckhornCloudlet
-${operator_name_openstack}=                       GDDT
+${cloudlet_name}=   automationBuckhornCloudlet
+${operator_name}=                       GDDT
 ${developer_organization_name}=  mobiledgex
 
 ${region}=  EU
 
 *** Test Cases ***
-Metrics shall collect cloudlet ipusage metric on openstack
+Metrics shall collect cloudlet ipusage metric 
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
    [Tags]  cloudlet  metrics
 
-   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  selector=ipusage  last=5
+   [Setup]  Setup Cloudlet Metrics
+
+   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=ipusage  last=5
 
    Cloudlet IPUsage Metrics Headings Should Be Correct  ${metrics}
 
@@ -37,13 +39,15 @@ Metrics shall collect cloudlet ipusage metric on openstack
 
    Cloudlet IPUsage Should Be In Range  ${metrics}
 
-Metrics shall collect cloudlet utilization metric on openstack
+Metrics shall collect cloudlet utilization metric 
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
    [Tags]  cloudlet  metrics
 
-   ${metrics}=         Get Cloudlet Metrics  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  selector=utilization  last=5
+   [Setup]  Setup Cloudlet Metrics
+
+   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=utilization  last=5
 
    Cloudlet Utilization Metrics Headings Should Be Correct  ${metrics}
 
@@ -56,20 +60,17 @@ Metrics shall collect cloudlet utilization metric on openstack
 
    Cloudlet Utilization Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster CPU metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster CPU metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
    ...  request cluster CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Run Keyword If  (${starttime} - ${cluster_name_dockerdedicated_endtime}) < ${metrics_wait_docker}  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})  ELSE  Set Variable  0
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -82,19 +83,17 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/docker on openst
 
    CPU Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Disk metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster Disk metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
-
+   ...  request cluster Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -107,19 +106,17 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/docker on opens
 
    Disk Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Memory metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster Memory metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -132,19 +129,17 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/docker on ope
 
    Memory Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster TCP metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster TCP metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster TCP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -157,19 +152,17 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/docker on openst
 
    TCP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster UDP metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster UDP metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster UDP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -182,19 +175,17 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/docker on openst
 
    UDP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Network metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster Network metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Network metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  dedicated  metrics
+   [Tags]  cluster  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -207,19 +198,17 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/docker on op
 
    Network Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster CPU metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster CPU metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request cluster CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -232,19 +221,17 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/docker on openstack
 
    CPU Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Disk metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster Disk metrics for IpAccessDedicated/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -257,19 +244,17 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/docker on openstac
 
    Disk Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Memory metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster Memory metrics for IpAccessDedicated/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalance  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -282,19 +267,17 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/docker on openst
 
    Memory Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster TCP metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster TCP metrics for IpAccessDedicated/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster TCP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -307,19 +290,17 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/docker on openstack
 
    TCP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster UDP metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster UDP metrics for IpAccessDedicated/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster UDP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -332,19 +313,17 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/docker on openstack
 
    UDP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Network metrics for IpAccessShared/docker on openstack
+Metrics shall collect Cluster Network metrics for IpAccessDedicated/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Network metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  docker  shared  metrics
+   [Tags]  cluster  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -357,19 +336,17 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/docker on opens
 
    Network Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster CPU metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster CPU metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request cluster CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -382,19 +359,17 @@ Metrics shall collect Cluster CPU metrics for IpAccessDedicated/k8s on openstack
 
    CPU Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Disk metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster Disk metrics for IpAccessShared/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -407,19 +382,17 @@ Metrics shall collect Cluster Disk metrics for IpAccessDedicated/k8s on openstac
 
    Disk Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Memory metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster Memory metrics for IpAccessShared/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -432,19 +405,17 @@ Metrics shall collect Cluster Memory metrics for IpAccessDedicated/k8s on openst
 
    Memory Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster TCP metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster TCP metrics for IpAccessShared/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster TCP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -457,19 +428,17 @@ Metrics shall collect Cluster TCP metrics for IpAccessDedicated/k8s on openstack
 
    TCP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster UDP metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster UDP metrics for IpAccessShared/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster UDP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -482,19 +451,17 @@ Metrics shall collect Cluster UDP metrics for IpAccessDedicated/k8s on openstack
 
    UDP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Network metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect Cluster Network metrics for IpAccessShared/LB/docker 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Network  metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  dedicated  metrics
+   [Tags]  cluster  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -507,19 +474,17 @@ Metrics shall collect Cluster Network metrics for IpAccessDedicated/k8s on opens
 
    Network Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster CPU metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster CPU metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
    ...  request cluster CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -532,19 +497,17 @@ Metrics shall collect Cluster CPU metrics for IpAccessShared/k8s on openstack
 
    CPU Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Disk metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster Disk metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -557,19 +520,17 @@ Metrics shall collect Cluster Disk metrics for IpAccessShared/k8s on openstack
 
    Disk Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Memory metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster Memory metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -582,19 +543,17 @@ Metrics shall collect Cluster Memory metrics for IpAccessShared/k8s on openstack
 
    Memory Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster TCP metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster TCP metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster TCP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -607,19 +566,17 @@ Metrics shall collect Cluster TCP metrics for IpAccessShared/k8s on openstack
 
    TCP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster UDP metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster UDP metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster UDP metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=udp  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=udp  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -632,19 +589,17 @@ Metrics shall collect Cluster UDP metrics for IpAccessShared/k8s on openstack
 
    UDP Should Be In Range  ${metrics}
 
-Metrics shall collect Cluster Network metrics for IpAccessShared/k8s on openstack
+Metrics shall collect Cluster Network metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request cluster CPU metrics with last=5
+   ...  request cluster Network metrics with last=5
    ...  verify info is correct
-   [Tags]  cluster  k8s  shared  metrics
+   [Tags]  cluster  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -657,19 +612,17 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/k8s on openstac
 
    Network Should Be In Range  ${metrics}
 
-Metrics shall collect App Connections metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster CPU metrics for IpAccessShared/LB/k8s 
    [Documentation]
-   ...  request App Connections metrics with last=5
+   ...  request cluster CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  dedicated  metrics
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -678,23 +631,160 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/docker on op
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    Should Be Equal As Integers  ${num_readings}  5
 
-   App Connections Metrics Headings Should Be Correct  ${metrics}
+   Cluster CPU Metrics Headings Should Be Correct  ${metrics}
 
-   App Connections Should Be In Range  ${metrics}
+   CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect Cluster Disk metrics for IpAccessShared/LB/k8s 
    [Documentation]
-   ...  request App CPU metrics with last=5
+   ...  request cluster Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  dedicated  metrics
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Cluster Disk Metrics Headings Should Be Correct  ${metrics}
+
+   Disk Should Be In Range  ${metrics}
+
+Metrics shall collect Cluster Memory metrics for IpAccessShared/LB/k8s 
+   [Documentation]
+   ...  request cluster Memory metrics with last=5
+   ...  verify info is correct
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Cluster Memory Metrics Headings Should Be Correct  ${metrics}
+
+   Memory Should Be In Range  ${metrics}
+
+Metrics shall collect Cluster TCP metrics for IpAccessShared/LB/k8s 
+   [Documentation]
+   ...  request cluster TCP metrics with last=5
+   ...  verify info is correct
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=tcp  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Cluster TCP Metrics Headings Should Be Correct  ${metrics}
+
+   TCP Should Be In Range  ${metrics}
+
+Metrics shall collect Cluster UDP metrics for IpAccessShared/LB/k8s 
+   [Documentation]
+   ...  request cluster UDP metrics with last=5
+   ...  verify info is correct
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=udp  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Cluster UDP Metrics Headings Should Be Correct  ${metrics}
+
+   UDP Should Be In Range  ${metrics}
+
+Metrics shall collect Cluster Network metrics for IpAccessShared/LB/k8s 
+   [Documentation]
+   ...  request cluster Network metrics with last=5
+   ...  verify info is correct
+   [Tags]  cluster  k8s  shared  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   Cluster Network Metrics Headings Should Be Correct  ${metrics}
+
+   Network Should Be In Range  ${metrics}
+
+# not supported for direct access
+#Metrics shall collect App Connections metrics for IpAccessDedicated/Direct/docker 
+#   [Documentation]
+#   ...  request App Connections metrics with last=5
+#   ...  verify info is correct
+#   [Tags]  app  docker  dedicated  direct  metrics
+#
+#   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+#   Log To Console  Waiting for ${waittime} seconds for metrics collection
+#   Sleep  ${waittime} seconds
+#
+#   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   App Connections Metrics Headings Should Be Correct  ${metrics}
+#
+#   App Connections Should Be In Range  ${metrics}
+
+Metrics shall collect App CPU metrics for IpAccessDedicated/Direct/docker 
+   [Documentation]
+   ...  request App CPU metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  docker  dedicated  direct  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -707,19 +797,17 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/docker on openstack
 
    App CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App Disk metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect App Disk metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
    ...  request App Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  dedicated  metrics
+   [Tags]  app  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -732,19 +820,17 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/docker on openstack
 
    App Disk Should Be In Range  ${metrics}
 
-Metrics shall collect App Memory metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect App Memory metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  dedicated  metrics
+   [Tags]  app  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -757,19 +843,17 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/docker on opensta
 
    App Memory Should Be In Range  ${metrics}
 
-Metrics shall collect App Network metrics for IpAccessDedicated/docker on openstack
+Metrics shall collect App Network metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
    ...  request App Network metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  dedicated  metrics
+   [Tags]  app  docker  dedicated  direct  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockerdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicated_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicated}  cluster_instance_name=${cluster_name_dockerdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -782,19 +866,17 @@ Metrics shall collect App Network metrics for IpAccessDedicated/docker on openst
 
    App Network Should Be In Range  ${metrics}
 
-Metrics shall collect App Connections metrics for IpAccessShared/docker on openstack
+Metrics shall collect App Connections metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request App Connections metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  shared  metrics
+   [Tags]  app  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicatedlb}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -807,19 +889,17 @@ Metrics shall collect App Connections metrics for IpAccessShared/docker on opens
 
    App Connections Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for IpAccessShared/docker on openstack
+Metrics shall collect App CPU metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request App CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  shared  metrics
+   [Tags]  app  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicatedlb}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -832,19 +912,17 @@ Metrics shall collect App CPU metrics for IpAccessShared/docker on openstack
 
    App CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App Disk metrics for IpAccessShared/docker on openstack
+Metrics shall collect App Disk metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request App Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  shared  metrics
+   [Tags]  app  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicatedlb}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -857,19 +935,17 @@ Metrics shall collect App Disk metrics for IpAccessShared/docker on openstack
 
    App Disk Should Be In Range  ${metrics}
 
-Metrics shall collect App Memory metrics for IpAccessShared/docker on openstack
+Metrics shall collect App Memory metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  shared  metrics
+   [Tags]  app  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicatedlb}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -882,19 +958,17 @@ Metrics shall collect App Memory metrics for IpAccessShared/docker on openstack
 
    App Memory Should Be In Range  ${metrics}
 
-Metrics shall collect App Network metrics for IpAccessShared/docker on openstack
+Metrics shall collect App Network metrics for IpAccessDedicated/LB/docker 
    [Documentation]
    ...  request App Network metrics with last=5
    ...  verify info is correct
-   [Tags]  app  docker  shared  metrics
+   [Tags]  app  docker  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_docker} - (${starttime} - ${cluster_name_dockershared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockershared_endtime}  ${metrics_wait_docker}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicatedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockershared}  cluster_instance_name=${cluster_name_dockershared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicatedlb}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -907,19 +981,17 @@ Metrics shall collect App Network metrics for IpAccessShared/docker on openstack
 
    App Network Should Be In Range  ${metrics}
 
-Metrics shall collect App Connections metrics for IpAccessShared/k8s on openstack
+Metrics shall collect App Connections metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request App Connections metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockersharedlb}  cluster_instance_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -932,19 +1004,17 @@ Metrics shall collect App Connections metrics for IpAccessShared/k8s on openstac
 
    App Connections Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for IpAccessShared/k8s on openstack
+Metrics shall collect App CPU metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request App CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockersharedlb}  cluster_instance_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -957,19 +1027,17 @@ Metrics shall collect App CPU metrics for IpAccessShared/k8s on openstack
 
    App CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App Disk metrics for IpAccessShared/k8s on openstack
+Metrics shall collect App Disk metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request App Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockersharedlb}  cluster_instance_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -982,19 +1050,17 @@ Metrics shall collect App Disk metrics for IpAccessShared/k8s on openstack
 
    App Disk Should Be In Range  ${metrics}
 
-Metrics shall collect App Memory metrics for IpAccessShared/k8s on openstack
+Metrics shall collect App Memory metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockersharedlb}  cluster_instance_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1007,19 +1073,17 @@ Metrics shall collect App Memory metrics for IpAccessShared/k8s on openstack
 
    App Memory Should Be In Range  ${metrics}
 
-Metrics shall collect App Network metrics for IpAccessShared/k8s on openstack
+Metrics shall collect App Network metrics for IpAccessShared/LB/docker 
    [Documentation]
    ...  request App Network metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  docker  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sshared_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sshared_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_dockersharedlb_endtime}  ${metrics_wait_docker}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sshared}  cluster_instance_name=${cluster_name_k8sshared}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockersharedlb}  cluster_instance_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1032,19 +1096,17 @@ Metrics shall collect App Network metrics for IpAccessShared/k8s on openstack
 
    App Network Should Be In Range  ${metrics}
 
-Metrics shall collect App Connections metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect App Connections metrics for IpAccessShared/LB/k8s 
    [Documentation]
    ...  request App Connections metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  dedicated  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8ssharedlb}  cluster_instance_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=connections  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1057,19 +1119,17 @@ Metrics shall collect App Connections metrics for IpAccessDedicated/k8s on opens
 
    App Connections Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect App CPU metrics for IpAccessShared/LB/k8s 
    [Documentation]
    ...  request App CPU metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  dedicated  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8ssharedlb}  cluster_instance_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1082,19 +1142,17 @@ Metrics shall collect App CPU metrics for IpAccessDedicated/k8s on openstack
 
    App CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App Disk metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect App Disk metrics for IpAccessShared/LB/k8s 
    [Documentation]
    ...  request App Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  dedicated  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8ssharedlb}  cluster_instance_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1107,19 +1165,17 @@ Metrics shall collect App Disk metrics for IpAccessDedicated/k8s on openstack
 
    App Disk Should Be In Range  ${metrics}
 
-Metrics shall collect App Memory metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect App Memory metrics for IpAccessShared/LB/k8s 
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  shared  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8ssharedlb}  cluster_instance_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1132,19 +1188,17 @@ Metrics shall collect App Memory metrics for IpAccessDedicated/k8s on openstack
 
    App Memory Should Be In Range  ${metrics}
 
-Metrics shall collect App Network metrics for IpAccessDedicated/k8s on openstack
+Metrics shall collect App Network metrics for IpAccessShared/LB/k8s 
    [Documentation]
    ...  request App Network metrics with last=5
    ...  verify info is correct
-   [Tags]  app  k8s  dedicated  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_k8s} - (${starttime} - ${cluster_name_k8sdedicated_endtime})
-   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicated_endtime}  ${metrics_wait_k8s}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8ssharedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicated}  cluster_instance_name=${cluster_name_k8sdedicated}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8ssharedlb}  cluster_instance_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1157,19 +1211,40 @@ Metrics shall collect App Network metrics for IpAccessDedicated/k8s on openstack
 
    App Network Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for VM on openstack
+Metrics shall collect App Connections metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
-   ...  request App CPU metrics with last=5
+   ...  request App Connections metrics with last=5
    ...  verify info is correct
-   [Tags]  app  vm  metrics
+   [Tags]  app  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
-   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicatedlb}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=connections  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  5
+
+   App Connections Metrics Headings Should Be Correct  ${metrics}
+
+   App Connections Should Be In Range  ${metrics}
+
+Metrics shall collect App CPU metrics for IpAccessDedicated/LB/k8s 
+   [Documentation]
+   ...  request App CPU metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  k8s  dedicated  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicatedlb}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1182,19 +1257,17 @@ Metrics shall collect App CPU metrics for VM on openstack
 
    App CPU Should Be In Range  ${metrics}
 
-Metrics shall collect App Disk metrics for VM on openstack
+Metrics shall collect App Disk metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
    ...  request App Disk metrics with last=5
    ...  verify info is correct
-   [Tags]  app  vm  metrics
+   [Tags]  app  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
-   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicatedlb}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1207,19 +1280,17 @@ Metrics shall collect App Disk metrics for VM on openstack
 
    App Disk Should Be In Range  ${metrics}
 
-Metrics shall collect App Memory metrics for VM on openstack
+Metrics shall collect App Memory metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
    ...  request App Memory metrics with last=5
    ...  verify info is correct
-   [Tags]  app  vm  metrics
+   [Tags]  app  k8s  shared  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
-   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicatedlb}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1232,19 +1303,17 @@ Metrics shall collect App Memory metrics for VM on openstack
 
    App Memory Should Be In Range  ${metrics}
 
-Metrics shall collect App Network metrics for VM on openstack
+Metrics shall collect App Network metrics for IpAccessDedicated/LB/k8s 
    [Documentation]
    ...  request App Network metrics with last=5
    ...  verify info is correct
-   [Tags]  app  vm  metrics
+   [Tags]  app  k8s  dedicated  loadbalancer  metrics
 
-   #${starttime}=  Get Time  epoch
-   #${waittime}=  Evaluate  ${metrics_wait_vm} - (${starttime} - ${vm_endtime})
-   ${waittime}=  Calculate Wait Time  ${vm_endtime}  ${metrics_wait_vm}
+   ${waittime}=  Calculate Wait Time  ${cluster_name_k8sdedicatedlb_endtime}  ${metrics_wait_k8s}
    Log To Console  Waiting for ${waittime} seconds for metrics collection
    Sleep  ${waittime} seconds
 
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vm}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  developer_org_name=${developer_organization_name}  selector=network  last=5
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_k8sdedicatedlb}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
 
@@ -1252,21 +1321,209 @@ Metrics shall collect App Network metrics for VM on openstack
 
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    Should Be Equal As Integers  ${num_readings}  5
+
+   App Network Metrics Headings Should Be Correct  ${metrics}
+
+   App Network Should Be In Range  ${metrics}
+
+Metrics shall collect App CPU metrics for VM direct 
+   [Documentation]
+   ...  request App CPU metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  direct  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmdirect_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmdirect}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App CPU Metrics Headings Should Be Correct  ${metrics}
+
+   App CPU Should Be In Range  ${metrics}
+
+Metrics shall collect App Disk metrics for VM direct 
+   [Documentation]
+   ...  request App Disk metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  direct  metrics
+
+   # EDGECLOUD-2596 Can not get disk metrics for VM based App Instance using mcctl
+
+   ${waittime}=  Calculate Wait Time  ${vmdirect_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmdirect}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App Disk Metrics Headings Should Be Correct  ${metrics}
+
+   App Disk Should Be In Range  ${metrics}
+
+Metrics shall collect App Memory metrics for VM direct 
+   [Documentation]
+   ...  request App Memory metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  direct  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmdirect_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmdirect}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App Memory Metrics Headings Should Be Correct  ${metrics}
+
+   App Memory Should Be In Range  ${metrics}
+
+Metrics shall collect App Network metrics for VM direct 
+   [Documentation]
+   ...  request App Network metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  direct  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmdirect_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmdirect}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App Network Metrics Headings Should Be Correct  ${metrics}
+
+   App Network Should Be In Range  ${metrics}
+
+Metrics shall collect App CPU metrics for VM lb 
+   [Documentation]
+   ...  request App CPU metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmlb_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmlb}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App CPU Metrics Headings Should Be Correct  ${metrics}
+
+   App CPU Should Be In Range  ${metrics}
+
+Metrics shall collect App Disk metrics for VM lb 
+   [Documentation]
+   ...  request App Disk metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  loadbalancer  metrics
+
+   # EDGECLOUD-2596 Can not get disk metrics for VM based App Instance using mcctl
+
+   ${waittime}=  Calculate Wait Time  ${vmlb_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmlb}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App Disk Metrics Headings Should Be Correct  ${metrics}
+
+   App Disk Should Be In Range  ${metrics}
+
+Metrics shall collect App Memory metrics for VM lb 
+   [Documentation]
+   ...  request App Memory metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmlb_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmlb}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
+
+   App Memory Metrics Headings Should Be Correct  ${metrics}
+
+   App Memory Should Be In Range  ${metrics}
+
+Metrics shall collect App Network metrics for VM lb 
+   [Documentation]
+   ...  request App Network metrics with last=5
+   ...  verify info is correct
+   [Tags]  app  vm  loadbalancer  metrics
+
+   ${waittime}=  Calculate Wait Time  ${vmlb_endtime}  ${metrics_wait_vm}
+   Log To Console  Waiting for ${waittime} seconds for metrics collection
+   Sleep  ${waittime} seconds
+
+   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_vmlb}  cluster_instance_name=${cluster_name_vm}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be True  ${num_readings} >= 1
 
    App Network Metrics Headings Should Be Correct  ${metrics}
 
    App Network Should Be In Range  ${metrics}
 
 *** Keywords ***
-Setup
+Setup Cloudlet Metrics
    Login  username=${username_mexadmin}  password=${password_mexadmin}
 
-   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack limits show -f json --absolute
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  node_type=crm  command=oscmd  args=openstack limits show -f json --absolute
    ${limits}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
    #${limits}=  Get limits
    Set Suite Variable  ${limits}
 
-   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack subnet show extinternet-subnet -f json
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  node_type=crm  command=oscmd  args=openstack subnet show ${cloudlet_external_subnet} -f json
    ${subnet}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
    #${subnet}=  Get Subnet Details  external-subnet
    Set Suite Variable  ${subnet}
@@ -1275,7 +1532,7 @@ Setup
    ${maxips}=  Evaluate  int(ipaddress.IPv4Address('${iprange[1]}')) - int(ipaddress.IPv4Address('${iprange[0]}')) + 1  modules=ipaddress
    Set Suite Variable  ${maxips}
 
-   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  node_type=crm  command=oscmd  args=openstack server list -f json
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  node_type=crm  command=oscmd  args=openstack server list -f json
    @{servers}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
    #@{servers}=  Get Server List
    ${networkcount}=  Set Variable  0
@@ -1286,6 +1543,9 @@ Setup
    #log to console  ${networkcount}
    Set Suite Variable  ${networkcount}
 
+   Setup  # also run the normal setup
+
+Setup
    ${operator_token}=  Login  username=${username_operator}  password=${password_operator}
    Set Suite Variable  ${operator_token}
 
@@ -1609,7 +1869,7 @@ App Memory Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 400000000
 
 App Network Should Be In Range
    [Arguments]  ${metrics}

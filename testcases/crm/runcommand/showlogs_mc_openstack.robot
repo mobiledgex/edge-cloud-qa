@@ -150,17 +150,18 @@ ShowLogs - docker dedicated shall return logs on openstack
     ${stdout_noid}=  Show Logs  region=${region} 
 
     # with containerid
-    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}
 
     # with timestamps
-    ${stdout_timestamps}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  tail=3  time_stamps=${True}
+    ${stdout_timestamps}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=3  time_stamps=${True}
 
     # with tail
-    ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  tail=1
+    ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=1
 
     # with since
+    Sleep  10
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  since=10s
+    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=20s
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound 
@@ -202,17 +203,18 @@ ShowLogs - docker shared shall return logs on openstack
     ${stdout_noid}=  Show Logs  region=${region}
 
     # with containerid
-    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}
 
     # with timestamps
-    ${stdout_timestamps}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  tail=3  time_stamps=${True}
+    ${stdout_timestamps}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=3  time_stamps=${True}
 
     # with tail
-    ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  tail=1
+    ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=1
 
     # with since
+    Sleep  10
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][1]}  since=10s
+    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=10s
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
