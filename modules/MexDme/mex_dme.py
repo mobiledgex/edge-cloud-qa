@@ -415,10 +415,11 @@ class Dme(MexGrpc):
         if resp.status != 1: # AI_SUCCESS
             raise Exception('get app inst list failed:{}'.format(str(resp)))
 
-        resp = sorted(resp.cloudlets, key=lambda x: x.cloudlet_name) # sorting since need to check for may apps. this return the sorted list instead of the response itself
+        # removed this since it now returns a list sorted by distance
+        #resp = sorted(resp.cloudlets, key=lambda x: x.cloudlet_name) # sorting since need to check for may apps. this return the sorted list instead of the response itself
         print(resp)
 
-        return resp
+        return resp.cloudlets
 
     def verify_location(self, verify_location_request_obj=None, **kwargs):
         resp = None

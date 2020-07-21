@@ -16,7 +16,7 @@ operator_name_gcp = 'gcp'
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
 docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
-docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/openpose-docker:20200116'
+docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:latest'
 docker_image_samsung = 'docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0'
 
 artifactory_dummy_image_name = 'execJira.py'
