@@ -25,8 +25,11 @@ password_developer = 'andya123'
 username_operator = 'andyanderson'
 password_operator = 'andya123'
 
+create_flavors = False  # test will create flavors or not.  Requires mexadmin username/password.  Sometimes flavors will be predefined and we wont have permissions to create our own
+
 # cloudlet variables
 cloudlet_name_openstack = 'edge2-galicia-spain'
+#cloudlet_name_openstack = 'edge1-madrid-spain'
 operator_name_openstack = 'Sonoral'
 physical_name_openstack = 'paradise'
 cloudlet_latitude = '45.5017'
@@ -37,7 +40,7 @@ developer_organization_name = 'andydeveloper'
 
 # docker image used for docker/k8s deployments
 docker_image = f'docker-tef.mobiledgex.net/{developer_organization_name}/images/server_ping_threaded:7.0'
-docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/openpose-docker:20200116'
+docker_image_gpu = f'docker-tef.mobiledgex.net/{developer_organization_name}/images/openpose-docker:20200116'
 
 # QCOW image used for VM deployments which has the test app running on it
 #qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_http.qcow2#md5:c7f7e312dd18b1c9ea586650721c75ba'
@@ -84,7 +87,7 @@ flavor_name_small = 'm4.small'
 flavor_name_medium = 'm4.medium'
 flavor_name_large = 'm4.large'
 flavor_name_vm = 'm4.large'
-flavor_name_gpu = flavor_name + 'gpu'
+flavor_name_gpu = 'm4.xxlarge-gpu' 
 master_flavor_name_small = 'm1.medium'
 master_flavor_name_medium = 'm1.medium'
 master_flavor_name_large = 'm1.large'
@@ -92,7 +95,7 @@ master_flavor_name_gpu = 'm1.large-gpu'
 node_flavor_name_small = 'm1.medium'
 node_flavor_name_medium = 'm1.medium'
 node_flavor_name_large = 'm1.large'
-node_flavor_name_gpu = 'm1.large-gpu'
+node_flavor_name_gpu = 'm1.xxlarge-gpu'
 
 app_name_dockerdedicated = app_name + 'dockerdedicated'
 app_name_dockerdedicatedgpu = app_name + 'dockerdedicatedgpu'

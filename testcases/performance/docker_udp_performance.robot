@@ -51,7 +51,7 @@ SSH to RootLB VM
 
   SSH to Iperf Client Side Docker Container and Run UDP Performance Test for 15s
 
-  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c dockerserver.automationParadiseCloudlet.GDDT.mobiledgex.net -b 0 -u -p 5201  return_stderr=${True}  return_rc=${True}
+  ${stdout}  ${stderr}  ${rc}=  Execute Command  docker run --rm networkstatic/iperf3 -c ${rootlb} -b 0 -u -p 5201  return_stderr=${True}  return_rc=${True}
 #  log many  {$stdout}
   Should Be Equal As Integers	${rc}	0
   Log  ${stdout}

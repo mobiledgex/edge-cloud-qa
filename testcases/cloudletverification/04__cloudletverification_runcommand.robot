@@ -8,8 +8,8 @@ Suite Setup      Setup
 Test Timeout    ${test_timeout_crm} 
 	
 *** Variables ***
-${cloudlet_name_openstack}  automationSunnydaleCloudlet
-${operator_name_openstack}  GDDT
+${cloudlet_name}  automationSunnydaleCloudlet
+${operator_name}  GDDT
 
 ${region}  EU
 
@@ -19,43 +19,53 @@ ${developer_organization_name}=  mobiledgex
 ${test_timeout_crm}  32 min
 
 *** Test Cases ***
-User shall be able to do RunCommand k8s shared
+User shall be able to do RunCommand k8s shared lb app
    [Documentation]
    ...  do RunCommand on k8s shared app 
    ...  verify RunCommand works 
-   [Tags]  k8s  shared  runcommand
+   [Tags]  k8s  shared  loadbalancer  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sshared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sshared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8ssharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid}  root\r\n
 
-User shall be able to do RunCommand on k8s dedicated
+User shall be able to do RunCommand on k8s dedicated lb app
    [Documentation]
    ...  do RunCommand on k8s dedicated app
    ...  verify RunCommand works
-   [Tags]  k8s  dedicated  runcommand
+   [Tags]  k8s  dedicated  loadbalancer  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_k8sdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid}  root\r\n
 
-User shall be able to do RunCommand on docker dedicated
+User shall be able to do RunCommand on docker dedicated/direct
    [Documentation]
    ...  do RunCommand on docker dedicated app
    ...  verify RunCommand works
-   [Tags]  docker  dedicated  runcommand
+   [Tags]  docker  dedicated  direct  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicated}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicated}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid}  root\r\n
 
-User shall be able to do RunCommand on docker shared
+User shall be able to do RunCommand on docker dedicated/lb
    [Documentation]
    ...  do RunCommand on docker shared app
    ...  verify RunCommand works
-   [Tags]  docker  shared  runcommand
+   [Tags]  docker  dedicated  loadbalancer  runcommand
 
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockershared}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockershared}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack}  token=${token}  command=whoami
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicatedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicatedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
+
+   Should Be Equal  ${stdout_noid}  root\r\n
+
+User shall be able to do RunCommand on docker shared/lb
+   [Documentation]
+   ...  do RunCommand on docker shared app
+   ...  verify RunCommand works
+   [Tags]  docker  shared  loadbalancer  runcommand
+
+   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockersharedlb}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockersharedlb}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
 
    Should Be Equal  ${stdout_noid}  root\r\n
 
