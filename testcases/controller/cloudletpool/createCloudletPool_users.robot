@@ -25,7 +25,7 @@ CreateCloudletPool - users shall get error when creating cloudlet pool
    ...  send CreateCloudletPool with user token
    ...  verify proper error is received
 
-   EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
+   #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${userToken}
 
@@ -37,7 +37,7 @@ DeleteCloudletPool - users shall get error when deleting cloudlet pool
    ...  send DeleteCloudletPool with user token
    ...  verify proper error is received 
 
-   EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
+   #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
    ${error}=  Run Keyword and Expect Error  *  Delete Cloudlet Pool  region=US  token=${userToken}
 

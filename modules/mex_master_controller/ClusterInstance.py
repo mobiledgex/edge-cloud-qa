@@ -169,7 +169,7 @@ class ClusterInstance(MexOperation):
         if 'key' in msg:
             msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_show = {'clusterinst': msg_show}
-        print('*WARN*', use_defaults, region)        
+
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
 
 

@@ -49,44 +49,45 @@ GetAppInstList - request without carriername shall return 3 apps
       ${appfqdns_distance_round2}=  Convert To Number  ${appfqdns[2].distance}  1
  
 
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${att_appinst.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${att_appinst.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${att_appinst.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${att_appinst.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round0}                             ${distance_round0}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${att_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${att_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${att_appinst.uri}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${att_appinst.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${att_appinst.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${att_appinst.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${att_appinst.mapped_ports[0].fqdn_prefix}
-
-      Should Be Equal             ${appfqdns[1].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round1}                             ${distance_round1}
-      Should Be Equal             ${appfqdns[1].appinstances[0].app_name}                 ${tmus_appinst_1.key.app_key.name}
-      Should Be Equal             ${appfqdns[1].appinstances[0].app_vers}                 ${tmus_appinst_1.key.app_key.version}
-      Should Be Equal             ${appfqdns[1].appinstances[0].fqdn}                    ${tmus_appinst_1.uri}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].proto}          ${tmus_appinst_1.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].internal_port}  ${tmus_appinst_1.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${tmus_appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_1.mapped_ports[0].fqdn_prefix}
-
-      Should Be Equal             ${appfqdns[2].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
+      # returns sorted list by distance
+      Should Be Equal             ${appfqdns[2].carrier_name}                             ${att_appinst.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${att_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${att_appinst.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${att_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round2}                             ${distance_round2}
-      Should Be Equal             ${appfqdns[2].appinstances[0].app_name}                 ${tmus_appinst_2.key.app_key.name}
-      Should Be Equal             ${appfqdns[2].appinstances[0].app_vers}                 ${tmus_appinst_2.key.app_key.version}
-      Should Be Equal             ${appfqdns[2].appinstances[0].fqdn}                    ${tmus_appinst_2.uri}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].proto}          ${tmus_appinst_2.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].internal_port}  ${tmus_appinst_2.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${tmus_appinst_2.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_2.mapped_ports[0].fqdn_prefix}
+      Should Be Equal             ${appfqdns[2].appinstances[0].app_name}                 ${att_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[2].appinstances[0].app_vers}                 ${att_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[2].appinstances[0].fqdn}                    ${att_appinst.uri}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].proto}          ${att_appinst.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].internal_port}  ${att_appinst.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${att_appinst.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${att_appinst.mapped_ports[0].fqdn_prefix}
+
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns_distance_round0}                             ${distance_round0}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${tmus_appinst_1.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${tmus_appinst_1.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${tmus_appinst_1.uri}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${tmus_appinst_1.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${tmus_appinst_1.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${tmus_appinst_1.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_1.mapped_ports[0].fqdn_prefix}
+
+      Should Be Equal             ${appfqdns[1].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns_distance_round1}                             ${distance_round1}
+      Should Be Equal             ${appfqdns[1].appinstances[0].app_name}                 ${tmus_appinst_2.key.app_key.name}
+      Should Be Equal             ${appfqdns[1].appinstances[0].app_vers}                 ${tmus_appinst_2.key.app_key.version}
+      Should Be Equal             ${appfqdns[1].appinstances[0].fqdn}                    ${tmus_appinst_2.uri}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].proto}          ${tmus_appinst_2.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].internal_port}  ${tmus_appinst_2.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${tmus_appinst_2.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_2.mapped_ports[0].fqdn_prefix}
 
       Length Should Be   ${appfqdns}  3
       Length Should Be   ${appfqdns[0].appinstances}  1
@@ -125,45 +126,45 @@ GetAppInstList - request without carriername and large limit shall return all ap
       ${distance_round2}=  Convert To Number  ${distance2}  1
       ${appfqdns_distance_round2}=  Convert To Number  ${appfqdns[2].distance}  1
 
-
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${att_appinst.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${att_appinst.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${att_appinst.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${att_appinst.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round0}                             ${distance_round0}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${att_appinst.key.app_key.name}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${att_appinst.key.app_key.version}
-      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${att_appinst.uri}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${att_appinst.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${att_appinst.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${att_appinst.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${att_appinst.mapped_ports[0].fqdn_prefix}
-
-      Should Be Equal             ${appfqdns[1].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round1}                             ${distance_round1}
-      Should Be Equal             ${appfqdns[1].appinstances[0].app_name}                 ${tmus_appinst_1.key.app_key.name}
-      Should Be Equal             ${appfqdns[1].appinstances[0].app_vers}                 ${tmus_appinst_1.key.app_key.version}
-      Should Be Equal             ${appfqdns[1].appinstances[0].fqdn}                    ${tmus_appinst_1.uri}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].proto}          ${tmus_appinst_1.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].internal_port}  ${tmus_appinst_1.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${tmus_appinst_1.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_1.mapped_ports[0].fqdn_prefix}
-
-      Should Be Equal             ${appfqdns[2].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
-      Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
-      Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
-      Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
+      # returns sorted list by distance
+      Should Be Equal             ${appfqdns[2].carrier_name}                             ${att_appinst.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${att_appinst.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${att_appinst.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${att_appinst.cloudlet_loc.longitude}
       Should Be Equal             ${appfqdns_distance_round2}                             ${distance_round2}
-      Should Be Equal             ${appfqdns[2].appinstances[0].app_name}                 ${tmus_appinst_2.key.app_key.name}
-      Should Be Equal             ${appfqdns[2].appinstances[0].app_vers}                 ${tmus_appinst_2.key.app_key.version}
-      Should Be Equal             ${appfqdns[2].appinstances[0].fqdn}                    ${tmus_appinst_2.uri}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].proto}          ${tmus_appinst_2.mapped_ports[0].proto}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].internal_port}  ${tmus_appinst_2.mapped_ports[0].internal_port}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${tmus_appinst_2.mapped_ports[0].public_port}
-      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_2.mapped_ports[0].fqdn_prefix}
+      Should Be Equal             ${appfqdns[2].appinstances[0].app_name}                 ${att_appinst.key.app_key.name}
+      Should Be Equal             ${appfqdns[2].appinstances[0].app_vers}                 ${att_appinst.key.app_key.version}
+      Should Be Equal             ${appfqdns[2].appinstances[0].fqdn}                    ${att_appinst.uri}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].proto}          ${att_appinst.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].internal_port}  ${att_appinst.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].public_port}    ${att_appinst.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[2].appinstances[0].ports[0].fqdn_prefix}    ${att_appinst.mapped_ports[0].fqdn_prefix}
+
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns_distance_round0}                             ${distance_round0}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${tmus_appinst_1.key.app_key.name}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${tmus_appinst_1.key.app_key.version}
+      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${tmus_appinst_1.uri}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${tmus_appinst_1.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${tmus_appinst_1.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${tmus_appinst_1.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_1.mapped_ports[0].fqdn_prefix}
+
+      Should Be Equal             ${appfqdns[1].carrier_name}                             ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.organization}
+      Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
+      Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
+      Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
+      Should Be Equal             ${appfqdns_distance_round1}                             ${distance_round1}
+      Should Be Equal             ${appfqdns[1].appinstances[0].app_name}                 ${tmus_appinst_2.key.app_key.name}
+      Should Be Equal             ${appfqdns[1].appinstances[0].app_vers}                 ${tmus_appinst_2.key.app_key.version}
+      Should Be Equal             ${appfqdns[1].appinstances[0].fqdn}                    ${tmus_appinst_2.uri}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].proto}          ${tmus_appinst_2.mapped_ports[0].proto}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].internal_port}  ${tmus_appinst_2.mapped_ports[0].internal_port}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].public_port}    ${tmus_appinst_2.mapped_ports[0].public_port}
+      Should Be Equal             ${appfqdns[1].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst_2.mapped_ports[0].fqdn_prefix}
 
       Length Should Be   ${appfqdns}  3
       Length Should Be   ${appfqdns[0].appinstances}  1

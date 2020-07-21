@@ -38,7 +38,7 @@ RunConsole - OperatorManager shall not be able to do RunConsole
 
     log to console  ${error}
 
-    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}') 
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}') 
 
     #Should Contain  ${error}  runCommand failed with stderr:Error: Forbidden, Forbiddenxxx
 
@@ -58,7 +58,7 @@ RunConsole - OperatorContributor shall not be able to do RunConsole
 
     log to console  ${error}
 
-    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
     #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
@@ -80,7 +80,7 @@ RunConsole - OperatorViewer shall not be able to do RunConsole
 
     log to console  ${error}
 
-    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
     #Should Contain  ${error}  Error: Forbidden (403), code=403, message=Forbidden
 
