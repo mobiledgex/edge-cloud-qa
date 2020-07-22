@@ -49,7 +49,14 @@ class Cloudlet(MexOperation):
             ip_support = 1
         if ip_support == "IpSupportDynamic":
             ip_support = 2
-        
+
+        if maintenance_state == 'NormalOperation':
+            maintenance_state = 0
+        elif maintenance_state == 'MaintenanceStart':
+            maintenance_state = 1
+        elif maintenance_state == 'MaintenanceStartNoFailover':
+            maintenance_state = 5
+            
         #"{\"cloudlet\":{\"key\":{\"operator_key\":{\"name\":\"rrrr\"},\"name\":\"rrrr\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         cloudlet_dict = {}
         cloudlet_key_dict = {}
@@ -179,7 +186,7 @@ class Cloudlet(MexOperation):
         msg_dict_show = None
         if 'key' in msg:
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
-            msg_dict_show = {'app': msg_show}
+            msg_dict_show = {'cloudlet': msg_show}
 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
@@ -200,7 +207,12 @@ class Cloudlet(MexOperation):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
-        return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+        msg_dict_show = None
+        if 'key' in msg:
+            msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
+            msg_dict_show = {'cloudlet': msg_show}
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
 
     def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)

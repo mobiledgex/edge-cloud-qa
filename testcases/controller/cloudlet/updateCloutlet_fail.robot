@@ -267,9 +267,9 @@ UpdateCloudlet with staticips of 6
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
 
 UpdateCloudlet with invalid maintenance mode 
-        [Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet staticips value
-        ...  The test case will try and update a Cloudlet with an invalid staticips of 6.
-        ...  A 'TypeError: 6 has type int, but expected one of: bytes, unicode' error is expected
+        [Documentation]   UpdateCloudlet - invalid maintenance mode shall return error 
+        ...  send UpdateCloudlet with invalid maintenance mode 
+        ...  verify correct error is received 
 
         ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     maintenance_state=999      use_defaults=False
         Should Be Equal  ${error_msg}   ('code=400', 'error={"message":"Invalid maintenance state, only normal operation and maintenance start states are allowed"}')
