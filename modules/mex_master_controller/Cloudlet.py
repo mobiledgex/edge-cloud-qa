@@ -20,13 +20,18 @@ class Cloudlet(MexOperation):
         self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
         self.addrestag_url = '/auth/ctrl/AddResTag'
 
-    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1"
         _cloudlet_name_field_number = "2.2"
         _container_version_field_number = "20"
         _package_version_field_number = "25"
+        _maintenance_state_field_number = "30"
+        _num_dynamic_ips_field_number = "8"
+        _latitude_field_number = "5.1"
+        _longitude_field_number = "5.2"
+        _static_ips_field_number = "7"
 
         if use_defaults:
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
@@ -58,8 +63,11 @@ class Cloudlet(MexOperation):
         loc_dict = {}
         if latitude is not None:
             loc_dict['latitude'] = float(latitude)
+            _fields_list.append(_latitude_field_number)
+
         if longitude is not None:
             loc_dict['longitude'] = float(longitude)
+            _fields_list.append(_longitude_field_number)
 
         if cloudlet_key_dict:
             cloudlet_dict['key'] = cloudlet_key_dict
@@ -67,14 +75,16 @@ class Cloudlet(MexOperation):
             cloudlet_dict['location'] = loc_dict
         if number_dynamic_ips is not None:
             cloudlet_dict['num_dynamic_ips'] = int(number_dynamic_ips)
+            _fields_list.append(_num_dynamic_ips_field_number)
+
         if ip_support is not None:
             cloudlet_dict['ip_support'] = ip_support
         #if self.accessuri is not None:
         #    cloudlet_dict['access_uri'] = self.accessuri
         #    _fields_list.append(self._cloudlet_accessuri_field)
-        #if self.staticips is not None:
-        #    cloudlet_dict['static_ips'] = self.staticips
-        #    _fields_list.append(self._cloudlet_staticips_field)
+        if static_ips is not None:
+            cloudlet_dict['static_ips'] = int(static_ips)
+            _fields_list.append(_static_ips_field_number)
 
         if physical_name is not None:
             cloudlet_dict['physical_name'] = physical_name
@@ -97,6 +107,9 @@ class Cloudlet(MexOperation):
             cloudlet_dict['package_version'] = package_version
             _fields_list.append(_package_version_field_number)
 
+        if maintenance_state is not None:
+            cloudlet_dict['maintenance_state'] = int(maintenance_state)
+            _fields_list.append(_maintenance_state_field_number)
             
         env_dict = {}
         if env_vars is not None:
@@ -183,8 +196,8 @@ class Cloudlet(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         return self.update(token=token, url=self.update_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
@@ -242,4 +255,5 @@ class Cloudlet(MexOperation):
         #    msg_dict_show = {'app': msg_show}
 
         return self.create(token=token, url=self.addrestag_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict)
+
 
