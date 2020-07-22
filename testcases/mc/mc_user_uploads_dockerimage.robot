@@ -36,8 +36,8 @@ MC - User shall be able to upload docker image as Developer Manager
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
 
-    Skip Verify Email	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+    Skip Verify Email   skip_verify_email=False
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}  email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -53,7 +53,7 @@ MC - User shall be able to upload docker image as Developer Manager
     Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -76,8 +76,9 @@ MC - User shall be able to upload docker image as Developer Contributor
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+
+    Skip Verify Email   skip_verify_email=False	
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}  email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -93,7 +94,7 @@ MC - User shall be able to upload docker image as Developer Contributor
     Should Contain  ${pusherror2}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror2}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -115,8 +116,9 @@ MC - User shall not be able to upload docker image as Developer Viewer
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+
+    Skip Verify Email   skip_verify_email=False	
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}  email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -132,7 +134,7 @@ MC - User shall not be able to upload docker image as Developer Viewer
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 	
     Create Org  orgname=${DEVorgname}  orgtype=developer
     
@@ -142,7 +144,7 @@ MC - User shall not be able to upload docker image as Developer Viewer
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
-    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version} 
 
     Should Contain  ${pullerror}  not found
 
@@ -159,8 +161,9 @@ MC - User shall not be able to upload docker image as Operator Manager
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+
+    Skip Verify Email   skip_verify_email=False	
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}   email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -176,7 +179,7 @@ MC - User shall not be able to upload docker image as Operator Manager
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -186,7 +189,7 @@ MC - User shall not be able to upload docker image as Operator Manager
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
-    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror}=   Run Keyword and Expect Error  *  Pull Image From Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version} 
 
     Should Contain  ${pullerror}  pull access denied
 
@@ -203,8 +206,9 @@ MC - User shall not be able to upload docker image as Operator Contributor
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+
+    Skip Verify Email   skip_verify_email=False	
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}  email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -220,13 +224,13 @@ MC - User shall not be able to upload docker image as Operator Contributor
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 
     Create Org  orgname=${OPorgname}  orgtype=operator
     
     Adduser Role  orgname=${OPorgname}  username=${username1}  role=OperatorContributor
 
-    ${error}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${error}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version} 
 
     Should Contain  ${error}  denied: requested access to the resource is denied
 
@@ -247,8 +251,9 @@ MC - User shall not be able to upload docker image as Operator Viewer
 
     ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
     ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-	
-    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+
+    Skip Verify Email   skip_verify_email=False	
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}  email_check=True
 
     # docker push/pull should fail since user is locked
     ${pusherror1}=   Run Keyword and Expect Error  *  Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
@@ -264,7 +269,7 @@ MC - User shall not be able to upload docker image as Operator Viewer
     Should Contain  ${pusherror1}  unauthorized: HTTP Basic: Access denied
     Should Contain  ${pullerror1}  unauthorized: HTTP Basic: Access denied
 
-    #Verify Email
+    Verify Email
 	
     Create Org  orgname=${OPorgname}  orgtype=operator
     
@@ -284,5 +289,6 @@ Setup
     Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 
 Teardown
+    Skip Verify Email   skip_verify_email=True
     Cleanup Provisioning
  
