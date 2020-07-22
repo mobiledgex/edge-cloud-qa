@@ -46,7 +46,7 @@ currentBuild.displayName = cycle
 node('jenkinsSlave1'){
     stage('Checkout') {
         // delete old protos before git and build
-        dir('go/src/github.com/mobiledgex/protos') {
+        dir('go/src/github.com/mobiledgex') {
            sh 'rm -rf *'
         }
 
@@ -57,10 +57,10 @@ node('jenkinsSlave1'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
-                        [$class:'SparseCheckoutPath', path:'jenkins/*'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/execJira.py'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
-                        [$class:'SparseCheckoutPath', path:'tools/*'],
+                        [$class:'SparseCheckoutPath', path:'tools/build_protos.py],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
