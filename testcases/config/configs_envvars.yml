@@ -1,0 +1,5 @@
+- name: CrmValue
+  value: [[ .Deployment.ClusterIp ]]
+- name: CrmValue2
+  value: [[ .Deployment.ClusterIp ]]
+
