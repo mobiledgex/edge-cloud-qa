@@ -60,7 +60,7 @@ node('jenkinsSlave1'){
                         [$class:'SparseCheckoutPath', path:'jenkins/execJira.py'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
-                        [$class:'SparseCheckoutPath', path:'tools/build_protos.py],
+                        [$class:'SparseCheckoutPath', path:'tools/build_protos.py'],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
