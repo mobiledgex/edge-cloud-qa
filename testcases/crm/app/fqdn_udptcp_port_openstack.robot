@@ -34,6 +34,7 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-1089
 User shall be able to access 1 UDP port on openstack
     [Documentation]
     ...  deploy app with 1 UDP port
@@ -50,7 +51,7 @@ User shall be able to access 1 UDP port on openstack
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
@@ -61,6 +62,7 @@ User shall be able to access 1 UDP port on openstack
 #    UDP Port Should Be Alive  app1554837441-901057-udp.automationhamburgcloudlet.tdg.mobiledgex.net  2015
    #UDP Port Should Be Alive  10.101.8.2  2015
 
+# ECQ-1090
 User shall be able to access 2 UDP ports on openstack
     [Documentation]
     ...  deploy app with 2 UDP ports
@@ -77,7 +79,7 @@ User shall be able to access 2 UDP ports on openstack
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 	
@@ -87,6 +89,7 @@ User shall be able to access 2 UDP ports on openstack
     UDP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
+# ECQ-1091
 User shall be able to access 1 TCP port on openstack
     [Documentation]
     ...  deploy app with 1 TCP port
@@ -101,7 +104,7 @@ User shall be able to access 1 TCP port on openstack
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     Log To Console  Waiting for k8s pod to be running
@@ -110,6 +113,7 @@ User shall be able to access 1 TCP port on openstack
     Log To Console  Checking if port is alive
     TCP Port Should Be Alive  ${fqdn}  ${cloudlet.ports[0].public_port}
 
+ # ECQ-1092
 User shall be able to access 2 TCP ports on openstack
     [Documentation]
     ...  deploy app with 2 TCP ports
@@ -124,7 +128,7 @@ User shall be able to access 2 TCP ports on openstack
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
@@ -133,6 +137,7 @@ User shall be able to access 2 TCP ports on openstack
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
+# ECQ-1093
 User shall be able to access 2 UDP and 2 TCP ports on openstack
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports
@@ -149,7 +154,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
@@ -163,6 +168,7 @@ User shall be able to access 2 UDP and 2 TCP ports on openstack
     UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
     UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
+# ECQ-1313
 User shall be able to access HTTP port on openstack
     [Documentation]
     ...  deploy app with HTTP port
@@ -179,7 +185,7 @@ User shall be able to access HTTP port on openstack
 	
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
     ${page}=  Catenate  SEPARATOR=/  ${cloudlet.ports[0].path_prefix}  ${http_page}
 
     Log To Console  Waiting for k8s pod to be running
@@ -188,6 +194,7 @@ User shall be able to access HTTP port on openstack
     Log To Console  Checking if port is alive
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[0].public_port}  ${page}
 
+# ECQ-1314
 User shall be able to access UDP,TCP and HTTP ports on openstack
     [Documentation]
     ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports
@@ -202,7 +209,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
@@ -214,6 +221,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
+# ECQ-
 User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     [Documentation]
     ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
@@ -228,7 +236,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
@@ -240,6 +248,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
+# ECQ-
 User shall be able to access UDP,TCP and HTTP ports on openstack with manifest and no image_path
     [Documentation]
     ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
@@ -254,7 +263,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest a
     Wait For App Instance Health Check OK
 
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
