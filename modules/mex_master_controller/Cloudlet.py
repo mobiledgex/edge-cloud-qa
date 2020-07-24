@@ -20,7 +20,7 @@ class Cloudlet(MexOperation):
         self.addmapping_url = '/auth/ctrl/AddCloudletResMapping'
         self.addrestag_url = '/auth/ctrl/AddResTag'
 
-    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, crm_override=None, notify_server_address=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1"
@@ -125,6 +125,21 @@ class Cloudlet(MexOperation):
                 key,value = var.split('=')
                 env_dict[key] = value
             cloudlet_dict['env_var'] = env_dict
+
+        access_dict = {}
+        if access_vars is not None:
+            var_list = access_vars.split(',')
+            for var in var_list:
+                #print('*WARN*', var)
+                if 'CACERT_DATA' in var:
+                    key,value = var.split('CACERT_DATA=')
+                    key = 'CACERT_DATA'
+                elif 'OPENRC_DATA' in var:
+                    key,value = var.split('OPENRC_DATA=')
+                    key = 'OPENRC_DATA'
+                print('*WARN*', 'kv',key,value)
+                access_dict[key] = value
+            cloudlet_dict['access_vars'] = access_dict
             
         if include_fields and _fields_list:
             cloudlet_dict['fields'] = []
@@ -174,8 +189,8 @@ class Cloudlet(MexOperation):
         return map_dict
 
     
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_delete = None
