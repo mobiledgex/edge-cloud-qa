@@ -29,8 +29,7 @@ ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:
 ${docker_command}  ./server_ping_threaded.py
 ${http_page}       automation.html
 
-${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
-${manifest_pod_name}=  server-ping-threaded-udptcphttp
+${docker_image_cpu}    docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:1.0
 
 ${test_timeout_crm}  15 min
 
@@ -51,8 +50,6 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
-    Wait for k8s pod to be running  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_org_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
-
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
@@ -68,8 +65,8 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=2
     Log To Console  Done Updating Cluster Instance
 
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
-    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
+    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
     ${server_info_master}=  Get Server List  name=${openstack_node_master}
@@ -112,8 +109,6 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
     Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=True
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
-    Wait for k8s pod to be running  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_org_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
-
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
@@ -129,8 +124,8 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=2
     Log To Console  Done Updating Cluster Instance
 
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
-    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name}
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
+    ${openstack_node_master}=  Catenate  SEPARATOR=-  master   ${cloudlet_lowercase}  ${cluster_name_default}
 
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
     ${server_info_master}=  Get Server List  name=${openstack_node_master}
@@ -154,29 +149,49 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create Autoscale Policy  region=${region}  min_nodes=2  max_nodes=4  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_default}  ${rootlb}
+
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
 
     Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=2
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
     Log To Console  Done Creating Cluster Instance
 
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}   scale_with_cluster=True 
+    Create App  region=${region}  image_path=${docker_image_cpu}  access_ports=tcp:2017  scale_with_cluster=True 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}
 
     Log To Console  Updating Cluster Instance 
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default} 
     Log To Console  Done Updating Cluster Instance
 
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
+
+    Set CPU Load  host=${clusterlb}  port=2017  load_percentage=72
+    Sleep  60s
+
+    FOR  ${x}  IN RANGE  0  30
+        ${server_info_node}=    Get Server List  name=${openstack_node_name}
+        ${num_servers_node}=    Get Length  ${server_info_node}
+        Exit For Loop If  '${num_servers_node}' == '2'
+        Sleep  10s
+    END
+
+    Should Be Equal As Numbers   ${num_servers_node}    2
+
+    FOR  ${x}  IN RANGE  0  10
+        ${clusterInst}=  Show Cluster Instances  region=${region}   cluster_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}
+        Exit For Loop If  '${clusterInst[0]['data']['state']}' == '5'
+        Sleep  10s
+    END
+
+    Should Be Equal As Numbers   ${clusterInst[0]['data']['state']}   5
+
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
 
 Shall be able to update IpAccessDedicated k8s cluster to include auto scale policy where min_nodes > number_nodes
@@ -202,7 +217,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}
     Log To Console  Done Updating Cluster Instance
 
-    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
 
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
