@@ -57,8 +57,12 @@ import com.mobiledgex.mel.MelMessaging;
 //import static org.junit.Assert.assertEquals;
 
 /*
+this is for DT sim card
+edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateOperatorCode  code=310260 organization=TELUS
+
 edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateApp appname=automation-sdk-docker-app2 app-org=MobiledgeX appvers=1.0 imagepath=docker.mobiledgex.net/adevorg/images/server-ping-threaded:6.0 accessports=tcp:1234,udp:1,tcp:1-5:tls,tcp:8080 deployment=docker defaultflavor=x1.medium androidpackagename=com.mobiledgex.sdkexerciser officialfqdn=stackoverflow1.com
 edgectl controller --addr mexdemo-us.ctrl.mobiledgex.net:55001 --tls ~/mex-ca.crt CreateAppInst appname=automation-sdk-docker-app2 app-org=MobiledgeX appvers=1.0 cloudlet=telusfake cloudlet-org=TELUS  cluster-org=MobiledgeX cluster=autoclustersdkdocker2
+
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -750,7 +754,7 @@ public class MainActivity extends AppCompatActivity {
             String findCloudletReplyFqdn = reply.getFqdn();
             String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
 
-            if (!officialAddress.equals(cloudletAddress)) throw new AssertionError("IP address does not patch officialfqdn=" + officialAddress + ". cloudletAddress=" + cloudletAddress);
+            if (!officialAddress.equals(cloudletAddress)) throw new AssertionError("IP address does not match officialfqdn=" + officialAddress + ". cloudletAddress=" + cloudletAddress);
         } catch (UnknownHostException var6) {
             throw new AssertionError("caught UnknownHostException");
         }
@@ -791,18 +795,19 @@ public class MainActivity extends AppCompatActivity {
             exc.printStackTrace();
         }
 
+        if (AppClient.FindCloudletReply.FindStatus.FIND_FOUND != reply.getStatus()) throw new AssertionError("App's expected test cloudlet Status doesn't match. got=" + reply.getStatus() + " expected=" + AppClient.FindCloudletReply.FindStatus.FIND_FOUND );
+
         try {
             String cloudletAddress = InetAddress.getByName(foundCloudletFqdn).getHostAddress();
             String findCloudletReplyFqdn = reply.getFqdn();
             String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
 
-            if (!officialAddress.equals(cloudletAddress)) throw new AssertionError("claim orgname does not patch");
+            if (!officialAddress.equals(cloudletAddress)) throw new AssertionError("address does not match. expected=" + cloudletAddress + " reply=" + officialAddress);
         } catch (UnknownHostException var6) {
             throw new AssertionError("caught UnknownHostException");
         }
         if (null == reply) throw new AssertionError("FindCloudlet is null");
 
-        if (AppClient.FindCloudletReply.FindStatus.FIND_FOUND != reply.getStatus()) throw new AssertionError("App's expected test cloudlet Status doesn't match.");
         if (AppClient.FindCloudletReply.FindStatus.FIND_FOUND_VALUE != reply.getStatusValue()) throw new AssertionError("App's expected test cloudlet Status Value doesn't match.");
 
         if (!reply.getFqdn().equals(foundCloudletFqdn)) throw new AssertionError("App's expected test cloudlet FQDN doesn't match.");
