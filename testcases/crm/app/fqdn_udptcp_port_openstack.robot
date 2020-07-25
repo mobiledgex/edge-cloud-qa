@@ -221,7 +221,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
-# ECQ-
+# ECQ-2267
 User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     [Documentation]
     ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
@@ -243,15 +243,14 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
-#    UDP Port Should Be Alive  server-ping-threaded-udptcphttp-udpservice.automationhawkinscloudlet.gddt.mobiledgex.net  10003
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
 
-# ECQ-
+# ECQ-2268
 User shall be able to access UDP,TCP and HTTP ports on openstack with manifest and no image_path
     [Documentation]
-    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest
+    ...  deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest and no image_path
     ...  verify all ports are accessible via fqdn
 
     ${cluster_name_default}=  Get Default Cluster Name
@@ -270,7 +269,6 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest a
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
-#    UDP Port Should Be Alive  server-ping-threaded-udptcphttp-udpservice.automationhawkinscloudlet.gddt.mobiledgex.net  10003
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
