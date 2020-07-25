@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "server-ping-threaded-chart.fullname" . }}tcp
+  labels:
+    app.kubernetes.io/name: {{ include "server-ping-threaded-chart.name" . }}
+    helm.sh/chart: {{ include "server-ping-threaded-chart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.tcpport }}
+      targetPort: {{ .Values.service.tcpport }}
+      protocol: TCP
+      name: tcp{{ .Values.service.tcpport }}
+  selector:
+    app.kubernetes.io/name: {{ include "server-ping-threaded-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "server-ping-threaded-chart.fullname" . }}udp
+  labels:
+    app.kubernetes.io/name: {{ include "server-ping-threaded-chart.name" . }}
+    helm.sh/chart: {{ include "server-ping-threaded-chart.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.udpport }}
+      targetPort: {{ .Values.service.udpport }}
+      protocol: UDP
+      name: udp{{ .Values.service.tcpport }}
+  selector:
+    app.kubernetes.io/name: {{ include "server-ping-threaded-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
