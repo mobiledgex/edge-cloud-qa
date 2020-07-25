@@ -37,6 +37,7 @@ Shall be able to update IpAccessShared k8s autocluster to modify number of worke
     [Documentation]
     ...  increase and reduce the number of slave nodes 
 
+    #EDGECLOUD-3133 - After UpdateClusterInst to increase the number of worker nodes , App Inst is no longer running
     ${cluster_name_default}=  Get Default Cluster Name
     ${cluster_name_default}=  Catenate  SEPARATOR=  auto  ${cluster_name_default}
     ${app_name_default}=  Get Default App Name
@@ -88,6 +89,7 @@ Shall be able to update IpAccessShared k8s autocluster to modify number of worke
     [Documentation]
     ...  increase the number of slave nodes with scale_with_cluster enabled for App
 
+    #EDGECLOUD-3133 - After UpdateClusterInst to increase the number of worker nodes , App Inst is no longer running
     ${cluster_name_default}=  Get Default Cluster Name
     ${cluster_name_default}=  Catenate  SEPARATOR=  auto  ${cluster_name_default}
     ${app_name_default}=  Get Default App Name
@@ -128,6 +130,7 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
     ...  create a cluster instance
     ...  update cluster instance to add the auto scale policy
 
+    #EDGECLOUD-3271 - After cluster instance is created by auto scaling policy , app instances are no longer running
     ${policy_name_default}=  Get Default Autoscale Policy Name
     ${cluster_name_default}=  Get Default Cluster Name
     ${cluster_name_default}=  Catenate  SEPARATOR=  auto  ${cluster_name_default}
@@ -178,6 +181,7 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
     ...  create a cluster instance
     ...  update cluster instance to add the auto scale policy
 
+    #EDGECLOUD-3167 - UpdateClusterInst should scale up the worker nodes to match the auto scaling policy
     ${policy_name_default}=  Get Default Autoscale Policy Name
     ${cluster_name_default}=  Get Default Cluster Name
     ${cluster_name_default}=  Catenate  SEPARATOR=  auto  ${cluster_name_default}
