@@ -9,7 +9,7 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${region}=  US
-${developer}=  mobiledgex
+${developer}=  MobiledgeX
 
 *** Test Cases ***
 CreatePrivacyPolicy - shall be able to create with policy and developer name only
