@@ -20,7 +20,11 @@ class ClusterInstance(MexOperation):
         self.metrics_cluster_url = '/auth/metrics/cluster'
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, use_defaults=True):
+    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False):
+
+        _fields_list = []
+        _number_nodes_field_number="14"
+        _autoscale_policy_field_number="18"
         liveness = None
         
         if cluster_name == 'default':
@@ -91,6 +95,7 @@ class ClusterInstance(MexOperation):
 
         if number_nodes is not None:
             clusterinst_dict['num_nodes'] = int(number_nodes)
+            _fields_list.append(_number_nodes_field_number)
 
         if shared_volume_size is not None:
             clusterinst_dict['shared_volume_size'] = int(shared_volume_size)
@@ -110,6 +115,15 @@ class ClusterInstance(MexOperation):
 
         if deployment is not None:
             clusterinst_dict['deployment'] = deployment
+    
+        if autoscale_policy_name is not None:
+            clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
+            _fields_list.append(_autoscale_policy_field_number)
+
+        if include_fields and _fields_list:
+            clusterinst_dict['fields'] = []
+            for field in _fields_list:
+                clusterinst_dict['fields'].append(field)
             
         print("ClusterInst Dict", clusterinst_dict)    
 
@@ -164,6 +178,20 @@ class ClusterInstance(MexOperation):
         msg_dict = {'clusterinst': msg}
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+
+    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False): 
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=use_defaults, include_fields=True)      
+        msg_dict = {'clusterinst': msg}
+     
+        msg_dict_show = None
+        if 'key' in msg:
+            msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
+            msg_dict_show = {'clusterinst': msg_show}
+        print('*WARN*', use_defaults, region)
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict)
+
 
     def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True):
         msg = self._build(cluster_name=cluster_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults)
