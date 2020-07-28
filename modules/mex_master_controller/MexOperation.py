@@ -63,6 +63,7 @@ class MexOperation(MexRest):
             payload = json_data
         else:
             msg_dict = message
+           
         if region is not None:
             msg_dict['region'] = region
             
@@ -87,6 +88,9 @@ class MexOperation(MexRest):
                 if 'CreateClusterInst' in url:
                     if 'Created ClusterInst successfully' not in str(self.resp.text):
                         raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
+                if 'UpdateClusterInst' in url:
+                    if 'Updated ClusterInst successfully' not in str(self.resp.text):
+                        raise Exception('ERROR: ClusterInst not updated successfully:' + str(self.resp.text))
                 elif url.endswith('CreateCloudlet'):
                     if 'Created Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
