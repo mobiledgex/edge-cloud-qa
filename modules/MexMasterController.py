@@ -18,6 +18,7 @@ from mex_controller_classes import Organization
 from mex_master_controller.OrgCloudletPool import OrgCloudletPool
 from mex_master_controller.OrgCloudlet import OrgCloudlet
 from mex_master_controller.CloudletPool import CloudletPool
+from mex_master_controller.VMPool import VMPool
 from mex_master_controller.CloudletPoolMember import CloudletPoolMember
 from mex_master_controller.Cloudlet import Cloudlet
 from mex_master_controller.App import App
@@ -143,6 +144,7 @@ class MexMasterController(MexRest):
         self.cloudlet_pool_member = None
         self.org_cloudlet_pool = None
         self.org_cloudlet = None
+        self.vm_pool = None
         self.operatorcode =  None
         self.privacy_policy =  None
         self.autoprov_policy =  None
@@ -180,6 +182,7 @@ class MexMasterController(MexRest):
         self.autoprov_policy = AutoProvisioningPolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.rundebug = RunDebug(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.vm_pool = VMPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -223,6 +226,9 @@ class MexMasterController(MexRest):
 
     def get_default_privacy_policy_name(self):
         return shared_variables.privacy_policy_name_default
+
+    def get_default_vm_pool_name(self):
+        return shared_variables.vmpool_name_default
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
@@ -1721,8 +1727,8 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 #        url = self.root_url + '/auth/ctrl/CreateCloudlet'
 #
 #        payload = None
@@ -2186,6 +2192,12 @@ class MexMasterController(MexRest):
 
     def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.vm_pool.create_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def delete_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.vm_pool.delete_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.privacy_policy.create_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)

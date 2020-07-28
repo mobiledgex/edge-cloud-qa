@@ -15,6 +15,7 @@ flavor_name_default = 'flavor' + default_time_stamp
 cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 organization_name_default = 'org' + default_time_stamp
 cloudletpool_name_default = 'cloudletpool' + default_time_stamp
+vmpool_name_default = 'vmpool' + default_time_stamp
 
 privacy_policy_name_default = 'privacypolicy' + default_time_stamp
 autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
