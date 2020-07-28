@@ -16,7 +16,7 @@ class AutoScalePolicy(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteAutoScalePolicy'
         self.show_url = '/auth/ctrl/ShowAutoScalePolicy'
 
-    def _build(self, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
+    def _build(self, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, include_fields=False, use_defaults=True):
 
         policy = None
 
@@ -38,11 +38,12 @@ class AutoScalePolicy(MexOperation):
         _trigger_time_field_number = "7"
                 
         if policy_name == 'default':
-            policy_name = shared_variables.autoscalepolicy_name_default
+            policy_name = shared_variables.autoscale_policy_name_default
             
         if use_defaults:
-            if policy_name is None: policy_name = shared_variables.autoscalepolicy_name_default
+            if policy_name is None: policy_name = shared_variables.autoscale_policy_name_default
             if developer_name is None: developer_name = shared_variables.developer_name_default
+            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
             if min_nodes is None: min_nodes = 1
             if max_nodes is None: max_nodes = 2
             if scale_up_cpu_threshold is None: scale_up_cpu_threshold = 50
@@ -58,10 +59,13 @@ class AutoScalePolicy(MexOperation):
         if developer_name:
             policy_key_dict['developer'] = developer_name
             _fields_list.append(_developer_field_number)
+   
+        if developer_org_name is not None:
+            policy_key_dict['organization'] = developer_org_name
                         
         if policy_key_dict:
             policy_dict['key'] = policy_key_dict
-            
+
         if min_nodes is not None:
             try:
                 policy_dict['min_nodes'] = int(min_nodes)
@@ -104,8 +108,8 @@ class AutoScalePolicy(MexOperation):
 
         return policy_dict
 
-    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults)
+    def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults)
         msg_dict = {'autoscalepolicy': msg}
 
         msg_dict_delete = None

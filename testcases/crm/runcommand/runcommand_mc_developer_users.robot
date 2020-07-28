@@ -19,7 +19,7 @@ ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
 ${docker_image}=  image
-${docker_image_developer}=  mobiledgex
+${docker_image_developer}=  MobiledgeX
 	
 *** Test Cases ***
 # ECQ-1567
@@ -66,7 +66,7 @@ RunCommand - DeveloperViewer shall not be able to do RunCommand
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
-    Should Be Equal  ${error}  ('code=403', 'error={"message":"code=403, message=Forbidden"}')
+    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
 *** Keywords ***
 Setup
