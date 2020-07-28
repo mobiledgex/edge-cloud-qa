@@ -8,7 +8,7 @@ Library  MexArtifactory
 Library  String
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+Test Teardown   Teardown
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -99,10 +99,10 @@ Setup
 
     Create Flavor  region=${region}
 
-    Skip Verify Email
-    Create user  username=${username1}  password=${password}  email_address=${email1}  
+    Skip Verify Email   skip_verify_email=False
+    Create user  username=${username1}  password=${password}  email_address=${email1}  email_check=True  
     Unlock User  username=${username1}
-    #Verify Email
+    Verify Email
 
     Create Org  orgname=${orgname}  orgtype=developer
 
@@ -121,3 +121,8 @@ Setup
     Set Suite Variable  ${rootlb}
     Set Suite Variable  ${orgname}
     Set Suite Variable  ${username1}
+
+
+Teardown
+    Skip Verify Email   skip_verify_email=True
+    Cleanup Provisioning

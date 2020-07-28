@@ -9,7 +9,7 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${region}=  US
-${developer}=  mobiledgex
+${developer}=  MobiledgeX
 
 ${operator_name_fake}=  tmus
 ${cloudlet_name_fake}=  tmocloud-1
@@ -46,7 +46,7 @@ CreatePrivacyPolicy - create without policy name shall return error
    ...  send CreatePrivacyPolicy with no policy name 
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Privacy Policy  developer_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Privacy Policy  developer_org_name=${developer}  region=${region}  token=${token}  use_defaults=${False}
 
 CreatePrivacyPolicy - create with unknown org name shall return error
    [Documentation]
