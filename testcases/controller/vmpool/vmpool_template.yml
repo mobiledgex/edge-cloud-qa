@@ -1,7 +1,7 @@
 description: Create a VM
 heat_template_version: '2016-10-14'
 resources:
-  generic-subnet:
+  vmpool-subnet:
     properties:
       cidr: 10.101.255.0/24
       dns_nameservers:
@@ -9,153 +9,127 @@ resources:
       - 1.0.0.1
       enable_dhcp: false
       gateway_ip: ""
-      name: mex-generic-subnet
+      name: mex-vmpool-subnet
       network: mex-k8s-net-1
     type: OS::Neutron::Subnet
-  genericvm1-port:
+  vmpoolvm1-port:
     properties:
       fixed_ips:
       - ip_address: 10.101.255.191
         subnet:
-          get_resource: generic-subnet
-      name: mex-genericvm1-port
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm1-port
       network_id: mex-k8s-net-1
       port_security_enabled: true
     type: OS::Neutron::Port
-  genericvm2-port:
+  vmpoolvm2-port:
     properties:
       fixed_ips:
       - ip_address: 10.101.255.192
         subnet:
-          get_resource: generic-subnet
-      name: mex-genericvm2-port
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm2-port
       network_id: mex-k8s-net-1
       port_security_enabled: true
     type: OS::Neutron::Port
-  genericvm3-port:
+  vmpoolvm3-port:
     properties:
       fixed_ips:
       - ip_address: 10.101.255.193
         subnet:
-          get_resource: generic-subnet
-      name: mex-genericvm3-port
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm3-port
       network_id: mex-k8s-net-1
       port_security_enabled: true
     type: OS::Neutron::Port
-  genericvm4-port:
+  vmpoolvm4-port:
     properties:
       fixed_ips:
       - ip_address: 10.101.255.194
         subnet:
-          get_resource: generic-subnet
-      name: mex-genericvm4-port
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm4-port
       network_id: mex-k8s-net-1
       port_security_enabled: true
     type: OS::Neutron::Port
-  genericvm5-port:
+  vmpoolvm5-port:
     properties:
       fixed_ips:
       - ip_address: 10.101.255.195
         subnet:
-          get_resource: generic-subnet
-      name: mex-genericvm5-port
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm5-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+    type: OS::Neutron::Port
+  vmpoolvm6-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.255.196
+        subnet:
+          get_resource: vmpool-subnet
+      name: mex-vmpoolvm6-port
       network_id: mex-k8s-net-1
       port_security_enabled: true
     type: OS::Neutron::Port
 
-  genericvm1:
+  vmpoolvm1:
     properties:
       config_drive: true
       flavor: m4.medium
-      image: mobiledgex-v3.1.4
-      name: genericvm1
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm1
       networks:
       - network: external-network-shared
-      - port: { get_resource: genericvm1-port }
-      user_data: "#cloud-config\nbootcmd:\n - echo MOBILEDGEX CLOUD CONFIG START\n\
-        \ - echo 'APT::Periodic::Enable \"0\";' > /etc/apt/apt.conf.d/10cloudinit-disable\n\
-        \ - apt-get -y purge update-notifier-common ubuntu-release-upgrader-core landscape-common\
-        \ unattended-upgrades\n - echo \"Removed APT and Ubuntu extra packages\" |\
-        \ systemd-cat\nssh_authorized_keys:\n - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrHlOJOJUqvd4nEOXQbdL8ODKzWaUxKVY94pF7J3diTxgZ1NTvS6omqOjRS3loiU7TOlQQU4cKnRRnmJW8QQQZSOMIGNrMMInGaEYsdm6+tr1k4DDfoOrkGMj3X/I2zXZ3U+pDPearVFbczCByPU0dqs16TWikxDoCCxJRGeeUl7duzD9a65bI8Jl+zpfQV+I7OPa81P5/fw15lTzT4+F9MhhOUVJ4PFfD+d6/BLnlUfZ94nZlvSYnT+GoZ8xTAstM7+6pvvvHtaHoV4YqRf5CelbWAQ162XNa9/pW5v/RKDrt203/JEk3e70tzx9KAfSw2vuO1QepkCZAdM9rQoCd\
-        \ ubuntu@registry\nchpasswd: { expire: False }\nssh_pwauth: False\ntimezone:\
-        \ UTC\nruncmd:\n - [ echo, MOBILEDGEX, doing, ifconfig ]\n - [ ifconfig, -a\
-        \ ]"
-      user_data_format: RAW
+      - port: { get_resource: vmpoolvm1-port }
     type: OS::Nova::Server
-  genericvm2:
+  vmpoolvm2:
     properties:
       config_drive: true
       flavor: m4.medium
-      image: mobiledgex-v3.1.4
-      name: genericvm2
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm2
       networks:
       - network: external-network-shared
-      - port: { get_resource: genericvm2-port }
-      user_data: "#cloud-config\nbootcmd:\n - echo MOBILEDGEX CLOUD CONFIG START\n\
-        \ - echo 'APT::Periodic::Enable \"0\";' > /etc/apt/apt.conf.d/10cloudinit-disable\n\
-        \ - apt-get -y purge update-notifier-common ubuntu-release-upgrader-core landscape-common\
-        \ unattended-upgrades\n - echo \"Removed APT and Ubuntu extra packages\" |\
-        \ systemd-cat\nssh_authorized_keys:\n - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrHlOJOJUqvd4nEOXQbdL8ODKzWaUxKVY94pF7J3diTxgZ1NTvS6omqOjRS3loiU7TOlQQU4cKnRRnmJW8QQQZSOMIGNrMMInGaEYsdm6+tr1k4DDfoOrkGMj3X/I2zXZ3U+pDPearVFbczCByPU0dqs16TWikxDoCCxJRGeeUl7duzD9a65bI8Jl+zpfQV+I7OPa81P5/fw15lTzT4+F9MhhOUVJ4PFfD+d6/BLnlUfZ94nZlvSYnT+GoZ8xTAstM7+6pvvvHtaHoV4YqRf5CelbWAQ162XNa9/pW5v/RKDrt203/JEk3e70tzx9KAfSw2vuO1QepkCZAdM9rQoCd\
-        \ ubuntu@registry\nchpasswd: { expire: False }\nssh_pwauth: False\ntimezone:\
-        \ UTC\nruncmd:\n - [ echo, MOBILEDGEX, doing, ifconfig ]\n - [ ifconfig, -a\
-        \ ]"
-      user_data_format: RAW
+      - port: { get_resource: vmpoolvm2-port }
     type: OS::Nova::Server
-  genericvm3:
+  vmpoolvm3:
     properties:
       config_drive: true
       flavor: m4.medium
-      image: mobiledgex-v3.1.4
-      name: genericvm3
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm3
       networks:
       - network: external-network-shared
-      - port: { get_resource: genericvm3-port }
-      user_data: "#cloud-config\nbootcmd:\n - echo MOBILEDGEX CLOUD CONFIG START\n\
-        \ - echo 'APT::Periodic::Enable \"0\";' > /etc/apt/apt.conf.d/10cloudinit-disable\n\
-        \ - apt-get -y purge update-notifier-common ubuntu-release-upgrader-core landscape-common\
-        \ unattended-upgrades\n - echo \"Removed APT and Ubuntu extra packages\" |\
-        \ systemd-cat\nssh_authorized_keys:\n - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrHlOJOJUqvd4nEOXQbdL8ODKzWaUxKVY94pF7J3diTxgZ1NTvS6omqOjRS3loiU7TOlQQU4cKnRRnmJW8QQQZSOMIGNrMMInGaEYsdm6+tr1k4DDfoOrkGMj3X/I2zXZ3U+pDPearVFbczCByPU0dqs16TWikxDoCCxJRGeeUl7duzD9a65bI8Jl+zpfQV+I7OPa81P5/fw15lTzT4+F9MhhOUVJ4PFfD+d6/BLnlUfZ94nZlvSYnT+GoZ8xTAstM7+6pvvvHtaHoV4YqRf5CelbWAQ162XNa9/pW5v/RKDrt203/JEk3e70tzx9KAfSw2vuO1QepkCZAdM9rQoCd\
-        \ ubuntu@registry\nchpasswd: { expire: False }\nssh_pwauth: False\ntimezone:\
-        \ UTC\nruncmd:\n - [ echo, MOBILEDGEX, doing, ifconfig ]\n - [ ifconfig, -a\
-        \ ]"
-      user_data_format: RAW
+      - port: { get_resource: vmpoolvm3-port }
     type: OS::Nova::Server
-  genericvm4:
+  vmpoolvm4:
     properties:
       config_drive: true
       flavor: m4.medium
-      image: mobiledgex-v3.1.4
-      name: genericvm4
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm4
       networks:
       - network: external-network-shared
-      - port: { get_resource: genericvm4-port }
-      user_data: "#cloud-config\nbootcmd:\n - echo MOBILEDGEX CLOUD CONFIG START\n\
-        \ - echo 'APT::Periodic::Enable \"0\";' > /etc/apt/apt.conf.d/10cloudinit-disable\n\
-        \ - apt-get -y purge update-notifier-common ubuntu-release-upgrader-core landscape-common\
-        \ unattended-upgrades\n - echo \"Removed APT and Ubuntu extra packages\" |\
-        \ systemd-cat\nssh_authorized_keys:\n - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrHlOJOJUqvd4nEOXQbdL8ODKzWaUxKVY94pF7J3diTxgZ1NTvS6omqOjRS3loiU7TOlQQU4cKnRRnmJW8QQQZSOMIGNrMMInGaEYsdm6+tr1k4DDfoOrkGMj3X/I2zXZ3U+pDPearVFbczCByPU0dqs16TWikxDoCCxJRGeeUl7duzD9a65bI8Jl+zpfQV+I7OPa81P5/fw15lTzT4+F9MhhOUVJ4PFfD+d6/BLnlUfZ94nZlvSYnT+GoZ8xTAstM7+6pvvvHtaHoV4YqRf5CelbWAQ162XNa9/pW5v/RKDrt203/JEk3e70tzx9KAfSw2vuO1QepkCZAdM9rQoCd\
-        \ ubuntu@registry\nchpasswd: { expire: False }\nssh_pwauth: False\ntimezone:\
-        \ UTC\nruncmd:\n - [ echo, MOBILEDGEX, doing, ifconfig ]\n - [ ifconfig, -a\
-        \ ]"
-      user_data_format: RAW
+      - port: { get_resource: vmpoolvm4-port }
     type: OS::Nova::Server
-  genericvm5:
+  vmpoolvm5:
     properties:
       config_drive: true
       flavor: m4.medium
-      image: mobiledgex-v3.1.4
-      name: genericvm5
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm5
       networks:
       - network: external-network-shared
-      - port: { get_resource: genericvm5-port }
-      user_data: "#cloud-config\nbootcmd:\n - echo MOBILEDGEX CLOUD CONFIG START\n\
-        \ - echo 'APT::Periodic::Enable \"0\";' > /etc/apt/apt.conf.d/10cloudinit-disable\n\
-        \ - apt-get -y purge update-notifier-common ubuntu-release-upgrader-core landscape-common\
-        \ unattended-upgrades\n - echo \"Removed APT and Ubuntu extra packages\" |\
-        \ systemd-cat\nssh_authorized_keys:\n - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrHlOJOJUqvd4nEOXQbdL8ODKzWaUxKVY94pF7J3diTxgZ1NTvS6omqOjRS3loiU7TOlQQU4cKnRRnmJW8QQQZSOMIGNrMMInGaEYsdm6+tr1k4DDfoOrkGMj3X/I2zXZ3U+pDPearVFbczCByPU0dqs16TWikxDoCCxJRGeeUl7duzD9a65bI8Jl+zpfQV+I7OPa81P5/fw15lTzT4+F9MhhOUVJ4PFfD+d6/BLnlUfZ94nZlvSYnT+GoZ8xTAstM7+6pvvvHtaHoV4YqRf5CelbWAQ162XNa9/pW5v/RKDrt203/JEk3e70tzx9KAfSw2vuO1QepkCZAdM9rQoCd\
-        \ ubuntu@registry\nchpasswd: { expire: False }\nssh_pwauth: False\ntimezone:\
-        \ UTC\nruncmd:\n - [ echo, MOBILEDGEX, doing, ifconfig ]\n - [ ifconfig, -a\
-        \ ]"
-      user_data_format: RAW
+      - port: { get_resource: vmpoolvm5-port }
     type: OS::Nova::Server
-
+  vmpoolvm6:
+    properties:
+      config_drive: true
+      flavor: m4.medium
+      image: mobiledgex-3.1.4-ubuntussh
+      name: vmpoolvm6
+      networks:
+      - network: external-network-shared
+      - port: { get_resource: vmpoolvm6-port }
+    type: OS::Nova::Server
