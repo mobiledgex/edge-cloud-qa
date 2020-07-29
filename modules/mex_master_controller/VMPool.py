@@ -85,9 +85,40 @@ class VMPool(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_vm_pool(self, token=None, region=None, vm_pool_name=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(pool_name=vm_pool_name, use_defaults=use_defaults)
+    def show_vm_pool(self, token=None, region=None, vm_pool_name=None, organization=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(pool_name=vm_pool_name, organization=organization, use_defaults=use_defaults)
         msg_dict = {'vmpool': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
+    def vm_should_be_in_use(self, token=None, region=None, vm_pool_name=None, organization=None, group_name=None, internal_name=None):
+        pool = self.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=organization, use_defaults=True)
+        if not pool:
+            raise Exception(f'VM pool={vm_pool_name} not found')
+
+        for vm in pool['data']['vms']:
+            if 'group_name' in vm and vm['group_name'] == group_name and vm['internal_name'] == internal_name and vm['state'] == 2:
+                return vm['name']
+
+        raise Exception(f'VM with group_name={group_name} and internal_name={internal_name} not In Use or not found')
+                
+    def vm_should_not_be_in_use(self, token=None, region=None, vm_pool_name=None, organization=None, vm_name=None):
+        pool = self.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=organization, use_defaults=True)
+        if not pool:
+            raise Exception(f'VM pool={vm_pool_name} not found')
+
+        vm_found = False
+        
+        for vm in pool['data']['vms']:
+            if vm['name'] == vm_name:
+                logging.debug(f'found vm:{vm}')
+                vm_found = True
+                if 'group_name' in vm or 'internal_name' in vm or 'state' in vm:
+                   raise Exception(f'VM pool={vm_pool_name} name={vm_name} is in use:{vm}') 
+                else:
+                    logging.debug('vm is not in use')
+
+        if not vm_found:
+           raise Exception(f'VM with pool={vm_pool_name} name={vm_name} is not found')
+
+        return True 
