@@ -149,10 +149,16 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         print('new connection')
       
     def on_message(self, message):
-        print('message received:  %s' % message)
-        # Reverse Message and send it back
-        print('sending back message: %s' % message[::-1])
-        self.write_message(message[::-1])
+        if (isinstance(message, str)):
+            print('message received:  %s' % message)
+            # Reverse Message and send it back
+            print('sending back message: %s' % message[::-1])
+            self.write_message(message[::-1])
+        else:
+            print('Binary message received:  %s' % message)
+            # Send the Message  back
+            print('sending back message: %s' % message)
+            self.write_message(message, binary=True)
  
     def on_close(self):
         print('connection closed')
