@@ -229,7 +229,7 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudlet': msg}
 
         msg_dict_show = None
-        if 'key' in msg:
+        if 'key' in msg and 'name' in msg['key']:
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
