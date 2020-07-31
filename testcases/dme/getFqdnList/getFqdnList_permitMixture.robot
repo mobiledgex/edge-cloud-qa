@@ -66,11 +66,11 @@ GetFqdnList - request shall only return apps with permits_platform_apps=True
       Should Be Equal             ${appfqdns[5].org_name}  ${app_9.key.organization}
       Should Be Equal             ${appfqdns[5].fqdns[0]}     ${app_9.official_fqdn}
 
-      Length Should Be   ${appfqdns}  6 
+      Length Should Be   ${appfqdns}  ${appcount} 
 
 *** Keywords ***
 Setup
-    Create Flavor
+    Create Flavor  
     #Create Cluster	
 
     ${dev_1}                 Catenate  SEPARATOR=  ${developer_name_default}  01
@@ -83,7 +83,6 @@ Setup
     ${dev_8}                 Catenate  SEPARATOR=  ${developer_name_default}  08
     ${dev_9}                 Catenate  SEPARATOR=  ${developer_name_default}  09
     ${dev_10}                 Catenate  SEPARATOR=  ${developer_name_default}  10 
-
 
     #Create Developer         developer_name=${dev_1}
     ${app_1}=  Create App     developer_org_name=${dev_1}  access_ports=tcp:1  official_fqdn=${uri_1}  #permits_platform_apps=${True}
@@ -141,5 +140,11 @@ Setup
     Set Suite Variable  ${app_9}
     Set Suite Variable  ${app_10}
 
-
+    ${apps}=  Show Apps
+    ${appcount}=  Set Variable  0
+    FOR  ${a}  IN  @{apps}
+       ${contains}=  Get Length  ${a.official_fqdn}
+       ${appcount}=  Run Keyword If  ${contains} > 0  Evaluate  ${appcount} + 1  ELSE  Set Variable  ${appcount}
+    END
+    Set Suite Variable  ${appcount}
 

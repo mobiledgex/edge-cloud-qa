@@ -89,7 +89,9 @@ GetFqdnList - request shall return 10 apps
       Should Be Equal             ${appfqdns[9].org_name}  ${app_10.key.organization}
       Should Be Equal             ${appfqdns[9].fqdns[0]}     ${app_10.official_fqdn}
 
-      Length Should Be   ${appfqdns}  10 
+      Length Should Be   ${appfqdns}  ${appcount} 
+
+      Should Be True  ${appcount} >= 10
 
 *** Keywords ***
 Setup
@@ -150,7 +152,7 @@ Setup
 
 
     #Create Developer            developer_name=${samsung_developer_name}
-    Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  official_fqdn=${samsung_uri} 
+    Run Keyword and Ignore Error  Create App  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri} 
     #Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${app_1} 
@@ -164,5 +166,11 @@ Setup
     Set Suite Variable  ${app_9}
     Set Suite Variable  ${app_10}
 
-
+    ${apps}=  Show Apps
+    ${appcount}=  Set Variable  0
+    FOR  ${a}  IN  @{apps}
+       ${contains}=  Get Length  ${a.official_fqdn}
+       ${appcount}=  Run Keyword If  ${contains} > 0  Evaluate  ${appcount} + 1  ELSE  Set Variable  ${appcount}
+    END
+    Set Suite Variable  ${appcount}
 
