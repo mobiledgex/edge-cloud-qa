@@ -2196,8 +2196,17 @@ class MexMasterController(MexRest):
     def create_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.vm_pool.create_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
+    def show_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.vm_pool.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
     def delete_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.vm_pool.delete_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def vm_should_be_in_use(self, token=None, region=None, vm_pool_name=None, org_name=None, group_name=None, internal_name=None):
+        return self.vm_pool.vm_should_be_in_use(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, group_name=group_name, internal_name=internal_name)
+
+    def vm_should_not_be_in_use(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_name=None):
+        return self.vm_pool.vm_should_not_be_in_use(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_name=vm_name)
 
     def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.privacy_policy.create_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
