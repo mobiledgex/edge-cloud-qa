@@ -31,7 +31,7 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${qcow_gpu_ubuntu16_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
-${client_path}     ../edge-cloud-sampleapps/FaceDetectionServer/client
+${client_path}     ../edge-cloud-sampleapps/ComputerVision/client
 #${client_path}  ../../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 ${image}=  3_bodies.png
