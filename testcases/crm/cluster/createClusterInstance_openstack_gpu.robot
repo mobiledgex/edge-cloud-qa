@@ -110,17 +110,21 @@ GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    Log to Console  DONE creating cluster instance
 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+   ${clustervm}=  Set Variable  mex-docker-vm-${cloudlet_name_openstack_gpu}-${cluster_name}-mobiledgex
 
    ${server_info}=    Get Server List  name=${clusterlb}
+   ${server_info_vm}=    Get Server List  name=${clustervm}
 
    # verify master and node have gpu_flavor
    Should Be Equal  ${server_info[0]['Flavor']}             m4.medium 
    Should Be Equal  ${server_info[0]['Status']}             ACTIVE
+   Should Be Equal  ${server_info_vm[0]['Flavor']}             m4.large-gpu
+   Should Be Equal  ${server_info_vm[0]['Status']}             ACTIVE
    Should Be Equal  ${cluster_inst['data']['node_flavor']}  ${openstack_flavor_name} 
    Should Be Equal  ${cluster_inst['data']['deployment']}   docker 
   
    # verify the NVIDIA is allocated
-   Node Should Have GPU  root_loadbalancer=${clusterlb}  node=${server_info[0]['Networks']}
+   Node Should Have GPU  root_loadbalancer=${clusterlb}  node=${server_info_vm[0]['Networks']}
 
 # ECQ-1905
 GPU - 1 GPU shall be allocated for Docker IpAccessShared on openstack
