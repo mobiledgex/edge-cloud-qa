@@ -3,7 +3,7 @@ test_timeout_crm = '60 min'
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
 #cloudlet_name_openstack = 'automationHamburgCloudlet'
-cloudlet_name_openstack = 'automationBonnCloudlet'
+cloudlet_name_openstack = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_shared = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_dedicated = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_vm = 'automationFrankfurtCloudlet'
@@ -26,6 +26,8 @@ qcow_centos_image_notrunning = 'https://artifactory-qa.mobiledgex.net/artifactor
 qcow_windows_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_windows2012.qcow2#md5:42171406daca80298098ac314200634a'
 qcow_centos_openstack_image = 'server_ping_threaded_centos7'
 qcow_gpu_ubuntu16_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/ubuntu16_nvidia_gpu.qcow2#md5:ebefc158437895d0399802dac66b2f4f'
+
+helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
 #vm_console_address =  'https://hamedgecloud.telekom.de:6080/vnc_auto.html'
 vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
