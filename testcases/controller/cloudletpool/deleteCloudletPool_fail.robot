@@ -36,10 +36,10 @@ DeleteCloudletPool - delete with name not found shall return error
    ...  send DeleteCloudletPool for policy not found
    ...  verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=xpoolx
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=xpoolx  operator_org_name=dmuus
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xpoolx\\\\"} not found"}
+   Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"xpoolx\\\\"} not found"}
 
 DeleteCloudletPool - delete when assinged to an org shall return error 
    [Documentation]
