@@ -7,6 +7,10 @@ Library  String
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
+*** Variables ***
+${region}=  US
+${organization}=  TDG
+
 *** Test Cases ***
 CreateCloudletPool - shall be able to create with long pool name 
    [Documentation]
@@ -15,7 +19,7 @@ CreateCloudletPool - shall be able to create with long pool name
 
    ${name}=  Generate Random String  length=100
 
-   ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${name}  use_defaults=False
+   ${pool_return}=  Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=${name}  operator_org_name=${organization}  use_defaults=False
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
 
@@ -27,7 +31,7 @@ CreateCloudletPool - shall be able to create with numbers in pool name
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
    
-   ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  use_defaults=False
+   ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=${organization}  use_defaults=False
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${epoch} 
 
