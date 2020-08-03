@@ -20,13 +20,16 @@ CreateCloudletPoolMember - shall be able to create with long pool name
 
    ${name}=  Generate Random String  length=100
 
-   Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${name}
-   ${pool_return}=  Create Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${name}  operator_org_name=${operator}  cloudlet_name=${cloudlet} 
-   log to console  xxx ${pool_return}
+   Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${name}  operator_org_name=${operator}
+   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${name}  operator_org_name=${operator}  cloudlet_name=${cloudlet} 
 
-   Should Be Equal  ${pool_return['data']['pool_key']['name']}                      ${name} 
-   Should Be Equal  ${pool_return['data']['cloudlet_key']['name']}                  ${cloudlet}
-   Should Be Equal  ${pool_return['data']['cloudlet_key']['organization']}  ${operator}
+   ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${name}  operator_org_name=${operator}
+
+   Should Be Equal  ${pool_return['data']['key']['name']}                   ${name} 
+   Should Be Equal  ${pool_return['data']['key']['organization']}           ${operator}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]}                  ${cloudlet}
+
+   Length Should Be  ${pool_return['data']['cloudlets']}   1
 
 CreateCloudletPoolMember - shall be able to create with numbers in pool name 
    [Documentation]
@@ -36,12 +39,16 @@ CreateCloudletPoolMember - shall be able to create with numbers in pool name
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
 
-   Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}
-   ${pool_return}=  Create Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=tmocloud-1 
+   Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
+   Add Cloudlet Pool Member  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=dmuus  cloudlet_name=tmocloud-1 
 
-   Should Be Equal  ${pool_return['data']['pool_key']['name']}                      ${epoch} 
-   Should Be Equal  ${pool_return['data']['cloudlet_key']['name']}                  ${cloudlet}
-   Should Be Equal  ${pool_return['data']['cloudlet_key']['organization']}  ${operator}
+   ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
+
+   Should Be Equal  ${pool_return['data']['key']['name']}                   ${epoch}
+   Should Be Equal  ${pool_return['data']['key']['organization']}           ${operator}
+   Should Be Equal  ${pool_return['data']['cloudlets'][0]}                  ${cloudlet}
+
+   Length Should Be  ${pool_return['data']['cloudlets']}   1
 
 *** Keywords ***
 Setup

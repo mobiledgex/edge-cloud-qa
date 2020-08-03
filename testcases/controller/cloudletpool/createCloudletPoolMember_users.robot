@@ -9,6 +9,7 @@ Suite Teardown  Cleanup Provisioning
 *** Variables ***
 ${username}=  mextester06
 ${password}=  mextester06123
+${operator}=  dmuus
 
 *** Test Cases ***
 ShowCloudletPoolMember - users shall get empty list 
@@ -28,7 +29,7 @@ CreateCloudletPoolMember - users shall get error when creating cloudlet pool
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
-   ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool Member  region=US  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *  Add Cloudlet Pool Member  region=US  token=${userToken}
 
    Should Contain  ${error}   403
    Should Contain  ${error}   {"message":"Forbidden"}
@@ -40,7 +41,7 @@ DeleteCloudletPoolMember - users shall get error when deleting cloudlet pool
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
-   ${error}=  Run Keyword and Expect Error  *  Delete Cloudlet Pool Member  region=US  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *  Remove Cloudlet Pool Member  region=US  token=${userToken}
 
    Should Contain  ${error}   403
    Should Contain  ${error}   {"message":"Forbidden"}
