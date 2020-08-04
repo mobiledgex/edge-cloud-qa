@@ -17,6 +17,38 @@ class MexKnife:
         self._start_upgrade()
         self._verify_upgrade(cloudlet_names,container_version)
 
+    def get_node_status(self, node):
+        #cmd_knife = f'knife node run-list status {node} | grep Status | awk ' + "'{{print $2}}'"
+        cmd_knife = f'knife node run-list status {node}'
+        logging.debug(f'getting node status with cmd={cmd_knife}')
+        output = self._run_cmd(cmd_knife).split('\n')
+        logging.debug(f'output={output}')
+        success_line = output[0].split()
+        return success_line[1]
+        #return output.rstrip()
+
+    def node_status_should_be_success(self, node):
+        try:
+            status = self.get_node_status(node)
+            if status == 'success':
+                logging.info('node status is success')
+                return status
+            else:
+                raise Exception(status)
+        except Exception as err:
+            raise Exception(f'node status is not success:{err}') 
+
+    def node_status_should_not_exist(self, node):
+        try:
+            status = self.get_node_status(node)
+            raise Exception(f'node status exists with {status}')
+        except Exception as err:
+            logging.debug(f'err:{err}')
+            if 'ERROR: The object you are looking for could not be found' in str(err):
+                logging.info('node not found')
+                return err
+            else:
+                raise Exception(f'node status returned:{err}')
 
     def _before_upgrade(self, cloudlets):
         cmd_knife = 'knife exec -E \'nodes.find("name:qa*pf") {|n| puts n.name+"="+n["edgeCloudVersion"]}\''
