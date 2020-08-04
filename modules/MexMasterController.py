@@ -1727,58 +1727,8 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
-#        url = self.root_url + '/auth/ctrl/CreateCloudlet'
-#
-#        payload = None
-#        cloudlet = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override).cloudlet
-#            cloudlet_dict = {'cloudlet': cloudlet}
-#            if region is not None:
-#                cloudlet_dict['region'] = region
-#
-#            payload = json.dumps(cloudlet_dict)
-#
-#        logger.info('create cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
- #           self._number_createcloudlet_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_createcloudlet_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#                if 'Created Cloudlet successfully' not in str(self.resp.text):
-#                    raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
-#                    
-#            except Exception as e:
-#                self._number_createcloudlet_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self.prov_stack.append(lambda:self.delete_cloudlet(region=region, token=self.super_token, cloudlet_name=cloudlet['key']['name'], operator_name=cloudlet['key']['operator_key']['name']))
-#
-#            self._number_createcloudlet_requests_success += 1
-#
-#            
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.delete_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
@@ -2196,11 +2146,20 @@ class MexMasterController(MexRest):
     def create_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.vm_pool.create_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
-    def show_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.vm_pool.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def show_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.vm_pool.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.vm_pool.delete_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.vm_pool.update_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def add_vm_pool_member(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_name=None, external_ip=None, internal_ip=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.vm_pool.add_vm_pool_member(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_name=vm_name, external_ip=external_ip, internal_ip=internal_ip, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def remove_vm_pool_member(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.vm_pool.remove_vm_pool_member(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_name=vm_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def vm_should_be_in_use(self, token=None, region=None, vm_pool_name=None, org_name=None, group_name=None, internal_name=None):
         return self.vm_pool.vm_should_be_in_use(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, group_name=group_name, internal_name=internal_name)
