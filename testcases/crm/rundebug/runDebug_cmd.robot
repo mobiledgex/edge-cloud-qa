@@ -67,7 +67,7 @@ RunDebug - cmd node_type set to shepherd and cmd stop-cpu-profile timeout 5s
     ...  verify stop-cpu-profile on shepherd node_type
 
 
-      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=15s
+      ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  node_type=${ntype_shep}  timeout=${time}
 
       ${type}=  Set Variable  ${node}[0][data][node][type]
       ${output}=  Set Variable  ${node}[0][data][output]
