@@ -22,7 +22,7 @@ class ShowDevice(MexOperation):
         dev_dict = {}
 
         if unique_id is not None:
-           key_dict['unique_id'] = unique_id
+           key_dict['unique_id'] = str(unique_id)
         if unique_id_type is not None:
            key_dict['unique_id_type'] = unique_id_type
 
