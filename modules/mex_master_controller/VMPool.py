@@ -15,9 +15,17 @@ class VMPool(MexOperation):
         self.create_url = '/auth/ctrl/CreateVMPool'
         self.delete_url = '/auth/ctrl/DeleteVMPool'
         self.show_url = '/auth/ctrl/ShowVMPool'
+        self.update_url = '/auth/ctrl/UpdateVMPool'
+        self.add_member_url = '/auth/ctrl/AddVMPoolMember'
+        self.remove_member_url = '/auth/ctrl/RemoveVMPoolMember'
 
-    def _build(self, pool_name=None, organization=None, vm_list=[], use_defaults=True):
+    def _build(self, pool_name=None, organization=None, vm_list=[], include_fields=False, use_defaults=True):
         pool = None
+
+        _fields_list = []
+        _operator_name_field_number = '2.1'
+        _pool_name_field_number = '2.2'
+        _vms_field_number = '3'
 
         # "key":{"name":"andypool","organization":"TDG"},"vms":[{"name":"andypool","net_info":{"external_ip":"1.1.1.1","internal_ip":"2.2.2.2"}}]}}
         
@@ -32,8 +40,11 @@ class VMPool(MexOperation):
         pool_key_dict = {}
         if pool_name is not None:
             pool_key_dict['name'] = pool_name
+            _fields_list.append(_pool_name_field_number)
+
         if organization is not None:
             pool_key_dict['organization'] = organization
+            _fields_list.append(_operator_name_field_number)
 
         vm_dict_list = []
         for vm in vm_list:
@@ -56,6 +67,51 @@ class VMPool(MexOperation):
 
         if vm_dict_list:
             pool_dict['vms'] = vm_dict_list
+            _fields_list.append(_vms_field_number)
+
+        if include_fields and _fields_list:
+            pool_dict['fields'] = []
+            for field in _fields_list:
+                pool_dict['fields'].append(field)
+
+        return pool_dict
+
+    def _build_member(self, pool_name=None, organization=None, vm_name=None, external_ip=None, internal_ip=None, include_fields=False, use_defaults=True):
+        pool = None
+
+        # "key":{"name":"andypool","organization":"TDG"},"vms":[{"name":"andypool","net_info":{"external_ip":"1.1.1.1","internal_ip":"2.2.2.2"}}]}}
+
+        if pool_name == 'default':
+            pool_name = shared_variables.vmpool_name_default
+
+        if use_defaults:
+            if pool_name is None: pool_name = shared_variables.vmpool_name_default
+            if organization is None: organization = shared_variables.organization_name_default
+
+        pool_dict = {}
+        pool_key_dict = {}
+        if pool_name is not None:
+            pool_key_dict['name'] = pool_name
+
+        if organization is not None:
+            pool_key_dict['organization'] = organization
+
+        vm_dict = {}
+        net_dict = {}
+        if vm_name is not None:
+            vm_dict['name'] = vm_name
+        if external_ip is not None:
+            net_dict['external_ip'] = external_ip
+        if internal_ip is not None:
+            net_dict['internal_ip'] = internal_ip
+        if net_dict:
+            vm_dict['net_info'] = net_dict
+
+        if pool_key_dict:
+            pool_dict['key'] = pool_key_dict
+
+        if vm_dict:
+            pool_dict['vm'] = vm_dict
 
         return pool_dict
 
@@ -90,6 +146,43 @@ class VMPool(MexOperation):
         msg_dict = {'vmpool': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, organization=None, vm_list=[], json_data=None, use_defaults=True, include_fields=True, use_thread=False):
+        msg = self._build(pool_name=vm_pool_name, organization=organization, vm_list=vm_list, include_fields=include_fields, use_defaults=use_defaults)
+        msg_dict = {'vmpool': msg}
+
+        msg_dict_show = None
+        if 'key' in msg:
+            msg_show = self._build(pool_name=msg['key']['name'], organization=msg['key']['organization'], use_defaults=False)
+            msg_dict_show = {'vmpool': msg_show}
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
+
+    def add_vm_pool_member(self, token=None, region=None, vm_pool_name=None, organization=None, vm_name=None, external_ip=None, internal_ip=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build_member(pool_name=vm_pool_name, organization=organization, vm_name=vm_name, external_ip=external_ip, internal_ip=internal_ip, use_defaults=use_defaults)
+        msg_dict = {'vmpoolmember': msg}
+
+        thread_name = None
+        if 'key' in msg:
+            thread_name = msg['key']['name']
+
+        msg_dict_delete = None
+        #if auto_delete and 'key' in msg:
+        #    msg_delete = self._build(pool_name=msg['key']['name'], organization=msg['key']['organization'], use_defaults=False)
+        #    msg_dict_delete = {'vmpoolmember': msg_delete}
+
+        msg_dict_show = None
+        if 'key' in msg:
+            msg_show = self._build(pool_name=msg['key']['name'], organization=msg['key']['organization'], use_defaults=False)
+            msg_dict_show = {'vmpool': msg_show}
+
+        return self.create(token=token, url=self.add_member_url, delete_url=self.remove_member_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+
+    def remove_vm_pool_member(self, token=None, region=None, vm_pool_name=None, organization=None, vm_name=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build_member(pool_name=vm_pool_name, organization=organization, vm_name=vm_name, use_defaults=use_defaults)
+        msg_dict = {'vmpoolmember': msg}
+
+        return self.delete(token=token, url=self.remove_member_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def vm_should_be_in_use(self, token=None, region=None, vm_pool_name=None, organization=None, group_name=None, internal_name=None):
         pool = self.show_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=organization, use_defaults=True)
