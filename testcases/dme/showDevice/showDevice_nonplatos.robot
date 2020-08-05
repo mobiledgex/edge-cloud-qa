@@ -35,7 +35,6 @@ showDevice - request for non-platos app with uuidtype=platos shall return device
       Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch} 
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
@@ -56,7 +55,6 @@ showDevice - request for non-platos app with uuidtype=xxxSamSungxxx shall return
       Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
@@ -77,7 +75,6 @@ showDevice - request for non-platos app with S20 shall return device information
       Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
@@ -96,7 +93,6 @@ showDevice - request for non-platos app with S6 shall return device information
       Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${platos_s6_id}
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
