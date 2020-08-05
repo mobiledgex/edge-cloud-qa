@@ -53,7 +53,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
@@ -113,7 +113,7 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
@@ -191,7 +191,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
@@ -230,7 +230,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
     ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
