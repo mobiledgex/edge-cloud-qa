@@ -90,7 +90,7 @@ showDevice - request for non-samsung app with S6 shall return device information
       ${device}=  Show Device  region=${region}  unique_id=${samsung_s6_id}  unique_id_type=${samsung_s6_type}
 
       Should Be Equal  ${device['data']['key']['unique_id_type']}  ${samsung_s6_type}
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${samsung_s6_id}
+      Should Be Equal  ${device['data']['key']['unique_id']}  ${samsung_s6_id}
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
 
