@@ -90,7 +90,7 @@ showDevice - request for non-platos app with S6 shall return device information
       ${device}=  Show Device  region=${region}  unique_id=${platos_s6_id}  unique_id_type=${platos_s6_type}
 
       Should Be Equal  ${device['data']['key']['unique_id_type']}  ${platos_s6_type}
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${platos_s6_id}
+      Should Be Equal  ${device['data']['key']['unique_id']}  ${platos_s6_id}
       Should Be True   ${device['data']['first_seen']['seconds']} > 0
       Should Be True   ${device['data']['first_seen']['nanos']} > 0
 
