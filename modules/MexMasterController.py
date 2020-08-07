@@ -801,7 +801,7 @@ class MexMasterController(MexRest):
 
         if use_defaults == True:
             if token is None: token = self.token
-            if orgname is None: orgname = self.orgname
+            if orgname is None: orgname = shared_variables.operator_name_default
 
         if json_data !=  None:
             payload = json_data
@@ -2181,8 +2181,8 @@ class MexMasterController(MexRest):
     def delete_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet_pool.delete_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.org_cloudlet_pool.create_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_pool_org_name=None, org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.org_cloudlet_pool.create_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, cloudlet_pool_org_name=cloudlet_pool_org_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def show_org_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.org_cloudlet_pool.show_org_cloudlet_pool(token=token, region=region, cloudlet_pool_name=cloudlet_pool_name, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -2193,6 +2193,27 @@ class MexMasterController(MexRest):
     def show_org_cloudlet(self, token=None, region=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.org_cloudlet.show_org_cloudlet(token=token, region=region, org_name=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def get_public_cloudlets(self, region=None):
+        all_cloudlets = self.show_cloudlets(token=self.super_token, region=region, use_defaults=False)
+        all_pools = self.show_cloudlet_pool(token=self.super_token, region=region, use_defaults=False)
+
+        pool_cloudlet_list = []
+        for pool in all_pools:
+            if 'cloudlets' in pool['data']:
+                for cloudlet in pool['data']['cloudlets']:
+                    pool_cloudlet_list.append(cloudlet)
+        logging.debug(f'cloudlets in a pool={pool_cloudlet_list}')
+
+        public_cloudlet_list = []
+        for cloudlet in all_cloudlets:
+            if cloudlet['data']['key']['name'] not in pool_cloudlet_list:
+                logging.debug(cloudlet['data']['key']['name'] + ' IS a public cloudlet')
+                public_cloudlet_list.append(cloudlet)
+            else:
+                logging.debug(cloudlet['data']['key']['name'] + ' is NOT a public cloudlet')
+
+        return public_cloudlet_list
+    
     def create_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.vm_pool.create_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
