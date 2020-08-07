@@ -45,29 +45,50 @@ CreateOrgCloudletPool - create without pool name shall return error
    ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  org_name=myorg  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"CloudletPool not specified"}
+   Should Contain   ${error}  error={"message":"CloudletPool name not specified"}
+
+CreateOrgCloudletPool - create without pool org name shall return error
+   [Documentation]
+   ...  send CreateOrgCloudletPool with region only
+   ...  verify proper error is received
+
+   ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=myorg  org_name=MobiledgeX  use_defaults=False
+
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"CloudletPool organization not specified"}
+
+CreateOrgCloudletPool - create with pool org not found shall return error
+   [Documentation]
+   ...  send CreateOrgCloudletPool for pool name that doesnt exist
+   ...  verify proper error is received
+
+   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  cloudlet_pool_org_name=xxx  org_name=MobiledgeX  use_defaults=False
+
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"org xxx not found"}
+
 
 CreateOrgCloudletPool - create with pool name not found shall return error
    [Documentation]
    ...  send CreateOrgCloudletPool for pool name that doesnt exist 
    ...  verify proper error is received
 
-   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  org_name=MobiledgeX  use_defaults=False
+   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  cloudlet_pool_org_name=MobiledgeX  org_name=MobiledgeX  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Specified CloudletPool mypooolxxx for region US not found"}
+   Should Contain   ${error}  error={"message":"Specified CloudletPool mypooolxxx org MobiledgeX for region US not found"}
 
 CreateOrgCloudletPool - create with org name not found shall return error
    [Documentation]
    ...  send CreateOrgCloudletPool for pool name that doesnt exist
    ...  verify proper error is received
 
-   Create Cloudlet Pool  region=US  token=${token} 
+   Create Cloudlet Pool  region=US  token=${token}  operator_org_name=MobiledgeX
 
-   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  org_name=myorg
+   ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  org_name=myorg  cloudlet_pool_org_name=MobiledgeX
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"org myorg not found"}
+   Should Contain   ${error}  error={"message":"Specified Organization myorg does not exist"}
 
 CreateOrgCloudletPool - create with same name shall return error
    [Documentation]
@@ -76,15 +97,15 @@ CreateOrgCloudletPool - create with same name shall return error
 
    #EDGECLOUD-1724 - creating same org cloudlet pool with same name should give info in error message
 
-   Create Cloudlet Pool  region=US  token=${token}
+   Create Cloudlet Pool  region=US  token=${token}  operator_org_name=MobiledgeX
 
    Create Org    
-   Create Org Cloudlet Pool  region=US  token=${token}  
+   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_org_name=MobiledgeX 
 
-   ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  
+   ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_org_name=MobiledgeX
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"OrgCloudletPool org ${org_name}, region US, pool ${pool_name} already exists"}
+   Should Contain   ${error}  error={"message":"OrgCloudletPool org ${org_name}, region US, pool ${pool_name} poolorg MobiledgeX already exists"}
 
 *** Keywords ***
 Setup
