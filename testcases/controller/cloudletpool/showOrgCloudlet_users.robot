@@ -28,23 +28,39 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    ...  send ShowOrgCloudlet for org1 and verify it returns the 1 cloudlet
    ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
+   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
+   Add Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
+   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
 
    ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
    ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
-   Should Be Equal  ${show_return[0]['key']['name']}  ${cloudlets[1]['cloudlet']} 
-   Should Be Equal  ${show_return[0]['key']['organization']}  ${cloudlets[1]['operator']}
-   Length Should Be   ${show_return}  1
+   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${num_public_cloudlets}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${num_public_cloudlets}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${num_public_cloudlets}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${num_public_cloudlets}  # pool cloudlet is already private
 
-   ${cloudlets2}=  Remove from List  ${cloudlets}  1
-   ${len}=  Get Length  ${cloudlets}	
-   #@{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
-   Cloudlets Should Be In List  ${cloudlets}  ${show_return2}
-   Length Should Be   ${show_return2}  ${len}
+   Length Should Be   ${show_return}  ${cloudlet_length1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}   
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+
+   #Should Be Equal  ${show_return[0]['key']['name']}  ${cloudlets[1]['cloudlet']} 
+   #Should Be Equal  ${show_return[0]['key']['organization']}  ${cloudlets[1]['operator']}
+
+   #Cloudlets Should Be In List  ${public_cloudlet_list}  ${show_return}
+
+   #Cloudlets Should Be In List  ${public_cloudlet_list}  ${show_return2}
+
+   #${cloudlets2}=  Remove from List  ${cloudlets}  1
+   #${len}=  Get Length  ${cloudlets}	
+   ##@{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
+   #Cloudlets Should Be In List  ${cloudlets}  ${show_return2}
+   #Length Should Be   ${show_return2}  ${len}
 
 ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    [Documentation]
@@ -462,12 +478,36 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
    Length Should Be   ${show_return_new}  2
 
 *** Keywords ***
+Pool Cloudlet Should Be In Show Org Cloudlet
+   [Arguments]  ${show_list}  ${cloudlet}  ${org}
+
+   ${inlist}=  Set Variable  ${False}
+   FOR  ${pool_cloudlet}  IN  @{show_list}
+      ${inlist}=  Run Keyword IF  '${pool_cloudlet['key']['name']}'=='${cloudlet}' and '${pool_cloudlet['key']['organization']}'=='${org}'  Set Variable  ${True}
+      ...  ELSE  Set Variable  ${inlist}
+   END
+
+   Should Be True  ${inlist}==${True}
+
+Pool Cloudlet Should Not Be In Show Org Cloudlet
+   [Arguments]  ${show_list}  ${cloudlet}  ${org}
+
+   Run Keyword and Expect Error  *  Pool Cloudlet Should Be In Show Org Cloudlet  ${show_list}  ${cloudlet}  ${org}
+
 Cloudlets Should Be In List
    [Arguments]  ${cloudlet_list}  ${show_list}
    FOR  ${pool_cloudlet}  IN  @{show_list}
       &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
       List Should Contain Value   ${cloudlet_list}  ${cloudlet_key}
    END
+
+Is Cloudlet in List
+   [Arguments]  ${cloudlet_list}  ${cloudlet}  ${org}
+   ${inlist}=  Set Variable  ${False}
+   &{cloudlet_key}=  Create Dictionary  cloudlet=${cloudlet}  operator=${org}
+   #${status}=  List Should Contain Value   ${cloudlet_list}  ${cloudlet_key}
+   ${inlist}=  Run Keyword IF  ${cloudlet_key} in ${cloudlet_list}  Set Variable  ${True}
+   [Return]  ${inlist}
 
 Setup
    ${epoch}=  Get Time  epoch
@@ -481,13 +521,23 @@ Setup
    ${poolname1}=  Get Default Cloudlet Pool Name
    ${poolname2}=  Catenate  SEPARATOR=  ${poolname1}  2
 
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
+
+   @{public_cloudlet_list}=  Create List
+   FOR  ${cloud}  IN  @{public_cloudlets}
+      &{cloudlet_key}=  Create Dictionary  cloudlet=${cloud['data']['key']['name']}  operator=${cloud['data']['key']['organization']}
+      Append To List  ${public_cloudlet_list}  ${cloudlet_key}
+   END
+   
    @{cloudlets}=  Create List
    ${cloudlet_list}=  Show Cloudlets  region=US  token=${super_token}  use_defaults=${False}
    FOR  ${cloud}  IN  @{cloudlet_list}
       &{cloudlet_key}=  Create Dictionary  cloudlet=${cloud['data']['key']['name']}  operator=${cloud['data']['key']['organization']}
+      #Run Keyword If  '${cloud['data']['key']['organization']}' == '${operator}'  Append To List  ${cloudlets}  ${cloudlet_key}
       Append To List  ${cloudlets}  ${cloudlet_key}
    END
-
+   
    Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    #Verify Email  email_address=${emailepoch}
@@ -508,3 +558,6 @@ Setup
    Set Suite Variable  ${poolname1}
    Set Suite Variable  ${poolname2}
    Set Suite Variable  ${cloudlets}
+   Set Suite Variable  ${public_cloudlets}
+   Set Suite Variable  ${num_public_cloudlets}
+   Set Suite Variable  ${public_cloudlet_list}
