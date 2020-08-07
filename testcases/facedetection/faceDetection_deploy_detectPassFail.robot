@@ -29,7 +29,7 @@ ${docker_image_facedetection}    docker.mobiledgex.net/mobiledgex/images/facedet
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008,tcp:8011
 
-${client_path}     ../edge-cloud-sampleapps/ComputerVision/client
+${client_path}     ../edge-cloud-sampleapps/ComputerVisionServer/client
 #${client_path}     ../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
