@@ -165,7 +165,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Should Be Equal As Numbers   ${num_servers_node}    2
 
-    FOR  ${x}  IN RANGE  0  10
+    FOR  ${x}  IN RANGE  0  30
         ${clusterInst}=  Show Cluster Instances  region=${region}   cluster_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}
         Exit For Loop If  '${clusterInst[0]['data']['state']}' == '5'
         Sleep  10s
