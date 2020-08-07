@@ -30,15 +30,21 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      log to console  xxxxx ${cloudlets}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}  
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      log to console  xxxxx ${cloudlets}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}  
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    [Documentation]
@@ -49,14 +55,20 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    [Documentation]
@@ -69,14 +81,20 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
    [Documentation]
@@ -90,14 +108,20 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    [Documentation]
@@ -110,14 +134,20 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
    [Documentation]
@@ -130,14 +160,20 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+#
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
    [Documentation]
@@ -150,14 +186,20 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    [Documentation]
@@ -170,14 +212,20 @@ ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
-   FOR  ${pool_cloudlet}  IN  @{pool_return}
-      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
-      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
-   END
+   ${public_cloudlets}=  Get Public Cloudlets  region=US
+   ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
-   ${expected_length}=  Get Length  ${cloudlets}
    ${pool_length}=      Get Length  ${pool_return}
-   Should Be Equal  ${expected_length}  ${pool_length}
+   Should Be Equal  ${num_public_cloudlets}  ${pool_length}
+
+#   FOR  ${pool_cloudlet}  IN  @{pool_return}
+#      &{cloudlet_key}=  Create Dictionary  cloudlet=${pool_cloudlet['key']['name']}  operator=${pool_cloudlet['key']['organization']}
+#      List Should Contain Value   ${cloudlets}  ${cloudlet_key}
+#   END
+
+#   ${expected_length}=  Get Length  ${cloudlets}
+#   ${pool_length}=      Get Length  ${pool_return}
+#   Should Be Equal  ${expected_length}  ${pool_length}
 
 *** Keywords ***
 Setup
