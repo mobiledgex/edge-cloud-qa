@@ -16,6 +16,8 @@ ${operator0}=  att
 #&{cloudlet3}=  cloudlet=automationGcpCentralCloudlet  operator=gcp
 #&{cloudlet4}=  cloudlet=automationAzureCentralCloudlet  operator=azure
 
+${region}=  US
+
 #@{cloudlets}=  &{cloudlet0}  &{cloudlet1}  &{cloudlet2}  &{cloudlet3}  &{cloudlet4}
 
 ${username}=  mextester06
@@ -28,13 +30,13 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    ...  send ShowOrgCloudlet for org1 and verify it returns the 1 cloudlet
    ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
-   Add Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
    ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
    ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${num_public_cloudlets}  # pool cloudlet is already public
@@ -68,25 +70,38 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    ...  send ShowOrgCloudlet for org1 and verify it returns the 2 cloudlets
    ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
-   #${cloudlet_copy}=  Copy List  ${cloudlets}  deepcopy=${True}
-   @{cloudlets1}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
-   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
-   Length Should Be   ${show_return}  2
+   ${org_cloudlets1}=  Set Variable  ${num_public_cloudlets}
+   ${org_cloudlets2}=  Set Variable  ${num_public_cloudlets}
 
-   Remove Values from List  ${cloudlets}  ${cloudlets[1]}  ${cloudlets[2]}
-   ${len}=  Get Length  ${cloudlets}
-   #@{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet3}  ${cloudlet4}
-   Cloudlets Should Be In List  ${cloudlets}  ${show_return2}
-   Length Should Be   ${show_return2}  ${len}  
+   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${org_cloudlets1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${org_cloudlets2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${org_cloudlets2}  # pool cloudlet is already private
+
+   ${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  tmus
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length2}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}  tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  tmocloud-2  tmus
 
 ShowOrgCloudlet - org shall be assigned to all cloudlets
    [Documentation]
@@ -94,22 +109,27 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    ...  send ShowOrgCloudlet for org1 and verify it returns all the cloudlets
    ...  send ShowOrgCloudlet for org2 and verify it returns no cloudlets
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-
+   # create a cloudlet pool for every org
+   &{org_dict}=  Create Dictionary
    FOR  ${cloudlet}  IN  @{cloudlets}
-      Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet['operator']}  cloudlet_name=${cloudlet['cloudlet']}
+      Set To Dictionary  ${org_dict}  ${cloudlet['operator']}  found
+   END
+   FOR  ${c}  IN  @{org_dict.keys()}  
+      Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
    END
 
-   #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet0['operator']}  cloudlet_name=${cloudlet0['cloudlet']}
-   #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet1['operator']}  cloudlet_name=${cloudlet1['cloudlet']}
-   #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet2['operator']}  cloudlet_name=${cloudlet2['cloudlet']}
-   #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet3['operator']}  cloudlet_name=${cloudlet3['cloudlet']}
-   #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlet4['operator']}  cloudlet_name=${cloudlet4['cloudlet']}
+   # add members to the pool
+   FOR  ${cloudlet}  IN  @{cloudlets}
+      Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${cloudlet['operator']}  operator_org_name=${cloudlet['operator']}  cloudlet_name=${cloudlet['cloudlet']}
+   END
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
+   # add to org cloudlet pool
+   FOR  ${c}  IN  @{org_dict.keys()}
+      Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}
+   END
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
    ${len_cloudlets}=  Get Length  ${cloudlets}
 
@@ -123,78 +143,125 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
    ...  assign different cloudlets to 2 different orgs 
    ...  send ShowOrgCloudlet for each org and verify the cloudlets 
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure  cloudlet_name=automationAzureCentralCloudlet
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus   org_name=${orgname2}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
-   @{cloudlets1}=  Create List  ${cloudlets[0]}
-   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
-   Length Should Be   ${show_return}  1
+   ${org_cloudlets1}=  Set Variable  ${num_public_cloudlets}
+   ${org_cloudlets2}=  Set Variable  ${num_public_cloudlets}
 
-   @{cloudlets2}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
-   Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  2
+   ${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  automationAzureCentralCloudlet  azure 
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Evaluate  ${org_cloudlets2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${org_cloudlets2}  # pool cloudlet is already private
+
+   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
+
+   ${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  tmus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}   automationAzureCentralCloudlet  azure 
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-2  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}   automationAzureCentralCloudlet  azure
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-1  tmus
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
 
 ShowOrgCloudlet - orgs shall be assigned the same cloudlet
    [Documentation]
    ...  assign same cloudlet to 2 different orgs
    ...  send ShowOrgCloudlet for each org and verify the cloudlets
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=tmus  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
-   @{cloudlets1}=  Create List  ${cloudlets[0]}
-   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
-   Length Should Be   ${show_return}  1
+   ${org_cloudlets1}=  Set Variable  ${num_public_cloudlets}
+   ${org_cloudlets2}=  Set Variable  ${num_public_cloudlets}
 
-   @{cloudlets2}=  Create List  ${cloudlets[0]}  ${cloudlets[2]}
-   Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  2
+   ${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus 
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets2}  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${org_cloudlets2}  # pool cloudlet is already private
+
+   ${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  tmus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist2}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist2}'=='${True}'   Evaluate  ${cloudlet_length1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}   tmocloud-1  tmus 
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-2  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
 
 ShowOrgCloudlet - orgs shall be assigned the same pool 
    [Documentation]
    ...  assign 2 orgs to same orgcloudletpool
    ...  send ShowOrgCloudlet for each org and verify the cloudlets
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
 
    #Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
 
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=tmus  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
-   @{cloudlets1}=  Create List  ${cloudlets[0]}
-   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
-   Length Should Be   ${show_return}  1
+   ${org_cloudlets1}=  Set Variable  ${num_public_cloudlets}
+   ${org_cloudlets2}=  Set Variable  ${num_public_cloudlets}
 
-   @{cloudlets2}=  Create List  ${cloudlets[0]} 
-   Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  1
+   ${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets2}  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  1+${org_cloudlets2}  # pool cloudlet is already private
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}   tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
 
 ShowOrgCloudlet - orgs shall be changed to different pools
    [Documentation]
@@ -203,42 +270,103 @@ ShowOrgCloudlet - orgs shall be changed to different pools
    ...  send orgcloudletpool delete and re-create by swithing the orgs
    ...  send ShowOrgCloudlet for each org and verify the cloudlets have switched orgs
 
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}
-   Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[0]['operator']}  cloudlet_name=${cloudlets[0]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
-   Create Cloudlet Pool Member  region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
+   Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure  cloudlet_name=automationAzureCentralCloudlet
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
 
-   ${show_return}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
-   ${show_return2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
-   @{cloudlets1}=  Create List  ${cloudlets[0]}
-   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
-   Length Should Be   ${show_return}  1
+   ${org_cloudlets1}=  Set Variable  ${num_public_cloudlets}
+   ${org_cloudlets2}=  Set Variable  ${num_public_cloudlets}
 
-   @{cloudlets2}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
-   Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
-   Length Should Be   ${show_return2}  2
+   ${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  automationAzureCentralCloudlet  azure
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Evaluate  ${org_cloudlets2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${org_cloudlets2}  # pool cloudlet is already private
+
+   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
+
+   ${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  tmus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}   automationAzureCentralCloudlet  azure
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2}  tmocloud-2  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}   automationAzureCentralCloudlet  azure
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-1  tmus
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
+
+#   @{cloudlets1}=  Create List  ${cloudlets[0]}
+#   Cloudlets Should Be In List  ${cloudlets1}  ${show_return}
+#   Length Should Be   ${show_return}  1
+#
+#   @{cloudlets2}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
+#   Cloudlets Should Be In List  ${cloudlets2}  ${show_return2}
+#   Length Should Be   ${show_return2}  2
 
    # change the pool
-   Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
-   Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname2}
-   Create Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname}
+   Delete Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
+   Delete Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname2}
+   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  org_name=${orgname}
 
    ${show_return_new}=   Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
    ${show_return_new2}=  Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname2}
 
-   @{cloudletsnew1}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
-   Cloudlets Should Be In List  ${cloudletsnew1}  ${show_return_new}
-   Length Should Be   ${show_return_new}  2
+#   ${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  automationAzureCentralCloudlet  azure
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${org_cloudlets2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${org_cloudlets2}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Evaluate  ${org_cloudlets1}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${org_cloudlets1}  # pool cloudlet is already private
 
-   @{cloudletsnew2}=  Create List  ${cloudlets[0]}
-   Cloudlets Should Be In List  ${cloudletsnew2}  ${show_return_new2}
-   Length Should Be   ${show_return_new2}  1
+#   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-1  tmus
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${cloudlet_length1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${cloudlet_length2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length2}  # pool cloudlet is already private
+
+#   ${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  tmus
+   ${cloudlet_length1}=  Run Keyword If  '${inlist2}'=='${True}'   Set Variable  ${cloudlet_length1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length1}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist2}'=='${True}'   Evaluate  ${cloudlet_length2}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length2}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length2}
+   Length Should Be   ${show_return2}  ${cloudlet_length1}
+
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return2   automationAzureCentralCloudlet  azure
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}  tmocloud-1  tmus
+   Pool Cloudlet Should Be In Show Org Cloudlet  ${show_return}  tmocloud-2  tmus
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}   automationAzureCentralCloudlet  azure
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  tmocloud-1  tmus
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  tmocloud-2  tmus
+
+   #@{cloudletsnew1}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
+   #Cloudlets Should Be In List  ${cloudletsnew1}  ${show_return_new}
+   #Length Should Be   ${show_return_new}  2
+#
+#   @{cloudletsnew2}=  Create List  ${cloudlets[0]}
+#   Cloudlets Should Be In List  ${cloudletsnew2}  ${show_return_new2}
+#   Length Should Be   ${show_return_new2}  1
 
 ShowOrgCloudlet - orgs shall be removed from all org pools
    [Documentation]
