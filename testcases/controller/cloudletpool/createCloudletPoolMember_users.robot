@@ -12,15 +12,16 @@ ${password}=  mextester06123
 ${operator}=  dmuus
 
 *** Test Cases ***
-ShowCloudletPoolMember - users shall get empty list 
-   [Documentation]
-   ...  send ShowCloudletPoolMember with user token 
-   ...  verify empty list is received 
-
-   ${pool_return}=  Show Cloudlet Pool Member  region=US  token=${userToken}
-   log to console  xxx ${pool_return}
-
-   Should Be Empty  ${pool_return}
+# show cloudlet pool member no longer supported
+#ShowCloudletPoolMember - users shall get empty list 
+#   [Documentation]
+#   ...  send ShowCloudletPoolMember with user token 
+#   ...  verify empty list is received 
+#
+#   ${pool_return}=  Show Cloudlet Pool Member  region=US  token=${userToken}
+#   log to console  xxx ${pool_return}
+#
+#   Should Be Empty  ${pool_return}
 
 CreateCloudletPoolMember - users shall get error when creating cloudlet pool 
    [Documentation]
