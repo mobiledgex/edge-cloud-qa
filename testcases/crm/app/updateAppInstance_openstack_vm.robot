@@ -166,7 +166,7 @@ User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     ${vm}=  Remove String  ${vm}  .
 
     Log To Console  Creating App and App Instance
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   region=${region}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer   region=${region}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
