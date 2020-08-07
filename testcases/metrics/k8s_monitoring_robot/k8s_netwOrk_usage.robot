@@ -141,10 +141,11 @@ Network Should Have Received Data
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[6]} >= 0 and ${reading[7]} >= 0
-   \  ${found_data}=  Run Keyword If  '${reading[9]}' > '10' and '${reading[10]}' > '10'  Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_data}
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[6]} >= 0 and ${reading[7]} >= 0
+      ${found_data}=  Run Keyword If  '${reading[9]}' > '10' and '${reading[10]}' > '10'  Set Variable  ${True}
+     ...                                 ELSE  Set Variable  ${found_data}
+   END
 
    Should Be True  ${found_data}  Didnot find network data
 
