@@ -7,6 +7,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1689
 DeleteCloudletPool - delete without region shall return error 
    [Documentation]
    ...  send DeleteCloudletPool without region 
@@ -19,6 +20,7 @@ DeleteCloudletPool - delete without region shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"no region specified"}
 
+# ECQ-1690
 DeleteCloudletPool - delete without parameters shall return error
    [Documentation] 
    ...  send DeleteCloudletPool with region only
@@ -31,6 +33,7 @@ DeleteCloudletPool - delete without parameters shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
 
+# ECQ-1691
 DeleteCloudletPool - delete with name not found shall return error
    [Documentation]
    ...  send DeleteCloudletPool for policy not found
@@ -41,6 +44,7 @@ DeleteCloudletPool - delete with name not found shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"dmuus\\\\",\\\\"name\\\\":\\\\"xpoolx\\\\"} not found"}
 
+# ECQ-1692
 DeleteCloudletPool - delete when assinged to an org shall return error 
    [Documentation]
    ...  send CreateCloudletPool

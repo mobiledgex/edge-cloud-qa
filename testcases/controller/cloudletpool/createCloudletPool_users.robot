@@ -11,6 +11,7 @@ ${username}=  mextester06
 ${password}=  mextester06123
 
 *** Test Cases ***
+# ECQ-1673
 ShowCloudletPool - users shall get empty list 
    [Documentation]
    ...  send ShowCloudletPool with user token 
@@ -20,6 +21,7 @@ ShowCloudletPool - users shall get empty list
 
    Should Be Empty  ${pool_return}
 
+# ECQ-1674
 CreateCloudletPool - users shall get error when creating cloudlet pool 
    [Documentation]
    ...  send CreateCloudletPool with user token
@@ -32,6 +34,7 @@ CreateCloudletPool - users shall get error when creating cloudlet pool
    Should Contain   ${error}  code=403
    Should Contain   ${error}  error={"message":"Forbidden"}
 
+# ECQ-1675
 DeleteCloudletPool - users shall get error when deleting cloudlet pool
    [Documentation]
    ...  send DeleteCloudletPool with user token
