@@ -12,6 +12,7 @@ ${password}=  mextester06123
 ${operator}=  tmus
 
 *** Test Cases ***
+# ECQ-1666
 # show cloudlet pool member no longer supported
 #ShowCloudletPoolMember - users shall get empty list 
 #   [Documentation]
@@ -23,6 +24,7 @@ ${operator}=  tmus
 #
 #   Should Be Empty  ${pool_return}
 
+# ECQ-1667
 CreateCloudletPoolMember - users shall get error when creating cloudlet pool 
    [Documentation]
    ...  send CreateCloudletPoolMember with user token
@@ -35,6 +37,7 @@ CreateCloudletPoolMember - users shall get error when creating cloudlet pool
    Should Contain  ${error}   403
    Should Contain  ${error}   {"message":"Forbidden"}
 
+# ECQ-1668
 DeleteCloudletPoolMember - users shall get error when deleting cloudlet pool
    [Documentation]
    ...  send DeleteCloudletPoolMember with user token

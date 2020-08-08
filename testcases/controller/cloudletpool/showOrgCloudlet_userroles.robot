@@ -21,6 +21,7 @@ ${username}=  mextester06
 ${password}=  mextester06123
 
 *** Test Cases ***
+# ECQ-1700
 ShowOrgCloudlet - developer org owner shall be able to see all cloudlets 
    [Documentation]
    ...  send ShowOrgCloudlet for org owner
@@ -46,6 +47,7 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1701
 ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for org owner
@@ -70,6 +72,7 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1702
 ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for DeveloperManager user
@@ -96,6 +99,7 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1703
 ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for DeveloperContributor user
@@ -123,6 +127,7 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1704
 ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for DeveloperViewer user
@@ -149,6 +154,7 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1705
 ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for OperatorManager user
@@ -175,6 +181,7 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1706
 ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for OperatorContributor user
@@ -201,6 +208,7 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
 #   ${pool_length}=      Get Length  ${pool_return}
 #   Should Be Equal  ${expected_length}  ${pool_length}
 
+# ECQ-1707
 ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    [Documentation]
    ...  send ShowOrgCloudlet for OperatorViewer user

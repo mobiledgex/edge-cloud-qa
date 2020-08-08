@@ -12,6 +12,7 @@ ${region}=  US
 ${organization}=  TDG
 
 *** Test Cases ***
+# ECQ-1656
 CreateCloudletPool - shall be able to create with long pool name 
    [Documentation]
    ...  send CreateCloudletPool with long pool name 
@@ -23,6 +24,7 @@ CreateCloudletPool - shall be able to create with long pool name
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
 
+# ECQ-1657
 CreateCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
    ...  send CreateCloudletPool with numbers in pool name
