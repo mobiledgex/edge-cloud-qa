@@ -37,7 +37,7 @@ User shall be able to Update Cluster Instance as Developer Manager
     Create Org  orgname=${orgname}  orgtype=developer
     Adduser Role  orgname=${orgname}  username=${username1}  role=DeveloperManager
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname} 
@@ -60,6 +60,8 @@ User shall be able to Update Cluster Instance as Developer Contributor
     Create Org  orgname=${orgname}  orgtype=developer
     Adduser Role  orgname=${orgname}  username=${username1}  role=DeveloperContributor
 
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
+
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
     Log To Console  Done Creating Cluster Instance
@@ -79,8 +81,9 @@ User shall not be able to Update Cluster Instance as Developer Viewer
     ${policy_name_default}=  Get Default Autoscale Policy Name
 
     Create Org  orgname=${orgname}  orgtype=developer
-
     Adduser Role  orgname=${orgname}  username=${username1}  role=DeveloperViewer
+
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
@@ -101,7 +104,7 @@ User shall not be able to Update Cluster Instance as Operator Manager
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorManager
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
@@ -122,7 +125,7 @@ User shall not be able to Update Cluster Instance as Operator Viewer
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorViewer
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
@@ -143,7 +146,7 @@ User shall not be able to Update Cluster Instance as Operator Contributor
     Create Org  orgname=${orgname}  orgtype=operator
     Adduser Role  orgname=${orgname}  username=${username1}  role=OperatorContributor
 
-    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+    Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60  developer_org_name=${orgname}
 
     Log To Console  Creating Cluster Instance
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared   deployment=kubernetes  number_nodes=1  developer_org_name=${orgname}
