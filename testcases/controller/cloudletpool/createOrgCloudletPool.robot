@@ -8,6 +8,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1676
 CreateOrgCloudletPool - shall be able to create with long pool name 
    [Documentation]
    ...  send CreateOrgCloudletPool with long pool name 
@@ -27,6 +28,7 @@ CreateOrgCloudletPool - shall be able to create with long pool name
 
    Should Be Equal  ${found}  ${True} 
 
+# ECQ-1677
 CreateOrgCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
    ...  send CreateOrgCloudletPool with numbers name
