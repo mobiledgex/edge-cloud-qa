@@ -7,6 +7,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1699
 DeleteOrg - delete org in use by org cloudlet pool shall return error
    [Documentation]
    ...  send CreateOrg

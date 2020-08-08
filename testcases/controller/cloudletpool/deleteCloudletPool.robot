@@ -7,6 +7,7 @@ Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_
 #Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1688
 DeleteCloudletPool - deleting cloudlet pool shall delete all cloudlet pool members 
    [Documentation]
    ...  send CreateCloudletPool
