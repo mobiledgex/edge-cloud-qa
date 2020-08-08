@@ -523,15 +523,32 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
    Remove Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure  cloudlet_name=automationAzureCentralCloudlet
    Remove Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  cloudlet_name=tmocloud-2
 
+   #${public_cloudlets2}=  Get Public Cloudlets
+
    ${show_return_new}=   Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname}
    ${show_return_new2}=  Show Org Cloudlet  region=${region}  token=${user_token}  org_name=${orgname2}
 
+   ${l1}=  Get Length  ${show_return_new}
+   ${l2}=  Get Length  ${show_return_new2}
+
    # no cloudlets are returned since the pool is now empty
-   Length Should Be   ${show_return_new}  0
+   #Length Should Be   ${show_return_new}  0
+   #${inlist0}=  Is Cloudlet In List  ${public_cloudlet_list}  automationAzureCentralCloudlet  azure
+   ${cloudlet_length1}=  Run Keyword If  '${inlist0}'=='${True}'   Set Variable  ${cloudlet_length1}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${cloudlet_length1}-1  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist0}'=='${True}'   Evaluate  ${cloudlet_length2}+1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length2}  # pool cloudlet is already private
 
-   Should Be True   len(${show_return_new2}) == ${cloudlet_length2}-1
+   #${inlist2}=  Is Cloudlet In List  ${public_cloudlet_list}  tmocloud-2  dmuus
+   ${cloudlet_length2}=  Run Keyword If  '${inlist2}'=='${True}'   Set Variable  ${cloudlet_length2}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  ${cloudlet_length2}-1  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length1}=  Run Keyword If  '${inlist2}'=='${True}'   Evaluate  ${cloudlet_length1}+1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${cloudlet_length1}  # pool cloudlet is already private
 
-   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return_new2}  tmocloud-2  dmuus 
+   Should Be True   len(${show_return_new}) == ${cloudlet_length1}
+   Should Be True   len(${show_return_new2}) == ${cloudlet_length2}
+
+   #Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return_new2}  tmocloud-2  dmuus 
   
 #   # 1 cloudlet should be returned
 #   @{cloudlets_new2}=  Create List  ${cloudlets[1]}

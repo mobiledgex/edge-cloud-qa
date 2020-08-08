@@ -2149,6 +2149,7 @@ class MexMasterController(MexRest):
 
         pool_cloudlet_list = []
         if 'data' in all_pools:
+            if 'cloudlets' in all_pools['data']:
                 for cloudlet in all_pools['data']['cloudlets']:
                     pool_cloudlet_list.append(cloudlet)
         else:
