@@ -16,7 +16,7 @@ class CloudletPool(MexOperation):
         self.delete_url = '/auth/ctrl/DeleteCloudletPool'
         self.show_url = '/auth/ctrl/ShowCloudletPool'
 
-    def _build(self, cloudlet_pool_name=None, organization=None, use_defaults=True):
+    def _build(self, cloudlet_pool_name=None, organization=None, cloudlet_list=None, use_defaults=True):
         pool = None
 
         if cloudlet_pool_name == 'default':
@@ -33,14 +33,17 @@ class CloudletPool(MexOperation):
 
         if organization is not None:
             pool_key_dict['organization'] = organization
-            
+           
+        if cloudlet_list is not None:
+           pool_dict['cloudlets'] = cloudlet_list
+ 
         if pool_key_dict:
             pool_dict['key'] = pool_key_dict
 
         return pool_dict
 
-    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, organization=operator_org_name, use_defaults=use_defaults)
+    def create_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, cloudlet_list=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, organization=operator_org_name, cloudlet_list=cloudlet_list, use_defaults=use_defaults)
         msg_dict = {'cloudletpool': msg}
 
         thread_name = None

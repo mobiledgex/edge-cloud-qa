@@ -7,6 +7,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1669
 CreateCloudletPool - create without region shall return error
    [Documentation]
    ...  send CreateCloudletPool without region
@@ -17,6 +18,7 @@ CreateCloudletPool - create without region shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"no region specified"}
 
+# ECQ-1670
 CreateCloudletPool - create without parameters shall return error
    [Documentation]
    ...  send CreateCloudletPool with region only
@@ -27,6 +29,7 @@ CreateCloudletPool - create without parameters shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid organization name"}
 
+# ECQ-2271
 CreateCloudletPool - create without pool name shall return error
    [Documentation]
    ...  send CreateCloudletPool with org only
@@ -37,6 +40,7 @@ CreateCloudletPool - create without pool name shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
 
+# ECQ-1671
 CreateCloudletPool - create with invalid pool name shall fails 
    [Documentation]
    ...  send CreateCloudletPool with invalid name
@@ -66,6 +70,7 @@ CreateCloudletPool - create with invalid pool name shall fails
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
 
+# ECQ-1672
 CreateCloudletPool - create with same name shall return error
    [Documentation]
    ...  send CreateCloudletPool twice for same name 
