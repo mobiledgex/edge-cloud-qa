@@ -4,6 +4,7 @@ Documentation  runDebug
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 Library  Process
 Library  OperatingSystem
+Library  Collections
 
 #Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -599,13 +600,9 @@ RunDebug - blanket request to enable-sample-logging will set all cloudlet node t
 
       ${cnt}=  Get Length  ${sample}
 
-      Run Keyword If   ${cnt} < 2  Get Output Type28  ELSE  Get Zero Output Type28
+      Run Keyword If   ${cnt} < 2  Get Output Type29  ELSE  Get Zero Output Type29
 
 
-    ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
-    ${cnt}=  Get Length  ${sample}
-
-    Run Keyword If   ${cnt} < 2  Get Output Type29  ELSE  Get Zero Output Type29
 
 
 *** Keywords ***
@@ -1089,30 +1086,76 @@ Get Zero Output Type27
     Should Contain  ${type2}  crm
 
 Get Output Type28
-    ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
-    Should Contain Any  ${sample}[data][output]  enabled log sampling  Unknown cmd enable-sample-logging
-    Should Contain Any  ${sample}[data][node][type]  ${ntype_shep}
+    ${sample}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
+    @{Enabled}=  Create List 
+    @{Node_Type}=  Create List  ${ntype_shep}
+    Append To List    ${Enabled}    ${sample}[data][output]
+    Append To List    ${Node_Type}  ${sample}[data][node][type]
+    Log List  ${Enabled}
+    Log List  ${Node_Type}
+    ${count_enabled}    Count Values In List   ${Enabled}    enabled log sampling
+    ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_shep}
+    ${passvalue}=  Set Variable  1
+    Should Be True  ${passvalue} <= ${count_enabled}
+    Should Be True  ${passvalue} <= ${count_ntype}
+ 
+#    Should Contain Any  ${sample}[data][output]  enabled log sampling  Unknown cmd enable-sample-logging
+#    Should Contain Any  ${sample}[data][node][type]  ${ntype_shep}
 
 Get Zero Output Type28
+
     ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_shep}  timeout=${time}
     ${cnt}=  Get Length  ${sample}
+         @{Enabled}=  Create List  
+         @{Node_Type}=  Create List  ${ntype_shep}
     FOR  ${key}  IN RANGE  ${cnt}
-       Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging
-       Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_shep}
+         Append To List    ${Enabled}    ${sample}[${key}][data][output]
+         Append To List    ${Node_Type}   ${sample}[${key}][data][node][type]
+#        Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging  request timed out
+#        Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_shep}
     END
+         Log List  ${Enabled}
+         Log List  ${Node_Type}
+         ${count_enabled}    Count Values In List   ${Enabled}    enabled log sampling
+         ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_shep}
+         ${passvalue}=  Set Variable  ${cnt} / 2
+         Should Be True  ${passvalue} < ${count_enabled}
+         Should Be True  ${passvalue} < ${count_ntype}
 
 Get Output Type29
-    ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
-    Should Contain Any  ${sample}[data][output]  enabled log sampling  Unknown cmd enable-sample-logging
-    Should Contain Any  ${sample}[data][node][type]  ${ntype_crm}
+    ${sample}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time} 
+    @{Enabled}=  Create List  
+    @{Node_Type}=  Create List  ${ntype_crm}
+    Append To List    ${Enabled}    ${sample}[data][output]
+    Append To List    ${Node_Type}   ${sample}[data][node][type]
+    Log List  ${Enabled}
+    Log List  ${Node_Type}
+    ${count_enabled}    Count Values In List   ${Enabled}    enabled log sampling
+    ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+    ${passvalue}=  Set Variable  1
+    Should Be True  ${passvalue} <= ${count_enabled}
+    Should Be True  ${passvalue} <= ${count_ntype}
+#    Should Contain Any  ${sample}[data][output]  enabled log sampling  Unknown cmd enable-sample-logging
+#    Should Contain Any  ${sample}[data][node][type]  ${ntype_crm}
 
 Get Zero Output Type29
     ${sample}=  RunDebug  region=EU  command=enable-sample-logging  node_type=${ntype_crm}  timeout=${time}
     ${cnt}=  Get Length  ${sample}
+         @{Enabled}=  Create List 
+         @{Node_Type}=  Create List  ${ntype_crm}
     FOR  ${key}  IN RANGE  ${cnt}
-       Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging
-       Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_crm}
+         Append To List    ${Enabled}    ${sample}[${key}][data][output]
+         Append To List    ${Node_Type}   ${sample}[${key}][data][node][type]
+#     Should Contain Any  ${sample}[${key}][data][output]  enabled log sampling  Unknown cmd enable-sample-logging
+#     Should Contain Any  ${sample}[${key}][data][node][type]  ${ntype_crm}
     END
+         Log List  ${Enabled}
+         Log List  ${Node_Type}
+         ${count_enabled}    Count Values In List   ${Enabled}    enabled log sampling
+         ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+         ${passvalue}=  Set Variable  ${cnt} / 2
+         Should Be True  ${passvalue} < ${count_enabled}
+         Should Be True  ${passvalue} < ${count_ntype}
 
 Get Zero Output First Last
     ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  timeout=${time}
@@ -1124,6 +1167,7 @@ Get Zero Output First Last
     Should Contain Any  ${type2}  ${ntype_shep}  ${ntype_crm}
     Should Be Equal  ${type3}  ${no_cpu_inprog}
     Should Be Equal  ${type4}  ${no_cpu_inprog}
+
 
 Get Output First Last
     ${node}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=${stop-cpu-profile}  timeout=${time}
