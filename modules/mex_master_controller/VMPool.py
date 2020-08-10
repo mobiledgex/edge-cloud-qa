@@ -19,9 +19,9 @@ class VMPool(MexOperation):
         self.add_member_url = '/auth/ctrl/AddVMPoolMember'
         self.remove_member_url = '/auth/ctrl/RemoveVMPoolMember'
 
-    def _build(self, pool_name=None, organization=None, vm_list=[], include_fields=False, use_defaults=True):
+    def _build(self, pool_name=None, organization=None, vm_list=None, include_fields=False, use_defaults=True):
         pool = None
-
+ 
         _fields_list = []
         _operator_name_field_number = '2.1'
         _pool_name_field_number = '2.2'
@@ -46,26 +46,30 @@ class VMPool(MexOperation):
             pool_key_dict['organization'] = organization
             _fields_list.append(_operator_name_field_number)
 
-        vm_dict_list = []
-        for vm in vm_list:
-            vm_dict = {}
-            net_dict = {}
-            if 'name' in vm and vm['name'] is not None:
-                vm_dict['name'] = vm['name']
-            if 'external_ip' in vm and vm['external_ip'] is not None:
-                net_dict['external_ip'] = vm['external_ip']
-            if 'internal_ip' in vm and vm['internal_ip'] is not None:
-                net_dict['internal_ip'] = vm['internal_ip']
-            if net_dict:
-                vm_dict['net_info'] = net_dict
+        vm_dict_list = None 
+        if vm_list is not None:
+            vm_dict_list = []
+            for vm in vm_list:
+                vm_dict = {}
+                net_dict = {}
+                if 'name' in vm and vm['name'] is not None:
+                    vm_dict['name'] = vm['name']
+                if 'external_ip' in vm and vm['external_ip'] is not None:
+                    net_dict['external_ip'] = vm['external_ip']
+                if 'internal_ip' in vm and vm['internal_ip'] is not None:
+                    net_dict['internal_ip'] = vm['internal_ip']
+                if 'state' in vm and vm['state'] is not None:
+                    vm_dict['state'] = vm['state']
+                if net_dict:
+                    vm_dict['net_info'] = net_dict
 
-            if vm_dict:
-                vm_dict_list.append(vm_dict)    
+                if vm_dict:
+                    vm_dict_list.append(vm_dict)    
 
         if pool_key_dict:
             pool_dict['key'] = pool_key_dict
 
-        if vm_dict_list:
+        if vm_dict_list is not None:
             pool_dict['vms'] = vm_dict_list
             _fields_list.append(_vms_field_number)
 
@@ -147,7 +151,7 @@ class VMPool(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, organization=None, vm_list=[], json_data=None, use_defaults=True, include_fields=True, use_thread=False):
+    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, organization=None, vm_list=None, json_data=None, use_defaults=True, include_fields=True, use_thread=False):
         msg = self._build(pool_name=vm_pool_name, organization=organization, vm_list=vm_list, include_fields=include_fields, use_defaults=use_defaults)
         msg_dict = {'vmpool': msg}
 

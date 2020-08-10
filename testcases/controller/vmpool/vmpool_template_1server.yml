@@ -1,0 +1,22 @@
+description: Create a VM
+heat_template_version: '2016-10-14'
+resources:
+  vmpoolvm7-port:
+    properties:
+      fixed_ips:
+      - ip_address: 10.101.253.197
+        subnet: mex-automationvmpool-subnet
+      name: mex-automationvmpool1-port
+      network_id: mex-k8s-net-1
+      port_security_enabled: true
+    type: OS::Neutron::Port
+  vmpoolvm7:
+    properties:
+      config_drive: true
+      flavor: m4.medium
+      image: mobiledgex-v3.1.6
+      name: automationvmpool7
+      networks:
+      - network: external-network-shared
+      - port: { get_resource: vmpoolvm7-port }
+    type: OS::Nova::Server
