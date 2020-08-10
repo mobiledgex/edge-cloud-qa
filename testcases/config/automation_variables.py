@@ -9,6 +9,9 @@ cloudlet_name_openstack_dedicated = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_vm = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_metrics = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_gpu = 'automationFrankfurtCloudlet'
+cloudlet_name_vmpool = 'automationVMPoolCloudlet'
+
+vmpool_name = 'automationVMPool'
 
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'

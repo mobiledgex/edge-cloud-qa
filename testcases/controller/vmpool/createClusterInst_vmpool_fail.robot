@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  DeleteVMPool failures
+Documentation  CreateClusterInst for VMPool failures
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
@@ -12,60 +12,85 @@ ${operator_name_vmpool}=  TDG
 ${vmpool_server_name}=  vmpoolvm
 ${physical_name}=  berlin
 
-${cloudlet_name_vmpool}=  cloudlet1595967146-891194
+${cloudlet_name_vmpool}=  automationVMPoolCloudlet
 ${vmpool_name}=  vmpool1595967146-891194
 
-${region}=  US
+${region}=  EU
 
 *** Test Cases ***
-ClusterInst shall fail with VMPool IpAccessDedicated/docker and over large flavor
+# ECQ-2362
+ClusterInst shall fail with VMPool IpAccessDedicated/docker and over-large flavor
    [Documentation]
-   ...  send CreateVMPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - IpAccessDedicated/docker CreateClusterInst with VMPool and a flavor larger than the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=docker  
 
    Should Be Equal  ${error}  ('code=400', 'error={"message":"No suitable platform flavor found for ${flavor_name}, please try a smaller flavor"}')
 
-ClusterInst shall fail with VMPool IpAccessShared/docker and over large flavor
+# ECQ-2363
+ClusterInst shall fail with VMPool IpAccessShared/docker and over-large flavor
    [Documentation]
-   ...  send CreateVMPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - IpAccessShared/docker CreateClusterInst with VMPool and a flavor larger than the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=docker
 
    Should Be Equal  ${error}  ('code=400', 'error={"message":"No suitable platform flavor found for ${flavor_name}, please try a smaller flavor"}') 
-  
-ClusterInst shall fail with VMPool IpAccessShared/k8s and over large flavor
+
+# ECQ-2364  
+ClusterInst shall fail with VMPool IpAccessShared/k8s and over-large flavor
    [Documentation]
-   ...  send CreateVMPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - IpAccessShared/k8s CreateClusterInst with VMPool and a flavor larger than the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=1
 
    Should Be Equal  ${error}  ('code=400', 'error={"message":"No suitable platform flavor found for ${flavor_name}, please try a smaller flavor"}')
 
-ClusterInst shall create with VMPool IpAccessDedicated/k8s and over large flavor
+# ECQ-2365
+ClusterInst shall fail with VMPool IpAccessDedicated/k8s and over-large flavor
    [Documentation]
-   ...  send CreateVMPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - IpAccessDedicated/k8s CreateClusterInst with VMPool and a flavor larger than the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
    
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=kubernetes  number_masters=1  number_nodes=1
 
    Should Be Equal  ${error}  ('code=400', 'error={"message":"No suitable platform flavor found for ${flavor_name}, please try a smaller flavor"}')
- 
+
+# ECQ-2366
+ClusterInst shall fail with VMPool IpAccessDedicated/k8s and too many nodes 
+   [Documentation]
+   ...  - IpAccessDedicated/k8s CreateClusterInst with VMPool and more nodes than available in the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=1024  vcpus=1  disk=1
+
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=kubernetes  number_masters=1  number_nodes=10
+
+   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400 
+
+# ECQ-2367
+ClusterInst shall fail with VMPool IpAccessShared/k8s and too many nodes
+   [Documentation]
+   ...  - IpAccessShared/k8s CreateClusterInst with VMPool and more nodes than available in the pool
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=1024  vcpus=1  disk=1
+
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=10
+
+   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
+
 *** Keywords ***
 Setup
    ${flavor_name}=  Get Default Flavor Name
-
-   Create Flavor  region=${region}  ram=8192  vcpus=1  disk=1
-
    Set Suite Variable  ${flavor_name}
