@@ -587,6 +587,12 @@ class MexOpenstack():
                 
         return json.loads(o_out)
 
+    def create_stack(self, file, name):
+        cmd = f'source {self.env_file};openstack stack create -t {file} {name}'
+        logging.debug(f'creating openstack stack with cmd = {cmd}')
+
+        self._execute_cmd(cmd)
+
     def delete_stack(self, name=None):
         cmd = f'source {self.env_file};openstack stack delete {name} -y'
         logging.debug(f'deleting openstack stack with cmd = {cmd}')
