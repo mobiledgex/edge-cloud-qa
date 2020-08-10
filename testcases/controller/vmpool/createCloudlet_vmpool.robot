@@ -1,8 +1,8 @@
 *** Settings ***
-Documentation  DeleteVMPool failures
+Documentation  CreateCloudlet for VM Pools
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
+Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_VMPOOL_ENV}
 Library  Collections
 Library  String
 
@@ -12,40 +12,46 @@ Suite Setup  Setup
 *** Variables ***
 ${organization}=  MobiledgeX
 ${operator_organization}=  TDG
-${vmpool_server_name}=  vmpoolvm
+${vmpool_server_name}=  automationvmpool
+#${vmpool_server_name}=  vmpoolvm
+
 ${physical_name}=  berlin
 
-${region}=  US
+${cloudlet_name_vmpool}=  automationVMPoolCloudlet
+${vmpool_name}=  automationVMPool
+
+${region}=  EU
 
 *** Test Cases ***
-DeleteVMPool - delete when assinged to an org shall return error
+# ECQ-2314
+CreateCloudlet - shall be able to create in vm pool
    [Documentation]
-   ...  send CreateVMPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - create a vmpool based on openstack
+   ...  - send CreateCloudlet for a VM Pool
+   ...  - verify vmpool contains the cloudlet
 
-   ${pool_name}=  Get Default VM Pool Name
+   #${pool_name}=  Get Default VM Pool Name
    ${org_name}=   Get Default Organization Name
 
-   ${pool_return}=  Create Cloudlet  region=US  operator_org_name=${operator_organization}  vm_pool=${pool_name}  platform_type=PlatformTypeVmPool  physical_name=${physical_name}
+   ${pool_return}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_organization}  vm_pool=${vmpool_name}  platform_type=PlatformTypeVmPool  physical_name=${physical_name}  #container_version=2020-08-03-1  override_policy_container_version=${True}
 
    Should Be Equal As Integers  ${pool_return['data']['platform_type']}  9  # VMPool
    Should Be Equal As Integers  ${pool_return['data']['state']}  5  # Ready
-   Should Be Equal              ${pool_return['data']['vm_pool']}  ${pool_name}  # Ready
+   Should Be Equal              ${pool_return['data']['vm_pool']}  ${vmpool_name}  
 
    ${operator_organization_lc}=  Convert To Lowercase  ${operator_organization}
 
    ${group_name}=  Set Variable  ${pool_return['data']['key']['name']}-${operator_organization}-pf
    ${internal_name}=  Set Variable  ${pool_return['data']['key']['name']}.${operator_organization_lc}.mobiledgex.net
+   ${internal_name}=  Convert To Lowercase  ${internal_name}
 
-   VM Should Be In Use  region=${region}  vm_pool_name=${pool_name}  org_name=${operator_organization}  group_name=${group_name}  internal_name=${group_name}
-   VM Should Be In Use  region=${region}  vm_pool_name=${pool_name}  org_name=${operator_organization}  group_name=${internal_name}  internal_name=${internal_name}
+   VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}  group_name=${group_name}  internal_name=${group_name}
+   VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}  group_name=${internal_name}  internal_name=${internal_name}
  
-   ${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=US  org_name=${operator_organization}
+   #${error}=  Run Keyword And Expect Error  *   Delete VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}
 
-   Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"VMPool in use by Cloudlet"}
+   #Should Contain   ${error}  code=400
+   #Should Contain   ${error}  error={"message":"VM pool in use by Cloudlet"}
 
 *** Keywords ***
 Setup
@@ -64,7 +70,8 @@ Setup
       Append To List  ${pool_list}  ${vm1}       
    END 
 
-   ${pool_return1}=  Create VM Pool  region=US  org_name=${operator_organization}  vm_list=${pool_list}
+   Run Keyword and Ignore Error  Delete VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}
+   ${pool_return1}=  Create VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_organization}  vm_list=${pool_list}
 
    Set Suite Variable  ${pool_return1}
 

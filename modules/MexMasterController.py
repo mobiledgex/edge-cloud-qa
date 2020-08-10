@@ -2152,7 +2152,7 @@ class MexMasterController(MexRest):
     def delete_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.vm_pool.delete_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=[], json_data=None, use_defaults=True, use_thread=False):
+    def update_vm_pool(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_list=None, json_data=None, use_defaults=True, use_thread=False):
         return self.vm_pool.update_vm_pool(token=token, region=region, vm_pool_name=vm_pool_name, organization=org_name, vm_list=vm_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def add_vm_pool_member(self, token=None, region=None, vm_pool_name=None, org_name=None, vm_name=None, external_ip=None, internal_ip=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
