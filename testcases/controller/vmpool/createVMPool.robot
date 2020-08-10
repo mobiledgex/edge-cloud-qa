@@ -3,43 +3,51 @@ Documentation  CreateVMPool
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  Collections
      
-Suite Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Test Setup  Setup
+Test Teardown  Cleanup Provisioning
+
+*** Variables ***
+${organization}=  MobiledgeX
+${region}=  US
 
 *** Test Cases ***
+# ECQ-2319
 CreateVMPool - shall be able to create without VM list 
    [Documentation]
-   ...  send CreateVMPool with long pool name 
-   ...  verify pool is created 
+   ...  - send CreateVMPool with long pool name 
+   ...  - verify pool is created 
 
    ${name}=  Generate Random String  length=100
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  use_defaults=False
+   ${pool_return}=  Create VM Pool  region=${region}  token=${token}  vm_pool_name=${name}  org_name=${organization}  use_defaults=False
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
 
+# ECQ-2320
 CreateVMPool - shall be able to create with numbers in pool name 
    [Documentation]
-   ...  send CreateVMPool with numbers in pool name
-   ...  verify pool is created 
+   ...  - send CreateVMPool with numbers in pool name
+   ...  - verify pool is created 
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
    
-   ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  use_defaults=False
+   ${pool_return}=  Create VM Pool  region=${region}  token=${token}  vm_pool_name=${epoch}  org_name=${organization}  use_defaults=False
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${epoch} 
 
+# ECQ-2321
 CreateVMPool - shall be able to create with 1 VM
    [Documentation]
-   ...  send CreateVMPool with long pool name
-   ...  verify pool is created
+   ...  - send CreateVMPool with 1 VM 
+   ...  - verify pool is created
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=80.187.128.12  internal_ip=2.2.2.2 
    @{vmlist}=  Create List  ${vm1}
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   ${pool_return}=  Create VM Pool  region=${region}  token=${token}  org_name=${organization}  vm_list=${vmlist}
 
    Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
    Should Be Equal  ${pool_return['data']['vms'][0]['net_info']['external_ip']}  80.187.128.12
@@ -47,10 +55,28 @@ CreateVMPool - shall be able to create with 1 VM
 
    Length Should Be   ${pool_return['data']['vms']}  1
 
+# ECQ-2322
+CreateVMPool - shall be able to create with internal address only 
+   [Documentation]
+   ...  - send CreateVMPool with internal address only 
+   ...  - verify pool is created
+
+   &{vm1}=  Create Dictionary  name=vm1  internal_ip=2.2.2.2
+   @{vmlist}=  Create List  ${vm1}
+
+   ${pool_return}=  Create VM Pool  region=${region}  token=${token}  org_name=${organization}  vm_list=${vmlist}
+
+   Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
+   Dictionary Should Not Contain Key  ${pool_return['data']['vms'][0]['net_info']}  external_ip
+   Should Be Equal  ${pool_return['data']['vms'][0]['net_info']['internal_ip']}  2.2.2.2
+
+   Length Should Be   ${pool_return['data']['vms']}  1
+
+# ECQ-2323
 CreateVMPool - shall be able to create with 10 VMs 
    [Documentation]
-   ...  send CreateVMPool with long pool name
-   ...  verify pool is created
+   ...  - send CreateVMPool with 10 VMs
+   ...  - verify all pools are created
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=80.187.128.12  internal_ip=2.2.2.1
    &{vm2}=  Create Dictionary  name=vm2  external_ip=80.187.128.12  internal_ip=2.2.2.2
@@ -64,7 +90,7 @@ CreateVMPool - shall be able to create with 10 VMs
    &{vm10}=  Create Dictionary  name=vm10  external_ip=80.187.128.12  internal_ip=2.2.2.10
    @{vmlist}=  Create List  ${vm1}  ${vm2}  ${vm3}  ${vm4}  ${vm5}  ${vm6}  ${vm7}  ${vm8}  ${vm9}  ${vm10}
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   ${pool_return}=  Create VM Pool  region=${region}  token=${token}  org_name=${organization}  vm_list=${vmlist}
 
    Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
    Should Be Equal  ${pool_return['data']['vms'][0]['net_info']['external_ip']}  80.187.128.12
@@ -103,7 +129,3 @@ CreateVMPool - shall be able to create with 10 VMs
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
-
-#   ${pool_name}=  Get Default VM Pool Name
-
-#   Set Suite Variable  ${pool_name}
