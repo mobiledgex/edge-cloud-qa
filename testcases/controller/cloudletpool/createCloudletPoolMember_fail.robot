@@ -10,6 +10,7 @@ Test Teardown  Cleanup Provisioning
 ${operator}=  dmuus
 
 *** Test Cases ***
+# ECQ-1660
 CreateCloudletPoolMember - create without region shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember without region
@@ -20,6 +21,7 @@ CreateCloudletPoolMember - create without region shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"no region specified"}
 
+# ECQ-1661
 CreateCloudletPoolMember - create without parameters shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember with region only
@@ -30,6 +32,7 @@ CreateCloudletPoolMember - create without parameters shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {} not found"}
 
+# ECQ-2303
 CreateCloudletPoolMember - create without org shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember with name only
@@ -40,6 +43,7 @@ CreateCloudletPoolMember - create without org shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"name\\\\":\\\\"xxx\\\\"} not found"}
 
+# ECQ-1662
 # removed since it checks the pool name exists before adding member
 #CreateCloudletPoolMember - create with invalid pool name shall return error 
 #   [Documentation]
@@ -68,6 +72,7 @@ CreateCloudletPoolMember - create without org shall return error
 #   Should Contain   ${error}  code=400
 #   Should Contain   ${error}  error={"message":"Invalid Cloudlet Pool name"}
 
+# ECQ-1663
 CreateCloudletPoolMember - create with same name shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember twice for same name 
@@ -83,6 +88,7 @@ CreateCloudletPoolMember - create with same name shall return error
    Should Contain  ${error}   400
    Should Contain  ${error}   {"message":"Cloudlet already part of pool"}
 
+# ECQ-1664
 CreateCloudletPoolMember - create operator not found shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember operator not found 
@@ -99,6 +105,7 @@ CreateCloudletPoolMember - create operator not found shall return error
    Should Contain  ${error}   400
    Should Contain  ${error}   {"message":"CloudletPool key {\\\\"organization\\\\":\\\\"dmuusxxx\\\\",\\\\"name\\\\":\\\\"${pool_name}\\\\"} not found"}
 
+# ECQ-1665
 CreateCloudletPoolMember - create cloudlet not found shall return error
    [Documentation]
    ...  send CreateCloudletPoolMember cloudlet not found
