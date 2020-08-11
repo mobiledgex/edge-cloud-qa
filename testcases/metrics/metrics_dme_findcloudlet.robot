@@ -266,15 +266,13 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  cellID
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  inf
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  oper
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  errs 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundOperator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  inf
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
 
  
 
@@ -295,17 +293,15 @@ Values Should Be In Range
       Should Be True   ${reading[8]} == 0
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[11]}  ${None}
-      Should Be True   ${reading[12]} >= 0
+      Should Be True   ${reading[11]} >= 0
       #Run Keyword If  '${reading[12]}' == '0'  Check Found Cloudlet  ${reading[13]}  ${reading[14]}
       #...  ELSE  Check Not Found Cloudlet  ${reading[13]}  ${reading[14]}
-      Should Be True  '${reading[13]}' == '${cloudlet_name}' or '${reading[13]}' == '${None}' 
-      Should Be True  '${reading[14]}' == '${operator}' or '${reading[14]}' == '${None}'
-      Should Be True   ${reading[15]} == 0
-      Should Be Equal  ${reading[16]}  FindCloudlet 
-      Should Be Equal  ${reading[17]}  ${None}
-      Should Be True   ${reading[18]} > 0
-      Should Be True   ${reading[19]} >= 0
+      Should Be True  '${reading[12]}' == '${cloudlet_name}' or '${reading[13]}' == '${None}' 
+      Should Be True  '${reading[13]}' == '${operator}' or '${reading[14]}' == '${None}'
+      Should Be True   ${reading[14]} == 0
+      Should Be Equal  ${reading[15]}  FindCloudlet 
+      Should Be True   ${reading[16]} > 0
+      Should Be True   ${reading[17]} >= 0
    END
 
 #Check Found Cloudlet
@@ -355,15 +351,13 @@ Metrics Should Match Influxdb
       Should Be Equal  ${metrics_influx_t[${index}]['cellID']}   ${reading[8]}
       Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}   ${reading[9]}
       Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}   ${reading[10]}
-      Should Be Equal  ${metrics_influx_t[${index}]['dev']}   ${reading[11]}
-      Should Be Equal  ${metrics_influx_t[${index}]['errs']}   ${reading[12]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}   ${reading[13]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}   ${reading[14]}
-      Should Be Equal  ${metrics_influx_t[${index}]['inf']}   ${reading[15]}
-      Should Be Equal  ${metrics_influx_t[${index}]['method']}   ${reading[16]}
-      Should Be Equal  ${metrics_influx_t[${index}]['oper']}   ${reading[17]}
-      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}   ${reading[18]}
-      Should Be Equal  ${metrics_influx_t[${index}]['ver']}   ${reading[19]}
+      Should Be Equal  ${metrics_influx_t[${index}]['errs']}   ${reading[11]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}   ${reading[12]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}   ${reading[13]}
+      Should Be Equal  ${metrics_influx_t[${index}]['inf']}   ${reading[14]}
+      Should Be Equal  ${metrics_influx_t[${index}]['method']}   ${reading[15]}
+      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}   ${reading[16]}
+      Should Be Equal  ${metrics_influx_t[${index}]['ver']}   ${reading[17]}
 
       ${index}=  Evaluate  ${index}+1
    END
