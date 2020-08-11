@@ -7,6 +7,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1699
 DeleteOrg - delete org in use by org cloudlet pool shall return error
    [Documentation]
    ...  send CreateOrg
@@ -17,8 +18,8 @@ DeleteOrg - delete org in use by org cloudlet pool shall return error
    #EDGECLOUD-1725 deleting an org which is in use by orgcloudletpool gives database error
 
    Create Org
-   Create Cloudlet Pool  region=US
-   Create Org Cloudlet Pool  region=US
+   Create Cloudlet Pool  region=US  operator_org_name=tmus
+   Create Org Cloudlet Pool  region=US  cloudlet_pool_org_name=tmus
 
    ${error}=  Run Keyword And Expect Error  *  Delete Org 
 
@@ -31,6 +32,7 @@ Setup
    Set Suite Variable  ${token}
 
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${org_name}=  Get Default Organization Name
 
    Set Suite Variable  ${pool_name}
-
+   Set Suite Variable  ${org_name}

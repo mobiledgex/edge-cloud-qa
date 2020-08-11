@@ -15,7 +15,7 @@ ${password_admin}=  mexadmin123
 
 ${username}=  mextester06 
 ${password}=  mextester06123 
-${orgname}=   metricsorg
+#${orgname}=   metricsorg
 	
 *** Test Cases ***
 CloudletMetrics - DeveloperManager shall not be able to get cloudlet metrics
@@ -135,6 +135,7 @@ CloudletMetrics - OperatorViewer shall not be able to get cloudlet metrics from 
 *** Keywords ***
 Setup
    ${epoch}=  Get Time  epoch
+   ${orgname}=  Catenate  SEPARATOR=  org  ${epoch}
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
    
@@ -148,6 +149,7 @@ Setup
    ${userToken}=  Login  username=${epochusername}  password=${password}
    ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
+   Set Suite Variable  ${orgname}
    Set Suite Variable  ${userToken}
    Set Suite Variable  ${adminToken}
    Set Suite Variable  ${epochusername}

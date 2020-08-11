@@ -50,7 +50,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to modify number of wo
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
@@ -103,7 +103,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to increase number of 
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 
@@ -165,7 +165,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Should Be Equal As Numbers   ${num_servers_node}    2
 
-    FOR  ${x}  IN RANGE  0  10
+    FOR  ${x}  IN RANGE  0  30
         ${clusterInst}=  Show Cluster Instances  region=${region}   cluster_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}
         Exit For Loop If  '${clusterInst[0]['data']['state']}' == '5'
         Sleep  10s
@@ -175,13 +175,13 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
 
-Shall be able to update IpAccessDedicated k8s cluster to include auto scale policy where min_nodes > number_nodes
+Shall be able to update IpAccessDedicated k8s autocluster to include auto scale policy where min_nodes > number_nodes
     [Documentation]
     ...  create an auto scale policy
     ...  create a cluster instance
@@ -211,7 +211,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
-    ${cloudlet}=  Find Cloudlet latitude=${latitude}  longitude=${longitude}
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
 

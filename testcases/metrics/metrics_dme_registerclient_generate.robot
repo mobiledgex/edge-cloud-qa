@@ -117,7 +117,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get appauth metrics
    ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][11]}
    Should Be Equal As Numbers  ${req_count}  2  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count}  2  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics}
@@ -126,7 +126,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get app ver=2.0 metrics
    ${metrics2}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=2.0
    ${req_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][11]}
    Should Be Equal As Numbers  ${req_count2}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count2}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics2}
@@ -135,7 +135,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get app dev=2.0 metrics
    ${metrics3}=  Get Register Client API Metrics  region=${region}  developer_org_name=2.0  app_name=${app}
    ${req_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][11]}
    Should Be Equal As Numbers  ${req_count3}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count3}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics3}
@@ -174,15 +174,15 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  cellID
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  inf
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  oper
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  ver
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundOperator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  inf
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
+   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  oper
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
 
 
 
@@ -197,21 +197,19 @@ Values Should Be In Range
       Should Be True   ${reading[2]} == 0
       Should Be True   ${reading[3]} == 0
       Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[18]} 
+      Should Be True   ${reading[5]} == ${reading[16]} 
       Should Be Equal  ${reading[6]}  ${app}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 0
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[11]}  ${None}
-      Should Be True   ${reading[12]} == 0
+      Should Be True   ${reading[11]} == 0
+      Should Be True   ${reading[12]} == ${None}
       Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be True   ${reading[15]} == 0
-      Should Be Equal  ${reading[16]}  RegisterClient
-      Should Be Equal  ${reading[17]}  ${None}
-      Should Be True   ${reading[18]} > 0
-      Should Be Equal  ${reading[19]}  ${appvers} 
+      Should Be True   ${reading[14]} == 0
+      Should Be Equal  ${reading[15]}  RegisterClient
+      Should Be True   ${reading[16]} > 0
+      Should Be Equal  ${reading[17]}  ${appvers} 
    END
 
 Values With Cellid Should Be In Range
@@ -225,21 +223,20 @@ Values With Cellid Should Be In Range
       Should Be True   ${reading[2]} == 0
       Should Be True   ${reading[3]} == 0
       Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[18]} 
+      Should Be True   ${reading[5]} == ${reading[16]} 
       Should Be Equal  ${reading[6]}  ${app}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 123 
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[11]}  ${None}
-      Should Be True   ${reading[12]} == 0
+      #Should Be Equal  ${reading[11]}  ${None}
+      Should Be True   ${reading[11]} == 0
+      Should Be True   ${reading[12]} == ${None}
       Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be True   ${reading[15]} == 0
-      Should Be Equal  ${reading[16]}  RegisterClient
-      Should Be Equal  ${reading[17]}  ${None}
-      Should Be True   ${reading[18]} > 0
-      Should Be Equal  ${reading[19]}  ${appvers}
+      Should Be True   ${reading[14]} == 0
+      Should Be Equal  ${reading[15]}  RegisterClient
+      Should Be True   ${reading[16]} > 0
+      Should Be Equal  ${reading[17]}  ${appvers}
    END
 
 Values With Auth Should Be In Range
@@ -253,21 +250,19 @@ Values With Auth Should Be In Range
       Should Be True   ${reading[2]} == 0
       Should Be True   ${reading[3]} == 0
       Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[18]} 
+      Should Be True   ${reading[5]} == ${reading[16]} 
       Should Be Equal  ${reading[6]}  ${appauth}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 0
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[11]}  ${None}
-      Should Be True   ${reading[12]} == 0
+      Should Be True   ${reading[11]} == 0
+      Should Be True   ${reading[12]} == ${None}
       Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be True   ${reading[15]} == 0
-      Should Be Equal  ${reading[16]}  RegisterClient
-      Should Be Equal  ${reading[17]}  ${None}
-      Should Be True   ${reading[18]} > 0
-      Should Be Equal  ${reading[19]}  ${appvers}
+      Should Be True   ${reading[14]} == 0
+      Should Be Equal  ${reading[15]}  RegisterClient
+      Should Be True   ${reading[16]} > 0
+      Should Be Equal  ${reading[17]}  ${appvers}
    END
 
 Values With Error Should Be In Range
@@ -281,20 +276,18 @@ Values With Error Should Be In Range
       Should Be True   ${reading[2]} == 0
       Should Be True   ${reading[3]} == 0
       Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[18]}
+      Should Be True   ${reading[5]} == ${reading[16]}
       Should Be Equal  ${reading[6]}  ${app_arg}
       Should Be Equal  ${reading[7]}  ${dev_arg}
       Should Be True   ${reading[8]} == 0
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be Equal  ${reading[11]}  ${None}
-      Should Be True   ${reading[12]} == ${reading[18]}
+      Should Be True   ${reading[11]} == ${reading[16]}
+      Should Be True   ${reading[12]} == ${None}
       Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be True   ${reading[15]} == 0
-      Should Be Equal  ${reading[16]}  RegisterClient
-      Should Be Equal  ${reading[17]}  ${None}
-      Should Be True   ${reading[18]} > 0
-      Should Be Equal  ${reading[19]}  ${ver_arg}
+      Should Be True   ${reading[14]} == 0
+      Should Be Equal  ${reading[15]}  RegisterClient
+      Should Be True   ${reading[16]} > 0
+      Should Be Equal  ${reading[17]}  ${ver_arg}
    END
 
