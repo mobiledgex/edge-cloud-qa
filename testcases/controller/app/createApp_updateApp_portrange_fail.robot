@@ -69,7 +69,7 @@ UpdateApp - Update shall fail for port out of range on docker access_type=loadba
     ...  update a docker loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    Create App  region=US  access_ports=tcp:1-51  deployment=docker  access_type=loadbalancer
+    Create App  region=US  access_ports=tcp:1-50  deployment=docker  access_type=loadbalancer
 
     ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:1-51
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')

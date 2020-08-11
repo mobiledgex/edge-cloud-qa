@@ -7,6 +7,7 @@ Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
 *** Test Cases ***
+# ECQ-1693
 DeleteOrgCloudletPool - delete without region shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool without region
@@ -17,6 +18,7 @@ DeleteOrgCloudletPool - delete without region shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Region not specified"} 
 
+# ECQ-1694
 DeleteOrgCloudletPool - delete without parameters shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool with region only
@@ -27,6 +29,7 @@ DeleteOrgCloudletPool - delete without parameters shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Organization name not specified"}
 
+# ECQ-1695
 DeleteOrgCloudletPool - delete without org name shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool with region only
@@ -37,6 +40,7 @@ DeleteOrgCloudletPool - delete without org name shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Organization name not specified"}
 
+# ECQ-1696
 DeleteOrgCloudletPool - delete without pool name shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool with region only
@@ -47,6 +51,7 @@ DeleteOrgCloudletPool - delete without pool name shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool not specified"}
 
+# ECQ-1697
 DeleteOrgCloudletPool - delete with pool name not found shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool for pool name that doesnt exist 
@@ -60,6 +65,7 @@ DeleteOrgCloudletPool - delete with pool name not found shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Specified CloudletPool for region not found"}
 
+# ECQ-1698
 DeleteOrgCloudletPool - delete with org name not found shall return error
    [Documentation]
    ...  send DeleteOrgCloudletPool for pool name that doesnt exist
