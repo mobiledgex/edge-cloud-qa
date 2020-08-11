@@ -254,9 +254,9 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with p
 
     # https://mobiledgex.atlassian.net/browse/ECQ-1735
 
-    ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
-    Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
-    Should Be Equal  ${image_list[0]['Status']}   active
+    #${image_list}=  Get Image List  ${qcow_centos_openstack_image}
+    #Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
+    #Should Be Equal  ${image_list[0]['Status']}   active
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
