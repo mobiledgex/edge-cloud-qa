@@ -697,7 +697,7 @@ class Zapi(WebService):
         
         return token
 
-    def get(self, url, headers, retries=10):
+    def get(self, url, headers, retries=2):
         for x in range(retries):
             super().get(url, headers=headers)
             if str(self.resp.status_code) != '200':
@@ -706,7 +706,7 @@ class Zapi(WebService):
             else:
                 return
 
-    def post(self, url, headers, data=None, files=None, retries=10):
+    def post(self, url, headers, data=None, files=None, retries=2):
         for x in range(retries):
             logging.info(f'sending files={files}')
             super().post(url, headers=headers, data=data,files=files)
@@ -716,7 +716,7 @@ class Zapi(WebService):
             else:
                 return
 
-    def put(self, url, headers, data, retries=10):
+    def put(self, url, headers, data, retries=2):
         for x in range(retries):
             super().put(url, headers=headers, data=data)
             if str(self.resp.status_code) != '200':
