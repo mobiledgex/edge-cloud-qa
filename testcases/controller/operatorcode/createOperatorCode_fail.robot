@@ -72,10 +72,12 @@ CreateOperatorCode - create with same name shall return error
    ...  send CreateOperatorName twice for same name
    ...  verify proper error is received
 
-   Create Operator Code  region=${region}  code=${code}  operator_org_name=${operator_name}
+   ${epoch_code}=  Get Time  epoch
+   ${epoch_code}=  Convert To String  ${epoch_code}
+   Create Operator Code  region=${region}  code=${epoch_code}  operator_org_name=${operator_name}
 
-   ${error}=  Run Keyword And Expect Error  *     Create Operator Code  region=${region}  code=${code}  operator_org_name=${operator_name}
+   ${error}=  Run Keyword And Expect Error  *     Create Operator Code  region=${region}  code=${epoch_code}  operator_org_name=${operator_name}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"key ${code} already exists"}
+   Should Contain   ${error}  error={"message":"Key ${epoch_code} already exists"}
 

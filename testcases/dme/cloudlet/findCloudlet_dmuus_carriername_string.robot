@@ -3,6 +3,7 @@ Documentation   FindCloudlet - request shall return dmuus with no gcp/azure clou
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
+Library  String
 Variables      shared_variables.py
 
 Suite Setup      Setup
@@ -12,7 +13,7 @@ Suite Teardown	Cleanup provisioning
 ${dme_api_address}  127.0.0.1:50051
 ${app_name}  someapplication   #has to match crm process startup parms
 ${region}  US
-${code}  qwerty
+#${code}  qwerty
 ${developer_name}  AcmeAppCo
 ${app_version}  1.0
 ${access_ports}    tcp:80,http:443,udp:10002
@@ -59,6 +60,7 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same
 
 *** Keywords ***
 Setup
+    ${code}=  Generate Random String  length=5
     Create Operator Code     operator_org_name=${operator_name}  code=${code}  region=${region}
     #Create Developer
     Create Flavor  region=${region}
@@ -73,5 +75,5 @@ Setup
 
     Set Suite Variable  ${appinst_1}
     Set Suite Variable  ${appinst_2}
-
+    Set Suite Variable  ${code}
 
