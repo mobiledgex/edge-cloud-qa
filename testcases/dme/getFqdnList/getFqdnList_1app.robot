@@ -30,7 +30,11 @@ GetFqdnList - request shall return 1 app
       Should Be Equal             ${appfqdns[0].org_name}  ${app.key.organization}
       Should Be Equal             ${appfqdns[0].fqdns[0]}  ${app.official_fqdn}
 
-      Length Should Be   ${appfqdns}  1
+      Length Should Be   ${appfqdns}  ${appcount}
+
+      Should Be True  ${appcount} >= 1
+
+#      Length Should Be   ${appfqdns}  1
 
 *** Keywords ***
 Setup
@@ -41,9 +45,16 @@ Setup
     #${tmus_appinst}=            Create App Instance  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     #Create Developer            developer_name=${samsung_developer_name}
-    Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  official_fqdn=${samsung_uri} 
+    Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  #official_fqdn=${samsung_uri} 
     #Create App Instance         app_name=${samsung_app_name}  developer_name=${samsung_developer_name}  cloudlet_name=${samsung_cloudlet_name}  operator_name=${samsung_operator_name}  uri=${samsung_uri}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${app} 
 
+    ${apps}=  Show Apps
+    ${appcount}=  Set Variable  0
+    FOR  ${a}  IN  @{apps}
+       ${contains}=  Get Length  ${a.official_fqdn}
+       ${appcount}=  Run Keyword If  ${contains} > 0  Evaluate  ${appcount} + 1  ELSE  Set Variable  ${appcount}
+    END
+    Set Suite Variable  ${appcount}
 
