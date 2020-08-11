@@ -13,6 +13,7 @@ ${operator}=  tmus
 ${cloudlet}=  tmocloud-1
 
 *** Test Cases ***
+# ECQ-1658
 CreateCloudletPoolMember - shall be able to create with long pool name 
    [Documentation]
    ...  send CreateCloudletPoolMember with long pool name 
@@ -31,6 +32,7 @@ CreateCloudletPoolMember - shall be able to create with long pool name
 
    Length Should Be  ${pool_return['data']['cloudlets']}   1
 
+# ECQ-1659
 CreateCloudletPoolMember - shall be able to create with numbers in pool name 
    [Documentation]
    ...  send CreateCloudletPoolMember with numbers in pool name

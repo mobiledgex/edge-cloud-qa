@@ -11,6 +11,7 @@ ${username}=  mextester06
 ${password}=  mextester06123
 
 *** Test Cases ***
+# ECQ-1685
 ShowOrgCloudletPool - users shall get empty list 
    [Documentation]
    ...  send ShowOrgCloudletPool with user token 
@@ -21,6 +22,7 @@ ShowOrgCloudletPool - users shall get empty list
 
    Should Be Empty  ${pool_return}
 
+# ECQ-1686
 CreateOrgCloudletPool - users shall get error when creating org cloudlet pool 
    [Documentation]
    ...  send CreateOrgCloudletPool with user token
@@ -33,6 +35,7 @@ CreateOrgCloudletPool - users shall get error when creating org cloudlet pool
    Should Contain   ${error}  code=403
    Should Contain   ${error}  error={"message":"Forbidden"}
 
+# ECQ-1687
 DeleteOrgCloudletPool - users shall get error when deleting org cloudlet pool
    [Documentation]
    ...  send DeleteOrgCloudletPool with user token
