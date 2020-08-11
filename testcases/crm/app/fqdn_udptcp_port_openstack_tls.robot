@@ -63,7 +63,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
 
    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[3].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}  tls=${True}
 
 # ECQ-2253
 User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated and app=k8s/lb
