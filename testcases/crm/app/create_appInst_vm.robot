@@ -100,7 +100,7 @@ User shall be able to create VM deployment on openstack
    Length Should Be  ${sec_groups}  3
 
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']} 
-   Length Should Be  ${sec_groups}  1
+   Length Should Be  ${sec_groups}  2
  
 *** Keywords ***
 Setup
