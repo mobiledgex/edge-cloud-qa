@@ -10,8 +10,8 @@ Test Teardown  Cleanup Provisioning
 # ECQ-1678
 CreateOrgCloudletPool - create without region shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool without region
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool without region
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  token=${token}  cloudlet_pool_name=andy  org_name=myorg  use_defaults=False
 
@@ -21,8 +21,8 @@ CreateOrgCloudletPool - create without region shall return error
 # ECQ-1679
 CreateOrgCloudletPool - create without parameters shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  use_defaults=False
 
@@ -32,8 +32,8 @@ CreateOrgCloudletPool - create without parameters shall return error
 # ECQ-1680
 CreateOrgCloudletPool - create without org name shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=andy  use_defaults=False
 
@@ -43,8 +43,8 @@ CreateOrgCloudletPool - create without org name shall return error
 # ECQ-1681
 CreateOrgCloudletPool - create without pool name shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  org_name=myorg  use_defaults=False
 
@@ -54,8 +54,8 @@ CreateOrgCloudletPool - create without pool name shall return error
 # ECQ-2304
 CreateOrgCloudletPool - create without pool org name shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool without pool org name 
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool without pool org name 
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=myorg  org_name=MobiledgeX  use_defaults=False
 
@@ -65,8 +65,8 @@ CreateOrgCloudletPool - create without pool org name shall return error
 # ECQ-2305
 CreateOrgCloudletPool - create with pool org not found shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool for pool org that doesnt exist
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool for pool org that doesnt exist
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  cloudlet_pool_org_name=xxx  org_name=MobiledgeX  use_defaults=False
 
@@ -76,8 +76,8 @@ CreateOrgCloudletPool - create with pool org not found shall return error
 # ECQ-1682
 CreateOrgCloudletPool - create with pool name not found shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool for pool name that doesnt exist 
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool for pool name that doesnt exist 
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Create Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypooolxxx  cloudlet_pool_org_name=MobiledgeX  org_name=MobiledgeX  use_defaults=False
 
@@ -87,8 +87,8 @@ CreateOrgCloudletPool - create with pool name not found shall return error
 # ECQ-1683
 CreateOrgCloudletPool - create with org name not found shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool for pool name that doesnt exist
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool for pool name that doesnt exist
+   ...  - verify proper error is received
 
    Create Cloudlet Pool  region=US  token=${token}  operator_org_name=MobiledgeX
 
@@ -100,8 +100,8 @@ CreateOrgCloudletPool - create with org name not found shall return error
 # ECQ-1684
 CreateOrgCloudletPool - create with same name shall return error
    [Documentation]
-   ...  send CreateOrgCloudletPool twice for same name 
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool twice for same name 
+   ...  - verify proper error is received
 
    #EDGECLOUD-1724 - creating same org cloudlet pool with same name should give info in error message
 

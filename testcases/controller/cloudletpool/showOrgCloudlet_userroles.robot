@@ -24,8 +24,8 @@ ${password}=  mextester06123
 # ECQ-1700
 ShowOrgCloudlet - developer org owner shall be able to see all cloudlets 
    [Documentation]
-   ...  send ShowOrgCloudlet for org owner
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for org owner
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -50,8 +50,8 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
 # ECQ-1701
 ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for org owner
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for org owner
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -75,8 +75,8 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
 # ECQ-1702
 ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for DeveloperManager user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for DeveloperManager user
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -102,8 +102,8 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
 # ECQ-1703
 ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for DeveloperContributor user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for DeveloperContributor user
+   ...  - verify all cloudlets are returned
 
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
@@ -130,8 +130,8 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
 # ECQ-1704
 ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for DeveloperViewer user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for DeveloperViewer user
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -157,8 +157,8 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
 # ECQ-1705
 ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for OperatorManager user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for OperatorManager user
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -184,8 +184,8 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
 # ECQ-1706
 ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for OperatorContributor user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for OperatorContributor user
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -211,8 +211,8 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
 # ECQ-1707
 ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    [Documentation]
-   ...  send ShowOrgCloudlet for OperatorViewer user
-   ...  verify all cloudlets are returned
+   ...  - send ShowOrgCloudlet for OperatorViewer user
+   ...  - verify all cloudlets are returned
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
