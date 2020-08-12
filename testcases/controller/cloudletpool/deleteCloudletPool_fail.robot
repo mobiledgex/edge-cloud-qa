@@ -10,8 +10,8 @@ Suite Teardown  Cleanup Provisioning
 # ECQ-1689
 DeleteCloudletPool - delete without region shall return error 
    [Documentation]
-   ...  send DeleteCloudletPool without region 
-   ...  verify proper error is received 
+   ...  - send DeleteCloudletPool without region 
+   ...  - verify proper error is received 
 
    #EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
 
@@ -23,8 +23,8 @@ DeleteCloudletPool - delete without region shall return error
 # ECQ-1690
 DeleteCloudletPool - delete without parameters shall return error
    [Documentation] 
-   ...  send DeleteCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send DeleteCloudletPool with region only
+   ...  - verify proper error is received
 
    #EDGECLOUD-1741 - DeleteCloudletPool without parms gives wrong message
 
@@ -36,8 +36,8 @@ DeleteCloudletPool - delete without parameters shall return error
 # ECQ-1691
 DeleteCloudletPool - delete with name not found shall return error
    [Documentation]
-   ...  send DeleteCloudletPool for policy not found
-   ...  verify proper error is received
+   ...  - send DeleteCloudletPool for policy not found
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=xpoolx  operator_org_name=tmus
 
@@ -47,10 +47,10 @@ DeleteCloudletPool - delete with name not found shall return error
 # ECQ-1692
 DeleteCloudletPool - delete when assinged to an org shall return error 
    [Documentation]
-   ...  send CreateCloudletPool
-   ...  assign via orgcloudletpool create
-   ...  send DeleteCloudletPool
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool
+   ...  - assign via orgcloudletpool create
+   ...  - send DeleteCloudletPool
+   ...  - verify proper error is received
 
    #EDGECLOUD-1728 able to do DeleteCloudletPool when the pool is assigned to an org  closed
    # EDGECLOUD-3401 able to do DeleteCloudletPool when the pool is assigned to an org

@@ -13,8 +13,8 @@ ${operator}=  tmus
 # ECQ-1660
 CreateCloudletPoolMember - create without region shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember without region
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember without region
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Add Cloudlet Pool Member  token=${token}  use_defaults=False
 
@@ -24,8 +24,8 @@ CreateCloudletPoolMember - create without region shall return error
 # ECQ-1661
 CreateCloudletPoolMember - create without parameters shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember with region only
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  token=${token}  use_defaults=False
 
@@ -35,8 +35,8 @@ CreateCloudletPoolMember - create without parameters shall return error
 # ECQ-2303
 CreateCloudletPoolMember - create without org shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember with name only
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember with name only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Add Cloudlet Pool Member  region=US  cloudlet_pool_name=xxx  token=${token}  use_defaults=False
 
@@ -75,8 +75,8 @@ CreateCloudletPoolMember - create without org shall return error
 # ECQ-1663
 CreateCloudletPoolMember - create with same name shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember twice for same name 
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember twice for same name 
+   ...  - verify proper error is received
 
    #EDGECLOUD-1716 CreateCloudletPoolMember for duplicate create should return the member name in the error
 
@@ -91,8 +91,8 @@ CreateCloudletPoolMember - create with same name shall return error
 # ECQ-1664
 CreateCloudletPoolMember - create operator not found shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember operator not found 
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember operator not found 
+   ...  - verify proper error is received
 
    #EDGECLOUD-1717 - CreateCloudletPoolMember - create with unknown operator/cloudlet should give info in error message
 
@@ -108,8 +108,8 @@ CreateCloudletPoolMember - create operator not found shall return error
 # ECQ-1665
 CreateCloudletPoolMember - create cloudlet not found shall return error
    [Documentation]
-   ...  send CreateCloudletPoolMember cloudlet not found
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember cloudlet not found
+   ...  - verify proper error is received
 
    #EDGECLOUD-1717 - CreateCloudletPoolMember - create with unknown operator/cloudlet should give info in error message
 
