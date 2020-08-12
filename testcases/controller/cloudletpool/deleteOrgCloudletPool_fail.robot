@@ -10,8 +10,8 @@ Suite Teardown  Cleanup Provisioning
 # ECQ-1693
 DeleteOrgCloudletPool - delete without region shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool without region
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool without region
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Delete Org Cloudlet Pool  token=${token}  cloudlet_pool_name=andy  org_name=myorg  use_defaults=False
 
@@ -21,8 +21,8 @@ DeleteOrgCloudletPool - delete without region shall return error
 # ECQ-1694
 DeleteOrgCloudletPool - delete without parameters shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Delete Org Cloudlet Pool  region=US  token=${token}  use_defaults=False
 
@@ -32,8 +32,8 @@ DeleteOrgCloudletPool - delete without parameters shall return error
 # ECQ-1695
 DeleteOrgCloudletPool - delete without org name shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Delete Org Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=andy  use_defaults=False
 
@@ -43,8 +43,8 @@ DeleteOrgCloudletPool - delete without org name shall return error
 # ECQ-1696
 DeleteOrgCloudletPool - delete without pool name shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Delete Org Cloudlet Pool  region=US  token=${token}  org_name=myorg  use_defaults=False
 
@@ -54,8 +54,8 @@ DeleteOrgCloudletPool - delete without pool name shall return error
 # ECQ-1697
 DeleteOrgCloudletPool - delete with pool name not found shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool for pool name that doesnt exist 
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool for pool name that doesnt exist 
+   ...  - verify proper error is received
 
    EDGECLOUD-1733 Inconsistencies in API behavior between MC specific and Controller specific returns
 
@@ -68,8 +68,8 @@ DeleteOrgCloudletPool - delete with pool name not found shall return error
 # ECQ-1698
 DeleteOrgCloudletPool - delete with org name not found shall return error
    [Documentation]
-   ...  send DeleteOrgCloudletPool for pool name that doesnt exist
-   ...  verify proper error is received
+   ...  - send DeleteOrgCloudletPool for pool name that doesnt exist
+   ...  - verify proper error is received
 
    EDGECLOUD-1733 Inconsistencies in API behavior between MC specific and Controller specific returns
 
