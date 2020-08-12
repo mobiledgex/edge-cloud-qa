@@ -15,8 +15,8 @@ ${organization}=  GDDT
 # ECQ-1656
 CreateCloudletPool - shall be able to create with long pool name 
    [Documentation]
-   ...  send CreateCloudletPool with long pool name 
-   ...  verify pool is created 
+   ...  - send CreateCloudletPool with long pool name 
+   ...  - verify pool is created 
 
    ${name}=  Generate Random String  length=100
 
@@ -27,8 +27,8 @@ CreateCloudletPool - shall be able to create with long pool name
 # ECQ-1657
 CreateCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
-   ...  send CreateCloudletPool with numbers in pool name
-   ...  verify pool is created 
+   ...  - send CreateCloudletPool with numbers in pool name
+   ...  - verify pool is created 
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}

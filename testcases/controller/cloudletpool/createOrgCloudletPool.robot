@@ -11,8 +11,8 @@ Suite Teardown  Cleanup Provisioning
 # ECQ-1676
 CreateOrgCloudletPool - shall be able to create with long pool name 
    [Documentation]
-   ...  send CreateOrgCloudletPool with long pool name 
-   ...  verify it is success 
+   ...  - send CreateOrgCloudletPool with long pool name 
+   ...  - verify it is success 
 
    ${name}=  Generate Random String  length=100
 
@@ -31,8 +31,8 @@ CreateOrgCloudletPool - shall be able to create with long pool name
 # ECQ-1677
 CreateOrgCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
-   ...  send CreateOrgCloudletPool with numbers name
-   ...  verify it is success
+   ...  - send CreateOrgCloudletPool with numbers name
+   ...  - verify it is success
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
