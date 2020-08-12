@@ -16,8 +16,8 @@ ${cloudlet}=  tmocloud-1
 # ECQ-1658
 CreateCloudletPoolMember - shall be able to create with long pool name 
    [Documentation]
-   ...  send CreateCloudletPoolMember with long pool name 
-   ...  verify pool member is created 
+   ...  - send CreateCloudletPoolMember with long pool name 
+   ...  - verify pool member is created 
 
    ${name}=  Generate Random String  length=100
 
@@ -35,8 +35,8 @@ CreateCloudletPoolMember - shall be able to create with long pool name
 # ECQ-1659
 CreateCloudletPoolMember - shall be able to create with numbers in pool name 
    [Documentation]
-   ...  send CreateCloudletPoolMember with numbers in pool name
-   ...  verify pool member is created 
+   ...  - send CreateCloudletPoolMember with numbers in pool name
+   ...  - verify pool member is created 
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}

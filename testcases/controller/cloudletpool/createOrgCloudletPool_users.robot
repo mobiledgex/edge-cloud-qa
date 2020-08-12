@@ -14,8 +14,8 @@ ${password}=  mextester06123
 # ECQ-1685
 ShowOrgCloudletPool - users shall get empty list 
    [Documentation]
-   ...  send ShowOrgCloudletPool with user token 
-   ...  verify empty list is received 
+   ...  - send ShowOrgCloudletPool with user token 
+   ...  - verify empty list is received 
 
    ${pool_return}=  Show Org Cloudlet Pool  region=US  token=${userToken}
    log to console  xxx ${pool_return}
@@ -25,8 +25,8 @@ ShowOrgCloudletPool - users shall get empty list
 # ECQ-1686
 CreateOrgCloudletPool - users shall get error when creating org cloudlet pool 
    [Documentation]
-   ...  send CreateOrgCloudletPool with user token
-   ...  verify proper error is received
+   ...  - send CreateOrgCloudletPool with user token
+   ...  - verify proper error is received
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
@@ -38,8 +38,8 @@ CreateOrgCloudletPool - users shall get error when creating org cloudlet pool
 # ECQ-1687
 DeleteOrgCloudletPool - users shall get error when deleting org cloudlet pool
    [Documentation]
-   ...  send DeleteOrgCloudletPool with user token
-   ...  verify proper error is received 
+   ...  - send DeleteOrgCloudletPool with user token
+   ...  - verify proper error is received 
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
