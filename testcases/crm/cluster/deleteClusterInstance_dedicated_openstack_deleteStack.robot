@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Delete ClusterInst after stack has been deleted 
+Documentation  Delete ClusterInst/AppInst after stack has been deleted 
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
@@ -20,12 +20,14 @@ ${docker_command}                     ./server_ping_threaded.py
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-ClusterInst shall be deleted with IpAccessDedicated/docker on openstack when no stack exists
+# ECQ-2423
+ClusterInst/AppInst shall be deleted with IpAccessDedicated/docker on openstack when no stack exists
    [Documentation]
-   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=docker
-   ...  verify it creates lb only
+   ...  - create a clusterinst/appinst on openstack with IpAccessDedicated and deploymenttype=docker
+   ...  - delete the stack from openstack
+   ...  - delete the appinst and clusterinst 
 
-   Create Flavor          ram=1024  vcpus=1  disk=1
+   #Create Flavor          ram=1024  vcpus=1  disk=1
 
    ${cluster_name}=  Get Default Cluster Name
    ${developer_name}=  Get Default Developer Name
@@ -40,30 +42,37 @@ ClusterInst shall be deleted with IpAccessDedicated/docker on openstack when no 
    ${openstack_stack_name}=    Catenate  SEPARATOR=-  ${cloudlet_lowercase_dedicated}  ${cluster_name}  ${developer_name}
    Delete Stack  ${openstack_stack_name}
 
+   Sleep  30
+
    #Delete Cluster Instance
 
-ClusterInst shall be deleted with IpAccessDedicated/k8s on openstack when no stack exists
+# ECQ-2424
+ClusterInst/AppInst shall be deleted with IpAccessDedicated/k8s on openstack when no stack exists
    [Documentation]
-   ...  create a cluster on openstack with IpAccessDedicated and deploymenttype=k8s
-   ...  verify it creates lb only
+   ...  - create a clusterinst/appinst on openstack with IpAccessDedicated and deploymenttype=k8s
+   ...  - delete the stack from openstack
+   ...  - delete the appinst and clusterinst
 
-   Create Flavor          ram=1024  vcpus=1  disk=1
+   #Create Flavor          ram=1024  vcpus=1  disk=1
 
    ${cluster_name}=  Get Default Cluster Name
    ${developer_name}=  Get Default Developer Name
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  no_auto_delete={$True}
+   ${cluster_inst}=  Create Cluster Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  #no_auto_delete={$True}
    Log to Console  DONE creating cluster instance
 
    ${openstack_stack_name}=    Catenate  SEPARATOR=-  ${cloudlet_lowercase_dedicated}  ${cluster_name}  ${developer_name}
 
    Delete Stack  ${openstack_stack_name}
 
-   Delete Cluster Instance
+   Sleep  30
+
+   #Delete Cluster Instance
 
 *** Keywords ***
 Setup
+    Create Flavor          ram=1024  vcpus=1  disk=1
     ${epoch_time}=  Get Time  epoch
     ${cloudlet_lowercase_dedicated}=  Convert to Lowercase  ${cloudlet_name_openstack_dedicated}
 
