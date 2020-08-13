@@ -10,10 +10,10 @@ Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_
 # ECQ-1688
 DeleteCloudletPool - deleting cloudlet pool shall delete all cloudlet pool members 
    [Documentation]
-   ...  send CreateCloudletPool
-   ...  send CreateCloudletPoolMembers 
-   ...  send DeleteCloudletPool
-   ...  verify all members are deleted 
+   ...  - send CreateCloudletPool
+   ...  - send CreateCloudletPoolMembers 
+   ...  - send DeleteCloudletPool
+   ...  - verify all members are deleted 
 
    ${token}=  Get Super Token
    ${pool_name}=  Get Default Cloudlet Pool Name
