@@ -27,12 +27,15 @@ ${password}=  mextester06123
 # ECQ-1708
 ShowOrgCloudlet - org shall be assigned to 1 cloudlet 
    [Documentation]
-   ...  assign 1 cloudlet to the pool for org1 
-   ...  send ShowOrgCloudlet for org1 and verify it returns the 1 cloudlet
-   ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
+   ...  - assign 1 cloudlet to the pool for org1 
+   ...  - send ShowOrgCloudlet for org1 and verify it returns the 1 cloudlet
+   ...  - send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
+
+   @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
-   Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
+   Update Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_list=${cloudlet_list}
+   #Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
 
    Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
 
@@ -68,9 +71,9 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
 # ECQ-1709
 ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    [Documentation]
-   ...  assign 2 cloudlet to the pool for org1
-   ...  send ShowOrgCloudlet for org1 and verify it returns the 2 cloudlets
-   ...  send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
+   ...  - assign 2 cloudlet to the pool for org1
+   ...  - send ShowOrgCloudlet for org1 and verify it returns the 2 cloudlets
+   ...  - send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
    Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  cloudlet_name=tmocloud-1
@@ -108,9 +111,9 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
 # ECQ-1710
 ShowOrgCloudlet - org shall be assigned to all cloudlets
    [Documentation]
-   ...  assign all cloudlet to the pool for org1
-   ...  send ShowOrgCloudlet for org1 and verify it returns all the cloudlets
-   ...  send ShowOrgCloudlet for org2 and verify it returns no cloudlets
+   ...  - assign all cloudlet to the pool for org1
+   ...  - send ShowOrgCloudlet for org1 and verify it returns all the cloudlets
+   ...  - send ShowOrgCloudlet for org2 and verify it returns no cloudlets
 
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
@@ -144,8 +147,8 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
 # ECQ-1711
 ShowOrgCloudlet - orgs shall be assigned to different cloudlets
    [Documentation]
-   ...  assign different cloudlets to 2 different orgs 
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets 
+   ...  - assign different cloudlets to 2 different orgs 
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets 
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -194,8 +197,8 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
 # ECQ-1712
 ShowOrgCloudlet - orgs shall be assigned the same cloudlet
    [Documentation]
-   ...  assign same cloudlet to 2 different orgs
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - assign same cloudlet to 2 different orgs
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=dmuus
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -236,8 +239,8 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
 # ECQ-1713
 ShowOrgCloudlet - orgs shall be assigned the same pool 
    [Documentation]
-   ...  assign 2 orgs to same orgcloudletpool
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - assign 2 orgs to same orgcloudletpool
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=dmuus
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -272,10 +275,10 @@ ShowOrgCloudlet - orgs shall be assigned the same pool
 # ECQ-1714
 ShowOrgCloudlet - orgs shall be changed to different pools
    [Documentation]
-   ...  assign 2 orgs to 2 different orgcloudletpools 
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
-   ...  send orgcloudletpool delete and re-create by swithing the orgs
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets have switched orgs
+   ...  - assign 2 orgs to 2 different orgcloudletpools 
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - send orgcloudletpool delete and re-create by swithing the orgs
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets have switched orgs
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -378,12 +381,12 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 # ECQ-1715
 ShowOrgCloudlet - orgs shall be removed from all org pools
    [Documentation]
-   ...  create 2 pools and assign all cloudlets to the pools 
-   ...  send orgcloudletpool create for 2 orgs
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
-   ...  delete the orgcloudletpools
-   ...  send ShowOrgCloudlet for each org
-   ...  verify empty list are returned for each org since all the cloudlets are still in a pool
+   ...  - create 2 pools and assign all cloudlets to the pools 
+   ...  - send orgcloudletpool create for 2 orgs
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - delete the orgcloudletpools
+   ...  - send ShowOrgCloudlet for each org
+   ...  - verify empty list are returned for each org since all the cloudlets are still in a pool
 
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
@@ -460,12 +463,12 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
 # ECQ-1716
 ShowOrgCloudlet - members shall be removed from cloudlet pools
    [Documentation]
-   ...  create 2 pools and assign all cloudlets to the pools
-   ...  send orgcloudletpool create for 2 orgs
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
-   ...  delete some of the members
-   ...  send ShowOrgCloudlet for each org
-   ...  verify proper cloudlets are returned
+   ...  - create 2 pools and assign all cloudlets to the pools
+   ...  - send orgcloudletpool create for 2 orgs
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - delete some of the members
+   ...  - send ShowOrgCloudlet for each org
+   ...  - verify proper cloudlets are returned
 
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -558,12 +561,12 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
 # ECQ-1717
 ShowOrgCloudlet - shall be to show after deleting all pools
    [Documentation]
-   ...  create 2 pools and assign all cloudlets to the pools
-   ...  send orgcloudletpool create for 2 orgs
-   ...  send ShowOrgCloudlet for each org and verify the cloudlets
-   ...  delete orgs and pools 
-   ...  send ShowOrgCloudlet for each org
-   ...  verify proper cloudlets are returned
+   ...  - create 2 pools and assign all cloudlets to the pools
+   ...  - send orgcloudletpool create for 2 orgs
+   ...  - send ShowOrgCloudlet for each org and verify the cloudlets
+   ...  - delete orgs and pools 
+   ...  - send ShowOrgCloudlet for each org
+   ...  - verify proper cloudlets are returned
 
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
@@ -652,12 +655,12 @@ ShowOrgCloudlet - shall be to show after deleting all pools
 # ECQ-1718
 ShowOrgCloudlet - shall be to add members after orgpoolcreate
    [Documentation]
-   ...  create 2 pools with no members
-   ...  send orgcloudletpool create for 2 orgs
-   ...  send ShowOrgCloudlet for each org and verify list is empty
-   ...  add members
-   ...  send ShowOrgCloudlet for each org
-   ...  verify proper cloudlets are returned
+   ...  - create 2 pools with no members
+   ...  - send orgcloudletpool create for 2 orgs
+   ...  - send ShowOrgCloudlet for each org and verify list is empty
+   ...  - add members
+   ...  - send ShowOrgCloudlet for each org
+   ...  - verify proper cloudlets are returned
 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure  #auto_delete=${False} 
    Create Cloudlet Pool         region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  #auto_delete=${False}
@@ -723,11 +726,11 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
 # ECQ-1719
 ShowOrgCloudlet - shall be to add user to existing orgpool 
    [Documentation]
-   ...  create pools with members
-   ...  send orgcloudletpool create
-   ...  create new user and assign to org 
-   ...  send ShowOrgCloudlet for each user 
-   ...  verify proper cloudlets are returned
+   ...  - create pools with members
+   ...  - send orgcloudletpool create
+   ...  - create new user and assign to org 
+   ...  - send ShowOrgCloudlet for each user 
+   ...  - verify proper cloudlets are returned
 
    @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
    Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=dmuus  cloudlet_list=${cloudlet_list}  #auto_delete=${False}

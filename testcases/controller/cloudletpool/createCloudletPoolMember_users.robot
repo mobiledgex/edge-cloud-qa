@@ -27,8 +27,8 @@ ${operator}=  dmuus
 # ECQ-1667
 CreateCloudletPoolMember - users shall get error when creating cloudlet pool 
    [Documentation]
-   ...  send CreateCloudletPoolMember with user token
-   ...  verify proper error is received
+   ...  - send CreateCloudletPoolMember with user token
+   ...  - verify proper error is received
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 
@@ -40,8 +40,8 @@ CreateCloudletPoolMember - users shall get error when creating cloudlet pool
 # ECQ-1668
 DeleteCloudletPoolMember - users shall get error when deleting cloudlet pool
    [Documentation]
-   ...  send DeleteCloudletPoolMember with user token
-   ...  verify proper error is received 
+   ...  - send DeleteCloudletPoolMember with user token
+   ...  - verify proper error is received 
 
    #EDGECLOUD-1740 - MC API error message not consistent for 400 and 403 errors
 

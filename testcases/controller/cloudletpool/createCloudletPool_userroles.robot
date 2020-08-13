@@ -18,8 +18,8 @@ ${password}=  mextester06123
 # ECQ-2306
 CreateCloudletPool - developer org owner shall not be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for Developer org owner
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool/DeleteCloudletPool for Developer org owner
+   ...  - verify proper error is received
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -42,8 +42,8 @@ CreateCloudletPool - developer org owner shall not be able to create a cloudlet 
 # ECQ-2307
 CreateCloudletPool - operator org owner shall be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for Operator org owner
-   ...  verify pool can be created and deleted
+   ...  - send CreateCloudletPool/DeleteCloudletPool for Operator org owner
+   ...  - verify pool can be created and deleted
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -57,8 +57,8 @@ CreateCloudletPool - operator org owner shall be able to create a cloudlet pool
 # ECQ-2308
 CreateCloudletPool - DeveloperManager shall be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for DeveloperManager user
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool/DeleteCloudletPool for DeveloperManager user
+   ...  - verify proper error is received
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -83,8 +83,8 @@ CreateCloudletPool - DeveloperManager shall be able to create a cloudlet pool
 # ECQ-2309
 CreateCloudletPool - DeveloperContributor shall be not able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for DeveloperContributor user
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool/DeleteCloudletPool for DeveloperContributor user
+   ...  - verify proper error is received
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -109,8 +109,8 @@ CreateCloudletPool - DeveloperContributor shall be not able to create a cloudlet
 # ECQ-2310
 CreateCloudletPool - DeveloperViewer shall be not able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for DeveloperViewer user
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool/DeleteCloudletPool for DeveloperViewer user
+   ...  - verify proper error is received
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
@@ -135,8 +135,8 @@ CreateCloudletPool - DeveloperViewer shall be not able to create a cloudlet pool
 # ECQ-2311
 CreateCloudletPool - OperatorManager shall be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for OperatorManager user
-   ...  verify pool can be created and deleted
+   ...  - send CreateCloudletPool/DeleteCloudletPool for OperatorManager user
+   ...  - verify pool can be created and deleted
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -152,8 +152,8 @@ CreateCloudletPool - OperatorManager shall be able to create a cloudlet pool
 # ECQ-2312
 CreateCloudletPool - OperatorContributor shall be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for OperatorContributor user
-   ...  verify pool can be created and deleted
+   ...  - send CreateCloudletPool/DeleteCloudletPool for OperatorContributor user
+   ...  - verify pool can be created and deleted
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
@@ -169,8 +169,8 @@ CreateCloudletPool - OperatorContributor shall be able to create a cloudlet pool
 # ECQ-2313
 CreateCloudletPool - OperatorViewer shall not be able to create a cloudlet pool
    [Documentation]
-   ...  send CreateCloudletPool/DeleteCloudletPool for OperatorViewer user
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool/DeleteCloudletPool for OperatorViewer user
+   ...  - verify proper error is received
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
