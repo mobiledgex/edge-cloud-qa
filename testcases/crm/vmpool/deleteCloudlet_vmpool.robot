@@ -2,9 +2,9 @@
 Documentation  DeleteCloudlet for VM Pools
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_VMPOOL_ENV}
-Library  Collections
-Library  String
+#Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_VMPOOL_ENV}
+#Library  Collections
+#Library  String
 
 #Suite Setup  Setup
 #Suite Teardown  Cleanup Provisioning
