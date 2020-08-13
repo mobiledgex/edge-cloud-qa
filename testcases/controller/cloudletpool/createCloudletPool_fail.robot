@@ -10,8 +10,8 @@ Suite Teardown  Cleanup Provisioning
 # ECQ-1669
 CreateCloudletPool - create without region shall return error
    [Documentation]
-   ...  send CreateCloudletPool without region
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool without region
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *   Create Cloudlet Pool  token=${token}  use_defaults=False
 
@@ -21,8 +21,8 @@ CreateCloudletPool - create without region shall return error
 # ECQ-1670
 CreateCloudletPool - create without parameters shall return error
    [Documentation]
-   ...  send CreateCloudletPool with region only
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool with region only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  use_defaults=False
 
@@ -32,8 +32,8 @@ CreateCloudletPool - create without parameters shall return error
 # ECQ-2271
 CreateCloudletPool - create without pool name shall return error
    [Documentation]
-   ...  send CreateCloudletPool with org only
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool with org only
+   ...  - verify proper error is received
 
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool  region=US  operator_org_name=TDG  token=${token}  use_defaults=False
 
@@ -43,8 +43,8 @@ CreateCloudletPool - create without pool name shall return error
 # ECQ-1671
 CreateCloudletPool - create with invalid pool name shall fails 
    [Documentation]
-   ...  send CreateCloudletPool with invalid name
-   ...  verify proper error is received 
+   ...  - send CreateCloudletPool with invalid name
+   ...  - verify proper error is received 
 
    # start with a dash
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=-pool  operator_org_name=TDG
@@ -73,8 +73,8 @@ CreateCloudletPool - create with invalid pool name shall fails
 # ECQ-1672
 CreateCloudletPool - create with same name shall return error
    [Documentation]
-   ...  send CreateCloudletPool twice for same name 
-   ...  verify proper error is received
+   ...  - send CreateCloudletPool twice for same name 
+   ...  - verify proper error is received
 
    Run Keyword and Ignore Error  Delete Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypoool  operator_org_name=TDG
    Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=mypoool  operator_org_name=TDG  use_defaults=False

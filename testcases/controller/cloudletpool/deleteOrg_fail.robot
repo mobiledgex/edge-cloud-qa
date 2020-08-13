@@ -10,10 +10,10 @@ Suite Teardown  Cleanup Provisioning
 # ECQ-1699
 DeleteOrg - delete org in use by org cloudlet pool shall return error
    [Documentation]
-   ...  send CreateOrg
-   ...  send CreateOrgCloudletPool
-   ...  send DeleteOrg
-   ...  verify proper error is received
+   ...  - send CreateOrg
+   ...  - send CreateOrgCloudletPool
+   ...  - send DeleteOrg
+   ...  - verify proper error is received
 
    #EDGECLOUD-1725 deleting an org which is in use by orgcloudletpool gives database error
 

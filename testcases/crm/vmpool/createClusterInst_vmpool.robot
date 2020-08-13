@@ -535,6 +535,78 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb after adding 
 
    [Teardown]  TeardownStack  ${app_name}stack  ${vm_list}  ${node_list}
 
+# ECQ-2422
+ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numnodes=2
+   [Documentation]
+   ...  - CreateClusterInst with IpAccessDedicated/k8s nummasters=1 numnodes=1 on vm pool
+   ...  - CreateAppInst with loadbalancer access
+   ...  - Verify VM is inuse in the pool
+   ...  - Verify Knife status is correct
+   ...  - Register/FindCloudlet and verify the ports are accessible
+   ...  - UpdateClusterInst by adding another worker node
+   ...  - Verify new VM is inuse in the pool
+   ...  - Verify new Knife status is correct
+
+   ${app_name}=  Get Default App Name
+
+   @{node_list}=  Create List
+   @{vm_list}=  Create List
+
+   Log to Console  START creating cluster instance
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=kubernetes  number_masters=1  number_nodes=1
+   Log to Console  DONE creating cluster instance
+
+   ${organization_lc}=  Convert To Lowercase  ${organization}
+   ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
+
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_node2}=  Set Variable  mex-k8s-node-2-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Convert To Lowercase  ${group_name}
+   ${internal_name_master}=  Convert To Lowercase  ${internal_name_master}
+   ${internal_name_node}=  Convert To Lowercase  ${internal_name_node}
+   ${internal_name_node2}=  Convert To Lowercase  ${internal_name_node2}
+   ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
+
+   ${vm1}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_master}
+   ${vm2}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node}
+   ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_lb}
+   Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
+
+   Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   Node Status Should Be Success  qa-${region}-${internal_name_master}
+   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}  qa-${region}-${internal_name_lb}
+
+   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=${cluster_name_default}
+
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+
+   Register Client
+   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+   ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   log to console  ${fqdn_0} ${fqdn_1}
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
+   UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
+   HTTP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][2]['public_port']}  ${page}
+
+   Log To Console  Updating Cluster Instance
+   Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  number_nodes=2
+   Log To Console  Done Updating Cluster Instance
+
+   ${vm4}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node}
+   Append To List  ${vm_list}  ${vm4}
+
+   Node Status Should Be Success  qa-${region}-${internal_name_node2}
+   Append To List  ${node_list}  qa-${region}-${internal_name_node2}
+
+   [Teardown]  Teardown  ${vm_list}  ${node_list}
+
 *** Keywords ***
 Setup
    Create Flavor  region=${region}
