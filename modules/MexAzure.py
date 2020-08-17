@@ -81,9 +81,10 @@ class MexAzure(WebService) :
         """
 
         if cloudlet and not resource_group:
-            resource_group = f'{cloudlet}_{cluster}'
+            resource_group = f'{cloudlet}-{cluster}'
             
-        url = f'subscriptions/{self.subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.ContainerService/managedClusters/{cluster}?api-version=2019-02-01'
+        #url = f'subscriptions/{self.subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.ContainerService/managedClusters/{cluster}?api-version=2019-02-01'
+        url = f'subscriptions/{self.subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.ContainerService/managedClusters/{resource_group}?api-version=2019-02-01'
         print('*WARN*', 'url', url)
 
         self._get(url)

@@ -68,7 +68,12 @@ Setup
 
     log to console  ${trunc_length}
     ${cluster_name}=  Get Substring  ${cluster_name_long}  0   ${trunc_length}
-    ${cluster_name_azure}=  Get Substring  ${cluster_name_long}  0  38  # truncate to 40chars
+
+    ${random_azure}=  Generate Random String  length=2  chars=[LOWER]  # generate 2 char string with lowercase only. This is because of limitations on length of resourcegroups in azure
+
+    #${cluster_name_azure}=  Get Substring  ${cluster_name_long}  0  38  # truncate to 40chars
+    ${cluster_name_azure}=  Catenate  SEPARATOR=  ${random_azure}  ${cluster_name_long}
+    ${cluster_name_azure}=  Get Substring  ${cluster_name_azure}  0  38  # truncate to 40chars
  
     log to console  az=${cluster_name_azure} os=${cluster_name}
     Set Suite Variable  ${cluster_name}

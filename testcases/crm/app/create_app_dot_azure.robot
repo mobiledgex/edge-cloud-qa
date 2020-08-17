@@ -53,8 +53,12 @@ User shall be able to create an app instance on azure with a dot in the app name
 
 *** Keywords ***
 Setup
+    ${cluster_name}=  Generate Random String  length=1  chars=[LOWER]  # generate 2 char string with lowercase only. This is because of limitations on length of resourcegroups in azure
+
     ${epoch_time}=  Get Time  epoch
-    ${cluster_name}=    Catenate  SEPARATOR=.  cl  ${epoch_time}
+#    ${cluster_name}=    Catenate  SEPARATOR=.  cl  ${epoch_time}
+    ${cluster_name}=    Catenate  SEPARATOR=.  ${cluster_name}  ${epoch_time}
+
     Set Suite Variable  ${cluster_name}
 
     #Create Developer
