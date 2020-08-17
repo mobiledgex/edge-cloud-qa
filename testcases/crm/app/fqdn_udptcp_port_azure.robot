@@ -165,10 +165,12 @@ User shall be able to access 2 UDP and 2 TCP ports on azure
 
 *** Keywords ***
 Setup
+    ${cluster_name}=  Generate Random String  length=2  chars=[LOWER]  # generate 2 char string with lowercase only. This is because of limitations on length of resourcegroups in azure
+
     ${current_date}=  Get Current Date
     #${epoch_time}=  Get Time  epoch
     ${epoch_time}=  Convert Date  ${current_date}  epoch
-    ${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
+    ${cluster_name}=    Catenate  SEPARATOR=  ${cluster_name}  ${epoch_time}
     #${cluster_name}=  Remove String  ${cluster_name}  .
 	
     #Create Developer

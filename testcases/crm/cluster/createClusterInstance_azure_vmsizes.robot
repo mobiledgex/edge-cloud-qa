@@ -9,6 +9,7 @@ Documentation  Cluster size for azure
 
 Library	 MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library	 MexAzure
+Library  String
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -115,7 +116,10 @@ Cluster with vcpus=20 and ram=4096 on azure shall fail with quota limit
 
 *** Keywords ***
 Setup
-    ${epoch_time}=  Get Time  epoch
-    ${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
+    #${epoch_time}=  Get Time  epoch
+    #${cluster_name}=    Catenate  SEPARATOR=  cl  ${epoch_time}
+    ${cluster_name}=  Generate Random String  length=2  chars=[LOWER]  # generate 2 char string with lowercase only. This is because of limitations on length of resourcegroups in azure
+    ${rg_cloudlet_name}=  Convert to Lowercase  ${cloudlet_name_azure}
 
     Set Suite Variable  ${cluster_name}
+    Set Suite Variable  ${rg_cloudlet_name}
