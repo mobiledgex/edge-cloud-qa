@@ -60,6 +60,8 @@ ${server_image}=  Image
 ${server_flavor}=  Flavor
 ${server_mobiledgex}=  mobiledgex
 ${mcctlcmd}=  mcctl  --addr https://console-qa.mobiledgex.net:443  --skipverify region  RunDebug region\=EU type\=crm cloudlet\=automationDusseldorfCloudlet cmd\=oscmd args\="openstack flavor list" shell=yes
+${count_flavor_list}=  | ID | Name | RAM | Disk | Ephemeral | VCPUs | Is Public |
+${count_server_list}=  | ID | Name | Status | Networks | Image | Flavor |
 ${time}=  40s
 
 
@@ -360,7 +362,7 @@ RunDebug - blanket cmd=oscmd args openstack flavor list EU only node type crm cl
       ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
 
       ${cnt}=  Get Length  ${stack}
-
+      
       Run Keyword If   ${cnt} < 2  Get Output Type15  ELSE  Get Zero Output Type15
 
 
@@ -397,7 +399,7 @@ RunDebug - cmd=oscmd args openstack server list on all cloudlets node type crm s
     ...  send runDebug cmd args openstack server list on all cloudlets
     ...  verify args openstack server list output is returned for all crm node type only
 
-      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}
+      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
       ${cnt}=  Get Length  ${stack}
 
       Run Keyword If   ${cnt} < 2  Get Output Type17  ELSE  Get Zero Output Type17
@@ -834,6 +836,7 @@ Get Zero Output Type13
     Should Contain  ${type}  ${ntype_crm}
     Should Contain  ${pprof}  ${not_progress_base64}
 
+
 Get Output Type14
     ${stack}=  RunDebug  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
     ${output}=  Set Variable  ${stack}[data][output]
@@ -854,28 +857,40 @@ Get Zero Output Type14
     Should Contain  ${output}  ${server_vcpus}
     Should Contain  ${output}  ${server_ispublic}
 
+
 Get Output Type15
     ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
-    Should Contain Any  ${stack}[data][output]  ${server_id}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_name}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_ram}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_disk}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_vcpus}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_ispublic}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][node][type]  ${ntype_crm}  ${unknown_cmd_oscmd}
+    @{Enabled}=  Create List   ${count_flavor_list}    
+    @{Node_Type}=  Create List  ${ntype_crm}
+    Append To List    ${Enabled}    ${stack}[data] Should Contain Any  ${count_flavor_list}  [output]
+    Append To List    ${Node_Type}  ${stack}[data][node][type]
+    Log List  ${Enabled}
+    Log List  ${Node_Type}
+    ${count_name}    Count Values In List    ${Enabled}   ${count_flavor_list}    
+    ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+    ${passvalue}=  Set Variable  1
+    Should Be True  ${passvalue} <= ${count_name}
+    Should Be True  ${passvalue} <= ${count_ntype}
 
 Get Zero Output Type15
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}
+
+    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_crm}  timeout=${time}    
     ${cnt}=  Get Length  ${stack}
+         @{Enabled}=  Create List   ${count_flavor_list}
+         @{Node_Type}=  Create List  ${ntype_crm}
     FOR  ${key}  IN RANGE  ${cnt}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_id}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_name}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_ram}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_disk}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_vcpus}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_ispublic}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][node][type]  ${ntype_crm}  ${unknown_cmd_oscmd}
+         Append To List    ${Enabled}    ${stack}[${key}][data] Should Contain Any  ${count_flavor_list}  [output]
+         Append To List    ${Node_Type}   ${stack}[${key}][data][node][type]
     END
+         Log List  ${Enabled}
+         Log List  ${Node_Type}
+     ${count_name}    Count Values In List    ${Enabled}   ${count_flavor_list}
+     ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+     ${passvalue}=  Set Variable  ${cnt} / 2
+     Should Be True  ${passvalue} < ${count_name}
+     Should Be True  ${passvalue} < ${count_ntype}
+
+
 
 Get Output Type16
     ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
@@ -899,30 +914,37 @@ Get Zero Output Type16
     Should Contain Any  ${stack}[0][data][output]  ${server_mobiledgex}  ${unknown_cmd_oscmd}
     Should Contain Any  ${stack}[0][data][node][type]  ${ntype_crm}  ${unknown_cmd_oscmd}
 
+
 Get Output Type17
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}
-    Should Contain Any  ${stack}[data][output]  ${server_id}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_name}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_status}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_networks}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_image}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_flavor}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][output]  ${server_mobiledgex}  ${unknown_cmd_oscmd}
-    Should Contain Any  ${stack}[data][node][type]  ${ntype_crm}  ${unknown_cmd_oscmd}
+    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
+    @{Enabled}=  Create List   ${count_server_list}
+    @{Node_Type}=  Create List  ${ntype_crm}
+    Append To List    ${Enabled}    ${stack}[data] Should Contain Any  ${count_server_list}  [output]
+    Append To List    ${Node_Type}  ${stack}[data][node][type]
+    Log List  ${Enabled}
+    Log List  ${Node_Type}
+    ${count_name}    Count Values In List    ${Enabled}   ${count_server_list}
+    ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+    ${passvalue}=  Set Variable  1
+    Should Be True  ${passvalue} <= ${count_name}
+    Should Be True  ${passvalue} <= ${count_ntype}
 
 Get Zero Output Type17
-    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}
+    ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack server list  node_type=${ntype_crm}  timeout=${time}
     ${cnt}=  Get Length  ${stack}
+         @{Enabled}=  Create List   ${count_server_list}
+         @{Node_Type}=  Create List  ${ntype_crm}
     FOR  ${key}  IN RANGE  ${cnt}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_id}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_name}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_status}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_networks}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_image}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_flavor}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][output]  ${server_mobiledgex}  ${unknown_cmd_oscmd}
-       Should Contain Any  ${stack}[${key}][data][node][type]  ${ntype_crm}  ${unknown_cmd_oscmd}
+         Append To List    ${Enabled}    ${stack}[${key}][data] Should Contain Any  ${count_server_list}  [output]
+         Append To List    ${Node_Type}   ${stack}[${key}][data][node][type]
     END
+         Log List  ${Enabled}
+         Log List  ${Node_Type}
+     ${count_name}    Count Values In List    ${Enabled}   ${count_server_list}
+     ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_crm}
+     ${passvalue}=  Set Variable  ${cnt} / 2
+     Should Be True  ${passvalue} < ${count_name}
+     Should Be True  ${passvalue} < ${count_ntype}
 
 Get Output Type18
     ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
