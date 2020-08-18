@@ -8,7 +8,7 @@ Library  MexApp
 Library  String
 
 Test Setup      Setup
-Test Teardown   Cleanup provisioning
+#Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -24,7 +24,7 @@ ${mobiledgex_domain}  mobiledgex.net
 
 #${rootlb}          automationbuckhorncloudlet.gddt.mobiledgex.net
 
-#${helm_image}     https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge
+${helm_image}     https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge
 #${helm_image}      stable/aerospike
 ${helm_nfs_image}  stable/nfs-client-provisioner
 
@@ -93,6 +93,41 @@ CreateApp - User shall be able to create k8s IpAccessShared with envVarsYaml Con
     Log To Console  Done Creating Cluster Instance
 
     Create App           region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}  #default_flavor_name=flavor1583873482-5017228
+    ${app_name_default}=  Get Default App Name
+    log to console  ${app_name_default}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    ${export1}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue
+    ${export2}=  Run Command On Pod  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  command=echo \\\$CrmValue2
+
+    ${openstack_master_name}=    Catenate  SEPARATOR=-  master  ${cloudlet_lowercase}  ${cluster_name_default}
+    ${server_info_node}=    Get Server List  name=${openstack_master_name}
+    ${server_split}=  Split String  ${server_info_node[0]['Networks']}  =
+    log to console  ${server_info_node} ${server_split[1]}
+
+    Should Be Equal  ${export1[0].strip()}  ${server_split[1]}
+    Should Be Equal  ${export2[0].strip()}  ${server_split[1]}
+
+CreateApp - User shall be able to create helm IpAccessShared with envVarsYaml Configs parm
+    [Documentation]
+    ...  deploy IpAccessShared k8s app with envVarsYaml Configs parm
+    ...  verify vars are exported in the container
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_shared}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+
+    ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
+
+    Log To Console  Creating Cluster Instance
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=helm  ip_access=IpAccessShared  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
+    Log To Console  Done Creating Cluster Instance
+
+    Sleep  60  # needed because of another bug. need to wait for prometheus to start
+
+    Create App           region=${region}  image_path=${helm_image}  access_ports=tcp:2016,udp:2015,http:8085  deployment=helm  image_type=ImageTypeHelm  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
