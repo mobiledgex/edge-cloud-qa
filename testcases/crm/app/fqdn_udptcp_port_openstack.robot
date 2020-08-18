@@ -178,7 +178,7 @@ User shall be able to access HTTP port on openstack
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  image_path=${docker_image}  access_ports=http:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
@@ -186,7 +186,7 @@ User shall be able to access HTTP port on openstack
     Log To Console  Registering Client and Finding Cloudlet
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
-    ${page}=  Catenate  SEPARATOR=/  ${cloudlet.ports[0].path_prefix}  ${http_page}
+    ${page}=  Catenate  SEPARATOR=  /  ${http_page}
 
     Log To Console  Waiting for k8s pod to be running
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
@@ -203,7 +203,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
@@ -212,7 +212,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}
 
@@ -230,7 +230,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
@@ -239,7 +239,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 
@@ -256,7 +256,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest a
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  image_path=no_default  access_ports=tcp:2016,udp:2015,http:8085  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
+    Create App  image_path=no_default  access_ports=tcp:2016,udp:2015,tcp:8085  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
@@ -265,7 +265,7 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest a
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
 

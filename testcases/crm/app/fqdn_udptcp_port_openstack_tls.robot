@@ -46,7 +46,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
    ${cluster_name_default}=  Get Default Cluster Name
    ${app_name_default}=  Get Default App Name
 
-   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,http:8085:tls,udp:2016  deployment=kubernetes  image_type=ImageTypeDocker  access_type=loadbalancer 
+   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,tcp:8085:tls,udp:2016  deployment=kubernetes  image_type=ImageTypeDocker  access_type=loadbalancer 
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -55,7 +55,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/shared and 
    ${cloudlet}=  Find Cloudlet	latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
@@ -82,7 +82,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    ${cluster_name_default}=  Get Default Cluster Name
    ${app_name_default}=  Get Default App Name
 
-   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,http:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
+   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
    #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,http:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
 
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
@@ -92,7 +92,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    Register Client
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[1].path_prefix}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
@@ -201,7 +201,7 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[3].path_prefix}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    #${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
 
    #TCP Port Should Be Alive   cluster1589497241-27719.automationparadisecloudlet.gddt.mobiledgex.net  2016  #tls=${True}
