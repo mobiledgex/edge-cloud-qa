@@ -48,7 +48,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
     Log To Console  Done Creating Cluster Instance
 
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -56,7 +56,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -108,7 +108,7 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
     Log To Console  Done Creating Cluster Instance
 
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  scale_with_cluster=True
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  scale_with_cluster=True
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -116,7 +116,7 @@ Shall be able to update IpAccessDedicated k8s cluster to increase number of work
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
@@ -214,7 +214,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
     Log To Console  Done Creating Cluster Instance
 
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}   scale_with_cluster=True
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}   scale_with_cluster=True
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}
 
     Log To Console  Updating Cluster Instance
@@ -233,7 +233,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
     ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}

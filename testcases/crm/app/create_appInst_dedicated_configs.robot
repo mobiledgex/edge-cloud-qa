@@ -50,7 +50,7 @@ CreateApp - User shall be able to create k8s IpAccessDedicated with envVarsYaml 
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
+    Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${config}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default} 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
@@ -76,7 +76,7 @@ CreateApp - User shall be able to create k8s IpAccessDedicated with envVarsYaml 
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  #flavor_name=${cluster_flavor_name}
     Log To Console  Done Creating Cluster Instance
 
-    Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,http:8085  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}  #default_flavor_name=flavor1583873482-5017228
+    Create App           region=${region}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  configs_kind=envVarsYaml  configs_config=${configs_envvars_url}  #default_flavor_name=flavor1583873482-5017228
     ${app_name_default}=  Get Default App Name
     log to console  ${app_name_default}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
