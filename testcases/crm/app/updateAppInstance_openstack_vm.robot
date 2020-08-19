@@ -54,12 +54,24 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeDirect
 
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
-    ${vm_info}=  Get Server List  name=${vm}
+
+    FOR  ${x}  IN RANGE  0  5
+        ${vm_info}=  Get Server List  name=${vm}
+        Exit For Loop If  '${vm_info[0]['Status']}' == 'SHUTOFF'
+        Sleep  2s
+    END
+
     Should Be Equal   ${vm_info[0]['Status']}  SHUTOFF
 
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
-    ${vm_info}=  Get Server List  name=${vm}
+
+    FOR  ${x}  IN RANGE  0  5
+        ${vm_info}=  Get Server List  name=${vm}
+        Exit For Loop If  '${vm_info[0]['Status']}' == 'ACTIVE'
+        Sleep  2s
+    END
+
     Should Be Equal   ${vm_info[0]['Status']}  ACTIVE
 
     Register Client
@@ -97,7 +109,12 @@ User shall be able to reboot VM based App Inst with AccessTypeDirect
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=Reboot
 
-    ${vm_info}=  Get Server List  name=${vm}
+    FOR  ${x}  IN RANGE  0  5
+        ${vm_info}=  Get Server List  name=${vm}
+        Exit For Loop If  '${vm_info[0]['Status']}' == 'ACTIVE'
+        Sleep  2s
+    END
+
     Should Be Equal   ${vm_info[0]['Status']}  ACTIVE
     ${node_info}=  Get Server Show  name=${vm}
     ${time_after_reboot}=  Set Variable  ${node_info['updated']}
