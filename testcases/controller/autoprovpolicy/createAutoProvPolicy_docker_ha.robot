@@ -11,7 +11,7 @@ Test Teardown  Cleanup Provisioning
 ${region}  US
 
 *** Test Cases ***
-CreateAutoProvPolicy - appinst should start when no appinst exists and max_instances=0
+CreateAutoProvPolicy - appinst should start when no appinst exists and max_instances=0 with cluster=docker/dedicated and app=docker/lb
    [Documentation]
    ...  send CreateAutoScalePolicy with min_nodes=1  max_nodes=2  scale_up_cpu_threshold=1 
    ...  verify policy is created 
@@ -20,13 +20,50 @@ CreateAutoProvPolicy - appinst should start when no appinst exists and max_insta
    @{cloudletlist}=  Create List  ${cloudlet1}
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  token=${token}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudletlist}
 
-   Create Cluster Instance  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  reservable=${True}
+   Create Cluster Instance  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
 
-   Create App  region=${region}  auto_prov_policy=${policy_name}  
+   Create App  region=${region}  auto_prov_policy=${policy_name}  deployment=docker  access_type=loadbalancer 
 
    ${appinst}=  Show App Instance  region=${region}  app_name=${app_name}
    
    Should Be Equal  ${appinst['data']['key']['app_key']['name']}  ${app_name}
+   Should Be Equal  ${appinst['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cluster_name}
+
+CreateAutoProvPolicy - appinst should start when no appinst exists and max_instances=0 with cluster=docker/dedicated and app=docker/direct
+   [Documentation]
+   ...  send CreateAutoScalePolicy with min_nodes=1  max_nodes=2  scale_up_cpu_threshold=1
+   ...  verify policy is created
+
+   &{cloudlet1}=  Create Dictionary  cloudlet_name=tmocloud-1  cloudlet_org_name=tmus  latitude=1  longitude=1
+   @{cloudletlist}=  Create List  ${cloudlet1}
+   ${policy_return}=  Create Auto Provisioning Policy  region=${region}  token=${token}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudletlist}
+
+   Create Cluster Instance  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
+
+   Create App  region=${region}  auto_prov_policy=${policy_name}  deployment=docker  access_type=direct
+
+   ${appinst}=  Show App Instance  region=${region}  app_name=${app_name}
+
+   Should Be Equal  ${appinst['data']['key']['app_key']['name']}  ${app_name}
+   Should Be Equal  ${appinst['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cluster_name}
+
+CreateAutoProvPolicy - appinst should start when no appinst exists and max_instances=0 with cluster=docker/shared and app=docker/lb
+   [Documentation]
+   ...  send CreateAutoScalePolicy with min_nodes=1  max_nodes=2  scale_up_cpu_threshold=1
+   ...  verify policy is created
+
+   &{cloudlet1}=  Create Dictionary  cloudlet_name=tmocloud-1  cloudlet_org_name=tmus  latitude=1  longitude=1
+   @{cloudletlist}=  Create List  ${cloudlet1}
+   ${policy_return}=  Create Auto Provisioning Policy  region=${region}  token=${token}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudletlist}
+
+   Create Cluster Instance  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=tmus  deployment=docker  ip_access=IpAccessShared  reservable=${True}
+
+   Create App  region=${region}  auto_prov_policy=${policy_name}  deployment=docker  access_type=loadbalancer
+
+   ${appinst}=  Show App Instance  region=${region}  app_name=${app_name}
+
+   Should Be Equal  ${appinst['data']['key']['app_key']['name']}  ${app_name}
+   Should Be Equal  ${appinst['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cluster_name}
 
 CreateAutoProvPolicy - 1 appinst should start when no appinst exists and max_instances>0
    [Documentation]
