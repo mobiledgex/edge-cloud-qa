@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.auth0.android:jwtdecode:2.0.0'
 
     // Matching Engine SDK
-    implementation 'com.mobiledgex:matchingengine:2.1.2'
+    implementation 'com.mobiledgex:matchingengine:2.1.2rc5'
     implementation "io.grpc:grpc-okhttp:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf-lite:${grpcVersion}"
