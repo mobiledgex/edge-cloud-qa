@@ -138,19 +138,12 @@ CreatePrivacyPolicy - shall be able to create docker cluster with icmp/tcp/udp
    @{openstackrules}=  Get Security Group Rules  group_id=${openstacksecgroup['id']}
    ${num_rules}=  Get Length  ${openstackrules}
 
-   Should Be Equal As Numbers  ${num_rules}  13
+   Should Be Equal As Numbers  ${num_rules}  12
 
    #Rules Should Exist  ${rules}  ${openstackrules}
 
    @{serverlist}=  Get Server List  ${crmserver_name} 
    @{crm_ip}=  Split String  ${serverlist[0]['Networks']}  separator==
-
-   # get normal 443 rule
-   @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['IP Protocol']}            tcp
-   Should Be Equal  ${openstackrules[0]['IP Range']}               0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['Port Range']}             443:443 
-   Should Be Equal  ${openstackrules[0]['Remote Security Group']}  ${None}
 
    # get normal 22 rule
    @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=${crm_ip[1]}/32
@@ -266,19 +259,12 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated cluster with icmp/tc
    @{openstackrules}=  Get Security Group Rules  group_id=${openstacksecgroup['id']}
    ${num_rules}=  Get Length  ${openstackrules}
 
-   Should Be Equal As Numbers  ${num_rules}  13
+   Should Be Equal As Numbers  ${num_rules}  12
 
    #Rules Should Exist  ${rules}  ${openstackrules}
 
    @{serverlist}=  Get Server List  ${crmserver_name}
    @{crm_ip}=  Split String  ${serverlist[0]['Networks']}  separator==
-
-   # get normal 443 rule
-   @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['IP Protocol']}            tcp
-   Should Be Equal  ${openstackrules[0]['IP Range']}               0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['Port Range']}             443:443
-   Should Be Equal  ${openstackrules[0]['Remote Security Group']}  ${None}
 
    # get normal 22 rule
    @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=${crm_ip[1]}/32
@@ -392,17 +378,10 @@ CreatePrivacyPolicy - shall be able to create cluster after policy update
    @{openstackrules}=  Get Security Group Rules  group_id=${openstacksecgroup['id']}
    ${num_rules}=  Get Length  ${openstackrules}
 
-   Should Be Equal As Numbers  ${num_rules}  5
+   Should Be Equal As Numbers  ${num_rules}  4
 
    @{serverlist}=  Get Server List  ${crmserver_name}
    @{crm_ip}=  Split String  ${serverlist[0]['Networks']}  separator==
-
-   # get normal 443 rule
-   @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['IP Protocol']}            tcp
-   Should Be Equal  ${openstackrules[0]['IP Range']}               0.0.0.0/0
-   Should Be Equal  ${openstackrules[0]['Port Range']}             443:443
-   Should Be Equal  ${openstackrules[0]['Remote Security Group']}  ${None}
 
    # get normal 22 rule
    @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=${crm_ip[1]}/32

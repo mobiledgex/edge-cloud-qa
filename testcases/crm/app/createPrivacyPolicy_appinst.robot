@@ -58,7 +58,7 @@ CreatePrivacyPolicy - shall be able to create docker dedicated appinst autoclust
    @{openstackrules}=  Get Security Group Rules  group_id=${openstacksecgroup['id']}
    ${num_rules}=  Get Length  ${openstackrules}
 
-   Should Be Equal As Numbers  ${num_rules}  18
+   Should Be Equal As Numbers  ${num_rules}  17
 
    #Rules Should Exist  ${rules}  ${openstackrules}
 
@@ -68,7 +68,7 @@ CreatePrivacyPolicy - shall be able to create docker dedicated appinst autoclust
    # get normal 443 rule
    @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=8085:8085  ip=0.0.0.0/0
-   Rule Should Exist  ${openstackrules}  proto=tcp  port=443:443  ip=0.0.0.0/0
+   #Rule Should Exist  ${openstackrules}  proto=tcp  port=443:443  ip=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=2015:2015  ip=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=2016:2016  ip=0.0.0.0/0
 
@@ -154,7 +154,7 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated appinst autocluster 
    @{openstackrules}=  Get Security Group Rules  group_id=${openstacksecgroup['id']}
    ${num_rules}=  Get Length  ${openstackrules}
 
-   Should Be Equal As Numbers  ${num_rules}  18
+   Should Be Equal As Numbers  ${num_rules}  17
 
    #Rules Should Exist  ${rules}  ${openstackrules}
 
@@ -164,7 +164,7 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated appinst autocluster 
    # get normal 443 rule
    @{openstackrules}=  Get Security Group Rules  protocol=tcp  group_id=${openstacksecgroup['id']}  ip_range=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=8085:8085  ip=0.0.0.0/0
-   Rule Should Exist  ${openstackrules}  proto=tcp  port=443:443  ip=0.0.0.0/0
+   #Rule Should Exist  ${openstackrules}  proto=tcp  port=443:443  ip=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=2015:2015  ip=0.0.0.0/0
    Rule Should Exist  ${openstackrules}  proto=tcp  port=2016:2016  ip=0.0.0.0/0
 
