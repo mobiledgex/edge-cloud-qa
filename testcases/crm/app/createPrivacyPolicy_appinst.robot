@@ -6,7 +6,7 @@ Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
 Library  String
      
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${region}=  EU 
