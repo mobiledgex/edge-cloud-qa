@@ -70,7 +70,14 @@ def main():
         logging.info("cycle=%s does NOT exist. creating the cycle" % new_cycle)
         new_cycle_resp = z.create_cycle(project_id=project_id, version_id=version_id, cycle_name=new_cycle, build=new_cycle)
         new_cycle_id = json.loads(new_cycle_resp)['id']
-        print(new_cycle_id)
+        logging.info(f'new_cycle_id={new_cycle_id}')
+
+         new_cycle_exists_id = z.get_cycle_id(name=new_cycle, project_id=project_id, version_id=version_id)
+         if new_cycle_id == new_cycle_exists_id:
+            logging.info(f'newly created cycle={new_cycle} found')
+         else:
+            logging.error(f'newly create cycle={new_cycle} NOT found')
+            sys.exit(1)
     else:
         logging.info("cycle=%s DOES exist. NOT creating the cycle" % new_cycle)
 
