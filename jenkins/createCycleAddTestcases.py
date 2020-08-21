@@ -6,6 +6,7 @@ import logging
 import json
 import zapi
 import jiraapi
+import time
 
 import subprocess
 import argparse
@@ -72,11 +73,22 @@ def main():
         new_cycle_id = json.loads(new_cycle_resp)['id']
         logging.info(f'new_cycle_id={new_cycle_id}')
 
-         new_cycle_exists_id = z.get_cycle_id(name=new_cycle, project_id=project_id, version_id=version_id)
-         if new_cycle_id == new_cycle_exists_id:
-            logging.info(f'newly created cycle={new_cycle} found')
-         else:
-            logging.error(f'newly create cycle={new_cycle} NOT found')
+        found = False
+        num_tries = 1 
+        for x in range(num_tries):
+           logging.info(f'looking for cycle {x}/{num_tries} tries')
+           new_cycle_exists_id = z.get_cycle_id(name=new_cycle, project_id=project_id, version_id=version_id)
+           print(f'xxx {new_cycle_id} == {new_cycle_exists_id}')
+           if new_cycle_id == new_cycle_exists_id:
+               logging.info(f'newly created cycle={new_cycle} found')
+               found = True
+               break
+           else:
+               logging.debug(f'newly create cycle={new_cycle} NOT found')
+               time.sleep(1)
+               #logging.error(f'newly create cycle={new_cycle} NOT found')
+        if not found:
+            logging.error(f'newly create cycle={new_cycle} NOT found. Done waiting')
             sys.exit(1)
     else:
         logging.info("cycle=%s DOES exist. NOT creating the cycle" % new_cycle)
