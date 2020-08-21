@@ -72,7 +72,7 @@ def main():
         new_cycle_resp = z.create_cycle(project_id=project_id, version_id=version_id, cycle_name=new_cycle, build=new_cycle)
         new_cycle_id = json.loads(new_cycle_resp)['id']
         logging.info(f'new_cycle_id={new_cycle_id}')
-
+        time.sleep(1)
         found = False
         num_tries = 1 
         for x in range(num_tries):
