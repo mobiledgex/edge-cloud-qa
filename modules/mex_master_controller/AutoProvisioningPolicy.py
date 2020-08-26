@@ -197,4 +197,7 @@ class AutoProvisioningPolicy(MexOperation):
         msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicycloudlet': msg}
 
-        return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        #return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+
+        return self.delete(token=token, url=self.removecloudlet_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
