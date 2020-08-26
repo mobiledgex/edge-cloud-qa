@@ -1,7 +1,10 @@
 *** Settings ***
+Documentation   UpdateCloudlet with maintenance states
+
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
-Test Teardown  teardown
+Test Setup     Setup
+Test Teardown  Teardown
 
 *** Variables ***
 ${cloudlet}=  tmocloud-1
@@ -10,9 +13,9 @@ ${region}=  US
 
 *** Test Cases ***
 UpdateCloudlet - shall be able to put cloudlet in maintenance=NormalOperation
-   [Documentation]   UpdateCloudlet - invalid maintenance mode shall return error
-   ...  send UpdateCloudlet with invalid maintenance mode
-   ...  verify correct error is received
+   [Documentation]
+   ...  - send UpdateCloudlet with maintenance=NormalOperation
+   ...  - verify maintenance_state is correct
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
 
@@ -23,9 +26,9 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=NormalOperation
    Should Not Contain  ${ret['data']}  maintenance_state  # we dont show 0 vaules
 
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
-   [Documentation]   UpdateCloudlet - invalid maintenance mode shall return error
-   ...  send UpdateCloudlet with invalid maintenance mode
-   ...  verify correct error is received
+   [Documentation]
+   ...  - send UpdateCloudlet with maintenance=MaintenanceStart
+   ...  - verify maintenance_state is correct
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
@@ -36,9 +39,9 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
    Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNoFailover
-   [Documentation]   UpdateCloudlet - invalid maintenance mode shall return error
-   ...  send UpdateCloudlet with invalid maintenance mode
-   ...  verify correct error is received
+   [Documentation]
+   ...  - send UpdateCloudlet with maintenance=MaintenanceStartNoFailover
+   ...  - verify maintenance_state is correct
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
@@ -49,9 +52,11 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
    Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNoFailover to maintenance=MaintenanceStart
-   [Documentation]   UpdateCloudlet - invalid maintenance mode shall return error
-   ...  send UpdateCloudlet with invalid maintenance mode
-   ...  verify correct error is received
+   [Documentation]
+   ...  - send UpdateCloudlet with maintenance=MaintenanceStartNoFailover
+   ...  - verify maintenance_state is correct
+   ...  - send UpdateCloudlet with maintenance=MaintenanceStart
+   ...  - verify maintenance_state is correct
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover     use_defaults=False
 
@@ -62,5 +67,19 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
    Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
 *** Keywords ***
-teardown
-   Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
+Setup
+   Create Flavor  region=${region}
+
+   Create Org
+   Create Cloudlet  region=${region}
+
+   ${operator}=  Get Default Organization Name
+   ${cloudlet}=  Get Default Cloudlet Name
+   #${flavor_name_default}=  Get Default Flavor Name
+   #Set Suite Variable  ${flavor_name_default}
+   Set Suite Variable  ${operator}
+   Set Suite Variable  ${cloudlet}
+
+Teardown
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  maintenance_state=NormalOperation
+   Cleanup Provisioning
