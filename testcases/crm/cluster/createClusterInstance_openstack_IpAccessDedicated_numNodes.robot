@@ -62,7 +62,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    #Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='443', port_range_min='443', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='${crm_ip}/32', updated_at=
    @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
-   Length Should Be  ${sec_groups}  3
+   Length Should Be  ${sec_groups}  2
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2
 
