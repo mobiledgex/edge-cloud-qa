@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import shared_variables
 
@@ -131,10 +132,11 @@ class Cloudlet(MexOperation):
 
         env_dict = {}
         if env_vars is not None:
-            var_list = env_vars.split(',')
-            for var in var_list:
-                key,value = var.split('=')
-                env_dict[key] = value
+            var_list = re.split('([A-Z_]+=)', env_vars)
+            del var_list[0]
+            
+            for index,var in enumerate(var_list[0::2]):
+                 env_dict[re.sub('=$', '', var_list[index+(1*index)])] = re.sub(',$', '', var_list[index+1+(1*index)])
             cloudlet_dict['env_var'] = env_dict
 
         access_dict = {}
@@ -156,7 +158,7 @@ class Cloudlet(MexOperation):
             cloudlet_dict['fields'] = []
             for field in _fields_list:
                 cloudlet_dict['fields'].append(field)
-
+        
         return cloudlet_dict
 
     def _build_metrics(self, type_dict=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):

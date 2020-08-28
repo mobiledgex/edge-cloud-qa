@@ -51,13 +51,13 @@ User shall be able to create app with large port range on openstack with docker 
    ${openstacksecgroup}=  Get Security Groups  name=${rootlb}-sg
    Should Be Equal  ${openstacksecgroup['name']}   ${rootlb}-sg
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='egress', ethertype='IPv4', id='.*', updated_at
-   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='443', port_range_min='443', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
+   #Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='443', port_range_min='443', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='${crm_ip}/32', updated_at=
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='30000', port_range_min='1', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='10000', port_range_min='2000', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at=
 
    @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
-   Length Should Be  ${sec_groups}  5
+   Length Should Be  ${sec_groups}  4
 
 *** Keywords ***
 Setup
