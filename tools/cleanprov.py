@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser(description='clean prov from controller')
 parser.add_argument('--address', default='127.0.0.1:55001', help='controller address:port default is 127.0.0.1:55001')
 parser.add_argument('--tables',default='appinst,app,clusterint,flavor,cloudlet', help='comma seperated list of tables in the order to be deleted: appinst,app,clusterint,flavor,cloudlet')
 parser.add_argument('--cloudlet',help='cloudlet to filter the delete by')
+parser.add_argument('--keypattern',default='',help='pattern to filter the key delete by')
 #parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
 #parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
 
@@ -21,6 +22,7 @@ args = parser.parse_args()
 controller_address = args.address
 tables = args.tables.split(',')
 cloudlet = args.cloudlet
+key_pattern = args.keypattern
 
 mex_root_cert = 'mex-ca.crt'
 mex_cert = 'localserver.crt'
@@ -58,9 +60,12 @@ def clean_appinst():
             if in_appinst_list(a):
                 print('keeping', a.key.app_key.name)
             else:
-                print('deleting', a.key.app_key.name)
-                a.crm_override = 1
-                controller.delete_app_instance(a)
+                if key_pattern in a.key.app_key.name:
+                    print('deleting', a.key.app_key.name)
+                    a.crm_override = 1
+                    controller.delete_app_instance(a)
+                else:
+                    print(f'keeping {a.key.app_key.name} since doesnt match keypattern={key_pattern}')
 
 def clean_app():
     print('clean app')
@@ -73,12 +78,15 @@ def clean_app():
             if in_app_list(a):
                 print('keeping', a.key.name)
             else:
-                print('deleting', a.key.name)
-                try:
-                   controller.delete_app(a)
-                except:
-                    print('error deleting.continuing to next item')
-
+                if key_pattern in a.key.name:
+                    print('deleting', a.key.name)
+                    try:
+                       controller.delete_app(a)
+                       #pass
+                    except:
+                        print('error deleting.continuing to next item')
+                else:
+                    print(f'keeping {a.key.name} since doesnt match keypattern={key_pattern}')
 
 def clean_clusterinst():
     print('clean cluster instance')

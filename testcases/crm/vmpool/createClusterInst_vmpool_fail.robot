@@ -90,6 +90,23 @@ ClusterInst shall fail with VMPool IpAccessShared/k8s and too many nodes
 
    Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
 
+# ECQ-2430
+ClusterInst shall fail with VMPool and privacy policy
+   [Documentation]
+   ...  - CreateClusterInst with VMPool and privacy policy
+   ...  - verify proper error is received
+
+   Create Flavor  region=${region}  ram=1024  vcpus=1  disk=1
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+
+   ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
+
+   ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Privacy Policy not supported on PLATFORM_TYPE_VM_POOL"}')
+
 *** Keywords ***
 Setup
    ${flavor_name}=  Get Default Flavor Name

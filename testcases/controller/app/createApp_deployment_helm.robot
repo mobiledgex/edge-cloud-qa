@@ -14,7 +14,7 @@ CreateApp - error shall be received with image_type=ImageTypeDocker deployment=h
     ...  create app with image_type=ImageTypeDocker deployment=helm
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=helm  access_ports=tcp:1,udp:2,http:80  image_path=mypath
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=helm  access_ports=tcp:1,udp:2  image_path=mypath
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Deployment is not valid for image type"
@@ -24,7 +24,7 @@ CreateApp - error shall be received with image_type=ImageTypeQcow deployment=hel
     ...  create app with image_type=ImageTypeQcow deployment=helm
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQcow  deployment=helm  access_ports=tcp:1,udp:2,http:80  image_path=mypath
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQcow  deployment=helm  access_ports=tcp:1,udp:2  image_path=mypath
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Deployment is not valid for image type"
