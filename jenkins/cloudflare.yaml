@@ -1,0 +1,10 @@
+cloudflare:
+  zone: mobiledgex.net
+  records:
+  - name: console-qa.mobiledgex.net 
+    type: A
+    content: "34.94.49.197"
+  - name: mc-qa.mobiledgex.net
+    type: A
+    content: "34.94.49.197"
+
