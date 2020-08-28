@@ -24,6 +24,7 @@ class App(MexOperation):
         _app_version_field_number = "2.3"
         _developer_name_field_number = "2.1.2"
         _accessports_field_number = "7"
+        _official_fqdn_field_number = '25'
 
         if app_name == 'default': app_name = shared_variables.app_name_default
         if app_version == 'default': app_version = shared_variables.app_version_default
@@ -128,6 +129,7 @@ class App(MexOperation):
             app_dict['scale_with_cluster'] = True
         if official_fqdn:
             app_dict['official_fqdn'] = official_fqdn
+            _fields_list.append(_official_fqdn_field_number)
         if annotations:
             app_dict['annotations'] = annotations
         if auto_prov_policy:
