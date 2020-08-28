@@ -193,8 +193,12 @@ class AutoProvisioningPolicy(MexOperation):
 
         return self.create(token=token, url=self.addcloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=None, show_msg=msg_dict_show)
 
-    def remove_autoprov_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults)
+    def remove_autoprov_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None,
+                                        cloudlet_name=None, operator_org_name=None, json_data=None, auto_delete=True,
+                                        use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name,
+                          operator_org_name=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicycloudlet': msg}
-
-        return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        # return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        return self.delete(token=token, url=self.removecloudlet_url, region=region, json_data=json_data,
+                           use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
