@@ -61,12 +61,16 @@ Setup
    ${server_list}=  Get Server List  ${vmpool_server_name}
    @{pool_list}=  Create List
    FOR  ${i}  IN  @{server_list}
-      log to console  ${i}
-      @{net_list}=  Split String  ${i['Networks']}  separator=;
-      @{ext_ip}=  Split String  ${net_list[0]}  separator==
-      @{int_ip}=  Split String  ${net_list[1]}  separator==
+      ${net0}  ${net1}=  Split String  ${i['Networks']}  separator=;
+      ${net0}=  Strip String  ${net0}
+      ${net1}=  Strip String  ${net1}
+      @{ip0}=  Split String  ${net0}  separator==
+      @{ip1}=  Split String  ${net1}  separator==
+      &{ipdict}=  Create Dictionary  ${ip0[0]}  ${ip0[1]}  ${ip1[0]}  ${ip1[1]}
 
-      &{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ext_ip[1]}  internal_ip=${int_ip[1]}
+      #&{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ext_ip[1]}  internal_ip=${int_ip[1]}
+      &{vm1}=  Create Dictionary  name=${i['Name']}  external_ip=${ipdict['external-network-shared']}  internal_ip=${ipdict['mex-k8s-net-1']}
+
       Append To List  ${pool_list}  ${vm1}       
    END 
 
