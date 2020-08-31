@@ -137,7 +137,7 @@ CreateVMPool - create with VMPool with duplicate external address shall return e
    ${error}=  Run Keyword and Expect Error  *  Create VM Pool  region=US  org_name=${organization}  vm_list=${vmlist}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"xxxxMissing external IP for VM: vm1"}
+   Should Contain   ${error}  error={"message":"VM with same external IP 1.1.1.1 already exists"}
 
 *** Keywords ***
 Setup
