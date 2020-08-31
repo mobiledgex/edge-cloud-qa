@@ -27,13 +27,13 @@ ${password}=  mextester06123
 
 *** Test Cases ***
 
-#Create docker based reservable cluster instnace
-#   [Documentation]
-#   ...  create a dedicated reservabe docker cluster instnace
-#
-#   Log to Console  START creating cluster instance
-#   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
-#   Log to Console  DONE creating cluster instance
+Create docker based reservable cluster instnace
+   [Documentation]
+   ...  create a dedicated reservabe docker cluster instnace
+
+   Log to Console  START creating cluster instance
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   Log to Console  DONE creating cluster instance
 
 Create Auto Provisioning Policy
 
