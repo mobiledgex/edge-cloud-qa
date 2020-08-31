@@ -684,6 +684,60 @@ AppInst - user shall be able to allocate public port tcp:18888
     Run Keyword Unless  (${epoch_time}-90) < ${appInst.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
     Run Keyword Unless  ${appInst.created_at.nanos} > 0  Fail  # verify has number greater than 0
 
+# ECQ-2429
+AppInst - User shall be able to add/delete dedicated/shared app/appInst with same TCP port
+    [Documentation]
+    ...  - create an app1 and appInst1 with shared (port not mapped)
+    ...  - create an app2 and appInst2 with dedicated  (port not mapped)
+    ...  - delete the appInst2
+    ...  - create appInst2 again with shared  (port IS mapped)
+    ...  - verify ports are mapped properly
+
+    ${cluster_instance_default}=  Get Default Cluster Name
+    ${app_name_1}=  Get Default App Name
+    ${app_name_2}=  Catenate  SEPARATOR=-  ${app_name_1}  2
+
+    # create app1 and appIns 1
+    Create App  app_name=${app_name_1}  access_ports=tcp:1  deployment=kubernetes  access_type=loadbalancer
+    ${appInst_1}=  Create App Instance  app_name=${app_name_1}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}  autocluster_ip_access=IpAccessShared  #no_auto_delete=${True}
+
+    Create App  app_name=${app_name_2}  access_ports=tcp:1
+    ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2  autocluster_ip_access=IpAccessDedicated  no_auto_delete=${True}
+
+    Delete App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2
+
+    # create appInst again
+    ${appInst_2_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${cluster_instance_default}2  autocluster_ip_access=IpAccessShared
+
+    ${app_default_1}=  Get Default App Name
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  tcp  .
+
+    # verify app1 uses port 1
+    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
+    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
+    Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          1  #LProtoTCP
+    #Should Be Equal              ${appInst_1.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    Length Should Be   ${appInst_1.mapped_ports}  1
+
+    # verify app2 uses port 1
+    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].internal_port}  1
+    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].public_port}    1
+    Should Be Equal As Integers  ${appInst_2.mapped_ports[0].proto}          1  #LProtoTCP
+    #Should Be Equal              ${appInst_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    Length Should Be   ${appInst_2.mapped_ports}  1
+
+    # verify app2 uses port 10000
+    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].internal_port}  1
+    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].public_port}    10000
+    Should Be Equal As Integers  ${appInst_2_2.mapped_ports[0].proto}          1  #LProtoTCP
+    #Should Be Equal              ${appInst_2_2.mapped_ports[0].fqdn_prefix}    ${fqdn_prefix_1}
+    Length Should Be   ${appInst_2.mapped_ports}  1
+
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_1.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  ${appInst_1.created_at.nanos} > 0  Fail  # verify has number greater than 0
+    Run Keyword Unless  (${epoch_time}-90) < ${appInst_2.created_at.seconds} < (${epoch_time}+90)  Fail  # verify created_at is within 1 minute
+    Run Keyword Unless  ${appInst_2.created_at.nanos} > 0  Fail  # verify has number greater than 0
+
 *** Keywords ***
 Setup
     #Create Developer
