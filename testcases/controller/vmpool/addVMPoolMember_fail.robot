@@ -109,7 +109,7 @@ AddVMPoolMember - add with duplicate external address shall return error
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  org_name=MobiledgeX  vm_name=vm2  external_ip=1.1.1.2  internal_ip=80.187.128.12 
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"xxxxMissing external IP for VM: vm1"}
+   Should Contain   ${error}  error={"message":"VM with same internal IP already exists as part of VM pool"}
 
 # ECQ-2348
 AddVMPoolMember - add with invalid address shall return error
