@@ -1635,7 +1635,7 @@ class MexMasterController(MexRest):
                 else:
                     raise Exception(f'health check not found')
             else:
-                raise Exception(f'app instance is NOT found.')
+                logging.debug(f'app instance is NOT found. sleeping and trying again')
             
         raise Exception(f'app instance health check is NOT OK. Got {appinstance["data"]["health_check"]} but expected 3')
 
