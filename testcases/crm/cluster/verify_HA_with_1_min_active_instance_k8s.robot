@@ -1,3 +1,4 @@
+### ECQ-2431 ###
 *** Settings ***
 Documentation   Create K8S Reservable Cluster and Verify Verify HA works with 1 min active instances
 
@@ -11,7 +12,7 @@ Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet_name_openstack_dedicated}  automationDusseldorfCloudlet
+${cloudlet_name_openstack_dedicated}  automationFrankfurtCloudlet
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
@@ -39,7 +40,7 @@ Create one k8s and one docker based reservable cluster instnace
 Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
-   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   &{cloudlet1}=  create dictionary  name=automationFrankfurtCloudlet  organization=TDG
    @{cloudletlist}=  create list  ${cloudlet1}
    ${policy_return}=  Create Auto Provisioning Policy  region=EU  policy_name=${policy_name}   min_active_instances=1  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
    log to console  ${policy_return}
@@ -59,7 +60,7 @@ Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 #   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
 #   Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
 
 #   log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
 #   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
@@ -72,7 +73,7 @@ Delete app instance and verify auto deployment works again
 
     delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
 
-    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
 
 Remove auto provisioning policy from App
     update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policy=${EMPTY}  app_version=v1  token=${user_token}

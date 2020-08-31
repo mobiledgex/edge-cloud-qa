@@ -38,8 +38,15 @@ Create docker based reservable cluster instnace
 Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
-   ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  deploy_client_count=1  deploy_interval_count=1  undeploy_client_count=2  undeploy_interval_count=1  developer_org_name=${orgname}  token=${user_token}
-   log to console  ${policy_return}
+
+   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   @{cloudletlist}=  create list  ${cloudlet1}
+
+   ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  deploy_client_count=1  deploy_interval_count=1  undeploy_client_count=2  undeploy_interval_count=1  min_active_instances=1  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
+
+#   should be equal  ${policy_return['data']['key']['name']}  automationDusseldorfCloudlet
+#   should be equal  ${policy_return['data']['key']['organization']}  TDG
+   log to console   ${policy_return}
 
 Add Cloudlet to Auto Provisioning Policy
 
@@ -56,7 +63,7 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
