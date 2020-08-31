@@ -1,0 +1,8 @@
+# andy-mac:e2e-tests andyanderson$ e2e-tests -setupfile ../../edge-cloud-qa/tools/dns.yaml  -testfile testfiles/deploy_start.yml --varsfile vars.yml
+cloudflare:
+  zone: mobiledgex.net
+  records:
+  - name: autoclustersdkdocker3.telusfake.telus.mobiledgex.net 
+    type: A
+    content: "13.65.203.205"
+

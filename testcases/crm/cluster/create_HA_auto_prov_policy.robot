@@ -1,7 +1,6 @@
 ### ECQ-2431 ###
 *** Settings ***
 Documentation   HA Configuration Checks via mcctl
-
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 Library         MexApp

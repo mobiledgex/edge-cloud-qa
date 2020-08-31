@@ -1,0 +1,13 @@
+GPU - 1 GPU shall be allocated for K8s IpAccessShared on openstack
+GPU - 1 GPU shall be allocated for K8s IpAccessDedicated on openstack
+GPU - 1 GPU shall be allocated for Docker on openstack
+GPU - 1 GPU shall be allocated for VM on openstack
+GPU - No GPU shall be allocated if gpu not specified for Docker on openstack
+GPU - No GPU shall be allocated if gpu not specified for K8s IpAccessShared on openstack
+GPU - No GPU shall be allocated if gpu not specified for K8s IpAccessDedicated on openstack
+GPU - No GPU shall be allocated if gpu not specified for VM on openstack
+
+allocate GPU with multiple nodes
+attempt allocate GPU when no gpus are available
+
+

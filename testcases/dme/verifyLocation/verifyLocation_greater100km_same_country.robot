@@ -8,7 +8,7 @@ Suite Setup      Setup
 Suite Teardown	Cleanup provisioning
 
 *** Variables ***
-${access_ports}    tcp:80,http:443,udp:10002
+${access_ports}    tcp:80,tcp:443,udp:10002
 ${operator_name}   tmus
 ${cloudlet_name1}  tmocloud-1
 ${cloudlet_lat1}   31
