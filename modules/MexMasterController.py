@@ -1617,7 +1617,7 @@ class MexMasterController(MexRest):
                     logging.debug(f'app instance not ready. got {appinstance["data"]["state"]}. sleeping and trying again')
                     time.sleep(1)
             else:
-                raise Exception(f'app instance is NOT found.')
+                logging.debug(f'app instance is NOT found. sleeping and trying again')
             
         raise Exception(f'app instance is NOT ready. Got {appinstance["data"]["state"]} but expected 5')
 
