@@ -133,7 +133,7 @@ UpdateVMPool - update with VMPool with duplicate external address shall return e
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  org_name=${organization}  vm_list=${vmlist}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"xxxxMissing external IP for VM: vm1"}
+   Should Contain   ${error}  error={"message":"VM with same external IP 1.1.1.1 already exists"}
 
 # ECQ-2389
 UpdateVMPool - update with VMPool in use shall return error
@@ -144,13 +144,14 @@ UpdateVMPool - update with VMPool in use shall return error
    # EDGECLOUD-3398 - UpdateVMPool message while pool in use is misleading
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=1.1.1.1  internal_ip=2.2.2.2
-   &{vm2}=  Create Dictionary  name=vm2  external_ip=1.1.1.1  internal_ip=2.2.2.2
+   &{vm2}=  Create Dictionary  name=vm2  external_ip=1.1.1.2  internal_ip=2.2.2.3
    @{vmlist}=  Create List  ${vm1}  ${vm2}
 
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}  vm_list=${vmlist}
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Encountered failures: Unable to update VM pool, as it is in use"}
+   Should Contain Any  ${error}  Encountered failures: Unable to delete VM automationvmpool1, as it is in use   Encountered failures: Unable to delete VM automationvmpool2, as it is in use   Encountered failures: Unable to delete VM automationvmpool3, as it is in use   Encountered failures: Unable to delete VM automationvmpool4, as it is in use   Encountered failures: Unable to delete VM automationvmpool5, as it is in use   Encountered failures: Unable to delete VM automationvmpool6, as it is in use
+   #Should Contain Any  ${error}  error={"message":"Encountered failures: Unable to delete VM automationvmpool2, as it is in use"}
 
 # ECQ-2390
 UpdateVMPool - update with VMPool not found shall return error
