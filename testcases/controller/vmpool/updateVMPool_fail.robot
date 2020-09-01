@@ -160,7 +160,7 @@ UpdateVMPool - update with VMPool not found shall return error
    ...  - verify proper error is received
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=1.1.1.1  internal_ip=2.2.2.2
-   &{vm2}=  Create Dictionary  name=vm2  external_ip=1.1.1.1  internal_ip=2.2.2.2
+   &{vm2}=  Create Dictionary  name=vm2  external_ip=1.1.1.2  internal_ip=2.2.2.3
    @{vmlist}=  Create List  ${vm1}  ${vm2}
 
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  vm_pool_name=xxautomationVMPool  org_name=${organization}  vm_list=${vmlist}
@@ -220,7 +220,7 @@ UpdateVMPool - update with invalid state shall return error
 
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=${region}  vm_pool_name=automationVMPool  org_name=${organization}  vm_list=${vmlist}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Invalid POST data, No enum value for 99"}
+   Should Contain   ${error}  error={"message":"Invalid VM state, only VmForceFree state is allowed"}
 
 *** Keywords ***
 Setup

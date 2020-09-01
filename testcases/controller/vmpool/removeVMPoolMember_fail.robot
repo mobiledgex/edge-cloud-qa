@@ -31,7 +31,8 @@ RemoveVMPoolMember - remove without parameters shall return error
    ${error}=  Run Keyword And Expect Error  *  Remove VM Pool Member  region=${region}  token=${token}  use_defaults=False
 
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"VMPool key {} not found"}
+   #Should Contain   ${error}  error={"message":"VMPool key {} not found"}
+   Should Contain   ${error}  error={"message":"Invalid organization name"}
 
 # ECQ-2359
 RemoveVMPoolMember - remove without VM name shall return error
@@ -39,7 +40,7 @@ RemoveVMPoolMember - remove without VM name shall return error
    ...  - send RemoveVMPoolMember without vm name and external/internal address
    ...  - verify proper error is received
 
-   # EDGECLOUD-3411 - RemoveVMPoolMember with missing vm name should give consistent error message
+   # EDGECLOUD-3411 - RemoveVMPoolMember with missing vm name should give consistent error message  fixed/closed
 
    &{vm1}=  Create Dictionary  external_ip=80.187.128.12  internal_ip=80.187.128.12 
    @{vmlist}=  Create List  ${vm1}
