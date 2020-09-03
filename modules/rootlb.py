@@ -34,6 +34,29 @@ class Rootlb(Linux):
 
         return output
 
+
+    def get_deploy(self):
+        cmd = f'KUBECONFIG={self.kubeconfig} kubectl get deploy -o name'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
+    def k8s_scale_replicas(self, instance):
+        cmd = f'KUBECONFIG={self.kubeconfig} kubectl scale --replicas=0 deploy/{instance}'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
     def get_pod(self, pod_name, pod_state=None):
         pod_list = self.get_pods()
 
@@ -72,6 +95,21 @@ class Rootlb(Linux):
         
     def helm_list(self):
         cmd = f'KUBECONFIG={self.kubeconfig} helm list'
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
+    def restart_docker_container_rootlb(self, operation, container_id):
+        if operation == 'stop':
+            cmd = f'docker stop {container_id}'
+        else:
+            cmd = f'docker start {container_id}'
+
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
