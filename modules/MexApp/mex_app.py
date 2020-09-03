@@ -228,7 +228,35 @@ class MexApp(object):
                 time.sleep(1)
 
         raise Exception(f'DNS for {dns} not ready after {wait_time} seconds')
-    
+   
+    def k8s_scale_replicas(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_replicas=None): 
+        rb = None
+        if root_loadbalancer is not None:
+            print('*WARN*', 'rootlb')
+            rb = rootlb.Rootlb(host=root_loadbalancer, kubeconfig=f'{cluster_name}.{operator_name}.kubeconfig' )
+            kubeconfig_file = f'{cluster_name}.{operator_name}.kubeconfig'
+        else:
+            rb = kubernetes.Kubernetes(self.kubeconfig_dir + '/' + kubeconfig)
+            kubeconfig_file = self.kubeconfig_dir + '/' + kubeconfig
+        
+        self.rootlb = rb
+        kubectl_out = rb.get_deploy() 
+
+        for line in kubectl_out:
+            if pod_name in line: 
+                deployment = line
+                logging.info('Deployment is ' + deployment )
+                name = line.split('/')
+                instance = name[1]
+
+        kubectl_out = rb.k8s_scale_replicas(instance)
+        logging.debug(kubectl_out)        
+
+        for line in kubectl_out:
+            if 'scaled' in line:
+                logging.info('Replicas scaled to ' + number_of_replicas )
+
+            
     def wait_for_k8s_pod_to_be_running(self, root_loadbalancer=None, kubeconfig=None, cluster_name=None, operator_name=None, pod_name=None, number_of_pods=1, wait_time=600):
 
         rb = None
@@ -279,6 +307,69 @@ class MexApp(object):
             raise Exception('All pods not found. expected=' + str(number_of_pods) + ' got=' + str(pod_count))
         
         raise Exception('Running k8s pod not found')
+
+    def restart_docker_container_rootlb(self, operation=None, root_loadbalancer=None):
+
+        self.wait_for_dns(root_loadbalancer)
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        container_id_list = rb.get_docker_container_id()
+        logging.debug(f'container_id={container_id_list}')
+        container_id = container_id_list[0]
+
+        if operation == 'stop':
+            output = rb.restart_docker_container(operation, container_id)
+
+            for line in output:
+                if container_id in line:
+                    logging.info('Stopped docker container on ' + root_loadbalancer)
+                    return True
+        else:
+            output = rb.restart_docker_container(operation, container_id)
+
+            for line in output:
+                if container_id in line:
+                    logging.info('Started docker container on ' + root_loadbalancer)
+                    return True
+
+        raise Exception('Restart of docker container failed on ' + root_loadbalancer)
+
+
+    def restart_docker_container_clustervm(self, node, operation=None, root_loadbalancer=None):
+        
+        command = 'docker ps -a --format "{{.ID}}"'
+        self.wait_for_dns(root_loadbalancer)
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+    
+        container_id_list = rb.run_command_on_node(node, command)
+        logging.debug(f'container_id={container_id_list}')
+        container_id = container_id_list[0]
+
+        if operation == 'stop':
+            command = f'docker stop {container_id}'
+            output = rb.run_command_on_node(node, command)
+
+            for line in output:
+                if container_id in line:
+                    logging.info('Stopped docker container on ' + node)
+                    return True
+
+        else:
+            command = f'docker start {container_id}'
+            output = rb.run_command_on_node(node, command)
+
+            for line in output:
+                if container_id in line:
+                    logging.info('Started docker container on ' + node)
+                    return True
+
+        raise Exception('Restart of docker container failed on ' + node)
 
     def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, wait_time=600):
 
