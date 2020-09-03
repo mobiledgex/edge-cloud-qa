@@ -19,7 +19,7 @@ class AutoProvisioningPolicy(MexOperation):
         self.addcloudlet_url = '/auth/ctrl/AddAutoProvPolicyCloudlet'
         self.removecloudlet_url = '/auth/ctrl/RemoveAutoProvPolicyCloudlet'
 
-    def _build(self, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, cloudlet_name=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, operator_org_name=None, include_fields=False, use_defaults=True):
+    def _build(self, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, cloudlet_name=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, operator_org_name=None, cloudlet_list=None, include_fields=False, use_defaults=True):
         _fields_list = []
         _policy_name_field_number = "2.1"
         _developer_name_field_number = "2.2"
@@ -29,6 +29,8 @@ class AutoProvisioningPolicy(MexOperation):
         _max_instances_field_number = "7"
         _undeploy_client_count_field_number = "8"
         _undeploy_interval_count_field_number = "9"
+        _cloudlets_field_number = "10"
+        # _cloudlet_organization_field
         _cloudlet_org_field_number = "5.1.1"  #???
         _cloudlet_name_field_number = "5.1.2" #???
         _lat_field_number = "6.1.1" #???
@@ -100,6 +102,25 @@ class AutoProvisioningPolicy(MexOperation):
                 policy_dict['max_instances'] = max_instances
             _fields_list.append(_max_instances_field_number)
 
+        # print('*WARN*', cloudlet_list)
+        cloudlet_dict_list = None
+        if cloudlet_list is not None:
+            cloudlet_dict_list = []
+            for cloudlet in cloudlet_list:
+                cloudlet_dict = {}
+                cloudlet_key_dict = {}
+
+
+                cloudlet_dict['key'] = cloudlet
+
+             # cloudlet_dict:
+                cloudlet_dict_list.append(cloudlet_dict)
+        # print('*WARN*', cloudlet_dict_list)
+        if cloudlet_dict_list is not None:
+            policy_dict['cloudlets'] = cloudlet_dict_list
+            _fields_list.append(_cloudlets_field_number)
+
+
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
             _fields_list.append(_cloudlet_name_field_number)
@@ -117,8 +138,8 @@ class AutoProvisioningPolicy(MexOperation):
 
         return policy_dict
 
-    def create_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, use_defaults=use_defaults)
+    def create_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicy': msg}
 
         msg_dict_delete = None
@@ -145,8 +166,8 @@ class AutoProvisioningPolicy(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def update_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances,cloudlet_list=cloudlet_list, use_defaults=use_defaults, include_fields=True)
+    def update_autoprov_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'autoprovpolicy': msg}
 
         msg_dict_show = None
@@ -172,8 +193,12 @@ class AutoProvisioningPolicy(MexOperation):
 
         return self.create(token=token, url=self.addcloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=None, show_msg=msg_dict_show)
 
-    def remove_autoprov_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults)
+    def remove_autoprov_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None,
+                                        cloudlet_name=None, operator_org_name=None, json_data=None, auto_delete=True,
+                                        use_defaults=True, use_thread=False):
+        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name,
+                          operator_org_name=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicycloudlet': msg}
-
-        return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        # return self.delete(token=token, url=self.removecloudlet_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        return self.delete(token=token, url=self.removecloudlet_url, region=region, json_data=json_data,
+                           use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)

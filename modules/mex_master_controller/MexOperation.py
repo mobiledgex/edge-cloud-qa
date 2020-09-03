@@ -85,6 +85,9 @@ class MexOperation(MexRest):
                 if 'UpdateAppInst' in url:
                     if 'Ready' not in str(self.resp.text):
                         raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp.text))
+                if 'RefreshAppInst' in url:
+                    if 'Failed: 0' not in str(self.resp.text):
+                        raise Exception('ERROR: AppInst not refreshed successfully:' + str(self.resp.text))
                 if 'CreateClusterInst' in url:
                     if 'Created ClusterInst successfully' not in str(self.resp.text):
                         raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
@@ -109,8 +112,14 @@ class MexOperation(MexRest):
                 if self.thread_queue:
                     logging.info(f'adding {thread_name} to thread_queue')
                     self.thread_queue.put({thread_name:sys.exc_info()})
-                    
-                raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
+                  
+                # have seen case where timeout exception is thrown but post was successful. Dont throw exception if 200 anyway 
+                if self.resp.status_code:
+                    if self.resp.status_code != 200: 
+                        #if self.thread_queue:
+                        #    logging.info(f'adding {thread_name} to thread_queue')
+                        #    self.thread_queue.put({thread_name:sys.exc_info()})
+                        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')

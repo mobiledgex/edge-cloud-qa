@@ -79,69 +79,80 @@ def start_tcp_ping(thread_name, port):
                #print('no data')
                break
 
-            writefile('recved tcp data from thread={} port={}'.format(thread_name, port))
+            writefile('recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+
+            if data.decode('utf8') == 'exit':
+               writefile('shutdown/close socket thread={} port={}'.format(thread_name, port))
+               conn.sendall(bytes('bye', encoding='utf-8'))
+               ssocket.shutdown(socket.SHUT_RDWR)
+               ssocket.close()
+               sys.exit()
 
             conn.sendall(bytes('pong', encoding='utf-8'))
     #    print('recved', data)
 
-def start_tls_tcp_ping(thread_name, port):
-    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-    pprint.pprint(context.get_ciphers())
-    #context.verify_mode = ssl.CERT_REQUIRED
-    context.load_cert_chain(certfile=server_cert, keyfile=server_key)
-    #context.load_verify_locations(cafile=client_cert)
+#def start_tls_tcp_ping(thread_name, port):
+#    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+#    pprint.pprint(context.get_ciphers())
+#    #context.verify_mode = ssl.CERT_REQUIRED
+#    context.load_cert_chain(certfile=server_cert, keyfile=server_key)
+#    #context.load_verify_locations(cafile=client_cert)
+#
+#    ssocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#    ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
+#    ssocket.bind(('', port))
+#    ssocket.listen(1)
+#    writefile('thread={} protocol=tcpservertport={}'.format(thread_name, port))
+#
+#    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+#
+#    while True:
+#        conn, addr = ssocket.accept()
+#
+#        sslconn = context.wrap_socket(conn, server_side=True) 
+#        print('cipher', sslconn.cipher())
+#
+#        while True:
+#            #print('waiting for data')
+#            data = sslconn.recv(1024)
+#            #print('conn after recv')
+#            if not data:
+#               #print('no data')
+#               break
+#
+#            writefile('andy recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+#
+#            if data == 'exit':
+#               writefile('exiting thread={} port={}'.format(thread_name, port))
+#               sys.exit()
+#
+#            sslconn.sendall(bytes('pong', encoding='utf-8'))
+#    #    print('recved', data)
 
-    ssocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
-    ssocket.bind(('', port))
-    ssocket.listen(1)
-    writefile('thread={} protocol=tcpservertport={}'.format(thread_name, port))
-
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-
-    while True:
-        conn, addr = ssocket.accept()
-
-        sslconn = context.wrap_socket(conn, server_side=True) 
-        print('cipher', sslconn.cipher())
-
-        while True:
-            #print('waiting for data')
-            data = sslconn.recv(1024)
-            #print('conn after recv')
-            if not data:
-               #print('no data')
-               break
-
-            writefile('recved tcp data from thread={} port={}'.format(thread_name, port))
-
-            sslconn.sendall(bytes('pong', encoding='utf-8'))
-    #    print('recved', data)
-
-def xstart_tls_tcp_ping(thread_name, port):
-    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as ssocket:
-       #ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
-       ssocket.bind(('', port))
-       ssocket.listen(1)
-       with context.wrap_socket(ssocket, server_side=True) as swrap:
-          writefile('thread={} protocol=tcpservertport={}'.format(thread_name, port))
-
-          while True:
-             conn, addr = ssocket.accept()
-
-             while True:
-                #print('waiting for data')
-                data = swrap.recv(1024)
-                #print('conn after recv')
-                if not data:
-                   #print('no data')
-                   break
-
-                writefile('recved tls tcp data from thread={} port={}'.format(thread_name, port))
-
-                swrap.sendall(bytes('pong', encoding='utf-8'))
-    #    print('recved', data)
+#def xstart_tls_tcp_ping(thread_name, port):
+#    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+#    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as ssocket:
+#       #ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
+#       ssocket.bind(('', port))
+#       ssocket.listen(1)
+#       with context.wrap_socket(ssocket, server_side=True) as swrap:
+#          writefile('thread={} protocol=tcpservertport={}'.format(thread_name, port))
+#
+#          while True:
+#             conn, addr = ssocket.accept()
+#
+#             while True:
+#                #print('waiting for data')
+#                data = swrap.recv(1024)
+#                #print('conn after recv')
+#                if not data:
+#                   #print('no data')
+#                   break
+#
+#                writefile('recved tls tcp data from thread={} port={}'.format(thread_name, port))
+#
+#                swrap.sendall(bytes('pong', encoding='utf-8'))
+#    #    print('recved', data)
 
 
 class WSHandler(tornado.websocket.WebSocketHandler):
@@ -190,7 +201,7 @@ _thread.start_new_thread(start_udp_ping, ("Thread-2", 2016))
 writefile('starting tcp thread')
 _thread.start_new_thread(start_tcp_ping, ("Thread-1", 2015))
 _thread.start_new_thread(start_tcp_ping, ("Thread-2", 2016))
-_thread.start_new_thread(start_tls_tcp_ping, ("Thread-1", 3015))
+#_thread.start_new_thread(start_tls_tcp_ping, ("Thread-1", 3015))
 writefile('starting websocket server')
 http_server = tornado.httpserver.HTTPServer(application)
 http_server.listen(3765)

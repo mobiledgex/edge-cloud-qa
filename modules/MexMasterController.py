@@ -1081,6 +1081,12 @@ class MexMasterController(MexRest):
             resp = send_message()
             return resp
 
+    def show_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
+        return self.cloudlet.show_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def inject_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, container_version=None, controller=None, notify_id=None, os_max_ram=None, os_max_vcores=None, os_max_vol_gb=None, state=None, status=None, flavor_name=None, flavor_disk=None, flavor_ram=None, flavor_vcpus=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
+        return self.cloudlet.inject_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, controller=controller, notify_id=notify_id, os_max_ram=os_max_ram, os_max_vcores=os_max_vcores, os_max_vol_gb=os_max_vol_gb, state=state, status=status, flavor_name=flavor_name, flavor_disk=flavor_disk, flavor_ram=flavor_ram, flavor_vcpus=flavor_vcpus, use_defaults=use_defaults, use_thread=use_thread)
+
     def show_cloudlets(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
@@ -1555,10 +1561,10 @@ class MexMasterController(MexRest):
         """
         return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
-    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, json_data=None, use_defaults=True, use_thread=False):
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, json_data=None, use_defaults=True, use_thread=False):
         """ Send region UpdateApp
         """
-        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policy=auto_prov_policy,  deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
 
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateAppInst
@@ -1617,9 +1623,21 @@ class MexMasterController(MexRest):
                     logging.debug(f'app instance not ready. got {appinstance["data"]["state"]}. sleeping and trying again')
                     time.sleep(1)
             else:
-                raise Exception(f'app instance is NOT found.')
+                logging.debug(f'app instance is NOT found. sleeping and trying again')
             
         raise Exception(f'app instance is NOT ready. Got {appinstance["data"]["state"]} but expected 5')
+
+    def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
+        for x in range(1, timeout):
+            appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+            if appinstance:
+                logging.debug(f'app instance still exists. got state={appinstance["data"]["state"]}. sleeping and trying again')
+                time.sleep(1)
+            else:
+                logging.info(f'app instance is NOT found.')
+                return True
+
+        raise Exception(f'app instance still exists. Got app_name={appinstance["data"]["key"]["app_key"]["name"]}  state={appinstance["data"]["state"]}')
 
     def wait_for_app_instance_health_check_ok(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
@@ -1635,7 +1653,7 @@ class MexMasterController(MexRest):
                 else:
                     raise Exception(f'health check not found')
             else:
-                raise Exception(f'app instance is NOT found.')
+                logging.debug(f'app instance is NOT found. sleeping and trying again')
             
         raise Exception(f'app instance health check is NOT OK. Got {appinstance["data"]["health_check"]} but expected 3')
 
@@ -2229,8 +2247,8 @@ class MexMasterController(MexRest):
     def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
         return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def show_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoprov_policy.show_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
@@ -2238,8 +2256,8 @@ class MexMasterController(MexRest):
     def delete_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoprov_policy.delete_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, cloudlet_list=[], json_data=None, use_defaults=True, use_thread=False):
-        return self.autoprov_policy.update_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count,  cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def update_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None, undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, use_thread=False):
+        return self.autoprov_policy.update_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count, undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def add_auto_provisioning_policy_cloudlet(self, token=None, region=None, policy_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.add_autoprov_policy_cloudlet(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -2262,11 +2280,17 @@ class MexMasterController(MexRest):
         return self.config.skip_verify_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
 
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, use_defaults=True, use_thread=False): 
+        if developer_org_name is None:
+            if self.organization_name:
+                developer_org_name = self.organization_name
+                cluster_instance_developer_name = self.organization_name
         return self.cluster_instance.update_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, number_masters=number_masters, number_nodes=number_nodes, autoscale_policy_name=autoscale_policy_name, use_defaults=use_defaults)
 
-    def update_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.app_instance.update_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, use_defaults=use_defaults, use_thread=use_thread)
+    def update_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.update_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, use_thread=use_thread)
 
+    def refresh_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.app_instance.refresh_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
