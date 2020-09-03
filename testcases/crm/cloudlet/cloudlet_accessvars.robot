@@ -8,7 +8,7 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${cloudlet_name_openstack_frankfurt}  automationFrankfurtCloudlet
-${operator_name_openstack_frankfurt}  andyoporg 
+${operator_name_openstack_frankfurt}  TDG
 ${physical_name_openstack_frankfurt}  frankfurt
 
 ${openrc_data}=  OS_AUTH_URL=https://fraedgecloud.telekom.de:5000/v3\nOS_PROJECT_ID=5c2443f40baf42548de46ad87fe21674\nOS_PROJECT_NAME=mex\nOS_USER_DOMAIN_NAME=Default\nOS_PROJECT_DOMAIN_ID=default\nOS_USERNAME=mexadmin\nOS_PASSWORD=ED2%jdB7-Ef]b8^x\nOS_REGION_NAME=RegionOne\nOS_INTERFACE=public\nOS_IDENTITY_API_VERSION=3
@@ -22,7 +22,7 @@ CreateCloudlet - User shall be able to create a cloudlet with access_vars
    [Documentation]
    ...  do CreateCloudlet with access vars parm
 
-  Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  cloudlet_name=${cloudlet_name_openstack_frankfurt}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_frankfurt}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  access_vars=CACERT_DATA=${cacert_data},OPENRC_DATA=${openrc_data}
+  Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_frankfurt}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_frankfurt}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  access_vars=CACERT_DATA=${cacert_data},OPENRC_DATA=${openrc_data}
 
 *** Keywords ***
 Setup
