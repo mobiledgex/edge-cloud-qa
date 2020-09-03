@@ -130,15 +130,15 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    ${cloudlet}=  Find Cloudlet        latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
-   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}  tls=${True}
 
-   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[3].public_port}
+   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
 
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}  tls=${True}
+   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
 
 # ECQ-2255
 User shall be able to access TCP TLS ports with cluster=docker/dedicated and app=docker/direct
@@ -167,7 +167,7 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    ${cloudlet}=  Find Cloudlet        latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet.ports[2].path_prefix}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
    ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
