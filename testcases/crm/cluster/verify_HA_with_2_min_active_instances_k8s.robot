@@ -1,17 +1,19 @@
+### ECQ-2437 ###
 *** Settings ***
-Documentation   Create K8S Reservable Cluster and Verify Auto-Provisioning Undeployment
+Documentation   Create K8S Reservable Cluster and Verify Verify HA works with 2 min active instances
 
 Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 Library         MexApp
 
-Test Timeout     20 minutes
+Test Timeout     15 minutes
 
 Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet_name_openstack_dedicated}  automationMunichCloudlet
+${cloudlet1}  automationDusseldorfCloudlet
+${cloudlet2}  automationFrankfurtCloudlet
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
@@ -33,44 +35,36 @@ Create one k8s and one docker based reservable cluster instnace
    ...  verify it creates 1 lb and 2 nodes and 1 master
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+
    Log to Console  DONE creating cluster instance
 
 Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
-   ${policy_return}=  Create Auto Provisioning Policy  region=EU  policy_name=${policy_name}  deploy_client_count=1  deploy_interval_count=1  undeploy_client_count=2  undeploy_interval_count=1  developer_org_name=${orgname}  token=${user_token}
+   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   &{cloudlet2}=  create dictionary  name=automationFrankfurtCloudlet  organization=TDG
+   @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
+   ${policy_return}=  Create Auto Provisioning Policy  region=EU  policy_name=${policy_name}   min_active_instances=2  max_instances=4  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
    log to console  ${policy_return}
 
-Add Cloudlet to Auto Provisioning Policy
-
-   log to console  Add Cloudlet to Auto Provisioning Policy
-   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=EU  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
-
-Create App, Add Autoprovisioning Policy and Deploy an App Instance
+Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 
    log to console  Creating App and App Instance
    create app  region=EU  app_name=${app_name}  deployment=kubernetes  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
-   log to console  Registering Client and Finding Cloudlet
-   Register Client  developer_org_name=${orgname}  app_version=v1
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
-   Should Contain  ${error_msg}  FIND_NOTFOUND
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}
 
-   log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
-   Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
-   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
-   log to console  Deployed Autoprovision App Successfully!
+Remove auto provisioning policy from App
+    update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policy=${EMPTY}  app_version=v1  token=${user_token}
 
-   Should Be Equal As Numbers  ${cloudlet.status}  1
+    sleep  2 minutes
 
-   sleep  7 mins
-
-Maintain Active Connection below undeployclientcount & Verify App Instance is deleted
-    App Instance Should Not Exist  app_instance=  ${app_name}
-
+    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}
+    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}  cloudlet_name=${cloudlet2}
 *** Keywords ***
 Setup
     ${epoch}=  Get Time  epoch
