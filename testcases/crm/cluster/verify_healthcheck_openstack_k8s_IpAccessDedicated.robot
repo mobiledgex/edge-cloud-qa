@@ -28,7 +28,7 @@ ${docker_command}  ./server_ping_threaded.py
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
-healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP access port
+IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP access port
     [Documentation]
     ...  deploy IpAccessShared k8s cluster and app with manifest with shared volume mounts
     ...  verify mounts are persisted over pod restart
@@ -61,7 +61,7 @@ healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for
 
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
-healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP and UDP access port
+IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for app with TCP and UDP access port
     [Documentation]
     ...  deploy IpAccessShared k8s cluster and app with manifest with shared volume mounts
     ...  verify mounts are persisted over pod restart
@@ -93,6 +93,32 @@ healthcheck shows HealthCheckFailServerFail when replicas are scaled to zero for
     END
 
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
+
+IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one port goes down for app with 2 TCP access ports
+    [Documentation]
+    ...  deploy IpAccessShared k8s cluster and app with manifest with shared volume mounts
+    ...  verify mounts are persisted over pod restart
+
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App and App Instance
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  command=${docker_command}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+    ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
+
+    Stop TCP Port  ${tcp_fqdn}  2016
+
+    FOR  ${x}  IN RANGE  0  20
+        ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+        Exit For Loop If  '${app_inst[0]['data']['health_check']}' == '2'
+        Sleep  2s
+    END
+
+    Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
 *** Keywords ***
 Setup
