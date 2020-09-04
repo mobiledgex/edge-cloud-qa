@@ -46,6 +46,56 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
+    def stop_udp_port(self, host, port):
+        data = 'exit'
+        exp_return_data = 'bye'
+        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+        data_to_send = data.encode('ascii')
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        client_socket.settimeout(1)
+
+        return_data = ''
+        try:
+            logging.debug(f'sending {data} to {host}:{port}')
+            client_socket.sendto(data_to_send,(host, int(port)))
+            logging.debug(f'waiting for {exp_return_data}')
+            (return_data, addr) = client_socket.recvfrom(data_size)
+            logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
+            #client_socket.shutdown(socket.SHUT_RDWR)
+            client_socket.close()
+        except Exception as e:
+            client_socket.close()
+            raise Exception('error=', e)
+
+        if return_data.decode('utf-8') != exp_return_data:
+            raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
+
+    def start_udp_port(self, host, port, server_port=4015):
+        data = f'udp:{port}'
+        exp_return_data = 'started'
+        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+        data_to_send = data.encode('ascii')
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        client_socket.settimeout(1)
+
+        return_data = ''
+        try:
+            logging.debug(f'sending {data} to {host}:{server_port}')
+            client_socket.sendto(data_to_send,(host, int(server_port)))
+            logging.debug(f'waiting for {exp_return_data}')
+            (return_data, addr) = client_socket.recvfrom(data_size)
+            logging.info('received this data from {}:{}'.format(addr, return_data.decode('utf-8')))
+            #client_socket.shutdown(socket.SHUT_RDWR)
+            client_socket.close()
+        except Exception as e:
+            client_socket.close()
+            raise Exception('error=', e)
+
+        if return_data.decode('utf-8') != exp_return_data:
+            raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
+
     def stop_tcp_port(self, host, port, tls=False):
         data = 'exit'
         exp_return_data = 'bye'
@@ -64,6 +114,41 @@ class MexApp(object):
             sock = context.wrap_socket(client_socket)
 
         sock.connect((host, int(port)))
+
+        return_data = ''
+        try:
+            logging.debug('sending data')
+            sock.sendall(bytes(data, encoding='utf-8'))
+            return_data = sock.recv(data_size)
+
+            logging.debug('data recevied back:' + return_data.decode('utf-8'))
+            sock.close()
+        except Exception as e:
+            print('caught exception')
+            sock.close()
+            raise Exception('error=', e)
+
+        if return_data.decode('utf-8') != exp_return_data:
+            raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
+
+    def start_tcp_port(self, host, port, server_port=4015, tls=False):
+        data = f'tcp:{port}'
+        exp_return_data = 'started'
+        data_size = sys.getsizeof(bytes(data, 'utf-8'))
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.settimeout(10)
+        sock = client_socket
+
+        if tls:
+            logging.info('creating ssl connection')
+            context = ssl.SSLContext()
+            context.verify_mode = ssl.CERT_NONE
+            context.check_hostname = False
+
+            sock = context.wrap_socket(client_socket)
+
+        sock.connect((host, int(server_port)))
 
         return_data = ''
         try:
