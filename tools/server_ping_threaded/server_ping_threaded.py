@@ -15,6 +15,7 @@ import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
+import sys
 
 http_port = 8085
 
@@ -22,6 +23,8 @@ http_port = 8085
 protocol = 'tcp'
 #protocol = 'udp'
 outfile = 'server_ping_outfile.txt'
+
+thread_count = 1
 
 server_cert = '/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud/tls/out/mex-server.crt'
 server_key = '/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud/tls/out/mex-server.key'
@@ -41,7 +44,7 @@ def writefile(s):
 def start_http_server(thread_name, port):
     handler = http.server.SimpleHTTPRequestHandler
 
-    writefile('thread={} protocol=http servertport={}'.format(thread_name, port))
+    writefile('start_http_server thread={} protocol=http servertport={}'.format(thread_name, port))
     httpd = socketserver.TCPServer(("", port), handler)
     httpd.serve_forever()
     #with socketserver.TCPServer(("", port), handler) as httpd:
@@ -51,23 +54,38 @@ def start_http_server(thread_name, port):
 def start_udp_ping(thread_name, port):
     ssocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     ssocket.bind(('', port))
-    writefile('thread={} protocol=udp servertport={}'.format(thread_name, port))
+    writefile('start_udp_ping thread={} protocol=udp serverport={}'.format(thread_name, port))
 
     while True:
         #num = random.randint(0,10)
         data, client_addr = ssocket.recvfrom(port)
-        writefile('recved udp data from thread={} port={}'.format(thread_name, port))
+        writefile('start_udp_ping recved udp data from thread={} port={} data={}'.format(thread_name, port, data))
         #new_data = data.upper()
+
+        if data.decode('utf8') == 'exit':
+           writefile('start_udp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
+           conn.sendall(bytes('bye', encoding='utf-8'))
+           ssocket.shutdown(socket.SHUT_RDWR)
+           ssocket.close()
+           sys.exit()
 
         ssocket.sendto(bytes('pong', encoding='utf-8'), client_addr)
     #    print('recved', data)
 
 def start_tcp_ping(thread_name, port):
-    ssocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
-    ssocket.bind(('', port))
-    ssocket.listen(1)
-    writefile('thread={} protocol=tcpservertport={}'.format(thread_name, port))
+    writefile('start_tcp_ping thread={} protocol=tcp serverport={}'.format(thread_name, port))
+
+    try:
+       ssocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+       ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
+       ssocket.bind(('', int(port)))
+       ssocket.listen(1)
+    except socket.error as e:
+       writefile('start_tcp_ping error starting socket thread={} protocol=tcp serverport={} error={}'.format(thread_name, port,e))
+    except socket.gaierror as e:
+       writefile('start_tcp_ping error starting socket thread={} protocol=tcp serverport={} error={}'.format(thread_name, port,e))
+    except Exception as e:
+       writefile('start_tcp_ping error starting socket thread={} protocol=tcp serverport={} error={}'.format(thread_name, port,e))
 
     while True:
         conn, addr = ssocket.accept()
@@ -79,16 +97,59 @@ def start_tcp_ping(thread_name, port):
                #print('no data')
                break
 
-            writefile('recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+            writefile('start_tcp_ping recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
 
             if data.decode('utf8') == 'exit':
-               writefile('shutdown/close socket thread={} port={}'.format(thread_name, port))
+               writefile('start_tcp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
                conn.sendall(bytes('bye', encoding='utf-8'))
                ssocket.shutdown(socket.SHUT_RDWR)
                ssocket.close()
                sys.exit()
 
             conn.sendall(bytes('pong', encoding='utf-8'))
+    #    print('recved', data)
+
+def start_port_thread(thread_name, port):
+    global thread_count
+    ssocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    ssocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # SO_REUSEADDR flag tells the kernel to reuse a local socket in TIME_WAIT state, without waiting for its natural timeout to expire
+    ssocket.bind(('', port))
+    ssocket.listen(1)
+    writefile('start_port_thread thread={} protocol=tcp port={}'.format(thread_name, port))
+
+    port_start = 0
+    while True:
+        conn, addr = ssocket.accept()
+        while True:
+            data = conn.recv(1024).decode('utf8')
+            if not data:
+               break
+
+            writefile('start_port_thread recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+
+            try:
+               protocol,port_start = data.split(':')
+            except:
+               print('error: split failed for data=' + data, flush=True)
+               conn.sendall(bytes('error', encoding='utf-8')) 
+               break
+
+            try:
+               if protocol == 'tcp':
+                  writefile('start_port_thread starting tcp thread thread={} port={}'.format('Thread-' + str(thread_count), port_start))
+                  _thread.start_new_thread(start_tcp_ping, ('Thread-' + str(thread_count), port_start))
+                  thread_count+=1 
+               elif protocol == 'udp':
+                  writefile('start_port_thread starting udp thread thread={} port={}'.format('Thread-' + str(thread_count), port_start))
+                  _thread.start_new_thread(start_udp_ping, ('Thread-' + str(thread_count), port_start))
+                  thread_count+=1
+            except:
+               #print('error: send failed ', flush=True)
+               writefile('start_port_thread error: start thread failed thread={} port={}'.format('Thread-' + str(thread_count), port))
+               conn.sendall(bytes('error', encoding='utf-8'))
+               break
+
+            conn.sendall(bytes('started', encoding='utf-8'))
     #    print('recved', data)
 
 #def start_tls_tcp_ping(thread_name, port):
@@ -194,14 +255,24 @@ application = tornado.web.Application([
 #f = open(outfile, 'w')
 
 writefile('starting http thread')
-_thread.start_new_thread(start_http_server, ("Thread-3", http_port))
+_thread.start_new_thread(start_http_server, ('Thread-' + str(thread_count), http_port))
+thread_count+=1
+
 writefile('starting udp thread')
-_thread.start_new_thread(start_udp_ping, ("Thread-1", 2015))
-_thread.start_new_thread(start_udp_ping, ("Thread-2", 2016))
+_thread.start_new_thread(start_udp_ping, ('Thread-' + str(thread_count), 2015))
+thread_count+=1
+_thread.start_new_thread(start_udp_ping, ('Thread-' + str(thread_count), 2016))
+thread_count+=1
+
 writefile('starting tcp thread')
-_thread.start_new_thread(start_tcp_ping, ("Thread-1", 2015))
-_thread.start_new_thread(start_tcp_ping, ("Thread-2", 2016))
-#_thread.start_new_thread(start_tls_tcp_ping, ("Thread-1", 3015))
+_thread.start_new_thread(start_tcp_ping, ('Thread-' + str(thread_count), 2015))
+thread_count+=1
+_thread.start_new_thread(start_tcp_ping, ('Thread-' + str(thread_count), 2016))
+thread_count+=1
+#_thread.start_new_thread(start_tls_tcp_ping, ('Thread-' + str(thread_count), 3015))
+_thread.start_new_thread(start_port_thread, ('Thread-' + str(thread_count), 4015))
+thread_count+=1
+
 writefile('starting websocket server')
 http_server = tornado.httpserver.HTTPServer(application)
 http_server.listen(3765)
