@@ -276,5 +276,5 @@ GetQosPositionKpi - request with position_id only shall return 1 position
 *** Keywords ***
 Setup
     Create Flavor
-    Create App			developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  official_fqdn=${samsung_uri} 
+    Run Keyword and Ignore Error  Create App  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  official_fqdn=${samsung_uri} 
 
