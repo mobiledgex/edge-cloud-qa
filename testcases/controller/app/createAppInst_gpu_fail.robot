@@ -21,7 +21,7 @@ AppInst - User shall not be able to create a VM AppInst with GPU flavor on cloud
     ...  create a VM app instance with gpu flavor but no gpu supported on cloudlet 
     ...  verify proper error is received
 
-    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
@@ -32,7 +32,7 @@ AppInst - User shall not be able to create a docker/shared autocluster AppInst w
     ...  create a docker/shared autocluster app instance with gpu flavor but no gpu supported on cloudlet
     ...  verify proper error is received
 
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared 
  
@@ -43,7 +43,7 @@ AppInst - User shall not be able to create a docker/dedicated autocluster AppIns
     ...  create a docker/dedicated autocluster app instance with gpu flavor but no gpu supported on cloudlet
     ...  verify proper error is received
 
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated
 
@@ -54,7 +54,7 @@ AppInst - User shall not be able to create a k8s/shared autocluster AppInst with
     ...  create a k8s/shared autocluster app instance with gpu flavor but no gpu supported on cloudlet
     ...  verify proper error is received
 
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared
 
@@ -65,7 +65,7 @@ AppInst - User shall not be able to create a k8s/dedicated autocluster AppInst w
     ...  create a k8s/dedicated autocluster app instance with gpu flavor but no gpu supported on cloudlet
     ...  verify proper error is received
 
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011
 
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated
 
