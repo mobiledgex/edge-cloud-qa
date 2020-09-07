@@ -386,7 +386,7 @@ def exec_testcase(z, t):
     print(t)
     print('xxxxxxxx', t['tc'], 'bbbbbb', os.path.basename(t['tc']))
     #if '.robot' in os.path.basename(t['tc']):
-    if '.robot' in t['tc']:
+    if '.robot' in t['tc'] or t['tc'].endswith('_robot'):
         tc_type = 'robot'
         tclines = t['tc'].splitlines()
         tc = tclines[0]

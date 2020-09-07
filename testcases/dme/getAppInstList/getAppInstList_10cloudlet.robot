@@ -35,6 +35,8 @@ ${azure_cloudlet longitude}	  -95
 ${mobile_latitude}  1
 ${mobile_longitude}  1
 
+${distance_offset}=  100
+
 *** Test Cases ***
 # ECQ-1054
 GetAppInstList - request shall return 10 cloudlets
@@ -95,7 +97,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[8].cloudlet_name}                            ${azure_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[8].gps_location.latitude}                    ${azure_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[8].gps_location.longitude}                   ${azure_appinst.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_9}                           ${distance_round_9}
+      Should Be True              ${appfqdns_distance_round_9} == (${distance_round_9} + ${distance_offset})
       Should Be Equal             ${appfqdns[8].appinstances[0].app_name}                 ${azure_appinst.key.app_key.name}
       Should Be Equal             ${appfqdns[8].appinstances[0].app_vers}                 ${azure_appinst.key.app_key.version}
       Should Be Equal             ${appfqdns[8].appinstances[0].fqdn}                    ${azure_appinst.uri}
@@ -108,7 +110,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[9].cloudlet_name}                            ${gcp_appinst.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[9].gps_location.latitude}                    ${gcp_appinst.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[9].gps_location.longitude}                   ${gcp_appinst.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_10}                           ${distance_round_10}
+      Should Be True              ${appfqdns_distance_round_10} == (${distance_round_10} + ${distance_offset})
       Should Be Equal             ${appfqdns[9].appinstances[0].app_name}                 ${gcp_appinst.key.app_key.name}
       Should Be Equal             ${appfqdns[9].appinstances[0].app_vers}                 ${gcp_appinst.key.app_key.version}
       Should Be Equal             ${appfqdns[9].appinstances[0].fqdn}                    ${gcp_appinst.uri}
@@ -121,7 +123,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[6].cloudlet_name}                            ${tmus_appinst_1.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[6].gps_location.latitude}                    ${tmus_appinst_1.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[6].gps_location.longitude}                   ${tmus_appinst_1.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_7}                           ${distance_round_7}
+      Should Be True              ${appfqdns_distance_round_7} == (${distance_round_7} + 0)
       Should Be Equal             ${appfqdns[6].appinstances[0].app_name}                 ${tmus_appinst_1.key.app_key.name}
       Should Be Equal             ${appfqdns[6].appinstances[0].app_vers}                 ${tmus_appinst_1.key.app_key.version}
       Should Be Equal             ${appfqdns[6].appinstances[0].fqdn}                    ${tmus_appinst_1.uri}
@@ -134,7 +136,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[7].cloudlet_name}                            ${tmus_appinst_2.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[7].gps_location.latitude}                    ${tmus_appinst_2.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[7].gps_location.longitude}                   ${tmus_appinst_2.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_8}                           ${distance_round_8}
+      Should Be True              ${appfqdns_distance_round_8} == (${distance_round_8} + 0)
       Should Be Equal             ${appfqdns[7].appinstances[0].app_name}                 ${tmus_appinst_2.key.app_key.name}
       Should Be Equal             ${appfqdns[7].appinstances[0].app_vers}                 ${tmus_appinst_2.key.app_key.version}
       Should Be Equal             ${appfqdns[7].appinstances[0].fqdn}                    ${tmus_appinst_2.uri}
@@ -147,7 +149,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst_3.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst_3.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst_3.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_1}                           ${distance_round_1}
+      Should Be True              ${appfqdns_distance_round_1} == (${distance_round_1} + 0)
       Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${tmus_appinst_3.key.app_key.name}
       Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${tmus_appinst_3.key.app_key.version}
       Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${tmus_appinst_3.uri}
@@ -160,7 +162,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[1].cloudlet_name}                            ${tmus_appinst_4.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[1].gps_location.latitude}                    ${tmus_appinst_4.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[1].gps_location.longitude}                   ${tmus_appinst_4.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_2}                           ${distance_round_2}
+      Should Be True              ${appfqdns_distance_round_2} == (${distance_round_2} + 0)
       Should Be Equal             ${appfqdns[1].appinstances[0].app_name}                 ${tmus_appinst_4.key.app_key.name}
       Should Be Equal             ${appfqdns[1].appinstances[0].app_vers}                 ${tmus_appinst_4.key.app_key.version}
       Should Be Equal             ${appfqdns[1].appinstances[0].fqdn}                    ${tmus_appinst_4.uri}
@@ -173,7 +175,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[2].cloudlet_name}                            ${tmus_appinst_5.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[2].gps_location.latitude}                    ${tmus_appinst_5.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[2].gps_location.longitude}                   ${tmus_appinst_5.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_3}                           ${distance_round_3}
+      Should Be True              ${appfqdns_distance_round_3} == (${distance_round_3} + 0)
       Should Be Equal             ${appfqdns[2].appinstances[0].app_name}                 ${tmus_appinst_5.key.app_key.name}
       Should Be Equal             ${appfqdns[2].appinstances[0].app_vers}                 ${tmus_appinst_5.key.app_key.version}
       Should Be Equal             ${appfqdns[2].appinstances[0].fqdn}                    ${tmus_appinst_5.uri}
@@ -186,7 +188,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[3].cloudlet_name}                            ${tmus_appinst_6.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[3].gps_location.latitude}                    ${tmus_appinst_6.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[3].gps_location.longitude}                   ${tmus_appinst_6.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_4}                           ${distance_round_4}
+      Should Be True              ${appfqdns_distance_round_4} == (${distance_round_4} + 0)
       Should Be Equal             ${appfqdns[3].appinstances[0].app_name}                 ${tmus_appinst_6.key.app_key.name}
       Should Be Equal             ${appfqdns[3].appinstances[0].app_vers}                 ${tmus_appinst_6.key.app_key.version}
       Should Be Equal             ${appfqdns[3].appinstances[0].fqdn}                    ${tmus_appinst_6.uri}
@@ -199,7 +201,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[4].cloudlet_name}                            ${tmus_appinst_7.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[4].gps_location.latitude}                    ${tmus_appinst_7.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[4].gps_location.longitude}                   ${tmus_appinst_7.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_5}                           ${distance_round_5}
+      Should Be True              ${appfqdns_distance_round_5} == (${distance_round_5} + 0)
       Should Be Equal             ${appfqdns[4].appinstances[0].app_name}                 ${tmus_appinst_7.key.app_key.name}
       Should Be Equal             ${appfqdns[4].appinstances[0].app_vers}                 ${tmus_appinst_7.key.app_key.version}
       Should Be Equal             ${appfqdns[4].appinstances[0].fqdn}                    ${tmus_appinst_7.uri}
@@ -212,7 +214,7 @@ GetAppInstList - request shall return 10 cloudlets
       Should Be Equal             ${appfqdns[5].cloudlet_name}                            ${tmus_appinst_8.key.cluster_inst_key.cloudlet_key.name}
       Should Be Equal             ${appfqdns[5].gps_location.latitude}                    ${tmus_appinst_8.cloudlet_loc.latitude}
       Should Be Equal             ${appfqdns[5].gps_location.longitude}                   ${tmus_appinst_8.cloudlet_loc.longitude}
-      Should Be Equal             ${appfqdns_distance_round_6}                          ${distance_round_6}
+      Should Be True              ${appfqdns_distance_round_6} == (${distance_round_6} + 0)
       Should Be Equal             ${appfqdns[5].appinstances[0].app_name}                 ${tmus_appinst_8.key.app_key.name}
       Should Be Equal             ${appfqdns[5].appinstances[0].app_vers}                 ${tmus_appinst_8.key.app_key.version}
       Should Be Equal             ${appfqdns[5].appinstances[0].fqdn}                    ${tmus_appinst_8.uri}

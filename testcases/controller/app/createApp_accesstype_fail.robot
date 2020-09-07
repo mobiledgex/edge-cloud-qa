@@ -21,7 +21,7 @@ App - User shall not be able to create a k8s App with accesstype=direct
     ...  create a k8s app with accesstype=direct
     ...  verify proper error is received
 
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22  access_type=direct
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid access type for deployment"}')
 
@@ -31,7 +31,7 @@ App - User shall not be able to create a helm App with accesstype=direct
     ...  create a helm app with accesstype=direct
     ...  verify proper error is received
 
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011,tcp:22  access_type=direct
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid access type for deployment"}')
 
