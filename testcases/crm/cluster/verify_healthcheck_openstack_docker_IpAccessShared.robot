@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  IpAccessShared Shared Volume Mounts 
+Documentation  Verify Healthcheck with IpAccessShared docker 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT} 
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_SHARED_ENV}
@@ -84,6 +84,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     [Documentation]
     ...  deploy IpAccessShared docker and create app with 2 TCP access ports
     ...  bring down one port and verify healthcheck
+    ...  verify healthcheck after the port comes up
 
     ${app_name_default}=  Get Default App Name
 
@@ -113,7 +114,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     [Documentation]
     ...  deploy IpAccessShared docker and create app with 2 TCP access ports and TLS=true
     ...  bring down one port and verify healthcheck
-
+    
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
@@ -155,7 +156,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
 
-IpAccessShared docker - healthcheck shows HealthCheckOk when one skip_hc port goes down for app with 2 TCP access ports
+IpAccessShared docker - healthcheck shows HealthCheckOk when TCP port with skip_hc goes down
     [Documentation]
     ...  deploy IpAccessShared docker and create app with 2 TCP access ports and skip_hc on 2nd port
     ...  bring down 2nd port and verify healthcheck
@@ -219,7 +220,7 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
-    Update App  region=${region}  access_ports=tcp:2015,tcp:2016,tcp:4015  skip_hc_ports=tcp:4016
+    Update App  region=${region}   skip_hc_ports=tcp:2016
 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
