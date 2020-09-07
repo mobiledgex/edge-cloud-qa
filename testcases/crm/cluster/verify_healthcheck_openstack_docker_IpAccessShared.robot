@@ -99,13 +99,13 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
 
     Stop TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
     Start TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  3
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  3
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
@@ -128,7 +128,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
 
     Stop TCP Port  ${tcp_fqdn}  2016  tls=True
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
@@ -151,7 +151,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
 
     Stop TCP Port  ${tcp_fqdn}  2015  tls=True
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
@@ -174,12 +174,12 @@ IpAccessShared docker - healthcheck shows HealthCheckOk when TCP port with skip_
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
  
@@ -209,13 +209,13 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
 
     Stop TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check    ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2
 
     Start TCP Port  ${tcp_fqdn}  2016
 
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  3
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  3
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
@@ -230,12 +230,12 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   3
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Verify Health Check  ${app_inst}  ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check   ${app_name_default}  {cluster_name_default}  2
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name={cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     Should Be Equal As Numbers   ${app_inst[0]['data']['health_check']}   2 
 
