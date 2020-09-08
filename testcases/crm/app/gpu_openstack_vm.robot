@@ -47,7 +47,7 @@ GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011,tcp:22
+    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_gpu_ubuntu16_image}  access_ports=tcp:8008,tcp:8011
     ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}
 
     Register Client
