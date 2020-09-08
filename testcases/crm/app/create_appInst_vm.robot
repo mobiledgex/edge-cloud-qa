@@ -85,7 +85,7 @@ User shall be able to create VM deployment on openstack
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
     ${vm}=  Remove String  ${vm}  .
 
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:1-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:23-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
 
    # verify dedicated cluster as it own security group
@@ -94,7 +94,7 @@ User shall be able to create VM deployment on openstack
    ${openstacksecgroup}=  Get Security Groups  name=${vm}-sg
    Should Be Equal  ${openstacksecgroup['name']}   ${vm}-sg
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='egress', ethertype='IPv4', id='.*', updated_at
-   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='1', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='23', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='40000', port_range_min='2015', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
    @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
    Length Should Be  ${sec_groups}  3
