@@ -15,7 +15,7 @@ ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:
 ${region}=  US
 
 *** Test Cases ***
-Update - User shall not be able to UpdateApp to include skip_hc_port when app inst is running
+UpdateApp - User shall not be able to UpdateApp to include skip_hc_port when app inst is running
     [Documentation]
     ...  create a docker based app instance
     ...  verify that UpdateApp to include skip_hc_port fails 
