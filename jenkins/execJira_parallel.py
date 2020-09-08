@@ -275,6 +275,10 @@ def find(name, path):
         if name in files:
             logging.debug('found {} {}'.format(root, name))
             return os.path.join(root, name)
+        elif name in dirs:
+            logging.debug('found directory {} {}'.format(root, name))
+            return os.path.join(root, name)
+    logging.error('could not find {}'.format(name))
     return 'fileNotFound'
 
 def update_single_defect(z, t):
