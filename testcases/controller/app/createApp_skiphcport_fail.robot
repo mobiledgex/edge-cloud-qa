@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   CreateAppInst with accesstype failures 
+Documentation   CreateApp with skip_hc_port failures  
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
