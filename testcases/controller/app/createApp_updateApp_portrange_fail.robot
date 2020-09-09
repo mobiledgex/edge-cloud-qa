@@ -22,7 +22,7 @@ CreateApp - Create shall fail for port out of range on k8s access_type=loadbalan
     ...  create a k8s loadbalancer app with port range greater than max 
     ...  verify proper error is returned 
 	
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:1-51  deployment=kubernetes  access_type=loadbalancer
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:23-74  deployment=kubernetes  access_type=loadbalancer
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2100
@@ -31,7 +31,7 @@ CreateApp - Create shall fail for port out of range on docker access_type=loadba
     ...  create a docker loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:1-51  deployment=docker  access_type=loadbalancer
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:23-74  deployment=docker  access_type=loadbalancer
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2101
@@ -40,7 +40,7 @@ CreateApp - Create shall fail for port out of range on vm access_type=loadbalanc
     ...  create a vm loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:1-51  deployment=vm  access_type=loadbalancer  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:23-74  deployment=vm  access_type=loadbalancer  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2102
@@ -49,7 +49,7 @@ CreateApp - Create shall fail for port out of range on helm access_type=loadbala
     ...  create a helm loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:1-51  deployment=helm  access_type=loadbalancer  image_type=ImageTypeHelm
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=tcp:23-74  deployment=helm  access_type=loadbalancer  image_type=ImageTypeHelm
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2103
@@ -60,7 +60,7 @@ UpdateApp - Update shall fail for port out of range on k8s access_type=loadbalan
 
     Create App  region=US  access_ports=tcp:1-5  deployment=kubernetes  access_type=loadbalancer
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:1-52
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2104
@@ -69,9 +69,9 @@ UpdateApp - Update shall fail for port out of range on docker access_type=loadba
     ...  update a docker loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    Create App  region=US  access_ports=tcp:1-50  deployment=docker  access_type=loadbalancer
+    Create App  region=US  access_ports=tcp:1-5  deployment=docker  access_type=loadbalancer
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:1-51
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2105
@@ -82,7 +82,7 @@ UpdateApp - Update shall fail for port out of range on vm access_type=loadbalanc
 
     Create App  region=US  access_ports=tcp:1-5  deployment=vm  access_type=loadbalancer  image_type=ImageTypeQCOW  image_path=${qcow_centos_image}
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:1-51
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2106
@@ -93,7 +93,7 @@ UpdateApp - Update shall fail for port out of range on helm access_type=loadbala
 
     Create App  region=US  access_ports=tcp:1-5  deployment=helm  access_type=loadbalancer  image_type=ImageTypeHelm
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:1-51
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 *** Keywords ***
