@@ -45,11 +45,11 @@ AppInst - user shall be able to add with TCP/UDP port range for VM
 # ECQ-2108
 AppInst - user shall be able to add with TCP/UDP port range for VM direct
     [Documentation]
-    ...  create a vm direct app with tcp:1-101 udp:1-102
+    ...  create a vm direct app with tcp:23-124 udp:1-102
     ...  create an app instance
     ...  verify ports are correct
 
-    Create App  access_ports=tcp:1-101,udp:1-102  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_type=direct
+    Create App  access_ports=tcp:23-124,udp:1-102  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_type=direct
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
@@ -57,9 +57,9 @@ AppInst - user shall be able to add with TCP/UDP port range for VM direct
 
     Should Be Equal              ${appInst.uri}    ${developer_name_default}${app_default}${version_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
 
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       101
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  23
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    23
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       124
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
 
     Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  1
