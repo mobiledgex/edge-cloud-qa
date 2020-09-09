@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  use UpdateAppInst to manage VM based App Inst on openstack
+Documentation  Verify Healthcheck with VM based app instance behind LoadBalancer
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
