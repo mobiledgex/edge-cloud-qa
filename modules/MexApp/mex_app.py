@@ -428,7 +428,7 @@ class MexApp(object):
         
         raise Exception('Running k8s pod not found')
 
-    def restart_docker_container_rootlb(self, operation=None, root_loadbalancer=None):
+    def stop_docker_container_rootlb(self, root_loadbalancer=None):
 
         self.wait_for_dns(root_loadbalancer)
 
@@ -440,25 +440,81 @@ class MexApp(object):
         logging.debug(f'container_id={container_id_list}')
         container_id = container_id_list[0]
 
-        if operation == 'stop':
-            output = rb.restart_docker_container(operation, container_id)
+        output = rb.stop_docker_container(container_id)
 
-            for line in output:
-                if container_id in line:
-                    logging.info('Stopped docker container on ' + root_loadbalancer)
-                    return True
-        else:
-            output = rb.restart_docker_container(operation, container_id)
+        for line in output:
+            if container_id in line:
+                logging.info('Stopped docker container on ' + root_loadbalancer)
+                return True
 
-            for line in output:
-                if container_id in line:
-                    logging.info('Started docker container on ' + root_loadbalancer)
-                    return True
+        raise Exception('docker stop failed on ' + root_loadbalancer)
+    
+    def start_docker_container_rootlb(self, root_loadbalancer=None):
+
+        self.wait_for_dns(root_loadbalancer)
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        container_id_list = rb.get_docker_container_id()
+        logging.debug(f'container_id={container_id_list}')
+        container_id = container_id_list[0]
+
+        output = rb.start_docker_container(container_id)
+
+        for line in output:
+            if container_id in line:
+                logging.info('Started docker container on ' + root_loadbalancer)
+                return True
+
+        raise Exception('docker start failed on ' + root_loadbalancer)
+
+    def restart_docker_container_rootlb(self, root_loadbalancer=None):
+
+        self.wait_for_dns(root_loadbalancer)
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        container_id_list = rb.get_docker_container_id()
+        logging.debug(f'container_id={container_id_list}')
+        container_id = container_id_list[0]
+
+        output = rb.restart_docker_container(container_id)
+
+        for line in output:
+            if container_id in line:
+                logging.info('Restarted docker container on ' + root_loadbalancer)
+                return True
 
         raise Exception('Restart of docker container failed on ' + root_loadbalancer)
 
+    def stop_docker_container_clustervm(self, node, root_loadbalancer=None):
 
-    def restart_docker_container_clustervm(self, node, operation=None, root_loadbalancer=None):
+        command = 'docker ps -a --format "{{.ID}}"'
+        self.wait_for_dns(root_loadbalancer)
+
+        rb = None
+        if root_loadbalancer is not None:
+            rb = rootlb.Rootlb(host=root_loadbalancer)
+
+        container_id_list = rb.run_command_on_node(node, command)
+        logging.debug(f'container_id={container_id_list}')
+        container_id = container_id_list[0]
+
+        command = f'docker stop {container_id}'
+        output = rb.run_command_on_node(node, command)
+
+        for line in output:
+            if container_id in line:
+                logging.info('Stopped docker container on ' + node)
+                return True
+
+        raise Exception('docker stop failed on ' + node)
+
+    def start_docker_container_clustervm(self, node, root_loadbalancer=None):
         
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
@@ -471,25 +527,15 @@ class MexApp(object):
         logging.debug(f'container_id={container_id_list}')
         container_id = container_id_list[0]
 
-        if operation == 'stop':
-            command = f'docker stop {container_id}'
-            output = rb.run_command_on_node(node, command)
+        command = f'docker start {container_id}'
+        output = rb.run_command_on_node(node, command)
 
-            for line in output:
-                if container_id in line:
-                    logging.info('Stopped docker container on ' + node)
-                    return True
+        for line in output:
+            if container_id in line:
+                logging.info('Started docker container on ' + node)
+                return True
 
-        else:
-            command = f'docker start {container_id}'
-            output = rb.run_command_on_node(node, command)
-
-            for line in output:
-                if container_id in line:
-                    logging.info('Started docker container on ' + node)
-                    return True
-
-        raise Exception('Restart of docker container failed on ' + node)
+        raise Exception('docker start failed on ' + node)
 
     def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, wait_time=600):
 
