@@ -104,11 +104,32 @@ class Rootlb(Linux):
 
         return output
 
-    def restart_docker_container_rootlb(self, operation, container_id):
-        if operation == 'stop':
-            cmd = f'docker stop {container_id}'
-        else:
-            cmd = f'docker start {container_id}'
+    def stop_docker_container(self, container_id):
+        cmd = f'docker stop {container_id}'
+
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
+    def start_docker_container(self, container_id):
+        cmd = f'docker start {container_id}'
+
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        return output
+
+    def restart_docker_container(self, container_id):
+        cmd = f'docker restart {container_id}'
 
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
