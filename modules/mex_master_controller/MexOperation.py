@@ -114,12 +114,14 @@ class MexOperation(MexRest):
                     self.thread_queue.put({thread_name:sys.exc_info()})
                   
                 # have seen case where timeout exception is thrown but post was successful. Dont throw exception if 200 anyway 
-                if self.resp.status_code:
-                    if self.resp.status_code != 200: 
-                        #if self.thread_queue:
-                        #    logging.info(f'adding {thread_name} to thread_queue')
-                        #    self.thread_queue.put({thread_name:sys.exc_info()})
-                        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
+                #if self.resp.status_code:
+                #    if self.resp.status_code != 200: 
+                #        #if self.thread_queue:
+                #        #    logging.info(f'adding {thread_name} to thread_queue')
+                #        #    self.thread_queue.put({thread_name:sys.exc_info()})
+                #        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
+
+                raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
