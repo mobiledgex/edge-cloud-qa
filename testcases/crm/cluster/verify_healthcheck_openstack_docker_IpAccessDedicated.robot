@@ -118,7 +118,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     Stop TCP Port  ${tcp_fqdn}  2016
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
-    Register Client  app_name=${app_name_default}
+    Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
 
@@ -160,7 +160,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     Stop TCP Port  ${tcp_fqdn}  2016  tls=True
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
-    Register Client  app_name=${app_name_default}
+    Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
 
@@ -191,7 +191,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     Stop TCP Port  ${tcp_fqdn}  2015  tls=True
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
-    Register Client  app_name=${app_name_default}
+    Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
 
@@ -227,7 +227,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckOk when TCP port with sk
     Stop TCP Port  ${tcp_fqdn}  2015
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
-    Register Client  app_name=${app_name_default}
+    Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
 
