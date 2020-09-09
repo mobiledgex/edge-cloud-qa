@@ -395,13 +395,15 @@ AppInst - error shall be recieved when creating a helm/lb/dedicated app inst whi
    ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a docker/direct/dedicated app inst while cloudlet is maintenance mode
+AppInst - error shall be recieved when deleting/updating/refreshing a docker/direct/dedicated app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create docker/dedicated cluster inst
    ...  - create a direct app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
 
@@ -411,22 +413,44 @@ AppInst - error shall be recieved when deleting a docker/direct/dedicated app in
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}  #image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  #configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete the appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a docker/lb/shared app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}  #image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a docker/lb/shared app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create docker/shared cluster inst
    ...  - create a lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
 
@@ -436,22 +460,44 @@ AppInst - error shall be recieved when deleting a docker/lb/shared app inst whil
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}  #image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  #configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   # delete appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a docker/lb/dedicated app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}  #image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a docker/lb/dedicated app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create docker/dedicated cluster inst
    ...  - create a lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
    ...  - delete the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
 
@@ -461,22 +507,44 @@ AppInst - error shall be recieved when deleting a docker/lb/dedicated app inst w
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}  
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete appinst
+   ${error_msg3}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a k8s/lb/shared app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a k8s/lb/shared app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create k8s/shared cluster inst
    ...  - create a lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
 
@@ -485,22 +553,45 @@ AppInst - error shall be recieved when deleting a k8s/lb/shared app inst while c
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a k8s/lb/dedicated app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a k8s/lb/dedicated app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create k8s/dedicated cluster inst
    ...  - create a lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
 
@@ -510,22 +601,44 @@ AppInst - error shall be recieved when deleting a k8s/lb/dedicated app inst whil
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a helm/lb/shared app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a helm/lb/shared app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create k8s/shared cluster inst
    ...  - create a helm/lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
 
@@ -535,22 +648,44 @@ AppInst - error shall be recieved when deleting a helm/lb/shared app inst while 
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
-AppInst - error shall be recieved when deleting a helm/lb/dedicated app inst while cloudlet is maintenance mode
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+AppInst - error shall be recieved when deleting/updating/refreshing a helm/lb/dedicated app inst while cloudlet is maintenance mode
    [Documentation]
    ...  - create k8s/dedicated cluster inst
    ...  - create a helm/lb app instance on the cloudlet
    ...  - put cloudlet in maintenance mode
-   ...  - delete the appinst
+   ...  - delete/update/refresh the appinst
    ...  - verify proper error is received
+
+   ${config}=  Set Variable  - name: CrmValue${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]${\n}- name: CrmValue2${\n}${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
 
@@ -560,14 +695,34 @@ AppInst - error shall be recieved when deleting a helm/lb/dedicated app inst whi
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
+   # delete appinst
    ${error_msg}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg2}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg3}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
 
-   ${error_msg2}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+   # delete appinst
+   ${error_msg4}=  Run Keyword And Expect Error  *  Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   # update appinst
+   ${error_msg5}=  Run Keyword And Expect Error  *  Update App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}  configs_kind=envVarsYaml  configs_config=${config}
+   Should Be Equal  ${error_msg5}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+
+   #refresh appinst
+   Update App  region=${region}  official_fqdn=x.com  developer_org_name=${operator_name}
+   ${error_msg6}=  Run Keyword And Expect Error  *  Refresh App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  app_name=${app['data']['key']['name']}  developer_org_name=${app['data']['key']['organization']}  app_version=${app['data']['key']['version']}
+   Should Be Equal  ${error_msg6}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
 AppInst - error shall be recieved when deleting a vm/lb/shared app inst while cloudlet is maintenance mode
    [Documentation]
