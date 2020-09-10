@@ -77,6 +77,34 @@ UpdateApp - User shall not be able to UpdateApp if skip_hc_port is not one of th
 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"XXX"}')
 
+UpdateApp - User shall not be able to UpdateApp to include skip_hc_port when invalid protocol is specified
+    [Documentation]
+    ...  create a docker based app
+    ...  verify that UpdateApp to include skip_hc_port fails
+
+    #EDGECLOUD-3585 - Controller show throw error if skiphcports has invalid protocol while updating app
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016
+    ${error_msg}=  Run Keyword And Expect Error  *  Update App  region=${region}  skip_hc_ports=tc:2017
+
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Unsupported protocol: tc"}')
+
+UpdateApp - User shall not be able to UpdateApp to include skip_hc_port when invalid port number is specified
+    [Documentation]
+    ...  create a docker based app
+    ...  verify that UpdateApp to include skip_hc_port fails
+
+    #EDGECLOUD-3586 - Controller show throw error if skiphcports has invalid port number while updating app
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App
+    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016
+    ${error_msg}=  Run Keyword And Expect Error  *  Update App  region=${region}  skip_hc_ports=tcp:0
+
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"App ports out of range"}')
+
 *** Keywords ***
 Setup
     Create Flavor     region=${region}
