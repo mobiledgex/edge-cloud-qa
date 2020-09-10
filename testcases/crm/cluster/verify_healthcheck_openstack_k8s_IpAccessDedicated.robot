@@ -115,6 +115,52 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
 
+IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one port goes down for app with 2 TCP access ports in range
+    [Documentation]
+    ...  deploy IpAccessDedicated k8s and create app with 2 TCP access ports in a range
+    ...  bring down 2nd port in range and verify healthcheck
+    ...  verify healthcheck after the port comes up
+
+    #EDGECLOUD-3427 - CreateAppInst with large port range not setting the proper security group rule
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App and App Instance
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  command=${docker_command}
+    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
+    ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+    ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
+
+    Stop TCP Port  ${tcp_fqdn}  2016
+    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+
+    Register Client
+    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    Should Contain  ${error_msg}  FIND_NOTFOUND
+
+    Start TCP Port  ${tcp_fqdn}  2016
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}
+    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
+
 IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one port goes down for app with 2 TCP access ports and TLS enabled on both ports
     [Documentation]
     ...  deploy IpAccessDedicated k8s and create app with 2 TCP access ports and TLS=true
