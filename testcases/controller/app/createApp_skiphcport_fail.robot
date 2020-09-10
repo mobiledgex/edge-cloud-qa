@@ -53,6 +53,28 @@ CreateApp - User shall not be able to CreateApp if skip_hc_port is not one of th
 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"XXX"}')
 
+CreateApp - User shall not be able to CreateApp to include skip_hc_port when invalid protocol is specified
+    [Documentation]
+    ...  create a docker based app with AccessTypeDirect
+    ...  verify that CreateApp to include skip_hc_port fails
+
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tc:2016
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Unsupported protocol: tc"}')
+
+CreateApp - User shall not be able to CreateApp to include skip_hc_port when invalid port number is specified
+    [Documentation]
+    ...  create a docker based app with AccessTypeDirect
+    ...  verify that CreateApp to include skip_hc_port fails
+
+    ${app_name_default}=  Get Default App Name
+
+    Log To Console  Creating App
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tcp:0
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"App ports out of range"}')
+
 *** Keywords ***
 Setup
     Create Flavor     region=${region}
