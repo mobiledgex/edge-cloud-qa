@@ -29,7 +29,7 @@ operator_name_openstack = 'TDG'
 operator_name_openstack_packet = 'packet'
 operator_name_vsphere = 'packet'
 
-docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:8.0'
 docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:latest'
