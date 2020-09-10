@@ -203,14 +203,22 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
-    def make_http_request(self, host, port, page, tls=False):
+    def make_http_request(self, host, port, page, tls=False, verify_cert=None):
         url = f'http://{host}:{port}/{page}'
         if tls:
             url = f'https://{host}:{port}/{page}'
 
         logging.info(f'checking for {url}')
 
-        resp = requests.get(url, verify=tls)
+        if tls and verify_cert:
+            logging.info('verifying certs for https connection')
+            resp = requests.get(url, verify=tls)
+        if tls and not verify_cert:
+            logging.info('TLS set with HTTPS but not verifying certs')
+            resp = requests.get(url, verify=False)
+        else:
+            resp = requests.get(url, verify=False)
+
         logging.info(f'recieved status_code={resp.status_code}')
         logging.info(f'recieved body={resp.text}')
         
