@@ -11,7 +11,8 @@ Test Teardown  Teardown
 ${region}=  US
 
 *** Test Cases ***
-AppInst - FindCloudlet shall not return appinst for k8s/lb/shared app inst when cloudlet is maintenance mode
+# ECQ-2533
+FindCloudlet - request shall not return appinst for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a k8s/lb/shared autocluster app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -24,7 +25,8 @@ AppInst - FindCloudlet shall not return appinst for k8s/lb/shared app inst when 
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for k8s/lb/dedicated app inst when cloudlet is maintenance mode
+# ECQ-2534
+FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a k8s/lb/dedicated autocluster app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -37,7 +39,8 @@ AppInst - FindCloudlet shall not return appinst for k8s/lb/dedicated app inst wh
 
    Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for docker/lb/dedicated app inst when cloudlet is maintenance mode
+# ECQ-2535
+FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a docker/lb/dedicated autocluster app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -50,7 +53,8 @@ AppInst - FindCloudlet shall not return appinst for docker/lb/dedicated app inst
 
    Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for docker/lb/shared app inst when cloudlet is maintenance mode
+# ECQ-2536
+FindCloudlet - request shall not return appinst for docker/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a docker/lb/shared autocluster app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -63,7 +67,8 @@ AppInst - FindCloudlet shall not return appinst for docker/lb/shared app inst wh
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for docker/direct/dedicated app inst when cloudlet is maintenance mode
+# ECQ-2537
+FindCloudlet - request shall not return appinst for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a docker/direct/dedicated autocluster app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -76,7 +81,8 @@ AppInst - FindCloudlet shall not return appinst for docker/direct/dedicated app 
 
    Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for vm/direct app inst when cloudlet is maintenance mode
+# ECQ-2538
+FindCloudlet - request shall not return appinst for vm/direct app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a vm/direct app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -89,7 +95,8 @@ AppInst - FindCloudlet shall not return appinst for vm/direct app inst when clou
 
    Register Client And Find Cloudlet  fqdn=${operator_name}${app_name_default}10.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for vm/lb app inst when cloudlet is maintenance mode
+# ECQ-2539
+FindCloudlet - request shall not return appinst for vm/lb app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create a vm/lb app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -102,7 +109,8 @@ AppInst - FindCloudlet shall not return appinst for vm/lb app inst when cloudlet
 
    Register Client And Find Cloudlet  fqdn=${operator_name}${app_name_default}10.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for helm/shared/lb app inst when cloudlet is maintenance mode
+# ECQ-2540
+FindCloudlet - request shall not return appinst for helm/shared/lb app inst when cloudlet is maintenance mode
     [Documentation]
    ...  - create a helm/shared/lb app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
@@ -115,7 +123,8 @@ AppInst - FindCloudlet shall not return appinst for helm/shared/lb app inst when
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
 
-AppInst - FindCloudlet shall not return appinst for helm/dedicated/lb app inst when cloudlet is maintenance mode
+# ECQ-2541
+FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst when cloudlet is maintenance mode
     [Documentation]
    ...  - create a helm/dedicated/lb app instance on the cloudlet
    ...  - send RegisterClient/FindCloudlet and verify appinst is returned
