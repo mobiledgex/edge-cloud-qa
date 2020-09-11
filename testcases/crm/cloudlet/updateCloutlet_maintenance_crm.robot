@@ -12,6 +12,7 @@ ${operator_openstack}=  GDDT
 ${region}=  EU
 
 *** Test Cases ***
+# ECQ-2453
 UpdateCloudlet - shall be able to put openstack cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet for openstack cloudlet with maintenance=NormalOperation,MaintenanceStart,MaintenanceStartNoFailover
@@ -31,6 +32,7 @@ UpdateCloudlet - shall be able to put openstack cloudlet in maintenance mode
 
    [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation
 
+# ECQ-2454
 UpdateCloudlet - shall be able to put openstack vmpool cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet for openstack vmpool cloudlet with maintenance=NormalOperation,MaintenanceStart,MaintenanceStartNoFailover
@@ -50,6 +52,7 @@ UpdateCloudlet - shall be able to put openstack vmpool cloudlet in maintenance m
 
    [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation
 
+# ECQ-2455
 UpdateCloudlet - shall be able to put vsphere cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet for vsphere cloudlet with maintenance=NormalOperation,MaintenanceStart,MaintenanceStartNoFailover
@@ -69,6 +72,7 @@ UpdateCloudlet - shall be able to put vsphere cloudlet in maintenance mode
 
    [Teardown]  Update Cloudlet  region=${region_vsphere}  cloudlet_name=${cloudlet_name_vsphere}  operator_org_name=${operator_name_vsphere}  maintenance_state=NormalOperation
 
+# ECQ-2456
 UpdateCloudlet - shall be able to put GCP cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet for gcp cloudlet with maintenance=NormalOperation,MaintenanceStart,MaintenanceStartNoFailover
@@ -88,6 +92,7 @@ UpdateCloudlet - shall be able to put GCP cloudlet in maintenance mode
 
    [Teardown]  Update Cloudlet  region=${region_gcp}  cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}  maintenance_state=NormalOperation
 
+# ECQ-2457
 UpdateCloudlet - shall be able to put Azure cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet for azure with maintenance=NormalOperation,MaintenanceStart,MaintenanceStartNoFailover

@@ -15,6 +15,7 @@ currentBuild.displayName = cycle
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
 def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
+def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
 builds1 = [:]
@@ -91,6 +92,10 @@ node('jenkinsSlave1'){
             echo "Caught in run parallel batch 1: ${err}"
             currentBuild.result = 'FAILURE'
          }
+      }
+
+      stage('run CRM Maintenance') {
+         build job: jobListMaintenance[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controllerazuregcp), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dmeazuregcp), string(name: 'CommitVersion', value: commit_version)]
       }
 
 //      stage('run WS tests parallel batch 2') {
