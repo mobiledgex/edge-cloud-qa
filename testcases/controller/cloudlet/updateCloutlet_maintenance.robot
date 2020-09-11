@@ -12,6 +12,7 @@ ${operator}=  tmus
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2443
 UpdateCloudlet - shall be able to put cloudlet in maintenance=NormalOperation
    [Documentation]
    ...  - send UpdateCloudlet with maintenance=NormalOperation
@@ -25,6 +26,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=NormalOperation
 
    Should Not Contain  ${ret['data']}  maintenance_state  # we dont show 0 vaules
 
+# ECQ-2444
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
    [Documentation]
    ...  - send UpdateCloudlet with maintenance=MaintenanceStart
@@ -38,6 +40,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
 
    Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
+# ECQ-2445
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNoFailover
    [Documentation]
    ...  - send UpdateCloudlet with maintenance=MaintenanceStartNoFailover
@@ -51,6 +54,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 
    Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
+# ECQ-2446
 UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNoFailover to maintenance=MaintenanceStart
    [Documentation]
    ...  - send UpdateCloudlet with maintenance=MaintenanceStartNoFailover
