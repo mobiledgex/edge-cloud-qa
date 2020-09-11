@@ -7,9 +7,9 @@ Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUT
 Library  MexApp
 Library  String
 
-Suite Setup      Setup
-
-Test Timeout    ${test_timeout_crm} 
+#Suite Setup      Setup
+Test Setup      Setup
+Test Timeout    ${test_timeout} 
 	
 *** Variables ***
 ${cloudlet_name}  automationSunnydaleCloudlet
@@ -17,7 +17,7 @@ ${operator_name}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 
-${test_timeout_crm}  32 min
+#${test_timeout_crm}  10 min
 
 *** Test Cases ***
 User shall be able to use privacy policy on docker dedicated 
@@ -29,19 +29,49 @@ User shall be able to use privacy policy on docker dedicated
    ...  veirfy port 2016 is not accessible since the port was not opened in the policy
    [Tags]  docker  dedicated  privacypolicy 
 
-   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=35.199.188.102/32  # where port server is running
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.94.223.108/32     # docker-qa for download of app
+
+
+
+
+
+
+# Below this line is the original content pre vsphere
+
+###   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=35.199.188.102/32  # where port server is running
+###   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.94.223.108/32     # docker-qa for download of app
 #   &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=35.247.68.151/32     # docker for download of envoy
-   &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=80.187.140.28/32     # docker for download of envoy
-   &{rule4}=  Create Dictionary  protocol=udp  port_range_minimum=53  port_range_maximum=53  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa 
-   &{rule5}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.72.125.12/32     # chef.mobiledgex.net
+###   &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=80.187.140.28/32     # docker for download of envoy
+###   &{rule4}=  Create Dictionary  protocol=udp  port_range_minimum=53  port_range_maximum=53  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa 
+###   &{rule5}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.72.125.12/32     # chef.mobiledgex.net
    #&{rule5}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # chef.mobiledgex.net
 
 
 ##   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # docker-qa for download of app
 #
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}  ${rule4}  ${rule5}
+### Three marks means it was not uncommented 2 or less was already there   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}  ${rule4}  ${rule5}
+# Above this line is original content pre vsphere  
+
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=35.199.188.102/32  # where port server is running
+#   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.94.223.108/32     # docker-qa for download of app
+#   &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=35.247.68.151/32     # docker for download of envoy
+   &{rule3}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=80.187.140.28/32     # docker for download of envoy
+   &{rule4}=  Create Dictionary  protocol=udp  port_range_minimum=53  port_range_maximum=53  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa
+#  &{rule5}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.72.125.12/32     # chef.mobiledgex.net
+#   &{rule5}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # chef.mobiledgex.net
+#   &{rule6}=  Create Dictionary  protocol=udp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa
+#   &{rule7}=  Create Dictionary  protocol=udp  port_range_minimum=443  port_range_maximum=443  remote_cidr=34.94.223.108/32     # docker-qa for download of app
+   &{rule8}=  Create Dictionary  protocol=tcp  port_range_minimum=2015  port_range_maximum=2015  remote_cidr=0.0.0.0/0  # dns resolution for docker-qa
+   &{rule9}=  Create Dictionary  protocol=tcp  port_range_minimum=22  port_range_maximum=22  remote_cidr=0.0.0.0/0     # docker for download of envoy for qa
+   &{rule10}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # docker-qa for download of app
+
+
+##   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=443  port_range_maximum=443  remote_cidr=0.0.0.0/0     # docker-qa for download of app
 #
+#   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}  ${rule4}  ${rule6}  ${rule8}  ${rule9}  ${rule10}
+   @{rulelist}=  Create List  ${rule1}  ${rule3}  ${rule4}  ${rule8}   ${rule9}  ${rule10}
+
+
+
    ${policy_return}=  Create Privacy Policy  region=${region}  policy_name=${privacy_policy_name}  rule_list=${rulelist}
 
    Log To Console  \nCreate cluster instance for docker dedicated with privacy policy
@@ -60,11 +90,14 @@ User shall be able to use privacy policy on docker dedicated
    #${fqdn_0}=  Set Variable  localhost	
 
    Egress port should be accessible      vm=${fqdn_0}  host=${privacy_policy_server}  protocol=tcp  port=2015
+
+   Sleep  30s
+
    Egress port should not be accessible  vm=${fqdn_0}  host=${privacy_policy_server}  protocol=tcp  port=2016
 
 
 *** Keywords ***
 Setup
    Login  username=${username_developer}  password=${password_developer}
-
+   Sleep  30s
    Create App  region=${region}  app_name=${app_name_dockerdedicated_privacypolicy}  deployment=docker   image_path=${docker_image_privacypolicy}       access_ports=tcp:3015   default_flavor_name=${flavor_name_small}
