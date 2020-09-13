@@ -46,8 +46,8 @@ class Rootlb(Linux):
 
         return output
 
-    def k8s_scale_replicas(self, instance):
-        cmd = f'KUBECONFIG={self.kubeconfig} kubectl scale --replicas=0 deploy/{instance}'
+    def k8s_scale_replicas(self, instance, no_of_replicas):
+        cmd = f'KUBECONFIG={self.kubeconfig} kubectl scale --replicas={no_of_replicas} deploy/{instance}'
         logging.info('executing ' + cmd)
         (output, err, errcode) = self.command(cmd)
         logging.debug('output=' + str(output))
