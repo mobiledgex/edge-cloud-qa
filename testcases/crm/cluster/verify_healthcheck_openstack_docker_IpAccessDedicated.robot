@@ -155,7 +155,6 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
@@ -177,7 +176,6 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].end_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
 
 IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one port goes down for app with 2 TCP access ports and TLS enabled on both ports
@@ -266,7 +264,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckOk when TCP port with sk
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
@@ -318,7 +316,7 @@ IpAccessDedicated docker - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Verify Health Check Ok   ${app_name_default}  {cluster_name_default}  2
+    Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
     Stop TCP Port  ${tcp_fqdn}  2015
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
