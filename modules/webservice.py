@@ -5,12 +5,15 @@ import json
 import sys
 import os
 import logging.config
-#import logging
-import robot.api.logger
+import logging
+#import robot.api.logger
 #import requests.packages.urllib3.connectionpool as httplib
 #import httplib as http_client
 import http.client as http_client
 import time
+
+logger = logging.getLogger(__name__)
+logging.getLogger('urllib3').setLevel(logging.CRITICAL)
 
 class WebService() :
     resp = None
@@ -44,7 +47,7 @@ class WebService() :
         #    self.output_format = output_format
 
     def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, stream_timeout=5):
-        logging.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} stream_timeout={stream_timeout}')
+        logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} stream_timeout={stream_timeout}')
 
         #url_to_use = self._buildUrl(url)
         self.stream_output = []
@@ -59,7 +62,7 @@ class WebService() :
                 for line in self.resp.iter_lines():
                     self.stream_output.append(json.loads(line.decode("utf-8")))
             else:
-                logging.debug('resp=' + str(self.resp.text))
+                logger.debug('resp=' + str(self.resp.text))
         except requests.exceptions.ConnectionError as e:
             if stream and 'Read timed out' in str(e):
                 logging.info(f'Read timeout while steaming:{e}')
