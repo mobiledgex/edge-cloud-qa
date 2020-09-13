@@ -23,14 +23,15 @@ table_list_str = ','.join(table_list)
 region_list = ['US', 'EU']
 region_list_str = ','.join(region_list)
 
+automation_regex = '.*16\d{8}\d*'
+
 parser = argparse.ArgumentParser(description='clean prov from controller')
-parser.add_argument('--mcaddress', default='console-qa.mobiledgex.net:443', help='master controller address:port default is console-qa.mobiledgex.net:443')
-parser.add_argument('--region', default=region_list_str, help='master controller region')
-#parser.add_argument('--address', default='127.0.0.1:55001', help='controller address:port default is 127.0.0.1:55001')
-parser.add_argument('--tables',default=table_list_str, help=f'comma seperated list of tables in the order to be deleted: default is {table_list_str}')
+parser.add_argument('--mcaddress', default='console-qa.mobiledgex.net:443', help='master controller address:port. Default is console-qa.mobiledgex.net:443')
+parser.add_argument('--region', default=region_list_str, help=f'master controller region. Default is {region_list_str}')
+parser.add_argument('--tables',default=table_list_str, help=f'comma seperated list of tables in the order to be deleted: Default is {table_list_str}')
 parser.add_argument('--cloudlet', default=None, help='cloudlet to filter the delete by')
 parser.add_argument('--keypattern',default='*',help='pattern to filter the key delete by')
-parser.add_argument('--automation',action='store_true', help='delete automation objects that have xxx159 pattern')
+parser.add_argument('--automation',action='store_true', help=f'delete automation objects that have {automation_regex} regular expression')
 
 #parser.add_argument('--outfile',required=False, default='tc_import.csv', help='csv outfile to write to. default is tc_import.csv')
 #parser.add_argument('--filepattern',required=False, default='test_*.py', help='file match pattern for testcase parsing. default is test_*.py')
@@ -46,7 +47,7 @@ key_pattern = args.keypattern
 automation_set = args.automation
 
 if automation_set:
-   key_pattern = '.*16\d{8}\d*'
+   key_pattern = automation_regex
 
 pattern_re = re.compile(key_pattern)
 
