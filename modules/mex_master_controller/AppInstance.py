@@ -137,9 +137,9 @@ class AppInstance(MexOperation):
             _fields_list.append(_configs_field_number)
             
         if crm_override:
-            if crm_override.lower() == "ignorecrm":
+            if str(crm_override).lower() == "ignorecrm":
                 crm_override = 2
-            elif crm_override.lower() == "IgnoreCrmAndTransientState":
+            elif str(crm_override).lower() == "IgnoreCrmAndTransientState":
                 crm_override = 4
             appinst_dict['crm_override'] = crm_override  # ignore errors from CRM
 
