@@ -377,7 +377,7 @@ class MexApp(object):
                 name = line.split('/')
                 instance = name[1]
 
-        kubectl_out = rb.k8s_scale_replicas(instance)
+        kubectl_out = rb.k8s_scale_replicas(instance, number_of_replicas)
         logging.debug(kubectl_out)        
 
         for line in kubectl_out:
