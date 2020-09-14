@@ -35,8 +35,7 @@ ${http_page}       automation.html
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${manifest_url_sharedvolumesize}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_shared_volumemount.yml
 	
-${test_timeout_crm}  32 min
-${sleep_time}  1s
+
 
 ${region}=  EU
 	
@@ -88,12 +87,10 @@ User shall be able to deploy a lb access App Instance on docker shared
 
    Log To Console  \nCreate lb access app instance for docker shared
 
-   Sleep  ${sleep_time} 
+
    Create App Instance  region=${region}  app_name=${app_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockersharedlb}  developer_org_name=${developer_organization_name}
 
-   Sleep  ${sleep_time} 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockersharedlb}
-   Sleep  ${sleep_time}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockersharedlb}
 
    Log To Console  \nCreate app instance done
@@ -119,7 +116,6 @@ User shall be able to create a lb access App on k8s shared
    ...  Verify app is created successfull
    [Tags]  app  k8s  shared  loadbalancer  app
 
-   Sleep  ${sleep_time} 
    Create App  region=${region}  app_name=${app_name_k8ssharedlb}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
 
 User shall be able to create lb access App on k8s dedicated
@@ -146,10 +142,8 @@ User shall be able to deploy a lb access App Instance on k8s shared
 
    Log To Console  \nCreate app instance for k8s shared 
    
-   Sleep  ${sleep_time}
    Create App Instance  region=${region}  app_name=${app_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  developer_org_name=${developer_organization_name}
 
-   Sleep  ${sleep_time}
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8ssharedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8ssharedlb}
 
@@ -163,10 +157,8 @@ User shall be able to deploy a lb access App Instance on k8s dedicated
 
    Log To Console  \nCreate app instance for k8s dedicated
 
-   Sleep  ${sleep_time}
    Create App Instance  region=${region}  app_name=${app_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8sdedicatedlb}  developer_org_name=${developer_organization_name}
-   
-   Sleep  ${sleep_time}
+
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8sdedicatedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8sdedicatedlb}
 
@@ -180,10 +172,8 @@ User shall be able to deploy App Instance on k8s shared with sharedvolumesize
 
    Log To Console  \nCreate app instance for k8s shared with sharedvolumesize
 
-   Sleep  ${sleep_time}
    Create App Instance  region=${region}  app_name=${app_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedvolumesize}  developer_org_name=${developer_organization_name}
 
-   Sleep  ${sleep_time}
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8ssharedvolumesize}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8ssharedvolumesize}
 
@@ -203,7 +193,6 @@ User shall be able to create a VM lb App
    ...  Verify app is created successfull
    [Tags]  app  vm  app  loadbalancer
 
-   Sleep  ${sleep_wait}
    Create App  region=${region}  app_name=${app_name_vmlb}  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
 
 User shall be able to create a VM with cloud-config
@@ -518,7 +507,6 @@ User shall be able to access the GPU on docker dedicated
    #Wait For DNS  ${cloudlet['fqdn']}
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
-   Sleep  ${sleep_time
 
    #${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
    #${image_full}=     Catenate  SEPARATOR=/  ${client_path}  ${image}
@@ -549,35 +537,6 @@ User shall be able to access the GPU on k8s shared
    #Wait For DNS  ${cloudlet['fqdn']}
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
-   SSleep  ${sleep_time
-
-   ${epoch_time}=  Get Time  epoch
-   ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
-
-   # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
-   # python3 multi_client.py -s localhost -e /object/detect/ -c rest -f objects_001.jpg --show-responses
-   Run Process  python3  ${facedetection_server_tester}   -s   ${ip}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
-   #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
-
-   ${output}=  Get File  ${outfile}
-   Log To Console  ${output}
-
-   Should Contain  ${output}  TEST_PASS=True
-
-User shall be able to access the GPU on VM
-   [Documentation]
-   ...  deploy app with 1 UDP port
-   ...  verify the port as accessible via fqdn
-   [Tags]  app  vm  gpu  gpuaccess
-
-   Log To Console  \nRegistering Client and Finding Cloudlet for GPU VM
-   Register Client  app_name=${app_name_vmgpu}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
-
-   #Wait For DNS  ${cloudlet['fqdn']}  wait_time=1800
-   ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
-
-   SSleep  ${sleep_time
 
    ${epoch_time}=  Get Time  epoch
    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
