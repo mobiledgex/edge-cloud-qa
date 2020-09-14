@@ -107,9 +107,9 @@ class ClusterInstance(MexOperation):
             clusterinst_dict['reservable'] = reservable
 
         if crm_override:
-            if crm_override.lower() == "ignorecrm":
+            if str(crm_override).lower() == "ignorecrm":
                 crm_override = 2
-            elif crm_override.lower() == "ignorecrmandtransientstate":
+            elif str(crm_override).lower() == "ignorecrmandtransientstate":
                 crm_override = 4
             clusterinst_dict['crm_override'] = crm_override  # ignore errors from CRM
 
@@ -125,8 +125,6 @@ class ClusterInstance(MexOperation):
             for field in _fields_list:
                 clusterinst_dict['fields'].append(field)
             
-        print("ClusterInst Dict", clusterinst_dict)    
-
         return clusterinst_dict
 
     def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):

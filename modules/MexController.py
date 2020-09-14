@@ -38,8 +38,8 @@ from mex_grpc import MexGrpc
 import shared_variables
 #import MexSharedVariables
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
-logger = logging.getLogger('mex_controller')
+#logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
 
 #default_time_stamp = str(int(time.time()))
 #cloudlet_name_default = 'cloudlet' + default_time_stamp
