@@ -9,7 +9,7 @@ import shared_variables
 
 from mex_rest import MexRest
 
-logger = logging.getLogger('mex_operation rest')
+logger = logging.getLogger(__name__)
 
 class MexOperation(MexRest):
     counter_dict = {'show': {'req_attempts': 0,
@@ -45,7 +45,12 @@ class MexOperation(MexRest):
         return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message)
 
     def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False):
-        return self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream)
+        resp = self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream)
+ 
+        if isinstance(resp, dict):
+            return [resp]
+        else:
+            return resp
 
     def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None):
         return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, show_message=show_msg)
@@ -106,11 +111,11 @@ class MexOperation(MexRest):
                     else:
                         raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
             except Exception as e:
-                logging.info('operation failed:' + str(sys.exc_info()))
+                logger.info('operation failed:' + str(sys.exc_info()))
                 self.counter_dict[message_type]['req_fail'] += 1
 
                 if self.thread_queue:
-                    logging.info(f'adding {thread_name} to thread_queue')
+                    logger.info(f'adding {thread_name} to thread_queue')
                     self.thread_queue.put({thread_name:sys.exc_info()})
                   
                 # have seen case where timeout exception is thrown but post was successful. Dont throw exception if 200 anyway 
@@ -147,7 +152,7 @@ class MexOperation(MexRest):
 
         cmd_docker = 'docker pull registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest > /dev/null && docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest'
         cmd = f'{cmd_docker} {command} --token {token}'
-        logging.info(f'running cmd: {cmd}')
+        logger.info(f'running cmd: {cmd}')
         
         def send_message():
             self.counter_dict[message_type]['req_attempts'] += 1
