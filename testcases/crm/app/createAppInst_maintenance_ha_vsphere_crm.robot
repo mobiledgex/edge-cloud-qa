@@ -15,6 +15,7 @@ ${region}=  ${region_vsphere}
 ${appinst_timeout}=  600
 
 *** Test Cases ***
+# ECQ-2555
 AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in openstack and 1 in vsphere 
@@ -42,6 +43,7 @@ AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated a
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_packet}  operator1=${operator_name_openstack_packet}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_packet}.${operator_name_openstack_packet}.mobiledgex.net  cloudlet2=${cloudlet_name_vsphere}  operator2=${operator_name_vsphere}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vsphere}.${operator_name_vsphere}.mobiledgex.net
 
+# ECQ-2556
 AppInst - vsphere-to-openstack appinst shall start for k8s/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in vsphere and 1 in openstack

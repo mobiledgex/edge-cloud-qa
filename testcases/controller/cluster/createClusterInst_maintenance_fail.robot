@@ -10,6 +10,7 @@ Test Teardown  Teardown
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2542
 ClusterInst - error shall be recieved when creating a docker/shared cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -33,6 +34,7 @@ ClusterInst - error shall be recieved when creating a docker/shared cluster inst
    ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2543
 ClusterInst - error shall be recieved when creating a docker/dedicated cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -56,6 +58,7 @@ ClusterInst - error shall be recieved when creating a docker/dedicated cluster i
    ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2544
 ClusterInst - error shall be recieved when creating a k8s/shared cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -83,6 +86,7 @@ ClusterInst - error shall be recieved when creating a k8s/shared cluster inst wh
    ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2545
 ClusterInst - error shall be recieved when creating a k8s/dedicated cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -110,6 +114,7 @@ ClusterInst - error shall be recieved when creating a k8s/dedicated cluster inst
    ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessDedicated
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2546
 ClusterInst - error shall be recieved when creating a docker/shared reservable cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -133,6 +138,7 @@ ClusterInst - error shall be recieved when creating a docker/shared reservable c
    ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared  reservable=${True}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2547
 ClusterInst - error shall be recieved when creating a docker/dedicated reservable cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -156,6 +162,7 @@ ClusterInst - error shall be recieved when creating a docker/dedicated reservabl
    ${error_msg2}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated  reservable=${True}
    Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2548
 ClusterInst - error shall be recieved when creating a k8s/shared reservable cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
@@ -183,6 +190,7 @@ ClusterInst - error shall be recieved when creating a k8s/shared reservable clus
    ${error_msg3}=  Run Keyword And Expect Error  *  Create Cluster Instance  region=${region}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=kubernetes  ip_access=IpAccessShared  reservable=${True}
    Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
 
+# ECQ-2549
 ClusterInst - error shall be recieved when creating a k8s/dedicated reservable cluster inst while cloudlet is maintenance mode
    [Documentation]
    ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
