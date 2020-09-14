@@ -15,6 +15,7 @@ ${region}=  EU
 ${appinst_timeout}=  600
 
 *** Test Cases ***
+# ECQ-2550
 AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -44,6 +45,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2551
 AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -73,6 +75,7 @@ AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2552
 AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -102,6 +105,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2553
 AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in openstack and 1 on vmpool
@@ -129,6 +133,7 @@ AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated ap
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2554
 AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in vmpool and 1 on openstack
