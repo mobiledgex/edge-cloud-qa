@@ -16,7 +16,6 @@ ${region}  EU
 ${app_version}=  1.0
 ${developer_organization_name}=  mobiledgex
 
-#${test_timeout_crm}  32 min
 
 *** Test Cases ***
 User shall be able to do RunCommand k8s shared lb app

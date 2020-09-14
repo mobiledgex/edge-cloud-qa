@@ -9,7 +9,6 @@ ${cloudlet_name}  automationHawkinsCloudlet
 ${operator_name}  GDDT
 ${physical_name}  hawkins
 
-${test_timeout}  32 min
 
 *** Test Cases ***
 CreateCloudlet - User shall be able to create a cloudlet on Openstack 
