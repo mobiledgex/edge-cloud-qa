@@ -9,7 +9,6 @@ ${cloudlet_name}  automationHamburgCloudlet
 ${operator_name}  TDG
 ${physical_name}  hamburg
 
-${test_timeout}  32 min
 
 *** Test Cases ***
 CreateCloudlet - User shall be able to create a cloudlet on Openstack 
