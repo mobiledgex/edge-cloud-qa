@@ -7,7 +7,7 @@
 # Individual parameters can be overriden with the '-v' option
 # example: robot --loglevel TRACE -V cloudletverification/cloudletverification_vars.py -v cloudlet_name_openstack:mycloudlet --outputdir=cloudletverification/logs -i cloudlet  cloudletverification
 # --dryrun to see what tests will execute without running them
-# -v run_teardown:0 is false not to tear down in order to analyze a test run
+# -v run_test_teardown:0 is false not to tear down in order to analyze a test run
 # example: robot --loglevel TRACE --dryrun -V cloudletverification/cloudletverification_vsphere_vars.py --outputdir=cloudletverification/logs -i dockerANDshared -e dockerANDdedicatedANDprivacypolicy -e createANDcloudlet -e gpu -e vm -e metrics -e oscmd -v run_test_teardown:1 cloudletverification
 ################################################3
 import time
