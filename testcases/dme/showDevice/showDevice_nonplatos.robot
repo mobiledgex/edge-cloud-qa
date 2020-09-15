@@ -31,10 +31,10 @@ showDevice - request for non-platos app with uuidtype=platos shall return device
 
       ${device}=  Show Device  region=${region}  unique_id=${epoch}  unique_id_type=${platos_org}  
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  ${platos_org} 
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch} 
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  ${platos_org} 
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch} 
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -51,10 +51,10 @@ showDevice - request for non-platos app with uuidtype=xxxSamSungxxx shall return
 
       ${device}=  Show Device  region=${region}  unique_id=${epoch}  unique_id_type=xxxSamSungxxx
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  xxxSamSungxxx
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  xxxSamSungxxx
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -71,10 +71,10 @@ showDevice - request for non-platos app with S20 shall return device information
 
       ${device}=  Show Device  region=${region}  unique_id=${epoch}  unique_id_type=${platos_s20_type}
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  ${platos_s20_type} 
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  ${platos_s20_type} 
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -89,14 +89,14 @@ showDevice - request for non-platos app with S6 shall return device information
 
       ${device}=  Show Device  region=${region}  unique_id=${platos_s6_id}  unique_id_type=${platos_s6_type}
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  ${platos_s6_type}
-      Should Be Equal  ${device['data']['key']['unique_id']}  ${platos_s6_id}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  ${platos_s6_type}
+      Should Be Equal  ${device[0]['data']['key']['unique_id']}  ${platos_s6_id}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
 *** Keywords ***
 Setup
     Create Flavor  region=${region} 
-    Create App  region=${region}  developer_org_name=${developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  image_path=${docker_image}  #docker-qa.mobiledgex.net/${developer_name}/images/server_ping_threaded:6.0
+    Run Keyword and Ignore Error  Create App  region=${region}  developer_org_name=${developer_name}  app_name=${platos_app_name}  access_ports=tcp:1  image_path=${docker_image}  #docker-qa.mobiledgex.net/${developer_name}/images/server_ping_threaded:6.0
