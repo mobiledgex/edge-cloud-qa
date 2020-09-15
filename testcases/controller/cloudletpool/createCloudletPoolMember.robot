@@ -26,11 +26,11 @@ CreateCloudletPoolMember - shall be able to create with long pool name
 
    ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${name}  operator_org_name=${operator}
 
-   Should Be Equal  ${pool_return['data']['key']['name']}                   ${name} 
-   Should Be Equal  ${pool_return['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return['data']['cloudlets'][0]}                  ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['key']['name']}                   ${name} 
+   Should Be Equal  ${pool_return[0]['data']['key']['organization']}           ${operator}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]}                  ${cloudlet}
 
-   Length Should Be  ${pool_return['data']['cloudlets']}   1
+   Length Should Be  ${pool_return[0]['data']['cloudlets']}   1
 
 # ECQ-1659
 CreateCloudletPoolMember - shall be able to create with numbers in pool name 
@@ -46,11 +46,11 @@ CreateCloudletPoolMember - shall be able to create with numbers in pool name
 
    ${pool_return}=  Show Cloudlet Pool  region=US  cloudlet_pool_name=${epoch}  operator_org_name=${operator}
 
-   Should Be Equal  ${pool_return['data']['key']['name']}                   ${epoch}
-   Should Be Equal  ${pool_return['data']['key']['organization']}           ${operator}
-   Should Be Equal  ${pool_return['data']['cloudlets'][0]}                  ${cloudlet}
+   Should Be Equal  ${pool_return[0]['data']['key']['name']}                   ${epoch}
+   Should Be Equal  ${pool_return[0]['data']['key']['organization']}           ${operator}
+   Should Be Equal  ${pool_return[0]['data']['cloudlets'][0]}                  ${cloudlet}
 
-   Length Should Be  ${pool_return['data']['cloudlets']}   1
+   Length Should Be  ${pool_return[0]['data']['cloudlets']}   1
 
 *** Keywords ***
 Setup
