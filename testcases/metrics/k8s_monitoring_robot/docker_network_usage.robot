@@ -36,6 +36,8 @@ AppMetrics - Shall be able to get the last docker app Network metric on openstac
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
    Network Should Be In Range  ${metrics}
@@ -49,6 +51,8 @@ AppMetrics - Shall be able to get the last 5 docker app Network metrics on opens
    ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   log  ${metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
