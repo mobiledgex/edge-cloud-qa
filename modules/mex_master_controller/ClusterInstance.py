@@ -206,4 +206,4 @@ class ClusterInstance(MexOperation):
 
         msg_dict = self._build_metrics(type_dict=inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
 
-        return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
