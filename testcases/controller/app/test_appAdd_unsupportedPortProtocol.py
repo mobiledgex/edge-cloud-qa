@@ -44,7 +44,8 @@ class tc(unittest.TestCase):
 #                                                  #developer_address=developer_address,
 #                                                  #developer_email=developer_email)
 #        self.controller.create_developer(self.developer.developer)
-        
+
+# ECQ-870        
     def test_CreateAppUnsupportedDedicated(self):
         # [Documentation] App - User shall not be able to create an app with unsupported protocol of tc:80 and IpAccessDedicated
         # ... create app with unsupported port protocol of tc:80 IpAccessDedicated
@@ -72,7 +73,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'tc is not a supported Protocol', 'error details')
+        expect_equal(error.details(), 'Unsupported protocol: tc', 'error details')
         expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 

@@ -21,7 +21,9 @@ ${operator_name_openstack}  GDDT
 
 ${docker_image}    docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0
 ${docker_command}  ./server_ping_threaded.py
-	
+
+${num_lines}=  12
+
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
@@ -71,8 +73,8 @@ ShowLogs - k8s shared shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
  
-    Length Should Be  ${stdout_noid_lines}         9
-    Length Should Be  ${stdout_id_lines}           9
+    Length Should Be  ${stdout_noid_lines}         ${num_lines} 
+    Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
     Length Should Be  ${stdout_since_lines}        1
@@ -126,8 +128,8 @@ ShowLogs - k8s dedicated shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}         9
-    Length Should Be  ${stdout_id_lines}           9
+    Length Should Be  ${stdout_noid_lines}         ${num_lines}
+    Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
     Length Should Be  ${stdout_since_lines}        1
@@ -179,8 +181,8 @@ ShowLogs - docker dedicated shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}  9
-    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_noid_lines}  ${num_lines}
+    Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
     Length Should Be  ${stdout_since_lines}  1
@@ -232,8 +234,8 @@ ShowLogs - docker shared shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}  9
-    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_noid_lines}  ${num_lines}
+    Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
     Length Should Be  ${stdout_since_lines}  1
