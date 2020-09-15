@@ -36,6 +36,8 @@ AppMetrics - Shall be able to get the last docker app Disk metric on openstack
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
    Disk Should Be In Range  ${metrics}
@@ -49,6 +51,8 @@ AppMetrics - Shall be able to get the last 5 docker app Disk metrics on openstac
    ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
+
+   log  ${metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -65,7 +69,7 @@ Setup
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
    ${app_name}=  Set Variable  app-us
-   ${clustername_docker}=   Set Variable  dockerdedicated
+   ${clustername_docker}=   Set Variable  dockermonitoring
    ${developer_name}=  Set Variable  testmonitor
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
