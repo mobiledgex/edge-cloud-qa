@@ -110,7 +110,6 @@ ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1
 
    Log to Console  \nCreating cluster instance done
 
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
    Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_large}
    Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
    Should Be Equal             ${cluster_inst['data']['deployment']}      kubernetes
