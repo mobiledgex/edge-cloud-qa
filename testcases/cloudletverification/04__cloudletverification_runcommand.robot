@@ -5,7 +5,7 @@ Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  auto_login=${
 
 Suite Setup      Setup
 
-Test Timeout    ${test_timeout_crm} 
+Test Timeout    ${test_timeout} 
 	
 *** Variables ***
 ${cloudlet_name}  automationMunichCloudlet
@@ -16,7 +16,6 @@ ${region}  EU
 ${app_version}=  1.0
 ${developer_organization_name}=  mobiledgex
 
-${test_timeout_crm}  32 min
 
 *** Test Cases ***
 User shall be able to do RunCommand k8s shared lb app

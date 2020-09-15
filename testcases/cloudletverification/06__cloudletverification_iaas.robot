@@ -1,14 +1,14 @@
 *** Settings ***
 Documentation  IaaS 
 
-Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  auto_login=${False}
 #Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_ENV}
 Library  MexApp
 Library  String
 
 Suite Setup      Setup
 
-Test Timeout    ${test_timeout_crm} 
+Test Timeout    ${test_timeout} 
 	
 *** Variables ***
 ${cloudlet_name}  automationMunichCloudlet
@@ -18,14 +18,14 @@ ${region}  EU
 
 ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 
-${test_timeout_crm}  32 min
+
 
 *** Test Cases ***
 User shall be able to access block storage to a VM 
    [Documentation]
    ...  do RunCommand on k8s shared app 
    ...  verify RunCommand works 
-   [Tags]  k8s  sharedvolumesize
+   [Tags]  k8s  sharedvolumesize 
 
    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name}  ${operator_name}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase  ${rootlb}
