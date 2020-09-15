@@ -28,13 +28,13 @@ AddVMPoolMember - shall be able to add member to empty list
    Add VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_name=x1  external_ip=80.187.128.12  internal_ip=2.2.2.2
 
    ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX
-   Should Be Equal   ${pool['data']['key']['name']}  ${name}
-   Length Should Be  ${pool['data']['vms']}  1
+   Should Be Equal   ${pool[0]['data']['key']['name']}  ${name}
+   Length Should Be  ${pool[0]['data']['vms']}  1
 
    Remove VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_name=x1
 
    ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX
-   Should Be Equal   ${pool['data']['key']['name']}  ${name}
+   Should Be Equal   ${pool[0]['data']['key']['name']}  ${name}
    Should Be Equal   ${pool_return['data']['vms']}  ${None}
 
 # ECQ-2340
@@ -62,45 +62,45 @@ AddVMPoolMember - shall be able to add 10 members
 
    ${pool_return}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
 
-   Should Be Equal  ${pool_return['data']['vms'][0]['name']}  vm1
-   Should Be Equal  ${pool_return['data']['vms'][0]['net_info']['external_ip']}  80.187.128.11
-   Should Be Equal  ${pool_return['data']['vms'][0]['net_info']['internal_ip']}  2.2.2.1
-   Should Be Equal  ${pool_return['data']['vms'][1]['name']}  vm2
-   Should Be Equal  ${pool_return['data']['vms'][1]['net_info']['external_ip']}  80.187.128.12
-   Should Be Equal  ${pool_return['data']['vms'][1]['net_info']['internal_ip']}  2.2.2.2
-   Should Be Equal  ${pool_return['data']['vms'][2]['name']}  vm3
-   Should Be Equal  ${pool_return['data']['vms'][2]['net_info']['external_ip']}  80.187.128.13
-   Should Be Equal  ${pool_return['data']['vms'][2]['net_info']['internal_ip']}  2.2.2.3
-   Should Be Equal  ${pool_return['data']['vms'][3]['name']}  vm4
-   Should Be Equal  ${pool_return['data']['vms'][3]['net_info']['external_ip']}  80.187.128.14
-   Should Be Equal  ${pool_return['data']['vms'][3]['net_info']['internal_ip']}  2.2.2.4
-   Should Be Equal  ${pool_return['data']['vms'][4]['name']}  vm5
-   Dictionary Should Not Contain Key  ${pool_return['data']['vms'][4]['net_info']}  external_ip
-   Should Be Equal  ${pool_return['data']['vms'][4]['net_info']['internal_ip']}  2.2.2.5
-   Should Be Equal  ${pool_return['data']['vms'][5]['name']}  vm6
-   Should Be Equal  ${pool_return['data']['vms'][5]['net_info']['external_ip']}  80.187.128.16
-   Should Be Equal  ${pool_return['data']['vms'][5]['net_info']['internal_ip']}  2.2.2.6
-   Should Be Equal  ${pool_return['data']['vms'][6]['name']}  vm7
-   Should Be Equal  ${pool_return['data']['vms'][6]['net_info']['external_ip']}  80.187.128.17
-   Should Be Equal  ${pool_return['data']['vms'][6]['net_info']['internal_ip']}  2.2.2.7
-   Should Be Equal  ${pool_return['data']['vms'][7]['name']}  vm8
-   Should Be Equal  ${pool_return['data']['vms'][7]['net_info']['external_ip']}  80.187.128.18
-   Should Be Equal  ${pool_return['data']['vms'][7]['net_info']['internal_ip']}  2.2.2.8
-   Should Be Equal  ${pool_return['data']['vms'][8]['name']}  vm9
-   Should Be Equal  ${pool_return['data']['vms'][8]['net_info']['external_ip']}  80.187.128.19
-   Should Be Equal  ${pool_return['data']['vms'][8]['net_info']['internal_ip']}  2.2.2.9
-   Should Be Equal  ${pool_return['data']['vms'][9]['name']}  vm10
-   Dictionary Should Not Contain Key  ${pool_return['data']['vms'][9]['net_info']}  external_ip
-   Should Be Equal  ${pool_return['data']['vms'][9]['net_info']['internal_ip']}  2.2.2.10
-   Length Should Be   ${pool_return['data']['vms']}  10
+   Should Be Equal  ${pool_return[0]['data']['vms'][0]['name']}  vm1
+   Should Be Equal  ${pool_return[0]['data']['vms'][0]['net_info']['external_ip']}  80.187.128.11
+   Should Be Equal  ${pool_return[0]['data']['vms'][0]['net_info']['internal_ip']}  2.2.2.1
+   Should Be Equal  ${pool_return[0]['data']['vms'][1]['name']}  vm2
+   Should Be Equal  ${pool_return[0]['data']['vms'][1]['net_info']['external_ip']}  80.187.128.12
+   Should Be Equal  ${pool_return[0]['data']['vms'][1]['net_info']['internal_ip']}  2.2.2.2
+   Should Be Equal  ${pool_return[0]['data']['vms'][2]['name']}  vm3
+   Should Be Equal  ${pool_return[0]['data']['vms'][2]['net_info']['external_ip']}  80.187.128.13
+   Should Be Equal  ${pool_return[0]['data']['vms'][2]['net_info']['internal_ip']}  2.2.2.3
+   Should Be Equal  ${pool_return[0]['data']['vms'][3]['name']}  vm4
+   Should Be Equal  ${pool_return[0]['data']['vms'][3]['net_info']['external_ip']}  80.187.128.14
+   Should Be Equal  ${pool_return[0]['data']['vms'][3]['net_info']['internal_ip']}  2.2.2.4
+   Should Be Equal  ${pool_return[0]['data']['vms'][4]['name']}  vm5
+   Dictionary Should Not Contain Key  ${pool_return[0]['data']['vms'][4]['net_info']}  external_ip
+   Should Be Equal  ${pool_return[0]['data']['vms'][4]['net_info']['internal_ip']}  2.2.2.5
+   Should Be Equal  ${pool_return[0]['data']['vms'][5]['name']}  vm6
+   Should Be Equal  ${pool_return[0]['data']['vms'][5]['net_info']['external_ip']}  80.187.128.16
+   Should Be Equal  ${pool_return[0]['data']['vms'][5]['net_info']['internal_ip']}  2.2.2.6
+   Should Be Equal  ${pool_return[0]['data']['vms'][6]['name']}  vm7
+   Should Be Equal  ${pool_return[0]['data']['vms'][6]['net_info']['external_ip']}  80.187.128.17
+   Should Be Equal  ${pool_return[0]['data']['vms'][6]['net_info']['internal_ip']}  2.2.2.7
+   Should Be Equal  ${pool_return[0]['data']['vms'][7]['name']}  vm8
+   Should Be Equal  ${pool_return[0]['data']['vms'][7]['net_info']['external_ip']}  80.187.128.18
+   Should Be Equal  ${pool_return[0]['data']['vms'][7]['net_info']['internal_ip']}  2.2.2.8
+   Should Be Equal  ${pool_return[0]['data']['vms'][8]['name']}  vm9
+   Should Be Equal  ${pool_return[0]['data']['vms'][8]['net_info']['external_ip']}  80.187.128.19
+   Should Be Equal  ${pool_return[0]['data']['vms'][8]['net_info']['internal_ip']}  2.2.2.9
+   Should Be Equal  ${pool_return[0]['data']['vms'][9]['name']}  vm10
+   Dictionary Should Not Contain Key  ${pool_return[0]['data']['vms'][9]['net_info']}  external_ip
+   Should Be Equal  ${pool_return[0]['data']['vms'][9]['net_info']['internal_ip']}  2.2.2.10
+   Length Should Be   ${pool_return[0]['data']['vms']}  10
 
    Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm6  
 
    ${pool_return2}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
-   Should Be Equal  ${pool_return2['data']['vms'][5]['name']}  vm7
-   Should Be Equal  ${pool_return2['data']['vms'][5]['net_info']['external_ip']}  80.187.128.17
-   Should Be Equal  ${pool_return2['data']['vms'][5]['net_info']['internal_ip']}  2.2.2.7
-   Length Should Be   ${pool_return2['data']['vms']}  9 
+   Should Be Equal  ${pool_return2[0]['data']['vms'][5]['name']}  vm7
+   Should Be Equal  ${pool_return2[0]['data']['vms'][5]['net_info']['external_ip']}  80.187.128.17
+   Should Be Equal  ${pool_return2[0]['data']['vms'][5]['net_info']['internal_ip']}  2.2.2.7
+   Length Should Be   ${pool_return2[0]['data']['vms']}  9 
    
    Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm1
    Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm2
@@ -113,7 +113,7 @@ AddVMPoolMember - shall be able to add 10 members
    Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm10
 
    ${pool_return3}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
-   Should Be Equal  ${pool_return3['data']['vms']}  ${None}
+   Should Be Equal  ${pool_return3[0]['data']['vms']}  ${None}
 
 *** Keywords ***
 Setup
