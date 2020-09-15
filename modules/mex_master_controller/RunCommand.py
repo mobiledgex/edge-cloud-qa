@@ -157,13 +157,13 @@ class RunCommand(MexOperation):
         #msg_show = self._build_show(type_dict=msg, since=since, tail=tail, time_stamps=time_stamps)
 
         #return self._show(token=token, url=self.runConsole_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg)
-        return self.show(token=token, url=self.runConsole_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.runConsole_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
     
     def _show(self, token=None, url=None, region=None, json_data=None, timeout=None, use_defaults=True, use_thread=False, message=None):
         msg_dict = {'ExecRequest': message}
         resp = self.show(token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
-        url = resp['access_url']
+        url = resp[0]['access_url']
 
         async def wsconnect():
             async with websockets.connect(url) as websocket:

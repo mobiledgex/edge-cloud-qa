@@ -1647,39 +1647,39 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if 'health_check' in appinstance['data']:
-                    if appinstance['data']['health_check'] == 3:
+                if 'health_check' in appinstance[0]['data']:
+                    if appinstance[0]['data']['health_check'] == 3:
                         logging.info(f'App Instance is health check OK')
                         return appinstance
                     else:
-                        logging.debug(f'app instance health check not OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
+                        logging.debug(f'app instance health check not OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
                         time.sleep(1)
                 else:
                     raise Exception(f'health check not found')
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
-        raise Exception(f'app instance health check is NOT OK. Got {appinstance["data"]["health_check"]} but expected 3')
+        raise Exception(f'app instance health check is NOT OK. Got {appinstance[0]["data"]["health_check"]} but expected 3')
 
-    def wait_for_app_instance_health_check_fail(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, state=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=45):
+    def wait_for_app_instance_health_check_fail(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, state=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if 'health_check' in appinstance['data']:
+                if 'health_check' in appinstance[0]['data']:
                     if state == 'HealthCheckFailServerFail': 
-                        if appinstance['data']['health_check'] == 2:
+                        if appinstance[0]['data']['health_check'] == 2:
                             logging.info(f'App Instance is health check {state}')
                             return appinstance                        
                         else:
-                            logging.debug(f'app instance health check OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
-                            time.sleep(2)
+                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
+                            time.sleep(1)
                     else:
-                        if appinstance['data']['health_check'] == 1:
+                        if appinstance[0]['data']['health_check'] == 1:
                             logging.info(f'App Instance is health check {state}')
                             return appinstance
                         else:
-                            logging.debug(f'app instance health check OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
-                            time.sleep(2)
+                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
+                            time.sleep(1)
                 else:
                     raise Exception(f'health check not found')
             else:

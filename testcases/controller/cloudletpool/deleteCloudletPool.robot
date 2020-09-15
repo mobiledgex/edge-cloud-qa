@@ -23,7 +23,7 @@ DeleteCloudletPool - deleting cloudlet pool shall delete all cloudlet pool membe
    Add Cloudlet Pool Member  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  cloudlet_name=tmocloud-2  auto_delete=${False}
 
    ${show_return}=   Show Cloudlet Pool  region=US  cloudlet_pool_name=${pool_name}  operator_org_name=tmus  token=${token}  use_defaults=${False} 
-   Length Should Be   ${show_return['data']['cloudlets']}  2
+   Length Should Be   ${show_return[0]['data']['cloudlets']}  2
 
    # delete the pool 
    Delete Cloudlet Pool         region=US   cloudlet_pool_name=${pool_name}  operator_org_name=tmus
