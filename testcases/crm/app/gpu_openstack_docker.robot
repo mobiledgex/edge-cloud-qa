@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  GPU VM app on openstack
+Documentation  GPU docker/k8s app on openstack
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
@@ -10,7 +10,7 @@ Library  OperatingSystem
 Library  Process
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -31,7 +31,7 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${qcow_gpu_ubuntu16_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
-${client_path}     ../edge-cloud-sampleapps/ComputerVision/client
+${client_path}     ../../../edge-cloud-sampleapps/ComputerVisionServer/client
 #${client_path}  ../../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 ${image}=  3_bodies.png
@@ -39,10 +39,11 @@ ${image}=  3_bodies.png
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-2560
 GPU - shall be able to deploy docker dedicated NVidia T4 Passthru GPU app on KVM Openstack
     [Documentation]
-    ...  deploy Ubuntu 16 VM image with GPU support on openstack
-    ...  verify app uses the GPU
+    ...  - deploy docker dedicated with GPU support on openstack
+    ...  - verify app uses the GPU with ComputerVisionServer
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -74,10 +75,11 @@ GPU - shall be able to deploy docker dedicated NVidia T4 Passthru GPU app on KVM
 
     Should Contain  ${output}  TEST_PASS=True 
 
+# ECQ-2561
 GPU - shall be able to deploy docker shared NVidia T4 Passthru GPU app on KVM Openstack
     [Documentation]
-    ...  deploy Ubuntu 16 VM image with GPU support on openstack
-    ...  verify app uses the GPU
+    ...  - deploy docker shared with GPU support on openstack
+    ...  - verify app uses the GPU with ComputerVisionServer
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
@@ -109,6 +111,7 @@ GPU - shall be able to deploy docker shared NVidia T4 Passthru GPU app on KVM Op
 
     Should Contain  ${output}  TEST_PASS=True
 
+# add when k8s is supported
 GPU - shall be able to deploy k8s shared NVidia T4 Passthru GPU app on KVM Openstack
     [Documentation]
     ...  deploy Ubuntu 16 VM image with GPU support on openstack
