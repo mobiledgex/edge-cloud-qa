@@ -27,7 +27,7 @@ ${port}=  8080
 ${region}=  US
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last docker app Disk metric on openstack
+Docker Dedicated AppInstMetrics - DISK usage metric on openstack
    [Documentation]
    ...  request app Disk metrics with last=1
    ...  verify info is correct
@@ -43,7 +43,7 @@ AppMetrics - Shall be able to get the last docker app Disk metric on openstack
    Disk Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 docker app Disk metrics on openstack
+Docker Dedicated AppInstMetrics - last 5 DISK usage metrics on openstack
    [Documentation]
    ...  request app Disk metrics with last=5
    ...  verify info is correct

@@ -27,7 +27,7 @@ ${port}=  8080
 ${region}=  US
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last k8s dedicated app Network metric on openstack
+k8s Shared AppInstMetrics - NETWORK metric on openstack
    [Documentation]
    ...  request app Network metrics with last=1
    ...  verify info is correct
@@ -43,7 +43,7 @@ AppMetrics - Shall be able to get the last k8s dedicated app Network metric on o
    Network Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 k8s dedicated app Network metrics on openstack
+k8s Shared AppInstMetrics - NETWORK usage metrics on openstack
    [Documentation]
    ...  request app Network metrics with last=5
    ...  verify info is correct

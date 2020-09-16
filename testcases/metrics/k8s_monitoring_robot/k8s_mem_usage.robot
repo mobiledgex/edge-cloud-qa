@@ -44,7 +44,7 @@ ${region}=  US
 #${region}=  EU
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last k8s dedicated app Memory metric on openstack
+k8s Dedicated AppInstMetrics - MEMORY usage metric on openstack
    [Documentation]
    ...  request app Memory metrics with last=1
    ...  verify info is correct
@@ -60,7 +60,7 @@ AppMetrics - Shall be able to get the last k8s dedicated app Memory metric on op
    Memory Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 k8s dedicated app Memory metrics on openstack
+k8s Dedicated AppInstMetrics - last 5 MEMORY usage metrics on openstack
    [Documentation]
    ...  request app Memory metrics with last=5
    ...  verify info is correct
