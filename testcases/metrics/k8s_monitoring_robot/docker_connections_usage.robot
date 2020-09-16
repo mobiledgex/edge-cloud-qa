@@ -27,7 +27,7 @@ ${port}=  8080
 ${region}=  US
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last docker app Connections metric on openstack
+Docker Dedicated AppInstMetrics - CONNECTIONS usage metrics on openstack
    [Documentation]
    ...  request app Connections metrics with last=1
    ...  verify info is correct
@@ -43,7 +43,7 @@ AppMetrics - Shall be able to get the last docker app Connections metric on open
    Connections Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 docker app Connections metrics on openstack
+Docker Dedicated AppInstMetrics - Last 5 CONNECTIONS usage metrics on openstack
    [Documentation]
    ...  request app Connections metrics with last=5
    ...  verify info is correct

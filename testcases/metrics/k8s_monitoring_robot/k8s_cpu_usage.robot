@@ -45,7 +45,7 @@ ${region}=  US
 #${region}=  EU
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last k8s dedicated app CPU metric on openstack
+k8s Dedicated AppInstMetrics - CPU usage metric on openstack
    [Documentation]
    ...  request app CPU metrics with last=1
    ...  verify info is correct
@@ -61,7 +61,7 @@ AppMetrics - Shall be able to get the last k8s dedicated app CPU metric on opens
    CPU Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 k8s dedicated app CPU metrics on openstack
+k8s Dedicated AppInstMetrics - last 5 CPU usage metrics on openstack
    [Documentation]
    ...  request app CPU metrics with last=5
    ...  verify info is correct
