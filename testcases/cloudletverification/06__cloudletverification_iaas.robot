@@ -26,7 +26,7 @@ User shall be able to access block storage to a VM
    [Documentation]
    ...  do RunCommand on k8s shared app 
    ...  verify RunCommand works 
-   [Tags]  k8s  sharedvolumesize  govc
+   [Tags]  k8s  sharedvolumesize 
 
    Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Platform Type Openstack    ELSE    Platform Type Vsphere
 
