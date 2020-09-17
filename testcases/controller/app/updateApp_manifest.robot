@@ -51,14 +51,50 @@ UpdateApp - user shall not be able to update to invalid manifest
     Should Contain  ${error}  Invalid deployment manifest, parse kubernetes deployment yaml failed,
 
 # ECQ-2558
-UpdateApp - user shall be able to update the ports with auto-generated manifest
+UpdateApp - user shall be able to update k8s/lb ports with auto-generated manifest
     [Documentation]
-    ...  - create an app with tcp access port and tcp manifest
+    ...  - create a k8s/lb app with tcp access port and tcp manifest
     ...  - verify app ports and manifest are correct
     ...  - update the app changing port and manifest to various port configurations
     ...  - verify app ports and manifest are updated
 
-    ${app1}=  Create App  access_ports=tcp:1
+    ${app1}=  Create App  access_ports=tcp:1  deployment=kubernetes   access_type=loadbalancer
+
+    Should Be Equal  ${app1.access_ports}         tcp:1
+
+    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp1${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 1${\n}${SPACE*4}targetPort: 1${\n}
+    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 1${\n}${SPACE*10}protocol: TCP
+
+
+    ${app2}=  Update App  access_ports=tcp:2
+    Should Contain      ${app2.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp2${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}
+    Should Contain      ${app2.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: TCP
+    Should Be Equal     ${app2.access_ports}         tcp:2
+
+    ${app3}=  Update App  access_ports=udp:2
+    Should Contain      ${app3.deployment_manifest}  ports:${\n}${SPACE*2}- name: udp2${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}
+    Should Contain      ${app3.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: UDP
+    Should Be Equal     ${app3.access_ports}         udp:2
+
+    ${app4}=  Update App  access_ports=tcp:2-4
+    Should Contain      ${app4.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp2${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}${SPACE*2}- name: tcp3${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 3${\n}${SPACE*4}targetPort: 3${\n}${SPACE*2}- name: tcp4${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 4${\n}${SPACE*4}targetPort: 4${\n}
+    Should Contain      ${app4.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 3${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 4${\n}${SPACE*10}protocol: TCP
+    Should Be Equal     ${app4.access_ports}         tcp:2-4
+
+    ${app5}=  Update App  access_ports=tcp:2-4,udp:2-4
+    Should Contain      ${app5.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp2${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}${SPACE*2}- name: tcp3${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 3${\n}${SPACE*4}targetPort: 3${\n}${SPACE*2}- name: tcp4${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 4${\n}${SPACE*4}targetPort: 4${\n}
+    Should Contain      ${app5.deployment_manifest}  - name: udp2${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}${SPACE*2}- name: udp3${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 3${\n}${SPACE*4}targetPort: 3${\n}${SPACE*2}- name: udp4${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 4${\n}${SPACE*4}targetPort: 4${\n}
+    Should Contain      ${app5.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 3${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 4${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: UDP${\n}${SPACE*8}- containerPort: 3${\n}${SPACE*10}protocol: UDP${\n}${SPACE*8}- containerPort: 4${\n}${SPACE*10}protocol: UDP
+    Should Be Equal     ${app5.access_ports}         tcp:2-4,udp:2-4
+
+UpdateApp - user shall be able to update k8s/direct ports with user manifest
+    [Documentation]
+    ...  - create a k8s/direct app with tcp access port and tcp manifest
+    ...  - verify app ports and manifest are correct
+    ...  - update the app changing port and manifest to various port configurations
+    ...  - verify app ports and manifest are updated
+
+    ${app1}=  Create App  access_ports=tcp:2015  deployment=kubernetes   access_type=loadbalancer  deployment_manifest=${docker_image}
 
     Should Be Equal  ${app1.access_ports}         tcp:1
 
