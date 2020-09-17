@@ -725,3 +725,15 @@ class MexApp(object):
             raise Exception(f'cloudlflaire exception get dns record failed: {sys.exc_info()[0]}')
 
         return dns_ip
+
+    def convert_govc_to_dictionary(self, output):
+        output_list = output.rstrip().split('\n')
+
+        output_dict = {}
+        for line in output_list:
+          line_split = line.split(':')
+          #print('*WARN*', line)
+          #print('*WARN*', line_split)
+          output_dict[line_split[0].strip()] = line_split[1].strip()
+
+        return output_dict
