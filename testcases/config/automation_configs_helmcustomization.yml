@@ -1,0 +1,6 @@
+nfs:
+  path: /share
+  server: [[ .Deployment.ClusterIp ]]
+storageClass:
+  name: standard
+  defaultClass: true
