@@ -93,7 +93,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   EDGECLOUD-3540 AutoProv not working for helm
+   #EDGECLOUD-3540 AutoProv not working for helm
 
    [Setup]     Setup     cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
    [Teardown]  Teardown  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
