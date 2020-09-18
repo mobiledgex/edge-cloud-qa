@@ -144,7 +144,7 @@ UpdateCloudletPool - shall be able to update pool after adding/removing members
    Add Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=automationHawkinsCloudlet
    Remove Cloudlet Pool Member  region=${region}  operator_org_name=${organization}  cloudlet_name=automationHawkinsCloudlet
  
-   @{cloudlet_list_update}=  Create List  automationParadiseCloudlet  automationBuckhornCloudlet
+   @{cloudlet_list_update}=  Create List  automationParadiseCloudlet  automationBeaconCloudlet
    ${pool_return2}=  Update Cloudlet Pool  region=${region}  operator_org_name=${organization}  cloudlet_list=${cloudlet_list_update}
 
    Should Be Equal  ${pool_return2['data']['key']['name']}  ${pool_name}
