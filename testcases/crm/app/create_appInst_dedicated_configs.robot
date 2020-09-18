@@ -31,7 +31,7 @@ ${http_page}       automation.html
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_volumemount.yml
 ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 
-${configs_envvars_url}=  http://35.199.188.102/apps/configs_envvars.yml
+${configs_envvars_url}=  http://35.199.188.102/apps/automation_configs_envvars.yml
 	
 ${test_timeout_crm}  15 min
 
