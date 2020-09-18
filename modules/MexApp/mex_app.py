@@ -465,7 +465,7 @@ class MexApp(object):
         if root_loadbalancer is not None:
             rb = rootlb.Rootlb(host=root_loadbalancer)
 
-        container_id_list = rb.get_docker_container_id()
+        container_id_list = rb.get_stopped_docker_container_id()
         logging.debug(f'container_id={container_id_list}')
         container_id = container_id_list[0]
 

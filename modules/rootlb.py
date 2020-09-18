@@ -140,6 +140,22 @@ class Rootlb(Linux):
 
         return output
 
+    def get_stopped_docker_container_id(self, name=None):
+        cmd = 'docker ps -a --format "{{.ID}}"'
+        if name:
+            cmd = cmd + f' --filter name=^{name}'
+
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        output = [id.rstrip() for id in output]
+
+        return output
+
     def get_docker_container_id(self, name=None):
         cmd = 'docker ps --format "{{.ID}}"'
         if name:
