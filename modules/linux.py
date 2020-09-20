@@ -6,7 +6,7 @@ import sys
 class Linux():
     client = None
 
-    def __init__(self, host = None, port = 22, username = None, password = None, key_file = None, logfile = '/tmp/sshLogfile.txt', verbose=False):
+    def __init__(self, host = None, port = 22, username = None, password = None, key_file = None, logfile = '/tmp/sshLogfile.txt', verbose=False, signed_key = None):
         #logging.config.fileConfig('logging.ini')
         logging.debug("init")
 
@@ -30,6 +30,7 @@ class Linux():
                     self.client.connect(hostname = host, port = port, username = username, password = password, pkey = k)
                 else:
                     k = paramiko.RSAKey.from_private_key_file(key_file)
+                    k.load_certificate(signed_key)
                     self.client.connect(hostname = host, port = port, username = username, pkey = k)
             else:
                 self.client.connect(hostname = host, port = port, username = username, password = password)
