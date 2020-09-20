@@ -38,9 +38,9 @@ class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.controller_1 = mex_controller.MexController(controller_address = controller_address_1,
-                                                      root_cert = mex_root_cert,
-                                                      key = mex_key,
-                                                      client_cert = mex_cert
+#                                                      root_cert = mex_root_cert,
+#                                                      key = mex_key,
+#                                                      client_cert = mex_cert
         )
 
         self.controller_2 = mex_controller.MexController(controller_address = controller_address_2,

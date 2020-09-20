@@ -35,9 +35,9 @@ class tc(unittest.TestCase):
         self.cluster_name = 'cluster' + str(time.time())
 
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    ) 
 
         self.cluster_instance_clusterNameOnly = mex_controller.ClusterInstance(cluster_name=self.cluster_name, use_defaults=False)
