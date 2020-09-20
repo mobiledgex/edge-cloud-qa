@@ -33,9 +33,9 @@ class tc(unittest.TestCase):
         flavor_name = 'c1.small'
 
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    )
         self.cluster_instance = mex_controller.ClusterInstance(cluster_name=cluster_name,
                                                              cloudlet_name=cloud_name,
