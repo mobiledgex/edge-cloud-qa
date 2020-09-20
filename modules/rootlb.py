@@ -4,7 +4,7 @@ from linux import Linux
 from kubernetes import Kubernetes
 
 class Rootlb(Linux):
-    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa_mex', cluster_name=None, verbose=False):
+    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa', cluster_name=None, verbose=False, signed_key='signed-key'):
         logging.debug('init')
 
         self.kubeconfig = kubeconfig
@@ -14,10 +14,11 @@ class Rootlb(Linux):
             
         if not os.path.isfile(key_file):
             key_file_pre = key_file
-            key_file = os.environ['HOME'] + '/.mobiledgex/' + os.path.basename(key_file)
+            key_file = os.environ['HOME'] + '/.ssh/' + os.path.basename(key_file)
+            signed_key = os.environ['HOME'] + '/.ssh/' + os.path.basename(signed_key)
             logging.warning('{} not found. using {}'.format(key_file_pre, key_file))
         try:
-            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose)
+            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose, signed_key=signed_key)
         except ConnectionError as err1:
             logging.error('caught ssh error:' + str(err1))
             raise ConnectionError
