@@ -34,6 +34,7 @@ import threading
 import queue
 
 from mex_grpc import MexGrpc
+import mex_certs
 
 import shared_variables
 #import MexSharedVariables
@@ -1066,8 +1067,8 @@ class MexController(MexGrpc):
     """
 
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
-    
-    def __init__(self, controller_address='127.0.0.1:55001', root_cert='mex-ca.crt', key='mex-ca.key', client_cert='mex-ca.crt'):
+
+    def __init__(self, controller_address='127.0.0.1:55001', root_cert=None, key=None, client_cert=None):
         """The controller address and certs can be given at library import time.
         These will be used for controller operations
 
@@ -1089,7 +1090,10 @@ class MexController(MexGrpc):
         self.last_stream = ''
 
         self._queue_obj = queue.Queue()
-        
+
+        if not root_cert:
+            client_cert, key, root_cert = mex_certs.generate_new_cert(controller_address=controller_address)
+            
         super(MexController, self).__init__(address=controller_address, root_cert=root_cert, key=key, client_cert=client_cert)
 
         #print(sys.path)
@@ -1137,8 +1141,6 @@ class MexController(MexGrpc):
         self.exec_stub = exec_pb2_grpc.ExecApiStub(self.grpc_channel)
 
         self._init_shared_variables()
-
-        print('*WARN*', 'INIT', shared_variables.developer_name_default)
 
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
