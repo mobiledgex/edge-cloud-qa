@@ -3,18 +3,20 @@ import logging.config
 import logging
 import sys
 
+logger = logging.getLogger(__name__)
+
 class Linux():
     client = None
 
-    def __init__(self, host = None, port = 22, username = None, password = None, key_file = None, logfile = '/tmp/sshLogfile.txt', verbose=False, signed_key = None):
+    def __init__(self, host = None, port = 22, username = None, password = None, key_file = None, logfile = '/tmp/sshLogfile.txt', verbose=False, signed_key = None, proxy_to_node=None):
         #logging.config.fileConfig('logging.ini')
-        logging.debug("init")
+        logger.debug("init")
 
         #logging.getLogger("paramiko").setLevel(logging.INFO)
-        logging.info('host=%s port=%d username=%s password=%s key_file=%s logfile=%s', host, port, username, password, key_file, logfile)
+        logger.info(f'host={host} port={port} username={username} password={password} key_file={key_file} signed_key={signed_key} logfile={logfile} proxy_to_node={proxy_to_node}')
 
         if verbose:
-            logging.getLogger("paramiko").setLevel(logging.DEBUG) 
+            logging.getLogger("paramiko").setLevel(logging.DEBUG)
 
         #paramiko.util.log_to_file(logfile)
 
@@ -31,7 +33,19 @@ class Linux():
                 else:
                     k = paramiko.RSAKey.from_private_key_file(key_file)
                     k.load_certificate(signed_key)
-                    self.client.connect(hostname = host, port = port, username = username, pkey = k)
+                    if proxy_to_node:
+                        # ssh -i ~/.ssh/id_rsa -i ~/.ssh/signed-key -o ProxyCommand="ssh -i ~/.ssh/id_rsa -i ~/.ssh/signed-key -W '[%h]:%p' ubuntu@cluster1600701900-5485592.automationfairviewcloudlet.gddt.mobiledgex.net" ubuntu@10.101.18.101
+
+                        #proxycmd = f"ssh -i {key_file} -i {signed_key} -W '[%h]:%p' {username}@{host}"
+                        proxycmd = f"ssh -i {key_file} -i {signed_key} -W '[{proxy_to_node}]:{port}' {username}@{host}"
+
+                        logger.debug(f'creating proxy with cmd={proxycmd}')
+                        proxyobj = paramiko.ProxyCommand(proxycmd)
+                        self.client.connect(hostname = proxy_to_node, port = port, username = username, pkey = k, sock=proxyobj)
+                        #self.client.connect(hostname = node, port = port, username = username, password = password, pkey = k, sock=proxyobj)
+                        logging.info('connection successful')
+                    else:
+                        self.client.connect(hostname = host, port = port, username = username, pkey = k)
             else:
                 self.client.connect(hostname = host, port = port, username = username, password = password)
         except ValueError as err1:
