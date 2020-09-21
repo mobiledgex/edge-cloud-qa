@@ -81,7 +81,8 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet organization:"' + operator_name + '" name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet organization:"' + operator_name + '" name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"' + operator_name + '","name":"' + cloud_name + '"} not found', 'error details')
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 
