@@ -30,7 +30,7 @@ UpdateCloudlet - shall be able to put openstack cloudlet in maintenance mode
    ${ret4}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_openstack}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
 
-   [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation
+   [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation  use_defaults=False
 
 # ECQ-2454
 UpdateCloudlet - shall be able to put openstack vmpool cloudlet in maintenance mode
@@ -50,7 +50,7 @@ UpdateCloudlet - shall be able to put openstack vmpool cloudlet in maintenance m
    ${ret4}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}     cloudlet_name=${cloudlet_name_vmpool}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
 
-   [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation
+   [Teardown]  Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_openstack}  maintenance_state=NormalOperation  use_defaults=False
 
 # ECQ-2455
 UpdateCloudlet - shall be able to put vsphere cloudlet in maintenance mode
@@ -70,7 +70,7 @@ UpdateCloudlet - shall be able to put vsphere cloudlet in maintenance mode
    ${ret4}=  Update Cloudlet  region=${region_vsphere}  operator_org_name=${operator_name_vsphere}     cloudlet_name=${cloudlet_name_vsphere}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
 
-   [Teardown]  Update Cloudlet  region=${region_vsphere}  cloudlet_name=${cloudlet_name_vsphere}  operator_org_name=${operator_name_vsphere}  maintenance_state=NormalOperation
+   [Teardown]  Update Cloudlet  region=${region_vsphere}  cloudlet_name=${cloudlet_name_vsphere}  operator_org_name=${operator_name_vsphere}  maintenance_state=NormalOperation  use_defaults=False
 
 # ECQ-2456
 UpdateCloudlet - shall be able to put GCP cloudlet in maintenance mode
@@ -90,7 +90,7 @@ UpdateCloudlet - shall be able to put GCP cloudlet in maintenance mode
    ${ret4}=  Update Cloudlet  region=${region_gcp}  operator_org_name=${operator_name_gcp}     cloudlet_name=${cloudlet_name_gcp}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
 
-   [Teardown]  Update Cloudlet  region=${region_gcp}  cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}  maintenance_state=NormalOperation
+   [Teardown]  Update Cloudlet  region=${region_gcp}  cloudlet_name=${cloudlet_name_gcp}  operator_org_name=${operator_name_gcp}  maintenance_state=NormalOperation  use_defaults=False
 
 # ECQ-2457
 UpdateCloudlet - shall be able to put Azure cloudlet in maintenance mode
@@ -110,7 +110,7 @@ UpdateCloudlet - shall be able to put Azure cloudlet in maintenance mode
    ${ret4}=  Update Cloudlet  region=${region_azure}  operator_org_name=${operator_name_azure}     cloudlet_name=${cloudlet_name_azure}     maintenance_state=NormalOperation      use_defaults=False
    Should Not Contain  ${ret4['data']}  maintenance_state  # we dont show 0 vaules
 
-   [Teardown]  Update Cloudlet  region=${region_azure}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  maintenance_state=NormalOperation
+   [Teardown]  Update Cloudlet  region=${region_azure}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  maintenance_state=NormalOperation  use_defaults=False
 
 #*** Keywords ***
 #Teardown
