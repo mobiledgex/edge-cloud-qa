@@ -4,11 +4,11 @@ from linux import Linux
 from kubernetes import Kubernetes
 
 class Rootlb(Linux):
-    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa', cluster_name=None, verbose=False, signed_key='signed-key'):
+    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa', cluster_name=None, verbose=False, signed_key='signed-key', proxy_to_node=None):
         logging.debug('init')
 
         self.kubeconfig = kubeconfig
-
+        
         if kubeconfig is None:
             self.kubeconfig = host + '.kubeconfig'
             
@@ -17,8 +17,9 @@ class Rootlb(Linux):
             key_file = os.environ['HOME'] + '/.ssh/' + os.path.basename(key_file)
             signed_key = os.environ['HOME'] + '/.ssh/' + os.path.basename(signed_key)
             logging.warning('{} not found. using {}'.format(key_file_pre, key_file))
+
         try:
-            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose, signed_key=signed_key)
+            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose, signed_key=signed_key, proxy_to_node=proxy_to_node)
         except ConnectionError as err1:
             logging.error('caught ssh error:' + str(err1))
             raise ConnectionError
@@ -288,10 +289,12 @@ class Rootlb(Linux):
         self.run_command_on_node(node, command)
         
     def run_command_on_node(self, node, command):
-        network, ip = node.split('=')
-        command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
+        #network, ip = node.split('=')
+        #command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
+        #command = f'ubuntu@{ip} \'{command}\''
 
         output = self.run_command(command)
+
         return output
     
     def run_command(self, cmd):
