@@ -20,7 +20,7 @@ ${latitude}       32.7767
 ${longitude}      -96.7970
 ${mobiledgex_domain}  mobiledgex.net
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
-
+${image_name}    server_ping_threaded_centos7
 ${test_timeout_crm}  30 min
 
 *** Test Cases ***
@@ -97,27 +97,29 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
 
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOff
+    Sleep  10s
 
-    FOR  ${x}  IN RANGE  0  5
-        ${vm_info}=  Get Server List  name=${vm}
-        Exit For Loop If  '${vm_info[0]['Status']}' == 'SHUTOFF'
-        Sleep  2s
+    ${vm_info}=  Get Server List  name=${vm}
+    ${num_servers}=   Get Length  ${vm_info}
+
+    FOR  ${x}  IN RANGE  0  ${num_servers}
+        Run Keyword If   '${vm_info[${x}]['Image']}' == '${image_name}'   Should Be Equal   ${vm_info[${x}]['Status']}   SHUTOFF
+        ...  ELSE  Should Be Equal   ${vm_info[${x}]['Status']}   ACTIVE
     END
-
-    Should Be Equal   ${vm_info[0]['Status']}  SHUTOFF
 
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
+    Sleep  10s
 
-    FOR  ${x}  IN RANGE  0  5
-        ${vm_info}=  Get Server List  name=${vm}
-        Exit For Loop If  '${vm_info[0]['Status']}' == 'ACTIVE'
-        Sleep  2s
+    ${vm_info}=  Get Server List  name=${vm}
+    ${num_servers}=   Get Length  ${vm_info}
+
+    FOR  ${x}  IN RANGE  0  ${num_servers}
+        Run Keyword If   '${vm_info[${x}]['Image']}' == '${image_name}'   Should Be Equal   ${vm_info[${x}]['Status']}   ACTIVE
+        ...  ELSE  Should Be Equal   ${vm_info[${x}]['Status']}   ACTIVE
     END
-
-    Should Be Equal   ${vm_info[0]['Status']}  ACTIVE
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default} 
 
