@@ -98,6 +98,6 @@ CreateApp - Create shall fail with helm and UDP TLS
 
 *** Keywords ***
 Setup
-    ${time}=  Get Time  epoch
-    Create Flavor  region=${region}  flavor_name=flavor${time}
+    #${time}=  Get Time  epoch
+    Create Flavor  region=${region}  #flavor_name=flavor${time}
 

@@ -176,6 +176,6 @@ CreateApp - Create shall fail with vm lb and tcp:22
 
 *** Keywords ***
 Setup
-    ${time}=  Get Time  epoch
-    Create Flavor  region=${region}  flavor_name=flavor${time}
+    #${time}=  Get Time  epoch
+    Create Flavor  region=${region}  #flavor_name=flavor${time}
 
