@@ -504,9 +504,11 @@ class MexApp(object):
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
 
+        network, node = node.split('=')
+
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
 
         container_id_list = rb.run_command_on_node(node, command)
         logging.debug(f'container_id={container_id_list}')
@@ -527,9 +529,11 @@ class MexApp(object):
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
 
+        network, node = node.split('=')
+
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
     
         container_id_list = rb.run_command_on_node(node, command)
         logging.debug(f'container_id={container_id_list}')
