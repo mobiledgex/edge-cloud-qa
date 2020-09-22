@@ -11,6 +11,8 @@ Test Teardown	Cleanup provisioning
 ${manifest_tcp}  http://35.199.188.102/apps/iperfapp.yml
 ${manifest_udp}  http://35.199.188.102/apps/iperfudpapp.yml
 
+${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
+
 ${access_ports_tcp}  tcp:2011
 ${access_ports_udp}  udp:2011
 	
@@ -28,7 +30,7 @@ UpdateApp - user shall be able to update the manifest
     Should Be Equal     ${app1.deployment_manifest}  ${tcp_yml.text}	
     Should Be Equal     ${app1.access_ports}         ${access_ports_tcp}	
 
-    ${app2}=  Update App  access_ports=${access_ports_udp}  deployment_manifest=${manifest_tcp}
+    ${app2}=  Update App  access_ports=${access_ports_udp}  deployment_manifest=${manifest_udp}
 
     Should Be Equal     ${app2.deployment_manifest}  ${udp_yml.text}	
     Should Be Equal     ${app2.access_ports}         ${access_ports_udp}	
@@ -94,23 +96,19 @@ UpdateApp - user shall be able to update k8s/direct ports with user manifest
     ...  - update the app changing port and manifest to various port configurations
     ...  - verify app ports and manifest are updated
 
-    ${app1}=  Create App  access_ports=tcp:2015  deployment=kubernetes   access_type=loadbalancer  deployment_manifest=${docker_image}
+    ${app1}=  Create App  access_ports=tcp:2016  deployment=kubernetes   access_type=loadbalancer  deployment_manifest=${manifest}
 
-    Should Be Equal  ${app1.access_ports}         tcp:1
+    Should Be Equal  ${app1.access_ports}         tcp:2016
 
-    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp1${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 1${\n}${SPACE*4}targetPort: 1${\n}
-    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 1${\n}${SPACE*10}protocol: TCP
+#    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp1${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2016${\n}${SPACE*4}targetPort: 1${\n}
+#    Should Contain   ${app1.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 1${\n}${SPACE*10}protocol: TCP
 
 
-    ${app2}=  Update App  access_ports=tcp:2
-    Should Contain      ${app2.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp2${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}
-    Should Contain      ${app2.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: TCP
-    Should Be Equal     ${app2.access_ports}         tcp:2
+    ${app2}=  Update App  access_ports=tcp:8085
+    Should Be Equal     ${app2.access_ports}         tcp:8085
 
-    ${app3}=  Update App  access_ports=udp:2
-    Should Contain      ${app3.deployment_manifest}  ports:${\n}${SPACE*2}- name: udp2${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}
-    Should Contain      ${app3.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: UDP
-    Should Be Equal     ${app3.access_ports}         udp:2
+    ${app3}=  Update App  access_ports=udp:2015
+    Should Be Equal     ${app3.access_ports}         udp:2015
 
     ${app4}=  Update App  access_ports=tcp:2-4
     Should Contain      ${app4.deployment_manifest}  ports:${\n}${SPACE*2}- name: tcp2${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}${SPACE*2}- name: tcp3${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 3${\n}${SPACE*4}targetPort: 3${\n}${SPACE*2}- name: tcp4${\n}${SPACE*4}protocol: TCP${\n}${SPACE*4}port: 4${\n}${SPACE*4}targetPort: 4${\n}
