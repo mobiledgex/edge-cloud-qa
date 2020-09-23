@@ -294,27 +294,30 @@ Values Should Be In Range
       Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
       Should Be True   ${reading[11]} >= 0
-      #Run Keyword If  '${reading[12]}' == '0'  Check Found Cloudlet  ${reading[13]}  ${reading[14]}
-      #...  ELSE  Check Not Found Cloudlet  ${reading[13]}  ${reading[14]}
-      Should Be True  '${reading[12]}' == '${cloudlet_name}' or '${reading[13]}' == '${None}' 
-      Should Be True  '${reading[13]}' == '${operator}' or '${reading[14]}' == '${None}'
-      Should Be True   ${reading[14]} == 0
+      Run Keyword If  '${reading[11]}' == '0'  Check Found Cloudlet  ${reading[12]}  ${reading[13]}
+      ...  ELSE  Check Not Found Cloudlet  ${None}  ${None}
+      #Should Be True  '${reading[12]}' == '${cloudlet_name}' or '${reading[13]}' == '${None}' 
+      #Should Be True  '${reading[13]}' == '${operator}' or '${reading[14]}' == '${None}'
+      Should Be True   ${reading[14]} >= 0
       Should Be Equal  ${reading[15]}  FindCloudlet 
       Should Be True   ${reading[16]} > 0
       Should Be True   ${reading[17]} >= 0
    END
 
-#Check Found Cloudlet
-#   [Arguments]  ${name}  ${operator}
-#
-#   Should Be Equal  ${name}  ${cloudlet_name}
-#   Should Be Equal  ${operator}  ${operator}
+Check Found Cloudlet
+   [Arguments]  ${name}  ${operator}
 
-#Check Not Found Cloudlet
-#   [Arguments]  ${name}  ${operator}
-#
-#   Should Be True  ${name} == ${None}
-#   Should Be True  ${operator} == ${None} 
+   Should Be True  '${name}' == '${cloudlet_name}' or '${name}' == '${None}'
+   Should Be True  '${operator}' == '${operator}' or '${operator}' == '${None}'
+
+   #Should Be Equal  ${name}  ${cloudlet_name}
+   #Should Be Equal  ${operator}  ${operator}
+
+Check Not Found Cloudlet
+   [Arguments]  ${name}  ${operator}
+
+   Should Be True  ${name} == ${None}
+   Should Be True  ${operator} == ${None} 
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
