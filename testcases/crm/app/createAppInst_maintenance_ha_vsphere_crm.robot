@@ -102,8 +102,8 @@ Setup
 Teardown
    [Arguments]  ${cloudlet1}  ${operator1}  ${cloudlet2}  ${operator2}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet2}  operator_org_name=${operator1}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet2}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
    Cleanup Provisioning
 
 AppInst Should Start When Cloudlet Goes To Maintenance Mode
@@ -121,7 +121,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    Should Be Equal              ${findcloudlet_1['fqdn']}  ${cloudlet1_fqdn}
 
    # put cloudlet in maintenance mode
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStart
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStart  use_defaults=${False}
 
    # appinst should spin up on other cloudlet
    App Instance Should Exist           region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}
@@ -137,7 +137,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    Wait For App Instance To Be Deleted   region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}  timeout=${appinst_timeout}
 
    # put cloudlet back online
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
 
    # verify it returns the 1st cloudlet
    ${findcloudlet_3}=  Find Cloudlet      latitude=31  longitude=-91
@@ -149,7 +149,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}
 
    # put cloudlet in maintenance mode no failover
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStartNoFailover
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStartNoFailover  use_defaults=${False}
 
    App Instance Should Exist           region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}
    Wait For App Instance To Be Ready   region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}  timeout=${appinst_timeout}
