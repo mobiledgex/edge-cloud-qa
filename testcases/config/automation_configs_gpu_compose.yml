@@ -1,0 +1,10 @@
+version: '2.3'
+services:
+  compvision:
+    image: docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-09-22
+    network_mode: "host"
+    restart: unless-stopped
+    runtime: nvidia
+    environment:
+     - NVIDIA_VISIBLE_DEVICES=all
+
