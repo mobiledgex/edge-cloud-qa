@@ -117,7 +117,8 @@ class ClusterInstance(MexOperation):
             clusterinst_dict['deployment'] = deployment
     
         if autoscale_policy_name is not None:
-            clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
+            if str(autoscale_policy_name) != "Unset":
+                clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
             _fields_list.append(_autoscale_policy_field_number)
 
         if include_fields and _fields_list:
