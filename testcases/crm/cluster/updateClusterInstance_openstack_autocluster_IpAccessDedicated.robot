@@ -173,6 +173,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Should Be Equal As Numbers   ${clusterInst[0]['data']['state']}   5
 
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=Unset
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
