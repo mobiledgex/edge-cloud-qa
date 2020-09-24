@@ -141,13 +141,16 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
     Create App  region=${region}  image_path=${docker_image_cpu}  access_ports=tcp:2017  scale_with_cluster=True
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}   cluster_instance_name=${cluster_name_default}  autocluster_ip_access=IpAccessShared
 
+    ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+    ${public_port}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
+
     Log To Console  Updating Cluster Instance
     Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=${policy_name_default}  cluster_name=${cluster_name_default}
     Log To Console  Done Updating Cluster Instance
 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
 
-    Set CPU Load  host=${rootlb}  port=2017  load_percentage=72
+    Set CPU Load  host=${rootlb}  port=${public_port}  load_percentage=72
     Sleep  60s
 
     FOR  ${x}  IN RANGE  0  30
@@ -167,6 +170,7 @@ Shall be able to update IpAccessShared k8s autocluster to include auto scale pol
 
     Should Be Equal As Numbers   ${clusterInst[0]['data']['state']}   5
 
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=Unset
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
