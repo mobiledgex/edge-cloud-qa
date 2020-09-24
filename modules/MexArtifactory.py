@@ -1,8 +1,9 @@
 import logging
 import subprocess
+import os
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
-logger = logging.getLogger('mex_mastercontroller rest')
+logger = logging.getLogger(__name__)
 
 class MexArtifactory():
 
@@ -13,9 +14,9 @@ class MexArtifactory():
         pass
 
     def curl_image_to_artifactory(self, username, password, server, org_name, image_name):
-        cmd = f'curl -u{username}:{password} -T {image_name} "https://{server}/artifactory/repo-{org_name}/{image_name}" --fail -v'
+        cmd = f'curl -u{username}:{password} -T {image_name} "https://{server}/artifactory/repo-{org_name}/{os.path.basename(image_name)}" --fail -v'
 
-        logging.info(cmd)
+        logger.info(cmd)
         #cmd2 = shlex.split(cmd)
         #print('*WARN*', 'cmd2', cmd2)
         
