@@ -383,7 +383,8 @@ Get dme metrics with starttime and endtime and last on openstack
 DeveloperManager shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   ${epoch}=  Get Time  epoch
+   #${epoch}=  Get Time  epoch
+   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -418,7 +419,9 @@ DeveloperManager shall be able to get dme metrics
 DeveloperContributor shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   ${epoch}=  Get Time  epoch
+   #${epoch}=  Get Time  epoch
+   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
+
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -453,7 +456,9 @@ DeveloperContributor shall be able to get dme metrics
 DeveloperViewer shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   ${epoch}=  Get Time  epoch
+   #${epoch}=  Get Time  epoch
+   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
+
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
