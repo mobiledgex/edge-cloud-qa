@@ -15,6 +15,7 @@ import subprocess
 import argparse
 import zipfile
 import zlib
+import html
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = 'cop6UQnmK4mwodXzijsY407F'
@@ -444,8 +445,12 @@ def exec_testcases(z, l):
         #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
         logging.info("executing " + exec_cmd)
         try:
+            exec_start = time.time()
             r = subprocess.run(exec_cmd, shell=True, check=True)
-            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+            exec_stop = time.time()
+            exec_duration = exec_stop - exec_start
+            comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1, comment=comment)
             logging.debug(f'updatestatus={status}')
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             last_status = 'pass'
@@ -453,11 +458,14 @@ def exec_testcases(z, l):
                 found_failure = 0 
         except subprocess.CalledProcessError as err:
             #print(err)
+            exec_stop = time.time()
+            exec_duration = exec_stop - exec_start
+            comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
             found_failure = 1
             logging.info("exec cmd failed. return code=: " + str(err.returncode))
             logging.info("exec cmd failed. stdout=: " + str(err.stdout))
             logging.info("exec cmd failed. stderr=: " + str(err.stderr))
-            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
+            status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2, comment=comment)
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
             last_status = 'fail'
 
