@@ -36,6 +36,7 @@ from mex_master_controller.ShowDeviceReport import ShowDeviceReport
 from mex_master_controller.RunDebug import RunDebug
 from mex_master_controller.Config import Config
 from mex_master_controller.VerifyEmail import VerifyEmail
+from mex_master_controller.User import User
 
 import shared_variables_mc
 import shared_variables
@@ -186,6 +187,7 @@ class MexMasterController(MexRest):
         self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.vm_pool = VMPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -488,6 +490,9 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/delete'
