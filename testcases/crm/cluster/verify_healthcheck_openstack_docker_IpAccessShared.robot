@@ -97,6 +97,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
     ${public_port_1}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][1]['public_port']}
+    ${public_port_2}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][2]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
@@ -104,8 +105,8 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
-    
-    Start TCP Port  ${tcp_fqdn}  ${public_port_1}
+   
+    Start TCP Port  ${tcp_fqdn}   2016   server_port=${public_port_2} 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Register Client
@@ -313,11 +314,12 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     ${app_inst}=   Show App Instances   region=${region}  app_name=${app_name_default}  cluster_instance_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
     ${public_port_1}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][1]['public_port']}
+    ${public_port_2}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][2]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
     Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
 
-    Start TCP Port  ${tcp_fqdn}  ${public_port_1}
+    Start TCP Port  ${tcp_fqdn}  2016  server_port=${public_port_2}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
