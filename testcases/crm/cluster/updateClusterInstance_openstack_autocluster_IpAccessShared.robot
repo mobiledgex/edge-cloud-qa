@@ -10,7 +10,7 @@ Library  String
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout    ${test_timeout_crm}
+Test Timeout    ${test_timeout_crm1}
 
 *** Variables ***
 
