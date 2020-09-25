@@ -676,8 +676,10 @@ class MexApp(object):
 
     def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
         rb = None
+        network, node = node.split('=')
+
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
         else:
             rb = self.rootlb
 
