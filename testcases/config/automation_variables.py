@@ -1,4 +1,5 @@
 test_timeout_crm = '32 min'
+test_timeout_crm1 = '40 min'
 
 cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
