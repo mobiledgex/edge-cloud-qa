@@ -277,7 +277,7 @@ class Rootlb(Linux):
 
     def write_file_to_node(self, node, mount, data=None):
         logging.info(f'write file to node={node} mount={mount}')
-        network, ip = node.split('=')
+        #network, ip = node.split('=')
 
         data_to_write = None
         if data:
