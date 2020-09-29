@@ -2,7 +2,7 @@
 
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
-Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+#Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Test Setup      Setup
 Test Teardown   CleanUp
 
@@ -21,7 +21,10 @@ ${samsung_end_nanos}  1234
 ${samsung_notify_id}  1234
 ${region}  US
 ${username}=  mextester06
-${password}=  mextester06123
+#${password}=  ${mextester06_gmail_password}
+#${password}=  mextester06123
+#${username}=  mextester99
+#${password}=  rfbixqomqidobmcb
 
 *** Test Cases ***
 
@@ -38,10 +41,10 @@ showDevice - developer viewer does not have permission to use command to return 
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
@@ -63,10 +66,10 @@ showDeviceReport - developer viewer does not have permission to use command to r
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
@@ -86,10 +89,10 @@ showDevice - developer manager does not have permission to use command to return
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
@@ -110,10 +113,10 @@ showDeviceReport - developer manager does not have permission to use command to 
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
@@ -134,10 +137,10 @@ showDevice - developer contributor does not have permission to use command to re
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}   region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
@@ -158,10 +161,10 @@ showDeviceReport - developer contributor does not have permission to use command
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
@@ -182,10 +185,10 @@ showDevice - mexadmin has permission to use command to return device information
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
@@ -207,10 +210,10 @@ showDeviceReport - mexadmin has permission to use command to return device infor
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
@@ -234,10 +237,10 @@ showDevice - operator viewer does not have permission to use command to return d
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
@@ -259,10 +262,10 @@ showDeviceReport - operator viewer does not have permission to use command to re
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
@@ -282,10 +285,10 @@ showDevice - operator manager does not have permission to use command to return 
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
@@ -306,10 +309,10 @@ showDeviceReport - operator manager does not have permission to use command to r
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
@@ -331,10 +334,10 @@ showDevice - operator contributor does not have permission to use command to ret
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
@@ -355,10 +358,10 @@ showDeviceReport - operator contributor does not have permission to use command 
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
@@ -379,10 +382,10 @@ showDevice - mexadmin has permission to use command to return device information
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
 
@@ -404,10 +407,10 @@ showDeviceReport - mexadmin has permission to use command to return device infor
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}
+      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  #developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
       ${pool_return}=        Show Device Report  region=US  token=${supertoken}
@@ -421,7 +424,7 @@ showDeviceReport - mexadmin has permission to use command to return device infor
 
 CleanUp
 
-   MexController.Cleanup Provisioning
+#   MexController.Cleanup Provisioning
    MexMasterController.Cleanup Provisioning
 
 Setup
@@ -430,20 +433,19 @@ Setup
    ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
    ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
-
+   ${epochpassword}=  Catenate  SEPARATOR=  ${username}  ${epoch} 
    ${supertoken}=  Get Super Token
 
    Skip Verify Email  token=${supertoken}
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   Create User  username=${epochusername}   password=${epochpassword}   email_address=${emailepoch}
 #   Verify Email  email_address=${emailepoch}
    Unlock User
-   ${user_token}=  Login  username=${epochusername}  password=${password}
+   ${user_token}=  Login  username=${epochusername}  password=${epochpassword}
 
-   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
+   Create User  username=${epochusername2}   password=${epochpassword}   email_address=${emailepoch2}
 #   Verify Email  email_address=${emailepoch2}
    Unlock User
-   ${user_token2}=  Login  username=${epochusername2}  password=${password}
-
+   ${user_token2}=  Login  username=${epochusername2}  password=${epochpassword}
 
    Set Suite Variable  ${user_token}
    Set Suite Variable  ${user_token2}
