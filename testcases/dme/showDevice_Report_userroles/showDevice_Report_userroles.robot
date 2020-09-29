@@ -21,10 +21,7 @@ ${samsung_end_nanos}  1234
 ${samsung_notify_id}  1234
 ${region}  US
 ${username}=  mextester06
-#${password}=  ${mextester06_gmail_password}
-#${password}=  mextester06123
-#${username}=  mextester99
-#${password}=  rfbixqomqidobmcb
+
 
 *** Test Cases ***
 
