@@ -136,7 +136,7 @@ Disk Should Be In Range
    \  Should Be Equal  ${reading[6]}  ${operator}
    \  Should Be Equal  ${reading[7]}  ${developer_name}
 
-   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 10000000
+   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100000000
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
