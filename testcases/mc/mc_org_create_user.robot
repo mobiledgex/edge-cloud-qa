@@ -13,7 +13,7 @@ ${dev_orgname}=    DevOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password} 
 	
 *** Test Cases ***
 MC - User shall be able to query empty orgs
