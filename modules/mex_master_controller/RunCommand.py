@@ -248,6 +248,3 @@ class RunCommand(MexOperation):
         cmd = f'mcctl --addr https://{mc_address} region RunConsole region={region} {msg}'
 
         return self.run(token=token, command=cmd, region=region, timeout=30, use_defaults=use_defaults, use_thread=use_thread)
-
-    def get_access_cloudlet_output(self):
-        return self.get_stream_output()
