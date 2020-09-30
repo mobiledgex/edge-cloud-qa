@@ -15,7 +15,7 @@ ${operator_name}  tmus
 ${cloudlet_name}  tmocloud-1
 
 ${username}=   mextester06
-${password}=   mextester06123
+${password}=   ${mextester06_gmail_password}
 #${email}=      mextester06@gmail.com
 
 ${docker_image}=  image
