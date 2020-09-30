@@ -12,7 +12,7 @@ ${organization}=  dmuus
 ${region}=  US
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 # ECQ-2306
