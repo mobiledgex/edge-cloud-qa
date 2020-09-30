@@ -10,7 +10,7 @@ Test Teardown  Teardown
 ${cloudlet}=  tmocloud-1
 ${operator}=  dmuus
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 ${region}=  US
 
