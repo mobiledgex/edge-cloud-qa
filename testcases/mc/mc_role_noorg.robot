@@ -23,10 +23,11 @@ MC - Admin user shall be able assign AdminManger role with no org
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminManager'
-   \  Exit For Loop If  ${found}
-
+   FOR  ${role}  IN  @{showadmin}
+        ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminManager'
+        Exit For Loop If  ${found}
+   END
+	
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${epochusername}
    Should Be Equal       ${role["role"]}      AdminManager 
@@ -211,10 +212,11 @@ MC - Admin user shall not be able assign AdminManger with a weak password
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminManager'
-   \  Exit For Loop If  ${found}
-
+   FOR  ${role}  IN  @{showadmin}
+        ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminManager'
+        Exit For Loop If  ${found}
+   END 
+	
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${adminuser}
    Should Be Equal       ${role["role"]}      AdminManager 
@@ -235,10 +237,11 @@ MC - Admin user shall be able assign AdminContributor role with no org
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminContributor'
-   \  Exit For Loop If  ${found}
-
+   FOR  ${role}  IN  @{showadmin}
+        ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminContributor'
+        Exit For Loop If  ${found}
+   END 
+	
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${epochusername}
    Should Be Equal       ${role["role"]}      AdminContributor 
@@ -268,10 +271,11 @@ MC - Admin user shall not be able assign AdminContributor with a weak password
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminContributor'
-   \  Exit For Loop If  ${found}
-
+   FOR  ${role}  IN  @{showadmin}
+        ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminContributor'
+         Exit For Loop If  ${found}
+   END
+	
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${adminuser}
    Should Be Equal       ${role["role"]}      AdminContributor 
@@ -292,10 +296,11 @@ MC - Admin user shall be able assign AdminViewer role with no org
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminViewer'
-   \  Exit For Loop If  ${found}
-
+   FOR  ${role}  IN  @{showadmin}
+	${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${epochusername}' and '${role['role']}'=='AdminViewer'
+        Exit For Loop If  ${found}
+   END
+	
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${epochusername}
    Should Be Equal       ${role["role"]}      AdminViewer 
@@ -325,9 +330,10 @@ MC - Admin user shall not be able assign AdminViewer with a weak password
    ${showadmin}=   Show Role Assignment   token=${adminToken}
 
    ${found}=  Set Variable  ${False}
-   : FOR  ${role}  IN  @{showadmin}
-   \  ${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminViewer'
-   \  Exit For Loop If  ${found}
+   FOR  ${role}  IN  @{showadmin}
+	${found}=  Run Keyword And Return Status  Should Be True  '${role['username']}'=='${adminuser}' and '${role['role']}'=='AdminViewer'
+        Exit For Loop If  ${found}
+   END
 
    log to console  ${role}
    Should Be Equal       ${role["username"]}  ${adminuser}
