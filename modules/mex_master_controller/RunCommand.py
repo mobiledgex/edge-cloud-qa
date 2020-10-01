@@ -19,7 +19,7 @@ class RunCommand(MexOperation):
         self.runConsole_url = '/auth/ctrl/RunConsole'
         self.accessCloudlet_url = '/auth/ctrl/AccessCloudlet'
 
-    def _build(self, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, use_defaults=False):
+    def _build(self, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, use_defaults=True):
 
         if use_defaults:
             if not app_name: app_name = shared_variables.app_name_default
