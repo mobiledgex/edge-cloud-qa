@@ -74,7 +74,8 @@ class MexMasterController(MexRest):
         self.prov_stack = []
 
         self.username = 'mexadmin'
-        self.password = 'mexadmin123'
+        #self.password = 'mexadmin123'
+        self.password = 'mexadminfastedgecloudinfra'
 
         self.admin_username = 'mexadmin'
        
