@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Docker App Memory Metrics
+Documentation   Docker App Disk Metrics
 
 Resource  ../metrics_app_library.robot
 
@@ -27,32 +27,36 @@ ${port}=  8080
 ${region}=  US
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last docker app Memory metric on openstack
+Docker Dedicated AppInstMetrics - DISK usage metric on openstack
    [Documentation]
-   ...  request app Memory metrics with last=1
+   ...  request app Disk metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   Memory Should Be In Range  ${metrics}
+   Disk Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 docker app Memory metrics on openstack
+Docker Dedicated AppInstMetrics - last 5 DISK usage metrics on openstack
    [Documentation]
-   ...  request app Memory metrics with last=5
+   ...  request app Disk metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   Memory Should Be In Range  ${metrics}
+   Disk Should Be In Range  ${metrics}
 
 *** Keywords ***
 Setup
@@ -64,14 +68,12 @@ Setup
    #${clustername_docker}=  Catenate  SEPARATOR=-  cluster  ${t}  docker
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   #${app_name}=  Set Variable  app1582226010-873146k8s
-   #${clustername_docker}=   Set Variable  cluster-1582226010-873146-docker
-   #${developer_name}=  Set Variable  mobiledgex
-
    ${app_name}=  Set Variable  app-us
-   ${clustername_docker}=   Set Variable  dockerdedicated
+   ${clustername_docker}=   Set Variable  dockermonitoring
    ${developer_name}=  Set Variable  testmonitor
+
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    log to console  ${appinst} ${app_name_influx}
@@ -84,7 +86,7 @@ Setup
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-mem
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-disk
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
@@ -94,16 +96,16 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  mem
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  disk
 
-Memory Should Be In Range
+Disk Should Be In Range
   [Arguments]  ${metrics}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 10000000
    END
 
 Metrics Should Match Influxdb
@@ -127,7 +129,6 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['mem']}  ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['disk']}  ${reading[9]}
       ${index}=  Evaluate  ${index}+1
    END
-

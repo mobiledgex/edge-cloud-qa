@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Docker App CPU Metrics
+Documentation   Docker App Network Metrics
 
 Resource  ../metrics_app_library.robot
 
@@ -11,7 +11,7 @@ Suite Setup       Setup
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_docker}=   dockerdedicated
+${clustername_docker}=   dockershared
 ${developer_name}=  testmonitor
 ${app_name}=  app-us
 
@@ -27,32 +27,36 @@ ${port}=  8080
 ${region}=  US
 
 *** Test Cases ***
-AppMetrics - Shall be able to get the last docker app CPU metric on openstack
+Docker Shared AppInstMetrics - NETWORK usage metric on openstack
    [Documentation]
-   ...  request app CPU metrics with last=1
+   ...  request app Network metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   CPU Should Be In Range  ${metrics}
+   Network Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 docker app CPU metrics on openstack
+Docker Shared AppInstMetrics - last 5 NETWORK usage metrics on openstack
    [Documentation]
-   ...  request app CPU metrics with last=5
+   ...  request app Network metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   CPU Should Be In Range  ${metrics}
+   Network Should Be In Range  ${metrics}
 
 *** Keywords ***
 Setup
@@ -65,12 +69,13 @@ Setup
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
    ${app_name}=  Set Variable  app-us
-   ${clustername_docker}=   Set Variable  dockerdedicated
+   ${clustername_docker}=   Set Variable  dockershared
    ${developer_name}=  Set Variable  testmonitor
+   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
-   #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
-
+   #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][2]}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
    log to console  ${appinst} ${app_name_influx}
@@ -83,7 +88,7 @@ Setup
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-network
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
@@ -93,17 +98,33 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cpu
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
 
-CPU Should Be In Range
-  [Arguments]  ${metrics}
+Network Should Be In Range
+   [Arguments]  ${metrics}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
    END
+
+Network Should Have Received Data
+   [Arguments]  ${metrics}
+
+   ${found_data}=  Set Variable  ${False}
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+
+   # verify values
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+      ${found_data}=  Run Keyword If  '${reading[9]}' > '10' and '${reading[10]}' > '10'  Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_data}
+   END
+
+   Should Be True  ${found_data}  Didnot find network data
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -126,8 +147,8 @@ Metrics Should Match Influxdb
    ${index}=  Set Variable  0
    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
-
+      Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
       ${index}=  Evaluate  ${index}+1
    END
 

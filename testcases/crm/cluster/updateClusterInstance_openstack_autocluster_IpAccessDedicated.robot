@@ -10,7 +10,7 @@ Library  String
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout    ${test_timeout_crm}
+Test Timeout    ${test_timeout_crm1}
 
 *** Variables ***
 
@@ -154,7 +154,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name_default}
 
     Set CPU Load  host=${clusterlb}  port=2017  load_percentage=72
-    Sleep  60s
+    Sleep  120s
 
     FOR  ${x}  IN RANGE  0  30
         ${server_info_node}=    Get Server List  name=${openstack_node_name}
@@ -165,7 +165,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Should Be Equal As Numbers   ${num_servers_node}    2
 
-    FOR  ${x}  IN RANGE  0  30
+    FOR  ${x}  IN RANGE  0  40
         ${clusterInst}=  Show Cluster Instances  region=${region}   cluster_name=${cluster_name_default}  cloudlet_name=${cloudlet_name_openstack_dedicated}
         Exit For Loop If  '${clusterInst[0]['data']['state']}' == '5'
         Sleep  10s
@@ -173,6 +173,7 @@ Shall be able to update IpAccessDedicated k8s autocluster to include auto scale 
 
     Should Be Equal As Numbers   ${clusterInst[0]['data']['state']}   5
 
+    Update Cluster Instance   region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autoscale_policy_name=Unset
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     Register Client
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}

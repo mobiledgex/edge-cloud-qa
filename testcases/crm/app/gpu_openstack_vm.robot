@@ -31,7 +31,7 @@ ${mobiledgex_domain}  mobiledgex.net
 
 ${qcow_gpu_ubuntu16_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
-${client_path}     ../edge-cloud-sampleapps/ComputerVision/client
+${client_path}     ../../../edge-cloud-sampleapps/ComputerVisionServer/client
 #${client_path}  ../../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 ${image}=  3_bodies.png
@@ -39,6 +39,7 @@ ${image}=  3_bodies.png
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# ECQ-1897
 GPU - shall be able to deploy NVidia T4 Passthru GPU app on KVM Openstack Ubuntu 16
     [Documentation]
     ...  deploy Ubuntu 16 VM image with GPU support on openstack

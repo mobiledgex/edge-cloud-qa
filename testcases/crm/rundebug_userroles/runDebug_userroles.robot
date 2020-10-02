@@ -2,7 +2,7 @@
 
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
-Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+#Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library  Process
 Library  OperatingSystem
 
@@ -14,7 +14,8 @@ Test Teardown   CleanUp
 
 ${region}  EU
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
+#${password}=  mextester06123
 ${region}=  EU
 ${cloudlet_name_openstack_dedicated}  automationParadiseCloudlet
 ${ntype_shep}=  shepherd
@@ -200,7 +201,7 @@ RunDebug - mexadmin has permission to use command to return device information f
 
 CleanUp
 
-   MexController.Cleanup Provisioning
+#   MexController.Cleanup Provisioning
    MexMasterController.Cleanup Provisioning
 
 Setup

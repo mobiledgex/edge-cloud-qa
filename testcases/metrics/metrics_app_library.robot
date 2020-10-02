@@ -656,7 +656,7 @@ Get app metrics with cloudlet/operator/developer only
    @{datesplit}=  Split String  ${datesplit[0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
-   ${start}=  Evaluate  ${epochpre} - 10800
+   ${start}=  Evaluate  ${epochpre} - 14400
    ${end}=    Evaluate  ${epochpre} - 30
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
