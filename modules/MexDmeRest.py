@@ -350,11 +350,11 @@ class MexDmeRest(MexRest):
         return token
 
     def wait_for_replies(self, *args):
-        print('*WARN*', type(args))
+        #print('*WARN*', type(args))
         for x in args:
             if isinstance(x, list):
                 for x2 in x:
-                    print('*WARN*', 'list')
+                    #print('*WARN*', 'list')
                     x.join()
             #print('*WARN*', 'join again')
             x.join()
