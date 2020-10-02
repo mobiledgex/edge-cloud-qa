@@ -16,7 +16,9 @@ cluster_flavor_name_default = 'cluster_flavor' + default_time_stamp
 organization_name_default = 'org' + default_time_stamp
 cloudletpool_name_default = 'cloudletpool' + default_time_stamp
 vmpool_name_default = 'vmpool' + default_time_stamp
-
+alert_receiver_name_default = 'alertreceiver' + default_time_stamp.replace('-','')
+alert_receiver_type_default = 'email'
+alert_receiver_severity_default = 'info'
 privacy_policy_name_default = 'privacypolicy' + default_time_stamp
 autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
 autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
