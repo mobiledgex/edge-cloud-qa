@@ -162,7 +162,7 @@ MC - Admin user shall not be able to change to a weak password
 	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 2.0 years but is 28.0 seconds. Please increase length or complexity"}
 
 
-	
+# ECQ-2756	
 MC - User shall not be able to change to a weak password 
 	[Documentation]
 	...  admin user can not change their password to a weak password  
