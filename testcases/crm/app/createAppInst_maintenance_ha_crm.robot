@@ -15,6 +15,7 @@ ${region}=  EU
 ${appinst_timeout}=  600
 
 *** Test Cases ***
+# ECQ-2550
 AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -44,6 +45,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2551
 AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -73,6 +75,7 @@ AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2552
 AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
@@ -90,18 +93,19 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   EDGECLOUD-3540 AutoProv not working for helm
+   #EDGECLOUD-3540 AutoProv not working for helm
 
    [Setup]     Setup     cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
    [Teardown]  Teardown  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha2}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
 
    Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2553
 AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in openstack and 1 on vmpool
@@ -129,6 +133,7 @@ AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated ap
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net
 
+# ECQ-2554
 AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in vmpool and 1 on openstack

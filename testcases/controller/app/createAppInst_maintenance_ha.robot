@@ -11,6 +11,7 @@ Test Teardown  Teardown
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2458
 AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -35,6 +36,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2459
 AppInst - appinst shall start for k8s/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -59,6 +61,7 @@ AppInst - appinst shall start for k8s/lb/dedicated app inst when cloudlet is mai
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2460
 AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -83,6 +86,7 @@ AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is 
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2461
 AppInst - appinst shall start for docker/lb/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -107,6 +111,7 @@ AppInst - appinst shall start for docker/lb/shared app inst when cloudlet is mai
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2462
 AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -131,6 +136,7 @@ AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2463
 AppInst - appinst shall start for helm/shared/lb app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -148,7 +154,7 @@ AppInst - appinst shall start for helm/shared/lb app inst when cloudlet is maint
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   EDGECLOUD-3540 AutoProv not working for helm
+   #EDGECLOUD-3540 AutoProv not working for helm
 
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
@@ -157,6 +163,7 @@ AppInst - appinst shall start for helm/shared/lb app inst when cloudlet is maint
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2464
 AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets
@@ -174,7 +181,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   EDGECLOUD-3540 AutoProv not working for helm
+   #EDGECLOUD-3540 AutoProv not working for helm
 
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
@@ -183,6 +190,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
+# ECQ-2465
 AppInst - appinst shall not start for docker/direct/shared app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets and minactiveinstances=1

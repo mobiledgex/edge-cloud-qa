@@ -15,6 +15,7 @@ ${region}=  ${region_vsphere}
 ${appinst_timeout}=  600
 
 *** Test Cases ***
+# ECQ-2555
 AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in openstack and 1 in vsphere 
@@ -42,6 +43,7 @@ AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated a
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_packet}  operator1=${operator_name_openstack_packet}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_packet}.${operator_name_openstack_packet}.mobiledgex.net  cloudlet2=${cloudlet_name_vsphere}  operator2=${operator_name_vsphere}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vsphere}.${operator_name_vsphere}.mobiledgex.net
 
+# ECQ-2556
 AppInst - vsphere-to-openstack appinst shall start for k8s/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in vsphere and 1 in openstack
@@ -100,8 +102,8 @@ Setup
 Teardown
    [Arguments]  ${cloudlet1}  ${operator1}  ${cloudlet2}  ${operator2}
 
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet2}  operator_org_name=${operator1}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet2}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
    Cleanup Provisioning
 
 AppInst Should Start When Cloudlet Goes To Maintenance Mode
@@ -119,7 +121,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    Should Be Equal              ${findcloudlet_1['fqdn']}  ${cloudlet1_fqdn}
 
    # put cloudlet in maintenance mode
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStart
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStart  use_defaults=${False}
 
    # appinst should spin up on other cloudlet
    App Instance Should Exist           region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}
@@ -135,7 +137,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    Wait For App Instance To Be Deleted   region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}  timeout=${appinst_timeout}
 
    # put cloudlet back online
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=NormalOperation  use_defaults=${False}
 
    # verify it returns the 1st cloudlet
    ${findcloudlet_3}=  Find Cloudlet      latitude=31  longitude=-91
@@ -147,7 +149,7 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}
 
    # put cloudlet in maintenance mode no failover
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStartNoFailover
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}  maintenance_state=MaintenanceStartNoFailover  use_defaults=${False}
 
    App Instance Should Exist           region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet1}  operator_org_name=${operator1}
    Wait For App Instance To Be Ready   region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet2}  operator_org_name=${operator2}  timeout=${appinst_timeout}

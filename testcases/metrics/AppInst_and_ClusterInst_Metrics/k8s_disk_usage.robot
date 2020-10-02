@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   Docker App Network Metrics
+Documentation   K8s Dedicated App Disk Metrics
 
 Resource  ../metrics_app_library.robot
 
@@ -9,11 +9,12 @@ Suite Setup       Setup
 #Test Timeout    ${test_timeout_crm}
 
 *** Variables ***
+
 ${cloudlet_name_openstack_metrics}=   packetcloudlet
 ${operator}=                       packet
-${clustername_docker}=   dockerdedicated
+${clustername_k8sdedicated}=   k8sshared
 ${developer_name}=  testmonitor
-${app_name}=  app-us
+${app_name}=  app-us-k8s
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
@@ -26,65 +27,89 @@ ${port}=  8080
 
 ${region}=  US
 
+#${cloudlet_name_openstack_metrics}=   automationParadiseCloudlet
+#${operator}=                       GDDT
+#${clustername_k8sdedicated}=   k8smonitoring
+#${developer_name}=  testmonitor
+#${app_name}=  k8sapp
+#
+#${username_admin}=  mexadmin
+#${password_admin}=  mexadmin123
+#
+#${username}=  testuser
+#${password}=  testuser
+#${orgname}=   testmonitor
+#
+#${port}=  8080
+#
+#${region}=  EU
+
 *** Test Cases ***
-AppMetrics - Shall be able to get the last docker app Network metric on openstack
+k8s Dedicated AppInstMetrics - DISK usage metric on openstack
    [Documentation]
-   ...  request app Network metrics with last=1
+   ...  request app Disk metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   Network Should Be In Range  ${metrics}
+   Disk Should Be In Range  ${metrics}
 
 
-AppMetrics - Shall be able to get the last 5 docker app Network metrics on openstack
+k8s Dedicated AppInstMetrics - last 5 DISK usage metrics on openstack
    [Documentation]
-   ...  request app Network metrics with last=5
+   ...  request app Disk metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
+   log  ${metrics}
+
    Metrics Headings Should Be Correct  ${metrics}
 
-   Network Should Be In Range  ${metrics}
+   Disk Should Be In Range  ${metrics}
 
 *** Keywords ***
 Setup
+
+   ${app_name}=  Set Variable  app-us-k8s
+   ${clustername_k8sdedicated}=   Set Variable  k8smonitoring
+   ${developer_name}=  Set Variable  testmonitor
 #   ${t}=  Get Default Time Stamp
 #   ${developer_name}=  Get Default Developer Name
 #   ${app_name}=  Get Default App Name
-#   ${clustername_docker}=  Get Default Cluster Name
+#   ${clustername_k8sdedicated}=  Get Default Cluster Name
 
-   #${clustername_docker}=  Catenate  SEPARATOR=-  cluster  ${t}  docker
+   #${clustername_k8sdedicated}=  Catenate  SEPARATOR=-  cluster  ${t}  k8sdedicated
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   ${app_name}=  Set Variable  app-us
-   ${clustername_docker}=   Set Variable  dockerdedicated
-   ${developer_name}=  Set Variable  testmonitor
-   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
-   ${app_name_influx}=  Convert To Lowercase  ${app_name}
+   #${app_name}=  Set Variable  app1582226010-873146k8s
+   #${clustername_k8sdedicated}=   Set Variable  cluster-1582226010-873146-k8sdedicated
+   #${developer_name}=  Set Variable  mobiledgex
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
-   #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][2]}
+   ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
 
-   log to console  ${appinst} ${app_name_influx}
+   log to console  ${appinst} ${pod}
 
    Set Suite Variable  ${app_name}
-   Set Suite Variable  ${clustername_docker}
-   Set Suite Variable  ${developer_name}
    Set Suite Variable  ${app_name_influx}
+   Set Suite Variable  ${clustername_k8sdedicated}
+   Set Suite Variable  ${developer_name}
+   Set Suite Variable  ${pod}
 
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-network
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        appinst-disk
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
@@ -94,33 +119,24 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  disk
 
-Network Should Be In Range
-   [Arguments]  ${metrics}
+Disk Should Be In Range
+  [Arguments]  ${metrics}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
-   END
+   : FOR  ${reading}  IN  @{values}
+  \  Should Be Equal  ${reading[1]}  ${app_name_influx}
+   \  Should Be Equal  ${reading[2]}  v1
+   \  Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
+   \  Should Be Equal  ${reading[4]}  ${developer_name}
+   \  Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
+   \  Should Be Equal  ${reading[6]}  ${operator}
+   \  Should Be Equal  ${reading[7]}  ${developer_name}
 
-Network Should Have Received Data
-   [Arguments]  ${metrics}
-
-   ${found_data}=  Set Variable  ${False}
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
-
-   # verify values
-   FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
-      ${found_data}=  Run Keyword If  '${reading[9]}' > '10' and '${reading[10]}' > '10'  Set Variable  ${True}
-      ...                                 ELSE  Set Variable  ${found_data}
-   END
-
-   Should Be True  ${found_data}  Didnot find network data
+   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100000000
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
@@ -141,10 +157,7 @@ Metrics Should Match Influxdb
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['sendBytes']}  ${reading[9]}
-      Should Be Equal  ${metrics_influx_t[${index}]['recvBytes']}  ${reading[10]}
-      ${index}=  Evaluate  ${index}+1
-   END
-
+   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+   \  Should Be Equal  ${metrics_influx_t[${index}]['disk']}  ${reading[9]}
+   \  ${index}=  Evaluate  ${index}+1

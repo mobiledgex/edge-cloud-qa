@@ -38,12 +38,14 @@ from mex_master_controller.Config import Config
 from mex_master_controller.VerifyEmail import VerifyEmail
 from mex_master_controller.AlertReceiver import AlertReceiver
 from mex_master_controller.Alert import Alert
+from mex_master_controller.User import User
 
 import shared_variables_mc
 import shared_variables
 
-logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
-logger = logging.getLogger('mex_mastercontroller rest')
+#logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s xline:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
+logger = logging.getLogger(__name__)
+#logging.getLogger('webservice').setLevel(logging.WARNING)
 
 timestamp = str(time.time())
 
@@ -190,6 +192,7 @@ class MexMasterController(MexRest):
         self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -492,6 +495,9 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/delete'
@@ -1015,7 +1021,6 @@ class MexMasterController(MexRest):
         if sort_field == 'flavor_name':
             #allregion = sorted(allregion, key=lambda x: (x['data']['region'].casefold(), x['data']['key']['name'].casefold()),reverse=reverse)
             resp_data = sorted(resp, key=lambda x: (x['data']['key']['name'].casefold()),reverse=reverse)
-            print('*WARN*', 'post', resp_data)
         elif sort_field == 'ram':
             logging.info('sorting by ram')
             resp_data = sorted(resp, key=lambda x: (x['data']['key']['ram'].casefold()),reverse=reverse)
@@ -1050,7 +1055,7 @@ class MexMasterController(MexRest):
         logger.info('show app on mc at {}. \n\t{}'.format(url, payload))
 
         def send_message():
-            self._number_showapp_requests += 1
+            #self._number_showapp_requests += 1
 
             try:
                 self.post(url=url, bearer=token, data=payload)
@@ -1060,13 +1065,13 @@ class MexMasterController(MexRest):
                 respText = str(self.resp.text)
 
                 if str(self.resp.status_code) != '200':
-                    self._number_showapp_requests_fail += 1
+                    #self._number_showapp_requests_fail += 1
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
-                self._number_showapp_requests_fail += 1
+                #self._number_showapp_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self._number_showapp_requests_success += 1
+            #self._number_showapp_requests_success += 1
 
             resp_data = self.decoded_data
             if type(resp_data) is dict:
@@ -1221,7 +1226,7 @@ class MexMasterController(MexRest):
 #            return resp
 
     def show_app_instances(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='app_name', sort_order='ascending'):
-        if app_name or app_version or cloudlet_name or operator_name or developer_name or cluster_instance_name or cluster_instance_developer_name:
+        if app_name or app_version or cloudlet_name or operator_org_name or developer_org_name or cluster_instance_name or cluster_instance_developer_org_name:
             resp_data = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
             if type(resp_data) is dict:
                 resp_data = [resp_data]
@@ -1231,7 +1236,11 @@ class MexMasterController(MexRest):
                 resp_data = sorted(resp_data, key=lambda x: x['data']['key']['app_key']['name'].casefold(),reverse=reverse)
 
             return resp_data
-        
+       
+        else:
+            resp_data = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
+            return resp_data
+ 
     def show_all_flavors(self, sort_field='flavor_name', sort_order='ascending'):
         # should enhance by querying for the regions. But hardcode for now
 
@@ -1497,7 +1506,7 @@ class MexMasterController(MexRest):
 #            return self.decoded_data
 
     def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.cluster_instance.delete_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, use_defaults=use_defaults)
+        return self.cluster_instance.delete_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override, use_defaults=use_defaults)
 #
 #        url = self.root_url + '/auth/ctrl/DeleteClusterInst'
 #
@@ -1551,7 +1560,7 @@ class MexMasterController(MexRest):
             logging.info(f'deleting {cluster}')
             self.cluster_instance.delete_cluster_instance(token=self.token, region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_org_name=cluster['data']['key']['organization'], cloudlet_name=cloudlet_name, operator_org_name=cluster['data']['key']['cloudlet_key']['organization'], crm_override=crm_override, use_defaults=False)
 
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, access_type=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None,  json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateApp
         """
         if developer_org_name is None:
@@ -1559,17 +1568,17 @@ class MexMasterController(MexRest):
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
 
-        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+        return self.app.create_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policy=auto_prov_policy, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports,  use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, json_data=None, use_defaults=True, use_thread=False):
         """ Send region DeleteApp
         """
-        return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+        return self.app.delete_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, use_defaults=use_defaults)
 
-    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, json_data=None, use_defaults=True, use_thread=False):
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policy=None, skip_hc_ports=None, json_data=None, use_defaults=True, use_thread=False):
         """ Send region UpdateApp
         """
-        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policy=auto_prov_policy,  deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, use_defaults=use_defaults)
+        return self.app.update_app(token=token, region=region, app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, auto_prov_policy=auto_prov_policy,  deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, skip_hc_ports=skip_hc_ports, annotations=annotations, use_defaults=use_defaults)
 
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateAppInst
@@ -1621,46 +1630,72 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if appinstance and appinstance['data']['state'] == 5:
+                if appinstance and appinstance[0]['data']['state'] == 5:
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 else:
-                    logging.debug(f'app instance not ready. got {appinstance["data"]["state"]}. sleeping and trying again')
+                    logging.debug(f'app instance not ready. got {appinstance[0]["data"]["state"]}. sleeping and trying again')
                     time.sleep(1)
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
-        raise Exception(f'app instance is NOT ready. Got {appinstance["data"]["state"]} but expected 5')
+        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected 5')
 
     def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                logging.debug(f'app instance still exists. got state={appinstance["data"]["state"]}. sleeping and trying again')
+                logging.debug(f'app instance still exists. got state={appinstance[0]["data"]["state"]}. sleeping and trying again')
                 time.sleep(1)
             else:
                 logging.info(f'app instance is NOT found.')
                 return True
 
-        raise Exception(f'app instance still exists. Got app_name={appinstance["data"]["key"]["app_key"]["name"]}  state={appinstance["data"]["state"]}')
+        raise Exception(f'app instance still exists. Got app_name={appinstance[0]["data"]["key"]["app_key"]["name"]}  state={appinstance[0]["data"]["state"]}')
 
     def wait_for_app_instance_health_check_ok(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if 'health_check' in appinstance['data']:
-                    if appinstance['data']['health_check'] == 3:
+                if 'health_check' in appinstance[0]['data']:
+                    if appinstance[0]['data']['health_check'] == 3:
                         logging.info(f'App Instance is health check OK')
                         return appinstance
                     else:
-                        logging.debug(f'app instance health check not OK. got {appinstance["data"]["health_check"]}. sleeping and trying again')
+                        logging.debug(f'app instance health check not OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
                         time.sleep(1)
                 else:
                     raise Exception(f'health check not found')
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
-        raise Exception(f'app instance health check is NOT OK. Got {appinstance["data"]["health_check"]} but expected 3')
+        raise Exception(f'app instance health check is NOT OK. Got {appinstance[0]["data"]["health_check"]} but expected 3')
+
+    def wait_for_app_instance_health_check_fail(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, state=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
+        for x in range(1, timeout):
+            appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+            if appinstance:
+                if 'health_check' in appinstance[0]['data']:
+                    if state == 'HealthCheckFailServerFail': 
+                        if appinstance[0]['data']['health_check'] == 2:
+                            logging.info(f'App Instance is health check {state}')
+                            return appinstance                        
+                        else:
+                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
+                            time.sleep(1)
+                    else:
+                        if appinstance[0]['data']['health_check'] == 1:
+                            logging.info(f'App Instance is health check {state}')
+                            return appinstance
+                        else:
+                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
+                            time.sleep(1)
+                else:
+                    raise Exception(f'health check not found')
+            else:
+                logging.debug(f'app instance is NOT found. sleeping and trying again')
+
+        raise Exception(f'app instance health check is NOT {state}')
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, timeout=120, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread, timeout=timeout)
@@ -2046,8 +2081,8 @@ class MexMasterController(MexRest):
     def create_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, developer_org_name=None,  min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.create_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def delete_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.autoscale_policy.delete_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+    def delete_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoscale_policy.delete_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def update_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=False, use_thread=False):
         url = self.root_url + '/auth/ctrl/UpdateAutoScalePolicy'
@@ -2100,52 +2135,54 @@ class MexMasterController(MexRest):
             resp = send_message()
             return self.decoded_data
 
-    def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/ctrl/ShowAutoScalePolicy'
-
-        payload = None
-        policy = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
-            policy_dict = {'autoscalepolicy': policy}
-            if region is not None:
-                policy_dict['region'] = region
-
-            payload = json.dumps(policy_dict)
-
-        logger.info('show autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            self._number_showautoscalepolicy_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-                
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_showautoscalepolicy_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-                    
-            except Exception as e:
-                self._number_showautoscalepolicy_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            self._number_showautoscalepolicy_requests_success += 1
-            
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+    def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.autoscale_policy.show_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+#
+#        url = self.root_url + '/auth/ctrl/ShowAutoScalePolicy'
+#
+#        payload = None
+#        policy = None
+#
+#        if use_defaults == True:
+#            if token == None: token = self.token
+#
+#        if json_data !=  None:
+#            payload = json_data
+#        else:
+#            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
+#            policy_dict = {'autoscalepolicy': policy}
+#            if region is not None:
+#                policy_dict['region'] = region
+#
+#            payload = json.dumps(policy_dict)
+#
+#        logger.info('show autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
+#
+#        def send_message():
+#            self._number_showautoscalepolicy_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token, data=payload)
+#                
+#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    self._number_showautoscalepolicy_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#                    
+#            except Exception as e:
+#                self._number_showautoscalepolicy_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#            self._number_showautoscalepolicy_requests_success += 1
+#            
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
     def create_operator_code (self, token=None, region=None, operator_org_name=None, code=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.operatorcode.create_operator_code(token=token, region=region, operator_org_name=operator_org_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -2284,6 +2321,9 @@ class MexMasterController(MexRest):
 
     def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.rundebug.run_debug(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def access_cloudlet(self, region=None, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.run_cmd.access_cloudlet(node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, command=command, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         if token is None:

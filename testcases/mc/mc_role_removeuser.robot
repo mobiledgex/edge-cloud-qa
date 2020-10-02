@@ -11,7 +11,7 @@ Test Teardown	Cleanup Provisioning
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
 ${username}=   mextester06
-${password}=   mextester06123
+${password}=   ${mextester06_gmail_password}
 ${email}=      mextester06@gmail.com
 ${orgname}=    TheAdminOrg
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw

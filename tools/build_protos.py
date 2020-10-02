@@ -24,7 +24,7 @@ edgecloud_dir = args.sourcedir
 edgeproto_dir = args.sourcedir_proto
 #edgecloud_dir_infra = args.sourcedir_infra
 edgecloud_qa_dir = args.qadir
-pkg_dir = os.environ['HOME'] + '/go/pkg/mod/github.com/gogo/protobuf@v1.0.0/gogoproto/'
+pkg_dir = os.environ['HOME'] + '/go/pkg/mod/github.com/gogo/protobuf@v1.3.1/gogoproto/'
 #edgecloud_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud/'
 #edgecloud_qa_dir = home_dir + '/go/src/github.com/mobiledgex/edge-cloud-qa/'
 

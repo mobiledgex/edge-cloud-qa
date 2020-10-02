@@ -28,9 +28,9 @@ class tc(unittest.TestCase):
     def setUp(self):
 
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    )
 
     def test_CreateAppInstCloudletNotFound_nodata(self):
@@ -221,7 +221,8 @@ class tc(unittest.TestCase):
         appinst_post = self.controller.show_app_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"DMUUS","name":"nocloud"} not found', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"DMUUS","name":"nocloud"} not found', 'error details')
+        expect_equal(self.controller.response.details(), 'Specified Cloudlet not found', 'error details')
         #expect_equal(self.controller.response.details(), 'Cloudlet operator_key:<name:"DMUUS" > name:"nocloud"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()

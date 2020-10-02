@@ -23,7 +23,7 @@ ${region}=  EU
 ${test_timeout_crm}  15 min
 
 ${username}          mextester06
-${password}          mextester06123
+${password}          ${mextester06_gmail_password}
 
 
 *** Test Cases ***
