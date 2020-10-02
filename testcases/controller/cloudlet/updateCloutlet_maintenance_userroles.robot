@@ -10,11 +10,12 @@ Test Teardown  Teardown
 ${cloudlet}=  tmocloud-1
 ${operator}=  tmus
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2447
 UpdateCloudlet - operator manager shall be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as OperatorManager
@@ -26,6 +27,7 @@ UpdateCloudlet - operator manager shall be able to put cloudlet in maintenance m
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover  
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation 
 
+# ECQ-2448
 UpdateCloudlet - operator contributor shall be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as OperatorContributor
@@ -37,6 +39,7 @@ UpdateCloudlet - operator contributor shall be able to put cloudlet in maintenan
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
    Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
 
+# ECQ-2449
 UpdateCloudlet - operator viewer shall not be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as OperatorViewer
@@ -48,6 +51,7 @@ UpdateCloudlet - operator viewer shall not be able to put cloudlet in maintenanc
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
 
+# ECQ-2450
 UpdateCloudlet - developer manager shall not be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as DeveloperManager
@@ -60,6 +64,7 @@ UpdateCloudlet - developer manager shall not be able to put cloudlet in maintena
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
 
+# ECQ-2451
 UpdateCloudlet - developer contributor shall not be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as DeveloperContributor
@@ -72,6 +77,7 @@ UpdateCloudlet - developer contributor shall not be able to put cloudlet in main
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update Cloudlet  region=${region}  token=${user_token2}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation
 
+# ECQ-2452
 UpdateCloudlet - developer viewer shall not be able to put cloudlet in maintenance mode
    [Documentation]
    ...  - send UpdateCloudlet with maintenance mode as DeveloperViewer

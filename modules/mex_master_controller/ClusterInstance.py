@@ -107,9 +107,9 @@ class ClusterInstance(MexOperation):
             clusterinst_dict['reservable'] = reservable
 
         if crm_override:
-            if crm_override.lower() == "ignorecrm":
+            if str(crm_override).lower() == "ignorecrm":
                 crm_override = 2
-            elif crm_override.lower() == "ignorecrmandtransientstate":
+            elif str(crm_override).lower() == "ignorecrmandtransientstate":
                 crm_override = 4
             clusterinst_dict['crm_override'] = crm_override  # ignore errors from CRM
 
@@ -117,7 +117,8 @@ class ClusterInstance(MexOperation):
             clusterinst_dict['deployment'] = deployment
     
         if autoscale_policy_name is not None:
-            clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
+            if str(autoscale_policy_name) != "Unset":
+                clusterinst_dict['auto_scale_policy'] = autoscale_policy_name
             _fields_list.append(_autoscale_policy_field_number)
 
         if include_fields and _fields_list:
@@ -125,8 +126,6 @@ class ClusterInstance(MexOperation):
             for field in _fields_list:
                 clusterinst_dict['fields'].append(field)
             
-        print("ClusterInst Dict", clusterinst_dict)    
-
         return clusterinst_dict
 
     def _build_metrics(self, type_dict=None, method=None, cell_id=None, selector=None, last=None, start_time=None, end_time=None, use_defaults=True):
@@ -208,4 +207,4 @@ class ClusterInstance(MexOperation):
 
         msg_dict = self._build_metrics(type_dict=inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
 
-        return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]

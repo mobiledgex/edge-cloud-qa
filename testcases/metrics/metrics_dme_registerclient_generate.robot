@@ -194,10 +194,10 @@ Values Should Be In Range
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} >= 0
-      Should Be True   ${reading[2]} == 0
-      Should Be True   ${reading[3]} == 0
-      Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[16]} 
+      Should Be True   ${reading[2]} >= 0
+      Should Be True   ${reading[3]} >= 0
+      Should Be True   ${reading[4]} >= 0
+      Should Be True   ${reading[5]} >= 0 
       Should Be Equal  ${reading[6]}  ${app}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 0
@@ -210,6 +210,8 @@ Values Should Be In Range
       Should Be Equal  ${reading[15]}  RegisterClient
       Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${appvers} 
+
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
    END
 
 Values With Cellid Should Be In Range
@@ -220,10 +222,10 @@ Values With Cellid Should Be In Range
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} >= 0
-      Should Be True   ${reading[2]} == 0
-      Should Be True   ${reading[3]} == 0
-      Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[16]} 
+      Should Be True   ${reading[2]} >= 0
+      Should Be True   ${reading[3]} >= 0
+      Should Be True   ${reading[4]} >= 0
+      Should Be True   ${reading[5]} >= 0 
       Should Be Equal  ${reading[6]}  ${app}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 123 
@@ -237,6 +239,8 @@ Values With Cellid Should Be In Range
       Should Be Equal  ${reading[15]}  RegisterClient
       Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${appvers}
+
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
    END
 
 Values With Auth Should Be In Range
@@ -247,10 +251,10 @@ Values With Auth Should Be In Range
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} >= 0
-      Should Be True   ${reading[2]} == 0
-      Should Be True   ${reading[3]} == 0
-      Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[16]} 
+      Should Be True   ${reading[2]} >= 0
+      Should Be True   ${reading[3]} >= 0
+      Should Be True   ${reading[4]} >= 0
+      Should Be True   ${reading[5]} >= 0        #== ${reading[16]} 
       Should Be Equal  ${reading[6]}  ${appauth}
       Should Be Equal  ${reading[7]}  ${developer}
       Should Be True   ${reading[8]} == 0
@@ -263,6 +267,8 @@ Values With Auth Should Be In Range
       Should Be Equal  ${reading[15]}  RegisterClient
       Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${appvers}
+
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
    END
 
 Values With Error Should Be In Range
@@ -273,10 +279,10 @@ Values With Error Should Be In Range
    # verify values
    FOR  ${reading}  IN  @{values}
       Should Be True   ${reading[1]} >= 0
-      Should Be True   ${reading[2]} == 0
-      Should Be True   ${reading[3]} == 0
-      Should Be True   ${reading[4]} == 0
-      Should Be True   ${reading[5]} == ${reading[16]}
+      Should Be True   ${reading[2]} >= 0
+      Should Be True   ${reading[3]} >= 0
+      Should Be True   ${reading[4]} >= 0
+      Should Be True   ${reading[5]} >= 0
       Should Be Equal  ${reading[6]}  ${app_arg}
       Should Be Equal  ${reading[7]}  ${dev_arg}
       Should Be True   ${reading[8]} == 0
@@ -289,5 +295,7 @@ Values With Error Should Be In Range
       Should Be Equal  ${reading[15]}  RegisterClient
       Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${ver_arg}
+
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
    END
 

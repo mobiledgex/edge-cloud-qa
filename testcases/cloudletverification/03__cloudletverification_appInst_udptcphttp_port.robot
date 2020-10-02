@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation  use FQDN to access app
 
-Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  auto_login=${False}
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexApp
 Library  String
@@ -18,8 +18,8 @@ ${cluster_flavor_name}  x1.medium
 	
 ${cloudlet_name}  automationMunichCloudlet
 ${operator_name}  TDG
-${cloudlet_latitude}       32.7767
-${cloudlet_longitude}      -96.7970
+#${cloudlet_latitude}       32.7767
+#${cloudlet_longitude}      -96.7970
 
 ${cluster_name}  cluster
 
@@ -31,7 +31,7 @@ ${http_page}       automation.html
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${manifest_url_sharedvolumesize}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_shared_volumemount.yml
 	
-${test_timeout_crm}  32 min
+
 
 ${region}=  EU
 	
@@ -111,7 +111,7 @@ User shall be able to create a lb access App on k8s shared
    ...  Verify app is created successfull
    [Tags]  app  k8s  shared  loadbalancer  app
 
-   Create App  region=${region}  app_name=${app_name_k8ssharedlb}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
+   Create App  region=${region}  app_name=${app_name_k8ssharedlb}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
 
 User shall be able to create lb access App on k8s dedicated
    [Documentation]
@@ -119,7 +119,7 @@ User shall be able to create lb access App on k8s dedicated
    ...  Verify app is created successfull
    [Tags]  app  k8s  dedicated  loadbalancer  app
 
-   Create App  region=${region}  app_name=${app_name_k8sdedicatedlb}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,http:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_medium}
+   Create App  region=${region}  app_name=${app_name_k8sdedicatedlb}        deployment=kubernetes  image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_medium}
 
 User shall be able to create an App on k8s shared with sharedvolumesize 
    [Documentation]
@@ -136,8 +136,8 @@ User shall be able to deploy a lb access App Instance on k8s shared
    [Tags]  app  k8s  shared  loadbalancer  appinst
 
    Log To Console  \nCreate app instance for k8s shared 
-
-   Create App Instance  region=${region}  app_name=${app_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  developer_org_name=${developer_organization_name
+   
+   Create App Instance  region=${region}  app_name=${app_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_k8ssharedlb}  developer_org_name=${developer_organization_name}
 
    Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_k8ssharedlb}
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8ssharedlb}
@@ -328,7 +328,8 @@ User shall be able to access UDP/TCP port on docker dedicated direct app
    ${cloudlet}=  Find Cloudlet	 latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
    Log To Console  \nChecking if port ${fqdn_0}:${cloudlet['ports'][0]['public_port']} is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
@@ -337,7 +338,7 @@ User shall be able to access UDP/TCP port on docker dedicated direct app
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
 
    Log To Console  \nChecking if port ${cloudlet['fqdn']}:${cloudlet['ports'][2]['public_port']} is alive
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
 
 User shall be able to access UDP/TCP port on docker dedicated lb app
    [Documentation]
@@ -350,7 +351,8 @@ User shall be able to access UDP/TCP port on docker dedicated lb app
    ${cloudlet}=  Find Cloudlet   latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
 
    Log To Console  \nChecking if port ${fqdn_0}:${cloudlet['ports'][0]['public_port']} is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
@@ -359,7 +361,7 @@ User shall be able to access UDP/TCP port on docker dedicated lb app
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
 
    Log To Console  \nChecking if port ${cloudlet['fqdn']}:${cloudlet['ports'][2]['public_port']} is alive
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
 
 User shall be able to access UDP/TCP port on docker shared lb app
    [Documentation]
@@ -372,12 +374,15 @@ User shall be able to access UDP/TCP port on docker shared lb app
    ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][0]['path_prefix']}  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+
 
    Log To Console  \nChecking if port is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
+
 
 User shall be able to access UDP/TCP/HTTP port on LB App on k8s dedicated
    [Documentation]
@@ -390,12 +395,15 @@ User shall be able to access UDP/TCP/HTTP port on LB App on k8s dedicated
    ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+
 
    Log To Console  \nChecking if port is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
+ 
 
 User shall be able to access UDP/TCP/HTTP port on LB App on k8s shared 
    [Documentation]
@@ -408,12 +416,15 @@ User shall be able to access UDP/TCP/HTTP port on LB App on k8s shared
    ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+
 
    Log To Console  \nChecking if port is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-   HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${page}
+   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
+
 
 User shall be able to access UDP/TCP/HTTP port on VM LB App 
    [Documentation]
@@ -426,7 +437,7 @@ User shall be able to access UDP/TCP/HTTP port on VM LB App
    ${cloudlet}=  Find Cloudlet  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['fqdn_prefix']}  ${http_page}
 
    Log To Console  \nChecking if port is alive
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
@@ -481,7 +492,6 @@ User shall be able to access the GPU on docker dedicated
    #Wait For DNS  ${cloudlet['fqdn']}
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
-   Sleep  30 s
 
    #${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  server_tester.py
    #${image_full}=     Catenate  SEPARATOR=/  ${client_path}  ${image}
@@ -513,18 +523,18 @@ User shall be able to access the GPU on k8s shared
    ${ip}=  Get DNS IP  ${cloudlet['fqdn']}
 
    Sleep  30 s
-
+  
    ${epoch_time}=  Get Time  epoch
    ${outfile}=        Catenate  SEPARATOR=  outfile  ${epoch_time}
-
+  
    # python3 server_tester.py -s 37.50.200.37  -e /openpose/detect/ -f 3_bodies.png --show-responses -r 4
    # python3 multi_client.py -s localhost -e /object/detect/ -c rest -f objects_001.jpg --show-responses
    Run Process  python3  ${facedetection_server_tester}   -s   ${ip}   -e  /openpose/detect/  -c  rest  -f   ${facedetection_image}  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
    #Run Process  python  ${server_tester}   -s    37.50.200.37  -e  /openpose/detect/   -f   3_bodies.png  --show-responses  -r  4  stdout=${outfile}  stderr=STDOUT
-
+  
    ${output}=  Get File  ${outfile}
    Log To Console  ${output}
-
+  
    Should Contain  ${output}  TEST_PASS=True
 
 User shall be able to access the GPU on VM
