@@ -24,7 +24,7 @@ ${policy_name}  AutoProvPolicyTest
 ${app_name}  AutoProvAppK8S
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 

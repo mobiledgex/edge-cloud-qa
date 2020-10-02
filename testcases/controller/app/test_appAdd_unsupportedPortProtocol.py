@@ -35,16 +35,17 @@ class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    )
 
 #        self.developer = mex_controller.Developer(developer_org_name=developer_name)#,
 #                                                  #developer_address=developer_address,
 #                                                  #developer_email=developer_email)
 #        self.controller.create_developer(self.developer.developer)
-        
+
+# ECQ-870        
     def test_CreateAppUnsupportedDedicated(self):
         # [Documentation] App - User shall not be able to create an app with unsupported protocol of tc:80 and IpAccessDedicated
         # ... create app with unsupported port protocol of tc:80 IpAccessDedicated
@@ -72,7 +73,7 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'tc is not a supported Protocol', 'error details')
+        expect_equal(error.details(), 'Unsupported protocol: tc', 'error details')
         expect_equal(len(app_pre), len(app_post), 'same number of apps')
         assert_expectations()
 

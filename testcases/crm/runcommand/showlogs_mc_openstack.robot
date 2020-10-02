@@ -21,8 +21,12 @@ ${operator_name_openstack}  TDG
 
 ${docker_image}    docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0
 ${docker_command}  ./server_ping_threaded.py
-	
+
+${num_lines}=  12
+
 ${test_timeout_crm}  15 min
+
+${since}=  30s
 
 *** Test Cases ***
 # ECQ-1887
@@ -52,8 +56,9 @@ ShowLogs - k8s shared shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  tail=1
 
     # with since
+    Sleep  10 
     TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  since=10s
+    ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
@@ -71,8 +76,8 @@ ShowLogs - k8s shared shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
  
-    Length Should Be  ${stdout_noid_lines}         9
-    Length Should Be  ${stdout_id_lines}           9
+    Length Should Be  ${stdout_noid_lines}         ${num_lines} 
+    Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
     Length Should Be  ${stdout_since_lines}        1
@@ -107,8 +112,9 @@ ShowLogs - k8s dedicated shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  tail=1
 
     # with since
+    Sleep  10 
     TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  since=10s
+    ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
@@ -126,8 +132,8 @@ ShowLogs - k8s dedicated shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}         9
-    Length Should Be  ${stdout_id_lines}           9
+    Length Should Be  ${stdout_noid_lines}         ${num_lines}
+    Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
     Length Should Be  ${stdout_since_lines}        1
@@ -159,9 +165,12 @@ ShowLogs - docker dedicated shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=1
 
     # with since
+    Get Time
     Sleep  10
+    Get Time
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=20s
+    Get Time
+    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=${since}
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound 
@@ -179,8 +188,8 @@ ShowLogs - docker dedicated shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}  9
-    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_noid_lines}  ${num_lines}
+    Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
     Length Should Be  ${stdout_since_lines}  1
@@ -214,7 +223,7 @@ ShowLogs - docker shared shall return logs on openstack
     # with since
     Sleep  10
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
-    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=10s
+    ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=${since}
 
     # with wrong containerid
     ${error}=  Run Keyword and Expect Error  *  Show Logs  region=${region}  container_id=notfound
@@ -232,8 +241,8 @@ ShowLogs - docker shared shall return logs on openstack
     ${stdout_timestamps_lines}=  Split To Lines  ${stdout_timestamps}
     ${stdout_since_lines}=       Split To Lines  ${stdout_since}
 
-    Length Should Be  ${stdout_noid_lines}  9
-    Length Should Be  ${stdout_id_lines}  9
+    Length Should Be  ${stdout_noid_lines}  ${num_lines}
+    Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
     Length Should Be  ${stdout_since_lines}  1

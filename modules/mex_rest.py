@@ -4,6 +4,8 @@ import json
 import sys
 import os
 
+logger = logging.getLogger(__name__)
+
 class MexRest(WebService) :
     decoded_data = None
     
@@ -14,7 +16,7 @@ class MexRest(WebService) :
 
     def post(self, url, data=None, bearer=None, stream=False):
         #logging.debug(f'url={url} data={data} cert={self.root_cert}')
-        logging.debug(f'url={url} data={data}')
+        logger.debug(f'url={url} data={data}')
 
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
         if bearer != None:
@@ -29,7 +31,7 @@ class MexRest(WebService) :
 
     def _decode_content(self):
         try:
-            logging.debug('content=' + self.resp.content.decode("utf-8"))
+            logger.debug('content=' + self.resp.content.decode("utf-8"))
             self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
         except:
             try:

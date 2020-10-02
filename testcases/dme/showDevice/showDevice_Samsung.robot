@@ -36,11 +36,11 @@ showDevice - request with id and type shall return device information
 
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  abcd 
-      Should Be Equal  ${device['data']['key']['unique_id']}  1234
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device['data']['notify_id']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  abcd 
+      Should Be Equal  ${device[0]['data']['key']['unique_id']}  1234
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+      Should Be True   ${device[0]['data']['notify_id']} > 0
 
       Length Should Be   ${device}  1
 
@@ -61,8 +61,8 @@ showDevice - request with first_seen and seconds shall return device information
  
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
 
-      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs} 
-      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs} 
+      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
 
       Length Should Be   ${device}  1
 
@@ -84,8 +84,8 @@ showDevice - request without first_seen_seconds shall return device information
       
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
 
-      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
 
       Length Should Be   ${device}  1
 
@@ -106,8 +106,8 @@ showDevice - request with first_seen_nanos shall return device information
 
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
 
-      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
 
       Length Should Be   ${device}  1
 
@@ -129,8 +129,8 @@ showDevice - without first_seen_nanos shall return device information
 
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_nanos=${nsecs}  notify_id=1
 
-      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
 
       Length Should Be   ${device}  1
 
@@ -153,7 +153,7 @@ showDevice - with notify_id shall return device information
 
 #      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
 #      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
-      Should Be Equal   ${device['data']['notify_id']}  ${ntfy}
+      Should Be Equal   ${device[0]['data']['notify_id']}  ${ntfy}
       
       Length Should Be   ${device}  1
 
@@ -164,7 +164,7 @@ showDevice - without notify_id shall return device information
     ...  verify notify_id is displayed without being requested
 
       ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd
-      Should Be True  ${device['data']['notify_id']} > 0
+      Should Be True  ${device[0]['data']['notify_id']} > 0
 
       Length Should Be  ${device}  1
   
@@ -200,7 +200,7 @@ Setup
    # ShowDevice  uniqueid=${uniqueid}  
 #ShowDevice  uniqueid=${uniqueid}    
     #ShowDevice  uniqueidtype=${uniqueidtype}
-    Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+    Run Keyword and Ignore Error  Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
 
    #Set Suite Variable  ${app} 
 

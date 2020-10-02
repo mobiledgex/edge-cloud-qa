@@ -13,26 +13,25 @@ ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-a
 
 *** Test Cases ***
 # ECQ-2244
-# now supported
-#CreateApp - Create shall fail with docker access_type=direct and TCP TLS
-#   [Documentation]
-#   ...  deploy app with docker and access_type=direct and TCP TLS port
-#   ...  verify error is received
-#
-#   # EDGECLOUD-2797 error should be given for CreateApp with docker direct access and tls
-#
-#   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-#   Should Be Equal  ${error}  ('code=400', 'error={"message":"???Deployment Type and HTTP access ports are incompatible"}')
-
-# ECQ-2245
-CreateApp - Create shall fail with docker access_type=direct and HTTP TLS
+CreateApp - Create shall fail with docker access_type=direct and TCP TLS
    [Documentation]
-   ...  deploy app with docker and access_type=direct and HTTP TLS port
+   ...  deploy app with docker and access_type=direct and TCP TLS port
    ...  verify error is received
 
-   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=http:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   #Should Be Equal  ${error}  ('code=400', 'error={"message":"Deployment Type and HTTP access ports are incompatible"}')
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid protocol http, not available for tls support"}')
+   # EDGECLOUD-2797 error should be given for CreateApp with docker direct access and tls
+
+   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"TLS unsupported on VM and docker deployments with direct access"}')
+
+# ECQ-2245 no longer supported
+#CreateApp - Create shall fail with docker access_type=direct and HTTP TLS
+#   [Documentation]
+#   ...  deploy app with docker and access_type=direct and HTTP TLS port
+#   ...  verify error is received
+#
+#   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=http:2016:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   #Should Be Equal  ${error}  ('code=400', 'error={"message":"Deployment Type and HTTP access ports are incompatible"}')
+#   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid protocol http, not available for tls support"}')
 
 # ECQ-2246
 CreateApp - Create shall fail with VM access_type=direct and TCP TLS
@@ -43,17 +42,17 @@ CreateApp - Create shall fail with VM access_type=direct and TCP TLS
    # EDGECLOUD-3233 error should be given for CreateApp with VM direct access and tls  fixed/closed
 
    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=tcp:2016:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"TLS unsupported on VM based deployments with direct access"}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"TLS unsupported on VM and docker deployments with direct access"}')
 
-# ECQ-2247
-CreateApp - Create shall fail with VM access_type=direct and HTTP TLS
-   [Documentation]
-   ...  deploy app with VM and access_type=direct and HTTP TLS port
-   ...  verify error is received
-
-   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=http:2016:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
-   #Should Be Equal  ${error}  ('code=400', 'error={"message":"Deployment Type and HTTP access ports are incompatible"}')
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid protocol http, not available for tls support"}')
+# ECQ-2247 no longer supported
+#CreateApp - Create shall fail with VM access_type=direct and HTTP TLS
+#   [Documentation]
+#   ...  deploy app with VM and access_type=direct and HTTP TLS port
+#   ...  verify error is received
+##
+#   ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  access_ports=http:2016:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
+#   #Should Be Equal  ${error}  ('code=400', 'error={"message":"Deployment Type and HTTP access ports are incompatible"}')
+#   Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid protocol http, not available for tls support"}')
 
 # ECQ-2248
 CreateApp - Create shall fail with docker and UDP TLS
@@ -99,6 +98,6 @@ CreateApp - Create shall fail with helm and UDP TLS
 
 *** Keywords ***
 Setup
-    ${time}=  Get Time  epoch
-    Create Flavor  region=${region}  flavor_name=flavor${time}
+    #${time}=  Get Time  epoch
+    Create Flavor  region=${region}  #flavor_name=flavor${time}
 
