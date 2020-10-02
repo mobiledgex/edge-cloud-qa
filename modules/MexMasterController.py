@@ -36,6 +36,8 @@ from mex_master_controller.ShowDeviceReport import ShowDeviceReport
 from mex_master_controller.RunDebug import RunDebug
 from mex_master_controller.Config import Config
 from mex_master_controller.VerifyEmail import VerifyEmail
+from mex_master_controller.AlertReceiver import AlertReceiver
+from mex_master_controller.Alert import Alert
 from mex_master_controller.User import User
 
 import shared_variables_mc
@@ -188,6 +190,8 @@ class MexMasterController(MexRest):
         self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.vm_pool = VMPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
@@ -2284,6 +2288,12 @@ class MexMasterController(MexRest):
 
     def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
         return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.create_alert_receiver(token=token, region=region, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_alerts(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.alert.show_alert(token=token, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
