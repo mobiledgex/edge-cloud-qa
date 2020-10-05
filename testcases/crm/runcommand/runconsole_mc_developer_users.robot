@@ -20,6 +20,7 @@ ${password}=   ${mextester06_gmail_password}
 
 ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
+${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
 # ECQ-2068
@@ -91,4 +92,4 @@ Setup
 
 Teardown
     Cleanup Provisioning
-    Login  username=mexadmin  password=mexadmin123
+    Login  username=mexadmin  password=${mex_password}
