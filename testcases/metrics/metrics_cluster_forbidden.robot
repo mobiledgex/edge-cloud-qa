@@ -11,7 +11,7 @@ ${cloudlet_name_openstack_metrics}=   automationSunnydaleCloudletStage
 ${operator}=                       GDDT
 
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 
 ${username}=  mextester06 
 ${password}=  ${mextester06_gmail_password} 
