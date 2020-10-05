@@ -19,7 +19,7 @@ ${developer_name}=  developer1574731678-0317152
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
 
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 
 ${username}=  mextester06
 ${password}=  mextester06123
