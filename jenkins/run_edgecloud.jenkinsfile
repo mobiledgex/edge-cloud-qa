@@ -4,10 +4,11 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
-def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests"]
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests"; "runCreateUserTests"]
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
 def jobListPerformance=["Performance"]
+def jobListSequence=["runPasswordTests"]
 
 builds1 = [:]
 builds2 = [:]
@@ -391,6 +392,10 @@ node('jenkinsSlave1'){
              builds3[jobName] = {
                 build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
              }
+          }
+
+          for(int i=0; i < jobListSequence.size(); ++i) {
+             build job: jobListSequence[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'MasterController', value: mastercontroller)]
           }
 
           try {
