@@ -12,7 +12,7 @@ ${newpass}=     w3^rEr0g
 ${adminpass}=   8SP@gBnPH62w
 ${newadminpass}=  n7A2f!dw1Stj	
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
-
+${mex_password}=  ${mexadmin_password}
 
 *** Test Cases ***
 # ECQ-2745	
