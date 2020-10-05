@@ -10,7 +10,7 @@ Test Teardown	Cleanup Provisioning
 ${password}=   mex1234567
 ${newpass}=   new1234567
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
-
+${mex_password}=  ${mexadmin_password}
 
 *** Test Cases ***
 MC - Admin user shall be able to change the password
@@ -19,7 +19,7 @@ MC - Admin user shall be able to change the password
 	...  change the password back to the original password after a successful password change
 
 	New Password    password=${newpass}     token=${adminToken}     use_defaults=${False}
-	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
+	New Password    password=${mex_password}    token=${adminToken}     use_defaults=${False}
 
 	
 MC - Admin user shall be able to login with the new password 
@@ -29,7 +29,7 @@ MC - Admin user shall be able to login with the new password
 
 	New Password    password=${newpass}     token=${adminToken}   use_defaults=${False}
 	Login   username=mexadmin   password=${newpass}
-	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
+	New Password    password=${mex_password}    token=${adminToken}     use_defaults=${False}
 
 MC - Admin user shall not be able to login with the old password 
 	[Documentation]
@@ -39,12 +39,12 @@ MC - Admin user shall not be able to login with the old password
 
 	New Password    password=${newpass}     token=${adminToken}   use_defaults=${False}
 
-	${error_msg}=  Run Keyword and Expect Error  *  Login   username=mexadmin   password=mexadmin123
+	${error_msg}=  Run Keyword and Expect Error  *  Login   username=mexadmin   password=${mex_password}
       	
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 
-	New Password    password=mexadmin123    token=${adminToken}     use_defaults=${False}
+	New Password    password=${mex_password}    token=${adminToken}     use_defaults=${False}
 
 	Should Be Equal As Numbers  ${status_code}  400	
 	Should Be Equal             ${body}         {"message":"Invalid username or password"}
