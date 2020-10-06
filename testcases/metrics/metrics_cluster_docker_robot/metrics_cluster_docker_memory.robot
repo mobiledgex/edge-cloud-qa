@@ -23,7 +23,7 @@ ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 ${orgname}=   metricsorg
 
 ${test_timeout}=  32 min
