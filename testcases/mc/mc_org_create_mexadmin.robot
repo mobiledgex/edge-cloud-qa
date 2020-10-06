@@ -13,7 +13,7 @@ ${dev_orgname}=    DevOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 ${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
