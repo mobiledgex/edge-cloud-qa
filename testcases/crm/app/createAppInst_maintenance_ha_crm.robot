@@ -103,7 +103,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
 
-   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
+   AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
 
 # ECQ-2553
 AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
