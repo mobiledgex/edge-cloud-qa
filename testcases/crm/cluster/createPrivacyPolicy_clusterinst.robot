@@ -13,7 +13,7 @@ ${region}=  EU
 ${developer}=  mobiledgex
 
 ${cloudlet_name_openstack_dedicated}=  automationMunichCloudlet
-${operator}=  TDG
+${operator_name_openstack}=  TDG
 
 *** Test Cases ***
 # combined this with all protocols in 1 testcase
@@ -27,7 +27,7 @@ CreatePrivacyPolicy - shall be able to create docker cluster with icmp
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist} 
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
@@ -55,7 +55,7 @@ CreatePrivacyPolicy - shall be able to create docker cluster with tcp
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
@@ -83,7 +83,7 @@ CreatePrivacyPolicy - shall be able to create docker cluster with udp
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['operator_key']['name']}
@@ -121,7 +121,7 @@ CreatePrivacyPolicy - shall be able to create docker cluster with icmp/tcp/udp
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
@@ -242,7 +242,7 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated cluster with icmp/tc
 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
@@ -361,7 +361,7 @@ CreatePrivacyPolicy - shall be able to create cluster after policy update
 
    ${policy_return2}=  Update Privacy Policy  region=${region}  rule_list=${rulelist2}
 
-   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${cluster}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${cluster['data']['key']['cloudlet_key']['organization']}
@@ -419,7 +419,7 @@ Setup
    ${policy_name}=  Get Default Privacy Policy Name
    ${developer_name}=  Get Default Developer Name
    
-   Create Flavor  region=EU
+   Create Flavor  region=${region}
 
    Set Suite Variable  ${policy_name}
    Set Suite Variable  ${developer_name}
