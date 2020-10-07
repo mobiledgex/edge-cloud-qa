@@ -66,15 +66,15 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2
 
-   Should Be Equal   ${server_info_node[0]['Flavor']}   m4.small
+   Should Contain Any   ${server_info_node[0]['Flavor']}   m4.small  m1.small
    Should Contain    ${server_info_node[0]['Image']}    mobiledgex
    Should Be Equal   ${server_info_node[0]['Status']}   ACTIVE
 	
-   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
+   Should Contain Any   ${server_info_master[0]['Flavor']}  m4.small  m1.small
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
+   Should Contain Any   ${server_info_lb[0]['Flavor']}  m4.medium  m1.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -86,7 +86,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=1 on openstack
    Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
+   Should Contain Any          ${cluster_inst.node_flavor}   m4.small  m1.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     1
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
@@ -118,23 +118,23 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
    ${server_info_lb}=      Get Server List  name=${clusterlb}
 
-   Should Be Equal   ${server_info_node[0]['Flavor']}   m4.small
+   Should Contain Any   ${server_info_node[0]['Flavor']}   m4.small  m1.small
    Should Contain    ${server_info_node[0]['Image']}    mobiledgex
    Should Be Equal   ${server_info_node[0]['Status']}   ACTIVE
 	
-   Should Be Equal   ${server_info_node[1]['Flavor']}   m4.small
+   Should Contain Any   ${server_info_node[1]['Flavor']}   m4.small  m1.small
    Should Contain    ${server_info_node[1]['Image']}    mobiledgex
    Should Be Equal   ${server_info_node[1]['Status']}   ACTIVE
 
-   Should Be Equal   ${server_info_node[2]['Flavor']}   m4.small
+   Should Contain Any   ${server_info_node[2]['Flavor']}   m4.small  m1.small
    Should Contain    ${server_info_node[2]['Image']}    mobiledgex
    Should Be Equal   ${server_info_node[2]['Status']}   ACTIVE
 
-   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
+   Should Contain Any   ${server_info_master[0]['Flavor']}  m4.small  m1.small
    Should Contain    ${server_info_master[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_master[0]['Status']}  ACTIVE
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
+   Should Contain Any   ${server_info_lb[0]['Flavor']}  m4.medium  m1.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -146,7 +146,7 @@ ClusterInst shall create with IpAccessDedicated and num_nodes=3 on openstack
    Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
+   Should Contain Any          ${cluster_inst.node_flavor}   m4.small  m1.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     3
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
@@ -361,7 +361,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
    ${server_info_lb}=      Get Server List  name=${clusterlb}
 
-   Should Be Equal   ${server_info_lb[0]['Flavor']}  m4.medium
+   Should Contain Any   ${server_info_lb[0]['Flavor']}  m4.medium  m1.medium
    Should Contain    ${server_info_lb[0]['Image']}   mobiledgex
    Should Be Equal   ${server_info_lb[0]['Status']}  ACTIVE
 
@@ -373,7 +373,7 @@ ClusterInst shall create with IpAccessDedicated and num_masters=0 num_nodes=0 on
    Should Be Equal As Numbers  ${num_servers_lb}      1   # 1 lb
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
+   Should Contain Any          ${cluster_inst.node_flavor}   m4.small  m1.small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   1
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     0  
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     1  #IpAccessDedicated
