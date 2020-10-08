@@ -25,13 +25,14 @@ ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:
 ${docker_compose_zip_url}=  http://35.199.188.102/apps/postgres_redis_compose.zip
 ${docker_image_path}=   docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
 ${docker_compose_zip}=  postgres_redis_compose.zip
+${docker_compose_zip_path}=  crm/app
 
 ${region}=  EU
 
 ${test_timeout_crm}  15 min
 
 ${username}          mextester06
-${password}          mextester06123
+${password}          ${mextester06_gmail_password}
 ${email}             mextester06@gmail.com
 
 ${artifactory_server}            artifactory-qa.mobiledgex.net
@@ -44,6 +45,7 @@ User shall be able to deploy docker compose zip filed from artifactory
     ...  deploy the app to openstack
     ...  verify containers are running 
 
+    ${docker_compose_zip_full}=  Find File  ${docker_compose_zip_path}/${docker_compose_zip}
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
@@ -62,7 +64,7 @@ User shall be able to deploy docker compose zip filed from artifactory
     ${user_token}=  Login  username=${username1}  password=${password}
     Verify Email Via MC  token=${user_token}
 
-    Curl Image To Artifactory  username=${username1}  password=${password}  server=${artifactory_server}  org_name=${orgname}  image_name=${docker_compose_zip}
+    Curl Image To Artifactory  username=${username1}  password=${password}  server=${artifactory_server}  org_name=${orgname}  image_name=${docker_compose_zip_full}
 
     ${compose_artifactory}=  Set Variable  https://${artifactory_server}/artifactory/repo-${orgname}/${docker_compose_zip}
 

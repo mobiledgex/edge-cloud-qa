@@ -24,7 +24,7 @@ ${policy_name}  AutoProvPolicyTest
 ${app_name}  AutoProvAppDocker
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 
@@ -40,7 +40,7 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
 
-   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_dedicated}  organization=${operator_name_openstack}
    @{cloudletlist}=  create list  ${cloudlet1}
 
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=1  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
@@ -50,7 +50,7 @@ Create Auto Provisioning Policy
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    log to console  Creating App and App Instance
-   create app  region=EU  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
 

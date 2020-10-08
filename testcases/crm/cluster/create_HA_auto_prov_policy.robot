@@ -9,7 +9,7 @@ Test Setup      Setup
 Test Teardown  Cleanup
 
 *** Variables ***
-${cloudlet_name_openstack_dedicated}  automationMunichCloudlet
+${cloudlet_name_openstack_dedicated}  automationBerlinCloudlet
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
@@ -21,7 +21,7 @@ ${policy_name}  AutoProvPolicyTest
 ${app_name}  AutoProvAppDocker
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 
@@ -29,7 +29,7 @@ Create Auto Provisioning Policy with 1 min_active_instances and 1 cloudlet
 
    Log to Console  Create Auto Provisioning Policy with 1 min_active_instances and 1 cloudlet
 
-   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_ha1}  organization=${operator_name_openstack}
    @{cloudletlist}=  create list  ${cloudlet1}
 
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=1  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
@@ -39,8 +39,8 @@ Create Auto Provisioning Policy with 1 min_active_instances and 1 cloudlet
 Create Auto Provisioning Policy with 2 min_active_instances and 2 cloudlets
 
   Log to Console  Create Auto Provisioning Policy with 2 min_active_instances and 2 cloudlets
-  &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
-  &{cloudlet2}=  create dictionary  name=automationMunichCloudlet  organization=TDG
+  &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_ha1}  organization=${operator_name_openstack}
+  &{cloudlet2}=  create dictionary  name=${cloudlet_name_openstack_ha2}  organization=${operator_name_openstack}
   @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 #  @{cloudletlist}=  create list  ${cloudlet2}
 
@@ -51,7 +51,7 @@ Create Auto Provisioning Policy with min_active_instances more than maximum_inst
 
   Log to Console  Create Auto Provisioning Policy with 1 min_active_instances and 1 cloudlet
 
-   &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
+   &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_ha1}  organization=${operator_name_openstack}
    @{cloudletlist}=  create list  ${cloudlet1}
 
    ${policy_return}=  Run Keyword And Expect Error  *  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=2  max_instances=1  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
@@ -62,8 +62,8 @@ Create Auto Provisioning Policy with min_active_instances more than number of cl
 
   Log to Console  Create Auto Provisioning Policy with 1 min_active_instances and 1 cloudlet
 
-  &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
-  &{cloudlet2}=  create dictionary  name=automationMunichCloudlet  organization=TDG
+  &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_ha1}  organization=${operator_name_openstack}
+  &{cloudlet2}=  create dictionary  name=${cloudlet_name_openstack_ha2}  organization=${operator_name_openstack}
   @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 
    ${policy_return}=  Run Keyword And Expect Error  *  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=3  max_instances=4  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}

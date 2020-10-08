@@ -196,7 +196,7 @@ class Zapi(WebService):
         #logging.debug('url=' + url)
 
         #self.get(url,headers = self.headers)
-        self.headers['Content-Type'] = 'application/json'
+        self.headers['Content-Type'] = 'application/text'
         self.post(url, headers = self.headers, data=data)
 
         content = self.resp.content.decode('utf-8')
@@ -231,6 +231,41 @@ class Zapi(WebService):
 
         #self.get(url,headers = self.headers)
         self.headers['Content-Type'] = 'text/plain'
+        self.get(url, headers = self.headers)
+
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            logging.debug('resp=' + content)
+            return content
+
+
+    def get_execution(self, execution_id=None, issue_id=None, project_id=None, offset=0):
+        logging.debug('execution_id={} issue_id={} project_id={} offset={}'.format(str(execution_id), str(issue_id), str(project_id), str(offset)))
+
+        relative_path = '/public/rest/api/1.0/execution/' + str(execution_id)
+        parms = f'issueId={issue_id}&projectId={project_id}'
+        #parms = f'issueId={issue_id}'
+        path = 'GET&' + relative_path + '&' + parms
+        print('*********', path)
+        self._generate_jwt(path)
+
+
+#        url = self.base_url + 'execution?issueId=' + issue_id + '&projectId=' + project_id + '&versionId=' + version_id + 'cycleId=' + cycle_id
+        #url = self.base_url + 'execution?issueId=' + str(issue_id)
+        url = self.zephyr_base_url + relative_path + '?' + parms
+
+        logging.debug('url=' + url)
+
+        #if limit is not None:
+        #    url = url + '&limit=' + str(limit)
+        #logging.debug('url=' + url)
+
+        #self.get(url,headers = self.headers)
+        self.headers['Content-Type'] = 'application/json'
         self.get(url, headers = self.headers)
 
         content = self.resp.content.decode('utf-8')
@@ -325,10 +360,10 @@ class Zapi(WebService):
             return content
 
 
-    def update_status(self, execution_id=None, issue_id=None, project_id=None, cycle_id=None, version_id=None, status=None):
+    def update_status(self, execution_id=None, issue_id=None, project_id=None, cycle_id=None, version_id=None, status=None, comment=None):
         logging.info('status=' + str(status))
         relative_path = '/public/rest/api/1.0/execution/' + str(execution_id)
-        data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
+        data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'","comment":"' + str(comment) + '"}'
         path = 'PUT&' + relative_path + '&'
 
         jwt = self._generate_jwt(path)
@@ -689,10 +724,11 @@ class Zapi(WebService):
         #print('t2',token2)
         #token3 = jwt.encode(payload, secret_key, algorithm='HS256')
         #print('t3',token3)
-        
+
+        print('jwt=' + str(token))
         logging.debug('jwt=' + str(token))
         #self.headers = {'Authorization': 'JWT ' + token, 'Content-Type': 'application/json', 'zapiAccessKey': self.access_key}
-        print('h', self.headers['Authorization'])
+        print('hhh', self.headers['Authorization'])
         self.headers['Authorization'] = 'JWT ' + token
         
         return token

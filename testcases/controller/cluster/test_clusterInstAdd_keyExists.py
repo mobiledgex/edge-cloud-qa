@@ -40,9 +40,9 @@ class tc(unittest.TestCase):
                                                 number_of_dynamic_ips = 254)
         self.flavor = mex_controller.Flavor(flavor_name=self.flavor_name, ram=1024, vcpus=1, disk=1)
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    )
         #self.cluster = mex_controller.Cluster(cluster_name=cluster_name,
         #                                      default_flavor_name=flavor_name)

@@ -35,9 +35,9 @@ class tc(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.controller = mex_controller.MexController(controller_address = controller_address,
-                                                    root_cert = mex_root_cert,
-                                                    key = mex_key,
-                                                    client_cert = mex_cert
+#                                                    root_cert = mex_root_cert,
+#                                                    key = mex_key,
+#                                                    client_cert = mex_cert
                                                    )
       
 #        self.operator = mex_controller.Operator(operator_name = operator_name)
@@ -81,7 +81,8 @@ class tc(unittest.TestCase):
         clusterinst_post = self.controller.show_cluster_instances()
 
         expect_equal(self.controller.response.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(self.controller.response.details(), 'Cloudlet organization:"' + operator_name + '" name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        #expect_equal(self.controller.response.details(), 'Cloudlet organization:"' + operator_name + '" name:"' + cloud_name + '"  not ready, state is CLOUDLET_STATE_NOT_PRESENT', 'error details')
+        expect_equal(self.controller.response.details(), 'Cloudlet key {"organization":"' + operator_name + '","name":"' + cloud_name + '"} not found', 'error details')
         #expect_equal(len(clusterinst_pre), len(clusterinst_post), 'same number of cluster')
         assert_expectations()
 

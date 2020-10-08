@@ -16,7 +16,7 @@ ${region}  US
 #${code}  2561
 ${developer_name}  AcmeAppCo
 ${app_version}  1.0
-${access_ports}    tcp:80,http:443,udp:10002
+${access_ports}    tcp:80,tcp:443,udp:10002
 ${operator_name}   tmus
 ${cloudlet_name1}  tmocloud-1
 ${cloudlet_lat1}   31
@@ -35,7 +35,7 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
 
       ${fqdn_prefix_tcp}=             Catenate  SEPARATOR=  ${app_name_default}  -  tcp  .
       ${fqdn_prefix_udp}=             Catenate  SEPARATOR=  ${app_name_default}  -  udp  .
-      ${fqdn_prefix_http}=            Catenate  SEPARATOR=  ${app_name_default}  -  http  .
+      ${fqdn_prefix_http}=            Catenate  SEPARATOR=  ${app_name_default}  -  tcp  .
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
@@ -51,7 +51,7 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1['data']['mapped_ports'][1]['proto']}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1['data']['mapped_ports'][1]['internal_port']}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1['data']['mapped_ports'][1]['public_port']}
-      Should Be Equal             ${cloudlet.ports[1].path_prefix}    ${appinst_1['data']['mapped_ports'][1]['path_prefix']}
+      Should Be Equal             ${cloudlet.ports[1].path_prefix}    ${appinst_1['data']['mapped_ports'][1]['fqdn_prefix']}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1['data']['mapped_ports'][2]['proto']}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1['data']['mapped_ports'][2]['internal_port']}

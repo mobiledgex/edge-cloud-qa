@@ -14,7 +14,7 @@ Suite Teardown  Cleanup
 *** Variables ***
 ${cloudlet1}  packetcloudlet
 ${cloudlet2}  DFWVMW2
-${operator_name_openstack}  packet
+${operator_name_openstack_packet}  packet
 ${mobiledgex_domain}  mobiledgex.net
 ${region}      US
 ${flavor}  automation_api_flavor
@@ -25,7 +25,7 @@ ${policy_name}  AutoProvPolicyTest
 ${app_name}  AutoProvAppK8s
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 
@@ -34,8 +34,8 @@ Create k8s based reservable cluster instnace
    ...  create a dedicated reservabe k8s cluster instnace
 
    Log to Console  START creating cluster instance
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack_packet}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}   cluster_name=${cluster_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}  developer_org_name=MobiledgeX  token=${super_token}
 
    Log to Console  DONE creating cluster instance
 
@@ -56,13 +56,13 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    log to console  Creating App and App Instance
    create app  region=${region}  app_name=${app_name}  deployment=kubernetes  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  token=${user_token}
-#   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack_packet}  token=${user_token}
+#   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=${cluster_name}  token=${user_token}
 
 Delete Cloudlet from Auto Provisioning Policy
 
-    ${remove_cloudlet}=  remove auto provisioning policy cloudlet  region=${region}  policy_name=${policy_name}  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack}  token=${user_token}
-    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack}  token=${user_token}
+    ${remove_cloudlet}=  remove auto provisioning policy cloudlet  region=${region}  policy_name=${policy_name}  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack_packet}  token=${user_token}
+    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  token=${user_token}
 #    sleep  3 minutes
 #    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}
 

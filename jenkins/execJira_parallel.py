@@ -13,6 +13,7 @@ import json
 import time
 import subprocess
 import argparse
+import html
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = 'cop6UQnmK4mwodXzijsY407F'
@@ -410,7 +411,7 @@ def exec_testcase(z, t):
     tmpdir = '/tmp/'
     tc_replace = tc.replace('/','')  # remove slash from filename
     file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
-    file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time()))
+    file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time())) + ".out"
     file_extension = '.txt'
 
     # delete old files since /tmp eventually gets filled up
@@ -450,8 +451,12 @@ def exec_testcase(z, t):
     #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
     logging.info("executing " + exec_cmd)
     try:
+        exec_start = time.time()
         r = subprocess.run(exec_cmd, shell=True, check=True)
-        status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
+        exec_stop = time.time()
+        exec_duration = exec_stop - exec_start
+        comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
         logging.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')
         last_status = 'pass'
@@ -460,13 +465,16 @@ def exec_testcase(z, t):
         number_passed += 1
     except subprocess.CalledProcessError as err:
         #print(err)
+        exec_stop = time.time()
+        exec_duration = exec_stop - exec_start
+        comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         logging.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
         logging.info("exec cmd failed. return code=: " + str(err.returncode))
         logging.info("exec cmd failed. stdout=: " + str(err.stdout))
         logging.info("exec cmd failed. stderr=: " + str(err.stderr))
-        status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
+        status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
         last_status = 'fail'
 
