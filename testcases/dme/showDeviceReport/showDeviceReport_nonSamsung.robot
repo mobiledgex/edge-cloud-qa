@@ -30,10 +30,10 @@ showDeviceReport - request for non-samsung app with uuidtype=samsung shall retur
 
       ${device}=  Show Device Report  region=${region}  unique_id=${timestamp}   unique_id_type=samsung  
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  samsung
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${timestamp}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  samsung
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${timestamp}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -50,10 +50,10 @@ showDeviceReport - request for non-samsung app with uuidtype=xxxSamSungxxx shall
 
       ${device}=  Show Device Report  region=${region}  unique_id=${epoch}  unique_id_type=xxxSamSungxxx
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  xxxSamSungxxx
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  xxxSamSungxxx
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -70,10 +70,10 @@ showDeviceReport - request for non-samsung app with S20 shall return device info
 
       ${device}=  Show Device Report  region=${region}  unique_id=${epoch}  unique_id_type=${samsung_s20_type}
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  ${samsung_s20_type}
-      Should Be Equal As Numbers  ${device['data']['key']['unique_id']}  ${epoch}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  ${samsung_s20_type}
+      Should Be Equal As Numbers  ${device[0]['data']['key']['unique_id']}  ${epoch}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 
@@ -88,10 +88,10 @@ showDeviceReport - request for non-samsung app with S6 shall return device infor
 
       ${device}=  Show Device Report  region=${region}  unique_id=${samsung_s6_id}  unique_id_type=${samsung_s6_type}
 
-      Should Be Equal  ${device['data']['key']['unique_id_type']}  ${samsung_s6_type}
-      Should Be Equal  ${device['data']['key']['unique_id']}  ${samsung_s6_id}
-      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  ${samsung_s6_type}
+      Should Be Equal  ${device[0]['data']['key']['unique_id']}  ${samsung_s6_id}
+      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
 
       Length Should Be   ${device}  1
 

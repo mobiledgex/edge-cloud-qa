@@ -465,7 +465,7 @@ class MexApp(object):
         if root_loadbalancer is not None:
             rb = rootlb.Rootlb(host=root_loadbalancer)
 
-        container_id_list = rb.get_docker_container_id()
+        container_id_list = rb.get_stopped_docker_container_id()
         logging.debug(f'container_id={container_id_list}')
         container_id = container_id_list[0]
 
@@ -504,9 +504,11 @@ class MexApp(object):
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
 
+        network, node = node.split('=')
+
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
 
         container_id_list = rb.run_command_on_node(node, command)
         logging.debug(f'container_id={container_id_list}')
@@ -527,9 +529,11 @@ class MexApp(object):
         command = 'docker ps -a --format "{{.ID}}"'
         self.wait_for_dns(root_loadbalancer)
 
+        network, node = node.split('=')
+
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
     
         container_id_list = rb.run_command_on_node(node, command)
         logging.debug(f'container_id={container_id_list}')
@@ -672,8 +676,10 @@ class MexApp(object):
 
     def write_file_to_node(self, node, mount='/var/opt/', root_loadbalancer=None, data=None):
         rb = None
+        network, node = node.split('=')
+
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
+            rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
         else:
             rb = self.rootlb
 
@@ -725,3 +731,15 @@ class MexApp(object):
             raise Exception(f'cloudlflaire exception get dns record failed: {sys.exc_info()[0]}')
 
         return dns_ip
+
+    def convert_govc_to_dictionary(self, output):
+        output_list = output.rstrip().split('\n')
+
+        output_dict = {}
+        for line in output_list:
+          line_split = line.split(':')
+          #print('*WARN*', line)
+          #print('*WARN*', line_split)
+          output_dict[line_split[0].strip()] = line_split[1].strip()
+
+        return output_dict

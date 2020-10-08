@@ -13,7 +13,7 @@ ${dev_orgname}=    DevOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password} 
 	
 *** Test Cases ***
 MC - User shall be able to query empty orgs
@@ -54,12 +54,12 @@ MC - User shall be able to create an operator org
 	Should Be Equal               ${body}         {"message":"Organization created"}
 	
 	${org}=  Show Organizations   token=${userToken}
-        Should Be Equal       ${org[0]["Name"]}                   ${op_orgname}
-	Should Be Equal       ${org[0]["Type"]}                   operator
-	Should Be Equal       ${org[0]["Address"]}                222 somewhere dr
-	Should Be Equal       ${org[0]["Phone"]}                  111-222-3333
-	Convert Date          ${org[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
-	Convert Date          ${org[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+        Should Be Equal       ${org[1]["Name"]}                   ${op_orgname}
+	Should Be Equal       ${org[1]["Type"]}                   operator
+	Should Be Equal       ${org[1]["Address"]}                222 somewhere dr
+	Should Be Equal       ${org[1]["Phone"]}                  111-222-3333
+	Convert Date          ${org[1]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
+	Convert Date          ${org[1]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
 MC - User shall be able to create multiple organizations
 	[Documentation]

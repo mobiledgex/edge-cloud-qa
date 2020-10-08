@@ -19,7 +19,7 @@ ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 ${orgname}=   metricsorg
 
 ${region}=  EU
@@ -286,7 +286,7 @@ Memory Should Be In Range
       Should Be Equal  ${reading[6]}  ${operator}
       Should Be Equal  ${reading[7]}  ${developer_name}
 
-      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 20000000
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 30000000
    END
 
 Metrics Should Match Influxdb

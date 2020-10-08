@@ -132,6 +132,33 @@ RunCommand - docker shared shall return command result on openstack
     Should Be Equal  ${stdout_id}  root\r\n
     Should Contain   ${error}  Error: No such container: notfound
 
+# ECQ-2586
+RunCommand - docker dedicated idle timeout shall be 30min on openstack
+    [Documentation]
+    ...  - deploy docker app
+    ...  - send RunCommand with cmd=/bin/bash to get a shell to the container
+    ...  - verify RunCommand returns back in 30mins which is the idle timeout value
+
+    Log To Console  Creating Cluster Instance
+    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  deployment=docker  ip_access=IpAccessDedicated
+
+    Log To Console  Creating App and App Instance
+    Create App  region=${region}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  deployment=docker  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
+    ${app_inst}=  Create App Instance  region=${region}  #cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  #cluster_instance_name=${cluster_name_default}  developer_name=${developer_name}  cluster_instance_developer_name=${developer_name}
+
+    log to console  ${app_inst}
+    ${token}=  Login
+
+    ${start_time}=  Get Time  epoch
+    ${stdout}=  Run Command  region=${region}  app_name=${app_inst['data']['key']['app_key']['name']}  app_version=${app_inst['data']['key']['app_key']['version']}  developer_org_name=${app_inst['data']['key']['app_key']['organization']}  cluster_instance_name=${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}  operator_org_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  cloudlet_name=${app_inst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  token=${token}  command=/bin/bash
+    ${end_time}=  Get Time  epoch
+
+    log to console   aaa ${start_time} ${end_time}
+
+    ${total_time}=  Set Variable  ${end_time} - ${start_time}
+
+    Should Be True  ${total_time} > 1800 and ${total_time} < 1830  # should be between 30min and 30min30secs
+
 *** Keywords ***
 Setup
     #Create Developer

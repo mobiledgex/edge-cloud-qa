@@ -57,7 +57,7 @@ Shall be able to configure IpAccessDedicated k8s autocluster with shared volume 
     ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  autocluster${time}
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
-#    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=autocluster${time}  mount=/share
+    Write File to Node  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}  data=autocluster${time}  mount=/share
 
     Mount Should Persist  root_loadbalancer=${rootlb}  pod_name=${manifest_pod_name}  mount=/data  cluster_name=autocluster${time}  operator_name=${operator_name_openstack}
 

@@ -7,6 +7,7 @@ import sys
 import rootlb
 from linux import Linux
 
+logger = logging.getLogger(__name__)
 
 class MexOpenstack():
     def __init__(self, environment_file=None):
@@ -1347,12 +1348,18 @@ class MexOpenstack():
 
     
     def node_should_have_gpu(self, root_loadbalancer, node=None):
-        rb = rootlb.Rootlb(host=root_loadbalancer)
-        if node is None: node = '127.0.0.1'
+        if node is None:
+            node = '127.0.0.1'
+        else:
+            network, node = node.split('=')
 
+        rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
+                
         cmd = 'lspci | grep \"3D controller: NVIDIA Corporation Device\"'
+
         try:
-            rb.run_command_on_node(node, cmd)
+            output = rb.run_command_on_node(node, cmd)
+            logger.info(f'cmd output={output}')
             logging.info('NVIDIA GPU is allocated')
         except:
             raise Exception('NVIDIA GPU is NOT allocated')

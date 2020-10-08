@@ -4,10 +4,11 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
-def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests"]
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runCreateUserTests"]
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
 def jobListPerformance=["Performance"]
+def jobListSequence=["runPasswordTests"]
 def jobListOwaspZAP=["OWASP ZAP"]
 def joblistNmapScanning=["nmap scanning"]
 def joblistImageScanning=["Image Scanning"]
@@ -443,6 +444,11 @@ node('jenkinsSlave1'){
                 build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
              }
           }
+
+          for(int i=0; i < jobListSequence.size(); ++i) {
+             build job: jobListSequence[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
+          }
+
           try {
             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Start Metrics Peformance Test"'
             status = sh(script: s, returnStatus: true);

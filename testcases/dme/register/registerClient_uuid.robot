@@ -32,7 +32,7 @@ RegisterClient - request without id and type shall return device information
     ...  registerClient with samsung app without unique_id and type
     ...  verify returns id and type 
 
-      Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+      Run Keyword and Ignore Error   Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
 
       ${regresp}=  Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=  unique_id_type=
       Should Be Equal  ${regresp['unique_id_type']}  ${samsung_developer_name}:${samsung_app_name}
@@ -46,7 +46,7 @@ RegisterClient - request with id and type shall return empty unique_id and type
     ...  registerClient with samsung app with unique_id and type
     ...  verify returns empty id and type
 
-    Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+    Run Keyword and Ignore Error   Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  access_ports=tcp:1  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
 
     ${regresp}=  Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=1234  unique_id_type=samsungtype
     Length Should Be   ${regresp['unique_id_type']}  0 
@@ -59,7 +59,7 @@ RegisterClient - request with id and type and auth shall return device informati
    ...  registerClient with samsung app with unique_id and type and auth
    ...  verify returns id and type
 
-   Create App              region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}    auth_public_key=${app_key}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+   Run Keyword and Ignore Error  Create App   region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}    auth_public_key=${app_key}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
 
    ${token}=  Generate Auth Token  app_name=${samsung_app_name}  app_version=${app_version}  developer_name=${samsung_developer_name}
 
@@ -88,7 +88,7 @@ RegisterClient - request without id shall return error
     ...  verify returns error 
 
 
-    Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
+    Run Keyword and Ignore Error   Create App  region=${region}  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  image_path=docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0
  
     ${error}=  Run Keyword And Expect error  *  Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=  unique_id_type=abcd
     #Should Be Equal  ${error}  '('post failed:', Exception('ws did not return a 200 response. responseCode = 400. ResponseBody={\n "code": 3,\n "message": "Both, or none of UniqueId and UniqueIdType should be set",\n "details": [\n ]\n}'))')
