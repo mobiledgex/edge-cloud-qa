@@ -47,7 +47,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_replicas=0
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -67,7 +67,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when replica
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_replicas=0
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     K8s scale replicas  root_loadbalancer=${clusterlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${app_name_default}  number_of_replicas=1
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -98,7 +98,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -142,7 +142,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -184,7 +184,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -215,7 +215,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckFailServerFail when one por
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2015  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -252,7 +252,7 @@ IpAccessDedicated k8s - healthcheck shows HealthCheckOk when TCP port with skip_
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -352,7 +352,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start TCP Port  ${tcp_fqdn}  2016
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -371,7 +371,7 @@ IpAccessDedicated k8s - healthcheck shows proper state after UpdateApp
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
 *** Keywords ***
 Setup
