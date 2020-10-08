@@ -2,9 +2,11 @@
 Documentation  runDebug
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
+Library  MexApp
 Library  Process
 Library  OperatingSystem
 Library  Collections
+Library  String
 
 #Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -63,10 +65,41 @@ ${mcctlcmd}=  mcctl  --addr https://console-qa.mobiledgex.net:443  --skipverify 
 ${count_flavor_list}=  | ID | Name | RAM | Disk | Ephemeral | VCPUs | Is Public |
 ${count_server_list}=  | ID | Name | Status | Networks | Image | Flavor |
 ${time}=  40s
-
+${govc_version}=  govc version
+${govc_host_info}=  govc host.info /packet-DFWVMW2/host/compute-cluster/139.178.87.98   
+${govccmd}=  govccmd
+${cloudlet_name_vsphere}=  DFWVMW2
 
 
 *** Test Cases ***
+#ECQ-2760
+RunDebug - use govccmd with args to check version
+    [Documentation]
+    ...  send runDebug specifying govccmd for cmd=
+    ...  verify args="govc version" returns version info
+
+
+    ${node}=  RunDebug  cloudlet_name=${cloudlet_name_vsphere}  command=${govccmd}  args=${govc_version}  node_type=${ntype_crm}  timeout=${time}
+
+    ${version}=  Set Variable  ${node}[0][data][output]
+    Should Contain  ${version}  0.23.0
+
+#ECQ-2761
+RunDebug - use govccmd with args to check host information
+    [Documentation]
+    ...  send runDebug specifying govccmd for cmd=
+    ...  verify args="govc host.info" returns vshphere host info
+
+    ${run_debug_out}=    Run Debug  cloudlet_name=${cloudlet_name_vsphere}  command=${govccmd}  args=${govc_host_info}  node_type=${ntype_crm}  timeout=${time}
+    ${string_output}=  Set Variable  ${run_debug_out}[-1][data][output]
+
+
+    ${govc}=    Convert GOVC To Dictionary    ${string_output}
+
+    Should Be Equal  ${govc['Path']}  /packet-DFWVMW2/host/compute-cluster/139.178.87.98
+    Should Be Equal  ${govc['Name']}  139.178.87.98
+
+
 #ECQ-2187
 RunDebug - cmd node_type set to shepherd and cmd stop-cpu-profile timeout 5s
     [Documentation]
