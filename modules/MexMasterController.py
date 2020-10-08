@@ -36,6 +36,9 @@ from mex_master_controller.ShowDeviceReport import ShowDeviceReport
 from mex_master_controller.RunDebug import RunDebug
 from mex_master_controller.Config import Config
 from mex_master_controller.VerifyEmail import VerifyEmail
+from mex_master_controller.AlertReceiver import AlertReceiver
+from mex_master_controller.Alert import Alert
+from mex_master_controller.User import User
 
 import shared_variables_mc
 import shared_variables
@@ -73,7 +76,8 @@ class MexMasterController(MexRest):
         self.prov_stack = []
 
         self.username = 'mexadmin'
-        self.password = 'mexadmin123'
+        #self.password = 'mexadmin123'
+        self.password = 'mexadminfastedgecloudinfra'
 
         self.admin_username = 'mexadmin'
        
@@ -186,6 +190,9 @@ class MexMasterController(MexRest):
         self.config = Config(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.vm_pool = VMPool(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -488,6 +495,9 @@ class MexMasterController(MexRest):
         else:
             resp = send_message()
             return self.decoded_data
+
+    def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/delete'
@@ -1620,28 +1630,28 @@ class MexMasterController(MexRest):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                if appinstance and appinstance['data']['state'] == 5:
+                if appinstance and appinstance[0]['data']['state'] == 5:
                     logging.info(f'App Instance is Ready')
                     return appinstance
                 else:
-                    logging.debug(f'app instance not ready. got {appinstance["data"]["state"]}. sleeping and trying again')
+                    logging.debug(f'app instance not ready. got {appinstance[0]["data"]["state"]}. sleeping and trying again')
                     time.sleep(1)
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
             
-        raise Exception(f'app instance is NOT ready. Got {appinstance["data"]["state"]} but expected 5')
+        raise Exception(f'app instance is NOT ready. Got {appinstance[0]["data"]["state"]} but expected 5')
 
     def wait_for_app_instance_to_be_deleted(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
-                logging.debug(f'app instance still exists. got state={appinstance["data"]["state"]}. sleeping and trying again')
+                logging.debug(f'app instance still exists. got state={appinstance[0]["data"]["state"]}. sleeping and trying again')
                 time.sleep(1)
             else:
                 logging.info(f'app instance is NOT found.')
                 return True
 
-        raise Exception(f'app instance still exists. Got app_name={appinstance["data"]["key"]["app_key"]["name"]}  state={appinstance["data"]["state"]}')
+        raise Exception(f'app instance still exists. Got app_name={appinstance[0]["data"]["key"]["app_key"]["name"]}  state={appinstance[0]["data"]["state"]}')
 
     def wait_for_app_instance_health_check_ok(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
@@ -1742,7 +1752,7 @@ class MexMasterController(MexRest):
                                     #label, link = line.split('Click to verify:')
                                     self._verify_link = line.rstrip()
 
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadminfastedgecloudinfra --skipverify'
                                     logging.info('login with:' + cmd)
                                     self._run_command(cmd)
                                     cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
@@ -2279,6 +2289,12 @@ class MexMasterController(MexRest):
     def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
         return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.create_alert_receiver(token=token, region=region, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+
+    def show_alerts(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.alert.show_alert(token=token, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
     def create_auto_provisioning_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, deploy_client_count=None, deploy_interval_count=None,undeploy_client_count=None, undeploy_interval_count=None, min_active_instances=None, max_instances=None, cloudlet_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.autoprov_policy.create_autoprov_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, deploy_client_count=deploy_client_count, deploy_interval_count=deploy_interval_count,undeploy_client_count=undeploy_client_count, undeploy_interval_count=undeploy_interval_count, min_active_instances=min_active_instances, max_instances=max_instances, cloudlet_list=cloudlet_list, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
@@ -2305,6 +2321,9 @@ class MexMasterController(MexRest):
 
     def run_debug(self, timeout=None, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, args=None, command=None, pretty=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.rundebug.run_debug(timeout=timeout, node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, args=args, command=command, pretty=pretty, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
+
+    def access_cloudlet(self, region=None, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.run_cmd.access_cloudlet(node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, command=command, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         if token is None:

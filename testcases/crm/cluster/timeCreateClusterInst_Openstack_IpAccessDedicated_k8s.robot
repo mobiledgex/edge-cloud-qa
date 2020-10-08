@@ -15,13 +15,13 @@ Test Teardown   Teardown
 Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
-#${cloudlet_name_openstack}   automationHawkinsCloudlet
+${cloudlet_name_openstack}   automationHawkinsCloudlet
 #${cloudlet_name_openstack}   automationBuckhornCloudlet
 #${cloudlet_name_openstack}   automationBeaconCloudlet
 #${cloudlet_name_openstack}   automationGcpCentralCloudlet
 #${cloudlet_name_openstack}   automationAzureCentralCloudlet
 #${cloudlet_name_openstack}   automationSunnydaleCloudletStage
-${cloudlet_name_openstack}   automationFairviewCloudlet
+#${cloudlet_name_openstack}   automationFairviewCloudlet
 #${cloudlet_name_openstack}   tmocloud-1
 #${operator_name_openstack}   gcp 
 #${operator_name_openstack}   azure 
@@ -33,6 +33,7 @@ ${mobiledgex_domain}    mobiledgex.net
 ${test_timeout_crm}   32 min
 	
 *** Test Cases ***
+# ECQ-1769	
 ClusterInst shall create single with IpAccessDed/kubernetes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessDed and deployment type=kubernetes
@@ -47,17 +48,19 @@ ClusterInst shall create single with IpAccessDed/kubernetes on openstack
 	Set Suite Variable    ${testnum}   1
 	
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   11
 	 
 	${epoch_start_time}=   Get Time  epoch
 	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}     flavor_name=${flavor_name}   number_nodes=0  number_masters=0   ip_access=IpAccessDedicated    deployment=kubernetes     	
 	${epoch_end_time}=     Get Time  epoch
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
-	${FileData}=     Set Variable  ${testnum} Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
+	${FileData}=     Set Variable   ${testnum} Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 	Write Data   
 
 
+# ECQ-1770
 ClusterInst shall create 2 with IpAccessDed/kubernetes on openstack
    [Documentation]
    ...  create 2 clusters on openstack with IpAccessDed and deployment type=kubernetes
@@ -82,40 +85,12 @@ ClusterInst shall create 2 with IpAccessDed/kubernetes on openstack
 
 	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
 	
-	${FileData}=     Set Variable   ${testnum} Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
+	${FileData}=     Set Variable    ${testnum} Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}     
 	Write Data   
 
 
-ClusterInst shall create 3 with IpAccessDedicated/kubernetes on openstack
-   [Documentation]
-   ...  create 3 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
-   ...  collect the time it takes to create the clusters and write it to a file
-
-	Clear Thread Dict
-	Set Suite Variable    ${testnum}   3
-
-	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
-	
-	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   3
-	
-	${epoch_start_time}=   Get Time  epoch
-	: FOR  ${INDEX}  IN RANGE  0  3
-	\  ${y}=   Convert To String   ${INDEX}
-	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}     flavor_name=${flavor_name}   number_nodes=0  number_masters=0   ip_access=IpAccessDedicated    deployment=kubernetes     use_thread=${True}   del_thread=${True}
-	\  Append To List   ${handle_list}   ${handle}
-	MexController.Wait For Replies    @{handle_list}
-	${epoch_end_time}=     Get Time  epoch
-
-	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
-	
-	${FileData}=     Set Variable       3 Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
-	Append To File   ${EXECDIR}/${FileName}     ${FileData}     
-	Write Data   
-
-
+# ECQ-1771
 ClusterInst shall create 4 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 4 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
@@ -127,7 +102,7 @@ ClusterInst shall create 4 with IpAccessDedicated/kubernetes on openstack
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   4
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   3
 	
 	${epoch_start_time}=   Get Time  epoch
 	: FOR  ${INDEX}  IN RANGE  0  4
@@ -145,21 +120,22 @@ ClusterInst shall create 4 with IpAccessDedicated/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 5 with IpAccessDedicated/kubernetes on openstack
+# ECQ-1772
+ClusterInst shall create 6 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
-   ...  create 5 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
+   ...  create 6 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
 
 	Clear Thread Dict
-	Set Suite Variable    ${testnum}   5
-	
+	Set Suite Variable    ${testnum}   4
+
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
 	
 	@{handle_list}=  Create List
-	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   5
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   4
 	
 	${epoch_start_time}=   Get Time  epoch
-	: FOR  ${INDEX}  IN RANGE  0  5
+	: FOR  ${INDEX}  IN RANGE  0  6
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
 	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}     flavor_name=${flavor_name}   number_nodes=0  number_masters=0   ip_access=IpAccessDedicated    deployment=kubernetes     use_thread=${True}   del_thread=${True}
@@ -174,6 +150,37 @@ ClusterInst shall create 5 with IpAccessDedicated/kubernetes on openstack
 	Write Data   
 
 
+# ECQ-1773
+ClusterInst shall create 8 with IpAccessDedicated/kubernetes on openstack
+   [Documentation]
+   ...  create 8 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
+   ...  collect the time it takes to create the clusters and write it to a file
+
+	Clear Thread Dict
+	Set Suite Variable    ${testnum}   8
+	
+	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	
+	@{handle_list}=  Create List
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   5
+	
+	${epoch_start_time}=   Get Time  epoch
+	: FOR  ${INDEX}  IN RANGE  0  8
+	\  ${y}=   Convert To String   ${INDEX}
+	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}     flavor_name=${flavor_name}   number_nodes=0  number_masters=0   ip_access=IpAccessDedicated    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  Append To List   ${handle_list}   ${handle}
+	MexController.Wait For Replies    @{handle_list}
+	${epoch_end_time}=     Get Time  epoch
+
+	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
+	
+	${FileData}=     Set Variable       ${testnum} Openstack Kubernetes Dedicated Cluster Creation Time: ${epoch_total_time}\n
+	Append To File   ${EXECDIR}/${FileName}     ${FileData}     
+	Write Data   
+
+
+# ECQ-1774
 ClusterInst shall create 10 with IpAccessDedicated/kubernetes on openstack
    [Documentation]
    ...  create 10 clusters on openstack with IpAccessDedicated and deployment type=kubernetes
@@ -215,7 +222,7 @@ Setup
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
 
-	${x}=  Evaluate    random.randint(2,20000)   random
+	${x}=  Evaluate    random.randint(10, 20000)   random
 	${x}=  Convert To String  ${x}
 	${cluster_name}=  Catenate  SEPARATOR=  timecl  ${x}
 	${testnum}=   Set Variable   1

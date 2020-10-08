@@ -9,7 +9,7 @@ Test Teardown    Teardown
 
 *** Variables ***
 ${username}          mextester99
-${password}          mextester99123
+${password}          ${mextester06_gmail_password}
 ${email}             mextester99@gmail.com
 ${mextester99_gmail_password}  rfbixqomqidobmcb
 ${server}            artifactory-qa.mobiledgex.net

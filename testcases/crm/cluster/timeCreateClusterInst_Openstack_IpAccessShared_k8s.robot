@@ -15,9 +15,9 @@ Test Teardown   Teardown
 Test Timeout     ${test_timeout_crm} 
 	
 *** Variables ***
-#${cloudlet_name_openstack}   automationHawkinsCloudlet
+${cloudlet_name_openstack}   automationHawkinsCloudlet
 #${cloudlet_name_openstack}   automationBuckhornCloudlet
-${cloudlet_name_openstack}   automationBeaconCloudlet
+#${cloudlet_name_openstack}   automationBeaconCloudlet
 #${cloudlet_name_openstack}   automationGcpCentralCloudlet
 #${cloudlet_name_openstack}   automationAzureCentralCloudlet
 #${cloudlet_name_openstack}   automationSunnydaleCloudletStage
@@ -33,6 +33,7 @@ ${mobiledgex_domain}    mobiledgex.net
 ${test_timeout_crm}  32 min
 	
 *** Test Cases ***
+# ECQ-1775	
 ClusterInst shall create single with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes
@@ -47,6 +48,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes on openstack
 	Set Suite Variable    ${testnum}   1
 	
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   11
 	 
 	${epoch_start_time}=   Get Time  epoch
 	Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}      flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     	
@@ -58,6 +60,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
+# ECQ-1776
 ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 2 clusters on openstack with IpAccessShared and deployment type=kubernetes
@@ -67,6 +70,7 @@ ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
 	Set Suite Variable    ${testnum}   2
 	
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   2
 	
 	@{handle_list}=  Create List
 	
@@ -86,43 +90,17 @@ ClusterInst shall create 2 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 3 with IpAccessShared/kubernetes on openstack
-   [Documentation]
-   ...  create 3 clusters on openstack with IpAccessShared and deployment type=kubernetes
-   ...  collect the time it takes to create the clusters and write it to a file
-
-	Clear Thread Dict
-	Set Suite Variable    ${testnum}    3
-	
-	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
-	
-	@{handle_list}=  Create List
-	
-	${epoch_start_time}=   Get Time  epoch
-	: FOR  ${INDEX}  IN RANGE  0  3
-	\  ${y}=   Convert To String   ${INDEX}
-	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
-	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}       flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
-	\  Append To List   ${handle_list}   ${handle}
-	MexController.Wait For Replies    @{handle_list}
-	${epoch_end_time}=     Get Time  epoch
-
-	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
-	
-	${FileData}=     Set Variable       ${testnum} Openstack Kubernetes Shared Cluster Creation Time: ${epoch_total_time}\n
-	Append To File   ${EXECDIR}/${FileName}     ${FileData}     
-	Write Data   
-
-
+# ECQ-1777
 ClusterInst shall create 4 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 4 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
 
 	Clear Thread Dict
-	Set Suite Variable    ${testnum}   4
+	Set Suite Variable    ${testnum}    4
 	
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   3
 	
 	@{handle_list}=  Create List
 	
@@ -142,20 +120,52 @@ ClusterInst shall create 4 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
-ClusterInst shall create 5 with IpAccessShared/kubernetes on openstack
+# ECQ-1778
+ClusterInst shall create 6 with IpAccessShared/kubernetes on openstack
    [Documentation]
-   ...  create 5 clusters on openstack with IpAccessShared and deployment type=kubernetes
+   ...  create 6 clusters on openstack with IpAccessShared and deployment type=kubernetes
    ...  collect the time it takes to create the clusters and write it to a file
 
 	Clear Thread Dict
-	Set Suite Variable    ${testnum}   5
+	Set Suite Variable    ${testnum}   6
 	
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   4
 	
 	@{handle_list}=  Create List
 	
 	${epoch_start_time}=   Get Time  epoch
-	: FOR  ${INDEX}  IN RANGE  0  5
+	: FOR  ${INDEX}  IN RANGE  0  6
+	\  ${y}=   Convert To String   ${INDEX}
+	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
+	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}       flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
+	\  Append To List   ${handle_list}   ${handle}
+	MexController.Wait For Replies    @{handle_list}
+	${epoch_end_time}=     Get Time  epoch
+
+	${epoch_total_time}=   Evaluate    ${epoch_end_time}-${epoch_start_time} 
+	
+	${FileData}=     Set Variable       ${testnum} Openstack Kubernetes Shared Cluster Creation Time: ${epoch_total_time}\n
+	Append To File   ${EXECDIR}/${FileName}     ${FileData}     
+	Write Data   
+
+
+# ECQ-1779
+ClusterInst shall create 8 with IpAccessShared/kubernetes on openstack
+   [Documentation]
+   ...  create 8 clusters on openstack with IpAccessShared and deployment type=kubernetes
+   ...  collect the time it takes to create the clusters and write it to a file
+
+	Clear Thread Dict
+	Set Suite Variable    ${testnum}   8
+	
+	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   5
+	
+	@{handle_list}=  Create List
+	
+	${epoch_start_time}=   Get Time  epoch
+	: FOR  ${INDEX}  IN RANGE  0  8
 	\  ${y}=   Convert To String   ${INDEX}
 	\  ${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   ${y}
 	\  ${handle}=   Create Cluster Instance   cluster_name=${cluster_name}   cloudlet_name=${cloudlet_name_openstack}   operator_org_name=${operator_name_openstack}      flavor_name=${flavor_name}    number_nodes=1  number_masters=1   ip_access=IpAccessShared    deployment=kubernetes     use_thread=${True}   del_thread=${True}
@@ -170,6 +180,7 @@ ClusterInst shall create 5 with IpAccessShared/kubernetes on openstack
 	Write Data   
 
 
+# ECQ-1780
 ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
    [Documentation]
    ...  create 10 clusters on openstack with IpAccessShared and deployment type=kubernetes
@@ -179,6 +190,7 @@ ClusterInst shall create 10 with IpAccessShared/kubernetes on openstack
 	Set Suite Variable    ${testnum}   10
 
 	${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
+	${cluster_name}=  Catenate  SEPARATOR=   ${cluster_name}   6
 	
 	@{handle_list}=  Create List
 	

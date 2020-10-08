@@ -19,7 +19,7 @@ ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 ${orgname}=   metricsorg
 
 ${region}=  EU
@@ -277,38 +277,41 @@ CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
-   \  Should Be Equal  ${reading[2]}  10
-   \  Should Be Equal  ${reading[3]}  ${pod}
-   \  Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
-   \  Should Be Equal  ${reading[5]}  ${developer_name}
-   \  Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics}
-   \  Should Be Equal  ${reading[7]}  ${operator}
-   \  Should Be Equal  ${reading[8]}  ${developer_name}
-
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+   FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[1]}  ${app_name_influx}
+      Should Be Equal  ${reading[2]}  10
+      Should Be Equal  ${reading[3]}  ${pod}
+      Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
+      Should Be Equal  ${reading[5]}  ${developer_name}
+      Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics}
+      Should Be Equal  ${reading[7]}  ${operator}
+      Should Be Equal  ${reading[8]}  ${developer_name}
+ 
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop  
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop  
+   END
  
    #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
    #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
 
-   \  ${index}=  Evaluate  ${index}+1
+      ${index}=  Evaluate  ${index}+1
+   END
