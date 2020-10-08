@@ -17,6 +17,7 @@ class RunCommand(MexOperation):
         self.runCommand_url = '/auth/ctrl/RunCommand'
         self.showLogs_url = '/auth/ctrl/ShowLogs'
         self.runConsole_url = '/auth/ctrl/RunConsole'
+        self.accessCloudlet_url = '/auth/ctrl/AccessCloudlet'
 
     def _build(self, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, use_defaults=True):
 
@@ -122,6 +123,8 @@ class RunCommand(MexOperation):
 
         cmd_run = f'appname={app_name} appvers={app_version} app-org={developer_org_name} cluster={cluster_instance_name} cloudlet-org={operator_org_name} cloudlet={cloudlet_name} --skipverify'
 
+
+
         if command:
             cmd_run += f' command={command}'
         if container_id:
@@ -136,6 +139,35 @@ class RunCommand(MexOperation):
             cmd_run += f' follow={follow}'
 
         return cmd_run
+
+    def _build_access(self, type_dict, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None,  command=None, clusterkey=None, clusterinst=None, appkey=None, appinstkey=None, use_defanlts=False):
+
+        #{"Region":"US","ExecRequest":{"app_inst_key":{"app_key":{},"cluster_inst_key":{"cluster_key":{},"cloudlet_key":{"organization":"packet","name":"DFWVMW"}}},"cmd":{"command":"docker ps;exit","cloudlet_mgmt_node":{"type":"platformvm","name":"DFWVMW-packet-pf"}}}}
+
+        cmd_key_dict = {}
+        node_dict = {}
+
+        msg_dict = {}
+        msg_dict.update(type_dict)
+
+        if command is not None:
+           cmd_key_dict['command'] = command
+        if node_name is not None:
+            node_dict['name'] = node_name
+        if node_type is not None:
+            node_dict['type'] = node_type
+        if node_dict:
+            cmd_key_dict['cloudlet_mgmt_node'] = node_dict
+        if cmd_key_dict:
+            msg_dict['cmd'] = cmd_key_dict
+
+
+        return msg_dict
+ 
+    def access_cloudlet(self, node_name=None, node_type=None, region=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
+        msg_access = self._build_access(type_dict=msg, node_name=node_name, node_type=node_type, command=command)
+        return self._show(token=token, url=self.accessCloudlet_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_access)
 
     def run_command(self, mc_address=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, command=None, token=None, region=None, json_data=None, timeout=None, use_defaults=True, use_thread=False):
         msg = self._build(app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, use_defaults=use_defaults)

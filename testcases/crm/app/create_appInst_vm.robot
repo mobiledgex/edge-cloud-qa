@@ -49,9 +49,16 @@ User shall be able to create VM/LB deployment on openstack
     ${app_name_default}=  Get Default App Name
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
-  
-    ${vm_lb}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}-lb
-    ${vm_lb}=  Remove String  ${vm_lb}  .
+
+    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
+    ${rootlb}=  Convert To Lowercase  ${rootlb}
+    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
+    ${vm}=  Remove String  ${vm}  .
+    ${vm_lb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
+
+    ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_vm}.${operator_name_openstack}.pf
+    ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
+    ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
  
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
@@ -65,8 +72,9 @@ User shall be able to create VM/LB deployment on openstack
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='2016', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2015', port_range_min='2015', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
    Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='8085', port_range_min='8085', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at=
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='22', port_range_min='22', protocol='tcp', remote_ip_prefix='${crm_ip}/32', updated_at=
    @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
-   Length Should Be  ${sec_groups}  4
+   Length Should Be  ${sec_groups}  5
 
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
    Length Should Be  ${sec_groups}  2

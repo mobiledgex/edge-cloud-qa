@@ -6,7 +6,7 @@ Library  MexApp
 Resource  metrics_app_library.robot
 	      
 Suite Setup       Setup
-#Test Teardown    Cleanup provisioning
+Test Teardown    Cleanup provisioning
 
 Test Timeout  ${test_timeout_crm}
 
@@ -17,7 +17,7 @@ ${clustername_docker}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
 
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 
 ${username}=  mextester06
 ${password}=  mextester06123
@@ -37,10 +37,13 @@ AppMetrics - Shall be able to get Docker app Connections metrics by version
    ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
+   Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
 
-   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics1}  appinst-connections
+   Metrics Headings Should Be Correct  ${metrics2}  appinst-connections
 
    Connections Should Be In Range  ${metrics1}
+   Connections Should Be In Range  ${metrics2}
 
 AppMetrics - Shall be able to get Docker app CPU metrics by version
    [Documentation]
@@ -51,10 +54,13 @@ AppMetrics - Shall be able to get Docker app CPU metrics by version
    ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
+   Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
 
-   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics1}   appinst-cpu
+   Metrics Headings Should Be Correct  ${metrics2}   appinst-cpu
 
-   CPU Should Be In Range  ${metrics}
+   CPU Should Be In Range  ${metrics1}
+   CPU Should Be In Range  ${metrics2}
 
 AppMetrics - Shall be able to get Docker disk CPU metrics by version
    [Documentation]
@@ -65,10 +71,13 @@ AppMetrics - Shall be able to get Docker disk CPU metrics by version
    ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
+   Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
 
-   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics1}   appinst-disk
+   Metrics Headings Should Be Correct  ${metrics2}   appinst-disk
 
-   Disk Should Be In Range  ${metrics}
+   Disk Should Be In Range  ${metrics1}
+   Disk Should Be In Range  ${metrics2}
 
 AppMetrics - Shall be able to get Docker memory CPU metrics by version
    [Documentation]
@@ -79,10 +88,13 @@ AppMetrics - Shall be able to get Docker memory CPU metrics by version
    ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
+   Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
 
-   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics1}   appinst-mem
+   Metrics Headings Should Be Correct  ${metrics2}   appinst-mem
 
-   Memory Should Be In Range  ${metrics}
+   Memory Should Be In Range  ${metrics1}
+   Memory Should Be In Range  ${metrics2}
 
 AppMetrics - Shall be able to get Docker networ CPU metrics by version
    [Documentation]
@@ -93,10 +105,13 @@ AppMetrics - Shall be able to get Docker networ CPU metrics by version
    ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
+   Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
 
-   Metrics Headings Should Be Correct  ${metrics1}
+   Metrics Headings Should Be Correct  ${metrics1}   appinst-network
+   Metrics Headings Should Be Correct  ${metrics2}   appinst-network
 
-   Network Should Be In Range  ${metrics}
+   Network Should Be In Range  ${metrics1}
+   Network Should Be In Range  ${metrics2}
 
 *** Keywords ***
 Setup
@@ -123,15 +138,15 @@ Setup
    Create App  region=${region}  app_name=${app_name}  app_version=${app_version}  default_flavor_name=${flavor_name}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,udp:2016
    ${appinst1}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  #autocluster_ip_access=IpAccessDedicated
 
-   Create App  region=${region}  app_name=${app_name}  app_version=${app_version2}  default_flavor_name=${flavor_name}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2017,udp:2018
+   Create App  region=${region}  app_name=${app_name}  app_version=${app_version2}  default_flavor_name=${flavor_name}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016,udp:2015
    ${appinst2}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version2}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  #autocluster_ip_access=IpAccessDedicated
 
    Log to Console  Wait and connect to TCP/UDP ports
    Sleep  7 mins
    UDP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][1]['public_port']}
    TCP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][0]['public_port']}  wait_time=20
-   #UDP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][1]['public_port']}
-   #TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   UDP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][1]['public_port']}
+   TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
    #Sleep  3 mins
@@ -153,150 +168,144 @@ Metrics Should Match Influxdb
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop
+   END
 
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
    : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
    \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
+   #\  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
 
    \  ${index}=  Evaluate  ${index}+1
+
+Appinst Connections Headings 
+  [Arguments]  ${metrics}
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  port
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  active
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  handled
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  accepts
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  bytesSent
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  bytesRecvd
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  P0
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  P25
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  P50
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  P75
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  P90
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][19]}  P95
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][20]}  P99
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][21]}  P99.5
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][22]}  P99.9
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][23]}  P100
+
+
+Appinst Cpu Headings
+  [Arguments]  ${metrics}
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cpu
+
+
+Appinst Disk Headings
+  [Arguments]  ${metrics}
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  disk
+
+
+Appinst Mem Headings
+  [Arguments]  ${metrics}
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  mem
+
+
+Appinst Network Headings
+  [Arguments]  ${metrics}
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  sendBytes
+    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  recvBytes
+
  
 Metrics Headings Should Be Correct
-  [Arguments]  ${metrics}
+  [Arguments]  ${metrics}  ${metrics_type}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}       appinst-network 
-   Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}       appinst-mem
-   Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}       appinst-disk 
-   Should Be Equal  ${metrics['data'][0]['Series'][3]['name']}       appinst-cpu 
-   Should Be Equal  ${metrics['data'][0]['Series'][4]['name']}       appinst-connections
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}       ${metrics_type}
 
-   FOR  ${i}  IN RANGE  0  5
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  app 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  ver
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  pod
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  clusterorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  apporg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  cpu
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  mem
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  disk
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  sendBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  recvBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  port 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][15]}  active 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][16]}  handled 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][17]}  accepts
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][18]}  bytesSent
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][19]}  bytesRecvd
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][20]}  P0
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][21]}  P25
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][22]}  P50
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][23]}  P75
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][24]}  P90
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][25]}  P95
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][26]}  P99
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][27]}  P99.5
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][28]}  P99.9
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][29]}  P100
-   END 
+   #FOR  0  IN RANGE  0  5
+   Run Keyword If   '${metrics_type}' == 'appinst-connections'  Appinst Connections Headings  ${metrics}
+   ...  ELSE IF  '${metrics_type}' == 'appinst-cpu'  Appinst Cpu Headings  ${metrics} 
+   ...  ELSE IF  '${metrics_type}' == 'appinst-disk'  Appinst Disk Headings   ${metrics}
+   ...  ELSE IF  '${metrics_type}' == 'appinst-mem'   Appinst Mem Headings   ${metrics}
+   ...  ELSE  Appinst Network Headings  ${metrics}
 
 CPU Should Be In Range
   [Arguments]  ${metrics}
 
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[8]} > 0 and ${reading[8]} <= 100
-
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[8]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
+   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100
 
 Disk Should Be In Range
   [Arguments]  ${metrics}
 
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[10]} > 0 and ${reading[10]} <= 1000000
-
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[10]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[10]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[10]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[10]}  ${None}
+   \  Should Be True               ${reading[9]} > 0 
 
 Memory Should Be In Range
   [Arguments]  ${metrics}
 
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000
-
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[9]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[9]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[9]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[9]}  ${None}
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000  
 
 Network Should Be In Range
   [Arguments]  ${metrics}
@@ -304,132 +313,26 @@ Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[11]} >= 0 and ${reading[12]} >= 0
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[11]}  ${None}
-   \  Should Be Equal               ${reading[12]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[11]}  ${None}
-   \  Should Be Equal               ${reading[12]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[11]}  ${None}
-   \  Should Be Equal               ${reading[12]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal               ${reading[11]}  ${None}
-   \  Should Be Equal               ${reading[12]}  ${None}
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
 
 Connections Should Be In Range
   [Arguments]  ${metrics}
 
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][4]['values']}
+   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
    : FOR  ${reading}  IN  @{values}
+   \  Should Be True               ${reading[9]} >= 0
+   \  Should Be True               ${reading[10]} >= 0
+   \  Should Be True               ${reading[11]} >= 0
+   \  Should Be True               ${reading[12]} >= 0
    \  Should Be True               ${reading[13]} >= 0
    \  Should Be True               ${reading[14]} >= 0
    \  Should Be True               ${reading[15]} >= 0
    \  Should Be True               ${reading[16]} >= 0
    \  Should Be True               ${reading[17]} >= 0
-   \  Should Be True               ${reading[16]} >= 0
+   \  Should Be True               ${reading[18]} >= 0
    \  Should Be True               ${reading[19]} >= 0
    \  Should Be True               ${reading[20]} >= 0
    \  Should Be True               ${reading[21]} >= 0
    \  Should Be True               ${reading[22]} >= 0
    \  Should Be True               ${reading[23]} >= 0
-   \  Should Be True               ${reading[24]} >= 0
-   \  Should Be True               ${reading[25]} >= 0
-   \  Should Be True               ${reading[26]} >= 0
-   \  Should Be True               ${reading[27]} >= 0
-   \  Should Be True               ${reading[28]} >= 0
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[13]}  ${None} 
-   \  Should Be Equal  ${reading[14]}  ${None} 
-   \  Should Be Equal  ${reading[15]}  ${None} 
-   \  Should Be Equal  ${reading[16]}  ${None}
-   \  Should Be Equal  ${reading[17]}  ${None} 
-   \  Should Be Equal  ${reading[18]}  ${None} 
-   \  Should Be Equal  ${reading[19]}  ${None} 
-   \  Should Be Equal  ${reading[20]}  ${None} 
-   \  Should Be Equal  ${reading[21]}  ${None} 
-   \  Should Be Equal  ${reading[22]}  ${None} 
-   \  Should Be Equal  ${reading[23]}  ${None} 
-   \  Should Be Equal  ${reading[24]}  ${None} 
-   \  Should Be Equal  ${reading[25]}  ${None} 
-   \  Should Be Equal  ${reading[26]}  ${None} 
-   \  Should Be Equal  ${reading[27]}  ${None} 
-   \  Should Be Equal  ${reading[28]}  ${None} 
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][1]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[13]}  ${None}
-   \  Should Be Equal  ${reading[14]}  ${None}
-   \  Should Be Equal  ${reading[15]}  ${None}
-   \  Should Be Equal  ${reading[16]}  ${None}
-   \  Should Be Equal  ${reading[17]}  ${None}
-   \  Should Be Equal  ${reading[18]}  ${None}
-   \  Should Be Equal  ${reading[19]}  ${None}
-   \  Should Be Equal  ${reading[20]}  ${None}
-   \  Should Be Equal  ${reading[21]}  ${None}
-   \  Should Be Equal  ${reading[22]}  ${None}
-   \  Should Be Equal  ${reading[23]}  ${None}
-   \  Should Be Equal  ${reading[24]}  ${None}
-   \  Should Be Equal  ${reading[25]}  ${None}
-   \  Should Be Equal  ${reading[26]}  ${None}
-   \  Should Be Equal  ${reading[27]}  ${None}
-   \  Should Be Equal  ${reading[28]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][2]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[13]}  ${None}
-   \  Should Be Equal  ${reading[14]}  ${None}
-   \  Should Be Equal  ${reading[15]}  ${None}
-   \  Should Be Equal  ${reading[16]}  ${None}
-   \  Should Be Equal  ${reading[17]}  ${None}
-   \  Should Be Equal  ${reading[18]}  ${None}
-   \  Should Be Equal  ${reading[19]}  ${None}
-   \  Should Be Equal  ${reading[20]}  ${None}
-   \  Should Be Equal  ${reading[21]}  ${None}
-   \  Should Be Equal  ${reading[22]}  ${None}
-   \  Should Be Equal  ${reading[23]}  ${None}
-   \  Should Be Equal  ${reading[24]}  ${None}
-   \  Should Be Equal  ${reading[25]}  ${None}
-   \  Should Be Equal  ${reading[26]}  ${None}
-   \  Should Be Equal  ${reading[27]}  ${None}
-   \  Should Be Equal  ${reading[28]}  ${None}
-
-   ${values}=  Set Variable  ${metrics['data'][0]['Series'][3]['values']}
-   # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[13]}  ${None}
-   \  Should Be Equal  ${reading[14]}  ${None}
-   \  Should Be Equal  ${reading[15]}  ${None}
-   \  Should Be Equal  ${reading[16]}  ${None}
-   \  Should Be Equal  ${reading[17]}  ${None}
-   \  Should Be Equal  ${reading[18]}  ${None}
-   \  Should Be Equal  ${reading[19]}  ${None}
-   \  Should Be Equal  ${reading[20]}  ${None}
-   \  Should Be Equal  ${reading[21]}  ${None}
-   \  Should Be Equal  ${reading[22]}  ${None}
-   \  Should Be Equal  ${reading[23]}  ${None}
-   \  Should Be Equal  ${reading[24]}  ${None}
-   \  Should Be Equal  ${reading[25]}  ${None}
-   \  Should Be Equal  ${reading[26]}  ${None}
-   \  Should Be Equal  ${reading[27]}  ${None}
-   \  Should Be Equal  ${reading[28]}  ${None}
-

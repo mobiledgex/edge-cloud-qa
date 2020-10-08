@@ -8,7 +8,7 @@ Library  MexApp
 Library  String
 
 Test Setup      Setup
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
 	
@@ -103,16 +103,17 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with e
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 #     TCP Port Should Be Alive  developer1570561247-819531app1570561247-81953110.automationsunnydalecloudlet.gddt.mobiledgex.net  2016
 
-User shall be able to access VM/LB deployment UDP and TCP ports on openstack with existing image
+# ECQ-2125
+User shall be able to access VM/LB deployment UDP and TCP ports on openstack
     [Documentation]
     ...  deploy VM app with a Load Balancer on openstack with 1 UDP and 1 TCP port with existing image
     ...  verify all ports are accessible via fqdn
 
     # https://mobiledgex.atlassian.net/browse/ECQ-2125
 
-    ${image_list}=  Get Image List  ${qcow_centos_openstack_image}
-    Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
-    Should Be Equal  ${image_list[0]['Status']}   active 
+    #${image_list}=  Get Image List  ${qcow_centos_openstack_image}
+    #Should Be Equal  ${image_list[0]['Name']}   ${qcow_centos_openstack_image}
+    #Should Be Equal  ${image_list[0]['Status']}   active 
 
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name

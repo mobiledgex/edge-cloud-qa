@@ -15,11 +15,12 @@ ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
 ${username}=   mextester06
-${password}=   mextester06123
+${password}=   ${mextester06_gmail_password}
 #${email}=      mextester06@gmail.com
 
 ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
+${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
 # ECQ-1570
@@ -108,5 +109,5 @@ Setup
 
 Teardown
     Cleanup Provisioning
-    Login  username=mexadmin  password=mexadmin123
+    Login  username=mexadmin  password=${mex_password}
 

@@ -4,20 +4,22 @@ from linux import Linux
 from kubernetes import Kubernetes
 
 class Rootlb(Linux):
-    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa_mex', cluster_name=None, verbose=False):
+    def __init__(self, kubeconfig=None, host=None, port=22, username='ubuntu', key_file='id_rsa', cluster_name=None, verbose=False, signed_key='signed-key', proxy_to_node=None):
         logging.debug('init')
 
         self.kubeconfig = kubeconfig
-
+        
         if kubeconfig is None:
             self.kubeconfig = host + '.kubeconfig'
             
         if not os.path.isfile(key_file):
             key_file_pre = key_file
-            key_file = os.environ['HOME'] + '/.mobiledgex/' + os.path.basename(key_file)
+            key_file = os.environ['HOME'] + '/.ssh/' + os.path.basename(key_file)
+            signed_key = os.environ['HOME'] + '/.ssh/' + os.path.basename(signed_key)
             logging.warning('{} not found. using {}'.format(key_file_pre, key_file))
+
         try:
-            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose)
+            super().__init__(host=host, port=port, username=username, key_file=key_file, verbose=verbose, signed_key=signed_key, proxy_to_node=proxy_to_node)
         except ConnectionError as err1:
             logging.error('caught ssh error:' + str(err1))
             raise ConnectionError
@@ -140,6 +142,22 @@ class Rootlb(Linux):
 
         return output
 
+    def get_stopped_docker_container_id(self, name=None):
+        cmd = 'docker ps -a --format "{{.ID}}"'
+        if name:
+            cmd = cmd + f' --filter name=^{name}'
+
+        logging.info('executing ' + cmd)
+        (output, err, errcode) = self.command(cmd)
+        logging.debug('output=' + str(output))
+
+        if errcode != 0:
+            raise Exception("cmd returned non-zero status of " + errcode)
+
+        output = [id.rstrip() for id in output]
+
+        return output
+
     def get_docker_container_id(self, name=None):
         cmd = 'docker ps --format "{{.ID}}"'
         if name:
@@ -259,7 +277,7 @@ class Rootlb(Linux):
 
     def write_file_to_node(self, node, mount, data=None):
         logging.info(f'write file to node={node} mount={mount}')
-        network, ip = node.split('=')
+        #network, ip = node.split('=')
 
         data_to_write = None
         if data:
@@ -271,10 +289,12 @@ class Rootlb(Linux):
         self.run_command_on_node(node, command)
         
     def run_command_on_node(self, node, command):
-        network, ip = node.split('=')
-        command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
+        #network, ip = node.split('=')
+        #command = f'ssh -i id_rsa_mex ubuntu@{ip} \'{command}\''
+        #command = f'ubuntu@{ip} \'{command}\''
 
         output = self.run_command(command)
+
         return output
     
     def run_command(self, cmd):

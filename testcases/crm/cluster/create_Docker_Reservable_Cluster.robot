@@ -23,7 +23,7 @@ ${policy_name}  AutoProvPolicyTest
 ${app_name}  AutoProvAppDocker
 ${token_server_url}  http://mextest.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
 
@@ -44,23 +44,23 @@ Create Auto Provisioning Policy
 Add Cloudlet to Auto Provisioning Policy
 
    log to console  Add Cloudlet to Auto Provisioning Policy
-   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=EU  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
+   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
 
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    log to console  Creating App and App Instance
-   create app  region=EU  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name}  deployment=docker  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
    log to console  Registering Client and Finding Cloudlet
    Register Client  developer_org_name=${orgname}  app_version=v1
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=GDDT
+   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
-   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=GDDT
+   ${cloudlet}=  Find Cloudlet  latitude=12  longitude=50  carrier_name=${operator_name_openstack}
    log to console  Deployed Autoprovision App Successfully!
 
    Should Be Equal As Numbers  ${cloudlet.status}  1
