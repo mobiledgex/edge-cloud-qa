@@ -47,7 +47,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailRootlbOffline when d
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailRootlbOffline
+    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Rootlb  root_loadbalancer=${clusterlb} 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -67,7 +67,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when dock
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Stop Docker Container Clustervm  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Clustervm  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -87,7 +87,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when dock
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Stop Docker Container Clustervm  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Clustervm  root_loadbalancer=${clusterlb}  node=${server_info_node[0]['Networks']}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -117,7 +117,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -161,7 +161,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -203,7 +203,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -234,7 +234,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckFailServerFail when one 
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2015  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -270,7 +270,7 @@ IpAccessDedicated docker - healthcheck shows HealthCheckOk when TCP port with sk
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -301,7 +301,7 @@ IpAccessDedicated docker - healthcheck shows proper state after UpdateApp
     ${tcp_fqdn}=   Set Variable  ${app_inst[0]['data']['uri']}
 
     Stop TCP Port  ${tcp_fqdn}  2016
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start TCP Port  ${tcp_fqdn}  2016
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -320,7 +320,7 @@ IpAccessDedicated docker - healthcheck shows proper state after UpdateApp
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
     Stop TCP Port  ${tcp_fqdn}  2015
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
 *** Keywords ***
 Setup

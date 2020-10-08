@@ -240,6 +240,9 @@ class MexMasterController(MexRest):
     def get_default_vm_pool_name(self):
         return shared_variables.vmpool_name_default
 
+    def get_default_alert_receiver_name(self):
+        return shared_variables.alert_receiver_name_default
+
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
     
@@ -1653,49 +1656,32 @@ class MexMasterController(MexRest):
 
         raise Exception(f'app instance still exists. Got app_name={appinstance[0]["data"]["key"]["app_key"]["name"]}  state={appinstance[0]["data"]["state"]}')
 
-    def wait_for_app_instance_health_check_ok(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
+    def wait_for_app_instance_health_check(self, status, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, use_thread=False, timeout=180):
         for x in range(1, timeout):
-            appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
+            appinstance = self.app_instance.show_app_instance(token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
             if appinstance:
                 if 'health_check' in appinstance[0]['data']:
-                    if appinstance[0]['data']['health_check'] == 3:
-                        logging.info(f'App Instance is health check OK')
+                    if appinstance[0]['data']['health_check'] == status:
+                        logging.info(f'App Instance is health check {status}')
                         return appinstance
                     else:
-                        logging.debug(f'app instance health check not OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
+                        logging.debug(f'app instance health check not {status}. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
                         time.sleep(1)
                 else:
                     raise Exception(f'health check not found')
             else:
                 logging.debug(f'app instance is NOT found. sleeping and trying again')
-            
-        raise Exception(f'app instance health check is NOT OK. Got {appinstance[0]["data"]["health_check"]} but expected 3')
 
-    def wait_for_app_instance_health_check_fail(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, state=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
-        for x in range(1, timeout):
-            appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
-            if appinstance:
-                if 'health_check' in appinstance[0]['data']:
-                    if state == 'HealthCheckFailServerFail': 
-                        if appinstance[0]['data']['health_check'] == 2:
-                            logging.info(f'App Instance is health check {state}')
-                            return appinstance                        
-                        else:
-                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
-                            time.sleep(1)
-                    else:
-                        if appinstance[0]['data']['health_check'] == 1:
-                            logging.info(f'App Instance is health check {state}')
-                            return appinstance
-                        else:
-                            logging.debug(f'app instance health check OK. got {appinstance[0]["data"]["health_check"]}. sleeping and trying again')
-                            time.sleep(1)
-                else:
-                    raise Exception(f'health check not found')
-            else:
-                logging.debug(f'app instance is NOT found. sleeping and trying again')
+        raise Exception(f'app instance health check is NOT {status}. Got {appinstance[0]["data"]["health_check"]} but expected {status}')
 
-        raise Exception(f'app instance health check is NOT {state}')
+    def wait_for_app_instance_health_check_ok(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, use_thread=False, timeout=180):
+        self.wait_for_app_instance_health_check(status=3, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
+
+    def wait_for_app_instance_health_check_server_fail(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
+        self.wait_for_app_instance_health_check(status=2, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
+
+    def wait_for_app_instance_health_check_rootlb_offline(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=90):
+        self.wait_for_app_instance_health_check(status=1, token=token, region=region, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, timeout=timeout)
 
     def run_command(self, token=None, region=None, command=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, container_id=None, timeout=120, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.run_command(token=token, region=region, mc_address=self.mc_address, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, container_id=container_id, command=command, use_defaults=use_defaults, use_thread=use_thread, timeout=timeout)
@@ -2289,9 +2275,18 @@ class MexMasterController(MexRest):
     def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
         return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.alert_receiver.create_alert_receiver(token=token, region=region, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.create_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
+    def alert_receiver_email_should_be_received(self, email_address, email_password, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, wait=30):
+        return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, wait=wait)
+
+    def alert_receiver_email_for_firing_appinstdown_should_be_received(self, email_address, email_password, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='FIRING', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, wait=wait)
+
+    def alert_receiver_email_for_resolved_appinstdown_should_be_received(self, email_address, email_password, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, wait=wait)
+ 
     def show_alerts(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.alert.show_alert(token=token, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
