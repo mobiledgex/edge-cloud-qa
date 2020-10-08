@@ -47,7 +47,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when docker 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Stop Docker Container Clustervm  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Clustervm  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -67,7 +67,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when docker 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Stop Docker Container Clustervm  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Clustervm  root_loadbalancer=${rootlb}  node=${server_info_node[0]['Networks']}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -100,7 +100,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     ${public_port_2}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][2]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -143,7 +143,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     ${public_port_1}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][1]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -174,7 +174,7 @@ IpAccessShared docker - healthcheck shows HealthCheckFailServerFail when one por
     ${public_port_0}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][0]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}  tls=True
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
     Should Contain  ${error_msg}  FIND_NOTFOUND
@@ -211,7 +211,7 @@ IpAccessShared docker - healthcheck shows HealthCheckOk when TCP port with skip_
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Register Client
     ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
@@ -317,7 +317,7 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     ${public_port_2}=  Set Variable  ${app_inst[0]['data']['mapped_ports'][2]['public_port']}
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_1}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Start TCP Port  ${tcp_fqdn}  2016  server_port=${public_port_2}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -338,7 +338,7 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     Verify Health Check Ok   ${app_name_default}  ${cluster_name_default}  2
 
     Stop TCP Port  ${tcp_fqdn}  ${public_port_0}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
  
 *** Keywords ***
