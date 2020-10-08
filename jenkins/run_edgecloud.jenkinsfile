@@ -8,10 +8,16 @@ def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandT
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
 def jobListPerformance=["Performance"]
+def jobListOwaspZAP=["OWASP ZAP"]
+def joblistNmapScanning=["nmap scanning"]
+def joblistImageScanning=["Image Scanning"]
 
 builds1 = [:]
 builds2 = [:]
 builds3 = [:]
+builds4 = [:]
+builds5 = [:]
+builds6 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
@@ -392,7 +398,51 @@ node('jenkinsSlave1'){
                 build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
              }
           }
+          
+          try {
+            parallel builds3
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
 
+          for(int i=0; i < jobListOwaspZAP.size(); ++i) {
+             def jobName = jobListOwaspZAP[i];
+             echo "i1=" + jobName
+             builds4[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          }          
+          
+          try {
+            parallel builds4
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobListNmapScanning.size(); ++i) {
+             def jobName = jobListNmapScanning[i];
+             echo "i1=" + jobName
+             builds5[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          } 
+
+          try {
+            parallel builds5
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobListImageScanning.size(); ++i) {
+             def jobName = jobListImageScanning[i];
+             echo "i1=" + jobName
+             builds6[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          }
           try {
             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Start Metrics Peformance Test"'
             status = sh(script: s, returnStatus: true);
