@@ -1,5 +1,8 @@
 import json
 import logging
+import email
+import imaplib
+import time
 
 import shared_variables
 
@@ -61,21 +64,22 @@ class AlertReceiver(MexOperation):
 
         return receiver_dict
 
-    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
         msg = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_delete = None
         if auto_delete and 'name' in msg:
-            msg_delete = self._build(receiver_name=msg['name'], use_defaults=False)
+            #msg_delete = self._build(receiver_name=msg['name'], type=msg['type'], use_defaults=False)
+            msg_delete = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
             msg_dict_delete = msg_delete
 
         msg_dict_show = None
         if 'name' in msg:
             msg_show = self._build(receiver_name=msg['name'], use_defaults=False)
             msg_dict_show = msg_show
-
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
+ 
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
 
     def delete_alert_receiver(self, token=None, region=None, receiver_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
         msg = self._build(receiver_name=receiver_name, use_defaults=use_defaults)
@@ -88,3 +92,70 @@ class AlertReceiver(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def verify_email(self, email_address, email_password, alert_type, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, server='imap.gmail.com', wait=30):
+        mail = imaplib.IMAP4_SSL(server)
+        mail.login(email_address, email_password)
+        mail.select('inbox')
+        logger.debug(f'successfully logged into {email_address}')
+
+        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_type}")')
+        mail_ids_pre = email_list[0].split()
+        num_emails_pre = len(mail_ids_pre)
+        logger.debug(f'originally found {num_emails_pre} with {alert_type}')
+        #num_emails_pre=0
+        
+        for attempt in range(wait):
+            mail.recent()
+            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_type}")')
+            mail_ids = email_list[0].split()
+            num_emails = len(mail_ids)
+            logging.info(f'number of emails found is {num_emails}')
+            if num_emails > num_emails_pre:
+                logging.info('new email found')
+                mail_id = email_list[0].split()
+                typ, data = mail.fetch(mail_id[-1], '(RFC822)')
+                for response_part in data:
+                    if isinstance(response_part, tuple):
+                        msg = email.message_from_string(response_part[1].decode('utf-8'))
+                        email_subject = msg['subject'].replace('\r\n','')
+                        email_from = msg['from']
+                        date_received = msg['date']
+                        logger.debug(f'subject={email_subject}')
+ 
+                        #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
+                        if f'{alert_name} Application: {app_name} Version: {app_version}' in email_subject:
+                            logger.info(f'subject{email_subject}  verified')
+                        else:
+                            raise Exception(f'subject not found. Expected[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}. Got {email_subject}')
+ 
+                        if msg.is_multipart():
+                            for part in msg.walk():
+                                ctype = part.get_content_type()
+                                logger.debug(f'type={ctype}')
+                                if ctype == 'text/html':  # found html part of the message
+                                    payload = part.get_payload(decode=True).decode('utf-8')
+                                    logger.debug(f'payload={payload}')
+
+                        def check_payload(text):
+                            if text in payload:
+                                logging.info(f'{text} found in alert email')
+                            else:
+                                raise Exception(f'{text} not found in alert email')
+
+                        if alert_name: check_payload(f'alertname = {alert_name}')
+                        if app_name: check_payload(f'app = {app_name}')
+                        if app_version: check_payload(f'appver = {app_version}')
+                        if developer_org_name: check_payload(f'apporg = {developer_org_name}')
+                        if cloudlet_name: check_payload(f'cloudlet = {cloudlet_name}')
+                        if operator_org_name: check_payload(f'cloudletorg = {operator_org_name}')
+                        if cluster_instance_name: check_payload(f'cluster = {cluster_instance_name}')
+                        if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
+                        if region: check_payload(f'region = {region}')
+                        if status: check_payload(f'status = {status}')
+
+                        return True
+            time.sleep(1)
+
+        raise Exception('email not found')
+

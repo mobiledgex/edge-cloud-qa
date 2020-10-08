@@ -74,6 +74,9 @@ CreateAlertReceiver - create without all app parms shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0  developer_org_name=x  app_name=x   token=${token}  use_defaults=${False}
 #   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0   token=${token}  use_defaults=${False}
 
+Create with invalid type
+create witout severity
+create with invalid severity
 
 *** Keywords ***
 Setup

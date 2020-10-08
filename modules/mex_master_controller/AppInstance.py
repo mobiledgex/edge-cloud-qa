@@ -22,7 +22,7 @@ class AppInstance(MexOperation):
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
     def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, use_defaults=True, include_fields=False):
-
+ 
         _fields_list = []
         _power_state_field_number = '31'
         _configs_field_number = '27'
@@ -48,7 +48,6 @@ class AppInstance(MexOperation):
             if not cloudlet_name: cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_org_name: operator_org_name = shared_variables.operator_name_default
 
-
         if cluster_instance_name == 'default':
             cluster_instance_name = shared_variables.cluster_name_default
 
@@ -69,7 +68,8 @@ class AppInstance(MexOperation):
             else:
                 power_state = 9
 
-        shared_variables.operator_name_default = operator_org_name
+        if operator_org_name: shared_variables.operator_name_default = operator_org_name
+        if cloudlet_name: shared_variables.cloudlet_name_default = cloudlet_name
 
         appinst_dict = {}
         appinst_key_dict = {}
@@ -91,6 +91,7 @@ class AppInstance(MexOperation):
             cluster_key_dict['name'] = cluster_instance_name
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
+
         if operator_org_name is not None:
             cloudlet_key_dict['organization'] = operator_org_name
         if cloudlet_key_dict:
@@ -173,7 +174,6 @@ class AppInstance(MexOperation):
 
         return metric_dict
 
-
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
@@ -203,7 +203,7 @@ class AppInstance(MexOperation):
     def update_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'appinst': msg}
-
+ 
         msg_dict_show = None
         if 'key' in msg:
             msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
@@ -227,7 +227,6 @@ class AppInstance(MexOperation):
         msg_dict = {'appinst': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
-
     
     def get_api_metrics(self, method, token=None, region=None, app_name=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, app_version=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)

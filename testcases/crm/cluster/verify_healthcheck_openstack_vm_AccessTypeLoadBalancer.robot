@@ -57,7 +57,7 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
     Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailRootlbOffline
+    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name_default}
 
     Start Docker Container Rootlb  root_loadbalancer=${clusterlb}
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -107,7 +107,7 @@ VM - healthcheck shows HealthCheckFailServerFail when VM is powered off
         ...  ELSE  Should Be Equal   ${vm_info[${x}]['Status']}   ACTIVE
     END
 
-    Wait For App Instance Health Check Fail  region=${region}  app_name=${app_name_default}  state=HealthCheckFailServerFail
+    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name_default}
 
     Log To Console  Updating App Instance
     Update App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}  powerstate=PowerOn
