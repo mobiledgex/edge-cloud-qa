@@ -21,7 +21,7 @@ ${clustername_k8dedicated}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
 
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 
 ${username}=  mextester06
 ${password}=  ${mextester06_gmail_password}
