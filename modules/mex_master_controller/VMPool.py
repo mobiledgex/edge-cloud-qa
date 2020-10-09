@@ -206,7 +206,7 @@ class VMPool(MexOperation):
 
         vm_found = False
         
-        for vm in pool['data']['vms']:
+        for vm in pool[0]['data']['vms']:
             if vm['name'] == vm_name:
                 logging.debug(f'found vm:{vm}')
                 vm_found = True
