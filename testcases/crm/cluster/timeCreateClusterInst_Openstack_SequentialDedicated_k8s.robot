@@ -33,8 +33,8 @@ ${developer_name_openstack}     MobiledgeX
 ${test_timeout_crm}   32 min
 	
 *** Test Cases ***
-# ECQ-	
-ClusterInst shall create 5 clusters in sequence with IpAccessDedicated/kubernetes on openstack
+# ECQ-2764
+ClusterInst shall create 5 clusters in sequence with IpAccessDedicated kubernetes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessDedicated and deployment type=kubernetes
    ...  collect the time it takes to create the cluster and write it to a file
