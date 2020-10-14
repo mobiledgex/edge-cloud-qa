@@ -36,7 +36,7 @@ class Config(MexOperation):
 
         return self.update(token=token, show_msg=msg_show, url=self.show_url, use_defaults=use_defaults, use_thread=use_thread, message=msg)
 
-    def skip_verify_config(self, token=None, skip_verify_email=None, lock_accounts=None, notify_email=None,  user_pass=None, admin_pass=None, use_defaults=True, use_thread=False):
+    def update_config(self, token=None, skip_verify_email=None, lock_accounts=None, notify_email=None,  user_pass=None, admin_pass=None, use_defaults=True, use_thread=False):
         msg = self._build(skip_verify_email=skip_verify_email, lock_accounts = lock_accounts, notify_email= notify_email, user_pass = user_pass, admin_pass = admin_pass)
         msg_show = msg 
 
