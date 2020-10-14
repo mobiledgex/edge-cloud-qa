@@ -2320,10 +2320,35 @@ class MexMasterController(MexRest):
     def access_cloudlet(self, region=None, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.access_cloudlet(node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, command=command, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_config(self, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.show_config(token=token, use_defaults=use_defaults, use_thread=use_thread)
+
     def skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         if token is None:
             token=self.super_token
         return self.config.skip_verify_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
+
+    def lock_accounts_config(self, lock_accounts=True, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.skip_verify_config(token=token, lock_accounts = lock_accounts, use_defaults=use_defaults, use_thread=use_thread)
+
+    def notify_email_config(self, notify_email=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.skip_verify_config(token=token, notify_email= notify_email, use_defaults=use_defaults, use_thread=use_thread)
+    
+    def user_pass_config(self, user_pass=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.skip_verify_config(token=token, user_pass = user_pass, use_defaults=use_defaults, use_thread=use_thread)
+    
+    def admin_pass_config(self, admin_pass=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.skip_verify_config(token=token, admin_pass = admin_pass, use_defaults=use_defaults, use_thread=use_thread)
 
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:
