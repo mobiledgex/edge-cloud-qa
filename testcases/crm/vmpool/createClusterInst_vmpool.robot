@@ -69,7 +69,7 @@ VM should be free after CreateClusterInst and UpdateVMPool state=VmForceFree
 
    ${pool}=  Show VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}
    @{update_list}=  Create List
-   FOR  ${vm}  IN  @{pool['data']['vms']}
+   FOR  ${vm}  IN  @{pool[0]['data']['vms']}
       &{update_dict}=  Run Keyword If  'group_name' in $vm   Build Update  group_name=${group_name}  vm_group_name=${vm['group_name']}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=VmForceFree
       ...  ELSE  Build Update  group_name=${None}  vm_group_name=${None}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=${None}
       Append To List  ${update_list}  ${update_dict}
