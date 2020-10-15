@@ -39,12 +39,19 @@ CreateAlertReceiver - create without receiver name shall return error
 
    #Should Contain  ${error}  ady
 
-CreateAlertReceiver - create without type shall return error
+CreateAlertReceiver - create with invalid type shall return error
    [Documentation]
-   ...  send CreatePrivacyPolicy without region
+   ...  send CreateAlertReceiver with invalid type
    ...  verify error is returned
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   # no type
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+
+   # invalid type value
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  type=x  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+
+   # empty type
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  type=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
 
 CreateAlertReceiver - create without app/cloudlet shall return error
    [Documentation]
@@ -74,9 +81,26 @@ CreateAlertReceiver - create without all app parms shall return error
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0  developer_org_name=x  app_name=x   token=${token}  use_defaults=${False}
 #   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0   token=${token}  use_defaults=${False}
 
-Create with invalid type
-create witout severity
-create with invalid severity
+CreateAlertReceiver - create without severity shall return error
+   [Documentation]
+   ...  send CreateAlertReceive without severity
+   ...  verify error is returned
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+
+CreateAlertReceiver - create with invalid severity shall return error
+   [Documentation]
+   ...  send CreateAlertReceive with invalid severity
+   ...  verify error is returned
+
+   # no severity
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+
+   # severity with invalid value
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  severity=x  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+
+   # severity with empty value
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  severity=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
 
 *** Keywords ***
 Setup
