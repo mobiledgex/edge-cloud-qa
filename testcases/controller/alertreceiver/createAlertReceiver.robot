@@ -21,7 +21,7 @@ CreatePrivacyPolicy - shall be able to create with policy and developer name onl
 
    ${name}=  Generate Random String  length=10
 
-   ${alert}=  Create Alert Receiver  region=${region}  token=${token}  #receiver_name=${name}  developer_org_name=${developer}  use_defaults=${False}
+   ${alert}=  Create Alert Receiver  receiver_name=${name}  type=email  severity=error  developer_org_name=${developer}  #use_defaults=${False}
 
    Should Be Equal  ${alert['data']['key']['name']}       ${name}
    Should Be Equal  ${policy_return['data']['key']['organization']}  ${developer}
