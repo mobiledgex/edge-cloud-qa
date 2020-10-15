@@ -10,8 +10,8 @@ def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrgani
 def jobListPerformance=["Performance"]
 def jobListSequence=["runPasswordTests"]
 def jobListOwaspZAP=["OWASP ZAP"]
-def joblistNmapScanning=["nmap scanning"]
-def joblistImageScanning=["Image Scanning"]
+def jobListNmapScanning=["nmap scanning"]
+def jobListImageScanning=["Image Scanning"]
 
 builds1 = [:]
 builds2 = [:]
