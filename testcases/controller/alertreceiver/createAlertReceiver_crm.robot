@@ -7,7 +7,7 @@ Library  MexApp
 Library  String
 
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 Test Timeout  15m
 
@@ -15,6 +15,9 @@ Test Timeout  15m
 ${username}=  qaadmin
 ${password}=  mexadminfastedgecloudinfra
 ${email}=  mxdmnqa@gmail.com
+
+${slack_channel}=  channel
+${slack_api_url}=  api
 
 ${region}=  EU
 ${app_name}=  app1601997927-351176 
@@ -25,7 +28,7 @@ ${developer}=  MobiledgeX
 ${latitude}       32.7767
 ${longitude}      -96.7970
 
-${email_wait}=  600
+${email_wait}=  300
 
 *** Test Cases ***
 AlertReceiver - shall be able to create/receive alerts with docker/dedicated/loadbalancer
@@ -332,6 +335,56 @@ AlertReceiver - shall be able to create/receive alerts with docker/dedicated/loa
    Alert Receiver Email For Firing AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  status=2  wait=${email_wait}
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
+
+AlertReceiver - shall be able to create/receive slack alerts with docker/dedicated/loadbalancer
+   [Documentation]
+   ...  - create alert reciever with appname and apporg
+   ...  - create docker/dedicated/loadbalancer appinst
+   ...  - stop the port on the app
+   ...  - verify AppInstDown firing alert and email are generated
+   ...  - start the port on the app
+   ...  - verify AppInstDown resolve alert and email are generated
+
+   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  app_name=${app_name}  developer_org_name=${developer}
+
+   Log To Console  Creating Cluster Instance
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated
+   Log To Console  Done Creating Cluster Instance
+
+   ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+   Register Client  app_name=${app_name}
+   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+
+   ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
+
+   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
+
+   Stop TCP Port  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
+#   Stop TCP Port  cluster1602766801-4264672.automationfrankfurtcloudlet.tdg.mobiledgex.net  2015
+
+   Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
+
+   Alert Receiver Slack Message For Firing AppInstDown Should Be Received  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+#   Alert Receiver Slack Message For Firing AppInstDown Should Be Received  app_name=app1602766801-4264672  app_version=1.0  developer_org_name=MobiledgeX  region=EU  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+
+   Show Alerts  region=${region}
+   # add checks for alerts once filter bug is fixed
+
+   Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
+#   Start TCP Port  host=cluster1602766801-4264672.automationfrankfurtcloudlet.tdg.mobiledgex.net  port=2015  server_port=4015
+
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+
+   Alert Receiver Slack Message For Resolved AppInstDown Should Be Received  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+#   Alert Receiver Slack Message For Resolved AppInstDown Should Be Received  app_name=app1602766801-4264672  app_version=1.0  developer_org_name=MobiledgeX  region=EU  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+
+   Show Alerts  region=${region}
+   # add checks for alerts once filter bug is fixed
+
+   # add alert silence after EDGECLOUD-3461 is fixed
 
 *** Keywords ***
 Setup
