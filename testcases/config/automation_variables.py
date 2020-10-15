@@ -62,3 +62,7 @@ vm_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMII
 gpu_client = 'multi_client.py'
 gpu_client_path = '../../../../edge-cloud-sampleapps/ComputerVisionServer/client'
 gpu_client_image = '3_bodies.png'
+
+# alert receiver
+slack_channel = '#qa-alertreceiver'
+slack_api_url = 'https://hooks.slack.com/services/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'
