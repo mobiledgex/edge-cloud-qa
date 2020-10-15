@@ -221,7 +221,7 @@ Setup
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     ${testdate}
 	${FileName}=    Catenate  SEPARATOR=    ${FileName}     .timings
 	
-	${x}=  Evaluate    random.randint(2,20000)   random
+	${x}=  Evaluate    random.randint(10, 20000)   random
 	${x}=  Convert To String  ${x}
 	${cluster_name}=  Catenate  SEPARATOR=  timecl  ${x}
 	${testnum}=   Set Variable   1
