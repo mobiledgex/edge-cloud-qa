@@ -3,6 +3,7 @@ import logging
 import email
 import imaplib
 import time
+from slack import WebClient
 
 import shared_variables
 
@@ -19,7 +20,10 @@ class AlertReceiver(MexOperation):
         self.delete_url = '/auth/alertreceiver/delete'
         self.show_url = '/auth/alertreceiver/show'
 
-    def _build(self, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, use_defaults=True):
+        self.slack_token = '***REMOVED***' 
+        self.slack_channel = 'C01CE9BNV6J'  # qa-alertreceiver
+
+    def _build(self, receiver_name=None, type=None, severity=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, use_defaults=True):
 
         if use_defaults:
             if receiver_name is None: receiver_name = shared_variables.alert_receiver_name_default
@@ -41,6 +45,11 @@ class AlertReceiver(MexOperation):
             receiver_dict['type'] = type
         if severity is not None:
             receiver_dict['severity'] = severity
+
+        if slack_channel is not None:
+            receiver_dict['slackchannel'] = slack_channel
+        if slack_api_url is not None:
+            receiver_dict['slackwebhook'] = slack_api_url
 
         if app_name:
             app_key_dict['name'] = app_name
@@ -64,8 +73,8 @@ class AlertReceiver(MexOperation):
 
         return receiver_dict
 
-    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
+    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_delete = None
@@ -87,11 +96,64 @@ class AlertReceiver(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_alert_receiver(self, token=None, region=None, receiver_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(receiver_name=receiver_name, use_defaults=use_defaults)
+    def show_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def verify_slack(self, alert_type, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, wait=30):
+        now = time.time() - 30
+
+        client = WebClient(token=self.slack_token)
+
+        def check_payload(text):
+            if text in response['messages'][0]['attachments'][0]['text']:
+                logging.info(f'{text} found in alert slack message')
+            else:
+                raise Exception(f'{text} not found in alert slack message')
+
+        for attempt in range(wait):
+            logging.debug(f'checking slack attempt {attempt}/{wait}')
+            #response = client.conversations_history(channel=self.slack_channel, oldest=now)
+            response = client.conversations_history(channel=self.slack_channel, limit=1)
+
+            if len(response['messages']) > 0:
+               subject = response['messages'][0]['attachments'][0]['fallback']
+               if alert_type in subject and f'{alert_name} Application: {app_name} Version: {app_version}' in subject: 
+                   logging.info('new slack message found')
+                   logging.debug(f'slack message found:{response}')
+
+                   if alert_name: check_payload(f'*alertname:* {alert_name}')
+                   if app_name: check_payload(f'*app:* {app_name}')
+                   if app_version: check_payload(f'*appver:* {app_version}')
+                   if developer_org_name: check_payload(f'*apporg:* {developer_org_name}')
+                   if cloudlet_name: check_payload(f'*cloudlet:* {cloudlet_name}')
+                   if operator_org_name: check_payload(f'*cloudletorg:* {operator_org_name}')
+                   if cluster_instance_name: check_payload(f'*cluster:* {cluster_instance_name}')
+                   if cluster_instance_developer_org_name: check_payload(f'*clusterorg:* {cluster_instance_developer_org_name}')
+                   if region: check_payload(f'*region:* {region}')
+                   if status: check_payload(f'*status:* {status}')
+                   if alert_type == 'RESOLVED':
+                       if response['messages'][0]['attachments'][0]['color'] == '2eb886':
+                           logging.info(f'color 2eb886 found in resolved alert slack message')
+                       else:
+                           raise Exception(f'color 2eb886 not found in resolved alert slack message')
+                   elif alert_type == 'FIRING':
+                       if response['messages'][0]['attachments'][0]['color'] == 'a30200':
+                           logging.info(f'color a30200 found in firing alert slack message')
+                       else:
+                           raise Exception(f'color a30200 not found in firing alert slack message')
+
+                   return True 
+               else:
+                   logging.debug('slack message found but doenst match yet. sleeping')
+                   time.sleep(1)
+            else:
+                logging.debug('no slack message not found yet. sleeping')
+                time.sleep(1)
+
+        raise Exception('slack message not found')
 
     def verify_email(self, email_address, email_password, alert_type, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, server='imap.gmail.com', wait=30):
         mail = imaplib.IMAP4_SSL(server)
