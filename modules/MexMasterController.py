@@ -387,7 +387,7 @@ class MexMasterController(MexRest):
             self._create_classes()
             return self.token
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -449,7 +449,8 @@ class MexMasterController(MexRest):
                 self._number_createuser_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
+            if auto_delete == True:
+                self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
 
         self.username = username
         self.password = password
@@ -696,7 +697,7 @@ class MexMasterController(MexRest):
             #return self.decoded_data
             return resp
 
-    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         #orgstamp = str(time.time())
         url = self.root_url + '/auth/org/create'
         payload = None
@@ -744,7 +745,8 @@ class MexMasterController(MexRest):
 
                 shared_variables.operator_name_default = org_dict['name']
                 
-                self.prov_stack.append(lambda:self.delete_org(orgname=org_dict['name'], token=self.super_token))
+                if auto_delete == True:
+                    self.prov_stack.append(lambda:self.delete_org(orgname=org_dict['name'], token=self.super_token))
 
             except Exception as e:
                 self._number_createorg_requests_fail += 1
@@ -1447,12 +1449,12 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
-        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
+        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults, auto_delete=auto_delete)
 
 #        url = self.root_url + '/auth/ctrl/CreateClusterInst'
 #
