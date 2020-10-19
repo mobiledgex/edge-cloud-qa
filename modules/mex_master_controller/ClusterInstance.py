@@ -20,7 +20,7 @@ class ClusterInstance(MexOperation):
         self.metrics_cluster_url = '/auth/metrics/cluster'
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False):
+    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
 
         _fields_list = []
         _number_nodes_field_number="14"
@@ -152,7 +152,7 @@ class ClusterInstance(MexOperation):
         return metric_dict
 
     def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults, auto_delete=auto_delete)
         msg_dict = {'clusterinst': msg}
 
         thread_name = None
