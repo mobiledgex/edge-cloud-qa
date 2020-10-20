@@ -127,7 +127,8 @@ class tc(unittest.TestCase):
         app_post = self.controller.show_apps()
 
         expect_equal(error.code(), grpc.StatusCode.UNKNOWN, 'status code')
-        expect_equal(error.details(), 'Invalid AccessPorts format \'tcp:80:\'', 'error details')
+        expect_equal(error.details(), 'Invalid AccessPorts annotation  for port 80, expected format is either key or key=val', 'error details')
+        #expect_equal(error.details(), 'Invalid AccessPorts format \'tcp:80:\'', 'error details')
         #expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port[-endport] but was tcp', 'error details')
 
         #expect_equal(error.details(), 'Invalid Access Ports format, expected proto:port but was tcp', 'error details')
