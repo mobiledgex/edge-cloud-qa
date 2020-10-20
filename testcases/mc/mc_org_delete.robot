@@ -334,6 +334,7 @@ Setup
         ${email}=  Catenate  SEPARATOR=   user  +  ${epoch}  @gmail.com
 	${username}=  Catenate  SEPARATOR=   user   ${epoch}
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch} 
+        Skip Verify Email
 	Create User  username=${username}   password=${password}   email_address=${email}
 	Unlock User
 	${userToken}=  Login  username=${username}  password=${password}
