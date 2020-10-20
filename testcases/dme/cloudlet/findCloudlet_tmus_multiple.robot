@@ -127,8 +127,8 @@ Find Cloudlet for tmus closest to latitude ${lat} longitude ${long} should retur
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${expected_long}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  1
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  1
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  8888
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  8888
     
     
 Setup
