@@ -100,7 +100,7 @@ CreateClusterInst - shall not be able to create a azure clusterInst with ipacces
     ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_org_name=${operator_name_azure}  cloudlet_name=${cloudlet_name_azure}  ip_access=IpAccessShared
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   IpAccessShared not supported for operator: azure 
+    Should Contain  ${error_msg}   IpAccessShared not supported for platform: PLATFORM_TYPE_FAKE
 
     #Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 
@@ -155,7 +155,7 @@ CreateClusterInst - shall not be able to create a gcp clusterInst with ipaccess=
     ${error_msg}=  Run Keyword and Expect Error  *  Create Cluster Instance  operator_org_name=${operator_name_gcp}  cloudlet_name=${cloudlet_name_gcp}  ip_access=IpAccessShared
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   IpAccessShared not supported for operator: gcp 
+    Should Contain  ${error_msg}   IpAccessShared not supported for platform: PLATFORM_TYPE_FAKE 
 
     #Should Be Equal As Numbers  ${clusterInst.ip_access}  1  #IpAccessDedicated
 

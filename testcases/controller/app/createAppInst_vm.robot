@@ -4,7 +4,7 @@ Documentation   CreateAppInst
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
 Test Setup	Setup
-Test Teardown   Teardown
+Test Teardown   Cleanup Provisioning
 
 *** Variables ***
 ${operator_name}  dmuus
@@ -27,6 +27,8 @@ AppInst - VM deployment without cluster shall create clustername='DefaultVMClust
     ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}  no_auto_delete=${True}
     
     Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultVMCluster
+
+    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultVMCluster
 
 AppInst - VM deployment shall be created with clustername
     [Documentation]
@@ -58,6 +60,3 @@ Setup
     Set Suite Variable  ${developer_name_default}
     Set Suite Variable  ${flavor_name_default}
 
-Teardown
-    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultVMCluster
-    Cleanup Provisioning
