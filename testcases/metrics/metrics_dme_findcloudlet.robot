@@ -27,10 +27,10 @@ ${app_version}=  1.0
 ${developer_org_name}=  MobiledgeX
 
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 
 ${test_timeout}=  32 min
 

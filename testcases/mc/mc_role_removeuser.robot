@@ -9,7 +9,7 @@ Test Teardown	Cleanup Provisioning
 
 *** Variables ***
 ${username_admin}=  mexadmin
-${password_admin}=  mexadmin123
+${password_admin}=  ${mexadmin_password}
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
 ${email}=      mextester06@gmail.com
