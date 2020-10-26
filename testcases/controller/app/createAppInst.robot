@@ -49,10 +49,11 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
+    ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}  no_auto_delete=${True}
 
     Show Cluster Instances
     ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
+    ${cluster_name}=  Set Variable  ${clusterInst[0].key.cluster_key.name}
 
     Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
     Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
@@ -65,6 +66,9 @@ AppInst - autocluster shall be created when app instance is created with cluster
     Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
 
     Length Should Be   ${clusterInst}  1
+
+    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=${cluster_name}
+    
 
 AppInst - appinst shall be created when app instance is created without cluster developer
     [Documentation]

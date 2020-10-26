@@ -76,7 +76,7 @@ ClusterInst shall fail with VMPool IpAccessDedicated/k8s and too many nodes
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessDedicated  deployment=kubernetes  number_masters=1  number_nodes=10
 
-   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400 
+   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Failed to meet VM requirement, required VMs = 12, free VMs available = 4","code":400 
 
 # ECQ-2367
 ClusterInst shall fail with VMPool IpAccessShared/k8s and too many nodes
@@ -88,7 +88,7 @@ ClusterInst shall fail with VMPool IpAccessShared/k8s and too many nodes
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=10
 
-   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
+   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Failed to meet VM requirement, required VMs = 11, free VMs available = 4","code":400
 
 # ECQ-2430
 ClusterInst shall fail with VMPool and privacy policy

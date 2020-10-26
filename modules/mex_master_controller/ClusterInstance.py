@@ -20,7 +20,7 @@ class ClusterInstance(MexOperation):
         self.metrics_cluster_url = '/auth/metrics/cluster'
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
 
-    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False):
+    def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
 
         _fields_list = []
         _number_nodes_field_number="14"

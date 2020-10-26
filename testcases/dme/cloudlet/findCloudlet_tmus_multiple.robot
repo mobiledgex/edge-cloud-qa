@@ -127,8 +127,8 @@ Find Cloudlet for tmus closest to latitude ${lat} longitude ${long} should retur
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${expected_long}
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  1
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  1
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  8888
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  8888
     
     
 Setup
@@ -161,7 +161,7 @@ Setup
     Create Cloudlet		cloudlet_name=${t9}  operator_org_name=tmus  latitude=35  longitude=-102
     Create Cloudlet		cloudlet_name=${t10}  operator_org_name=tmus  latitude=35  longitude=-103
     #Create Cluster		
-    Create App			access_ports=tcp:1  
+    Create App			access_ports=tcp:8888  
     ${appinst_1}=               Create App Instance		cloudlet_name=${tmus_cloudlet_name1}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
     ${appinst_2}=               Create App Instance		cloudlet_name=${tmus_cloudlet_name2}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
     ${appinst_3}=               Create App Instance		cloudlet_name=${t3}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
