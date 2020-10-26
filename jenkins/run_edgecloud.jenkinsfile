@@ -475,8 +475,9 @@ node('jenkinsSlave1'){
        }
        stage('slack report') {
           echo "slack report"
+          job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis 
           //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
-	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
+	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'JobDuration', value: job_duration)]
        }
    } else {
        echo "build was failure so not running any tests"
