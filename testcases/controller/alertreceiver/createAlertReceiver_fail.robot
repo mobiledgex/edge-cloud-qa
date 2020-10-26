@@ -2,68 +2,62 @@
 Documentation  CreateAlertReceiver failures
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library  String
 
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-${region}=  US
+${username}=  mextester06
+${password}=  ${mextester06_gmail_password}
 ${developer}=  MobiledgeX
 
-${operator_name_fake}=  dmuus
-${cloudlet_name_fake}=  tmocloud-1
-${operator_name_azure}=  azure
-${cloudlet_name_azure}=  automationAzureCentralCloudlet
-${operator_name_gcp}=   gcp
-${cloudlet_name_gcp}=  automationGcpCentralCloudlet
-
-
 *** Test Cases ***
-CreateAlertReceiver - create without parms shall return error
+CreateAlertReveiver - missing/invalid/empty parms shall return error
    [Documentation]
-   ...  send CreatePrivacyPolicy without region
-   ...  verify error is returned
+   ...  - send alertreceiver create with various missing/invalid/empty parms
+   ...  - verify proper error is received
+ 
+   [Template]  Fail Create Alert Receiver
+   
+   # no/invalid token
+   ('code\=400', 'error\={"message":"no bearer token found"}')   use_defaults=${False}  
+   ('code\=401', 'error\={"message":"invalid or expired jwt"}')  token=xx  use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver name has to be specified"}')  Create Alert Receiver  token=${token}  use_defaults=${False}
+   # no parms
+   ('code\=400', 'error\={"message":"Receiver name has to be specified"}')  token=${super_token}  use_defaults=${False}
 
-CreateAlertReceiver - create without receiver name shall return error
-   [Documentation]
-   ...  send CreatePrivacyPolicy without region
-   ...  verify error is returned
+   # no receiver name
+   ('code\=400', 'error\={"message":"Receiver name has to be specified"}')  type=email  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
-   #EDGECLOUD-3678 create alertreceiver without receiver name gives bad error message
+   # no/invalid/empty type
+   ('code\=400', 'error\={"message":"Receiver type invalid"}')  receiver_name=email  severity=error  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Receiver type invalid"}')  receiver_name=email  severity=error  type=x  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Receiver type invalid"}')  receiver_name=email  severity=error  type=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver name has to be specified"}')  Create Alert Receiver  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
-   #${error}=  Run Keyword and Expect Error  *   Create Alert Receiver  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   # no app/cloudlet
+   ('code\=400', 'error\={"message":"Either cloudlet, or app instance details have to be specified"}')  receiver_name=xxx  type=email  severity=info  token=${super_token}  use_defaults=${False}
 
-   #Should Contain  ${error}  ady
+   # no/invalid/empty severity
+   ('code\=400', 'error\={"message":"Alert severity has to be one of \\\\"info\\\\", \\\\"warning\\\\", \\\\"error\\\\""}')  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Alert severity has to be one of \\\\"info\\\\", \\\\"warning\\\\", \\\\"error\\\\""}')  receiver_name=xxx  type=email  severity=x  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Alert severity has to be one of \\\\"info\\\\", \\\\"warning\\\\", \\\\"error\\\\""}')  receiver_name=xxx  type=email  severity=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
-CreateAlertReceiver - create with invalid type shall return error
-   [Documentation]
-   ...  send CreateAlertReceiver with invalid type
-   ...  verify error is returned
+   # no/invalid slack channel/url
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  slack_api_url=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=${Empty}  slack_api_url=http://x.com  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=xx  slack_api_url=${Empty}  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Slack URL, or channel are missing"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=${Empty}  slack_api_url=${Empty}  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
-   # no type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Unable to create a receiver - Invalid Slack api URL"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=x  slack_api_url=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
-   # invalid type value
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  type=x  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
-
-   # empty type
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Receiver type invalid"}')  Create Alert Receiver  receiver_name=email  severity=error  type=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
-
-CreateAlertReceiver - create without app/cloudlet shall return error
-   [Documentation]
-   ...  send CreatePrivacyPolicy without region
-   ...  verify error is returned
-
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  token=${token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=x  slack_api_url=http://  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
 CreateAlertReceiver - duplicate create shall return error
    [Documentation]
-   ...  send CreatePrivacyPolicy without region
-   ...  verify error is returned
+   ...  - send alertreceiver twice for same receiver name
+   ...  - verify error is returned
 
    Create Alert Receiver  developer_org_name=dmuus  
    
@@ -71,39 +65,55 @@ CreateAlertReceiver - duplicate create shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  Unable to create a receiver - bad response status 409 Conflict[Receiver Exists - delete it first]
 
-CreateAlertReceiver - create without all app parms shall return error
+CreateAlertReceiver - create with app from another user shall return error
    [Documentation]
-   ...  send CreatePrivacyPolicy without region
-   ...  verify error is returned
+   ...  - create user1 and user2
+   ...  - create org as user1
+   ...  - create alertreceiver as user1 and verify succeeds
+   ...  - send alertreceiver as user2 with org from user1
+   ...  - verify error is returned
 
-#   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  token=${token}  use_defaults=${False}
-#   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  app_version=1.0  token=${token}  use_defaults=${False}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0  developer_org_name=x  app_name=x   token=${token}  use_defaults=${False}
-#   Run Keyword and Expect Error  ('code=400', 'error={"message":"Either cloudlet, or app instance details have to be specified"}')  Create Alert Receiver  receiver_name=xxx  type=email  app_version=1.0   token=${token}  use_defaults=${False}
+   ${receiver_name}=  Get Default Alert Receiver Name
 
-CreateAlertReceiver - create without severity shall return error
-   [Documentation]
-   ...  send CreateAlertReceive without severity
-   ...  verify error is returned
+   Skip Verify Email  token=${super_token}
+   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   # Verify Email  email_address=${emailepoch}
+   Unlock User
+   ${user_token}=  Login  username=${epochusername}  password=${password}
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
+   # Verify Email  email_address=${emailepoch2}
+   Unlock User
+   ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
-CreateAlertReceiver - create with invalid severity shall return error
-   [Documentation]
-   ...  send CreateAlertReceive with invalid severity
-   ...  verify error is returned
+   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
 
-   # no severity
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   ${alert}=  Create Alert Receiver  token=${user_token}  receiver_name=${receiver_name}1  type=email  severity=info  developer_org_name=${orgname}  #use_defaults=${False}
 
-   # severity with invalid value
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  severity=x  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error   ('code=403', 'error={"message":"Forbidden"}')  Create Alert Receiver  token=${user_token2}  receiver_name=${receiver_name}2  type=email  severity=info  developer_org_name=${orgname}  #use_defaults=${False}
 
-   # severity with empty value
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Alert severity has to be one of \\\\"error\\\\", \\\\"warning\\\\", \\\\"info\\\\""}')  Create Alert Receiver  receiver_name=xxx  type=email  severity=${EMPTY}  app_name=x  app_version=x  developer_org_name=x  token=${token}  use_defaults=${False}
+   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
+
+   ${alert}=  Create Alert Receiver  token=${user_token2}  receiver_name=${receiver_name}2  type=email  severity=info  developer_org_name=${orgname}  #use_defaults=${False}
 
 *** Keywords ***
 Setup
-   ${token}=  Get Super Token
-   Set Suite Variable  ${token}
+   ${epoch}=  Get Time  epoch
+   ${super_token}=  Get Super Token
+   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   ${epochusername2}=  Set Variable  ${epochusername}2
+   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}2  @gmail.com
+
+   Set Suite Variable  ${super_token}
+   Set Suite Variable  ${epochusername}
+   Set Suite Variable  ${epochusername2}
+   Set Suite Variable  ${emailepoch}
+   Set Suite Variable  ${emailepoch2}
+
+Fail Create Alert Receiver
+   [Arguments]  ${error_msg}  &{parms}
+
+   ${std_create}=  Run Keyword and Expect Error  *  Create Alert Receiver  &{parms}
+   Should Be Equal  ${std_create}  ${error_msg}
 
