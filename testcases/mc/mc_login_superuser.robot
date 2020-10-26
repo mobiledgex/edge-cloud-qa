@@ -7,6 +7,7 @@ Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 #Test Teardown	Cleanup Provisioning
 
 *** Variables ***
+${mex_password}=  ${mexadmin_password}
 
 *** Test Cases ***
 MC - Superuser shall be able to successfully login
@@ -52,7 +53,7 @@ MC - Superuser with no username shall not be able to login
     ...  login to the mc with no username and superuser password
     ...  verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=mexadmin123  use_defaults=${False}
+   ${error_msg}=  Run Keyword and Expect Error  *  Login  username=${None}  password=${mex_password}  use_defaults=${False}
 
    ${status_code}=  Response Status Code
    ${body}=         Response Body
@@ -130,20 +131,20 @@ MC - User with invalid json shall not be able to login
     ...  login to the mc with invalid username/password json
     ...  verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","password":"mexadmin123"
+   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","password":"${mex_password}"
 
    ${status_code}=  Response Status Code
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Invalid POST data"}
+   Should Be Equal             ${body}         {"message":"Invalid POST data, unexpected EOF"}
 
 MC - User with wrong parm name shall not be able to login
     [Documentation]
     ...  login to the mc with wrong username/password json
     ...  verify correct error msg is received
 
-   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","passwor":"mexadmin123"}
+   ${error_msg}=  Run Keyword and Expect Error  *  Login  json_data={"username":"mexadmin","passwor":"${mex_password}"}
 
    ${status_code}=  Response Status Code
    ${body}=         Response Body

@@ -69,7 +69,7 @@ VM should be free after CreateClusterInst and UpdateVMPool state=VmForceFree
 
    ${pool}=  Show VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}
    @{update_list}=  Create List
-   FOR  ${vm}  IN  @{pool['data']['vms']}
+   FOR  ${vm}  IN  @{pool[0]['data']['vms']}
       &{update_dict}=  Run Keyword If  'group_name' in $vm   Build Update  group_name=${group_name}  vm_group_name=${vm['group_name']}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=VmForceFree
       ...  ELSE  Build Update  group_name=${None}  vm_group_name=${None}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=${None}
       Append To List  ${update_list}  ${update_dict}
@@ -134,7 +134,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/docker/direct
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -188,7 +189,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/docker/lb
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -239,7 +241,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/docker/lb
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -292,7 +295,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -349,7 +353,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -398,7 +403,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -455,7 +461,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -527,7 +534,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb after adding 
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
@@ -589,7 +597,8 @@ ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numno
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+   #${page}=    Catenate  SEPARATOR=/  ${cloudlet['ports'][2]['path_prefix']}  ${http_page}
    log to console  ${fqdn_0} ${fqdn_1}
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}

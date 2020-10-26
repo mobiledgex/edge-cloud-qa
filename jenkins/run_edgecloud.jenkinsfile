@@ -4,14 +4,21 @@ dateParm = "${BuildDate}"
 commit_version = "notset"
 image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
-def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests"]
+def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runCreateUserTests", "runMCConfigsTests"]
 def jobListGcp = ["runCrmTests"]
 def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
 def jobListPerformance=["Performance"]
+def jobListSequence=["runPasswordTests"]
+def jobListOwaspZAP=["OWASP ZAP"]
+def jobListNmapScanning=["nmap scanning"]
+def jobListImageScanning=["Image Scanning"]
 
 builds1 = [:]
 builds2 = [:]
 builds3 = [:]
+builds4 = [:]
+builds5 = [:]
+builds6 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
@@ -252,6 +259,11 @@ node('jenkinsSlave1'){
              //sh 'docker system prune -af'  //remove all docker stuff without prompting
 
              sleep 60  // wait for all pods to come up
+
+             // defrag etcd
+             sh 'kubectl config use-context mexplat-qa-us;kubectl exec -it mex-etcd-0 -- sh -c "ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag"'
+             sh 'kubectl config use-context mexplat-qa-eu;kubectl exec -it mex-etcd-0 -- sh -c "ETCDCTL_API=3 etcdctl --endpoints=http://mex-etcd-0.mex-etcd:2379,http://mex-etcd-1.mex-etcd:2379,http://mex-etcd-2.mex-etcd:2379 defrag"'
+
 	  }
        }
     } catch(e) {
@@ -392,6 +404,55 @@ node('jenkinsSlave1'){
                 build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
              }
           }
+          
+          try {
+            parallel builds3
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobListOwaspZAP.size(); ++i) {
+             def jobName = jobListOwaspZAP[i];
+             echo "i1=" + jobName
+             builds4[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          }          
+          
+          try {
+            parallel builds4
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobListNmapScanning.size(); ++i) {
+             def jobName = jobListNmapScanning[i];
+             echo "i1=" + jobName
+             builds5[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          } 
+
+          try {
+            parallel builds5
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          for(int i=0; i < jobListImageScanning.size(); ++i) {
+             def jobName = jobListImageScanning[i];
+             echo "i1=" + jobName
+             builds6[jobName] = {
+                build job: jobName //, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: Version), string(name: 'Cycle', value: cycle)]
+             }
+          }
+
+          for(int i=0; i < jobListSequence.size(); ++i) {
+             build job: jobListSequence[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
+          }
 
           try {
             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./slackMessage.py "Start Metrics Peformance Test"'
@@ -414,8 +475,9 @@ node('jenkinsSlave1'){
        }
        stage('slack report') {
           echo "slack report"
+          job_duration = System.currentTimeMillis() - currentBuild.startTimeInMillis 
           //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
-	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
+	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'JobDuration', value: job_duration)]
        }
    } else {
        echo "build was failure so not running any tests"
