@@ -159,7 +159,7 @@ class MexMasterController(MexRest):
         if auto_login:
             self.super_token = self.login(self.username, self.password, None, False)
 
-        self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        #self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
         #self.flavor = Flavor(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         #self.app = App(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
@@ -193,6 +193,7 @@ class MexMasterController(MexRest):
         self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -533,7 +534,7 @@ class MexMasterController(MexRest):
     def update_user_restriction(self, username=None, locked=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/restricted/user/update'
         payload = None
-
+        
         if use_defaults == True:
             if token is None: token = self.super_token
             if username is None: username = self.username
@@ -558,10 +559,10 @@ class MexMasterController(MexRest):
         #if str(self.resp.text) != '{"message":"user deleted"}':
         #    raise Exception("error deleting  user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-    def unlock_user(self, username=None):
+    def unlock_user(self, token=None, username=None):
         if username is None: username = shared_variables_mc.username_default
         logging.info(f'unlocking username={username}')
-        self.update_user_restriction(username=username, locked=False)
+        self.update_user_restriction(token=token, username=username, locked=False)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
@@ -1447,12 +1448,12 @@ class MexMasterController(MexRest):
 
         return resp_data
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, json_data=None, use_defaults=True, use_thread=False):
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
-        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults)
+        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, use_defaults=use_defaults)
 
 #        url = self.root_url + '/auth/ctrl/CreateClusterInst'
 #
@@ -1784,7 +1785,7 @@ class MexMasterController(MexRest):
                                        )
             stdout, stderr = process.communicate()
             logging.info('verify returned:',stdout, stderr)
-            print('*WARN*',stdout, stderr)
+            #print('*WARN*',stdout, stderr)
             if stderr:
                 raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
         except subprocess.CalledProcessError as e:
@@ -2275,12 +2276,15 @@ class MexMasterController(MexRest):
     def update_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, use_defaults=True, use_thread=False):
         return self.privacy_policy.update_privacy_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.alert_receiver.create_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, email_address=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.create_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def show_alert_receivers(self, token=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.alert_receiver.show_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name,  developer_org_name=developer_org_name, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
+    def delete_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.alert_receiver.delete_alert_receiver(token=token, receiver_name=receiver_name, type=type, severity=severity, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    
     def alert_receiver_email_should_be_received(self, email_address, email_password, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, wait=30):
         return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, wait=wait)
 
@@ -2349,6 +2353,11 @@ class MexMasterController(MexRest):
 
     def refresh_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.refresh_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, use_thread=use_thread)
+
+    def run_mcctl(self, parms):
+        cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms}'
+        logging.info(f'executing mcctl: {cmd}')
+        self._run_command(cmd)
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
