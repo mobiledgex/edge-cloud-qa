@@ -35,6 +35,7 @@ docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-09-22'
 docker_image_samsung = 'docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0'
+docker_image_cpu = 'docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:1.0'
 
 artifactory_dummy_image_name = 'execJira.py'
 
