@@ -13,7 +13,8 @@ ${dev_orgname}=    DevOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
+${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
 #MC - Show org with admin user no orgs created
@@ -253,6 +254,6 @@ MC - Shall not be able to create an org with an expired token
 
 *** Keywords ***
 Setup
-   ${adminToken}=   Login  username=mexadmin  password=mexadmin123
+   ${adminToken}=   Login  username=mexadmin  password=${mex_password}
 	
    Set Suite Variable  ${adminToken}

@@ -13,7 +13,7 @@ ${region}=  EU
 ${developer}=  mobiledgex
 
 ${cloudlet_name_openstack_dedicated}=  automationSunnydaleCloudlet
-${operator}=  GDDT
+${operator_name_openstack}=  GDDT
 
 *** Test Cases ***
 # ECQ-2018
@@ -41,7 +41,7 @@ CreatePrivacyPolicy - shall be able to create docker dedicated appinst autoclust
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016,tcp:8085  image_type=ImageTypeDocker  deployment=docker
-   ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
@@ -137,7 +137,7 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated appinst autocluster 
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes 
-   ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    ${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
    ${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
@@ -233,7 +233,7 @@ CreatePrivacyPolicy - shall be able to create VM appinst with icmp/tcp/udp
    ${policy_return}=  Create Privacy Policy  region=${region}  rule_list=${rulelist}
 
    Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016,tcp:8085  #default_flavor_name=${cluster_flavor_name}
-   ${app}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
+   ${app}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
    #${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
    #${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}

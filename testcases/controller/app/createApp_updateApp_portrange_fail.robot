@@ -14,6 +14,7 @@ ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
 ${qcow_centos_image}=  https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
+${docker_compose_url}=  http://35.199.188.102/apps/server_ping_threaded_compose.yml
 
 *** Test Cases ***
 # ECQ-2099
@@ -69,9 +70,9 @@ UpdateApp - Update shall fail for port out of range on docker access_type=loadba
     ...  update a docker loadbalancer app with port range greater than max
     ...  verify proper error is returned
 
-    Create App  region=US  access_ports=tcp:1-5  deployment=docker  access_type=loadbalancer
+    Create App  region=US  access_ports=tcp:1-5  deployment=docker  access_type=loadbalancer  deployment_manifest=${docker_compose_url}
 
-    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74
+    ${error}=  Run Keyword and Expect Error  *  Update App  region=US  access_ports=tcp:23-74  deployment_manifest=${docker_compose_url}
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Port range greater than max of 50 for load balanced application"}')
 
 # ECQ-2105

@@ -25,6 +25,7 @@ ${mobiledgex_domain}  mobiledgex.net
 ${test_timeout_crm}  32 min
 	
 *** Test Cases ***
+# ECQ-2766
 ClusterInst shall create single with IpAccessShared/kubernetes with 1 Node on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 1
@@ -43,6 +44,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 1 Node on op
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 
 
+# ECQ-2767
 ClusterInst shall create single with IpAccessShared/kubernetes with 2 Nodes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 2
@@ -59,6 +61,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 2 Nodes on o
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 
 
+# ECQ-2768
 ClusterInst shall create single with IpAccessShared/kubernetes with 3 Nodes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 3
@@ -74,6 +77,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 3 Nodes on o
 	${FileData}=     Set Variable       1 Openstack Kubernetes Shared 3 Node Cluster Creation Time: ${epoch_total_time}\n
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 
+# ECQ-2769
 ClusterInst shall create single with IpAccessShared/kubernetes with 4 Nodes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 4
@@ -89,6 +93,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 4 Nodes on o
 	${FileData}=     Set Variable       1 Openstack Kubernetes Shared 4 Node Cluster Creation Time: ${epoch_total_time}\n
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 
+# ECQ-2770
 ClusterInst shall create single with IpAccessShared/kubernetes with 5 Nodes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 5
@@ -105,6 +110,7 @@ ClusterInst shall create single with IpAccessShared/kubernetes with 5 Nodes on o
 	Append To File   ${EXECDIR}/${FileName}     ${FileData}    
 
 
+# ECQ-2771
 ClusterInst shall create single with IpAccessShared/kubernetes with 10 Nodes on openstack
    [Documentation]
    ...  create a cluster on openstack with IpAccessShared and deployment type=kubernetes number of nodes 10
