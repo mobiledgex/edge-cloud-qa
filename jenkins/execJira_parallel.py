@@ -459,6 +459,9 @@ def exec_testcase(z, t):
         var_cmd = ''
         variable_file = ''
         var_override_cmd = ''
+        region = 'noCRMPoolDefined'
+        cloudlet = 'noCRMPoolDefined'
+        operator = 'noCRMPoolDefined'
 
         if 'VariableFile' in os.environ:
             variable_file = os.environ['VariableFile']
