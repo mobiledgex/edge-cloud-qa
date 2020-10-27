@@ -42,6 +42,13 @@ testcase_timeout = '60m'
 crm_pool_round_robin = None
 crm_pool_var = None
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
+logging.getLogger('urllib3').setLevel(logging.ERROR)
+logging.getLogger('zapi').setLevel(logging.DEBUG)
+
 def main():
     starttime = time.time()
 
@@ -94,21 +101,8 @@ def main():
     #rhc = "tp5555555555.testlab-ncc5.com"
     #workspace = "www"
     
-    #
-    # setup logging
-    #
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
-        #format = "%(message)s")
-    #logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.ERROR)
-    logging.getLogger('urllib3').setLevel(logging.ERROR)
-    logging.getLogger('zapi').setLevel(logging.DEBUG)
-    #if verbose:
-    #    logging.getLogger().setLevel(logging.DEBUG)
-
     #logging.info("cycle=%s version=%s project=%s summary=%s rhc=%s workspace=%s httpTrace=%s" % (cycle, version, project, summary, rhc, workspace, httpTrace))
-    logging.info(f'cycle={cycle} version={version} project={project} component={component} numexecutors={num_executors} workspace={workspace} cmrpool={crm_pool_dict} crm_pool_round_robin={crm_pool_round_robin}')
+    logger.info(f'cycle={cycle} version={version} project={project} component={component} numexecutors={num_executors} workspace={workspace} cmrpool={crm_pool_dict} crm_pool_round_robin={crm_pool_round_robin}')
 
     #z = zapi.Zapi(username = username, password = password)
     z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=False)
@@ -123,7 +117,7 @@ def main():
             version_id = v['id']
     cycle_id = z.get_cycle_id(name=cycle, project_id=project_id, version_id=version_id)
     if not cycle_id:
-        logging.error(f'cycle id not for found for cycle={cycle}')
+        logger.error(f'cycle id not for found for cycle={cycle}')
         sys.exit(1)
         
     #z.get_server_info()
@@ -153,7 +147,7 @@ def main():
         
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version +  "\\\" ORDER BY Issue ASC"
-    logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
+    logger.info("zephyrQueryUrl=" + zephyrQueryUrl)
 
     #result = z.execute_query(zephyrQueryUrl)
     startat = 0
@@ -197,12 +191,12 @@ def get_testcases(z, result, cycle_id, project_id, version_id):
     #for s in query_content['executions']:
     for s in query_content['issues']:
         print('issueKey', s['key'])
-        logging.info("getting script for:" + s['key'])
+        logger.info("getting script for:" + s['key'])
         sresult = z.get_teststeps(s['id'],s['fields']['project']['id'])
         sresult_content = json.loads(sresult)
 
         if sresult_content: # list is not empty;therefore, has a teststep
-            logging.info("found a teststep")
+            logger.info("found a teststep")
             #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
             #tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
             tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'defects': s['fields']['issuelinks']}
@@ -212,9 +206,9 @@ def get_testcases(z, result, cycle_id, project_id, version_id):
             #    tmp_list['defect_count'] = s['execution']['totalDefectCount']
             #else:
             #    tmp_list['defect_count'] = 0
-            logging.info("script is " + sresult_content[0]['step'])
+            logger.info("script is " + sresult_content[0]['step'])
         else:
-            logging.info("did NOT find a teststep")
+            logger.info("did NOT find a teststep")
             tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
 
         tc_list.append(tmp_list)
@@ -230,7 +224,7 @@ def get_testcases_z(z, result, cycle):
     for s in query_content['searchObjectList']:
         print('cycleName', s['execution']['cycleName'], cycle)
         if s['execution']['cycleName'] == cycle:
-            logging.info("getting script for:" + s['issueSummary'])
+            logger.info("getting script for:" + s['issueSummary'])
             #sresult = z.get_teststeps(s['issueId'])
             sresult = z.get_teststeps(s['execution']['issueId'],s['execution']['projectId'])
             sresult_content = json.loads(sresult)
@@ -239,16 +233,16 @@ def get_testcases_z(z, result, cycle):
             #logging.info("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
             #logging.info("stepLength=%d" % int(len(sresult_content)))
             if sresult_content: # list is not empty;therefore, has a teststep
-                logging.info("found a teststep")
+                logger.info("found a teststep")
                 #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
                 tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
                 if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
                     tmp_list['defect_count'] = s['execution']['totalDefectCount']
                 else:
                     tmp_list['defect_count'] = 0
-                    logging.info("script is " + sresult_content[0]['step'])
+                    logger.info("script is " + sresult_content[0]['step'])
             else:
-                logging.info("did NOT find a teststep")
+                logger.info("did NOT find a teststep")
                 tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['issueKey']}
             
             tc_list.append(tmp_list)
@@ -256,10 +250,10 @@ def get_testcases_z(z, result, cycle):
     return tc_list
 
 def update_defects(z, l):
-    logging.info('updating defects')
+    logger.info('updating defects')
     #logging.info('execution_id=' + str(exec_id))
     for t in l:
-        logging.info("checking defects for " + t['issue_key'])
+        logger.info("checking defects for " + t['issue_key'])
         #print(t)
         #elist = z.get_execution_list(execution_id = t['issue_id'])
         #elist = z.get_execution_list(execution_id = t['id'])
@@ -272,7 +266,7 @@ def update_defects(z, l):
             t['defect_count'] = 0
         if t['defect_count'] > 0:
             #logging.info('defects found = ' + str(execList[1]['totalDefectCount']))
-            logging.info('defects found = ' + str(t['defect_count']))
+            logger.info('defects found = ' + str(t['defect_count']))
             #sys.exit(1)
             #previous_exec_defects = execList[1]['defects']
             previous_exec_defects = t['defects']
@@ -287,7 +281,7 @@ def update_defects(z, l):
 
                     print(d_list)
                     
-            logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
+            logger.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
             elist = z.get_execution_list(execution_id = t['issue_id'])
             elist_string = json.loads(elist)
             print(elist_string)
@@ -297,18 +291,18 @@ def update_defects(z, l):
             #time.sleep(5)
             sys.exit(1)
         else:
-            logging.info('no defects found')
+            logger.info('no defects found')
 
 def find(name, path):
-    logging.debug('finding file {} in {}'.format(name, path))
+    logger.debug('finding file {} in {}'.format(name, path))
     for root, dirs, files in os.walk(path):
         if name in files:
-            logging.debug('found {} {}'.format(root, name))
+            logger.debug('found {} {}'.format(root, name))
             return os.path.join(root, name)
         elif name in dirs:
-            logging.debug('found directory {} {}'.format(root, name))
+            logger.debug('found directory {} {}'.format(root, name))
             return os.path.join(root, name)
-    logging.error('could not find {}'.format(name))
+    logger.error('could not find {}'.format(name))
     return 'fileNotFound'
 
 def update_single_defect(z, t):
@@ -317,7 +311,7 @@ def update_single_defect(z, t):
         t['defect_count'] = 0
     if t['defect_count'] > 0:
         #logging.info('defects found = ' + str(execList[1]['totalDefectCount']))
-        logging.info('defects found = ' + str(t['defect_count']))
+        logger.info('defects found = ' + str(t['defect_count']))
         #sys.exit(1)
         #previous_exec_defects = execList[1]['defects']
         previous_exec_defects = t['defects']
@@ -333,10 +327,10 @@ def update_single_defect(z, t):
                 
                     print(d_list)
             else:
-                logging.info('not updating issue since no inwardIssue')
+                logger.info('not updating issue since no inwardIssue')
             
         if d_list:        
-            logging.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
+            logger.info('updating defect list for ' + t['issue_key'] + ' to ' + str(d_list))
             #elist = z.get_execution_list(execution_id = t['issue_id'])
             #elist_string = json.loads(elist)
             #print(elist_string)
@@ -346,9 +340,9 @@ def update_single_defect(z, t):
             #time.sleep(5)
             #sys.exit(1)
         else:
-            logging.info('no defects to update, defect list is empty')
+            logger.info('no defects to update, defect list is empty')
     else:
-        logging.info('no defects found')
+        logger.info('no defects found')
 
 def exec_testcases_parallel(z, l, num_executors):
     global found_failure
@@ -358,13 +352,13 @@ def exec_testcases_parallel(z, l, num_executors):
 
     threads = []
     
-    logging.info('number of testcases is ' + str(len(l)))
+    logger.info('number of testcases is ' + str(len(l)))
     for t in range(0, len(l), num_executors):
         print('t',t)
         plist = l[t:t+num_executors]
-        logging.info('adding this many testcases:' + str(len(plist)))
+        logger.info('adding this many testcases:' + str(len(plist)))
         for p in plist:
-            logging.info('adding thread for tc=' + p['tc'])
+            logger.info('adding thread for tc=' + p['tc'])
             thread = threading.Thread(target=exec_testcase, args=(z,p))
             threads += [thread]
             thread.start()
@@ -393,13 +387,13 @@ def exec_testcase(z, t):
     #print('t',t)
     #sys.exit(1)
     if t['tc'] == 'noTestcaseInStep':
-        logging.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
+        logger.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
         found_failure = 1  # consider it a failure if the teststep is missing
         number_failed += 1
         #continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         return
 
-    logging.info("executing " + t['issue_key'])
+    logger.info("executing " + t['issue_key'])
     print('xxxxxx',t['project_id'])
     status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
     query_content = json.loads(status)
@@ -413,9 +407,9 @@ def exec_testcase(z, t):
 
     status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
     if 'll execution(s) were successfully updated' in status_s:
-        logging.info("tc status WIP updated successful")
+        logger.info("tc status WIP updated successful")
     else:
-        logging.info("tc status WIP update FAIL")
+        logger.info("tc status WIP update FAIL")
 
     tc_type = ''
     tc = 'tcnotset'
@@ -448,7 +442,7 @@ def exec_testcase(z, t):
 
     # delete old files since /tmp eventually gets filled up
     delete_cmd = "rm -f " + file_delete
-    logging.info("deleting " + delete_cmd)
+    logger.info("deleting " + delete_cmd)
     subprocess.run(delete_cmd, shell=True, check=True)
 
     #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
@@ -472,7 +466,7 @@ def exec_testcase(z, t):
         if crm_pool_round_robin:
             print('round')
             next_crm = next(crm_pool_round_robin)
-            logging.info(f'executing on pool={next_crm}')
+            logger.info(f'executing on pool={next_crm}')
             region = next_crm['region']
             cloudlet = next_crm['cloudlet']
             operator = next_crm['operator']
@@ -480,7 +474,7 @@ def exec_testcase(z, t):
 
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
             openstack_file = find(f'openrc_{cloudlet}.mex', os.environ['WORKSPACE'])
-            logging.info(f'using env_file={env_file} openstack_file={openstack_file}')
+            logger.info(f'using env_file={env_file} openstack_file={openstack_file}')
 
             my_env['AUTOMATION_OPENSTACK_DEDICATED_ENV'] = openstack_file
             my_env['AUTOMATION_OPENSTACK_SHARED_ENV'] = openstack_file
@@ -493,9 +487,9 @@ def exec_testcase(z, t):
                     if '=' in line:
                         var,value = line.split('=')
                         value = value.strip()
-                        logging.info(f'adding env {var}={value}')
+                        logger.info(f'adding env {var}={value}')
                         my_env[var] = value
-            logging.debug(f'my_env={my_env}')
+            logger.debug(f'my_env={my_env}')
         #sys.exit(1)
         if robot_tcname:
             exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
@@ -515,26 +509,26 @@ def exec_testcase(z, t):
     else:
         exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
     #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
-    logging.info("executing " + exec_cmd)
+    logger.info("executing " + exec_cmd)
     try:
         exec_file = f'{file_output}.exec'
-        logging.info(f'writing exec file {exec_file}')
+        logger.info(f'writing exec file {exec_file}')
         with open(exec_file, 'w') as f:
             f.write(exec_cmd)
     except Exception as e:
-        logging.info(f'exec file write error {e}')
+        logger.info(f'exec file write error {e}')
     try:
         exec_start = time.time()
         exec_cmd = f'timeout {testcase_timeout} bash "{exec_file}" && rm {file_output}.exec'
-        logging.info("subprocess " + exec_cmd)
+        logger.info("subprocess " + exec_cmd)
         r = subprocess.run(exec_cmd, shell=True, check=True, env=my_env)
-        logging.info(f'subprocess returncode={r.returncode}')
+        logger.info(f'subprocess returncode={r.returncode}')
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
         comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
-        logging.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')
+        logger.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')
         last_status = 'pass'
         if found_failure == -1:
             found_failure = 0
@@ -544,12 +538,12 @@ def exec_testcase(z, t):
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
         comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
-        logging.info('test failed:' + t['issue_key'])
+        logger.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
-        logging.info("exec cmd failed. return code=: " + str(err.returncode))
-        logging.info("exec cmd failed. stdout=: " + str(err.stdout))
-        logging.info("exec cmd failed. stderr=: " + str(err.stderr))
+        logger.info("exec cmd failed. return code=: " + str(err.returncode))
+        logger.info("exec cmd failed. stdout=: " + str(err.stdout))
+        logger.info("exec cmd failed. stderr=: " + str(err.stderr))
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
         last_status = 'fail'
@@ -558,12 +552,12 @@ def exec_testcase(z, t):
         file_output_done = file_output + '_' + str(int(time.time())) + file_extension
         # add ending timestamp to file
         mv_cmd = 'mv {} {}'.format(file_output, file_output_done)
-        logging.info("moving " + mv_cmd)
+        logger.info("moving " + mv_cmd)
         r = subprocess.run(mv_cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
-        logging.info("mv cmd failed. return code=: " + str(err.returncode))
-        logging.info("mv cmd failed. stdout=: " + str(err.stdout))
-        logging.info("mv cmd failed. stderr=: " + str(err.stderr))
+        logger.info("mv cmd failed. return code=: " + str(err.returncode))
+        logger.info("mv cmd failed. stdout=: " + str(err.stdout))
+        logger.info("mv cmd failed. stderr=: " + str(err.stderr))
 
     # zip output
     #try:
@@ -580,17 +574,17 @@ def exec_testcase(z, t):
     if os.path.isfile(file_output_done):
         z.add_attachment(id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], version_id=t['version_id'], cycle_id=t['cycle_id'], file=file_output_done)
     else:
-        logging.error('ERROR adding attachment. file {} does not exist'.format(file_output_done))
+        logger.error('ERROR adding attachment. file {} does not exist'.format(file_output_done))
 
     #rename trace file to pass or fail for easier debugging
     try:
         mv_cmd = 'mv {} {}.{}'.format(file_output_done, file_output_done, last_status)
-        logging.info("moving " + mv_cmd)
+        logger.info("moving " + mv_cmd)
         r = subprocess.run(mv_cmd, shell=True, check=True)
     except subprocess.CalledProcessError as err:
-        logging.info("mv cmd failed. return code=: " + str(err.returncode))
-        logging.info("mv cmd failed. stdout=: " + str(err.stdout))
-        logging.info("mv cmd failed. stderr=: " + str(err.stderr))
+        logger.info("mv cmd failed. return code=: " + str(err.returncode))
+        logger.info("mv cmd failed. stdout=: " + str(err.stdout))
+        logger.info("mv cmd failed. stderr=: " + str(err.stderr))
 
     # add output file to jira
     #z.add_attachment(id=t['id'], file=file_output_done)
