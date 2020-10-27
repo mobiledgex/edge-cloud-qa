@@ -488,7 +488,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb after adding 
    @{vm_list}=  Create List
 
    ${error}=  Run Keyword and Expect Error  *  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  ip_access=IpAccessShared  deployment=kubernetes  number_masters=1  number_nodes=4
-   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
+   #Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
+   Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Failed to meet VM requirement
 
    Create Stack  file=vmpool_template_1server.yml  name=${app_name}stack
    Sleep  60  # wait for server to come up
