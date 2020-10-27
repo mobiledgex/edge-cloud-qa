@@ -68,8 +68,13 @@ def main():
         num_executors = int(os.environ['NumberParallelExecutions'])
 
     #export CRMPool="{\"cloudlet_name_openstack_shared\":[{\"cloudlet\":\"automationHamburgCloudlet\",\"operator\":\"TDG\",\"region\":\"EU\"},{\"cloudlet\":\"packet-qaregression\",\"operator\":\"packet\",\"region\":\"US\"},{\"cloudlet\":\"automationDusseldorfCloudlet\",\"operator\":\"TDG\",\"region\":\"EU\"}]}"
+    crm_pool_dict = None
     if 'CRMPool' in os.environ:
-        crm_pool_dict = json.loads(os.environ['CRMPool'])
+        try:
+            crm_pool_dict = json.loads(os.environ['CRMPool'])
+        except Exception as e:
+            logging.error(f'error loading CRMPool:{e}')
+            sys.exit(1)
         crm_pool_var = list(crm_pool_dict)[0]
         crm_pool_round_robin = itertools.cycle(crm_pool_dict[list(crm_pool_dict)[0]])
             
