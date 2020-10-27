@@ -72,6 +72,7 @@ def main():
     if 'CRMPool' in os.environ:
         try:
             crm_pool_dict = json.loads(os.environ['CRMPool'])
+            logging.info(f'crm_pool_dict={crm_pool_dict}')
         except Exception as e:
             logging.error(f'error loading CRMPool:{e}')
             sys.exit(1)
