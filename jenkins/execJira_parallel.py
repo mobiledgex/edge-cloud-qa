@@ -517,15 +517,16 @@ def exec_testcase(z, t):
             f.write(exec_cmd)
     except Exception as e:
         logger.info(f'exec file write error {e}')
+
+    exec_start = time.time()
     try:
-        exec_start = time.time()
         exec_cmd = f'timeout {testcase_timeout} bash "{exec_file}" && rm {file_output}.exec'
         logger.info("subprocess " + exec_cmd)
         r = subprocess.run(exec_cmd, shell=True, check=True, env=my_env)
         logger.info(f'subprocess returncode={r.returncode}')
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
-        comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
         logger.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')
@@ -537,7 +538,8 @@ def exec_testcase(z, t):
         #print(err)
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
-        comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        #comment = html.escape('{"start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         logger.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
