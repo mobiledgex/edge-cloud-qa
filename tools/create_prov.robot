@@ -41,6 +41,7 @@ Create Cloudlet
 Create App
    Create App  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  image_type=ImageTypeDocker  cluster_name=automationapicluster  default_flavor_name=automation_api_flavor
    Create App  app_name=automation_api_auth_app  app_version=1.0  developer_name=automation_api  image_type=ImageTypeDocker  cluster_name=automationapicluster  default_flavor_name=automation_api_flavor  auth_public_key=-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----
-
+   Create App   developer_org_name=MobiledgeX  app_name=automation-sdk-porttest  app_version=1.0  image_type=ImageTypeDocker  image_path=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:8.0  access_ports=udp:2015,tcp:2015:tls,tcp:2016,tcp:3765,tcp:8085  cluster_name=automationapicluster  default_flavor_name=automation_api_flavor  use_defaults=${False}
 Create App Instance
    Create App Instance  app_name=automation_api_app  app_version=1.0  developer_name=automation_api  cluster_instance_name=autocluster  cloudlet_name=tmocloud-1  operator_name=tmus  flavor_name=automation_api_flavor
+   Create App Instance  app_name=automation-sdk-porttest	app_version=1.0  cluster_instance_name=autocluster  cloudlet_name=automationFrankfurtCloudlet  operator_org_name=TDG  flavor_name=automation_api_flavor
