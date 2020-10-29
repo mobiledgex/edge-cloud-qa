@@ -207,8 +207,8 @@ node('jenkinsSlave1'){
                  throw new Exception("Create cycle failed")
              }
 
-             def status = -1
-             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle_console
+             status = -1
+             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle_console
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
                  println "${s} failed"
@@ -230,8 +230,8 @@ node('jenkinsSlave1'){
                   throw new Exception("Copy tests to release failed")
               }
 
-              def status = -1
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle_console + ' --component WebUI'
+              status = -1
+              s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle_console + ' --component WebUI'
               status = sh(script: s, returnStatus: true);
               println status
               if(status != 0) {
