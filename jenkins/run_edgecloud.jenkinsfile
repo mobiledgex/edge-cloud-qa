@@ -6,12 +6,13 @@ image = "registry.mobiledgex.net:5000/mobiledgex/edge-cloud"
 
 def jobList1Parallel = ["runControllerTests", "runMetricsTests", "runRunCommandTests", "runAccountTests", "runUserRoleTests", "runCSharpTests", "runCPPTests", "runRunConsoleTests", "runFaceDetectionTests","runDMETests", "runClusterSvcTests", "runRootlbTests", "runShowLogsTests", "runVMPoolControllerTests", "runSecurityTests", "runCreateUserTests", "runMCConfigsTests"]
 def jobListGcp = ["runCrmTests"]
-def jobList2Parallel = ["runCloudletPoolAllTests", "runConsoleTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
+def jobList2Parallel = ["runCloudletPoolAllTests", "runOrganizationTests", "runShowNodeTests", "runPerformance"]
 def jobListPerformance=["Performance"]
 def jobListSequence=["runPasswordTests"]
 def jobListOwaspZAP=["OWASP ZAP"]
 def jobListNmapScanning=["nmap scanning"]
 def jobListImageScanning=["Image Scanning"]
+def jobListConsole=["runConsoleTests"]
 
 builds1 = [:]
 builds2 = [:]
@@ -39,6 +40,7 @@ node('jenkinsSlave1'){
     //date = date.getAt(Calendar.DATE)
     //tag = Version + '_automation_' + year + month + date
     cycle = Version + '_automation_' + dateValue
+    cycle_console = Version + '_automation_' + dateValue + '_console'
     tag = dateValue
     project = "${project}"
     
@@ -204,12 +206,22 @@ node('jenkinsSlave1'){
                  currentBuild.result = 'FAILURE'
                  throw new Exception("Create cycle failed")
              }
+
+             def status = -1
+             def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle_console
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "${s} failed"
+                 currentBuild.result = 'FAILURE'
+                 throw new Exception("Create cycle failed")
+             }
+
 	  }
        }
 
           dir('go/src/github.com/mobiledgex/jenkins') {
               def status = -1
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --componentOmit WebUI'
               status = sh(script: s, returnStatus: true);
               println status
               if(status != 0) {
@@ -217,6 +229,17 @@ node('jenkinsSlave1'){
                   currentBuild.result = 'FAILURE'
                   throw new Exception("Copy tests to release failed")
               }
+
+              def status = -1
+              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle_console + ' --component WebUI'
+              status = sh(script: s, returnStatus: true);
+              println status
+              if(status != 0) {
+                  println "copyTestsToRelease.py failed"
+                  currentBuild.result = 'FAILURE'
+                  throw new Exception("Copy tests to release failed")
+              }
+
           }
     } catch(e) {
        dir('go/src/github.com/mobiledgex/jenkins') {
@@ -478,6 +501,20 @@ node('jenkinsSlave1'){
           //build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: loadname), [$class: 'NodeParameterValue', name: 'node', labels:["${node}"], nodeEligibility: [$class: 'AllNodeEligibility']]]
 	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle)]
        }
+
+       stage('run console tests') {
+          echo "running console tests"
+
+          for(int i=0; i < jobListConsole.size(); ++i) {
+             build job: jobListSequence[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
+          }
+       }
+
+       stage('slack console report') {
+          echo "slack report"
+          build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
+       }
+
    } else {
        echo "build was failure so not running any tests"
    }
