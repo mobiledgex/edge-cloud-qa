@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  CreatePrivacyPolicy
+Documentation  ShowAlertReceiver
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
@@ -14,19 +14,14 @@ ${region}=  US
 ${developer}=  MobiledgeX
 
 *** Test Cases ***
-CreatePrivacyPolicy - shall be able to create with policy and developer name only
+ShowAlertReceiver - shall be able to show all alert receivers
    [Documentation]
    ...  send CreatePrivacyPolicy with policy and developer name only
    ...  verify policy is created
 
-   ${rcv_name}=  Get Default Alert Receiver Name 
+   ${alert}=  Show Alert Receivers  
 
-   ${alert}=  Create Alert Receiver  receiver_name=${rcv_name}  developer_org_name=${developer}  #use_defaults=${False}
-
-   Alert Receiver Should Exist
-
-   Should Be Equal  ${alert['data']['key']['name']}       ${rcv_name}
-   Should Be Equal  ${policy_return['data']['key']['organization']}  ${developer}
+   Receivers Data Should Be Good  ${alert}
 
 *** Keywords ***
 Setup
@@ -38,3 +33,14 @@ Setup
 
    Set Suite Variable  ${policy_name}
    Set Suite Variable  ${developer_name}
+
+Receivers Data Should Be Good
+   [Arguments]  ${alert}
+
+   FOR  ${a}  IN  @{alert}
+      Should Be True  len('${a['Name']}') > 0
+      Should Be True  '${a['Type']}' == 'email' or '${a['Type']}' == 'slack'
+      Should Be True  '${a['Severity']}' == 'info' or '${a['Severity']}' == 'error' or '${a['Severity']}' == 'warn'
+      Should Be True  len('${a['User']}') > 0
+      #Should Be True  len('${a['Email']}') > 0
+   END
