@@ -47,12 +47,14 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Hawkins
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hawkins}  cloudlet_name=${cloudlet_name_openstack_hawkins}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hawkins}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682
 
+# ECQ-1498
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Buckhorn
         [Documentation]
         ...  do CreateCloudlet to start a CRM on buckhorn openstack
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_buckhorn}  cloudlet_name=${cloudlet_name_openstack_buckhorn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_buckhorn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4
 
+# ECQ-1613
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Beacon 
         [Documentation]  
         ...  do CreateCloudlet to start a CRM on beacon openstack 
@@ -89,6 +91,7 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Packet
 
         Create Cloudlet  region=US  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name_openstack_packet}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_packet}  number_dynamic_ips=254  latitude=41.881832  longitude=-87.623177
 
+# ECQ-1631
 CreateCloudlet - User shall be able to create a fake cloudlet
         [Documentation]
         ...  do CreateCloudlet to start a fake CRM 

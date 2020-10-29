@@ -39,6 +39,7 @@ from mex_master_controller.VerifyEmail import VerifyEmail
 from mex_master_controller.AlertReceiver import AlertReceiver
 from mex_master_controller.Alert import Alert
 from mex_master_controller.User import User
+from mex_master_controller.Stream import Stream 
 
 import shared_variables_mc
 import shared_variables
@@ -193,6 +194,7 @@ class MexMasterController(MexRest):
         self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.stream = Stream(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -1454,110 +1456,10 @@ class MexMasterController(MexRest):
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
-        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults, auto_delete=auto_delete)
-
-#        url = self.root_url + '/auth/ctrl/CreateClusterInst'
-#
-#        payload = None
-#        clusterInst = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            if developer_name is None and self.organization_name: developer_name = self.organization_name
-#            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults).cluster_instance
-#            cluster_dict = {'clusterinst': clusterInst}
-#            if region is not None:
-#                cluster_dict['region'] = region
-#
-#            payload = json.dumps(cluster_dict)
-#
-#        logger.info('create cluster instance on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_createclusterinst_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_createclusterinst_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#                if 'Created ClusterInst successfully' not in str(self.resp.text):
-#                    raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
-#
-#            except Exception as e:
-#                self._number_createclusterinst_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self.prov_stack.append(lambda:self.delete_cluster_instance(region=region, token=self.super_token, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'], operator_name=clusterInst['key']['cloudlet_key']['operator_key']['name'], developer_name=clusterInst['key']['developer']))
-#
-#            self._number_createclusterinst_requests_success += 1
-#
-#            resp =  self.show_cluster_instances(token=token, region=region, cluster_name=clusterInst['key']['cluster_key']['name'], cloudlet_name=clusterInst['key']['cloudlet_key']['name'])
-#
-#            return resp
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
+        return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
-        return self.cluster_instance.delete_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override, use_defaults=use_defaults)
-#
-#        url = self.root_url + '/auth/ctrl/DeleteClusterInst'
-#
-#        payload = None
-#        clusterInst = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            clusterInst = ClusterInstance(cluster_name=cluster_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override).cluster_instance
-#            cluster_dict = {'clusterinst': clusterInst}
-#            if region is not None:
-#                cluster_dict['region'] = region
-#
-#            payload = json.dumps(cluster_dict)
-#
-#        logger.info('delete cluster instance on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_deleteclusterinst_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_deleteclusterinst_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#                if crm_override is None and 'Deleted ClusterInst successfully' not in str(self.resp.text):
-#                    raise Exception('ERROR: ClusterInst not deleted successfully:' + str(self.resp.text))
-#            except Exception as e:
-#                self._number_deleteclusterinst_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_deleteclusterinst_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
+        return self.cluster_instance.delete_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
     def delete_all_cluster_instances(self, region, cloudlet_name, crm_override=None):
         clusterinstances = self.show_cluster_instances(token=self.token, region=region, cloudlet_name=cloudlet_name, use_defaults=False)
@@ -2381,6 +2283,15 @@ class MexMasterController(MexRest):
 
     def refresh_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, privacy_policy=None, shared_volume_size=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.refresh_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, powerstate=powerstate, configs_kind=configs_kind, configs_config=configs_config, use_defaults=use_defaults, use_thread=use_thread)
+
+    def stream_cloudlet(self, token=None, region=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.stream.stream_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def stream_cluster_instance(self, token=None, region=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.stream.stream_clusterinst(token=token, region=region, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def stream_app_instance(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.stream.stream_appinst(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=None, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
