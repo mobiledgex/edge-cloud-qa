@@ -35,6 +35,7 @@ def main():
     parser.add_argument('--project')
     parser.add_argument('--cycle')
     parser.add_argument('--component', default='Automated')
+    parser.add_argument('--componentOmit')
 
     args = parser.parse_args()
 
@@ -42,6 +43,7 @@ def main():
     project = args.project
     new_cycle = args.cycle
     component = args.component
+    component_omit = args.componentOmit
  
     logging.basicConfig(
         level=logging.DEBUG,
@@ -69,6 +71,8 @@ def main():
     if cycle_id: 
         #add tests to cycle
         jql = 'project={} and type=Test and component={} and fixVersion={}'.format(project, component, version)
+        if component_omit:
+            jql += f' and component!={component_omit}'
         print('jql', jql)
         z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, jql=jql)
         #start_date = time.strftime('%Y-%m-%d', time.gmtime())
