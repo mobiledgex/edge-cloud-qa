@@ -81,7 +81,6 @@ class MexOperation(MexRest):
         
             try:
                 self.post(url=url, bearer=token, data=payload, stream=stream, stream_timeout=stream_timeout)
-
                 logger.info(f'response:{self.resp.status_code} {self.resp_text}')
 
                 # failures return a 200 for http streaming, so have to check the output for failure
@@ -127,7 +126,7 @@ class MexOperation(MexRest):
                 #        #    self.thread_queue.put({thread_name:sys.exc_info()})
                 #        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
-                raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
+                raise Exception(f'code={self.resp.status_code}', f'error={self.resp_text}')
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
@@ -145,7 +144,10 @@ class MexOperation(MexRest):
             return t
         else:
             resp = send_message()
-            return self.decoded_data
+            if stream:
+                return self.stream_output
+            else:
+                return self.decoded_data
 
     def run(self, message_type='run', token=None, command=None, region=None, timeout=120, json_data=None, use_defaults=True, use_thread=False, thread_name='thread_name'):
         if use_defaults == True:
