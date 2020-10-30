@@ -259,7 +259,7 @@ class Cloudlet(MexOperation):
 
         create_return = self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)
 
-        if use_thred:
+        if use_thread:
             return create_return
         else:
             return create_return[0]
