@@ -14,7 +14,7 @@ class MexRest(WebService) :
 
         #self.root_cert = self._findFile(root_cert)
 
-    def post(self, url, data=None, bearer=None, stream=False):
+    def post(self, url, data=None, bearer=None, stream=False, stream_timeout=5):
         #logging.debug(f'url={url} data={data} cert={self.root_cert}')
         logger.debug(f'url={url} data={data}')
 
@@ -23,17 +23,27 @@ class MexRest(WebService) :
             headers['Authorization'] = 'Bearer ' + bearer
 
         #self.resp = super().post(url=url, data=data, verify_cert=self.root_cert, headers=headers)
-        self.resp = super().post(url=url, data=data, headers=headers, stream=stream)
-        self._decode_content()
+        self.resp = super().post(url=url, data=data, headers=headers, stream=stream, stream_timeout=stream_timeout)
+        
+        self._decode_content(stream=stream)
 
         if str(self.resp.status_code) != '200':
             raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
-    def _decode_content(self):
+    def _decode_content(self, stream=False):
         try:
-            logger.debug('content=' + self.resp.content.decode("utf-8"))
-            self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
-        except:
+            if stream:
+                for line in self.stream_output_bytes:
+                    logger.debug(f'stream decode {line}')
+                    self.stream_output.append(json.loads(line.decode("utf-8")))
+                logger.debug('decoded stream_output=' + str(self.stream_output))
+                self.resp_text = str(self.stream_output)
+            else:
+                logger.debug('content=' + self.resp.content.decode("utf-8"))
+                self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
+                self.resp_text = self.decoded_data
+        except Exception as e:
+            logger.error(f'expception decoding result {e}')
             try:
                 datasplit = self.resp.content.decode("utf-8").splitlines()
                 if len(datasplit) == 1:
@@ -43,6 +53,7 @@ class MexRest(WebService) :
                     for data in datasplit:
                         data_list.append(json.loads(data))
                     self.decoded_data = data_list
+                    self.resp_text = self.decoded_data
             except:
                 logging.debug('error decoding response content')
 
