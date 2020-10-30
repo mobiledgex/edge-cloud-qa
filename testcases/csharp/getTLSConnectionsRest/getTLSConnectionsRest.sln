@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "getConnectionsRest", "getConnectionsRest\getConnectionsRest.csproj", "{C6881DF2-19BB-44B1-8F0E-F7F38F22D391}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "getTLSConnectionsRest", "getTLSConnectionsRest\getTLSConnectionsRest.csproj", "{C6881DF2-19BB-44B1-8F0E-F7F38F22D391}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
