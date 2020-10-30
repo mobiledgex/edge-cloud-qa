@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  CreatePrivacyPolicy for user roles
+Documentation  CreateAlertReceiver for user roles
 
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
@@ -9,86 +9,76 @@ Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${username}=  mextester06
-${password}=  mextester06123mobiledgexisbadass
+${password}=  ${mextester06_gmail_password} 
 
 ${region}=  US
 
 *** Test Cases ***
 CreateAlertReceiver - DeveloperManager shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as DeveloperManager 
-   ...  do CreatePrivacyPolicy
-   ...  verify policy is created 
+   ...  - assign user to org as DeveloperManager 
+   ...  - create an alert receiver
+   ...  - verify receiver is created 
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Alert Receiver  region=${region}  token=${user_token}  developer_org_name=${orgname}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
-CreatePrivacyPolicy - DeveloperContributor shall be able to create a privacy policy
+CreateAlertReceiver - DeveloperContributor shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as DeveloperContributor
-   ...  do CreatePrivacyPolicy
-   ...  verify policy is created
+   ...  - assign user to org as DeveloperContributor
+   ...  - create an alert receiver
+   ...  - verify receiver is created
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Alert Receiver  region=${region}  token=${user_token}  #receiver_name=${name}  developer_org_name=${developer}  use_defaults=${False}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
-CreatePrivacyPolicy - DeveloperViewer shall not be able to create a privacy policy
+CreateAlertReceiver - DeveloperViewer shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as DeveloperViewer
-   ...  do CreatePrivacyPolicy
-   ...  verify error is returned 
+   ...  - assign user to org as DeveloperViewer
+   ...  - create an alert receiver
+   ...  - verify receiver is created
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=developer
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperViewer    token=${user_token}     use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Alert Receiver  region=${region}  token=${user_token}  #receiver_name=${name}  developer_org_name=${developer}  use_defaults=${False}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
-CreatePrivacyPolicy - OperatorManager shall not be able to create a privacy policy
+CreateAlertReceiver - OperatorManager shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as OperatorManager
-   ...  attempt to do CreatePrivacyPolicy 
-   ...  verify proper error is returned 
+   ...  - assign user to org as OperatorManager
+   ...  - create an alert receiver
+   ...  - verify receiver is created
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Alert Receiver  token=${user_token2}  operator_org_name=${orgname}  #use_defaults=${False}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
-CreatePrivacyPolicy - OperatorContributor shall not be able to create a privacy policy
+CreateAlertReceiver - OperatorContributor shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as OperatorContributor
-   ...  attempt to do CreatePrivacyPolicy
-   ...  verify proper error is returned
+   ...  - assign user to org as OperatorContributor
+   ...  - create an alert receiver
+   ...  - verify receiver is created
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
 
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
-   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-
-CreatePrivacyPolicy - OperatorViewer shall not be able to create a privacy policy
+CreateAlertReceiver - OperatorViewer shall be able to create an alert receiver
    [Documentation]
-   ...  assign user to org as OperatorViewer
-   ...  attempt to do CreatePrivacyPolicy
-   ...  verify proper error is returned
+   ...  - assign user to org as OperatorViewer
+   ...  - create an alert receiver
+   ...  - verify receiver is created
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
 
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
-   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
-
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Privacy Policy  developer_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   ${alert}=  Create Alert Receiver  token=${user_token2}  developer_org_name=${orgname}
 
 *** Keywords ***
 Setup

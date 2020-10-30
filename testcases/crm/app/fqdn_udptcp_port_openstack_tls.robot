@@ -189,7 +189,7 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}

@@ -5,11 +5,11 @@ cloudlet_name_azure = 'automationAzureCentralCloudlet'
 cloudlet_name_gcp = 'automationGcpCentralCloudlet'
 #cloudlet_name_openstack = 'automationHamburgCloudlet'
 cloudlet_name_openstack = 'automationFrankfurtCloudlet'
-cloudlet_name_openstack_shared = 'automationFrankfurtCloudlet'
-cloudlet_name_openstack_dedicated = 'automationFrankfurtCloudlet'
-cloudlet_name_openstack_vm = 'automationFrankfurtCloudlet'
+cloudlet_name_openstack_shared = 'automationHamburgCloudlet'
+cloudlet_name_openstack_dedicated = 'automationHamburgCloudlet'
+cloudlet_name_openstack_vm = 'automationHamburgCloudlet'
 cloudlet_name_openstack_metrics = 'automationFrankfurtCloudlet'
-cloudlet_name_openstack_gpu = 'automationFrankfurtCloudlet'
+cloudlet_name_openstack_gpu = 'automationHamburgCloudlet'
 cloudlet_name_vmpool = 'automationVMPoolCloudlet'
 cloudlet_name_vsphere = 'DFWVMW2'
 cloudlet_name_openstack_packet = 'packetcloudlet'
@@ -35,6 +35,7 @@ docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-09-22'
 docker_image_samsung = 'docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0'
+docker_image_cpu = 'docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:1.0'
 
 artifactory_dummy_image_name = 'execJira.py'
 
@@ -61,7 +62,7 @@ expired_cookie = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODQ1NzQ5MDIsI
 vm_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----'
 
 gpu_client = 'multi_client.py'
-gpu_client_path = '../../../../edge-cloud-sampleapps/ComputerVisionServer/client'
+gpu_client_path = '../edge-cloud-sampleapps/ComputerVisionServer/client'
 gpu_client_image = '3_bodies.png'
 
 # alert receiver
