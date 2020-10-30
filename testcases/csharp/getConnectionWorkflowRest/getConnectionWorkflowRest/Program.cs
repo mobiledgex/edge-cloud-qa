@@ -38,7 +38,7 @@ namespace RestSample
     {
         string UniqueID.GetUniqueIDType()
         {
-                return "Mine";
+            return "Mine";
         }
 
         string UniqueID.GetUniqueID()
@@ -52,11 +52,8 @@ namespace RestSample
         static string carrierName = "GDDT";
 
         // QA env
-        //static string orgName = "MobiledgeX";
-        //static string appName = "automation-api-app";
-        //static string appVersion = "1.0";
-        static string orgName = "ladevorg";
-        static string appName = "porttestapp";
+        static string orgName = "MobiledgeX";
+        static string appName = "automation-sdk-porttest";
         static string appVersion = "1.0";
 
         // Production env
@@ -354,102 +351,13 @@ namespace RestSample
 
                 Dictionary<int, DistributedMatchEngine.AppPort> tcpAppPortDict = new Dictionary<int, DistributedMatchEngine.AppPort>();
 
-                Dictionary<int, DistributedMatchEngine.AppPort> udpAppPortDict = new Dictionary<int, DistributedMatchEngine.AppPort>();
-
                 Console.WriteLine("TCP Port Testing\n");
                 tcpAppPortDict = me.GetTCPAppPorts(findCloudletReply);
+                check = false;
                 foreach (KeyValuePair<int, DistributedMatchEngine.AppPort> kvp in tcpAppPortDict)
                 {
-                    check = false;
-                    if (kvp.Key == 8085)
-                    {
-                        Console.WriteLine("Starting HTTP Port Testing");
-                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                        message = "/automation.html";
-                        string uriString = aWebSocketServerFqdn;
-                        UriBuilder uriBuilder = new UriBuilder("http", uriString, kvp.Key);
-                        Uri uri = uriBuilder.Uri;
-
-                        try
-                        {
-                            HttpClient httpClient = await me.GetHTTPClient(uri);
-                            //Assert.ByVal(httpClient, Is.Not.Null);
-                            HttpResponseMessage response = await httpClient.GetAsync(message);
-                            response.EnsureSuccessStatusCode();
-                            string responseBody = await response.Content.ReadAsStringAsync();
-                            //Assert.ByVal(responseBody, Is.Not.Null);
-                            Console.WriteLine("http response body is " + responseBody);
-                            //Assert.True(responseBody.Contains("HTTP Connection Test"));
-                        }
-                        catch (HttpRequestException e)
-                        {
-                            Console.WriteLine("HttpRequestException is " + e.Message);
-                            Console.WriteLine("Test Case Failed!!!");
-                            Environment.Exit(1);
-                        }
-                        check = true;
-                        Console.WriteLine("Http Connection Port " + kvp.Key + " finished.\n");
-
-                    }
-                    check = false;
-                    if (kvp.Key == 3765)
-                    {
-                        try
-                        {
-                            Console.WriteLine("Starting WEBSocket Testing");
-                            Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                            message = "noeL";
-                            string path = "/ws";
-                            byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
-                            System.Threading.CancellationToken cToken;
-                            var buffer = new ArraySegment<byte>(new byte[128]);
-                            WebSocketReceiveResult wsResult;
-
-                            ClientWebSocket webSocket = await me.GetWebsocketConnection(findCloudletReply, kvp.Value, kvp.Key, 10000, path);
-
-                            await webSocket.SendAsync(bytesMessage, WebSocketMessageType.Text, true, cToken);
-                            wsResult = await webSocket.ReceiveAsync(buffer, cToken);
-                            byte[] msgBytes = buffer.Skip(buffer.Offset).Take(wsResult.Count).ToArray();
-                            string rcvMsg = Encoding.UTF8.GetString(msgBytes);
-
-
-                            //receiveMessage = ms.Write(buffer.Array, buffer.Offset, wsResult.Count);
-
-                            if (rcvMsg == "Leon")
-                            {
-                                Console.WriteLine("Sent: " + message);
-                                Console.WriteLine("Received: " + rcvMsg);
-                                Console.WriteLine("GetWebSocket Connection worked!:");
-
-                            }
-                            else
-                            {
-
-                                Console.WriteLine("GetWebSocket Connection DID NOT work!: " + rcvMsg);
-                                Environment.Exit(1);
-                            }
-                        }
-                        catch (GetConnectionException e)
-                        { 
-                            Console.WriteLine("GetWebSocket Connection Exception is " + e.Message);
-                            Console.WriteLine("Test Case Failed!!!");
-                            Environment.Exit(1);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("GetWebSocket Connection exception is " + e);
-                            Console.WriteLine("Test Case Failed!!!");
-                            Environment.Exit(1);
-                        }
-                        check = true;
-                        //Assert.True(receiveMessage.Contains("tcp test string"));
-                        Console.WriteLine("GetWebSocket Connection Port " + kvp.Key + " finished.\n");
-
-                    }
-                    check = false;
                     if (kvp.Key == 2016)
                     {
-
                         try
                         {
                             Console.WriteLine("Starting TCP Port Testing");
@@ -460,6 +368,7 @@ namespace RestSample
 
                             tcpConnection.Send(bytesMessage);
 
+                            Console.WriteLine("\nMessage Sent: " + message);
                             byte[] buffer = new byte[message.Length * 2]; // C# chars are unicode-16 bits
                             int numRead = tcpConnection.Receive(buffer);
                             byte[] readBuffer = new byte[numRead];
@@ -468,7 +377,9 @@ namespace RestSample
 
                             if (receiveMessage == "pong")
                             {
-                                Console.WriteLine("TCP Get Connection worked!: " + receiveMessage);
+                                Console.WriteLine("TCP Get Connection worked!: ");
+                                Console.WriteLine("Received Message: " + receiveMessage);
+                                check = true;
                                 tcpConnection.Close();
                             }
                             else
@@ -490,122 +401,8 @@ namespace RestSample
                             Console.WriteLine("Test Case Failed!!!");
                             Environment.Exit(1);
                         }
-                        check = true;
-                        //Assert.True(receiveMessage.Contains("tcp test string"));
-                        Console.WriteLine("TCP Connection Port " + kvp.Key + " finished.\n");
+                        Console.WriteLine("\nTCP Connection Port " + kvp.Key + " finished.");
                     }
-                    check = false;
-                    if(kvp.Key == 2015)
-                    {
-                        Console.WriteLine("Starting TLS Port Testing");
-                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                        message = test;
-                        byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
-                        //SslStream stream = await me.GetTCPTLSConnection(aWebSocketServerFqdn, kvp.Key, 10000);
-                        //try
-                        //{
-                            //Console.WriteLine("Starting Authentication");
-                            //stream.AuthenticateAsClient(aWebSocketServerFqdn);
-                            //Console.WriteLine("Endinging Authentication");
-                        //}
-                        //catch (AuthenticationException e)
-                        //{
-                            //Console.WriteLine("Exception: {0}", e.Message);
-                            //if (e.InnerException != null)
-                            //{
-                                //Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
-                            //}
-                            //Console.WriteLine("Auth failed - closing the connection.");
-                            //stream.Close();
-                            //return;
-                        //}
-
-                        //stream.Write(bytesMessage);
-                        //stream.Flush();
-                        //string serverMessage = ReadMessage(stream);
-                        //Console.WriteLine("\n\nReceived: " + serverMessage);
-                        check = true;
-                        Console.WriteLine("TLS Connection Port " + kvp.Key + " finished.\n");
-                    }
-                }
-
-                 string ReadMessage(SslStream sslStream)
-                {
-                    // Read the  message sent by the server.
-                    // The end of the message is signaled using the
-                    // "<EOF>" marker.
-                    byte[] buffer = new byte[2048];
-                    StringBuilder messageData = new StringBuilder();
-                    int bytes = -1;
-                    do
-                    {
-                        bytes = sslStream.Read(buffer, 0, buffer.Length);
-
-                        // Use Decoder class to convert from bytes to UTF8
-                        // in case a character spans two buffers.
-                        Decoder decoder = Encoding.UTF8.GetDecoder();
-                        char[] chars = new char[decoder.GetCharCount(buffer, 0, bytes)];
-                        decoder.GetChars(buffer, 0, bytes, chars, 0);
-                        messageData.Append(chars);
-                        // Check for EOF.
-                        if (messageData.ToString().IndexOf("<EOF>") != -1)
-                        {
-                            break;
-                        }
-                    } while (bytes != 0);
-
-                    return messageData.ToString();
-                }
-
-                Console.WriteLine("Starting UDP Port Testing");
-                aWebSocketServerFqdn = appName + "-udp." + findCloudletReply.fqdn;
-                udpAppPortDict = me.GetUDPAppPorts(findCloudletReply);
-                foreach (KeyValuePair<int, DistributedMatchEngine.AppPort> kvp in udpAppPortDict)
-                {
-                    check = false;
-                    try
-                    {
-                        Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                        message = test;
-                        byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
-                        Socket udpConnection = await me.GetUDPConnection(aWebSocketServerFqdn, kvp.Key, 10000);
-                        //Assert.ByVal(tcpConnection, Is.Not.Null);
-
-                        udpConnection.Send(bytesMessage);
-
-                        byte[] buffer = new byte[message.Length * 2]; // C# chars are unicode-16 bits
-                        int numRead = udpConnection.Receive(buffer);
-                        byte[] readBuffer = new byte[numRead];
-                        Array.Copy(buffer, readBuffer, numRead);
-                        receiveMessage = Encoding.ASCII.GetString(readBuffer);
-                        if (receiveMessage == "pong")
-                        {
-                            Console.WriteLine("UDP Get Connection worked!: " + receiveMessage);
-                            udpConnection.Close();
-                        }
-                        else
-                        {
-                            Console.WriteLine("UDP Get Connection DID NOT work!: " + receiveMessage);
-                            udpConnection.Close();
-                            Environment.Exit(1);
-                        }
-                    }
-                    catch (GetConnectionException e)
-                    {
-                        Console.WriteLine("UDP GetConnectionException is " + e.Message);
-                        Console.WriteLine("Test Case Failed!!!");
-                        Environment.Exit(1);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("UDP socket exception is " + e);
-                        Console.WriteLine("Test Case Failed!!!");
-                        Environment.Exit(1);
-                    }
-                    check = true;
-                    //Assert.True(receiveMessage.Contains("tcp test string"));
-                    Console.WriteLine("Test UDP Connection Port " + kvp.Key + " finished.\n");
-
                 }
             }
             catch (InvalidTokenServerTokenException itste)
@@ -626,6 +423,6 @@ namespace RestSample
                 Console.WriteLine("\nGetConnectionWorkflowRest Testcase Failed!!");
                 Environment.Exit(1);
             }
-        }        
+        }
     };
 }

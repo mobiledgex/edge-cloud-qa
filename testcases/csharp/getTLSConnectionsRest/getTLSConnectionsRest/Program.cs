@@ -17,13 +17,11 @@
 
 using System;
 using System.Threading.Tasks;
-using System.Net.Sockets;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Json;
-using System.IO;
 using System.Text;
 using DistributedMatchEngine;
-using System.Net.Http;
+using System.Net.Security;
+using System.Security.Authentication;
 
 
 namespace RestSample
@@ -46,8 +44,8 @@ namespace RestSample
         //static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
         //QA env
         static string carrierName = "GDDT";
-        static string orgName = "ladevorg";
-        static string appName = "porttestapp";
+        static string orgName = "MobiledgeX";
+        static string appName = "automation-sdk-porttest";
         static string appVers = "1.0";
         static string host = "eu-qa.dme.mobiledgex.net";
         static string fallbackDmeHost = "eu-qa.dme.mobiledgex.net";
@@ -63,7 +61,7 @@ namespace RestSample
 
         static string developerAuthToken = "";
         static UInt32 cellID = 0;
-        static Tag[] tags = new Tag[0];
+        //static Tag[] tags = new Tag[0];
         //const string connectionTestFqdn = "mextest-app-cluster.fairview-main.gddt.mobiledgex.net";
         //const string aWebSocketServerFqdn = "pingpong-tcp.fairview-main.gddt.mobiledgex.net"; // or, localhost.
         //const string connectionTestFqdn = "autoclusterautomation-api-app.automationparadisecloudlet.gddt.mobiledgex.net";
@@ -134,7 +132,7 @@ namespace RestSample
         {
             try
             {
-                Console.WriteLine("Get Connections Testcase!!");
+                Console.WriteLine("Get TLS Connections Testcase!!");
 
                 MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
@@ -145,7 +143,7 @@ namespace RestSample
                 // location in an Unity application should be from an application context
                 // LocationService.
                 var locTask = Util.GetLocationFromDevice();
-                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType(), tags);
+                var registerClientRequest = me.CreateRegisterClientRequest(orgName, appName, appVers, developerAuthToken, cellID, me.GetUniqueIDType(), me.GetUniqueIDType());
                 // APIs depend on Register client to complete successfully:
                 RegisterClientReply registerClientReply;
                 try
@@ -178,11 +176,11 @@ namespace RestSample
                 var loc = await locTask;
 
                 // Independent requests:
-                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName, cellID, tags);
+                var verifyLocationRequest = me.CreateVerifyLocationRequest(loc, carrierName, cellID);
                 var findCloudletRequest = me.CreateFindCloudletRequest(loc);
                 //var getLocationRequest = me.CreateGetLocationRequest(carrierName, cellID, tags);
 
-                
+
                 // These are asynchronious calls, of independent REST APIs.
 
                 // FindCloudlet:
@@ -275,135 +273,74 @@ namespace RestSample
                 }
 
 
-                Console.WriteLine("\nTest TCP 2016 Connection Starting.");
+                Console.WriteLine("\nTest TLS 2015 Connection Starting.");
 
                 string test = "{\"Data\": \"ping\"}";
                 string message = test;
                 byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
 
-                // TCP Connection Test
+                // TLS Connection Test
                 string receiveMessage = "";
                 try
                 {
-                    Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, 2016, 10000);
-                    //Assert.ByVal(tcpConnection, Is.Not.Null);
+                    MatchingEngine.ServerRequiresClientCertificateAuthentication(true);
 
-                    tcpConnection.Send(bytesMessage);
+                    SslStream stream = await me.GetTCPTLSConnection(aWebSocketServerFqdn, 2015, 10000, true);
+                    Console.WriteLine("Authenticated");
 
-                    byte[] buffer = new byte[message.Length * 2]; // C# chars are unicode-16 bits
-                    int numRead = tcpConnection.Receive(buffer);
-                    byte[] readBuffer = new byte[numRead];
-                    Array.Copy(buffer, readBuffer, numRead);
-                    receiveMessage = Encoding.ASCII.GetString(readBuffer);
+                    stream.Write(bytesMessage, 0, bytesMessage.Length);
+                    await Task.Delay(500);
+                    Console.WriteLine("Message Sent: " + message.ToString());
 
-                    if(receiveMessage == "pong")
-                    {
-                        Console.WriteLine("TCP Get Connection worked!: " + receiveMessage);
-                        tcpConnection.Close();
-                    }
-                    else
-                    {
-                        Console.WriteLine("TCP Get Connection DID NOT work!: " + receiveMessage);
-                        tcpConnection.Close();
-                        Environment.Exit(1);
-                    }
-                }
-                catch (GetConnectionException e)
-                {
-                    Console.WriteLine("TCP GetConnectionException is " + e.Message);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("TCP socket exception is " + e);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
-                //Assert.True(receiveMessage.Contains("tcp test string"));
-                Console.WriteLine("Test TCP Connection finished.\n");
+                    stream.Flush();
 
-                Console.WriteLine("Test UDP 2015 Connection Starting.");
-                // UDP Connection Test
-                receiveMessage = "";
-                try
-                {
-                    Socket udpConnection = await me.GetUDPConnection(aWebSocketServerFqdn, 2015, 10000);
-                    //Assert.ByVal(tcpConnection, Is.Not.Null);
+                    byte[] readBuffer = new byte[4];
+                    stream.Read(readBuffer);
+                    receiveMessage = Encoding.UTF8.GetString(readBuffer);
 
-                    udpConnection.Send(bytesMessage);
+                    //Console.WriteLine("Received Message: " + receiveMessage);
+                    //Console.WriteLine("Received Message Length: " + receiveMessage.Length);
 
-                    byte[] buffer = new byte[message.Length * 2]; // C# chars are unicode-16 bits
-                    int numRead = udpConnection.Receive(buffer);
-                    byte[] readBuffer = new byte[numRead];
-                    Array.Copy(buffer, readBuffer, numRead);
-                    receiveMessage = Encoding.ASCII.GetString(readBuffer);
+                    stream.Close();
+
                     if (receiveMessage == "pong")
                     {
-                        Console.WriteLine("UDP Get Connection worked!: " + receiveMessage);
-                        udpConnection.Close();
+                        Console.WriteLine("TLS Get Connection worked!");
+                        Console.WriteLine("Recieved Message: " + receiveMessage);
+                        stream.Close();
                     }
                     else
                     {
-                        Console.WriteLine("UDP Get Connection DID NOT work!: " + receiveMessage);
-                        udpConnection.Close();
+                        Console.WriteLine("Pong not Recieved!!! TLS Test Case Failed!!!!");
+                        stream.Close();
                         Environment.Exit(1);
+
                     }
+
+                }
+                catch (AuthenticationException e)
+                {
+                    Console.WriteLine("Authentication Exception is " + e.Message);
+                    Console.WriteLine("TLS Test Case Failed!!!");
+                    Environment.Exit(1);
                 }
                 catch (GetConnectionException e)
                 {
-                    Console.WriteLine("UDP GetConnectionException is " + e.Message);
-                    Console.WriteLine("Test Case Failed!!!");
+                    Console.WriteLine("TLS GetConnectionException is " + e.Message);
+                    Console.WriteLine("TLS Test Case Failed!!!");
                     Environment.Exit(1);
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("UDP socket exception is " + e);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
-                //Assert.True(receiveMessage.Contains("tcp test string"));
-                Console.WriteLine("Test UDP Connection finished.\n");
-
-                Console.WriteLine("Test HTTP 8085 Connection Starting.");
-                message = "/automation.html";
-                string uriString = aWebSocketServerFqdn;
-                UriBuilder uriBuilder = new UriBuilder("http", uriString, 8085);
-                Uri uri = uriBuilder.Uri;
-
-                // HTTP Connection Test
-                try
-                {
-                    HttpClient httpClient = await me.GetHTTPClient(uri);
-                    //Assert.ByVal(httpClient, Is.Not.Null);
-                    HttpResponseMessage response = await httpClient.GetAsync(message);
-                    response.EnsureSuccessStatusCode();
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    //Assert.ByVal(responseBody, Is.Not.Null);
-                    Console.WriteLine("http response body is " + responseBody);
-                    //Assert.True(responseBody.Contains("HTTP Connection Test"));
-                }
-                catch (HttpRequestException e)
-                {
-                    Console.WriteLine("HttpRequestException is " + e.Message);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
-                Console.WriteLine("Test Http Connection finished.\n");
-
-
             }
-            catch (Exception e) // Catch All
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message + "\n" + e.StackTrace);
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.Message + "\n" + e.InnerException.StackTrace);
-                    Console.WriteLine("Test Case Failed!!!");
-                    Environment.Exit(1);
-                }
+                Console.WriteLine("TLS socket exception is " + e);
+                Console.WriteLine("TLSTest Case Failed!!!");
+                Environment.Exit(1);
             }
-            Console.WriteLine("Test Case Passed!!!");
+            Console.WriteLine("Test TLS Connection finished.\n");
+        
+            Console.WriteLine("TLS Connections Test Case Passed!!!");
+            
         }
     };
 }
