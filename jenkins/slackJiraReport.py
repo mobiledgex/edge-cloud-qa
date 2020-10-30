@@ -34,12 +34,14 @@ parser = argparse.ArgumentParser(description='post jira automation report to sla
 parser.add_argument('--version', default='Nimbus', help='jira version. default is \'Nimbus\'')
 parser.add_argument('--project', default='ECQ', help='jira project. default is \'ECQ\'')
 parser.add_argument('--cycle', help='jira cycle. no default')
+parser.add_argument('--jobduration', default=0, help='duration of job. default is 0')
 
 args = parser.parse_args()
 
 project_name = args.project
 version_name = args.version
 cycle_name = args.cycle
+job_duration = args.jobduration
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -166,6 +168,8 @@ report_string += f'>*Total WIP:* {total_wip}   {(total_wip/total_counted)*100:.2
 report_string += f'>*Total Blocked:* {total_blocked}   {(total_blocked/total_counted)*100:.2f}%\n'
 report_string += f'>*Total NA:* {total_na}   {(total_na/total_counted)*100:.2f}%\n'
 report_string += f'>*Total WontExec:* {total_wontexec}   {(total_wontexec/total_counted)*100:.2f}%\n'
+if job_duration > 0:
+    report_string += f'>*Execution Time:* {job_duration/1000/60/60/60} hrs\n'
 
 if total_count != total_counted:
     report_string += f'*WARNING - total count did not add up. counted={total_counted} expected={total_count}*\n'
