@@ -20,7 +20,7 @@ node('jenkinsSlave1') {
 
    stage("create report") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackJiraReport.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle
+         def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackJiraReport.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --jobduration ' + jobduration
          status = sh(script:s, returnStatus: true);
          println status
          if(status != 0) {
