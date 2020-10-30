@@ -243,7 +243,7 @@ class Cloudlet(MexOperation):
 
         return info_dict
  
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
@@ -257,20 +257,20 @@ class Cloudlet(MexOperation):
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)
 
 
-    def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
+    def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
-        return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=stream, stream_timeout=stream_timeout)
 
-    def show_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False):
+    def show_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
-        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=stream, stream_timeout=stream_timeout)
 
     def show_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults)
@@ -290,7 +290,7 @@ class Cloudlet(MexOperation):
 
         return self.update(token=token, url=self.inject_info_url, show_url=self.show_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
 
-    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False):
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
@@ -299,7 +299,7 @@ class Cloudlet(MexOperation):
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
-        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)
 
     def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)

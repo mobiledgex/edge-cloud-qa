@@ -164,6 +164,7 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with c
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
 
+# ECQ-1389
 User shall be able to access VM deployment UDP and TCP ports on openstack with cloud-config
     [Documentation]
     ...  deploy VM app on openstack with 1 UDP and 1 TCP port with cloud-config

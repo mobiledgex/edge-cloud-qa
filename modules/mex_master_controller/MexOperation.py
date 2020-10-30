@@ -38,24 +38,24 @@ class MexOperation(MexRest):
         self.token = token
         self.thread_queue = thread_queue
 
-    def create(self, token=None, url=None, delete_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, show_msg=None, thread_name=None):
-        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name)
+    def create(self, token=None, url=None, delete_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None):
+        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
 
-    def delete(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None):
-        return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message)
+    def delete(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False, stream_timeout=None):
+        return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream, stream_timeout=stream_timeout)
 
-    def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False):
-        resp = self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream)
+    def show(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False, stream_timeout=None):
+        resp = self.send(message_type='show', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream, stream_timeout=stream_timeout)
  
         if isinstance(resp, dict):
             return [resp]
         else:
             return resp
 
-    def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None):
-        return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, show_message=show_msg)
+    def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None, stream=False, stream_timeout=None):
+        return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, show_message=show_msg, stream=stream, stream_timeout=stream_timeout)
 
-    def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name', stream=False):
+    def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5):
         url = self.root_url + url
     
         payload = None
@@ -80,31 +80,32 @@ class MexOperation(MexRest):
             self.counter_dict[message_type]['req_attempts'] += 1
         
             try:
-                self.post(url=url, bearer=token, data=payload, stream=stream)
-                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
+                self.post(url=url, bearer=token, data=payload, stream=stream, stream_timeout=stream_timeout)
+
+                logger.info(f'response:{self.resp.status_code} {self.resp_text}')
 
                 # failures return a 200 for http streaming, so have to check the output for failure
                 if 'CreateAppInst' in url:
-                    if 'Created AppInst successfully' not in str(self.resp.text):
-                        raise Exception('ERROR: AppInst not created successfully:' + str(self.resp.text))
+                    if 'Created AppInst successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: AppInst not created successfully:' + str(self.resp_text))
                 if 'UpdateAppInst' in url:
-                    if 'Ready' not in str(self.resp.text):
-                        raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp.text))
+                    if 'Ready' not in str(self.resp_text):
+                        raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp_text))
                 if 'RefreshAppInst' in url:
-                    if 'Failed: 0' not in str(self.resp.text):
-                        raise Exception('ERROR: AppInst not refreshed successfully:' + str(self.resp.text))
+                    if 'Failed: 0' not in str(self.resp_text):
+                        raise Exception('ERROR: AppInst not refreshed successfully:' + str(self.resp_text))
                 if 'CreateClusterInst' in url:
-                    if 'Created ClusterInst successfully' not in str(self.resp.text):
-                        raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp.text))
+                    if 'Created ClusterInst successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: ClusterInst not created successfully:' + str(self.resp_text))
                 if 'UpdateClusterInst' in url:
-                    if 'Updated ClusterInst successfully' not in str(self.resp.text):
-                        raise Exception('ERROR: ClusterInst not updated successfully:' + str(self.resp.text))
+                    if 'Updated ClusterInst successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: ClusterInst not updated successfully:' + str(self.resp_text))
                 elif url.endswith('CreateCloudlet'):
-                    if 'Created Cloudlet successfully' not in str(self.resp.text):
-                        raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp.text))
+                    if 'Created Cloudlet successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp_text))
                 elif url.endswith('DeleteCloudlet'):
-                    if 'Deleted Cloudlet successfully' not in str(self.resp.text):
-                        raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
+                    if 'Deleted Cloudlet successfully' not in str(self.resp_text):
+                        raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp_text))
                 #elif url.endswith('UpdateCloudlet'):
                 #    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
                 #        pass
@@ -130,13 +131,13 @@ class MexOperation(MexRest):
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
-                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=token, message=delete_message, use_defaults=False))
+                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
             self.counter_dict[message_type]['req_success'] += 1
 
             if message and show_message:
                 logger.debug(f'showing:{show_message}')
                 #resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
-                resp = self.send(message_type='show', region=region, url=show_url, token=token, message=show_message, use_defaults=False)
+                resp = self.send(message_type='show', region=region, url=show_url, token=token, message=show_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout)
         if use_thread is True:
             thread_name = f'Thread-{thread_name}-{str(time.time())}'
             t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
