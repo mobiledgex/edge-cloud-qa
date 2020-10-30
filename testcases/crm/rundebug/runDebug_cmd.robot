@@ -11,7 +11,6 @@ Library  String
 #Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-
 *** Variables ***
 ${app_name}  andy
 ${developer_name}  MobiledgeX
@@ -26,6 +25,7 @@ ${unknown_cmd}=  Unknown cmd
 ${unknown_cmd1}=  ('code=400('code=400', 'error={"message":"Forbidden"}')
 ${unknown_cmd_oscmd}=  Unknown cmd oscmd
 ${unknown_cmd_crmcmd}=  Unknown cmd crmcmd
+${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
 ${not_supported}=  not supported
 ${invalid_txt}=  adjsx
 ${timeout_request}=  request timed out
@@ -443,10 +443,12 @@ RunDebug - cmd=oscmd args openstack flavor list on all cloudlets node type sheph
     ...  send runDebug cmd args openstack flavor list on all cloudlets
     ...  verify args openstack flavor list output returns not valid command for all shepherd node type
 
-      ${stack}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_shep}
+      ${all_shepherd}=  RunDebug  region=EU  command=oscmd  args=openstack flavor list  node_type=${ntype_shep}
 
+      ${cnt}=  Get Length  ${all_shepherd}
 
-      Request Should Be Invalid  ${stack}
+      Run Keyword If  ${cnt} < 2  Get Output Type17A  ELSE  Get Zero Output Type17A
+
 
 
 #ECQ-2210
@@ -985,6 +987,46 @@ Get Output Type18
     ${output}=  Set Variable  ${stack[0]['data']['output']}
     Should Contain  ${type}  ${ntype_shep}
     Should Contain  ${output}  ${unknown_cmd_oscmd}
+
+Get Output Type17A
+    ${sample}=  RunDebug  region=EU   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
+    @{Unknown_Cmd}=  Create List
+    @{Node_Type}=  Create List
+    @{Timeout}=  Create List
+    Append To List    ${Unknown_Cmd}    ${sample}[0][data][output]
+    Append To List    ${Node_Type}  ${sample}[0][data][node][type]
+    Append To List    ${Timeout}    ${sample}[0][data][output]
+    Log List  ${Unknown_Cmd}
+    Log List  ${Node_Type}
+    Log List  ${Timeout}
+    ${count_unknown}    Count Values In List   ${Unknown_Cmd}   ${unknown_command_oscmd}
+    ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_shep}
+    ${count_timeout}    Count Values In List  ${Timeout}    ${timeout_request}
+    ${passvalue}=  Set Variable  1 
+    Should Be True  ${count_unknown} > ${count_timeout}
+    Should Be True  ${passvalue} <= ${count_ntype}
+
+Get Zero Output Type17A
+
+    ${sample}=  RunDebug  region=EU   command=oscmd  args=openstack flavor list  node_type=${ntype_shep}  timeout=${time}
+    ${cnt}=  Get Length  ${sample}
+         @{Unknown_Cmd}=  Create List
+         @{Node_Type}=  Create List
+         @{Timeout}=  Create List
+    FOR  ${key}  IN RANGE  ${cnt}
+         Append To List    ${Unknown_Cmd}    ${sample}[${key}][data][output]
+         Append To List    ${Node_Type}  ${sample}[${key}][data][node][type]
+         Append To List    ${Timeout}    ${sample}[${key}][data][output]
+    END
+         Log List  ${Unknown_Cmd}
+         Log List  ${Node_Type}
+         Log List  ${Timeout}
+         ${count_unknown}    Count Values In List   ${Unknown_Cmd}   ${unknown_command_oscmd}
+         ${count_ntype}    Count Values In List   ${Node_Type}    ${ntype_shep}
+         ${count_timeout}    Count Values In List  ${Timeout}    ${timeout_request}
+         ${passvalue}=  Set Variable  ${cnt} / 2
+         Should Be True  ${count_unknown} > ${count_timeout}
+         Should Be True  ${passvalue} < ${count_ntype}
 
 Get Zero Output Type18
     ${stack}=  RunDebug  region=EU  cloudlet_name=${cloudlet_name_openstack_dedicated}  command=oscmd  args=openstack server list  node_type=${ntype_shep}  timeout=${time}
