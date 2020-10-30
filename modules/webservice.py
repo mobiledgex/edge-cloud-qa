@@ -24,7 +24,7 @@ class WebService() :
     trace_file = None
     stream_output_bytes = []
     stream_output = []
-    resp_test = ''
+    resp_text = ''
     
     #def __init__(self, jid = None, password = None, sesid = None, http_or_https = None, output_format = None) :
     def __init__(self, debug = False, http_trace = False) :
@@ -53,7 +53,8 @@ class WebService() :
         
         #url_to_use = self._buildUrl(url)
         self.stream_output_bytes = []
-         
+        self.stream_output = []
+     
         timeout = None
         if stream:
             timeout = (3.05, stream_timeout)
