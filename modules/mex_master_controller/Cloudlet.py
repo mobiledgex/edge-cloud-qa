@@ -257,7 +257,7 @@ class Cloudlet(MexOperation):
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)[0]
 
 
     def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
