@@ -1,0 +1,17 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "getWEBServerConnectionRest", "getWEBServerConnectionRest\getWEBServerConnectionRest.csproj", "{5DB5CB0A-86B5-44F1-8F9E-43E1A5C8CB6E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5DB5CB0A-86B5-44F1-8F9E-43E1A5C8CB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DB5CB0A-86B5-44F1-8F9E-43E1A5C8CB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DB5CB0A-86B5-44F1-8F9E-43E1A5C8CB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DB5CB0A-86B5-44F1-8F9E-43E1A5C8CB6E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
