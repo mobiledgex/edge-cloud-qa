@@ -22,7 +22,9 @@ class WebService() :
     #httpLogger = None
     debug = False
     trace_file = None
+    stream_output_bytes = []
     stream_output = []
+    resp_test = ''
     
     #def __init__(self, jid = None, password = None, sesid = None, http_or_https = None, output_format = None) :
     def __init__(self, debug = False, http_trace = False) :
@@ -48,19 +50,24 @@ class WebService() :
 
     def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, stream_timeout=5):
         logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} stream_timeout={stream_timeout}')
-
-        #url_to_use = self._buildUrl(url)
-        self.stream_output = []
         
+        #url_to_use = self._buildUrl(url)
+        self.stream_output_bytes = []
+         
         timeout = None
         if stream:
             timeout = (3.05, stream_timeout)
         
         try:
             self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
+
+            logger.debug(f'resp={self.resp}')
             if stream:
                 for line in self.resp.iter_lines():
-                    self.stream_output.append(json.loads(line.decode("utf-8")))
+                    logging.debug(f'stream line={line}')
+                    #self.stream_output.append(json.loads(line.decode("utf-8")))
+                    self.stream_output_bytes.append(line)
+                logger.debug('stream_output_bytes=' + str(self.stream_output_bytes))
             else:
                 logger.debug('resp=' + str(self.resp.text))
         except requests.exceptions.ConnectionError as e:

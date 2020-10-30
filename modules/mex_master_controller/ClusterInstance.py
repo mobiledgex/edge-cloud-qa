@@ -151,7 +151,7 @@ class ClusterInstance(MexOperation):
 
         return metric_dict
 
-    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
         msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
@@ -169,17 +169,17 @@ class ClusterInstance(MexOperation):
             msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_show = {'clusterinst': msg_show}
 
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name)
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
 
 
-    def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False):
+    def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
         msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, reservable=reservable, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
-        return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
 
 
-    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False): 
+    def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600): 
         msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=use_defaults, include_fields=True)      
         msg_dict = {'clusterinst': msg}
      
@@ -189,14 +189,14 @@ class ClusterInstance(MexOperation):
             msg_dict_show = {'clusterinst': msg_show}
         print('*WARN*', use_defaults, region)
 
-        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict)
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict, stream=True, stream_timeout=600)
 
 
-    def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True):
+    def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True, stream=True, stream_timeout=600):
         msg = self._build(cluster_name=cluster_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
-        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
 
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         inst = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=False)
