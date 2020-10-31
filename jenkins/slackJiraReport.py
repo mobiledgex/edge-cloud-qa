@@ -1,6 +1,8 @@
 import os
 #from flask import Flask, request
-from slackclient import SlackClient
+#from slackclient import SlackClient
+from slack import WebClient
+from slack.errors import SlackApiError
 import argparse
 import json
 import logging
@@ -41,7 +43,7 @@ args = parser.parse_args()
 project_name = args.project
 version_name = args.version
 cycle_name = args.cycle
-job_duration = args.jobduration
+job_duration = int(args.jobduration)
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -78,7 +80,8 @@ oauth_scope = 'chat:write:bot'
 
 #slack_token = os.environ["SLACK_API_TOKEN"]
 slack_token = api_token
-sc = SlackClient(slack_token)
+#sc = SlackClient(slack_token)
+sc = WebClient(token=slack_token)
 
 project_info = j.get_project(project_name)
 content = json.loads(project_info)
@@ -231,10 +234,21 @@ report_attachment = json.dumps(
         }
     ])    
 
-sc.api_call(
-    "chat.postMessage",
-    channel=channel_number,
-    #text="Hello from Python! :tada:"
-    text=report_string,
-    #attachments=report_attachment 
-)
+#sc.api_call(
+#    "chat.postMessage",
+#    channel=channel_number,
+#    #text="Hello from Python! :tada:"
+#    text=report_string,
+#    #attachments=report_attachment 
+#)
+
+try:
+    response = sc.chat_postMessage(
+        channel='#qa-automation',
+        text=report_string)
+except SlackApiError as e:
+    # You will get a SlackApiError if "ok" is False
+    assert e.response["ok"] is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+    print(f"Got an error: {e.response['error']}")
+
