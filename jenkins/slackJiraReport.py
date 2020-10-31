@@ -172,7 +172,7 @@ report_string += f'>*Total Blocked:* {total_blocked}   {(total_blocked/total_cou
 report_string += f'>*Total NA:* {total_na}   {(total_na/total_counted)*100:.2f}%\n'
 report_string += f'>*Total WontExec:* {total_wontexec}   {(total_wontexec/total_counted)*100:.2f}%\n'
 if job_duration > 0:
-    report_string += f'>*Execution Time:* {job_duration/1000/60/60/60} hrs\n'
+    report_string += f'>*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs\n'
 
 if total_count != total_counted:
     report_string += f'*WARNING - total count did not add up. counted={total_counted} expected={total_count}*\n'
@@ -242,10 +242,13 @@ report_attachment = json.dumps(
 #    #attachments=report_attachment 
 #)
 
+print(report_string)
+
 try:
-    response = sc.chat_postMessage(
-        channel='#qa-automation',
-        text=report_string)
+    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
+    print('slack message:', response['response_metadata']['messages'])
+    if response['response_metadata']['messages']:
+        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
     assert e.response["ok"] is False
