@@ -28,7 +28,7 @@ class MexRest(WebService) :
         self._decode_content(stream=stream)
 
         if str(self.resp.status_code) != '200':
-            raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+            raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp_text).rstrip())
 
     def _decode_content(self, stream=False):
         try:
