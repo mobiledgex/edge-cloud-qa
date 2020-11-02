@@ -86,7 +86,7 @@ class MexOperation(MexRest):
                 # failures return a 200 for http streaming, so have to check the output for failure
                 if 'CreateAppInst' in url:
                     if 'Created AppInst successfully' not in str(self.resp_text):
-                        raise Exception('ERROR: AppInst not created successfully:' + str(self.resp_text))
+                        raise Exception(f'ERROR: AppInst not created successfully:{self.resp_text}')
                 if 'UpdateAppInst' in url:
                     if 'Ready' not in str(self.resp_text):
                         raise Exception('ERROR: AppInst not updated successfully:' + str(self.resp_text))
@@ -126,7 +126,12 @@ class MexOperation(MexRest):
                 #        #    self.thread_queue.put({thread_name:sys.exc_info()})
                 #        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
-                raise Exception(f'code={self.resp.status_code}', f'error={self.resp_text}')
+                if stream:
+                    fail_text = self.stream_output_str[0]
+                else:
+                    fail_text = self.resp_text
+
+                raise Exception(f'code={self.resp.status_code}', f'error={fail_text}')
 
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
