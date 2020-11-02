@@ -23,6 +23,7 @@ class WebService() :
     debug = False
     trace_file = None
     stream_output_bytes = []
+    stream_output_str = []
     stream_output = []
     resp_text = ''
     
@@ -54,6 +55,8 @@ class WebService() :
         #url_to_use = self._buildUrl(url)
         self.stream_output_bytes = []
         self.stream_output = []
+        self.stream_output_str = []
+        self.resp_text = ''
      
         timeout = None
         if stream:
@@ -61,16 +64,18 @@ class WebService() :
         
         try:
             self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
-
             logger.debug(f'resp={self.resp}')
             if stream:
                 for line in self.resp.iter_lines():
                     logging.debug(f'stream line={line}')
-                    #self.stream_output.append(json.loads(line.decode("utf-8")))
-                    self.stream_output_bytes.append(line)
+                    self.stream_output_str.append(line.decode("utf-8"))
+                    self.stream_output.append(json.loads(line.decode("utf-8")))
+                    #self.stream_output_bytes.append(line)
                 logger.debug('stream_output_bytes=' + str(self.stream_output_bytes))
+                self.resp_text = str(self.stream_output_str)
             else:
                 logger.debug('resp=' + str(self.resp.text))
+                self.resp_text = str(self.resp.text)
         except requests.exceptions.ConnectionError as e:
             if stream and 'Read timed out' in str(e):
                 logging.info(f'Read timeout while steaming:{e}')

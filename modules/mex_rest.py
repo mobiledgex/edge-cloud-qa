@@ -28,7 +28,7 @@ class MexRest(WebService) :
         self._decode_content(stream=stream)
 
         if str(self.resp.status_code) != '200':
-            raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp_text).rstrip())
+            raise Exception(f'ws did not return a 200 response. responseCode = {self.resp.status_code}. ResponseBody={self.resp_text.rstrip()}')
 
     def _decode_content(self, stream=False):
         try:
@@ -37,11 +37,9 @@ class MexRest(WebService) :
                     logger.debug(f'stream decode {line}')
                     self.stream_output.append(json.loads(line.decode("utf-8")))
                 logger.debug('decoded stream_output=' + str(self.stream_output))
-                self.resp_text = str(self.stream_output)
             else:
                 logger.debug('content=' + self.resp.content.decode("utf-8"))
                 self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
-                self.resp_text = self.decoded_data
         except Exception as e:
             logger.error(f'expception decoding result {e}')
             try:
