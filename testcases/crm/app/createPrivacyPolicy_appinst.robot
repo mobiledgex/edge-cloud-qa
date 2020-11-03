@@ -43,10 +43,10 @@ CreatePrivacyPolicy - shall be able to create docker dedicated appinst autoclust
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016,tcp:8085  image_type=ImageTypeDocker  deployment=docker
    ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
-   ${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
-   ${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
-   ${openstack_group_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
+   ${cloudname}=  Convert To Lowercase  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+   ${operator}=   Convert To Lowercase  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
+   ${openstack_group_name}=  Catenate  SEPARATOR=.  ${app[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
 
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    Should Be Equal  ${openstacksecgroup['name']}   ${openstack_group_name}
@@ -139,10 +139,10 @@ CreatePrivacyPolicy - shall be able to create k8s dedicated appinst autocluster 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes 
    ${app}=  Create App Instance  region=${region}  cluster_instance_name=${cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  autocluster_ip_access=IpAccessDedicated  privacy_policy=${policy_return['data']['key']['name']}
 
-   ${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
-   ${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
-   ${openstack_group_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
+   ${cloudname}=  Convert To Lowercase  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+   ${operator}=   Convert To Lowercase  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
+   ${openstack_group_name}=  Catenate  SEPARATOR=.  ${app[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
 
    ${openstacksecgroup}=  Get Security Groups  name=${openstack_group_name}
    Should Be Equal  ${openstacksecgroup['name']}   ${openstack_group_name}
@@ -238,8 +238,8 @@ CreatePrivacyPolicy - shall be able to create VM appinst with icmp/tcp/udp
    #${cloudname}=  Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
    #${operator}=   Convert To Lowercase  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
    #${openstack_group_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cluster_key']['name']}  ${cloudname}  ${operator}  mobiledgex.net-sg
-   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
-   @{uri_split}=  Split String  ${app['data']['uri']}  .
+   ${crmserver_name}=  Catenate  SEPARATOR=.  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${app[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}  pf
+   @{uri_split}=  Split String  ${app[0]['data']['uri']}  .
    ${openstack_group_name}=  Catenate  SEPARATOR=-  ${uri_split[0]}  sg
 
    @{serverlist}=  Get Server List  ${crmserver_name}
