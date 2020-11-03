@@ -18,47 +18,47 @@ ${developer_organization_name}=  mobiledgex
 ${region}=  EU
 
 *** Test Cases ***
-Metrics shall collect cloudlet ipusage metric 
-   [Documentation]
-   ...  request the last cloudlet ipusage metric
-   ...  verify info is correct
-   [Tags]  cloudlet  metrics
+#Metrics shall collect cloudlet ipusage metric 
+#   [Documentation]
+#   ...  request the last cloudlet ipusage metric
+#   ...  verify info is correct
+#   [Tags]  cloudlet  metrics
+#
+#   [Setup]  Setup Cloudlet Metrics
+#
+#   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=ipusage  last=5
+#
+#   Cloudlet IPUsage Metrics Headings Should Be Correct  ${metrics}
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   Cloudlet IPUsage Should Be In Range  ${metrics}
 
-   [Setup]  Setup Cloudlet Metrics
-
-   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=ipusage  last=5
-
-   Cloudlet IPUsage Metrics Headings Should Be Correct  ${metrics}
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   Cloudlet IPUsage Should Be In Range  ${metrics}
-
-Metrics shall collect cloudlet utilization metric 
-   [Documentation]
-   ...  request the last cloudlet ipusage metric
-   ...  verify info is correct
-   [Tags]  cloudlet  metrics
-
-   [Setup]  Setup Cloudlet Metrics
-
-   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=utilization  last=5
-
-   Cloudlet Utilization Metrics Headings Should Be Correct  ${metrics}
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   Cloudlet Utilization Should Be In Range  ${metrics}
+#Metrics shall collect cloudlet utilization metric 
+#   [Documentation]
+#   ...  request the last cloudlet ipusage metric
+#   ...  verify info is correct
+#   [Tags]  cloudlet  metrics
+#
+#   [Setup]  Setup Cloudlet Metrics
+#
+#   ${metrics}=         Get Cloudlet Metrics  region=${region}  token=${operator_token}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  selector=utilization  last=5
+#
+#   Cloudlet Utilization Metrics Headings Should Be Correct  ${metrics}
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   Cloudlet Utilization Should Be In Range  ${metrics}
 
 Metrics shall collect Cluster CPU metrics for IpAccessDedicated/Direct/docker 
    [Documentation]
@@ -1860,7 +1860,7 @@ App Disk Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 5000000000
 
 App Memory Should Be In Range
   [Arguments]  ${metrics}
@@ -1869,7 +1869,7 @@ App Memory Should Be In Range
 
    # verify values
    : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 400000000
+   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000000
 
 App Network Should Be In Range
    [Arguments]  ${metrics}
