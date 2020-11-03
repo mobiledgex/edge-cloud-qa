@@ -2,6 +2,7 @@
 
 import sys
 import os
+import glob
 import threading
 #print(sys.path)
 
@@ -436,14 +437,21 @@ def exec_testcase(z, t):
     #tmpdir = os.environ['TMPDIR']
     tmpdir = '/tmp/'
     tc_replace = tc.replace('/','')  # remove slash from filename
-    file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+    #file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
+    file_delete = tmpdir + "*" + t['issue_key'] + "*"
     file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time())) + ".out"
     file_extension = '.txt'
 
     # delete old files since /tmp eventually gets filled up
-    delete_cmd = "rm -f " + file_delete
-    logger.info("deleting " + delete_cmd)
-    subprocess.run(delete_cmd, shell=True, check=True)
+    #delete_cmd = "rm -f " + file_delete
+    logger.info("deleting " + file_delete)
+    #subprocess.run(delete_cmd, shell=True, check=True)
+    for f in glob.glob(file_delete):
+        try:
+            os.remove(f)
+        except Exception as e:
+            logging.info(f'remove failed:{e}')
+
 
     #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
     my_env = os.environ.copy()
