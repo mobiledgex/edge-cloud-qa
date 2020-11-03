@@ -127,7 +127,7 @@ class MexOperation(MexRest):
                 #        raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
 
                 if stream:
-                    fail_text = self.stream_output_str[0]
+                    fail_text = self.stream_output_str[-1]  # assume error is always the last line
                 else:
                     fail_text = self.resp_text
 
