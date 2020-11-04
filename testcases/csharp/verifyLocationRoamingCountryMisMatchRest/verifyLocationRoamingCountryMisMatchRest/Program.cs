@@ -117,7 +117,8 @@ namespace RestSample
 
                 Console.WriteLine("VerifyLocationRoamingCountryMisMatchRest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 //Set the location in the location server

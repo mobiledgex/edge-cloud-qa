@@ -51,7 +51,8 @@ namespace RestSample
 
                 Console.WriteLine("FindCloudletFailRest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 // Start location task:
