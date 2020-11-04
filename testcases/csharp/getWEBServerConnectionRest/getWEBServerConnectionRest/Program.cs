@@ -130,7 +130,8 @@ namespace RestSample
             {
                 Console.WriteLine("Get WEB Server Connections Testcase!!");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
 
                 FindCloudletReply findCloudletInfo = null;
