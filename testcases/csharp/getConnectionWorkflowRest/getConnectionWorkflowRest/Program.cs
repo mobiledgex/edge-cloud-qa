@@ -25,11 +25,6 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DistributedMatchEngine;
-using System.Net.Http;
-using System.Net.WebSockets;
-using System.Net.Security;
-using System.Security.Authentication;
-using System.Linq;
 
 namespace RestSample
 {
@@ -143,7 +138,8 @@ namespace RestSample
             {
                 Console.WriteLine("GetConnectionWorkflowRest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
