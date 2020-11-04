@@ -96,7 +96,6 @@ logging.info("project_id=%s version_id=%s" % (project_id, version_id))
 
 cycle_id = z.get_cycle_id(name=cycle_name, project_id=project_id, version_id=version_id)
 
-
 jiraQueryUrl = 'project="' + project_name + '" AND fixVersion="' + version_name + '" ORDER BY Issue ASC'
 offset = 0
 max_allowed = 0
@@ -246,8 +245,8 @@ print(report_string)
 
 try:
     response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
-    print('slack message:', response['response_metadata']['messages'])
-    if response['response_metadata']['messages']:
+    print('slack message:', response)
+    if 'response_metadata' in response and response['response_metadata']['messages']:
         response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
 except SlackApiError as e:
     # You will get a SlackApiError if "ok" is False
