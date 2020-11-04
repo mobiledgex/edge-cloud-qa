@@ -20,7 +20,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=NormalOperation
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
 
-   Should Not Contain  ${ret['data']}  maintenance_state  # we dont show 0 vaules
+   Should Not Contain  ${ret[0]['data']}  maintenance_state  # we dont show 0 vaules
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=NormalOperation      use_defaults=False
 
@@ -34,7 +34,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStart
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
-   Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal As Integers  ${ret[0]['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStart     use_defaults=False
 
@@ -48,7 +48,7 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
-   Should Be Equal As Integers  ${ret['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
+   Should Be Equal As Integers  ${ret[0]['data']['maintenance_state']}  31  # UNDER_MAINTENANCE
 
    ${ret}=  Update Cloudlet  region=${region}  operator_org_name=${operator}     cloudlet_name=${cloudlet}     maintenance_state=MaintenanceStartNoFailover      use_defaults=False
 
