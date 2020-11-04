@@ -64,14 +64,14 @@ Cluster with vcpus=1 and ram=1024 on openstack shall be m4.small
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.small
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.small 
+   Should Contain   ${server_info[0]['Flavor']}   .small
+   Should Contain   ${server_info[1]['Flavor']}   .small 
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.small 
+   Should Contain  ${cluster_inst.node_flavor}   .small 
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -93,14 +93,14 @@ Cluster with vcpus=2 and ram=2048 on openstack shall be m4.small
    Log to Console  DONE creating cluster instance
 
    ${server_info}=  Get Server List  name=${cluster_name}
-   Should Be Equal   ${server_info[0]['Flavor']}  m4.small
-   Should Be Equal   ${server_info[1]['Flavor']}  m4.small
+   Should Contain   ${server_info[0]['Flavor']}   .small
+   Should Contain   ${server_info[1]['Flavor']}   .small
 
    ${num_servers}=   Get Length  ${server_info}
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.small
+   Should Contain  ${cluster_inst.node_flavor}   .small
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -131,13 +131,13 @@ Cluster with vcpus=4 and ram=4096 on openstack shall be sdwan-ESC
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    FOR  ${x}  IN RANGE  0  ${num_servers}
-       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
-       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.large
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Contain   ${server_info[${x}]['Flavor']}   .small
+       ...  ELSE  Should Contain   ${server_info[${x}]['Flavor']}   .large
    END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
    #Should Be Equal  ${cluster_inst.node_flavor}   flavor_ESC_ESC 
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.large 
+   Should Contain   ${cluster_inst.node_flavor}   .large 
 
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
@@ -167,12 +167,12 @@ Cluster with vcpus=4 and ram=8192 and disk=40 on openstack shall be m4.large
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    FOR  ${x}  IN RANGE  0  ${num_servers}
-       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
-       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.large  
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Contain   ${server_info[${x}]['Flavor']}   .small
+       ...  ELSE  Should Contain   ${server_info[${x}]['Flavor']}   .large  
    END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.large
+   Should Contain   ${cluster_inst.node_flavor}   .large
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -201,12 +201,12 @@ Cluster with vcpus=8 and ram=16384 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    FOR  ${x}  IN RANGE  0  ${num_servers}
-       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
-       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.xlarge
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Contain   ${server_info[${x}]['Flavor']}   .small
+       ...  ELSE  Should Contain   ${server_info[${x}]['Flavor']}   .xlarge  
    END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
+   Should Contain  ${cluster_inst.node_flavor}    .xlarge
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -235,12 +235,12 @@ Cluster with vcpus=1 and ram=8192 and disk=1 on openstack shall be sdwan-ESC
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    FOR  ${x}  IN RANGE  0  ${num_servers}
-       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
-       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.large
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Contain   ${server_info[${x}]['Flavor']}   .small
+       ...  ELSE  Should Contain   ${server_info[${x}]['Flavor']}   .large
    END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.large 
+   Should Contain  ${cluster_inst.node_flavor}   .large 
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
@@ -269,12 +269,12 @@ Cluster with vcpus=1 and ram=1024 and disk=160 on openstack shall be m4.xlarge
    Should Be Equal As Numbers  ${num_servers}  2   # master + 1 nodes
 
    FOR  ${x}  IN RANGE  0  ${num_servers}
-       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Be Equal   ${server_info[${x}]['Flavor']}   m4.small
-       ...  ELSE  Should Be Equal   ${server_info[${x}]['Flavor']}   m4.xlarge
+       Run Keyword If   '${server_info[${x}]['Name']}' == '${server_info_node}'   Should Contain   ${server_info[${x}]['Flavor']}   .small
+       ...  ELSE  Should Contain   ${server_info[${x}]['Flavor']}   .xlarge
    END
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}     m4.xlarge
+   Should Contain   ${cluster_inst.node_flavor}   .xlarge
 	
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
