@@ -49,7 +49,8 @@ namespace RestSample
             {
                 Console.WriteLine("FindCloudletMCC_MNC_Rest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
