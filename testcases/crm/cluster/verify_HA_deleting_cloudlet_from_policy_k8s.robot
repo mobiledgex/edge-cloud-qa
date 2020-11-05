@@ -13,7 +13,7 @@ Suite Teardown  Cleanup
 
 *** Variables ***
 ${cloudlet1}  automationParadiseCloudlet
-${cloudlet2}  automationFairviewCloudlet
+${cloudlet2}  automationBeaconCloudlet
 ${operator_name_openstack}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
@@ -44,7 +44,7 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
    &{cloudlet1}=  create dictionary  name=automationParadiseCloudlet  organization=GDDT
-   &{cloudlet2}=  create dictionary  name=automationFairviewCloudlet  organization=GDDT
+   &{cloudlet2}=  create dictionary  name=automationBeaconCloudlet  organization=GDDT
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
    ${policy_return}=  Create Auto Provisioning Policy  region=EU  policy_name=${policy_name}   min_active_instances=1  max_instances=2  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
    log to console  ${policy_return}
