@@ -13,7 +13,7 @@ Suite Teardown  Cleanup
 
 *** Variables ***
 ${cloudlet1}  automationDusseldorfCloudlet
-${cloudlet2}  automationFrankfurtCloudlet
+${cloudlet2}  automationBerlinCloudlet
 ${operator_name_openstack}  TDG
 ${mobiledgex_domain}  mobiledgex.net
 ${region}      EU
@@ -44,7 +44,7 @@ Create Auto Provisioning Policy
    Log to Console  Create Auto Provisioning Policy with 2 min active instances and add two cloudlet to the policy
 
    &{cloudlet1}=  create dictionary  name=automationDusseldorfCloudlet  organization=TDG
-   &{cloudlet2}=  create dictionary  name=automationFrankfurtCloudlet  organization=TDG
+   &{cloudlet2}=  create dictionary  name=automationBerlinCloudlet  organization=TDG
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 
    ${policy_return}=  Create Auto Provisioning Policy  region=${region}  policy_name=${policy_name}  min_active_instances=1  max_instances=2  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
