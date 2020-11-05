@@ -3,6 +3,7 @@ import logging
 import json
 import sys
 import os
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,6 @@ class MexRest(WebService) :
     def post(self, url, data=None, bearer=None, stream=False, stream_timeout=5):
         #logging.debug(f'url={url} data={data} cert={self.root_cert}')
         logger.debug(f'url={url} data={data}')
-
         headers = {'Content-type': 'application/json', 'accept': 'application/json'}
         if bearer != None:
             headers['Authorization'] = 'Bearer ' + bearer
@@ -77,8 +77,8 @@ class MexRest(WebService) :
 
     def _findFile(self, path):
         for dirname in sys.path:
-            candidate = os.path.join(dirname, path)
-            if os.path.isfile(candidate):
-                return candidate
+            for ppath in Path(dirname).rglob(path):
+                if os.path.isfile(ppath) and ppath.name==path:
+                    return ppath
         raise Exception('cant find file {}'.format(path))
 
