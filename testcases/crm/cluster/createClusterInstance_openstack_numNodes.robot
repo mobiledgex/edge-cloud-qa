@@ -44,11 +44,11 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
 
    ${server_info_node}=    Get Server List  name=${openstack_node_name}
    ${server_info_master}=  Get Server List  name=${openstack_node_master}
-   Should Be Equal   ${server_info_node[0]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[1]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[2]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_node[3]['Flavor']}    m4.small
-   Should Be Equal   ${server_info_master[0]['Flavor']}  m4.small
+   Should Contain   ${server_info_node[0]['Flavor']}     .small
+   Should Contain   ${server_info_node[1]['Flavor']}     .small
+   Should Contain   ${server_info_node[2]['Flavor']}     .small
+   Should Contain   ${server_info_node[3]['Flavor']}     .small
+   Should Contain   ${server_info_master[0]['Flavor']}   .small
 
    ${num_servers_node}=     Get Length  ${server_info_node}
    ${num_servers_master}=   Get Length  ${server_info_master}
@@ -56,7 +56,7 @@ Cluster shall create with IpAccessShared and num_nodes=4 on openstack
    Should Be Equal As Numbers  ${num_servers_master}  1   # 1 master
 
    Should Be Equal  ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal  ${cluster_inst.node_flavor}   m4.small
+   Should Contain   ${cluster_inst.node_flavor}   .small
 
    #Sleep  120 seconds  #wait for metrics apps to build before can delete
 
