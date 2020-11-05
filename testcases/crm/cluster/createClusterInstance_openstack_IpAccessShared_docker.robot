@@ -46,7 +46,7 @@ ClusterInst shall create with IpAccessShared/docker on openstack
    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 nodes
 
    Should Be Equal             ${cluster_inst.flavor.name}   ${flavor_name}
-   Should Be Equal             ${cluster_inst.node_flavor}   m4.small
+   Should Contain              ${cluster_inst.node_flavor}   .small
    Should Be Equal As Numbers  ${cluster_inst.num_masters}   0
    Should Be Equal As Numbers  ${cluster_inst.num_nodes}     0
    Should Be Equal As Numbers  ${cluster_inst.ip_access}     3  #IpAccessShared
