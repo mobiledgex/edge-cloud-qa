@@ -491,7 +491,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb after adding 
    #Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Unable to find a free VM with internal network connectivity","code":400
    Should Contain  ${error}  Encountered failures: Create failed: Cluster VM create Failed: Failed to meet VM requirement
 
-   Create Stack  file=vmpool_template_1server.yml  name=${app_name}stack
+   ${ymlfile}=  Find File  vmpool_template_1server.yml
+   Create Stack  file=${ymlfile}  name=${app_name}stack
    Sleep  60  # wait for server to come up
    ${new_server}=  Get Server List  name=automationvmpool7
    ${networks}=  Split String  ${new_server[0]['Networks']}   separator=;
