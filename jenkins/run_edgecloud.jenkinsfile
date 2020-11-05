@@ -504,18 +504,18 @@ node('jenkinsSlave1'){
 	  build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'JobDuration', value: job_duration_string)]
        }
 
-       stage('run console tests') {
-          echo "running console tests"
-
-          for(int i=0; i < jobListConsole.size(); ++i) {
-             build job: jobListSequence[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
-          }
-       }
-
-       stage('slack console report') {
-          echo "slack report"
-          build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
-       }
+//       stage('run console tests') {
+//          echo "running console tests"
+//
+//          for(int i=0; i < jobListConsole.size(); ++i) {
+//             build job: jobListConsole[0], parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
+//          }
+//       }
+//
+//       stage('slack console report') {
+//          echo "slack report"
+//          build job: 'createReport', parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle_console)]
+//       }
 
    } else {
        echo "build was failure so not running any tests"
