@@ -31,7 +31,7 @@ CreateCloudlet - create with platformtype=VMPool but no vmpool shall return erro
 
    ${error}=  Run Keyword and Expect Error  *  Create Cloudlet  region=US  operator_org_name=${operator_organization}  platform_type=PlatformTypeVmPool
 
-   Should Contain   ${error}  {"result":{"message":"VM Pool is mandatory for PlatformTypeVmPool","code":400}}
+   Should Contain   ${error}   ('code=400', 'error={"message":"VM Pool is mandatory for PlatformTypeVmPool"}')
 
 # ECQ-2317
 CreateCloudlet - create with VMPool with no external address shall return error
