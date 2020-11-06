@@ -120,6 +120,23 @@ UpdateApp - user shall be able to update k8s/direct ports with user manifest
     Should Contain      ${app5.deployment_manifest}  - name: udp2${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 2${\n}${SPACE*4}targetPort: 2${\n}${SPACE*2}- name: udp3${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 3${\n}${SPACE*4}targetPort: 3${\n}${SPACE*2}- name: udp4${\n}${SPACE*4}protocol: UDP${\n}${SPACE*4}port: 4${\n}${SPACE*4}targetPort: 4${\n}
     Should Contain      ${app5.deployment_manifest}  ports:${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 3${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 4${\n}${SPACE*10}protocol: TCP${\n}${SPACE*8}- containerPort: 2${\n}${SPACE*10}protocol: UDP${\n}${SPACE*8}- containerPort: 3${\n}${SPACE*10}protocol: UDP${\n}${SPACE*8}- containerPort: 4${\n}${SPACE*10}protocol: UDP
     Should Be Equal     ${app5.access_ports}         tcp:2-4,udp:2-4
+
+# ECQ-2810
+UpdateApp - user shall not be able to update ports only with user manifest
+    [Documentation]
+    ...  - create an app with tcp access port and tcp manifest
+    ...  - verify app ports and manifest are correct
+    ...  - update the app with port only
+    ...  - verify proper error is received
+
+    ${app1}=  Create App  access_ports=${access_ports_tcp}  deployment_manifest=${manifest_tcp}
+
+    Should Be Equal     ${app1.deployment_manifest}  ${tcp_yml.text}
+    Should Be Equal     ${app1.access_ports}         ${access_ports_tcp}
+
+    ${error}=  Run Keyword and Expect Error  *  Update App  access_ports=${access_ports_udp}
+
+    Should Contain  ${error}  Kubernetes manifest which was previously specified must be provided again when changing access ports 
 	
 *** Keywords ***
 Setup
