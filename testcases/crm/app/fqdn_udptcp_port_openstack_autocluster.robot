@@ -28,6 +28,7 @@ ${http_page}       automation.html
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+#ECQ-1332
 User shall be able to access 2 UDP and 2 TCP ports on openstack and autocluster
     [Documentation]
     ...  deploy app with 2 UDP and 2 TCP ports with autocluster
