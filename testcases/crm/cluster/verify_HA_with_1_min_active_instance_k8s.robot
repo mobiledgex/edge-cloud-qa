@@ -6,7 +6,7 @@ Library         MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library		    MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 Library         MexApp
 
-Test Timeout     15 minutes
+Test Timeout     ${test_timeout_crm}
 
 Suite Setup      Setup
 Suite Teardown  Cleanup
