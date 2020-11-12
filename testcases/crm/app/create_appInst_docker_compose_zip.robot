@@ -45,7 +45,7 @@ User shall be able to deploy docker compose zip filed from artifactory
     ...  deploy the app to openstack
     ...  verify containers are running 
 
-    ${docker_compose_zip_full}=  Find File  ${docker_compose_zip_path}/${docker_compose_zip}
+    ${docker_compose_zip_full}=  Find File  ${docker_compose_zip}
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
