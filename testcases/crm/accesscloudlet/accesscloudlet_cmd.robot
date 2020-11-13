@@ -51,8 +51,8 @@ ${operator_name_openstack}=  TDG
 ${operator_name_vcd}=  packet
 ${cloudlet_name}=  ${cloudlet_name_openstack_shared}
 ${operator_name}=  ${operator_name_openstack}
-#${cloudlet_platform_type}=  PlatformTypeOpenstack 
-${cloudlet_platform_type}=  PlatformTypevSphere
+${cloudlet_platform_type}=  PlatformTypeOpenstack 
+#${cloudlet_platform_type}=  PlatformTypevSphere
 #${cloudlet_platform_type}=  PlatformTypeVCD
 ${mobiledgex_domain}=  mobiledgex.net
 
