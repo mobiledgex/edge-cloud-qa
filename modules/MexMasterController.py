@@ -1507,6 +1507,7 @@ class MexMasterController(MexRest):
         """ Send region DeleteAppInst for all instances filter by cloudlet
         """
         appinstances = self.show_app_instances(region=region, cloudlet_name=cloudlet_name)
+
         found_failure = False
         for app in appinstances:
             logging.info(f'deleting {app}')
@@ -1689,10 +1690,12 @@ class MexMasterController(MexRest):
                                        stderr=subprocess.PIPE,
                                        )
             stdout, stderr = process.communicate()
-            logging.info('verify returned:',stdout, stderr)
+            logging.info(f'stdout:{stdout} stderr:{stderr}')
             #print('*WARN*',stdout, stderr)
             if stderr:
                 raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
+
+            return stdout
         except subprocess.CalledProcessError as e:
             raise Exception("runCommanddd failed:", e)
         except Exception as e:
@@ -2299,9 +2302,9 @@ class MexMasterController(MexRest):
         return self.stream.stream_appinst(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=None, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms):
-        cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms}'
+        cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
-        self._run_command(cmd)
+        return json.loads(self._run_command(cmd).decode('utf-8'))
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
