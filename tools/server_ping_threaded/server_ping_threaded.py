@@ -59,15 +59,22 @@ def start_udp_ping(thread_name, port):
     while True:
         #num = random.randint(0,10)
         data, client_addr = ssocket.recvfrom(port)
-        writefile('start_udp_ping recved udp data from thread={} port={} data={}'.format(thread_name, port, data))
+        writefile(f'start_udp_ping recved udp data from address={client_addr}thread={thread_name} port={port} data={data}')
         #new_data = data.upper()
 
-        if data.decode('utf8') == 'exit':
-           writefile('start_udp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
-           conn.sendall(bytes('bye', encoding='utf-8'))
-           ssocket.shutdown(socket.SHUT_RDWR)
-           ssocket.close()
-           sys.exit()
+        try:
+           if data.decode('utf8') == 'exit':
+              writefile('start_udp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
+              conn.sendall(bytes('bye', encoding='utf-8'))
+              ssocket.shutdown(socket.SHUT_RDWR)
+              ssocket.close()
+              sys.exit()
+        except UnicodeDecodeError as e:
+           writefile(f'start_tcp_ping unicodecode error from address={addr} thread={thread_name} port={port} data={data}: {e}')
+           continue
+        except Exception as e:
+           writefile(f'start_tcp_ping unknown exception error from address={addr} thread={thread_name} port={port} data={data}: {e}')
+           continue
 
         ssocket.sendto(bytes('pong', encoding='utf-8'), client_addr)
     #    print('recved', data)
@@ -97,14 +104,21 @@ def start_tcp_ping(thread_name, port):
                #print('no data')
                break
 
-            writefile('start_tcp_ping recved tcp data from thread={} port={} data={}'.format(thread_name, port, data))
+            writefile(f'start_tcp_ping recved tcp data from address={addr} thread={thread_name} port={port} data={data}')
 
-            if data.decode('utf8') == 'exit':
-               writefile('start_tcp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
-               conn.sendall(bytes('bye', encoding='utf-8'))
-               ssocket.shutdown(socket.SHUT_RDWR)
-               ssocket.close()
-               sys.exit()
+            try:
+               if data.decode('utf8', 'strict') == 'exit':
+                  writefile('start_tcp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
+                  conn.sendall(bytes('bye', encoding='utf-8'))
+                  ssocket.shutdown(socket.SHUT_RDWR)
+                  ssocket.close()
+                  sys.exit()
+            except UnicodeDecodeError as e:
+               writefile(f'start_tcp_ping unicodecode error from address={addr} thread={thread_name} port={port} data={data}: {e}')
+               continue
+            except Exception as e:
+               writefile(f'start_tcp_ping unknown exception error from address={addr} thread={thread_name} port={port} data={data}: {e}')
+               continue
 
             conn.sendall(bytes('pong', encoding='utf-8'))
     #    print('recved', data)
@@ -271,6 +285,8 @@ _thread.start_new_thread(start_tcp_ping, ('Thread-' + str(thread_count), 2016))
 thread_count+=1
 #_thread.start_new_thread(start_tls_tcp_ping, ('Thread-' + str(thread_count), 3015))
 _thread.start_new_thread(start_port_thread, ('Thread-' + str(thread_count), 4015))
+thread_count+=1
+_thread.start_new_thread(start_tcp_ping, ('Thread-' + str(thread_count), 8000))  # used to be used by backend but customer wanted to use it for app. EDGECLOUD-3833
 thread_count+=1
 
 writefile('starting websocket server')
