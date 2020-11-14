@@ -76,7 +76,7 @@ class AlertReceiver(MexOperation):
             cluster_key_dict['cluster_key'] = {'name': cluster_instance_name}
         if cluster_instance_developer_org_name is not None:
             cluster_key_dict['organization'] = cluster_instance_developer_org_name
-        if app_cloudlet_key_dict is not None:
+        if app_cloudlet_key_dict:
             cluster_key_dict['cloudlet_key'] = app_cloudlet_key_dict
 
         if app_key_dict:
@@ -102,8 +102,8 @@ class AlertReceiver(MexOperation):
             msg_dict_delete = msg_delete
 
         msg_dict_show = None
-        if 'name' in msg:
-            msg_show = self._build(receiver_name=msg['name'], use_defaults=False)
+        if 'name' in msg and 'type' in msg and 'severity' in msg:
+            msg_show = self._build(receiver_name=msg['name'], type=msg['type'], severity=msg['severity'], use_defaults=False)
             msg_dict_show = msg_show
  
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
@@ -173,21 +173,21 @@ class AlertReceiver(MexOperation):
 
         raise Exception('slack message not found')
 
-    def verify_email(self, email_address, email_password, alert_type, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, server='imap.gmail.com', wait=30):
         mail = imaplib.IMAP4_SSL(server)
         mail.login(email_address, email_password)
         mail.select('inbox')
         logger.debug(f'successfully logged into {email_address}')
 
-        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_type}")')
+        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_name}")')
         mail_ids_pre = email_list[0].split()
         num_emails_pre = len(mail_ids_pre)
-        logger.debug(f'originally found {num_emails_pre} with {alert_type}')
+        logger.debug(f'originally found {num_emails_pre} with {alert_name}')
         #num_emails_pre=0
         
         for attempt in range(wait):
             mail.recent()
-            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_type}")')
+            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_name}")')
             mail_ids = email_list[0].split()
             num_emails = len(mail_ids)
             logging.info(f'number of emails found is {num_emails}')
@@ -204,10 +204,11 @@ class AlertReceiver(MexOperation):
                         logger.debug(f'subject={email_subject}')
  
                         #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
-                        if f'{alert_name} Application: {app_name} Version: {app_version}' in email_subject:
+                        subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                        if alert_type in email_subject and subject_to_check in email_subject:
                             logger.info(f'subject{email_subject}  verified')
                         else:
-                            raise Exception(f'subject not found. Expected[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}. Got {email_subject}')
+                            raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
  
                         if msg.is_multipart():
                             for part in msg.walk():
