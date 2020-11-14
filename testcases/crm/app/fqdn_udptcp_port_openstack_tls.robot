@@ -76,7 +76,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
    Log To Console  Creating Cluster Instance
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
    Log To Console  Done Creating Cluster Instance
 
    ${cluster_name_default}=  Get Default Cluster Name
@@ -85,7 +85,7 @@ User shall be able to access TCP and HTTP TLS ports with cluster=k8s/dedicated a
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
    #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015:tls,tcp:2016:tls,http:8085:tls,udp:2016  image_type=ImageTypeDocker  access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -122,7 +122,7 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
    #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
@@ -189,7 +189,7 @@ User shall be able to access TCP TLS ports with cluster=docker/shared and app=do
 
    #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
 
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessShared  deployment=docker
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}

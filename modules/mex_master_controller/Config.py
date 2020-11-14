@@ -12,17 +12,33 @@ class Config(MexOperation):
         self.update_url = '/auth/config/update'
         self.show_url = '/auth/config/show'
 
-     #curl -X POST "https://console-qa.mobiledgex.net:443/api/v1/auth/config/update" -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -k --data-raw '{"skipverifyemail":true}'
-    def _build(self, skip_verify_email=None):
+     #curl -X POST "https://console-qa.mobiledgex.net:443/api/v1/auth/config/update" -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" -k --data-raw '{"adminpasswordmincracktimesec":63072000,"locknewaccounts":true,"notifyemailaddress":"mexcontester@gmail.com","passwordmincracktimesec":2592000,"skipverifyemail":true}'
+
+    def _build(self, skip_verify_email=None, lock_accounts=None, notify_email=None, user_pass=None, admin_pass=None):
         configverify_dict = {}
   
         if skip_verify_email is not None:
             configverify_dict['skipverifyemail'] = skip_verify_email
+        if lock_accounts is not None:
+            configverify_dict['locknewaccounts'] = lock_accounts
+        if notify_email is not None:
+            configverify_dict['notifyemailaddress'] = notify_email
+        if user_pass is not None:
+            configverify_dict['passwordmincracktimesec'] = user_pass
+        if admin_pass is not None:
+            configverify_dict['adminpasswordmincracktimesec'] = admin_pass
 
         return configverify_dict
 
-    def skip_verify_config(self, token=None, skip_verify_email=None, use_defaults=True, use_thread=False):
-        msg = self._build(skip_verify_email=skip_verify_email)
+    def show_config(self, token=None,  use_defaults=False, use_thread=False):
+        msg = self._build()
+        msg_show = msg
+
+        return self.show(token=token, url=self.show_url, use_defaults=True, use_thread=use_thread, message=msg_show)[0]
+
+    def update_config(self, token=None, skip_verify_email=None, lock_accounts=None, notify_email=None,  user_pass=None, admin_pass=None, use_defaults=True, use_thread=False):
+        msg = self._build(skip_verify_email=skip_verify_email, lock_accounts = lock_accounts, notify_email= notify_email, user_pass = user_pass, admin_pass = admin_pass)
         msg_show = msg 
 
         return self.update(token=token, show_msg=msg_show, url=self.update_url, show_url=self.show_url, use_defaults=use_defaults, use_thread=use_thread, message=msg)
+

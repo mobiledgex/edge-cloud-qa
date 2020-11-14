@@ -14,6 +14,7 @@ import time
 import subprocess
 import argparse
 import html
+import itertools
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = '***REMOVED***'
@@ -35,13 +36,23 @@ python_path = '$WORKSPACE/go/src/github.com/mobiledgex/protos:$WORKSPACE/go/src/
 found_failure = -1
 number_failed = 0
 number_passed = 0
+delay_between_tests = 10
+testcase_timeout = '60m'
+
+crm_pool_round_robin = None
+crm_pool_var = None
 
 def main():
+    starttime = time.time()
+
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
     args = parser.parse_args()
 
     num_executors = 1
+
+    global crm_pool_round_robin
+    global crm_pool_var
     
     print(os.environ)
     cycle = os.environ['Cycle']
@@ -55,7 +66,13 @@ def main():
     #httpTrace = os.environ['httpTrace']
     if 'NumberParallelExecutions' in os.environ:
         num_executors = int(os.environ['NumberParallelExecutions'])
-    
+
+    #export CRMPool="{\"cloudlet_name_openstack_shared\":[{\"cloudlet\":\"automationHawkinsCloudlet\",\"operator\":\"GDDT\",\"region\":\"EU\"},{\"cloudlet\":\"packet-qaregression\",\"operator\":\"packet\",\"region\":\"US\"},{\"cloudlet\":\"automationParadiseCloudlet\",\"operator\":\"GDDT\",\"region\":\"EU\"}]}"
+    if 'CRMPool' in os.environ:
+        crm_pool_dict = json.loads(os.environ['CRMPool'])
+        crm_pool_var = list(crm_pool_dict)[0]
+        crm_pool_round_robin = itertools.cycle(crm_pool_dict[list(crm_pool_dict)[0]])
+            
     #print(httpTrace)
     #if httpTrace == 'true':
     #    httpTrace = 1
@@ -85,8 +102,8 @@ def main():
     #    logging.getLogger().setLevel(logging.DEBUG)
 
     #logging.info("cycle=%s version=%s project=%s summary=%s rhc=%s workspace=%s httpTrace=%s" % (cycle, version, project, summary, rhc, workspace, httpTrace))
-    logging.info("cycle=%s version=%s project=%s component=%s workspace=%s" % (cycle, version, project, component, workspace))
-        
+    logging.info(f'cycle={cycle} version={version} project={project} component={component} numexecutors={num_executors} workspace={workspace} cmrpool={crm_pool_dict} crm_pool_round_robin={crm_pool_round_robin}')
+
     #z = zapi.Zapi(username = username, password = password)
     z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=False)
     j = jiraapi.Jiraapi(username=username, token=jira_token)
@@ -99,7 +116,10 @@ def main():
         if v['name'] == version:
             version_id = v['id']
     cycle_id = z.get_cycle_id(name=cycle, project_id=project_id, version_id=version_id)
-
+    if not cycle_id:
+        logging.error(f'cycle id not for found for cycle={cycle}')
+        sys.exit(1)
+        
     #z.get_server_info()
     #z.get_cycles(project_id=10006, version_id=10007)
     #sys.exit(1)
@@ -158,7 +178,10 @@ def main():
     #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
     exec_status = exec_testcases_parallel(z, tc_list, num_executors)
     print("exec_status=" + str(exec_status))
-          
+
+    endtime = time.time()
+    print(f'test duration is {(endtime-starttime)/60} minutes')
+
     sys.exit(exec_status)
 
 def get_testcases(z, result, cycle_id, project_id, version_id):
@@ -325,7 +348,8 @@ def exec_testcases_parallel(z, l, num_executors):
     global found_failure
     global number_passed
     global number_failed
-    
+    global crm_pool_round_robin
+
     threads = []
     
     logging.info('number of testcases is ' + str(len(l)))
@@ -338,7 +362,7 @@ def exec_testcases_parallel(z, l, num_executors):
             thread = threading.Thread(target=exec_testcase, args=(z,p))
             threads += [thread]
             thread.start()
-            time.sleep(30)  # wait between starting each testcase
+            time.sleep(delay_between_tests)  # wait between starting each testcase
             #print(l[t]['tc'],l[t+num_executors-1]['tc'])
 
         for x in threads:
@@ -354,6 +378,8 @@ def exec_testcase(z, t):
     global found_failure
     global number_passed
     global number_failed
+    global crm_pool_round_robin
+    global crm_pool_var
     
     print('tc',t['tc'])
     last_status = 'unset'
@@ -420,22 +446,53 @@ def exec_testcase(z, t):
     subprocess.run(delete_cmd, shell=True, check=True)
 
     #exec_cmd = "export AUTOMATION_RHCIP=" + rhc + ";./" + t['tc'] + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
+    my_env = os.environ.copy()
     if tc_type == 'robot':
         robot_file = find(tc, os.environ['WORKSPACE'])
         #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp ./" + os.path.basename(t['tc'])
         xml_output = file_output + '.xml'
         var_cmd = ''
         variable_file = ''
+        var_override_cmd = ''
+
         if 'VariableFile' in os.environ:
             variable_file = os.environ['VariableFile']
         if len(variable_file) > 0:
             variable_file_full = find(variable_file, os.environ['WORKSPACE'])
             var_cmd = f'--variablefile {variable_file_full}'
+        if crm_pool_round_robin:
+            print('round')
+            next_crm = next(crm_pool_round_robin)
+            logging.info(f'executing on pool={next_crm}')
+            region = next_crm['region']
+            cloudlet = next_crm['cloudlet']
+            operator = next_crm['operator']
+            var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable operator_name_openstack:{operator} --variable region:{region}'
+
+            env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
+            openstack_file = find(f'openrc_{cloudlet}.mex', os.environ['WORKSPACE'])
+            logging.info(f'using env_file={env_file} openstack_file={openstack_file}')
+
+            my_env['AUTOMATION_OPENSTACK_DEDICATED_ENV'] = openstack_file
+            my_env['AUTOMATION_OPENSTACK_SHARED_ENV'] = openstack_file
+            my_env['AUTOMATION_OPENSTACK_VM_ENV'] = openstack_file
+            my_env['AUTOMATION_OPENSTACK_GPU_ENV'] = openstack_file
+            
+            with open(env_file) as f:
+                lines = f.readlines()
+                for line in lines:
+                    if '=' in line:
+                        var,value = line.split('=')
+                        value = value.strip()
+                        logging.info(f'adding env {var}={value}')
+                        my_env[var] = value
+            logging.debug(f'my_env={my_env}')
+        #sys.exit(1)
         if robot_tcname:
-            exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' -t \"' + robot_tcname + '\" ' + robot_file
+            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --output {xml_output} --log {file_output} -t \"{robot_tcname}\" {robot_file}'
         else:
             #exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";robot --outputdir /tmp --output " + xml_output + " --log " + file_output + " ./" + tc
-            exec_cmd = 'export PYTHONPATH=' + python_path + ';robot --loglevel TRACE ' + var_cmd + ' --outputdir /tmp --output ' + xml_output + ' --log ' + file_output + ' ' + robot_file
+            exec_cmd = f'export PYTHONPATH={python_path};robot --loglevel TRACE {var_cmd} {var_override_cmd} --outputdir /tmp --output {xml_output} --log {file_output} {robot_file}'
         #file_output = '/tmp/log.html'
         file_extension = '.html'
     elif tc_type == 'python':
@@ -451,11 +508,21 @@ def exec_testcase(z, t):
     #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
     logging.info("executing " + exec_cmd)
     try:
+        exec_file = f'{file_output}.exec'
+        logging.info(f'writing exec file {exec_file}')
+        with open(exec_file, 'w') as f:
+            f.write(exec_cmd)
+    except Exception as e:
+        logging.info(f'exec file write error {e}')
+    try:
         exec_start = time.time()
-        r = subprocess.run(exec_cmd, shell=True, check=True)
+        exec_cmd = f'timeout {testcase_timeout} bash "{exec_file}" && rm {file_output}.exec'
+        logging.info("subprocess " + exec_cmd)
+        r = subprocess.run(exec_cmd, shell=True, check=True, env=my_env)
+        logging.info(f'subprocess returncode={r.returncode}')
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
-        comment = html.escape('{"start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_stop) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1, comment=comment)
         #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
         logging.info(f'test passed:{t["issue_key"]} number_passed={number_passed} number_failed={number_failed}')

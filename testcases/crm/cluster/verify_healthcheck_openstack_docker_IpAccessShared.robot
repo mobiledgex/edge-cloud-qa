@@ -26,6 +26,7 @@ ${mobiledgex_domain}  mobiledgex.net
 ${docker_image}    docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:8.0
 ${docker_command}  ./server_ping_threaded.py
 ${http_page}       automation.html
+${docker_compose_url}=  http://35.199.188.102/apps/server_ping_threaded_compose.yml
 
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -301,13 +302,13 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App and App Instance
-    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker
+    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  image_type=ImageTypeDocker  deployment=docker  deployment_manifest=${docker_compose_url}
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  auto_delete=False
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default} 
-    Update App  region=${region}  access_ports=tcp:2015,tcp:2016,tcp:4015
+    Update App  region=${region}  access_ports=tcp:2015,tcp:2016,tcp:4015  deployment_manifest=${docker_compose_url}
 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  auto_delete=False
 
@@ -323,7 +324,7 @@ IpAccessShared docker - healthcheck shows proper state after UpdateApp
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 
     Delete App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
-    Update App  region=${region}   skip_hc_ports=tcp:2016
+    Update App  region=${region}   skip_hc_ports=tcp:2016  deployment_manifest=${docker_compose_url}
 
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
