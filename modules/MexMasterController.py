@@ -388,7 +388,7 @@ class MexMasterController(MexRest):
             self._create_classes()
             return self.token
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         namestamp = str(time.time())
         url = self.root_url + '/usercreate'
         payload = None
@@ -450,7 +450,8 @@ class MexMasterController(MexRest):
                 self._number_createuser_requests_fail += 1
                 raise Exception("post failed:", e)
 
-            self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
+            if auto_delete == True:
+                self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
 
         self.username = username
         self.password = password
@@ -697,7 +698,7 @@ class MexMasterController(MexRest):
             #return self.decoded_data
             return resp
 
-    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         #orgstamp = str(time.time())
         url = self.root_url + '/auth/org/create'
         payload = None
@@ -745,7 +746,8 @@ class MexMasterController(MexRest):
 
                 shared_variables.operator_name_default = org_dict['name']
                 
-                self.prov_stack.append(lambda:self.delete_org(orgname=org_dict['name'], token=self.super_token))
+                if auto_delete == True:
+                    self.prov_stack.append(lambda:self.delete_org(orgname=org_dict['name'], token=self.super_token))
 
             except Exception as e:
                 self._number_createorg_requests_fail += 1
@@ -1453,6 +1455,7 @@ class MexMasterController(MexRest):
             if self.organization_name:
                 developer_org_name = self.organization_name
                 cluster_instance_developer_name = self.organization_name
+
         return self.cluster_instance.create_cluster_instance(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, use_defaults=use_defaults)
 
 #        url = self.root_url + '/auth/ctrl/CreateClusterInst'
@@ -1739,7 +1742,7 @@ class MexMasterController(MexRest):
                                     #label, link = line.split('Click to verify:')
                                     self._verify_link = line.rstrip()
 
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadmin123 --skipverify'
+                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadminfastedgecloudinfra --skipverify'
                                     logging.info('login with:' + cmd)
                                     self._run_command(cmd)
                                     cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
@@ -2342,10 +2345,40 @@ class MexMasterController(MexRest):
     def access_cloudlet(self, region=None, node_name=None, node_type=None, cloudlet_name=None, operator_org_name=None, command=None, token=None, json_data=None, use_defaults=True, use_thread=False):
         return self.run_cmd.access_cloudlet(node_name=node_name, node_type=node_type, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, command=command, token=token, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_config(self, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.show_config(token=token, use_defaults=use_defaults, use_thread=use_thread)
+
     def skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
         if token is None:
             token=self.super_token
-        return self.config.skip_verify_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
+        return self.config.update_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_skip_verify_email(self, skip_verify_email=True, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, skip_verify_email=skip_verify_email, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_lock_accounts_config(self, lock_accounts=True, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, lock_accounts = lock_accounts, use_defaults=use_defaults, use_thread=use_thread)
+
+    def set_notify_email_config(self, notify_email=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, notify_email= notify_email, use_defaults=use_defaults, use_thread=use_thread)
+    
+    def set_user_pass_strength_config(self, user_pass=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, user_pass = user_pass, use_defaults=use_defaults, use_thread=use_thread)
+    
+    def set_admin_pass_strength_config(self, admin_pass=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, admin_pass = admin_pass, use_defaults=use_defaults, use_thread=use_thread)
 
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:

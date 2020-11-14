@@ -312,4 +312,5 @@ MC - User shall not be able to create the user with a weak password
 *** Keywords ***
 Setup
 	Login
+        Skip Verify Email
 

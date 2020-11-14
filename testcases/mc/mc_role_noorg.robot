@@ -362,6 +362,7 @@ Setup
    Verify Email  email_address=${emailepoch}
    ${userToken}=  Login  username=${epochusername}  password=${password}
 
+   Skip Verify Email
    Create User  username=${adminuser}   password=${userpass}   email_address=${adminuseremail}    email_check=False
    Unlock User
 #   Verify Email  email_address=${adminuseremail}

@@ -24,8 +24,8 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port for Dock
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tcp:2016
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"XXX"}')
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  access_type=Direct  skip_hc_ports=tcp:2016
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"SkipHcPorts not supported for type: ACCESS_TYPE_DIRECT"}')
 
 CreateApp - User shall not be able to CreateApp to include skip_hc_port for vm based app with AccessTypeDirect
     [Documentation]
@@ -38,7 +38,7 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port for vm b
     Log To Console  Creating App
     ${error_msg}=  Run Keyword And Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   region=${region}  skip_hc_ports=tcp:2016
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"XXX"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"SkipHcPorts not supported for type: ACCESS_TYPE_DIRECT"}')
 
 CreateApp - User shall not be able to CreateApp if skip_hc_port is not one of the access ports 
     [Documentation]
@@ -51,7 +51,7 @@ CreateApp - User shall not be able to CreateApp if skip_hc_port is not one of th
     Log To Console  Creating App
     ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  skip_hc_ports=tcp:2017
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"XXX"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"SkipHcPort 2017 not found in accessPorts"}')
 
 CreateApp - User shall not be able to CreateApp to include skip_hc_port when invalid protocol is specified
     [Documentation]
@@ -62,7 +62,7 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port when inv
 
     Log To Console  Creating App
     ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tc:2016
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Unsupported protocol: tc"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot parse skipHcPorts: Unsupported protocol: tc"}')
 
 CreateApp - User shall not be able to CreateApp to include skip_hc_port when invalid port number is specified
     [Documentation]
@@ -73,7 +73,7 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port when inv
 
     Log To Console  Creating App
     ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tcp:0
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"App ports out of range"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot parse skipHcPorts: App ports out of range"}')
 
 *** Keywords ***
 Setup
