@@ -294,13 +294,17 @@ class MexApp(object):
     def set_cpu_load(self, host, port, load_percentage):
         data = f'load={load_percentage}'
         logging.info(f'setting CPU load to {load_percentage}%')
+        return_data = None
         try:
             return_data = self._send_tcp_data(host, port, data).decode('utf-8')
         except Exception as e:
-            logging.debug(f'tcp exception caught:{e}')
+            logging.error(f'tcp exception caught:{e}')
+            raise Exception(e)
 
         if return_data != 'pong':
-            raise Exception('correct data not received from server. expected=' + pong + ' got=' + return_data.decode('utf-8'))
+            raise Exception(f'correct data not received from server. expected=pong got={return_data}')
+
+        return return_data
 
     def egress_port_should_be_accessible(self, vm, host, protocol, port, vm_port=3015, wait_time=0):
         data = f'{host}:{protocol}:{port}'
