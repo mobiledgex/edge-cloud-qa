@@ -337,7 +337,8 @@ class MexDmeRest(MexRest):
         
         process = subprocess.run(cmd,
                                  shell=True,
-                                 text=True,
+        #                         text=True,
+                                 universal_newlines=True,  # same as text option, for older python versions
                                  capture_output=True
         )
         

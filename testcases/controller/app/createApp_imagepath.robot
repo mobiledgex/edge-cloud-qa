@@ -29,7 +29,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=ku
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid registry path"
     #Should Contain  ${error_msg}  details = "Get https://docker.registry.com/v2/app/tags/list: remote error: tls: internal error"
-    Should Contain  ${error_msg}  details = "Failed to validate docker registry image, path docker.registry.com/app, Get https://docker.registry.com/v2/app/tags/list: EOF" 
+    Should Contain  ${error_msg}  details = "Failed to validate docker registry image, path docker.registry.com/app, Get "https://docker.registry.com/v2/app/tags/list": EOF" 
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=kubernetes image_path and no latest
     [Documentation]
@@ -81,7 +81,7 @@ CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=do
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid registry path"
-    Should Contain  ${error_msg}  details = "Failed to validate docker registry image, path docker.registry.com/app, Get https://docker.registry.com/v2/app/tags/list: EOF" 
+    Should Contain  ${error_msg}  details = "Failed to validate docker registry image, path docker.registry.com/app, Get "https://docker.registry.com/v2/app/tags/list": EOF" 
 
 CreateApp - error shall be received wih image_type=ImageTypeDocker deployment=docker image_path and no latest
     [Documentation]
@@ -124,7 +124,7 @@ CreateApp - error shall be received with image_type=ImageTypeQCOW deployment=vm 
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 #    Should Contain  ${error_msg}   details = "imagepath should be full registry URL: <domain-name>/<registry-path>"
-    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path mypath#md5:12345678901234567890123456789012, Get mypath#md5:12345678901234567890123456789012: unsupported protocol scheme """ 
+    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path mypath#md5:12345678901234567890123456789012, Get "mypath#md5:12345678901234567890123456789012": unsupported protocol scheme """ 
 
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path of bad domain
     [Documentation]
@@ -135,7 +135,7 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid registry path"
-    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path docker.registry.com/app#md5:12345678901234567890123456789012, Get docker.registry.com/app#md5:12345678901234567890123456789012: unsupported protocol scheme """ 
+    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path docker.registry.com/app#md5:12345678901234567890123456789012, Get "docker.registry.com/app#md5:12345678901234567890123456789012": unsupported protocol scheme """ 
 
 # ECQ-1370 - removed from automation since qa vault now has access to artifactory and artifactory-qa. But retested bug manually
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
@@ -169,7 +169,7 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
                                                                                                                    
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid image path"
-    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199, Get htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199: unsupported protocol scheme "htt""
+    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199, Get "htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199": unsupported protocol scheme "htt""
 
 *** Keywords ***
 Setup

@@ -105,11 +105,11 @@ class MexOperation(MexRest):
                 elif url.endswith('DeleteCloudlet'):
                     if 'Deleted Cloudlet successfully' not in str(self.resp.text):
                         raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
-                elif url.endswith('UpdateCloudlet'):
-                    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
-                        pass
-                    else:
-                        raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
+                #elif url.endswith('UpdateCloudlet'):
+                #    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
+                #        pass
+                #    else:
+                #        raise Exception('ERROR: Cloudlet not updated successfully:' + str(self.resp.text))
             except Exception as e:
                 logger.info('operation failed:' + str(sys.exc_info()))
                 self.counter_dict[message_type]['req_fail'] += 1
