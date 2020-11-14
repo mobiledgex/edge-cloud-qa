@@ -2,7 +2,7 @@
 Documentation  CreateAlertReceiver
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
-Library  String
+Library  Collections 
      
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -21,21 +21,21 @@ CreateAlertReceiver - shall be able to create email alert
    ...  - send alertreceiver create with type=email and suppored severities and app/cloudlets
    ...  - verify alertreceiver is created
 
-   EDGECLOUD-3854 unable to delete alertreceivers with special chars
+   #EDGECLOUD-3904 alertreceiver create with cloudlet-org not configuring correctly
 
    [Template]  Create an Alert Receiver
+      # cluster
+#      type=email  severity=info     cluster_instance_developer_org_name=${developer}
+
       # cloudlet
       type=email  severity=info     operator_org_name=${developer}
-      name=my alert  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}  cloudlet_name=x
       type=email  severity=warning     operator_org_name=${developer}
       type=email  severity=warning     operator_org_name=${developer}  cloudlet_name=x
       type=email  email_address=x@x.com  severity=error     operator_org_name=${developer}
-      name=dfafasfasfasfafafafafafasffafafafasfafafafa af asf asdf asdf asdf asdf asdfasdfas dfasdfasdf  type=email  severity=error     operator_org_name=${developer}  cloudlet_name=x
 
       # app
       type=email  severity=info     developer_org_name=${developer}  
       type=email  severity=warning     developer_org_name=${developer}  app_name=x
-      name=12345  type=email  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
       type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  
       type=email  email_address=x@x.com  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y
       type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg
@@ -48,10 +48,20 @@ CreateAlertReceiver - shall be able to create email alert
       type=email  severity=error     developer_org_name=${developer}  app_cloudlet_org=appcloudlet
 
       # app and cloudlet
-      type=email  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
-      name=!@@#$%%#@$  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}   developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+      #type=email  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
 
-      # add show checks for each once show filter is there
+      # receiver name
+      receiver_name=x          type=email  severity=info     developer_org_name=${developer}
+      receiver_name=1          type=email  severity=info     developer_org_name=${developer}
+      receiver_name=0x         type=email  severity=info     developer_org_name=${developer}
+      receiver_name=x_x        type=email  severity=info     developer_org_name=${developer}
+      receiver_name=x.xx       type=email  severity=info     developer_org_name=${developer}
+      receiver_name=x,xx       type=email  severity=info     developer_org_name=${developer}
+      receiver_name=x!xx       type=email  severity=info     developer_org_name=${developer}
+      receiver_name=x .&_!,xx  type=email  severity=info     developer_org_name=${developer}
+      receiver_name=dfafasfasfasfafafafafafasffafafafasfafafafa af asf asdf asdf asdf asdf asdfasdfas dfasdfasdf  type=email  severity=error     operator_org_name=${developer}  cloudlet_name=x
+      receiver_name=12345  type=email  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
+      receiver_name=my alert  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}  cloudlet_name=x
 
 CreateAlertReceiver - shall be able to create slack alert
    [Documentation]
@@ -82,37 +92,69 @@ CreateAlertReceiver - shall be able to create slack alert
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     developer_org_name=${developer}  app_cloudlet_org=appcloudlet
 
    # app and cloudlet
-      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
-      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}   developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+   #   type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
+   #   type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}   developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+
+      # receiver name
+      receiver_name=x          type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=1          type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=0x         type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x_x        type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x.xx       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x,xx       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x!xx       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x .&_!,xx  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
 
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
-   ${receiver_name}=  Get Default Alert Receiver Name
-   ${developer_name}=  Get Default Developer Name
+   ${receiver_name_default}=  Get Default Alert Receiver Name
 
-   Set Suite Variable  ${receiver_name}
-   Set Suite Variable  ${developer_name}
+   Set Suite Variable  ${receiver_name_default}
 
 Create An Alert Receiver
-   [Arguments]  ${name}=${None}  ${type}=slack  ${severity}=${None}  ${developer_org_name}=${None}  ${app_name}=${None}  ${app_version}=${None}  ${app_cloudlet_name}=${None}  ${app_cloudlet_org}=${None}  ${cluster_instance_name}=${None}  ${cluster_instance_developer_org_name}=${None}  ${cloudlet_name}=${None}  ${operator_org_name}=${None}  ${slack_channel}=${None}  ${slack_api_url}=${None}  ${email_address}=${None}
- 
-   ${name}=  Set Variable If  '${Name}' == '${None}'  ${receiver_name}${counter}  ${Name}
+   [Arguments]  &{parms}
+   #[Arguments]  ${name}=${None}  ${type}=slack  ${severity}=${None}  ${developer_org_name}=${None}  ${app_name}=${None}  ${app_version}=${None}  ${app_cloudlet_name}=${None}  ${app_cloudlet_org}=${None}  ${cluster_instance_name}=${None}  ${cluster_instance_developer_org_name}=${None}  ${cloudlet_name}=${None}  ${operator_org_name}=${None}  ${slack_channel}=${None}  ${slack_api_url}=${None}  ${email_address}=${None}
 
-   ${alert}=  Create Alert Receiver  receiver_name=${name}  type=${type}  severity=${severity}     developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  app_cloudlet_name=${appcloudlet_name}  app_cloudlet_org=${app_cloudlet_org}  cluster_instance_name=${cluster_instance_name}   cluster_instance_developer_org_name=${cluster_instance_developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  email_address=${email_address}
+   &{parms}=  Run Keyword If  'receiver_name' not in ${parms}  Set To Dictionary  ${parms}  receiver_name=${receiver_name_default}${counter}  ELSE  Set Variable  ${parms}
+   ${counter}=  Evaluate  ${counter} + 1
+   Set Test Variable  ${counter}
+ 
+   #${name}=  Set Variable If  '${Name}' == '${None}'  ${receiver_name}${counter}  ${Name}
+
+   ${alert}=  Create Alert Receiver  &{parms}  token=${token}  use_defaults=${False}
+
+   #${alert}=  Create Alert Receiver  receiver_name=${name}  type=${type}  severity=${severity}     developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  app_cloudlet_name=${appcloudlet_name}  app_cloudlet_org=${app_cloudlet_org}  cluster_instance_name=${cluster_instance_name}   cluster_instance_developer_org_name=${cluster_instance_developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_org_name}  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  email_address=${email_address}
 
    #${alert}=  Create Alert Receiver  receiver_name=${receiver_name}${counter}  &{alert_args}
 
-   #Should Be Equal  ${alert['Name']}      ${receiver_name}${counter}
-   #Should Be Equal  ${alert['Type']}      ${type}
-   #Should Be Equal  ${alert['Severity']}  ${severity}
-   #Should Be Equal  ${alert['User']}      mexadmin 
-   #Should Be Equal  ${alert['Email']}     mexadmin@mobiledgex.net 
+   Should Be Equal  ${alert['Name']}      ${parms['receiver_name']}
+   Should Be Equal  ${alert['Type']}      ${parms['type']}
+   Should Be Equal  ${alert['Severity']}  ${parms['severity']}
+   Should Be Equal  ${alert['User']}      mexadmin 
+   #Run Keyword If  'email_address' in ${parms}  Should Be Equal  ${alert['Email']}  ${parms['email_address']}  ELSE  Should Be Equal  ${alert['Email']}  mexadmin@mobiledgex.net 
+   Run Keyword If  'email_address' in ${parms}  Verify Email Alert  ${alert}  &{parms}
+   Run Keyword If  'slack_channel' in ${parms} or 'slack_api_url' in ${parms}  Verify Slack Alert  ${alert}  &{parms}
+   Run Keyword If  'operator_org_name' in ${parms}  Should Be Equal  ${alert['Cloudlet']['organization']}  ${parms['operator_org_name']}  
+   Run Keyword If  'cloudlet_name' in ${parms}  Should Be Equal  ${alert['Cloudlet']['name']}  ${parms['cloudlet_name']}  
+   Run Keyword If  'developer_org_name' in ${parms}  Should Be Equal  ${alert['AppInst']['app_key']['organization']}  ${parms['developer_org_name']}  
+   Run Keyword If  'app_name' in ${parms}  Should Be Equal  ${alert['AppInst']['app_key']['name']}  ${parms['app_name']}  
+   Run Keyword If  'app_version' in ${parms}  Should Be Equal  ${alert['AppInst']['app_key']['version']}  ${parms['app_version']}  
+   Run Keyword If  'app_cloudlet_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['cloudlet_key']['name']}  ${parms['app_cloudlet_name']}  
+   Run Keyword If  'cluster_instance_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['cluster_key']['name']}  ${parms['cluster_instance_name']}  
+   Run Keyword If  'cluster_instance_developer_org_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['organization']}  ${parms['cluster_instance_developer_org_name']}  
+
+Verify Email Alert
+   [Arguments]  ${alert}  &{parms}
+
+   Run Keyword If  'email_address' in ${parms}  Should Be Equal  ${alert['Email']}  ${parms['email_address']}  ELSE  Should Be Equal  ${alert['Email']}  mexadmin@mobiledgex.net
+
+Verify Slack Alert
+   [Arguments]  ${alert}  &{parms}
+
+   Run Keyword If  'slack_channel' in ${parms}  Should Be Equal  ${alert['SlackChannel']}  ${parms['slack_channel']}
+   Run Keyword If  'slack_api_url' in ${parms}  Should Be Equal  ${alert['SlackWebhook']}  <hidden>
 
 
-   #Run Keyword If  '${developer_org_name}' != ${None}   Should Be Equal  ${alert['AppInst']['appkey']['name']}  ${app_name}
-
-   ${counter}=  Evaluate  ${counter} + 1
-   Set Test Variable  ${counter}
