@@ -7,9 +7,9 @@ Library  MexApp
 Library  String
 
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+#Test Teardown  Cleanup Provisioning
 
-Test Timeout  15m
+Test Timeout  25m
 
 *** Variables ***
 ${username}=  qaadmin
@@ -35,7 +35,7 @@ ${longitude}      -96.7970
 ${email_wait}=  300
 
 *** Test Cases ***
-AlertReceiver - shall be able to create/receive email alerts with docker/dedicated/loadbalancer
+AlertReceiver - shall be able to create/receive HealthCheckFailServerFail email alerts with docker/dedicated/loadbalancer
    [Documentation]
    ...  - create alert reciever with appname and apporg
    ...  - create docker/dedicated/loadbalancer appinst
@@ -65,19 +65,19 @@ AlertReceiver - shall be able to create/receive email alerts with docker/dedicat
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name} 
 
-   Alert Receiver Email For Firing AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Email For Firing AppInstDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
-   Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   # add checks for alerts once filter bug is fixed EDGECLOUD-3743 ShowAlert does not work with optional args
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
-AlertReceiver - shall be able to create/receive email alerts with docker/shared/loadbalancer
+AlertReceiver - shall be able to create/receive HealthCheckFailServerFail email alerts with docker/shared/loadbalancer
    [Documentation]
    ...  - create docker/shared/loadbalancer appinst
    ...  - create alert reciever with apporg
@@ -101,10 +101,9 @@ AlertReceiver - shall be able to create/receive email alerts with docker/shared/
 
    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
 
-   Create Alert Receiver  developer_org_name=${developer}
+   Create Alert Receiver  type=email  developer_org_name=${developer}
 
    Stop TCP Port  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
-#   Stop TCP Port  cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  2015
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
@@ -113,7 +112,6 @@ AlertReceiver - shall be able to create/receive email alerts with docker/shared/
    # add checks for alerts once filter bug is fixed
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
-#   Start TCP Port  host=cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  port=2015  server_port=4015
 
    Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Show Alerts  region=${region}
@@ -121,11 +119,11 @@ AlertReceiver - shall be able to create/receive email alerts with docker/shared/
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
-AlertReceiver - shall be able to create/receive HealthCheckFailRootlbOffline alerts with docker/dedicated/loadbalancer
+AlertReceiver - shall be able to create/receive HealthCheckFailRootlbOffline email alerts with docker/dedicated/loadbalancer
    [Documentation]
    ...  - create alert reciever with appname and apporg
    ...  - create docker/dedicated/loadbalancer appinst
-   ...  - stop the port on the app
+   ...  - stop the docker container
    ...  - verify AppInstDown firing alert and email are generated
    ...  - start the port on the app
    ...  - verify AppInstDown resolve alert and email are generated
@@ -152,23 +150,23 @@ AlertReceiver - shall be able to create/receive HealthCheckFailRootlbOffline ale
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
 
-   Alert Receiver Email For Firing AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  status=1  wait=${email_wait}
+   Alert Receiver Email For Firing AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  status=1  wait=${email_wait}
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
 
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
-   Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  status=1  wait=${email_wait}
+   Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  status=1  wait=${email_wait}
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
-AlertReceiver - shall be able to create/receive HealthCheckFailServerFail alerts with vm/shared/loadbalancer
+AlertReceiver - shall be able to create/receive apporg HealthCheckFailServerFail email alerts with vm/shared/loadbalancer
    [Documentation]
-   ...  - create docker/shared/loadbalancer appinst
+   ...  - create vm/shared/loadbalancer appinst
    ...  - create alert reciever with apporg
-   ...  - stop the port on the app
+   ...  - power off the VM
    ...  - verify AppInstDown firing alert and email are generated
    ...  - start the port on the app
    ...  - verify AppInstDown resolve alert and email are generated
@@ -187,17 +185,7 @@ AlertReceiver - shall be able to create/receive HealthCheckFailServerFail alerts
 
    Create Alert Receiver  developer_org_name=${developer}
 
-#   ${cluster_name}=  Set Variable  cluster1602098261-390385 
-#   ${app_name}=  Set Variable  app1602098261-390385 
-#   ${app_org}=  Set Variable  MobiledgeX
-#   ${rootlb}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.mobiledgex.net
-#   Update App Instance  app_name=${app_name}  app_version=${app_version}  developer_org_name=${app_org}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${app_org}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  region=${region}  powerstate=PowerOff  #use_defaults=${False}
    Update App Instance  region=${region}  powerstate=PowerOff
-
-#   Stop Docker Container Rootlb   root_loadbalancer=${rootlb}
-
-#   Stop TCP Port  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
-#   Stop TCP Port  cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  2015
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
@@ -205,15 +193,9 @@ AlertReceiver - shall be able to create/receive HealthCheckFailServerFail alerts
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
 
-   #Update App Instance  app_name=${app_name}  app_version=${app_version}  developer_org_name=${app_org}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${app_org}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  region=${region}  powerstate=PowerOn  #use_defaults=${False}
    Update App Instance  region=${region}  powerstate=PowerOn
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
-
-#   Start Docker Container Rootlb   root_loadbalancer=${rootlb}
-
-#   Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
-#   Start TCP Port  host=cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  port=2015  server_port=4015
 
    Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Show Alerts  region=${region}
@@ -221,10 +203,10 @@ AlertReceiver - shall be able to create/receive HealthCheckFailServerFail alerts
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
-AlertReceiver - shall be able to create/receive alerts with k8s/shared/loadbalancer
+AlertReceiver - shall be able to create/receive appname/apporg/appvers HealthCheckFailServerFail alerts with k8s/shared/loadbalancer
    [Documentation]
    ...  - create k8s/shared/loadbalancer appinst
-   ...  - create alert reciever with apporg
+   ...  - create alert reciever with appname/apporg/appver
    ...  - stop the port on the app
    ...  - verify AppInstDown firing alert and email are generated
    ...  - start the port on the app
@@ -248,7 +230,6 @@ AlertReceiver - shall be able to create/receive alerts with k8s/shared/loadbalan
    Create Alert Receiver  type=email  severity=error  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}
 
    Stop TCP Port  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}  tls:${True}
-#   Stop TCP Port  cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  2015
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
@@ -257,7 +238,6 @@ AlertReceiver - shall be able to create/receive alerts with k8s/shared/loadbalan
    # add checks for alerts once filter bug is fixed
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
-#   Start TCP Port  host=cluster1601997927-351176.automationfrankfurtcloudlet.tdg.mobiledgex.net  port=2015  server_port=4015
 
    Alert Receiver Email For Resolved AppInstDown Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
    Show Alerts  region=${region}
@@ -534,7 +514,7 @@ CreateAlertReceiver - shall be able to create/receive email/slack autoscale aler
    Create Alert Receiver  receiver_name=autoalert ${epoch}1  type=email  developer_org_name=${developer}  app_version=1.1
    Create Alert Receiver  receiver_name=autoalert ${epoch}2  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  developer_org_name=${developer}  app_version=1.1
 
-   ${autoscale_policy}=  Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=50  trigger_time=60
+   ${autoscale_policy}=  Create Autoscale Policy  region=${region}  min_nodes=1  max_nodes=2  scale_up_cpu_threshold=70  scale_down_cpu_threshold=10  trigger_time=60
 
    Log To Console  Creating Cluster Instance
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  autoscale_policy_name=${autoscale_policy['data']['key']['name']}
@@ -552,8 +532,16 @@ CreateAlertReceiver - shall be able to create/receive email/slack autoscale aler
 
 #   ${openstack_node_name}=    Catenate  SEPARATOR=-  node  .  ${cloudlet_lowercase}  ${cluster_name}
 
-   Set CPU Load  host=${fqdn_0}  port=2017  load_percentage=72
-   Sleep  120s
+   Set CPU Load  host=${fqdn_0}  port=2017  load_percentage=75
+
+   Alert Receiver Email For Firing CPU Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Show Alerts  region=${region}
+   # add checks for alerts once filter bug is fixed
+
+   Alert Receiver Email For Resolved CPU Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Show Alerts  region=${region}
+
+#   Sleep  120s
 
 #   FOR  ${x}  IN RANGE  0  30
 #       ${server_info_node}=    Get Server List  name=${openstack_node_name}
@@ -580,6 +568,36 @@ CreateAlertReceiver - shall be able to create/receive email/slack autoscale aler
 #
 #   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
 
+CreateAlertReceiver - shall be able to create/receive email/slack autoprov alerts for k8s/dedicated/loadbalancer
+   [Documentation]
+   ...  create an auto scale policy
+   ...  create a cluster instance
+   ...  update cluster instance to add the auto scale policy
+
+   Create Alert Receiver  receiver_name=autoprovalert ${epoch}1  type=email  developer_org_name=${developer}  app_version=1.0
+   Create Alert Receiver  receiver_name=autoprovalert ${epoch}2  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  developer_org_name=${developer}  app_version=1.0
+
+   &{cloudlet1}=  create dictionary  name=${cloudlet_name_openstack_dedicated}  organization=${operator_name_openstack}
+   @{cloudletlist}=  create list  ${cloudlet1}
+   ${autoprov_policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=${developer}  min_active_instances=1  max_instances=1  cloudlet_list=${cloudletlist}
+
+   Log to Console  START creating cluster instance
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  reservable=${True}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+   Log to Console  DONE creating cluster instance
+
+   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  auto_prov_policy=${autoprov_policy['data']['key']['name']}  deployment=docker  access_type=loadbalancer
+
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${developer}  app_version=1.0  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+
+   Alert Receiver Email For Firing CPU Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Show Alerts  region=${region}
+   # add checks for alerts once filter bug is fixed
+
+   Alert Receiver Email For Resolved CPU Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Show Alerts  region=${region}
+
 *** Keywords ***
 Setup
    ${epoch}=  Get Time  epoch
@@ -604,5 +622,6 @@ Setup
    Set Suite Variable  ${recv_name}
    Set Suite Variable  ${cluster_name}
    Set Suite Variable  ${emailepoch}
+   Set Suite Variable  ${epoch}
    Set Suite Variable  ${epochusername}
 
