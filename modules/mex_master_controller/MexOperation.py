@@ -60,10 +60,10 @@ class MexOperation(MexRest):
     
         payload = None
         msg_dict = None
-    
+ 
         if use_defaults == True:
             if token == None: token = self.token
-        
+ 
         if json_data !=  None:
             payload = json_data
         else:
