@@ -304,7 +304,7 @@ class Cloudlet(MexOperation):
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
-        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show, stream=stream, stream_timeout=stream_timeout)[0]
 
     def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=False)
