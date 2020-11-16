@@ -107,12 +107,25 @@ def start_tcp_ping(thread_name, port):
             writefile(f'start_tcp_ping recved tcp data from address={addr} thread={thread_name} port={port} data={data}')
 
             try:
-               if data.decode('utf8', 'strict') == 'exit':
-                  writefile('start_tcp_ping shutdown/close socket thread={} port={}'.format(thread_name, port))
+               decoded_data = data.decode('utf8', 'strict')
+               if decoded_data == 'exit':
+                  writefile('start_tcp_ping shutdown/close socket thread={thread_name} port={port}')
                   conn.sendall(bytes('bye', encoding='utf-8'))
                   ssocket.shutdown(socket.SHUT_RDWR)
                   ssocket.close()
                   sys.exit()
+               elif decoded_data == 'version':
+                  writefile(f'start_tcp_ping version requested thread={thread_name} port={port}')
+                  version_data = '0'
+                  with open('VERSION') as version_file:
+                     version_data = version_file.read()
+                  writefile(f'start_tcp_ping version is {version_data} thread={thread_name} port={port}')
+                  conn.sendall(bytes(version_data, encoding='utf-8'))
+               elif decoded_data == 'ping':
+                  writefile('start_tcp_ping ping received thread={thread_name} port={port}')
+                  conn.sendall(bytes('pong', encoding='utf-8'))
+               else:
+                  conn.sendall(bytes('unknown', encoding='utf-8')) 
             except UnicodeDecodeError as e:
                writefile(f'start_tcp_ping unicodecode error from address={addr} thread={thread_name} port={port} data={data}: {e}')
                continue
@@ -120,7 +133,7 @@ def start_tcp_ping(thread_name, port):
                writefile(f'start_tcp_ping unknown exception error from address={addr} thread={thread_name} port={port} data={data}: {e}')
                continue
 
-            conn.sendall(bytes('pong', encoding='utf-8'))
+            #conn.sendall(bytes('pong', encoding='utf-8'))
     #    print('recved', data)
 
 def start_port_thread(thread_name, port):
