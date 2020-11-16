@@ -203,6 +203,21 @@ class MexApp(object):
         if return_data.decode('utf-8') != exp_return_data:
             raise Exception('correct data not received from server. expected=' + exp_return_data + ' got=' + return_data.decode('utf-8'))
 
+    def get_app_version(self, host, port, wait_time=0, tls=False):
+        data = 'version'
+        logging.info('getting app version')
+        return_data = None
+        try:
+            return_data = self._send_tcp_data(host, port, data).decode('utf-8')
+        except Exception as e:
+            logging.error(f'tcp exception caught:{e}')
+            raise Exception(e)
+
+        if len(return_data) <= 0:
+            raise Exception(f'correct data not received from server. expected=version got={return_data}')
+
+        return return_data
+
     def make_http_request(self, host, port, page, tls=False, verify_cert=None):
         url = f'http://{host}:{port}/{page}'
         if tls:
