@@ -395,7 +395,7 @@ class App():
             #_fields_list.append(self._deployment_manifest_field)
         if self.scale_with_cluster:
             app_dict['scale_with_cluster'] = True
-        if self.official_fqdn:
+        if self.official_fqdn is not None:
             app_dict['official_fqdn'] = self.official_fqdn
         if self.annotations:
             app_dict['annotations'] = self.annotations
