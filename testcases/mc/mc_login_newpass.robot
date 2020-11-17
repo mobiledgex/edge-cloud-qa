@@ -7,10 +7,10 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
-${password}=    w3^rEr0o
-${newpass}=     w3^rEr0g
-${adminpass}=   8SP@gBnPH62w
-${newadminpass}=  n7A2f!dw1Stj	
+${password}=    H31m8@W8maSfg
+${newpass}=     aI6A8T*BqfkX1
+${adminpass}=   H31m8@W8maSfgnC
+${newadminpass}=  kI6h91F!UBH*Xyh	
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
 ${mex_password}=  ${mexadmin_password}
 
@@ -159,7 +159,7 @@ MC - Admin user shall not be able to change to a weak password
 	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone     token=${adminuserToken}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 2.0 years but is 28.0 seconds. Please increase length or complexity"}
+	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 2.0 years but is 12.0 seconds. Please increase length or complexity"}
 
 
 # ECQ-2756	
@@ -171,7 +171,7 @@ MC - User shall not be able to change to a weak password
 	${error}=  Run Keyword and Expect Error  *  New Password    password=aweakone     token=${epochuserToken1}     use_defaults=${False}
 
 	Should Contain    ${error}   Code = 400	
-	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 31.0 days but is 28.0 seconds. Please increase length or complexity"}
+	Should Contain    ${error}   Body={"message":"Password too weak, requires crack time 31.0 days but is 12.0 seconds. Please increase length or complexity"}
 
 *** Keywords ***
 Setup
@@ -186,7 +186,7 @@ Setup
 	${adminuser}=   Catenate  SEPARATOR=  ${username}  ${epoch}  2	
 	Create User  username=${epochuser1}   password=${password}   email_address=${emailepoch1}    email_check=False
 	Unlock User
-	Create User  username=${epochuser2}   password=46O&fSUU   email_address=${emailepoch2}    email_check=False
+	Create User  username=${epochuser2}   password=L63l0K%0LSo3@   email_address=${emailepoch2}    email_check=False
 	Unlock User
 	Create User  username=${adminuser}   password=${adminpass}   email_address=${adminuseremail}    email_check=False
 	Unlock User
@@ -194,7 +194,7 @@ Setup
 	${adduser}=   Adduser Role   username=${adminuser}   role=AdminManager    token=${adminToken}     use_defaults=${False}
 	${adminuserToken}=   Login  username=${adminuser}   password=${adminpass}
 	${epochuserToken1}=  Login  username=${epochuser1}  password=${password}
-	${epochuserToken2}=  Login  username=${epochuser2}   password=46O&fSUU
+	${epochuserToken2}=  Login  username=${epochuser2}   password=L63l0K%0LSo3@
 	Set Suite Variable  ${adminuser}
         Set Suite Variable  ${adminuserToken}
 	Set Suite Variable  ${epochuser1}
