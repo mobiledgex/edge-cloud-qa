@@ -78,7 +78,7 @@ Shall be able to update IpAccessShared k8s autocluster to modify number of worke
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
     ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 node
+    Should Be Equal As Numbers  ${num_servers_node}    2   # 2 worker nodes
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
