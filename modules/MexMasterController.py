@@ -2313,10 +2313,11 @@ class MexMasterController(MexRest):
     def run_mcctl(self, parms):
         cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
+        output = self._run_command(cmd).decode('utf-8')
         try:
-           return json.loads(self._run_command(cmd).decode('utf-8'))
+           return json.loads(output)
         except:
-           return self._run_command(cmd).decode('utf-8')
+           return output
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
