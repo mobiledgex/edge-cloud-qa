@@ -246,6 +246,9 @@ class MexMasterController(MexRest):
     def get_default_alert_receiver_name(self):
         return shared_variables.alert_receiver_name_default
 
+    def get_default_auto_provisioning_policy_name(self):
+        return shared_variables.autoprov_policy_name_default
+
     def get_default_time_stamp(self):
         return shared_variables.time_stamp_default
     
@@ -2310,7 +2313,10 @@ class MexMasterController(MexRest):
     def run_mcctl(self, parms):
         cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
-        return json.loads(self._run_command(cmd).decode('utf-8'))
+        try:
+           return json.loads(self._run_command(cmd).decode('utf-8'))
+        except:
+           return self._run_command(cmd).decode('utf-8')
 
     def cleanup_provisioning(self):
         """ Deletes all the provisiong that was added during the test
