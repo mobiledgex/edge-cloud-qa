@@ -20,6 +20,7 @@ builds3 = [:]
 builds4 = [:]
 builds5 = [:]
 builds6 = [:]
+builds7 = [:]
 
 node('jenkinsSlave1'){
     date = new Date()
