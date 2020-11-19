@@ -9,8 +9,8 @@ Test Teardown	Teardown
 *** Variables ***
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}	
-${userpass}=   w3^rEr0o
-${adminpass}=  w3^r{r0o		
+${userpass}=   H31m8@W8maSfg
+${adminpass}=  H31m8@W8maSfgnC		
 
 *** Test Cases ***
 # ECQ-1641	
