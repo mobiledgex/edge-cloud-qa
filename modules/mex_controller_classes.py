@@ -615,7 +615,7 @@ class AutoScalePolicy():
             self.policy_name = shared_variables.autoscalepolicy_name_default
             
         if use_defaults:
-            if policy_name is None: self.policy_name = shared_variables.autoscalepolicy_name_default
+            if policy_name is None: self.policy_name = shared_variables.autoscale_policy_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if min_nodes is None: self.min_nodes = 1
             if max_nodes is None: self.max_nodes = 2
@@ -629,8 +629,8 @@ class AutoScalePolicy():
             policy_key_dict['name'] = self.policy_name
             _fields_list.append(_name_field_number)
 
-        if self.developer_name:
-            policy_key_dict['developer'] = self.developer_name
+        if self.developer_name is not None:
+            policy_key_dict['organization'] = self.developer_name
             _fields_list.append(_developer_field_number)
                         
         if policy_key_dict:
