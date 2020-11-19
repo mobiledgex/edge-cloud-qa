@@ -9,7 +9,7 @@ Test Setup	Setup
 
 *** Variables ***
 ${username}=    mextester06
-${password}=    w3^rEr0o
+${password}=    H31m8@W8maSfg
 ${adminuser}=   mextester06admin
 ${adminpass}=   mexadminfastedgecloudinfra
 	
