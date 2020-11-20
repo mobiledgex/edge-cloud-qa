@@ -101,4 +101,5 @@ CreateCloudlet without physicalname
 
         #Should Contain  ${resp}  failed to get values for /secret/data/cloudlet/openstack/${cldlet}/openrc.json from Vault
         #Should Contain  ${resp}  Failed to source platform variables as physicalname '${cldlet}' is invalid
-        Should Contain  ${resp}   Failed to source access variables as '${oper}/${cldlet}' does not exist in secure secrets storage (Vault)"
+        #Should Contain  ${resp}   Failed to source access variables as '${oper}/${cldlet}' does not exist in secure secrets storage (Vault)"
+        Should Contain  ${resp}  Failed to source access variables from '/secret/data/US/cloudlet/openstack/${oper}/${cldlet}/openrc.json', does not exist in secure secrets storage (Vault)
