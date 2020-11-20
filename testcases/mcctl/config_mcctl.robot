@@ -15,7 +15,7 @@ ${notify}=   mexcontester@gmail.com
 	
 
 *** Test Cases ***
-# ECQ-
+# ECQ-2863
 ResetConfig - mcctl shall be able to reset/show config
 	[Documentation]
 	...  - send Reset/Show Config via mcctl 
@@ -25,7 +25,7 @@ ResetConfig - mcctl shall be able to reset/show config
 	Success Reset/Show Config Via mcctl
 
 
-# ECQ-
+# ECQ-2864
 UpdateConfig - mcctl shall handle update/show config changes
 	[Documentation]
 	...  - send UpdateConfig via mcctl with various parameters
@@ -45,7 +45,7 @@ UpdateConfig - mcctl shall handle update/show config changes
         passwordmincracktimesec=1  adminpasswordmincracktimesec=2
 
 
-# ECQ-
+# ECQ-2865
 UpdateConfig - mcctl shall handle update failures
 	[Documentation]
 	...  - send UpdateConfig via mcctl with various error cases
@@ -62,11 +62,11 @@ UpdateConfig - mcctl shall handle update failures
 	Bad Request (400), admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=2591999
 
 
-# ECQ-
+# ECQ-2866
 VersionConfig - mcctl shall show the config version
 	[Documentation]
-	...  - send  VersionConfig via mcctl with various error cases
-	...  - verify proper error is received
+	...  - send  VersionConfig via mcctl 
+	...  - verify proper information is received
 
 	Show Config Version Via mcctl
 
