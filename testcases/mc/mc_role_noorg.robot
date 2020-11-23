@@ -9,8 +9,8 @@ Test Teardown	Teardown
 *** Variables ***
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}	
-${userpass}=   w3^rEr0o
-${adminpass}=  w3^r{r0o		
+${userpass}=   H31m8@W8maSfg
+${adminpass}=  H31m8@W8maSfgnC		
 
 *** Test Cases ***
 # ECQ-1641	
@@ -203,7 +203,7 @@ MC - Admin user shall not be able assign AdminManger with a weak password
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 7.0 months. Please increase length or complexity"}
+   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 5.0 months. Please increase length or complexity"}
 
    Login   username=${adminuser}   password=${userpass}
    ${userinformatioin}=   Get Current User   	
@@ -262,7 +262,7 @@ MC - Admin user shall not be able assign AdminContributor with a weak password
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 7.0 months. Please increase length or complexity"}
+   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 5.0 months. Please increase length or complexity"}
 
    Login   username=${adminuser}   password=${userpass}
    ${userinformatioin}=   Get Current User   	
@@ -321,7 +321,7 @@ MC - Admin user shall not be able assign AdminViewer with a weak password
    ${body}=         Response Body
 
    Should Be Equal As Numbers  ${status_code}  400	
-   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 7.0 months. Please increase length or complexity"}
+   Should Be Equal             ${body}         {"message":"Password too weak, requires crack time 2.0 years but is 5.0 months. Please increase length or complexity"}
 
    Login   username=${adminuser}   password=${userpass}
    ${userinformatioin}=   Get Current User   	

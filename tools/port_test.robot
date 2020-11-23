@@ -31,6 +31,8 @@ User shall be able to access port on openstack
     #Stop TCP Port  ${tcp_fqdn}  ${tcp_port}
     #Start TCP Port  ${tcp_fqdn}   ${tcp_port}
     #Stop TCP Port  ${tcp_fqdn}  ${tcp_port}
+    ${version}=  Get App Version  ${tcp_fqdn}  ${tcp_port} 
+    Log to Console  version=${version}
     UDP Port Should Be Alive  ${udp_fqdn}  ${udp_port}
     TCP Port Should Be Alive  ${tcp_fqdn}  ${tls_port}  tls=${True}	
     TCP Port Should Be Alive  ${tcp_fqdn}  ${tcp_port} 

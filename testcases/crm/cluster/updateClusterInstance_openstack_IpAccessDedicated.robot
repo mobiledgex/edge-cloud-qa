@@ -87,7 +87,7 @@ Shall be able to update IpAccessDedicated k8s cluster to modify number of worker
     ${server_info_node}=    Get Server List  name=${openstack_node_name}
 
     ${num_servers_node}=     Get Length  ${server_info_node}
-    Should Be Equal As Numbers  ${num_servers_node}    1   # 1 node
+    Should Be Equal As Numbers  ${num_servers_node}    2   # 2 worker nodes
 
     TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
     UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
