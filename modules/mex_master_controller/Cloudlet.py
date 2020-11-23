@@ -94,7 +94,7 @@ class Cloudlet(MexOperation):
         #    cloudlet_dict['access_uri'] = self.accessuri
         #    _fields_list.append(self._cloudlet_accessuri_field)
         if static_ips is not None:
-            cloudlet_dict['static_ips'] = int(static_ips)
+            cloudlet_dict['static_ips'] = static_ips
             _fields_list.append(_static_ips_field_number)
 
         if physical_name is not None:
@@ -243,8 +243,8 @@ class Cloudlet(MexOperation):
 
         return info_dict
  
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_delete = None
