@@ -13,6 +13,7 @@ ${cldlet}  CreateTest
 ${region}  US
 
 *** Test Cases ***
+# ECQ-904
 CreateCloudlet with all parameters
 	[Documentation]   CreateCloudlet - Creates a cloudlet with all of the parameters
 	...  The test case creates a cloudlet with all valid parameters
@@ -30,6 +31,7 @@ CreateCloudlet with all parameters
         Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
         Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
 
+# ECQ-905
 CreateCloudlet without the optional parameters
 	[Documentation]   CreateCloudlet - Creates a cloudlet without the optional parameters
 	...  The test case creates a cloudlet without accessuri, ipsupport, and staticips.
@@ -51,6 +53,7 @@ CreateCloudlet without the optional parameters
         Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
 
 # no longer support accessurl
+# ECQ-906
 #CreateCloudlet with required parameters and accessuri
 #	[Documentation]   CreateCloudlet - Creates a cloudlet with required parameters and the optional accessuri parameter
 #	...  The test case creates a cloudlet with required parameters and the optional accessuri parameter
@@ -72,8 +75,9 @@ CreateCloudlet without the optional parameters
 #        Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
 #        Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
 
+# ECQ-907
 CreateCloudlet with required parameters and ipsupport
-		[Documentation]   CreateCloudlet - Creates a cloudlet with required parameters and the ipsupport parameter
+	[Documentation]   CreateCloudlet - Creates a cloudlet with required parameters and the ipsupport parameter
 	...  The test case creates a cloudlet with required parameters and the ipsupport parameter
 	...  Expect the cloudlet to be created sucessfully
 
@@ -92,6 +96,7 @@ CreateCloudlet with required parameters and ipsupport
         Should Be True  ${cloudlet['data']['created_at']['nanos']} > 0
         Should Be True  'updated_at' in ${cloudlet['data']} and 'seconds' not in ${cloudlet['data']['updated_at']} and 'nanos' not in ${cloudlet['data']['updated_at']}
 
+# ECQ-908
 CreateCloudlet with required parameters and staticips
 		[Documentation]   CreateCloudlet - Creates a cloudlet with required parameters and the optional staticips parameter
 	...  The test case creates a cloudlet with required parameters and the optional staticips parameter
