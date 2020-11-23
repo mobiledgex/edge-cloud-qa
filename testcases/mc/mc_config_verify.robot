@@ -130,11 +130,12 @@ MC - Verify the SkipVerifyEmail change works
 	${config}=   Show Config    token=${adminToken}
 	Should Be Equal   ${config['LockNewAccounts']}   ${False}
 
-	Create User   username=${newuser}   password=${password}   email_address=${email}
+	${variable}=  Create User   username=${newuser}   password=${password}   email_address=${email}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         {"message":"user created"}
+	#Should Be Equal             ${body}         {"message":"user created"}
+        Should Be Equal              ${variable['Message']}         user created
 
 	${error}=    Run Keyword and Expect Error  *   Login   username=${newuser}   password=${password}
 	Should Contain  ${error}    responseCode = 400
@@ -181,11 +182,12 @@ MC - Verify the LocknewAccounts change works
 	${config}=   Show Config    token=${adminToken}
 	Should Be Equal   ${config['SkipVerifyEmail']}   ${True}
 
-	Create User   username=${newuser}   password=${password}   email_address=${email}
+	${variable}=  Create User   username=${newuser}   password=${password}   email_address=${email}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         {"message":"user created"}
+	#Should Be Equal             ${body}         {"Message":"user created"}
+        Should Be Equal             ${variable['Message']}         user created
 
 	${token}=   Login   username=${newuser}   password=${password}
 
@@ -199,11 +201,12 @@ MC - Verify the LocknewAccounts change works
 	${config}=   Show Config    token=${adminToken}
 	Should Be Equal   ${config['LockNewAccounts']}   ${True}
 
-	Create User   username=${newuser}   password=${password}   email_address=${email}
+	${variable}=  Create User   username=${newuser}   password=${password}   email_address=${email}
 	${status_code}=  Response Status Code
 	${body}=         Response Body
 	Should Be Equal As Numbers  ${status_code}  200	
-	Should Be Equal             ${body}         {"message":"user created"}
+	#Should Be Equal             ${body}         {"message":"user created"}
+        Should Be Equal              ${variable['Message']}         user created
 
 	${error}=    Run Keyword and Expect Error  *   Login   username=${newuser}   password=${password}
 	Should Contain  ${error}    responseCode = 400
@@ -218,7 +221,6 @@ MC - Verify the LocknewAccounts change works
 	${body}=         Response Body
 	Should Be Equal As Numbers  ${status_code}  200	
 	Should Be Equal             ${body}         {"message":"user deleted"}
-
 
 # ECQ-2779
 MC - Verify Admin Password strength can not be set lower than User Password strength
