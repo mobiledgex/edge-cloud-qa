@@ -53,9 +53,9 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/direct
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_lb}=  Set Variable  ${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_lb}=  Set Variable  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
@@ -110,9 +110,9 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/lb
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_lb}=  Set Variable  ${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_lb}=  Set Variable  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
@@ -162,8 +162,8 @@ AppInst autocluster shall create with VMPool IpAccessShared/docker/lb
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
 
@@ -211,9 +211,9 @@ AppInst autocluster shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_master}=  Convert To Lowercase  ${internal_name_master}
    ${internal_name_node}=  Convert To Lowercase  ${internal_name_node}
@@ -262,10 +262,10 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_lb}=  Set Variable  ${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
-   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst[0]['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_lb}=  Set Variable  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_master}=  Convert To Lowercase  ${internal_name_master}
    ${internal_name_node}=  Convert To Lowercase  ${internal_name_node}
