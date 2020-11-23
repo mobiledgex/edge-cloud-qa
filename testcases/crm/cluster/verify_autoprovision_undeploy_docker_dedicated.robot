@@ -48,11 +48,6 @@ Create Auto Provisioning Policy
 #   should be equal  ${policy_return['data']['key']['organization']}  TDG
    log to console   ${policy_return}
 
-Add Cloudlet to Auto Provisioning Policy
-
-   log to console  Add Cloudlet to Auto Provisioning Policy
-   ${add_cloudlet}=  Add Auto Provisioning Policy Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  policy_name=${policy_name}  developer_org_name=${orgname}  token=${user_token}
-
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
 
    log to console  Creating App and App Instance
