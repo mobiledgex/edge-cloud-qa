@@ -7,7 +7,7 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
-${password}=   w3^rEr0o
+${password}=   H31m8@W8maSfg
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
 
 *** Test Cases ***
