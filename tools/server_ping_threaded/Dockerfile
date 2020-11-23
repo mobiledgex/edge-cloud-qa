@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.7
 
 RUN apt-get update && apt-get install -y vim && apt-get install -y net-tools && apt-get install -y lsof
 
@@ -7,5 +7,6 @@ RUN pip3 install tornado
 
 ADD server_ping_threaded.py /
 ADD automation.html /
+ADD VERSION /
 
 ENTRYPOINT ["./server_ping_threaded.py"]
