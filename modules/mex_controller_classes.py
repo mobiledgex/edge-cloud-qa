@@ -293,7 +293,7 @@ class App():
         self.scale_with_cluster = scale_with_cluster
         self.official_fqdn = official_fqdn
         self.annotations = annotations
-        print('*WARN*', 'selfdfn=', self.developer_name)
+        print('*WARN*', 'selfdfn=', self.developer_org_name)
         # used for UpdateApp - hardcoded from proto
         #self._deployment_manifest_field = str(app_pb2.App.DEPLOYMENT_MANIFEST_FIELD_NUMBER)
         #self._access_ports_field = str(app_pb2.App.ACCESS_PORTS_FIELD_NUMBER)
@@ -325,9 +325,9 @@ class App():
                 if self.image_path is None:
                     self.image_path='docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0'
                     
-            elif self.deployment == 'VM':
+            if self.deployment.lower() == 'vm':
                 if self.image_path is None:
-                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
+                    self.image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d'
                 #self.image_type = 2
             print('*WARN*', 'selfdfn2=', self.default_flavor_name,shared_variables.flavor_name_default)
 
@@ -395,7 +395,7 @@ class App():
             #_fields_list.append(self._deployment_manifest_field)
         if self.scale_with_cluster:
             app_dict['scale_with_cluster'] = True
-        if self.official_fqdn:
+        if self.official_fqdn is not None:
             app_dict['official_fqdn'] = self.official_fqdn
         if self.annotations:
             app_dict['annotations'] = self.annotations
@@ -615,7 +615,7 @@ class AutoScalePolicy():
             self.policy_name = shared_variables.autoscalepolicy_name_default
             
         if use_defaults:
-            if policy_name is None: self.policy_name = shared_variables.autoscalepolicy_name_default
+            if policy_name is None: self.policy_name = shared_variables.autoscale_policy_name_default
             if developer_name is None: self.developer_name = shared_variables.developer_name_default
             if min_nodes is None: self.min_nodes = 1
             if max_nodes is None: self.max_nodes = 2
@@ -629,8 +629,8 @@ class AutoScalePolicy():
             policy_key_dict['name'] = self.policy_name
             _fields_list.append(_name_field_number)
 
-        if self.developer_name:
-            policy_key_dict['developer'] = self.developer_name
+        if self.developer_name is not None:
+            policy_key_dict['organization'] = self.developer_name
             _fields_list.append(_developer_field_number)
                         
         if policy_key_dict:
