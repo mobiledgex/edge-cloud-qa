@@ -70,13 +70,13 @@ FindCloudlet - request shall not return cloudlet if state=CloudletStateOffline
 
       Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
 
-      Should Be Equal             ${cloudlet.fqdn}  ${tmus_appinst[0]['data']['uri']}
+      Should Be Equal             ${cloudlet.fqdn}  ${tmus_appinst['data']['uri']}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${tmus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${tmus_cloudlet_longitude}
 
-      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${tmus_appinst[0]['data']['mapped_ports'][0]['proto']}  #LProtoTCP
-      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${tmus_appinst[0]['data']['mapped_ports'][0]['internal_port']}
-      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${tmus_appinst[0]['data']['mapped_ports'][0]['public_port']}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${tmus_appinst['data']['mapped_ports'][0]['proto']}  #LProtoTCP
+      Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
+      Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${tmus_appinst['data']['mapped_ports'][0]['public_port']}
 
       FOR  ${state}  IN  @{cloudlet_states}
          # set tmus cloudlet offline
@@ -85,14 +85,14 @@ FindCloudlet - request shall not return cloudlet if state=CloudletStateOffline
          # should return gcp cloudlet since tmus is offline
          ${cloudlet2}=  Find Cloudlet       carrier_name=${tmus_operator_name}  latitude=36  longitude=-96
          Should Be Equal As Numbers  ${cloudlet2.status}  1  #FIND_FOUND
-         Should Be Equal             ${cloudlet2.fqdn}  ${gcp_appinst[0]['data']['uri']}
+         Should Be Equal             ${cloudlet2.fqdn}  ${gcp_appinst['data']['uri']}
 
          # set tmus cloudlet back online
          Inject Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name_default}  operator_org_name=${tmus_operator_name}  state=CloudletStateReady
          # should return tmus cloudlet since tmus is ready
          ${cloudlet3}=  Find Cloudlet       carrier_name=${tmus_operator_name}  latitude=36  longitude=-96
          Should Be Equal As Numbers  ${cloudlet3.status}  1  #FIND_FOUND
-         Should Be Equal             ${cloudlet3.fqdn}  ${tmus_appinst[0]['data']['uri']}
+         Should Be Equal             ${cloudlet3.fqdn}  ${tmus_appinst['data']['uri']}
       END
 *** Keywords ***
 Setup
