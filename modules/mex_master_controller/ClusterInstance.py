@@ -25,6 +25,9 @@ class ClusterInstance(MexOperation):
         _fields_list = []
         _number_nodes_field_number="14"
         _autoscale_policy_field_number="18"
+        _flavor_name_field_number="3.1"
+        _reservable_field_number="21"
+
         liveness = None
         
         if cluster_name == 'default':
@@ -83,6 +86,7 @@ class ClusterInstance(MexOperation):
             
         if flavor_name is not None:
             clusterinst_dict['flavor'] = {'name': flavor_name}
+            _fields_list.append(_flavor_name_field_number)
 
         if liveness is not None:
             clusterinst_dict['liveness'] = liveness
@@ -105,6 +109,7 @@ class ClusterInstance(MexOperation):
 
         if reservable is not None:
             clusterinst_dict['reservable'] = reservable
+            _fields_list.append(_reservable_field_number)
 
         if crm_override:
             if str(crm_override).lower() == "ignorecrm":
@@ -169,7 +174,7 @@ class ClusterInstance(MexOperation):
             msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_show = {'clusterinst': msg_show}
 
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
 
 
     def delete_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, reservable=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
@@ -189,7 +194,7 @@ class ClusterInstance(MexOperation):
             msg_dict_show = {'clusterinst': msg_show}
         print('*WARN*', use_defaults, region)
 
-        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict, stream=True, stream_timeout=600)
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict, stream=True, stream_timeout=600)[0]
 
 
     def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True, stream=True, stream_timeout=600):
