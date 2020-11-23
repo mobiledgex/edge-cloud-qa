@@ -202,22 +202,30 @@ namespace RestSample
 
                     if (findCloudletReply != null)
                     {
-                        Console.WriteLine("FindCloudlet Reply Status: " + findCloudletReply.status);
-                        Console.WriteLine("FindCloudlet:" +
-                                " ver: " + findCloudletReply.ver +
-                                ", fqdn: " + findCloudletReply.fqdn +
-                                ", cloudlet_location: " +
-                                " long: " + findCloudletReply.cloudlet_location.longitude +
-                                ", lat: " + findCloudletReply.cloudlet_location.latitude);
-                        // App Ports:
-                        foreach (AppPort p in findCloudletReply.ports)
+                        if (findCloudletReply.status.ToString() == "FIND_NOTFOUND")
                         {
-                            Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
-                                  ", protocol: " + p.proto +
-                                  ", public_port: " + p.public_port +
-                                  ", internal_port: " + p.internal_port +
-                                  ", path_prefix: " + p.path_prefix +
-                                  ", end_port: " + p.end_port);
+                            Console.WriteLine("No App Instance Found!!! Test Case Failed!!");
+                            Environment.Exit(1);
+                        }
+                        else
+                        {
+                            Console.WriteLine("FindCloudlet Reply Status: " + findCloudletReply.status);
+                            Console.WriteLine("FindCloudlet:" +
+                                    " ver: " + findCloudletReply.ver +
+                                    ", fqdn: " + findCloudletReply.fqdn +
+                                    ", cloudlet_location: " +
+                                    " long: " + findCloudletReply.cloudlet_location.longitude +
+                                    ", lat: " + findCloudletReply.cloudlet_location.latitude);
+                            // App Ports:
+                            foreach (AppPort p in findCloudletReply.ports)
+                            {
+                                Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
+                                      ", protocol: " + p.proto +
+                                      ", public_port: " + p.public_port +
+                                      ", internal_port: " + p.internal_port +
+                                      ", path_prefix: " + p.path_prefix +
+                                      ", end_port: " + p.end_port);
+                            }
                         }
                     }
                     aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
@@ -291,7 +299,11 @@ namespace RestSample
                             WebSocketReceiveResult wsResult;
 
                             ClientWebSocket webSocket = await me.GetWebsocketConnection(findCloudletReply, kvp.Value, kvp.Key, 10000, path);
-
+                            if(webSocket == null)
+                            {
+                                Console.WriteLine("No WEBSocket Returned!!! Test Case Failed!!");
+                                Environment.Exit(1);
+                            }
                             await webSocket.SendAsync(bytesMessage, WebSocketMessageType.Text, true, cToken);
                             wsResult = await webSocket.ReceiveAsync(buffer, cToken);
                             byte[] msgBytes = buffer.Skip(buffer.Offset).Take(wsResult.Count).ToArray();
