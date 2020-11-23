@@ -24,6 +24,10 @@ CreateCloudletPool - shall be able to create with long pool name
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${name} 
 
+   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+
 # ECQ-1657
 CreateCloudletPool - shall be able to create with numbers in pool name 
    [Documentation]
@@ -36,6 +40,10 @@ CreateCloudletPool - shall be able to create with numbers in pool name
    ${pool_return}=  Create Cloudlet Pool  region=US  token=${token}  cloudlet_pool_name=${epoch}  operator_org_name=${organization}  use_defaults=False
 
    Should Be Equal  ${pool_return['data']['key']['name']}  ${epoch} 
+
+   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
 
 # ECQ-2420
 CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
@@ -51,6 +59,10 @@ CreateCloudletPool - shall be able to create with 1 cloudlet in cloudlet list
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  1 
 
+   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
+
 # ECQ-2421
 CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
    [Documentation]
@@ -64,6 +76,10 @@ CreateCloudletPool - shall be able to create with 2 cloudlets in cloudlet list
    Should Be Equal  ${pool_return['data']['key']['name']}  ${pool_name}
    Should Be Equal  ${pool_return['data']['cloudlets']}  ${cloudlet_list}
    Length Should Be  ${pool_return['data']['cloudlets']}  2
+
+   Should Be True  ${pool_return['data']['created_at']['seconds']} > 0
+   Should Be True  ${pool_return['data']['created_at']['nanos']} > 0
+   Should Be True  'updated_at' in ${pool_return['data']} and 'seconds' not in ${pool_return['data']['updated_at']} and 'nanos' not in ${pool_return['data']['updated_at']}
  
 *** Keywords ***
 Setup
