@@ -31,18 +31,18 @@ GetAppInstList - request with opertor code mapping shall return 1 app
       ${distance_round}=  Convert To Number  ${distance}  1
       ${appfqdns_distance_round}=  Convert To Number  ${appfqdns[0].distance}  1  
       log to console  ${tmus_appinst}
-      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
-      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst[0]['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
-      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst[0]['data']['cloudlet_loc']['latitude']}
-      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst[0]['data']['cloudlet_loc']['longitude']}
+      Should Be Equal             ${appfqdns[0].carrier_name}                             ${tmus_appinst['data']['key']['cluster_inst_key']['cloudlet_key']['organization']}
+      Should Be Equal             ${appfqdns[0].cloudlet_name}                            ${tmus_appinst['data']['key']['cluster_inst_key']['cloudlet_key']['name']}
+      Should Be Equal             ${appfqdns[0].gps_location.latitude}                    ${tmus_appinst['data']['cloudlet_loc']['latitude']}
+      Should Be Equal             ${appfqdns[0].gps_location.longitude}                   ${tmus_appinst['data']['cloudlet_loc']['longitude']}
       Should Be Equal             ${appfqdns_distance_round}                             ${distance_round}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${tmus_appinst[0]['data']['key']['app_key']['name']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${tmus_appinst[0]['data']['key']['app_key']['version']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${tmus_appinst[0]['data']['uri']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${tmus_appinst[0]['data']['mapped_ports'][0]['proto']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${tmus_appinst[0]['data']['mapped_ports'][0]['internal_port']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${tmus_appinst[0]['data']['mapped_ports'][0]['public_port']}
-      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst[0]['data']['mapped_ports'][0]['fqdn_prefix']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_name}                 ${tmus_appinst['data']['key']['app_key']['name']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].app_vers}                 ${tmus_appinst['data']['key']['app_key']['version']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].fqdn}                    ${tmus_appinst['data']['uri']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].proto}          ${tmus_appinst['data']['mapped_ports'][0]['proto']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].public_port}    ${tmus_appinst['data']['mapped_ports'][0]['public_port']}
+      Should Be Equal             ${appfqdns[0].appinstances[0].ports[0].fqdn_prefix}    ${tmus_appinst['data']['mapped_ports'][0]['fqdn_prefix']}
 
       Should Be Equal             ${appfqdns[0].carrier_name}  ${operator_name}
 
