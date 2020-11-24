@@ -240,6 +240,9 @@ class MexMasterController(MexRest):
     def get_default_privacy_policy_name(self):
         return shared_variables.privacy_policy_name_default
 
+    def get_default_autoprov_policy_name(self):
+        return shared_variables.autoprov_policy_name_default
+
     def get_default_vm_pool_name(self):
         return shared_variables.vmpool_name_default
 
