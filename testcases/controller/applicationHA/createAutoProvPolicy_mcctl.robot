@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  CreatePrivacyPolicy mcctl
+Documentation  CreateAutoProvPolicy mcctl
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
