@@ -22,9 +22,11 @@ AppInst - user shall be able to add with TCP port range for k8s
 	
     Create App  access_ports=tcp:1-10 
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${public_path}=  Set Variable  ${app_default}-tcp.
+    ${public_path}=  Set Variable  ${app_default}${version}-tcp.
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1 
@@ -42,9 +44,11 @@ AppInst - user shall be able to add with UDP port range for k8s
 
     Create App  access_ports=udp:1-10
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${public_path}=  Set Variable  ${app_default}-udp.
+    ${public_path}=  Set Variable  ${app_default}${version}-udp.
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -83,6 +87,8 @@ AppInst - user shall be able to add with TCP/UDP port range for k8s
 
     Create App  access_ports=tcp:1-10,udp:1-10
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
     ${public_path}=  Set Variable  ${app_default}-udp.
@@ -91,13 +97,13 @@ AppInst - user shall be able to add with TCP/UDP port range for k8s
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       10
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
-    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${app_default}-tcp. 
+    Should Be Equal              ${appInst.mapped_ports[0].fqdn_prefix}    ${app_default}${version}-tcp. 
 
     Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[1].end_port}       10
     Should Be Equal As Integers  ${appInst.mapped_ports[1].proto}          2  #LProtoUDP
-    Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${app_default}-udp.
+    Should Be Equal              ${appInst.mapped_ports[1].fqdn_prefix}    ${app_default}${version}-udp.
 
     Length Should Be   ${appInst.mapped_ports}  2
 

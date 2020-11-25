@@ -2,6 +2,7 @@
 Documentation   UpdateAppInst 
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library         String
 #Variables       shared_variables.py
 
 Test Setup	Setup
@@ -68,12 +69,13 @@ AppInst - User shall be able to update the app accessports afer appInst delete
     Update App          access_ports=udp:2
 
     ${appInst_post}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
-
+    ${version}=  Set Variable  ${appInst_post.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
     #${appInst_post}=  Show App Instances  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
   
     ${app_name_default}=  Get Default App Name
  
-    ${fqdn_prefix}=  Catenate  SEPARATOR=-  ${app_name_default}  udp.
+    ${fqdn_prefix}=  Catenate  SEPARATOR=-  ${app_name_default}${version}  udp.
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_pre.mapped_ports[0].proto}          2
