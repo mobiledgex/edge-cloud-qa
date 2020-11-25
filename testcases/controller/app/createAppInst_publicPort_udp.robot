@@ -2,6 +2,7 @@
 Documentation   CreateAppInst public port UDP
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library         String
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -24,10 +25,11 @@ AppInst - user shall be able to add 1 UDP port with same public port
 
     Create App  access_ports=udp:1
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
-
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          2  #LProtoUDP
@@ -45,9 +47,11 @@ AppInst - user shall be able to add 10 UDP port with same public port
 
     Create App  access_ports=udp:1,udp:2,udp:3,udp:4,udp:5,udp:6,udp:7,udp:8,udp:9,udp:10
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
@@ -114,12 +118,14 @@ AppInst - 2 appInst on different app and same cluster and same cloudlet shall no
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  -  udp  .
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  .
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -151,12 +157,14 @@ AppInst - 2 appInst on different app and different cluster and same cloudlet sha
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  -  udp  .
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  .
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -188,12 +196,14 @@ AppInst - 2 appInst on different app/cluster/cloudlet shall be able to allocate 
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     ${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  -  udp  .
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  ${version}  -  udp  .
 
     # create app2 and appInst on the same port
     Create App  app_name=${app_default_2}  access_ports=udp:1
@@ -229,9 +239,11 @@ AppInst - 2 appInst on same app and different cluster and same cloudlet shall no
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     #${app_default_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
     #${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_default_2}  -  udp  .
@@ -267,9 +279,11 @@ AppInst - 2 appInst on same app and different cluster and different cloudlet sha
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     # create app2 and appInst on the same port
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name_2}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
@@ -300,14 +314,15 @@ AppInst - User shall be able to add app/appInst, delete, and readd with same pub
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}  no_auto_delete=${True}
-
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
     Delete App Instance
 
     # create appInst again
     ${appInst_2}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
@@ -338,9 +353,11 @@ AppInst - User shall be able to add app, udpate app, add /appInst with same publ
 
     # create appInst
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     # verify app1 uses port 1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  3
@@ -370,21 +387,22 @@ AppInst - 3 appInst on different app and different cluster and different cloudle
     # create app1 and appIns 1
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  -  udp  .
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  .
     ${autocluster_2}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}   2
     Create App  app_name=${app_name_2}  access_ports=udp:1
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_2}
 
-
     # create appInst4 on the port 10000
     ${app_name_3}=  Catenate  SEPARATOR=-  ${app_default_1}  3
-    ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  -  udp  .
+    ${fqdn_prefix_3}=  Catenate  SEPARATOR=  ${app_name_3}  ${version}  -  udp  .
     ${autocluster_3}=  Catenate  SEPARATOR=  autocluster  ${epoch_time}   3
     Create App  app_name=${app_name_3}  access_ports=udp:10000
     ${appInst_3}=  Create App Instance  app_name=${app_name_3}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${autocluster_3}
@@ -424,13 +442,15 @@ AppInst - appInst shall not allocate UDP port 10000 if already allocated
     # create app1 and appIns 1
     Create App  access_ports=udp:10000
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default_1}=  Get Default App Name
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default_1}  ${version}  -  udp  .
 
     # create appInst2 on the same port
     ${app_name_2}=  Catenate  SEPARATOR=-  ${app_default_1}  2
-    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  -  udp  .
+    ${fqdn_prefix_2}=  Catenate  SEPARATOR=  ${app_name_2}  ${version}  -  udp  .
     Create App  app_name=${app_name_2}  access_ports=udp:10000
     ${appInst_2}=  Create App Instance  app_name=${app_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
 
@@ -461,8 +481,10 @@ AppInst - user shall be to add multiple UDP public ports
 
     Create App  access_ports=udp:1
     ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst_1.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
-    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
+    ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].public_port}    1
     Should Be Equal As Integers  ${appInst_1.mapped_ports[0].proto}          2  #LProtoTCP
@@ -494,9 +516,11 @@ AppInst - user shall not be able to allocate public port udp:22
 
     Create App  access_ports=udp:22
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  22
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    10000
@@ -515,9 +539,11 @@ AppInst - user shall be able to allocate public port udp:18889
 
     Create App  access_ports=udp:18889
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18889
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18889
@@ -536,9 +562,11 @@ AppInst - user shall be able to allocate public port udp:18888
 
     Create App  access_ports=udp:18888
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     ${app_default}=  Get Default App Name
-    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  -  udp  .
+    ${fqdn_prefix}=  Catenate  SEPARATOR=  ${app_default}  ${version}  -  udp  .
 
     Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  18888
     Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    18888
