@@ -33,7 +33,7 @@ UpdateApp - User shall not be able to UpdateApp to include skip_hc_port when app
 
     ${error_msg}=  Run Keyword And Expect Error  *  Update App  region=${region}  skip_hc_ports=tcp:2016  
 
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Field cannot be modified when AppInsts exist"}')
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot update Skip Hc Ports when AppInst exists"}')
 
 UpdateApp - User shall not be able to UpdateApp to include skip_hc_port for Docker based app with AccessTypeDirect
     [Documentation]
