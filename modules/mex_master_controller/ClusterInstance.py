@@ -30,9 +30,11 @@ class ClusterInstance(MexOperation):
 
         liveness = None
         
-        if cluster_name == 'default':
-            cluster_name = shared_variables.cluster_name_default
-            
+        if cluster_name == 'default': cluster_name = shared_variables.cluster_name_default
+        if cloudlet_name == 'default': cloudlet_name = shared_variables.cloudlet_name_default
+        if operator_org_name == 'default': operator_org_name = shared_variables.operator_name_default
+        if developer_org_name == 'default': developer_org_name = shared_variables.developer_name_default
+ 
         if use_defaults:
             if cluster_name is None: cluster_name = shared_variables.cluster_name_default
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
@@ -185,9 +187,14 @@ class ClusterInstance(MexOperation):
 
 
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, crm_override=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600): 
-        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=use_defaults, include_fields=True)      
+        if not cluster_name: cluster_name = 'default'
+        if not operator_org_name: operator_org_name = 'default'
+        if not cloudlet_name: cloudlet_name = 'default'
+        if not developer_org_name: developer_org_name = 'default'
+
+        msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, crm_override=crm_override, autoscale_policy_name=autoscale_policy_name, use_defaults=False, include_fields=True)      
         msg_dict = {'clusterinst': msg}
-     
+         
         msg_dict_show = None
         if 'key' in msg:
             msg_show = self._build(cluster_name=msg['key']['cluster_key']['name'], operator_org_name=msg['key']['cloudlet_key']['organization'], cloudlet_name=msg['key']['cloudlet_key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
