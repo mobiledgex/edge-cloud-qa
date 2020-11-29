@@ -29,7 +29,8 @@ ${docker_image_facedetection}    docker.mobiledgex.net/mobiledgex/images/facedet
 ${docker_command}  ./gunicorn
 ${facedetection_ports}  tcp:8008,tcp:8011
 
-${client_path}     ../edge-cloud-sampleapps/ComputerVisionServer/client
+${gpu_client}  multi_client.py
+${gpu_client_path}     ../edge-cloud-sampleapps/ComputerVisionServer/client
 #${client_path}     ../../../edge-cloud-sampleapps/FaceDetectionServer/client
 
 @{image_list_good}  Bruce.jpg  Bruce.png  Wonho.png  Wonho2.png  face.png  face2.png  faceHuge.jpg  face_20181015-163834.png  face_large.png  face_small.png  face_triple.png
@@ -66,11 +67,11 @@ Facedetection server shall recognize faces
 
     Sleep  60  # wait for process to be up
 
-    ${server_tester}=  Catenate  SEPARATOR=/  ${client_path}  multi_client.py
+    ${server_tester}=  Catenate  SEPARATOR=/  ${gpu_client_path}  ${gpu_client} 
 
     # verify good images
     FOR  ${image}  IN  @{image_list_good}
-      ${image_full}=  Catenate  SEPARATOR=/  ${client_path}  ${image}
+      ${image_full}=  Catenate  SEPARATOR=/  ${gpu_client_path}  ${image}
       ${outfile}=     Catenate  SEPARATOR=  outfile  ${image}  ${epoch_time}
       Run Process  python3  ${server_tester}   -s   ${fqdn}  -e   /detector/detect/  -c  rest  -f   ${image_full}   --show-responses  stdout=${outfile}  stderr=STDOUT
       ${output}=  Get File  ${outfile}
@@ -81,7 +82,7 @@ Facedetection server shall recognize faces
 
     # verify bad images
     FOR  ${image}  IN  @{image_list_bad}
-      ${image_full}=  Catenate  SEPARATOR=/  ${client_path}  ${image}
+      ${image_full}=  Catenate  SEPARATOR=/  ${gpu_client_path}  ${image}
       ${outfile}=     Catenate  SEPARATOR=  outfile  ${image}  ${epoch_time}
       Run Process  python3  ${server_tester}   -s   ${fqdn}   -e   /detector/detect/  -c  rest  -f   ${image_full}   --show-responses  stdout=${outfile}  stderr=STDOUT
       ${output}=  Get File  ${outfile}
