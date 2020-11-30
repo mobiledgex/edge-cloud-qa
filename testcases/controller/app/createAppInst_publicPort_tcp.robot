@@ -628,7 +628,7 @@ AppInst - user shall be to add multiple TCP public ports
     \   ${appInst_1}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     \   
-    \   ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  -  tcp  .
+    \   ${fqdn_prefix_1}=  Catenate  SEPARATOR=  ${app_name}  ${version}  -  tcp  .
     \   ${public_port}=  Evaluate  10000 + ${index}
     \   # verify app1 uses port 1
     \   Should Be Equal As Integers  ${appInst_1.mapped_ports[0].internal_port}  1
