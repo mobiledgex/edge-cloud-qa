@@ -132,8 +132,8 @@ CreateApp - User shall not be able to create a k8s app with invalid yaml config
     ...  - create k8s app with unknown Configs value
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
@@ -156,20 +156,20 @@ CreateApp - User shall not be able to create a k8s app with invalid config url
     ...  - create k8s app with invalid Configs url
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://myconfig
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from https://myconfig
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://1.1.1.1
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://1.1.1.1
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://1.1.1.1
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://35.199.188.10
-    Should Contain  ${error}  i/o timeout
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://35.199.188.10
+    #Should Contain  ${error}  i/o timeout
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://35.199.188.10
     Should Contain  ${error}  i/o timeout 
