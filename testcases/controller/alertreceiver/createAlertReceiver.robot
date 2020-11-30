@@ -12,26 +12,31 @@ Test Timeout  1m
 *** Variables ***
 ${region}=  US
 ${developer}=  MobiledgeX
+${operator}=  GDDT
 
 ${counter}=  ${0}
 
 *** Test Cases ***
 CreateAlertReceiver - shall be able to create email alert
    [Documentation]
-   ...  - send alertreceiver create with type=email and suppored severities and app/cloudlets
+   ...  - send alertreceiver create with type=email and suppored severities and app/cluster/cloudlets
    ...  - verify alertreceiver is created
-
-   #EDGECLOUD-3904 alertreceiver create with cloudlet-org not configuring correctly
 
    [Template]  Create an Alert Receiver
       # cluster
-#      type=email  severity=info     cluster_instance_developer_org_name=${developer}
+      type=email  severity=info     cluster_instance_developer_org_name=${developer}
+      type=email  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=email  email_address=x@x.com  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=email  email_address=x@x.com  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
+      type=email  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
 
       # cloudlet
-      type=email  severity=info     operator_org_name=${developer}
-      type=email  severity=warning     operator_org_name=${developer}
-      type=email  severity=warning     operator_org_name=${developer}  cloudlet_name=x
-      type=email  email_address=x@x.com  severity=error     operator_org_name=${developer}
+      type=email  severity=info     operator_org_name=${operator}
+      type=email  severity=warning     operator_org_name=${operator}
+      type=email  severity=warning     operator_org_name=${operator}  cloudlet_name=x
+      type=email  email_address=x@x.com  severity=error     operator_org_name=${operator}
+      type=email  severity=info     operator_org_name=${operator}  region=US
+      type=email  severity=warning     operator_org_name=${operator}  cloudlet_name=x  region=US
 
       # app
       type=email  severity=info     developer_org_name=${developer}  
@@ -46,9 +51,13 @@ CreateAlertReceiver - shall be able to create email alert
       type=email  email_address=x@x.com  severity=warning     developer_org_name=${developer}  cluster_instance_developer_org_name=corg
       type=email  severity=info     developer_org_name=${developer}  app_cloudlet_name=appcloudlet
       type=email  severity=error     developer_org_name=${developer}  app_cloudlet_org=appcloudlet
-
-      # app and cloudlet
-      #type=email  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
+      type=email  severity=info     developer_org_name=${developer}  region=US
+      type=email  severity=warning     developer_org_name=${developer}  app_name=x  region=US
+      type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  region=US
+      type=email  email_address=x@x.com  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  region=US
+      type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=email  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
 
       # receiver name
       receiver_name=x          type=email  severity=info     developer_org_name=${developer}
@@ -65,18 +74,27 @@ CreateAlertReceiver - shall be able to create email alert
 
 CreateAlertReceiver - shall be able to create slack alert
    [Documentation]
-   ...  - send alertreceiver create with type=slack and suppored severities and app/cloudlets
+   ...  - send alertreceiver create with type=slack and suppored severities and app/cluster/cloudlets
    ...  - verify alertreceiver is created
 
    [Template]  Create an Alert Receiver
+      # cluster
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     cluster_instance_developer_org_name=${developer}
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
+
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  cloudlet_name=x
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     operator_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     operator_org_name=${developer}  cloudlet_name=x
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     operator_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     operator_org_name=${developer}  cloudlet_name=x
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  cloudlet_name=x  region=US
 
-   # app
+      # app
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  app_name=x
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
@@ -90,10 +108,14 @@ CreateAlertReceiver - shall be able to create slack alert
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  cluster_instance_developer_org_name=corg
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_cloudlet_name=appcloudlet
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     developer_org_name=${developer}  app_cloudlet_org=appcloudlet
-
-   # app and cloudlet
-   #   type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info  developer_org_name=${developer}  operator_org_name=${developer}
-   #   type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}   developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  app_name=x  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     developer_org_name=${developer}  app_name=x  app_version=1  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
 
       # receiver name
       receiver_name=x          type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
@@ -145,6 +167,7 @@ Create An Alert Receiver
    Run Keyword If  'app_cloudlet_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['cloudlet_key']['name']}  ${parms['app_cloudlet_name']}  
    Run Keyword If  'cluster_instance_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['cluster_key']['name']}  ${parms['cluster_instance_name']}  
    Run Keyword If  'cluster_instance_developer_org_name' in ${parms}  Should Be Equal  ${alert['AppInst']['cluster_inst_key']['organization']}  ${parms['cluster_instance_developer_org_name']}  
+   Run Keyword If  'region' in ${parms}  Should Be Equal  ${alert['Region']}  ${parms['region']}
 
 Verify Email Alert
    [Arguments]  ${alert}  &{parms}
