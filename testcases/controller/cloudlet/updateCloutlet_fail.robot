@@ -260,9 +260,9 @@ UpdateCloudlet with staticips of 6
 	...  The test case will try and update a Cloudlet with an invalid staticips of 6.
 	...  A 'TypeError: 6 has type int, but expected one of: bytes, unicode' error is expected
 
-	#${statips}    Convert To Integer 	6
+	${staticips}    Convert To Integer 	6
 
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     static_ips=6       use_defaults=False
+	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     static_ips=${staticips}       use_defaults=False
         Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid data: code=400, message=Unmarshal type error: expected=string, got=number, field=Cloudlet.static_ips, offset=84"}')
 	#Should Contain Any  ${error_msg}   TypeError: 6 has type int, but expected one of: bytes, unicode    TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips 
         #Should Contain  ${error_msg}  TypeError: 6 has type <class 'int'>, but expected one of: (<class 'bytes'>, <class 'str'>) for field Cloudlet.static_ips
