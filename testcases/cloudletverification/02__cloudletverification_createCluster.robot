@@ -38,12 +38,12 @@ ClusterInst shall create with IpAccessDedicated/docker for Direct App
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_small}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
-   Should Be Equal             ${cluster_inst['data']['deployment']}      docker
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#  These lines have been replaced with line above for vsphere or openstack # Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_small}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       1  #IpAccessDedicated
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      docker
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#  These lines have been replaced with line above for vsphere or openstack # Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_small}
 
 ClusterInst shall create with IpAccessDedicated/docker for LB App
    [Documentation]
@@ -62,12 +62,12 @@ ClusterInst shall create with IpAccessDedicated/docker for LB App
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_small}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
-   Should Be Equal             ${cluster_inst['data']['deployment']}      docker
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_small}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_small}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       1  #IpAccessDedicated
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      docker
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}     ${node_flavor_name_small}
 
 ClusterInst shall create with IpAccessShared/docker for LB App
    [Documentation]
@@ -86,12 +86,12 @@ ClusterInst shall create with IpAccessShared/docker for LB App
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_medium}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       3  #IpAccessShared
-   Should Be Equal             ${cluster_inst['data']['deployment']}      docker
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_medium}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_medium}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_medium}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       3  #IpAccessShared
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      docker
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_medium}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}     ${node_flavor_name_medium}
 
 ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1 and num_nodes=1
    [Documentation]
@@ -110,16 +110,16 @@ ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_large}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
-   Should Be Equal             ${cluster_inst['data']['deployment']}      kubernetes
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_masters']}     1
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_nodes']}       1
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_large}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_large}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_large}
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_large}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_large}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       1  #IpAccessDedicated
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      kubernetes
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_masters']}     1
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_nodes']}       1
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_large}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_large}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_large}
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}         ${node_flavor_name_large}
 
 ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 and num_nodes=1
    [Documentation]
@@ -138,16 +138,16 @@ ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 an
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_small}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       3  #IpAccessShared
-   Should Be Equal             ${cluster_inst['data']['deployment']}      kubernetes
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_masters']}     1
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_nodes']}       1
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_small}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_small}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       3  #IpAccessShared
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      kubernetes
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_masters']}     1
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_nodes']}       1
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_small}
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}         ${node_flavor_name_small}
 
 ClusterInst shall create with K8s and sharedvolumesize
    [Documentation]
@@ -166,17 +166,18 @@ ClusterInst shall create with K8s and sharedvolumesize
 
    Log to Console  \nCreating cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_small}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       3  #IpAccessShared
-   Should Be Equal             ${cluster_inst['data']['deployment']}      kubernetes
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_masters']}     1
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_nodes']}       1
-   Should Be Equal As Numbers  ${cluster_inst['data']['shared_volume_size']}  1
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_small}
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_small}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_small}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_small}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       3  #IpAccessShared
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      kubernetes
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_masters']}     1
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_nodes']}       1
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['shared_volume_size']}  1
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_small}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_small}
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}         ${node_flavor_name_small}
 
 ClusterInst shall create with IpAccessDedicated/docker and GPU
    [Documentation]
@@ -196,12 +197,12 @@ ClusterInst shall create with IpAccessDedicated/docker and GPU
    Log to Console  \nCreating GPU cluster instance done
 
    # verify gpu_flavor
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_gpu}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       1  #IpAccessDedicated
-   Should Be Equal             ${cluster_inst['data']['deployment']}      docker
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}     ${node_flavor_name_gpu}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_gpu}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       1  #IpAccessDedicated
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      docker
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}     ${node_flavor_name_gpu}
 
 ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and num_nodes=1
    [Documentation]
@@ -220,16 +221,16 @@ ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and n
 
    Log to Console  \nCreating GPU cluster instance done
 
-   Should Be Equal             ${cluster_inst['data']['flavor']['name']}  ${flavor_name_gpu}
-   Should Be Equal As Numbers  ${cluster_inst['data']['ip_access']}       3  #IpAccessShared
-   Should Be Equal             ${cluster_inst['data']['deployment']}      kubernetes
-   Should Be Equal As Numbers  ${cluster_inst['data']['state']}           5  #Ready
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_masters']}     1
-   Should Be Equal As Numbers  ${cluster_inst['data']['num_nodes']}       1
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst['data']['node_flavor']}  ${node_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
-#   Should Be Equal             ${cluster_inst['data']['master_node_flavor']}  ${master_flavor_name_gpu}
-#   Should Be Equal             ${cluster_inst['data']['node_flavor']}         ${node_flavor_name_gpu}
+   Should Be Equal             ${cluster_inst[0]['data']['flavor']['name']}  ${flavor_name_gpu}
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['ip_access']}       3  #IpAccessShared
+   Should Be Equal             ${cluster_inst[0]['data']['deployment']}      kubernetes
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['state']}           5  #Ready
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_masters']}     1
+   Should Be Equal As Numbers  ${cluster_inst[0]['data']['num_nodes']}       1
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'    Should Be Equal    ${cluster_inst[0]['data']['node_flavor']}  ${node_flavor_name_gpu}     ELSE  Log to Console  \nSkipping node new flavor check Vsphere detected
+#   Should Be Equal             ${cluster_inst[0]['data']['master_node_flavor']}  ${master_flavor_name_gpu}
+#   Should Be Equal             ${cluster_inst[0]['data']['node_flavor']}         ${node_flavor_name_gpu}
 
 *** Keywords ***
 Setup
