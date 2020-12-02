@@ -25,13 +25,14 @@ region = 'US'
 
 # account information
 username_mexadmin = 'mexadmin'
-password_mexadmin = 'mexadmin123'
+password_mexadmin = 'mexadminfastedgecloudinfra'
 username_developer = 'andyanderson'
 #username_developer = 'tomdevmanager'
-#password_developer = 'mexadmin123'
-password_developer = 'password'
+#password_developer = '58a8dd77baf9b8833f9753c93a62a5f5f3f35b11'
+#password_developer = 'password'
+password_developer = 'mexadminfastedgecloudinfra'
 username_operator = 'andyanderson'
-password_operator = 'password'
+password_operator = 'mexadminfastedgecloudinfra'
 #developer_organization_name = 'tomdev'
 developer_organization_name = 'MobiledgeX'
 
@@ -87,8 +88,8 @@ cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_ip_range},{cloudlet_ext_
 
 
 # docker image used for docker/k8s deployments
-#docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
-docker_image = 'docker-qa.mobiledgex.net/tomdev/images/server-ping-threaded:6.0'
+docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
+#docker_image = 'docker-qa.mobiledgex.net/tomdev/images/server-ping-threaded:6.0'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:2020-06-16-GPU'
 docker_image_privacypolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
 
