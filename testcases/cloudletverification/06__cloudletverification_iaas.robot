@@ -63,7 +63,7 @@ Platform Type Vsphere
 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name_k8ssharedvolumesize}  ${rootlb}
 
-   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  node_type=crm  command=govccmd  args=govc vm.info /packet-DFWVMW2/vm/*mex*k8s*node*1*k8s*
+   ${run_debug_out}=    Run Debug  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  node_type=crm  command=govccmd  args=govc vm.info /packet-DFWVMW2/vm/*mex*k8s*node*cpoc16*shrdvolsze*
    ${string_output}=  Set Variable  ${run_debug_out}[-1][data][output]
 
    ${govc}=    Convert GOVC To Dictionary    ${string_output}
