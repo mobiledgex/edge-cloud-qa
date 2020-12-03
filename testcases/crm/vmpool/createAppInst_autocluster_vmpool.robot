@@ -123,8 +123,8 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/lb
 
    Append To List  ${node_list}  qa-${region}-${internal_name_lb}  qa-${region}-${internal_name_vm}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_lb}
-   Node Status Should Be Success  qa-${region}-${internal_name_vm}
+   #Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   #Node Status Should Be Success  qa-${region}-${internal_name_vm}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 
@@ -173,7 +173,7 @@ AppInst autocluster shall create with VMPool IpAccessShared/docker/lb
    Append To List  ${node_list}  qa-${region}-${internal_name_vm}
 
    Sleep  5
-   Node Status Should Be Success  qa-${region}-${internal_name_vm}
+   #Node Status Should Be Success  qa-${region}-${internal_name_vm}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 
@@ -222,8 +222,8 @@ AppInst autocluster shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${vm2}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node}
    Append To List  ${vm_list}  ${vm1}  ${vm2}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
@@ -277,9 +277,9 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_lb}
    Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_lb}
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   #Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node}
    Append To List  ${node_list}  qa-${region}-${internal_name_lb}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
