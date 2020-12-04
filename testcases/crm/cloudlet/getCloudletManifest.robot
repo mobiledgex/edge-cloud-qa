@@ -17,7 +17,8 @@ ${physical_name_openstack_hawkins}  hawkins
 ${test_timeout_crm}  60 min
 
 *** Test Cases ***
-GetloudletManifest - User shall be able to get cloudlet manifest, revoke and get again
+# ECQ-2901
+GetCloudletManifest - User shall be able to get cloudlet manifest, revoke and get again
    [Documentation]
    ...  - do CreateCloudlet with restricted access
    ...  - do GetCloudletManifest and check return
