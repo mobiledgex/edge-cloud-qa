@@ -177,8 +177,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/docker/lb
 
    Append To List  ${node_list}  qa-${region}-${internal_name_lb}  qa-${region}-${internal_name_vm}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_lb}
-   Node Status Should Be Success  qa-${region}-${internal_name_vm}
+   #Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   #Node Status Should Be Success  qa-${region}-${internal_name_vm}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=${cluster_name_default}
@@ -230,7 +230,7 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/docker/lb
    Append To List  ${node_list}  qa-${region}-${internal_name_vm}
 
    Sleep  5
-   Node Status Should Be Success  qa-${region}-${internal_name_vm}
+   #Node Status Should Be Success  qa-${region}-${internal_name_vm}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=${cluster_name_default}
@@ -282,8 +282,8 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${vm2}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node}
    Append To List  ${vm_list}  ${vm1}  ${vm2}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -339,9 +339,9 @@ ClusterInst/AppInst shall create with VMPool IpAccessDedicated/k8s/lb nummasters
    ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_lb}
    Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_lb}
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   #Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}  qa-${region}-${internal_name_lb}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -391,7 +391,7 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${vm1}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_master}
    Append To List  ${vm_list}  ${vm1}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -447,9 +447,9 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node2}
    Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node1}
-   Node Status Should Be Success  qa-${region}-${internal_name_node2}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node1}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node2}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node1}  qa-${region}-${internal_name_node2}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -522,9 +522,9 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb after adding 
    ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node2}
    Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node1}
-   Node Status Should Be Success  qa-${region}-${internal_name_node2}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node1}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node2}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node1}  qa-${region}-${internal_name_node2}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -585,9 +585,9 @@ ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numno
    ${vm3}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_lb}
    Append To List  ${vm_list}  ${vm1}  ${vm2}  ${vm3}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_lb}
-   Node Status Should Be Success  qa-${region}-${internal_name_master}
-   Node Status Should Be Success  qa-${region}-${internal_name_node}
+   #Node Status Should Be Success  qa-${region}-${internal_name_lb}
+   #Node Status Should Be Success  qa-${region}-${internal_name_master}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node}
    Append To List  ${node_list}  qa-${region}-${internal_name_master}  qa-${region}-${internal_name_node}  qa-${region}-${internal_name_lb}
 
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -613,7 +613,7 @@ ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numno
    ${vm4}=  VM Should Be In Use  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}  group_name=${group_name}  internal_name=${internal_name_node}
    Append To List  ${vm_list}  ${vm4}
 
-   Node Status Should Be Success  qa-${region}-${internal_name_node2}
+   #Node Status Should Be Success  qa-${region}-${internal_name_node2}
    Append To List  ${node_list}  qa-${region}-${internal_name_node2}
 
    [Teardown]  Teardown  ${vm_list}  ${node_list}
