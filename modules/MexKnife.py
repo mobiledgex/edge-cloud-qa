@@ -29,12 +29,14 @@ class MexKnife:
 
     def node_status_should_be_success(self, node):
         try:
-            status = self.get_node_status(node)
-            if status == 'success':
-                logging.info('node status is success')
-                return status
-            else:
-                raise Exception(status)
+            for i in range(60):
+                status = self.get_node_status(node)
+                if status == 'success':
+                    logging.info('node status is success')
+                    return status
+                else:
+                    time.sleep(10)
+            raise Exception(status)
         except Exception as err:
             raise Exception(f'node status is not success:{err}') 
 
