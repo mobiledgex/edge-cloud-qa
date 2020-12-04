@@ -172,7 +172,7 @@ Shall be able to update IpAccessDedicated k8s cluster to include auto scale poli
     Set CPU Load  host=${clusterlb}  port=2017  load_percentage=72
     Sleep  120s
 
-    FOR  ${x}  IN RANGE  0  30
+    FOR  ${x}  IN RANGE  0  35
         ${server_info_node}=    Get Server List  name=${openstack_node_name}
         ${num_servers_node}=    Get Length  ${server_info_node}
         Exit For Loop If  '${num_servers_node}' == '2'

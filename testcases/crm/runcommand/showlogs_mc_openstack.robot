@@ -22,7 +22,7 @@ ${operator_name_openstack}  TDG
 ${docker_image}    docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0
 ${docker_command}  ./server_ping_threaded.py
 
-${num_lines}=  12
+${num_lines}=  13
 
 ${test_timeout_crm}  15 min
 
