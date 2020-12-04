@@ -100,7 +100,7 @@ class MexOperation(MexRest):
                     if 'Updated ClusterInst successfully' not in str(self.resp_text):
                         raise Exception('ERROR: ClusterInst not updated successfully:' + str(self.resp_text))
                 elif url.endswith('CreateCloudlet'):
-                    if 'Created Cloudlet successfully' not in str(self.resp_text):
+                    if 'Created Cloudlet successfully' not in str(self.resp_text) and 'Cloudlet configured successfully' not in str(self.resp_text):
                         raise Exception('ERROR: Cloudlet not created successfully:' + str(self.resp_text))
                 elif url.endswith('DeleteCloudlet'):
                     if 'Deleted Cloudlet successfully' not in str(self.resp_text):
