@@ -184,11 +184,13 @@ class AppInstance(MexOperation):
 
         msg_dict_delete = None
         if auto_delete and 'key' in msg:
+            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
             msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_delete = {'appinst': msg_delete}
 
         msg_dict_show = None
         if 'key' in msg:
+            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
             msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_show = {'appinst': msg_show}
         
