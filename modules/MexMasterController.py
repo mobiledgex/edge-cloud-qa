@@ -1707,124 +1707,23 @@ class MexMasterController(MexRest):
         except Exception as e:
             raise Exception("runCommanddd failed:", e)
 
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, container_version=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        return self.cloudlet.create_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, container_version=container_version, override_policy_container_version=override_policy_container_version, deployment_local=deployment_local, notify_server_address=notify_server_address, crm_override=crm_override, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def delete_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.delete_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
-#
-#        url = self.root_url + '/auth/ctrl/DeleteCloudlet'
-#
-#        payload = None
-#        clusterInst = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name).cloudlet
-#            cloudlet_dict = {'cloudlet': cloudlet}
-#            if region is not None:
-#                cloudlet_dict['region'] = region
-#
-#            payload = json.dumps(cloudlet_dict)
-#
-#        logger.info('delete cloudlet instance on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_deletecloudlet_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_deletecloudlet_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#                if 'Deleted Cloudlet successfully' not in str(self.resp.text):
-#                    raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp.text))
-#
-#            except Exception as e:
-#                self._number_deletecloudlet_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_deletecloudlet_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
 
     def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
+    def get_cloudlet_manifest(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.get_cloudlet_manifest(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def revoke_access_key(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cloudlet.revoke_access_key(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_cloudlet_metrics(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.get_cloudlet_metrics(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-
-#        url = self.root_url + '/auth/metrics/cloudlet'
-#
-#        payload = None
-#        metric_dict = {}
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cloudlet = Cloudlet(operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).cloudlet
-#            print('*WARN*', cloudlet)
-#            if 'key' in cloudlet:
-#                metric_dict = {'cloudlet': cloudlet['key']}
-#            print('*WARN*', 'after cloudlet')
-#            if region is not None:
-#                metric_dict['region'] = region
-#            if selector is not None:
-#                metric_dict['selector'] = selector
-#            if last is not None:
-#                try:
-#                    metric_dict['last'] = int(last)
-#                except:
-#                    metric_dict['last'] = last
-#            if start_time is not None:
-#                metric_dict['starttime'] = start_time
-#            if end_time is not None:
-#                metric_dict['endtime'] = end_time
-#                
-#
-#            payload = json.dumps(metric_dict)
-#
-#        logger.info('get cloudlet metrics on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            #self._number_deletecloudlet_requests += 1#
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    #self._number_deletecloudlet_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#
-#            except Exception as e:
-#                #self._number_deletecloudlet_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            #self._number_deletecloudlet_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
 
     def add_cloudlet_resource_mapping(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, mapping=None, json_data=None, use_defaults=True, use_thread=False):
         """ Sends region AddCloudletResMapping
@@ -1839,130 +1738,8 @@ class MexMasterController(MexRest):
     def get_cluster_metrics(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
       return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
         
-#        url = self.root_url + '/auth/metrics/cluster'
-#
-#        payload = None
-#        metric_dict = {}
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cluster = ClusterInstance(cluster_name=cluster_instance_name, operator_name=operator_name, cloudlet_name=cloudlet_name, developer_name=developer_name, use_defaults=False).cluster_instance
-#            print('*WARN*', cluster)
-#            if 'key' in cluster:
-#                metric_dict = {'clusterinst': cluster['key']}
-#            if region is not None:
-#                metric_dict['region'] = region
-#            if selector is not None:
-#                metric_dict['selector'] = selector
-#            if last is not None:
-#                try:
-#                    metric_dict['last'] = int(last)
-#                except:
-#                    metric_dict['last'] = last
-#            if start_time is not None:
-#                metric_dict['starttime'] = start_time
-#            if end_time is not None:
-#                metric_dict['endtime'] = end_time
- #               
-#
-#            payload = json.dumps(metric_dict)
-#
-#        logger.info('get cluster metrics on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            #self._number_deletecloudlet_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    #self._number_deletecloudlet_requests_fail += 1
-#                    raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
-#                    #raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#
-#            except Exception as e:
-#                #self._number_deletecloudlet_requests_fail += 1
-#                #raise Exception("post failed:", e)
-#                raise Exception(f'code={self.resp.status_code}', f'error={self.resp.text}')
-#
-#
-#            #self._number_deletecloudlet_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
-
     def get_app_metrics(self, token=None, region=None, app_name=None, app_version=None, cluster_instance_name=None, developer_org_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-
-#        url = self.root_url + '/auth/metrics/app'
-#
-#        payload = None
-#        metric_dict = {}
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            print('*WARN*', 'xxxx', developer_name)
-#            app = AppInstance(app_name=app_name, cluster_instance_name=cluster_name, developer_name=developer_name, operator_name=operator_name, cloudlet_name=cloudlet_name, use_defaults=False).app_instance
-#            print('*WARN*', 'app',app)
-#            if 'key' in app:
-#                metric_dict = {'appinst': app['key']}
-#            if region is not None:
-#                metric_dict['region'] = region
-#            if selector is not None:
-#                metric_dict['selector'] = selector
-#            if last is not None:
-#                try:
-#                    metric_dict['last'] = int(last)
-#                except:
-#                    metric_dict['last'] = last
-#            if start_time is not None:
-#                metric_dict['starttime'] = start_time
-#            if end_time is not None:
-#                metric_dict['endtime'] = end_time
-#                
-#
-#            payload = json.dumps(metric_dict)
-#
-#        logger.info('get app metrics on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            #self._number_deletecloudlet_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    #self._number_deletecloudlet_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#
-#            except Exception as e:
-#                #self._number_deletecloudlet_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            #self._number_deletecloudlet_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
 
     def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
         return self.app_instance.get_api_metrics(method=method, token=token, region=region, app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cell_id=cell_id, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
