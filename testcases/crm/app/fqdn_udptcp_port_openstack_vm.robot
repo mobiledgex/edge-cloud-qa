@@ -281,6 +281,55 @@ User shall be able to access VM deployment UDP and TCP ports on openstack with p
     TCP Port Should Be Alive  ${cloudlet.fqdn}  2016 
     UDP Port Should Be Alive  ${cloudlet.fqdn}  2016 
 
+# ECQ-2902
+User shall be able to access VM deployment UDP and TCP ports without cloudinit
+    [Documentation]
+    ...  - deploy VM app on openstack with port range without cloudinit
+    ...  - verify all ports are accessible via fqdn
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_nocloudinit}  access_ports=tcp:2000-3000,udp:2000-3000   region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster   region=${region}
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+
+    Should Be Equal As Integers  ${cloudlet.ports[0].public_port}  2000
+    Should Be Equal As Integers  ${cloudlet.ports[0].end_port}     3000
+    Should Be Equal As Integers  ${cloudlet.ports[1].public_port}  2000
+    Should Be Equal As Integers  ${cloudlet.ports[1].end_port}     3000
+
+    TCP Port Should Be Alive  ${cloudlet.fqdn}  2015
+    UDP Port Should Be Alive  ${cloudlet.fqdn}  2015
+    TCP Port Should Be Alive  ${cloudlet.fqdn}  2016
+    UDP Port Should Be Alive  ${cloudlet.fqdn}  2016
+
+# ECQ-2903
+User shall be able to access VM/LB deployment UDP and TCP ports without cloudinit
+    [Documentation]
+    ...  - deploy VM app with a Load Balancer on openstack without cloudinit
+    ...  - verify all ports are accessible via fqdn
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_nocloudinit}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+
+    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+
 *** Keywords ***
 Setup
     #Create Developer
