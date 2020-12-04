@@ -44,6 +44,7 @@ qcow_centos_image_notrunning = 'https://artifactory-qa.mobiledgex.net/artifactor
 qcow_windows_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_windows2012.qcow2#md5:42171406daca80298098ac314200634a'
 qcow_centos_openstack_image = 'server_ping_threaded_centos7'
 qcow_gpu_ubuntu16_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/ubuntu16_nvidia_gpu.qcow2#md5:ebefc158437895d0399802dac66b2f4f'
+qcow_centos_image_nocloudinit = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_nocloudinit.qcow2#md5:1e0f1567f87c5867e4cd999a9a3eec3a'
 
 helm_image = 'https://resources.gigaspaces.com/helm-charts:gigaspaces/insightedge'
 
