@@ -19,14 +19,19 @@ ${password}=  ${mextester06_gmail_password}
 *** Test Cases ***
 ShowAlertReceiver - shall be able to show all alert receivers
    [Documentation]
-   ...  send CreatePrivacyPolicy with policy and developer name only
-   ...  verify policy is created
+   ...  - send ShowAlertReceiver with no args
+   ...  - verify all receivers
 
    ${alert}=  Show Alert Receivers  
 
    Receivers Data Should Be Good  ${alert}
 
 ShowAlertReceiver - users should only see their own receivers
+   [Documentation]
+   ...  - create alert receivers as different users
+   ...  - verify users cannot see each others receivers
+   ...  - verify mexadmin can see all of them
+
    [Setup]  Setup Users
 
    ${alert11}=  Create Alert Receiver  receiver_name=${receiver_name}11  type=email  severity=info  developer_org_name=${orgname}  token=${user_token1}
@@ -40,14 +45,39 @@ ShowAlertReceiver - users should only see their own receivers
    ${show_admin}=  Show Alert Receivers  token=${super_token}  developer_org_name=${orgname}  use_defaults=${False}
 
    Length Should Be  ${show1}  2
-   Length Should Be  ${show1}  2
+   Length Should Be  ${show2}  2
    Length Should Be  ${show_admin}  4
 
    Should Be Equal  ${show1[0]['User']}  ${epochusername1}
    Should Be Equal  ${show1[1]['User']}  ${epochusername1}
    Should Be Equal  ${show2[0]['User']}  ${epochusername2}
    Should Be Equal  ${show2[1]['User']}  ${epochusername2}
- 
+
+ShowAlertReceiver - org manager should see other receivers
+   [Documentation]
+   ...  - create alert receivers as contributors
+   ...  - verify org manager can see the receivers
+   ...  - verify mexadmin can see all of them
+
+   [Setup]  Setup Users
+
+   ${org_default}=  Get Default Organization Name
+
+   ${orgname}=  Create Org  orgname=${org_default}1  token=${user_token1}  orgtype=developer
+   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token1}     use_defaults=${False}
+
+   ${alert11}=  Create Alert Receiver  receiver_name=${receiver_name}11  type=email  severity=info  developer_org_name=${orgname}  token=${user_token2}
+   ${show1}=  Show Alert Receivers  user=${epochusername2}  developer_org_name=${orgname}  token=${user_token1}  use_defaults=${False}
+   Should Be Equal  ${show1[0]}  ${alert11}
+
+   ${alert12}=  Create Alert Receiver  receiver_name=${receiver_name}12  type=email  severity=info  cluster_instance_developer_org_name=${orgname}  token=${user_token2}
+   ${show2}=  Show Alert Receivers  user=${epochusername2}  cluster_instance_developer_org_name=${orgname}  token=${user_token1}  use_defaults=${False}
+   Should Be Equal  ${show2[0]}  ${alert12}
+
+   ${alert13}=  Create Alert Receiver  receiver_name=${receiver_name}13  type=email  severity=info  operator_org_name=${orgname}  token=${user_token2}
+   ${show3}=  Show Alert Receivers  user=${epochusername2}  operator_org_name=${orgname}  token=${user_token1}  use_defaults=${False}
+   Should Be Equal  ${show3[0]}  ${alert13}
+
 *** Keywords ***
 #Setup
 #   ${token}=  Get Super Token

@@ -41,6 +41,8 @@ DeleteAlertReveiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type slack and severity warn for user \\\\"mexadmin\\\\"]"}')  type=slack  severity=warn
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type z and severity a for user \\\\"mexadmin\\\\"]"}')  type=z  severity=a
 
+   Org details must be present to manage a specific receiver  delete with user but no org
+
 DeleteAlertReceiver - delete alertreceiver from another user shall return error
    [Documentation]
    ...  - create alertreceiver as mexadmin
