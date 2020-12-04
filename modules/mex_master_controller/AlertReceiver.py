@@ -23,8 +23,8 @@ class AlertReceiver(MexOperation):
         self.slack_token = 'xoxb-313978814983-1439649519408-2VLnGtw8kG7Krl3aGudkQoww' 
         self.slack_channel = 'C01CE9BNV6J'  # qa-alertreceiver
 
-    def _build(self, receiver_name=None, type=None, severity=None, email_address=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=True):
-        logging.info(f'usedef {use_defaults}')
+    def _build(self, region=None, receiver_name=None, type=None, severity=None, email_address=None, user=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=True):
+
         if use_defaults:
             if receiver_name is None: receiver_name = shared_variables.alert_receiver_name_default
             if type is None: type = shared_variables.alert_receiver_type_default
@@ -40,6 +40,9 @@ class AlertReceiver(MexOperation):
         cloudlet_key_dict = {}
         cluster_key_dict = {}
         app_cloudlet_key_dict = {}
+
+        if region is not None:
+            receiver_dict['region'] = region
  
         if receiver_name is not None:
             receiver_dict['name'] = receiver_name
@@ -47,6 +50,8 @@ class AlertReceiver(MexOperation):
             receiver_dict['type'] = type
         if severity is not None:
             receiver_dict['severity'] = severity
+        if user is not None:
+            receiver_dict['user'] = user 
 
         if slack_channel is not None:
             receiver_dict['slackchannel'] = slack_channel
@@ -91,8 +96,8 @@ class AlertReceiver(MexOperation):
 
         return receiver_dict
 
-    def create_alert_receiver(self, token=None, receiver_name=None, type=None, severity=None, email_address=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, use_defaults=use_defaults)
+    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, email_address=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(region=region, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_delete = None
@@ -108,134 +113,161 @@ class AlertReceiver(MexOperation):
  
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
 
-    def delete_alert_receiver(self, token=None, region=None, receiver_name=None,  type=None, severity=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, use_defaults=use_defaults)
+    def delete_alert_receiver(self, token=None, region=None, receiver_name=None,  type=None, severity=None, user=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, user=user, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
+    def show_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_developer_org_name=None, user=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(receiver_name=receiver_name, type=type, severity=severity, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, user=user, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def verify_slack(self, alert_type, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, wait=30):
+    def verify_slack(self, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, wait=30, num_messages_to_check=3):
         now = time.time() - 30
 
         client = WebClient(token=self.slack_token)
 
-        def check_payload(text):
-            if text in response['messages'][0]['attachments'][0]['text']:
-                logging.info(f'{text} found in alert slack message')
+        def check_payload(msg, text):
+            if text in msg['attachments'][0]['text']:
+                logger.info(f'{text} found in alert slack message')
             else:
                 raise Exception(f'{text} not found in alert slack message')
 
         for attempt in range(wait):
-            logging.debug(f'checking slack attempt {attempt}/{wait}')
+            logger.debug(f'checking slack attempt {attempt}/{wait}')
             #response = client.conversations_history(channel=self.slack_channel, oldest=now)
-            response = client.conversations_history(channel=self.slack_channel, limit=1)
+            try:
+                response = client.conversations_history(channel=self.slack_channel, limit=num_messages_to_check)
+            except Exception as e:
+                logger.info(f'slack error caught:{e}')
 
             if len(response['messages']) > 0:
-               subject = response['messages'][0]['attachments'][0]['fallback']
-               if alert_type in subject and f'{alert_name} Application: {app_name} Version: {app_version}' in subject: 
-                   logging.info('new slack message found')
-                   logging.debug(f'slack message found:{response}')
+               logger.info(f"checking {len(response['messages'])} messages")
+               for slack_msg in response['messages']:
+                   subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                   logger.info(f'checking message for alert_type={alert_type} subject={subject_to_check}') 
+                   #subject = response['messages'][0]['attachments'][0]['fallback']
+                   subject = slack_msg['attachments'][0]['fallback']
+                   logger.info(f'message to check: {subject}')
 
-                   if alert_name: check_payload(f'*alertname:* {alert_name}')
-                   if app_name: check_payload(f'*app:* {app_name}')
-                   if app_version: check_payload(f'*appver:* {app_version}')
-                   if developer_org_name: check_payload(f'*apporg:* {developer_org_name}')
-                   if cloudlet_name: check_payload(f'*cloudlet:* {cloudlet_name}')
-                   if operator_org_name: check_payload(f'*cloudletorg:* {operator_org_name}')
-                   if cluster_instance_name: check_payload(f'*cluster:* {cluster_instance_name}')
-                   if cluster_instance_developer_org_name: check_payload(f'*clusterorg:* {cluster_instance_developer_org_name}')
-                   if region: check_payload(f'*region:* {region}')
-                   if status: check_payload(f'*status:* {status}')
-                   if alert_type == 'RESOLVED':
-                       if response['messages'][0]['attachments'][0]['color'] == '2eb886':
-                           logging.info(f'color 2eb886 found in resolved alert slack message')
-                       else:
-                           raise Exception(f'color 2eb886 not found in resolved alert slack message')
-                   elif alert_type == 'FIRING':
-                       if response['messages'][0]['attachments'][0]['color'] == 'a30200':
-                           logging.info(f'color a30200 found in firing alert slack message')
-                       else:
-                           raise Exception(f'color a30200 not found in firing alert slack message')
+                   if alert_type in subject and subject_to_check in subject: 
+                       logger.info('new slack message found')
+                       logger.debug(f'slack message found:{response}')
 
-                   return True 
-               else:
-                   logging.debug('slack message found but doenst match yet. sleeping')
-                   time.sleep(1)
+                       try:
+                           if alert_name: check_payload(slack_msg, f'*alertname:* {alert_name}')
+                           if app_name: check_payload(slack_msg, f'*app:* {app_name}')
+                           if app_version: check_payload(slack_msg, f'*appver:* {app_version}')
+                           if developer_org_name: check_payload(slack_msg, f'*apporg:* {developer_org_name}')
+                           if cloudlet_name: check_payload(slack_msg, f'*cloudlet:* {cloudlet_name}')
+                           if operator_org_name: check_payload(slack_msg, f'*cloudletorg:* {operator_org_name}')
+                           if cluster_instance_name: check_payload(slack_msg, f'*cluster:* {cluster_instance_name}')
+                           if cluster_instance_developer_org_name: check_payload(slack_msg, f'*clusterorg:* {cluster_instance_developer_org_name}')
+                           if region: check_payload(slack_msg, f'*region:* {region}')
+                           if status: check_payload(slack_msg, f'*status:* {status}')
+                           if scope: check_payload(slack_msg, f'scope = {scope}')
+                           if port: check_payload(slack_msg, f'*port:* {port}')
+                           check_payload(slack_msg, '*job:* MobiledgeX Monitoring')
+                       except Exception as e:
+                           logger.info(f'check payload failed:{e}')
+                           continue
+
+                       if alert_type == 'RESOLVED':
+                           if slack_msg['attachments'][0]['color'] == '2eb886':
+                               logger.info(f'color 2eb886 found in resolved alert slack message')
+                           else:
+                               raise Exception(f'color 2eb886 not found in resolved alert slack message')
+                       elif alert_type == 'FIRING':
+                           if slack_msg['attachments'][0]['color'] == 'a30200':
+                               logger.info(f'color a30200 found in firing alert slack message')
+                           else:
+                               raise Exception(f'color a30200 not found in firing alert slack message')
+
+                       return True 
+                   else:
+                       logger.debug('slack message found but doenst match yet. sleeping')
+                       time.sleep(1)
             else:
-                logging.debug('no slack message not found yet. sleeping')
+                logger.debug('no slack message not found yet. sleeping')
                 time.sleep(1)
 
         raise Exception('slack message not found')
 
-    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, server='imap.gmail.com', wait=30):
         mail = imaplib.IMAP4_SSL(server)
         mail.login(email_address, email_password)
         mail.select('inbox')
         logger.debug(f'successfully logged into {email_address}')
 
-        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_name}")')
+        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
         mail_ids_pre = email_list[0].split()
         num_emails_pre = len(mail_ids_pre)
-        logger.debug(f'originally found {num_emails_pre} with {alert_name}')
+        logger.debug(f'originally found {num_emails_pre} with {alert_receiver_name}')
         #num_emails_pre=0
         
         for attempt in range(wait):
             mail.recent()
-            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_name}")')
+            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
             mail_ids = email_list[0].split()
             num_emails = len(mail_ids)
-            logging.info(f'number of emails found is {num_emails}')
+            logger.info(f'number of emails found is {num_emails}')
             if num_emails > num_emails_pre:
-                logging.info('new email found')
-                mail_id = email_list[0].split()
-                typ, data = mail.fetch(mail_id[-1], '(RFC822)')
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        msg = email.message_from_string(response_part[1].decode('utf-8'))
-                        email_subject = msg['subject'].replace('\r\n','')
-                        email_from = msg['from']
-                        date_received = msg['date']
-                        logger.debug(f'subject={email_subject}')
- 
-                        #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
-                        subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
-                        if alert_type in email_subject and subject_to_check in email_subject:
-                            logger.info(f'subject{email_subject}  verified')
-                        else:
-                            raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
- 
-                        if msg.is_multipart():
-                            for part in msg.walk():
-                                ctype = part.get_content_type()
-                                logger.debug(f'type={ctype}')
-                                if ctype == 'text/html':  # found html part of the message
-                                    payload = part.get_payload(decode=True).decode('utf-8')
-                                    logger.debug(f'payload={payload}')
+                def check_payload(text):
+                    if text in payload:
+                        logger.info(f'{text} found in alert email')
+                    else:
+                        raise Exception(f'{text} not found in alert email')
 
-                        def check_payload(text):
-                            if text in payload:
-                                logging.info(f'{text} found in alert email')
+                for newemail in email_list:
+                    logger.info('checking new email')
+                    mail_id = newemail.split()
+                    typ, data = mail.fetch(mail_id[-1], '(RFC822)')
+                    for response_part in data:
+                        if isinstance(response_part, tuple):
+                            msg = email.message_from_string(response_part[1].decode('utf-8'))
+                            email_subject = msg['subject'].replace('\r\n','')
+                            email_from = msg['from']
+                            date_received = msg['date']
+                            logger.debug(f'subject={email_subject}')
+ 
+                            #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
+                            subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                            if alert_type in email_subject and subject_to_check in email_subject:
+                                logger.info(f'subject{email_subject}  verified')
                             else:
-                                raise Exception(f'{text} not found in alert email')
+                                #raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
+                                logger.info(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
+                                continue 
+ 
+                            if msg.is_multipart():
+                                for part in msg.walk():
+                                    ctype = part.get_content_type()
+                                    logger.debug(f'type={ctype}')
+                                    if ctype == 'text/html':  # found html part of the message
+                                        payload = part.get_payload(decode=True).decode('utf-8')
+                                        logger.debug(f'payload={payload}')
+                            try:    
+                                if alert_name: check_payload(f'alertname = {alert_name}')
+                                if app_name: check_payload(f'app = {app_name}')
+                                if app_version: check_payload(f'appver = {app_version}')
+                                if developer_org_name: check_payload(f'apporg = {developer_org_name}')
+                                if cloudlet_name: check_payload(f'cloudlet = {cloudlet_name}')
+                                if operator_org_name: check_payload(f'cloudletorg = {operator_org_name}')
+                                if cluster_instance_name: check_payload(f'cluster = {cluster_instance_name}')
+                                if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
+                                if region: check_payload(f'region = {region}')
+                                if status: check_payload(f'status = {status}')
+                                if port: check_payload(f'port = {port}')
+                                if scope: check_payload(f'scope = {scope}')
+                                check_payload('job = MobiledgeX Monitoring')
+                            except Exception as e:
+                                logger.info(f'check payload failed:{e}')
+                                continue
 
-                        if alert_name: check_payload(f'alertname = {alert_name}')
-                        if app_name: check_payload(f'app = {app_name}')
-                        if app_version: check_payload(f'appver = {app_version}')
-                        if developer_org_name: check_payload(f'apporg = {developer_org_name}')
-                        if cloudlet_name: check_payload(f'cloudlet = {cloudlet_name}')
-                        if operator_org_name: check_payload(f'cloudletorg = {operator_org_name}')
-                        if cluster_instance_name: check_payload(f'cluster = {cluster_instance_name}')
-                        if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
-                        if region: check_payload(f'region = {region}')
-                        if status: check_payload(f'status = {status}')
-
-                        return True
+                            return True
             time.sleep(1)
 
         raise Exception('email not found')

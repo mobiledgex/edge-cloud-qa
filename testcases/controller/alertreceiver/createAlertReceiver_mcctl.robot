@@ -87,6 +87,9 @@ CreateAlertReceiver - mcctl shall handle create failures
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
 
+      # user
+      Error: Bad Request (400), User is not specifiable, current logged in user will be used  name=${recv_name}  type=emai  severity=info  app-org=${developer}  user=x
+
 *** Keywords ***
 Setup
    ${recv_name}=  Get Default Alert Receiver Name
