@@ -13,6 +13,8 @@ import rootlb
 import kubernetes
 import shared_variables
 
+from mex_master_controller.AlertReceiver import AlertReceiver
+
 class MexApp(object):
     def __init__(self):
         self.kubeconfig_dir = os.getenv('HOME') + '/.mobiledgex'
@@ -20,6 +22,8 @@ class MexApp(object):
         self.cf_token = '***REMOVED***'
         self.cf_user = 'mobiledgex.ops@mobiledgex.com'
         self.cf_zone_name = 'mobiledgex.net'
+
+        self.alert_receiver = AlertReceiver(root_url='dummy')
         
     def ping_udp_port(self, host, port):
         data = 'ping'
@@ -440,6 +444,28 @@ class MexApp(object):
         
         raise Exception('Running k8s pod not found')
 
+    def stop_crm_docker_container(self, crm_ip=None):
+        rb = rootlb.Rootlb(host=crm_ip)
+
+        output = rb.stop_docker_container('crmserver')
+        
+        if output[0] == 'crmserver\n':
+            logging.info('Stopped crmserver on ' + crm_ip)
+            return True
+        else:
+            raise Exception('crmserver docker stop failed on ' + crm_ip)
+
+    def start_crm_docker_container(self, crm_ip=None):
+        rb = rootlb.Rootlb(host=crm_ip)
+
+        output = rb.start_docker_container('crmserver')
+
+        if output[0] == 'crmserver\n':
+            logging.info('Started crmserver on ' + crm_ip)
+            return True
+        else:
+            raise Exception('crmserver docker start failed on ' + crm_ip)
+
     def stop_docker_container_rootlb(self, root_loadbalancer=None):
 
         self.wait_for_dns(root_loadbalancer)
@@ -747,3 +773,82 @@ class MexApp(object):
           output_dict[line_split[0].strip()] = line_split[1].strip()
 
         return output_dict
+
+    def alert_receiver_email_should_be_received(self, email_address, email_password, alert_receiver_name, alert_type, alert_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, status=None, scope=None, wait=30):
+        return self.alert_receiver.verify_email(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type=alert_type, alert_name=alert_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, wait=wait)
+
+    def alert_receiver_slack_message_should_be_received(self, alert_type, alert_name, alert_receiver_name, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, scope=None, wait=30):
+        return self.alert_receiver.verify_slack(alert_type=alert_type, alert_name=alert_name, region=region, alert_receiver_name=alert_receiver_name, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status=status, port=port, scope=scope, wait=wait)
+
+    def alert_receiver_email_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_slack_message_for_firing_appinstdown_healthcheckfailserverfail_should_be_received(self, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailserverfail_should_be_received(self, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailServerFail', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_slack_message_for_firing_appinstdown_healthcheckfailrootlboffline_should_be_received(self, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailrootlboffline_should_be_received(self, alert_receiver_name=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, scope='Application', wait=wait)
+
+    def alert_receiver_email_for_firing_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
+
+    def alert_receiver_email_for_resolved_cloudletdown_should_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=180):
+        self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, alert_name='CloudletDown', region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
+
+    def alert_receiver_slack_message_for_firing_cloudletdown_should_be_received(self, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='CloudletDown', alert_receiver_name=alert_receiver_name, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
+
+    def alert_receiver_slack_message_for_resolved_cloudletdown_should_be_received(self, region=None, alert_receiver_name=None, cloudlet_name=None, operator_org_name=None, wait=30):
+        self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, scope='Cloudlet', wait=wait)
+
+    def alert_receiver_email_for_firing_appinstdown_healthcheckfailrootlboffline_should_not_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=30):
+        try:
+            self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_receiver_name=alert_receiver_name, alert_type='FIRING', alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, wait=wait)
+        except Exception as e:
+            logger.info(f'email not found:{e}')
+            return True
+
+        raise Exception('alert receiver email for firing appinstdown healthcheckfailrootlboffline was received')
+
+    def alert_receiver_email_for_resolved_appinstdown_healthcheckfailrootlboffline_should_not_be_received(self, email_address, email_password, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, wait=180):
+        try:
+            self.alert_receiver_email_should_be_received(email_address=email_address, email_password=email_password, alert_type='RESOLVED', alert_receiver_name=alert_receiver_name, alert_name='AppInstDown', region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, wait=wait)
+        except Exception as e:
+            logger.info(f'email not found:{e}')
+            return True
+
+        raise Exception('alert receiver email for resolved appinstdown healthcheckfailrootlboffline was received')
+
+    def alert_receiver_slack_message_for_firing_appinstdown_healthcheckfailrootlboffline_should_not_be_received(self, region=None, alert_receiver_name=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        try:
+            self.alert_receiver_slack_message_should_be_received(alert_type='FIRING', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, wait=wait)
+        except Exception as e:
+            logger.info(f'slack message not found:{e}')
+            return True
+
+        raise Exception('alert receiver slack message for firing appinstdown healthcheckfailrootlboffline was received')
+
+    def alert_receiver_slack_message_for_resolved_appinstdown_healthcheckfailrootlboffline_should_not_be_received(self, alert_receiver_name=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, status=None, port=None, wait=30):
+        try:
+            self.alert_receiver_slack_message_should_be_received(alert_type='RESOLVED', alert_name='AppInstDown', alert_receiver_name=alert_receiver_name, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, status='HealthCheckFailRootlbOffline', port=port, wait=wait)
+        except Exception as e:
+            logger.info(f'slack message not found:{e}')
+            return True
+
+        raise Exception('alert receiver slack message for resolved appinstdown healthcheckfailrootlboffline was received')
+
