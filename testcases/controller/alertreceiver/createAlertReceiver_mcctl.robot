@@ -14,6 +14,7 @@ ${region}=  US
 ${developer}=  MobiledgeX
 
 *** Test Cases ***
+# ECQ-2905
 CreateAlertReceiver - mcctl shall be able to create/delete email/slack alert
    [Documentation]
    ...  - send alertreceiver create via mcctl with various parms
@@ -63,6 +64,7 @@ CreateAlertReceiver - mcctl shall be able to create/delete email/slack alert
       name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  region=US
       name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  region=US
 
+# ECQ-2906
 CreateAlertReceiver - mcctl shall handle create failures
    [Documentation]
    ...  - send alertreceiver create via mcctl with various error cases
