@@ -19,11 +19,17 @@ ${password}=  ${mextester06_gmail_password}
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2912
 CreateAlertReceiver - DeveloperManager shall be able to create an alert receiver      orgtype=developer  role=DeveloperManager
+# ECQ-2913
 CreateAlertReceiver - DeveloperContributor shall be able to create an alert receiver  orgtype=developer  role=DeveloperContributor
+# ECQ-2914
 CreateAlertReceiver - DeveloperViewer shall be able to create an alert receiver       orgtype=developer  role=DeveloperViewer
+# ECQ-2915
 CreateAlertReceiver - OperatorManager shall be able to create an alert receiver       orgtype=operator   role=OperatorManager
+# ECQ-2916
 CreateAlertReceiver - OperatorContributor shall be able to create an alert receiver   orgtype=operator   role=OperatorContributor
+# ECQ-2917
 CreateAlertReceiver - OperatorViewer shall be able to create an alert receiver        orgtype=operator   role=OperatorViewer
 
 *** Keywords ***
