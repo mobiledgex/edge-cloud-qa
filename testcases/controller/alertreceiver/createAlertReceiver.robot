@@ -17,6 +17,7 @@ ${operator}=  GDDT
 ${counter}=  ${0}
 
 *** Test Cases ***
+# ECQ-2907
 CreateAlertReceiver - shall be able to create email alert
    [Documentation]
    ...  - send alertreceiver create with type=email and suppored severities and app/cluster/cloudlets
@@ -72,6 +73,7 @@ CreateAlertReceiver - shall be able to create email alert
       receiver_name=12345  type=email  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
       receiver_name=my alert  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}  cloudlet_name=x
 
+# ECQ-2908
 CreateAlertReceiver - shall be able to create slack alert
    [Documentation]
    ...  - send alertreceiver create with type=slack and suppored severities and app/cluster/cloudlets
