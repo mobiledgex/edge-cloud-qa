@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
 
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${developer}=  MobiledgeX
@@ -16,6 +16,7 @@ ${password}=  ${mextester06_gmail_password}
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-2920
 DeleteAlertReceiver - developer org owner shall be able to delete alertreceiver from another user
    [Documentation]
    ...  - create alertreceiver as a user
@@ -33,14 +34,15 @@ DeleteAlertReceiver - developer org owner shall be able to delete alertreceiver 
    ${alertshow_pre}=  Show Alert Receivers  token=${user_token2}  receiver_name=${receiver_name}  type=email  severity=info  developer_org_name=${orgname}
    Length Should Be  ${alertshow_pre}  1
 
-#   ${error}=  Run Keyword and Expect Error  *  Delete Alert Receiver  token=${user_token3}  type=email  severity=info  user=${epochusername2}  developer_org_name=${orgname}
-#   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
-#
-#   Delete Alert Receiver  token=${user_token_owner}  type=email  severity=info  user=${epochusername2}  developer_org_name=${orgname}
-#  
-#   ${alertshow_post}=  Show Alert Receivers  token=${user_token2}  receiver_name=${receiver_name}  type=email  severity=info  developer_org_name=${orgname}
-#   Length Should Be  ${alertshow_post}  0
+   ${error}=  Run Keyword and Expect Error  *  Delete Alert Receiver  token=${user_token3}  type=email  severity=info  user=${epochusername2}  developer_org_name=${orgname}
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
+   Delete Alert Receiver  token=${user_token_owner}  type=email  severity=info  user=${epochusername2}  developer_org_name=${orgname}
+  
+   ${alertshow_post}=  Show Alert Receivers  token=${user_token2}  receiver_name=${receiver_name}  type=email  severity=info  developer_org_name=${orgname}
+   Length Should Be  ${alertshow_post}  0
+
+# ECQ-2921
 DeleteAlertReceiver - operator org owner shall be able to delete alertreceiver from another user
    [Documentation]
    ...  - create alertreceiver as a user
@@ -66,6 +68,7 @@ DeleteAlertReceiver - operator org owner shall be able to delete alertreceiver f
    ${alertshow_post}=  Show Alert Receivers  token=${user_token2}  receiver_name=${receiver_name}  type=email  severity=info  developer_org_name=${orgname}
    Length Should Be  ${alertshow_post}  0
 
+# ECQ-2922
 DeleteAlertReceiver - mexadmin shall be able to delete alertreceiver from another user
    [Documentation]
    ...  - create alertreceiver as a user
@@ -104,7 +107,6 @@ Setup
    ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
    ${epochusername3}=  Catenate  SEPARATOR=  ${username}  ${epoch}  3
 
-   # No longer need to verify email to create user accounts EDC-2163 has been added using Skip Verify Config
    Skip Verify Email  token=${super_token}
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
