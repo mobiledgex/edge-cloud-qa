@@ -51,7 +51,7 @@ FindCloudlet - request shall return tmus with no gcp/azure provisioned ond same 
       Should Be Equal As Numbers  ${cloudlet.ports[1].proto}          ${appinst_1['data']['mapped_ports'][1]['proto']}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[1].internal_port}  ${appinst_1['data']['mapped_ports'][1]['internal_port']}
       Should Be Equal As Numbers  ${cloudlet.ports[1].public_port}    ${appinst_1['data']['mapped_ports'][1]['public_port']}
-      Should Be Equal             ${cloudlet.ports[1].path_prefix}    ${appinst_1['data']['mapped_ports'][1]['fqdn_prefix']}
+      Should Be Equal             ${cloudlet.ports[1].fqdn_prefix}    ${appinst_1['data']['mapped_ports'][1]['fqdn_prefix']}
 
       Should Be Equal As Numbers  ${cloudlet.ports[2].proto}          ${appinst_1['data']['mapped_ports'][2]['proto']}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[2].internal_port}  ${appinst_1['data']['mapped_ports'][2]['internal_port']}
