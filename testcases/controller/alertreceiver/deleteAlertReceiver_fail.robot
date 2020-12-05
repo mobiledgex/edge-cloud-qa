@@ -13,6 +13,7 @@ ${username}=  mexadmin
 ${mexadmin_password}=  mexadminfastedgecloudinfra
 
 *** Test Cases ***
+# ECQ-2918
 DeleteAlertReveiver - missing/invalid/empty parms shall return error
    [Documentation]
    ...  - send alertreceiver delete with various missing/invalid/empty parms
@@ -41,8 +42,9 @@ DeleteAlertReveiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type slack and severity warn for user \\\\"mexadmin\\\\"]"}')  type=slack  severity=warn
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type z and severity a for user \\\\"mexadmin\\\\"]"}')  type=z  severity=a
 
-   Org details must be present to manage a specific receiver  delete with user but no org
+   ('code\=400', 'error\={"message":"Org details must be present to manage a specific receiver"}')  token=${super_token}  receiver_name=${receiver_name}  type=email  severity=info  user=xxx  use_defaults=${False}
 
+# ECQ-2919
 DeleteAlertReceiver - delete alertreceiver from another user shall return error
    [Documentation]
    ...  - create alertreceiver as mexadmin
