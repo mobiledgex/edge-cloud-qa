@@ -12,7 +12,8 @@ ${password}=  ${mextester06_gmail_password}
 ${developer}=  MobiledgeX
 
 *** Test Cases ***
-CreateAlertReveiver - missing/invalid/empty parms shall return error
+# ECQ-2909
+CreateAlertReceiver - missing/invalid/empty parms shall return error
    [Documentation]
    ...  - send alertreceiver create with various missing/invalid/empty parms
    ...  - verify proper error is received
@@ -77,6 +78,7 @@ CreateAlertReveiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=email  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer
    ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=slack_channel  slack_api_url=http://x.com  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer  region=US
 
+# ECQ-2910
 CreateAlertReceiver - duplicate create shall return error
    [Documentation]
    ...  - send alertreceiver twice for same receiver name
@@ -88,6 +90,7 @@ CreateAlertReceiver - duplicate create shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  Unable to create a receiver - bad response status 409 Conflict[Receiver Exists - delete it first]
 
+# ECQ-2911
 CreateAlertReceiver - create with app from another user shall return error
    [Documentation]
    ...  - create user1 and user2
