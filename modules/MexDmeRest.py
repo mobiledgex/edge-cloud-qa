@@ -332,7 +332,7 @@ class MexDmeRest(MexRest):
             logger.error(f'key_file={key_file} does not exist')
             return None
         
-        cmd = 'genauthtoken -appname ' + app_name + ' -appvers ' + app_version + ' -devname ' + developer_name + ' -privkeyfile ' + key_file
+        cmd = f'genauthtoken -appname {app_name} -appvers {app_version} -devname {developer_name} -privkeyfile {key_file}'
         logger.debug('cmd=' + cmd)
         
         process = subprocess.run(cmd,
