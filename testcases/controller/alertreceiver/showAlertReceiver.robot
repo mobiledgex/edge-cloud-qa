@@ -17,6 +17,7 @@ ${username}=  mextester06
 ${password}=  ${mextester06_gmail_password}
 
 *** Test Cases ***
+# ECQ-2923
 ShowAlertReceiver - shall be able to show all alert receivers
    [Documentation]
    ...  - send ShowAlertReceiver with no args
@@ -26,6 +27,7 @@ ShowAlertReceiver - shall be able to show all alert receivers
 
    Receivers Data Should Be Good  ${alert}
 
+# ECQ-2924
 ShowAlertReceiver - users should only see their own receivers
    [Documentation]
    ...  - create alert receivers as different users
@@ -53,11 +55,11 @@ ShowAlertReceiver - users should only see their own receivers
    Should Be Equal  ${show2[0]['User']}  ${epochusername2}
    Should Be Equal  ${show2[1]['User']}  ${epochusername2}
 
+# ECQ-2925
 ShowAlertReceiver - org manager should see other receivers
    [Documentation]
    ...  - create alert receivers as contributors
    ...  - verify org manager can see the receivers
-   ...  - verify mexadmin can see all of them
 
    [Setup]  Setup Users
 
