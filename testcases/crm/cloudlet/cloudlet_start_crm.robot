@@ -47,12 +47,18 @@ CreateCloudlet - User shall be able to create a cloudlet on Openstack Hamburg
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_hamburg}  cloudlet_name=${cloudlet_name_openstack_hamburg}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_hamburg}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682
 
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_hamburg}  operator_org_name=${operator_name_openstack_hamburg}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_hamburg}  tags=pci=t4gpu:1
+
 # ECQ-1498
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Bonn
         [Documentation]
         ...  do CreateCloudlet to start a CRM on bonn openstack
 
         Create Cloudlet  region=EU  operator_org_name=${operator_name_openstack_bonn}  cloudlet_name=${cloudlet_name_openstack_bonn}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_bonn}  number_dynamic_ips=254  latitude=50.73438    longitude=7.09549  env_vars=FLAVOR_MATCH_PATTERN=m4
+
+        Add Cloudlet Resource Mapping  region=EU  cloudlet_name=${cloudlet_name_openstack_bonn}  operator_org_name=${operator_name_openstack_bonn}  mapping=gpu=${gpu_resource_name}
+        Add Resource Tag  region=EU  resource_name=${gpu_resource_name}  operator_org_name=${operator_name_openstack_bonn}  tags=pci=t4gpu:1
 
 # ECQ-1613
 CreateCloudlet - User shall be able to create a cloudlet on Openstack Berlin 
