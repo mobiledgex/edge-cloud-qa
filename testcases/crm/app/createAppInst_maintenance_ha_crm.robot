@@ -39,7 +39,7 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha2}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
 
-   Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
@@ -69,7 +69,7 @@ AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha2}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
 
-   Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
@@ -101,7 +101,7 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha2}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
 
-   Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}
 
@@ -129,7 +129,7 @@ AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated ap
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_vmpool}    operator_org_name=${operator_name_openstack}    developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
 
-   Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net
 
@@ -157,7 +157,7 @@ AppInst - vmpool-to-openstack appinst shall start for k8s/lb/shared app inst whe
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}    operator_org_name=${operator_name_openstack}    developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
 
-   Create App  region=${region}  auto_prov_policy=${policy['data']['key']['name']}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_vmpool}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha1}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net
 
@@ -181,6 +181,7 @@ Setup
    &{cloudlet2}=  Create Dictionary  name=${cloudlet2}  organization=${operator2}
    @{cloudlets}=  Create List  ${cloudlet1}  ${cloudlet2}
    ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=${operator_name}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
+   @{policy_list}=  Create List  ${policy['data']['key']['name']}
 
    Set Suite Variable  ${flavor_name_default}
    Set Suite Variable  ${operator_name}
@@ -188,6 +189,7 @@ Setup
    Set Suite Variable  ${app_name_default}
    Set Suite Variable  ${cluster2}
    Set Suite Variable  ${policy}
+   Set Suite Variable  @{policy_list}
 
 Teardown
    [Arguments]  ${cloudlet1}  ${operator1}  ${cloudlet2}  ${operator2}
