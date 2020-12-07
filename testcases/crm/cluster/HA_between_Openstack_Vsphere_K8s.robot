@@ -52,9 +52,10 @@ Create Auto Provisioning Policy
    log to console   ${policy_return}
 
 Create App, Add Autoprovisioning Policy and Deploy an App Instance
-
+   
+   @{policy_list}=  Create List  ${policy_name}
    log to console  Creating App and App Instance
-   create app  region=${region}  app_name=${app_name}  deployment=kubernetes  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policy=${policy_name}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
+   create app  region=${region}  app_name=${app_name}  deployment=kubernetes  developer_org_name=${orgname}  image_path=docker-qa.mobiledgex.net/testmonitor/images/myfirst-app:v1  auto_prov_policies=@{policy_list}  access_ports=tcp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
    Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet1}  operator_org_name=${operator_name_openstack_packet}  token=${user_token}
 #   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet2}  operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=${cluster_name}  token=${user_token}
@@ -67,7 +68,7 @@ Delete Cloudlet from Auto Provisioning Policy
 #    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}
 
 Remove auto provisioning policy from App
-    update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policy=${EMPTY}  app_version=v1  token=${user_token}
+    update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policies=@{EMPTY}  app_version=v1  token=${user_token}
 
     sleep  2 minutes
 #    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}  cloudlet_name=${cloudlet1}
