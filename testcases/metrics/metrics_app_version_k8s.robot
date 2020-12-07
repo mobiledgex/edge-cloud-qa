@@ -12,7 +12,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
-${operator}=                       TDG
+${operator_name_openstack}=                       TDG
 ${clustername_docker}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
 
@@ -33,8 +33,8 @@ AppMetrics - Shall be able to get Docker app Connections metrics by version
    ...  request the cluster Connections metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections 
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections 
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
    Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
@@ -50,8 +50,8 @@ AppMetrics - Shall be able to get Docker app CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
    Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
@@ -67,8 +67,8 @@ AppMetrics - Shall be able to get Docker disk CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
    Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
@@ -84,8 +84,8 @@ AppMetrics - Shall be able to get Docker memory CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
    Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
@@ -101,8 +101,8 @@ AppMetrics - Shall be able to get Docker network metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
    Metrics Should Match Influxdb  metrics=${metrics2}  metrics_influx=${metrics_influx2}
@@ -133,13 +133,13 @@ Setup
 
    Create Flavor  region=${region}
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  deployment=kubernetes  number_nodes=1  ip_access=IpAccessShared
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  number_nodes=1  ip_access=IpAccessShared
 
    Create App  region=${region}  app_name=${app_name}  app_version=${app_version}  default_flavor_name=${flavor_name}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2015,udp:2016
-   ${appinst1}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  #autocluster_ip_access=IpAccessDedicated
+   ${appinst1}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
 
    Create App  region=${region}  app_name=${app_name}  app_version=${app_version2}  default_flavor_name=${flavor_name}  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2015
-   ${appinst2}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version2}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  #autocluster_ip_access=IpAccessDedicated
+   ${appinst2}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version2}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
 
    Log to Console  Wait and connect to TCP/UDP ports
    Sleep  7 mins
