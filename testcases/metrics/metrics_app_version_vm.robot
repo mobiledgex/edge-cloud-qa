@@ -12,7 +12,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
-${operator}=                       TDG
+${operator_name_openstack}=                       TDG
 ${cluster_name}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
 
@@ -35,10 +35,10 @@ AppMetrics - Shall be able to get Docker app Connections metrics by version
    ...  request the cluster Connections metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections 
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections 
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
@@ -51,10 +51,10 @@ AppMetrics - Shall be able to get Docker app CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  cpu
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  cpu
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
@@ -67,8 +67,8 @@ AppMetrics - Shall be able to get Docker disk CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
@@ -81,8 +81,8 @@ AppMetrics - Shall be able to get Docker memory CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
@@ -95,8 +95,8 @@ AppMetrics - Shall be able to get Docker networ CPU metrics by version
    ...  request the cluster CPU metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  ${app_version2}  ${app_name_influx}  ${cluster_name}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
@@ -122,32 +122,32 @@ Setup
    #${clustername_k8dedicated}=   Set Variable  cluster-1585261834-0104609-k8sdedicated
    #${flavor_name}=  Set Variable  flavor1585261834-0104609
 
-   #Create Flavor  region=${region}  flavor_name=${flavorname}  disk=80
+   Create Flavor  region=${region}  flavor_name=${flavorname}  disk=80
 
-   #Create App  region=${region}  app_name=${app_name}  app_version=${app_version}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
-   #${app_inst1}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}
+   Create App  region=${region}  app_name=${app_name}  app_version=${app_version}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
+   ${app_inst1}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
 
-   #Create App  region=${region}  app_name=${app_name}  app_version=${app_version2}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
-   #${app_inst2}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version2}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}
+   Create App  region=${region}  app_name=${app_name}  app_version=${app_version2}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
+   ${app_inst2}=  Create App Instance  region=${region}  app_name=${app_name}  app_version=${app_version2}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
 
    Log to Console  Wait and connect to TCP/UDP ports
-   #Sleep  7 mins
-   #UDP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][1]['public_port']}
-   #TCP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][0]['public_port']}  wait_time=20
-   #UDP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][1]['public_port']}
-   #TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
-   #UDP Port Should Be Alive  mobiledgexapp1585696665-92696810.automationdusseldorfcloudlet.tdg.mobiledgex.net  2015 
-   #TCP Port Should Be Alive  mobiledgexapp1585696665-92696810.automationdusseldorfcloudlet.tdg.mobiledgex.net  2016  wait_time=20
-   #UDP Port Should Be Alive  mobiledgexapp1585696665-92696820.automationdusseldorfcloudlet.tdg.mobiledgex.net  2015 
-   #TCP Port Should Be Alive  mobiledgexapp1585696665-92696820.automationdusseldorfcloudlet.tdg.mobiledgex.net   2016  wait_time=20
+   Sleep  7 mins
+   UDP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][1]['public_port']}
+   TCP Port Should Be Alive  ${appinst1['data']['uri']}  ${appinst1['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   UDP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][1]['public_port']}
+   TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
+   UDP Port Should Be Alive  mobiledgexapp1585696665-92696810.automationdusseldorfcloudlet.tdg.mobiledgex.net  2015 
+   TCP Port Should Be Alive  mobiledgexapp1585696665-92696810.automationdusseldorfcloudlet.tdg.mobiledgex.net  2016  wait_time=20
+   UDP Port Should Be Alive  mobiledgexapp1585696665-92696820.automationdusseldorfcloudlet.tdg.mobiledgex.net  2015 
+   TCP Port Should Be Alive  mobiledgexapp1585696665-92696820.automationdusseldorfcloudlet.tdg.mobiledgex.net   2016  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
    #Sleep  3 mins
 
    ${app_name}=  Set Variable  app1585696665-926968
    ${cluster_name}=  Set Variable  cluster1585696665-926968 
-   #${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
-   #${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
+   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
+   ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
    ${app_name_influx}=  Convert To Lowercase  ${app_name}
    
    Set Suite Variable  ${app_name}
@@ -156,7 +156,7 @@ Setup
    Set Suite Variable  ${app_version2}
    Set Suite Variable  ${cluster_name}
    Set Suite Variable  ${developer_name}
-   #Set Suite Variable  ${pod}
+   Set Suite Variable  ${pod}
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
