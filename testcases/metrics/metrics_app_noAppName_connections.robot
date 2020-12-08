@@ -16,7 +16,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
-${operator}=                       GDDT
+${operator_name_openstack}=                       GDDT
 ${clustername_docker}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
 
@@ -34,7 +34,7 @@ AppMetrics - Shall be able to get the app Connections metrics with cloudlet/oper
    ...  request all app Connections metrics with cloudlet/operator/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections 
+   ${metrics}=  Get app metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections 
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -65,7 +65,7 @@ AppMetrics - Shall be able to get the app Connections metrics with operator/deve
    ...  request all app Connections metrics with operator/developer only
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with operator/developer only  ${operator}  ${developer_name}  connections 
+   ${metrics}=  Get app metrics with operator/developer only  ${operator_name_openstack}  ${developer_name}  connections 
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -91,7 +91,18 @@ AppMetrics - Shall be able to get all app Connections metrics with developer onl
    ...  request all app connections metrics with developer only
    ...  verify info is correct and only returns 2000 metrics
 
-   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections 
+   [Teardown]  Config Teardown
+
+   Set Max Metrics Data Points Config   1234
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  1234
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Connections Should be in Range  ${metrics}
+
+   Set Max Metrics Data Points Config   10000
+
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  10000
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -112,6 +123,9 @@ Setup
 
    Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
+
+Config Teardown
+   Set Max Metrics Data Points Config   10000
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}

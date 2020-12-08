@@ -657,7 +657,7 @@ Get cluster metrics with developer only
    [Return]  ${metrics}
 
 Get all cluster metrics with developer only
-   [Arguments]  ${developer}  ${selector}
+   [Arguments]  ${developer}  ${selector}  ${number_to_check}=${None}
 
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get Cluster Metrics  region=${region}  developer_org_name=${developer}  selector=${selector}
@@ -666,7 +666,9 @@ Get all cluster metrics with developer only
    ${num_readings}=  Get Length  ${metricspre['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be Equal As Integers  ${num_readings}  2000
+   #Should Be Equal As Integers  ${num_readings}  2000
+   Should Be Equal As Integers  ${num_readings}  ${number_to_check}  # was changed to 10000
+
 
    [Return]  ${metricspre}
 

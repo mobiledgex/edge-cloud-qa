@@ -10,7 +10,7 @@ Test Timeout    ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationSunnydaleCloudlet
-${operator}=                       GDDT
+${operator_name_openstack}=                       GDDT
 ${clustername_docker}=   cluster1574731678-0317152-docker
 ${developer_name}=  developer1574731678-0317152 
 ${app_name}=  xxx
@@ -32,7 +32,7 @@ AppMetrics - Shall be able to get the last docker app Connections metric on open
    ...  request app Connections metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -46,7 +46,7 @@ AppMetrics - Shall be able to get the last 5 docker app Connections metrics on o
    ...  request app Connections metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -59,7 +59,7 @@ AppMetrics - Shall be able to get the last 10 docker app Connections metrics on 
    ...  request cluster Connections metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -72,7 +72,7 @@ AppMetrics - Shall be able to get all docker app Connections metrics on openstac
    ...  request all cluster Connections metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -87,7 +87,7 @@ AppMetrics - Shall be able to request more docker app Connections metrics than e
    ...  request cluster Connections metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -102,7 +102,7 @@ AppMetrics - Shall be able to get docker app Connections metrics with starttime 
    ...  request cluster Connections metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -113,7 +113,7 @@ AppMetrics - Shall be able to get docker app Connections metrics with endtime on
    ...  request cluster Connections metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -126,7 +126,7 @@ AppMetrics - Shall be able to get the docker app Connections metrics with startt
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -139,7 +139,7 @@ AppMetrics - Shall be able to get the docker app Connections metrics with startt
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the docker app Connections metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -148,7 +148,7 @@ AppMetrics - Shall be able to get the docker app Connections metrics with endtim
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -159,28 +159,28 @@ AppMetrics - Shall be able to get the docker app Connections metrics with endtim
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the docker app Connections metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the docker app Connections metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the docker app Connections metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Connections metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -191,7 +191,7 @@ AppMetrics - Shall be able to get the docker app Connections metrics with startt
    ...  request all cluster Connections metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -202,7 +202,7 @@ AppMetrics - DeveloperManager shall be able to get docker app Connections metric
    ...  request the cluster Connections metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -215,7 +215,7 @@ AppMetrics - DeveloperContributor shall be able to get docker app Connections me
    ...  request the cluster Connections metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -228,7 +228,7 @@ AppMetrics - DeveloperViewer shall be able to get docker app Connections metrics
    ...  request the cluster Connections metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -241,8 +241,8 @@ AppMetrics - Shall be able to get Docker app Connections metrics by version
    ...  request the cluster Connections metrics by version
    ...  verify metrics are returned
 
-   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  1.0  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections 
-   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  2.0  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections 
+   ${metrics1}   ${metrics_influx1}=  Get the last 5 app metrics on openstack with version     ${app_name}  1.0  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections 
+   ${metrics2}   ${metrics_influx2}=  Get the last 5 app metrics on openstack with version     ${app_name}  2.0  ${app_name_influx}  ${clustername_docker}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections 
 
    Metrics Should Match Influxdb  metrics=${metrics1}  metrics_influx=${metrics_influx1}
 
