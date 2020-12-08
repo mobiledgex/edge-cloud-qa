@@ -302,5 +302,5 @@ Metrics Should Match Influxdb
       Should Be Equal  ${metrics_influx_t[${index}]['udpRecv']}   ${reading[6]}
       Should Be Equal  ${metrics_influx_t[${index}]['udpRecvErr']}   ${reading[7]}
  
-      ${index}=  Evaluate  ${index}+1$a
+      ${index}=  Evaluate  ${index}+1
    END
