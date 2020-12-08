@@ -1,7 +1,7 @@
 import json
 import logging
 
-import shared_variables
+import shared_variables_mc
 
 from mex_master_controller.MexOperation import MexOperation
 
@@ -15,20 +15,24 @@ class User(MexOperation):
         self.create_url = '/auth/user/create'
         self.delete_url = '/auth/user/delete'
         self.show_url = '/auth/user/show'
+        self.current_url = '/auth/user/current'
+        self.update_url = '/auth/user/update'
 
-    def _build(self, username=None, use_defaults=True):
+    def _build(self, username=None, metadata=None, use_defaults=True):
         pool = None
 
         if username == 'default':
-            username = shared_variables.username_default
+            username = shared_variables_mc.username_default
             
         if use_defaults:
-            if username is None: username = shared_variables.username_default
+            if username is None: username = shared_variables_mc.username_default
 
         pool_dict = {}
 
         if username is not None:
             pool_dict['username'] = username
+        if metadata is not None:
+            pool_dict['metadata'] = metadata
 
         return pool_dict
 
@@ -37,4 +41,14 @@ class User(MexOperation):
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def current_user(self, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.show(token=token, url=self.current_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=None)[0]
+
+    def update_user(self, token=None, metadata=None, json_data=None, use_defaults=False, use_thread=False):
+        msg = self._build(metadata=metadata, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.update(token=token, url=self.update_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=None)
+
 

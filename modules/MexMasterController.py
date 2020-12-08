@@ -206,6 +206,12 @@ class MexMasterController(MexRest):
     def get_token(self):
         return self.token
 
+    def get_default_username(self):
+        return shared_variables_mc.username_default
+
+    def get_default_email(self):
+        return shared_variables_mc.email_default
+
     def get_roletype(self):
         if self.orgtype == 'developer': return 'DeveloperContributor'
         else: return 'OperatorContributor'
@@ -476,41 +482,47 @@ class MexMasterController(MexRest):
             return self.decoded_data
             #return username, password, email
 
-    def get_current_user(self, token=None, use_defaults=True, use_thread=False):
-        url = self.root_url + '/auth/user/current'
-
-        logger.info('user/current on mc at {}'.format(url))
-
-        if use_defaults == True:
-            if token is None: token = self.token
-
-        def send_message():
-            self._number_currentuser_requests += 1
-
-            try:
-                self.post(url=url, bearer=token)
-
-                logger.info('response:\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_currentuser_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                self._number_currentuser_requests_fail += 1
-                raise Exception("post failed:", e)
-
-        self._number_currentuser_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
+#    def get_current_user(self, token=None, use_defaults=True, use_thread=False):
+#        url = self.root_url + '/auth/user/current'
+#
+#        logger.info('user/current on mc at {}'.format(url))
+#
+#        if use_defaults == True:
+#            if token is None: token = self.token
+#
+#        def send_message():
+#            self._number_currentuser_requests += 1
+#
+#            try:
+#                self.post(url=url, bearer=token)
+#
+#                logger.info('response:\n' + str(self.resp.text))
+#
+#                if str(self.resp.status_code) != '200':
+#                    self._number_currentuser_requests_fail += 1
+#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
+#            except Exception as e:
+#                self._number_currentuser_requests_fail += 1
+#                raise Exception("post failed:", e)
+#
+#        self._number_currentuser_requests_success += 1
+#
+#        if use_thread is True:
+#            t = threading.Thread(target=send_message)
+#            t.start()
+#            return t
+#        else:
+#            resp = send_message()
+#            return self.decoded_data
 
     def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
         return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
+
+    def get_current_user(self, token=None, json_data=None, use_defaults=True):
+        return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
+
+    def update_current_user(self, token=None, metadata=None, json_data=None, use_defaults=True):
+        return self.user.update_user(token=token, metadata=metadata, json_data=json_data, use_defaults=use_defaults)
 
     def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/delete'
