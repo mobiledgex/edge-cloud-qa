@@ -10,7 +10,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBerlinCloudletStage 
-${operator}=                       TDG
+${operator_name_openstack}=                       TDG
 
 ${region}=  EU
 
@@ -27,7 +27,7 @@ Setup
 
    ${t}=  Get Default Time Stamp
 
-   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8dedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
+   Create Cluster Instance  region=${region}  cluster_name=${clustername_k8dedicated}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=kubernetes  ip_access=IpAccessDedicated  number_masters=1  number_nodes=1
 
    Log to Console  Waiting for metrics to be collected
    Sleep  15 mins

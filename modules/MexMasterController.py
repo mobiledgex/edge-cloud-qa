@@ -2044,6 +2044,11 @@ class MexMasterController(MexRest):
             token=self.super_token
         return self.config.update_config(token=token, admin_pass = admin_pass, use_defaults=use_defaults, use_thread=use_thread)
 
+    def set_max_metrics_data_points_config(self, max_metrics_data_points=None, token=None, use_defaults=True, use_thread=False):
+        if token is None:
+            token=self.super_token
+        return self.config.update_config(token=token, max_metrics_data_points=max_metrics_data_points, use_defaults=use_defaults, use_thread=use_thread)
+
     def update_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, crm_override=None, number_masters=None, number_nodes=None, autoscale_policy_name=None, json_data=None, use_defaults=True, use_thread=False): 
         if developer_org_name is None:
             if self.organization_name:

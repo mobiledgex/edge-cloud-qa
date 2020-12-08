@@ -10,7 +10,7 @@ Test Timeout    ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationMunichCloudlet
-${operator}=                       TDG
+${operator_name_openstack}=                       TDG
 ${clustername_k8sdedicated}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
 ${app_name}=  xxx
@@ -32,7 +32,7 @@ AppMetrics - Shall be able to get the last k8s dedicated app Connections metric 
    ...  request app Connections metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -46,7 +46,7 @@ AppMetrics - Shall be able to get the last 5 k8s dedicated app Connections metri
    ...  request app Connections metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -59,7 +59,7 @@ AppMetrics - Shall be able to get the last 10 k8s dedicated app Connections metr
    ...  request cluster Connections metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -72,7 +72,7 @@ AppMetrics - Shall be able to get all k8s dedicated app Connections metrics on o
    ...  request all cluster Connections metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -87,7 +87,7 @@ AppMetrics - Shall be able to request more k8s dedicated app Connections metrics
    ...  request cluster Connections metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -102,7 +102,7 @@ AppMetrics - Shall be able to get k8s dedicated app Connections metrics with sta
    ...  request cluster Connections metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -113,7 +113,7 @@ AppMetrics - Shall be able to get k8s dedicated app Connections metrics with end
    ...  request cluster Connections metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -126,7 +126,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -139,7 +139,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -148,7 +148,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -159,28 +159,28 @@ AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
 AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Connections metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -191,7 +191,7 @@ AppMetrics - Shall be able to get the k8s dedicated app Connections metrics with
    ...  request all cluster Connections metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -202,7 +202,7 @@ AppMetrics - DeveloperManager shall be able to get k8s dedicated app Connections
    ...  request the cluster Connections metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -215,7 +215,7 @@ AppMetrics - DeveloperContributor shall be able to get k8s dedicated app Connect
    ...  request the cluster Connections metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -228,7 +228,7 @@ AppMetrics - DeveloperViewer shall be able to get k8s dedicated app Connections 
    ...  request the cluster Connections metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  connections
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sdedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  connections
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -296,45 +296,47 @@ Connections Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be Equal  ${reading[1]}  ${app_name_influx}
-   \  Should Be Equal  ${reading[2]}  10
-   \  Should Be Equal  ${reading[3]}  ${pod}
-   \  Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
-   \  Should Be Equal  ${reading[5]}  ${developer_name}
-   \  Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics} 
-   \  Should Be Equal  ${reading[7]}  ${operator}
-   \  Should Be Equal  ${reading[8]}  ${developer_name}
-   \  Should Be Equal  ${reading[9]}  ${port}
+   FOR  ${reading}  IN  @{values}
+      Should Be Equal  ${reading[1]}  ${app_name_influx}
+      Should Be Equal  ${reading[2]}  10
+      Should Be Equal  ${reading[3]}  ${pod}
+      Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
+      Should Be Equal  ${reading[5]}  ${developer_name}
+      Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics} 
+      Should Be Equal  ${reading[7]}  ${operator_name_openstack}
+      Should Be Equal  ${reading[8]}  ${developer_name}
+      Should Be Equal  ${reading[9]}  ${port}
 
-   \  Should Be True               ${reading[10]} >= 0
-   \  Should Be True               ${reading[11]} >= 0
-   \  Should Be True               ${reading[12]} >= 0
-   \  Should Be True               ${reading[13]} >= 0
-   \  Should Be True               ${reading[14]} >= 0
-   \  Should Be True               ${reading[15]} >= 0
-   \  Should Be True               ${reading[16]} >= 0
-   \  Should Be True               ${reading[17]} >= 0
-   \  Should Be True               ${reading[18]} >= 0
-   \  Should Be True               ${reading[19]} >= 0
-   \  Should Be True               ${reading[20]} >= 0
-   \  Should Be True               ${reading[21]} >= 0
-   \  Should Be True               ${reading[22]} >= 0
-   \  Should Be True               ${reading[23]} >= 0
-   \  Should Be True               ${reading[24]} >= 0
+      Should Be True               ${reading[10]} >= 0
+      Should Be True               ${reading[11]} >= 0
+      Should Be True               ${reading[12]} >= 0
+      Should Be True               ${reading[13]} >= 0
+      Should Be True               ${reading[14]} >= 0
+      Should Be True               ${reading[15]} >= 0
+      Should Be True               ${reading[16]} >= 0
+      Should Be True               ${reading[17]} >= 0
+      Should Be True               ${reading[18]} >= 0
+      Should Be True               ${reading[19]} >= 0
+      Should Be True               ${reading[20]} >= 0
+      Should Be True               ${reading[21]} >= 0
+      Should Be True               ${reading[22]} >= 0
+      Should Be True               ${reading[23]} >= 0
+      Should Be True               ${reading[24]} >= 0
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop  
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop  
+   END
  
    #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
    #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
@@ -342,32 +344,33 @@ Metrics Should Match Influxdb
 
    ${index}=  Set Variable  0
 #   : FOR  ${reading}  IN  @{metrics_influx_t}
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
 #   \  Log to console  ${metrics_influx_t[${index}]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['app']}  ${reading[1]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['cluster']}  ${reading[2]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['dev']}  ${reading[3]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}  ${reading[4]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['operator']}  ${reading[5]}
 #   \  Should Be Equal  ${metrics_influx_t[${index}]['port']}  ${reading[6]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[10]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[11]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[12]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[13]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[14]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[15]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[16]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[17]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[18]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[19]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[20]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[21]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[22]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[23]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[24]}
+      Should Be Equal  ${metrics_influx_t[${index}]['active']}  ${reading[10]}
+      Should Be Equal  ${metrics_influx_t[${index}]['handled']}  ${reading[11]}
+      Should Be Equal  ${metrics_influx_t[${index}]['accepts']}  ${reading[12]}
+      Should Be Equal  ${metrics_influx_t[${index}]['bytesSent']}  ${reading[13]}
+      Should Be Equal  ${metrics_influx_t[${index}]['bytesRecvd']}  ${reading[14]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P0']}  ${reading[15]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P25']}  ${reading[16]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P50']}  ${reading[17]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P75']}  ${reading[18]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P90']}  ${reading[19]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P95']}  ${reading[20]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99']}  ${reading[21]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99.5']}  ${reading[22]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P99.9']}  ${reading[23]}
+      Should Be Equal  ${metrics_influx_t[${index}]['P100']}  ${reading[24]}
 
-   \  ${index}=  Evaluate  ${index}+1
+     ${index}=  Evaluate  ${index}+1
+   END
 
 Metrics Should Match Connected App 
    [Arguments]  ${metrics}
@@ -378,12 +381,13 @@ Metrics Should Match Connected App
    ${found_histogram}=   Set Variable  ${False}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
+   FOR  ${reading}  IN  @{values}
    #\  @{datesplit}=  Split String  ${reading[0]}  .
-   \  ${found_connection}=  Run Keyword If  '${reading[9]}' == '${port}' and '${reading[10]}' == '1' and '${reading[11]}' == '1' and '${reading[12]}' == '1' and '${reading[13]}' > '0' and '${reading[14]}' > '0'  Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_connection}
-   \  ${found_histogram}=  Run Keyword If  '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0' and '${reading[22]}' > '0' and '${reading[23]}' > '0' and '${reading[24]}' > '0'  Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_histogram}
+      ${found_connection}=  Run Keyword If  '${reading[9]}' == '${port}' and '${reading[10]}' == '1' and '${reading[11]}' == '1' and '${reading[12]}' == '1' and '${reading[13]}' > '0' and '${reading[14]}' > '0'  Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_connection}
+      ${found_histogram}=  Run Keyword If  '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0' and '${reading[22]}' > '0' and '${reading[23]}' > '0' and '${reading[24]}' > '0'  Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_histogram}
+   END
 
    Should Be True  ${found_connection}  Didnot find connected app 
    Should Be True  ${found_histogram}   Didnot find histogram app
