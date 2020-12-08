@@ -16,7 +16,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
-${operator}=                       GDDT
+${operator_name_openstack}=                       GDDT
 #${clustername_k8dedicated}=  cluster1573768282-436812 
 #${developer_name}=   developer1573768282-436812
 
@@ -33,7 +33,7 @@ ClusterMetrics - Shall be able to get the last k8s dedicated cluster Disk metric
    ...  request cluster Disk metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last cluster metric on openstack   ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
    
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -46,7 +46,7 @@ ClusterMetrics - Shall be able to get the last 5 k8s dedicated cluster Disk metr
    ...  request cluster Disk metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last 5 cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -59,7 +59,7 @@ ClusterMetrics - Shall be able to get the last 10 k8s dedicated cluster Disk met
    ...  request cluster Disk metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last 10 cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -72,7 +72,7 @@ ClusterMetrics - Shall be able to get all k8s dedicated cluster Disk metrics on 
    ...  request all cluster Disk metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get all cluster metrics on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -86,7 +86,7 @@ ClusterMetrics - Shall be able to request more k8s dedicated cluster Disk metric
    ...  request cluster Disk metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get more cluster metrics than exist on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -99,7 +99,7 @@ ClusterMetrics - Shall be able to get k8s dedicated cluster Disk metrics with st
    ...  request cluster Disk metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get cluster metrics with starttime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -110,7 +110,7 @@ ClusterMetrics - Shall be able to get k8s dedicated cluster Disk metrics with en
    ...  request cluster Disk metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get cluster metrics with endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -121,7 +121,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics wit
    ...  request cluster Disk metrics with starttime=lastrecord 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get cluster metrics with starttime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -134,7 +134,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics wit
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get cluster metrics with starttime > lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -143,7 +143,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics wit
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get cluster metrics with endtime=lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -154,28 +154,28 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics wit
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get cluster metrics with endtime = firstrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get cluster metrics with starttime and endtime > lastrecord on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Disk metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get cluster metrics with starttime and endtime on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -188,7 +188,7 @@ ClusterMetrics - Shall be able to get the k8s dedicated cluster Disk metrics wit
    ...  request all cluster Disk metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get cluster metrics with starttime and endtime and last on openstack     ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -199,7 +199,7 @@ ClusterMetrics - DeveloperManager shall be able to get k8s dedicated cluster Dis
    ...  request the cluster Disk metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -212,7 +212,7 @@ ClusterMetrics - DeveloperContributor shall be able to get k8s dedicated cluster
    ...  request the cluster Disk metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -225,7 +225,7 @@ ClusterMetrics - DeveloperViewer shall be able to get k8s dedicated cluster Disk
    ...  request the cluster Disk metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get cluster metrics  ${username}  ${password}  ${clustername_k8dedicated}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -268,21 +268,23 @@ Disk Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop
+   END
 
    #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
    #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
@@ -293,8 +295,8 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['disk']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['disk']}   ${reading[5]}
-   \  ${index}=  Evaluate  ${index}+1
-
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['disk']}   ${reading[5]}
+      ${index}=  Evaluate  ${index}+1
+   END
