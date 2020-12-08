@@ -114,7 +114,7 @@ def main():
     component_list = component.split(',')
     component_query = ''
     for component in component_list:
-        component_query += ' AND component = ' + component
+        component_query += f' AND component = \\\"{component}\\\"'
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
@@ -122,7 +122,7 @@ def main():
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version +  "\\\" ORDER BY Issue ASC"
     logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
-
+    
     #result = z.execute_query(zephyrQueryUrl)
     startat = 0
     maxresults = 0
