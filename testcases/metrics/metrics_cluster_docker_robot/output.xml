@@ -1,0 +1,1647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1 (Python 3.7.5 on darwin)" generated="20200228 14:37:28.181" rpa="false">
+<suite id="s1" name="metrics cluster docker noClusterName cpu" source="/Users/andyanderson/go/src/github.com/mobiledgex/edge-cloud-qa/testcases/metrics/metrics_cluster_docker_robot/metrics_cluster_docker_noClusterName_cpu.robot">
+<test id="s1-t1" name="ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/operator/developer only">
+<kw name="Setup" type="setup">
+<kw name="Get Default Time Stamp" library="MexMasterController">
+<assign>
+<var>${timestamp}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.262" level="INFO">${timestamp} = 1582922248-7565382</msg>
+<status status="PASS" starttime="20200228 14:37:29.262" endtime="20200228 14:37:29.262"></status>
+</kw>
+<kw name="Get Default Developer Name" library="MexMasterController">
+<assign>
+<var>${developer_name}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.262" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:29.262" endtime="20200228 14:37:29.262"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>cluster</arg>
+<arg>${timestamp}</arg>
+<arg>-docker</arg>
+</arguments>
+<assign>
+<var>${clustername_docker}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.263" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:29.262" endtime="20200228 14:37:29.263"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${clustername_docker}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:29.263" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:29.263" endtime="20200228 14:37:29.263"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${developer_name}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:29.264" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:29.263" endtime="20200228 14:37:29.264"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:29.261" endtime="20200228 14:37:29.264"></status>
+</kw>
+<kw name="Get cluster metrics with cloudlet/operator/developer only" library="metrics_cluster_library">
+<arguments>
+<arg>${cloudlet_name_openstack_metrics}</arg>
+<arg>${operator}</arg>
+<arg>${developer_name}</arg>
+<arg>cpu</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet}</arg>
+<arg>operator_name=${operator}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metricspre}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.265" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"operator_key": {"name": "TDG"}, "name": "automationBerlinCloudlet"}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20}</msg>
+<msg timestamp="20200228 14:37:29.814" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T06:54:24.674000024Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.0659758519994518],["2020-02-28T06:54:16.220000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.0677052224917523],["2020-02-28T06:54:07.8039999Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1181204042546082],["2020-02-28T06:53:59.323999881Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1275492270250926],["2020-02-28T06:53:50.852999925Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.981331329598223],["2020-02-28T06:53:42.516000032Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9598820866465547],["2020-02-28T06:53:34.063999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1677317771369013],["2020-02-28T06:53:25.720000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1352646590859816],["2020-02-28T06:53:08.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2087565133918923],["2020-02-28T06:53:00.630000114Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.025460138817591],["2020-02-28T06:52:43.901000022Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.203080135502008],["2020-02-28T06:52:35.492000102Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2007208757701933],["2020-02-28T06:52:18.743999958Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1261216512297296],["2020-02-28T06:52:10.351999998Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.996737913018043],["2020-02-28T06:51:45.188999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1795200129314396],["2020-02-28T06:51:36.779999971Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.008090178450661],["2020-02-28T06:51:28.400000095Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1898509166781657],["2020-02-28T06:51:19.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.977173455640178],["2020-02-28T06:51:03.155999898Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1614439526964],["2020-02-28T06:50:54.690000057Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.141638605234931]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:29.814" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:29.814" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:29.814" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:29.814" level="INFO">${metricspre} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:54:24.674000024Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:29.264" endtime="20200228 14:37:29.814"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${metricspre['data'][0]}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:29.815" endtime="20200228 14:37:29.816"></status>
+</kw>
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${metricspre['data'][0]['Series'][0]['values'][0][0]}</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>@{datesplit}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.816" level="INFO">@{datesplit} = [ 2020-02-28T06:54:24 | 674000024Z ]</msg>
+<status status="PASS" starttime="20200228 14:37:29.816" endtime="20200228 14:37:29.817"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>${datesplit[0]}</arg>
+<arg>result_format=epoch</arg>
+<arg>date_format=%Y-%m-%dT%H:%M:%S</arg>
+</arguments>
+<assign>
+<var>${epochpre}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.822" level="INFO">${epochpre} = 1582894464.0</msg>
+<status status="PASS" starttime="20200228 14:37:29.817" endtime="20200228 14:37:29.822"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${epochpre}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:29.822" endtime="20200228 14:37:29.822"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 3600</arg>
+</arguments>
+<assign>
+<var>${start}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.823" level="INFO">${start} = 1582890864.0</msg>
+<status status="PASS" starttime="20200228 14:37:29.822" endtime="20200228 14:37:29.823"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 30</arg>
+</arguments>
+<assign>
+<var>${end}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.824" level="INFO">${end} = 1582894434.0</msg>
+<status status="PASS" starttime="20200228 14:37:29.823" endtime="20200228 14:37:29.824"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${start}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${start_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.824" level="INFO">${start_date} = 2020-02-28T05:54:24Z</msg>
+<status status="PASS" starttime="20200228 14:37:29.824" endtime="20200228 14:37:29.824"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${end}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${end_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.825" level="INFO">${end_date} = 2020-02-28T06:53:54Z</msg>
+<status status="PASS" starttime="20200228 14:37:29.824" endtime="20200228 14:37:29.825"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${start_date} ${end_date}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:29.825" endtime="20200228 14:37:29.825"></status>
+</kw>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet}</arg>
+<arg>operator_name=${operator}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>start_time=${start_date}</arg>
+<arg>end_time=${end_date}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<msg timestamp="20200228 14:37:29.826" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"operator_key": {"name": "TDG"}, "name": "automationBerlinCloudlet"}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20, "starttime": "2020-02-28T05:54:24Z", "endtime": "2020-02-28T06:53:54Z"}</msg>
+<msg timestamp="20200228 14:37:30.291" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T06:53:50.852999925Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.981331329598223],["2020-02-28T06:53:42.516000032Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9598820866465547],["2020-02-28T06:53:34.063999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1677317771369013],["2020-02-28T06:53:25.720000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1352646590859816],["2020-02-28T06:53:08.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2087565133918923],["2020-02-28T06:53:00.630000114Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.025460138817591],["2020-02-28T06:52:43.901000022Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.203080135502008],["2020-02-28T06:52:35.492000102Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2007208757701933],["2020-02-28T06:52:18.743999958Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1261216512297296],["2020-02-28T06:52:10.351999998Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.996737913018043],["2020-02-28T06:51:45.188999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1795200129314396],["2020-02-28T06:51:36.779999971Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.008090178450661],["2020-02-28T06:51:28.400000095Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1898509166781657],["2020-02-28T06:51:19.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.977173455640178],["2020-02-28T06:51:03.155999898Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1614439526964],["2020-02-28T06:50:54.690000057Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.141638605234931],["2020-02-28T06:50:46.207999944Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.144639867369401],["2020-02-28T06:50:37.723999977Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9354601387607637],["2020-02-28T06:50:29.319999933Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9574182724686873],["2020-02-28T06:50:20.9289999Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.928993501213383]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:30.291" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:30.291" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.291" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.292" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:29.825" endtime="20200228 14:37:30.292"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Messages']}</arg>
+<arg>${None}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.292" endtime="20200228 14:37:30.293"></status>
+</kw>
+<kw name="Dictionary Should Not Contain Key" library="Collections">
+<doc>Fails if ``key`` is found from ``dictionary``.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]}</arg>
+<arg>partial</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.293" endtime="20200228 14:37:30.293"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${num_readings}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.294" level="INFO">Length is 20</msg>
+<msg timestamp="20200228 14:37:30.294" level="INFO">${num_readings} = 20</msg>
+<status status="PASS" starttime="20200228 14:37:30.293" endtime="20200228 14:37:30.294"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.294" endtime="20200228 14:37:30.294"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20200228 14:37:30.295" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20200228 14:37:30.295" endtime="20200228 14:37:30.295"></status>
+</kw>
+<msg timestamp="20200228 14:37:30.295" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:29.264" endtime="20200228 14:37:30.295"></status>
+</kw>
+<kw name="Metrics Headings Should Be Correct">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['name']}</arg>
+<arg>cluster-cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.296" endtime="20200228 14:37:30.297"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][0]}</arg>
+<arg>time</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.297" endtime="20200228 14:37:30.297"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][1]}</arg>
+<arg>cluster</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.297" endtime="20200228 14:37:30.298"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][2]}</arg>
+<arg>dev</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.298" endtime="20200228 14:37:30.298"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][3]}</arg>
+<arg>cloudlet</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.298" endtime="20200228 14:37:30.299"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][4]}</arg>
+<arg>operator</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.299" endtime="20200228 14:37:30.299"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][5]}</arg>
+<arg>cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.299" endtime="20200228 14:37:30.300"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.295" endtime="20200228 14:37:30.300"></status>
+</kw>
+<kw name="CPU Should Be In Range">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${values}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.301" level="INFO">${values} = [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.981331329598223], ['2020-02-28T06:53:42.516000032Z', 'cluster1582840989-...</msg>
+<status status="PASS" starttime="20200228 14:37:30.301" endtime="20200228 14:37:30.301"></status>
+</kw>
+<kw name="${reading} IN [ @{values} ]" type="for">
+<kw name="${reading} = ['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.981331329598223]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.301" endtime="20200228 14:37:30.302"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.301" endtime="20200228 14:37:30.302"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:42.516000032Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9598820866465547]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.302" endtime="20200228 14:37:30.303"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.302" endtime="20200228 14:37:30.303"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:34.063999891Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1677317771369013]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.303" endtime="20200228 14:37:30.303"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.303" endtime="20200228 14:37:30.303"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:25.720000028Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1352646590859816]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.304" endtime="20200228 14:37:30.304"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.303" endtime="20200228 14:37:30.304"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:08.967999935Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.2087565133918923]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.304" endtime="20200228 14:37:30.305"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.304" endtime="20200228 14:37:30.305"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:00.630000114Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.025460138817591]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.305" endtime="20200228 14:37:30.305"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.305" endtime="20200228 14:37:30.305"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:43.901000022Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.203080135502008]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.306" endtime="20200228 14:37:30.306"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.306" endtime="20200228 14:37:30.306"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:35.492000102Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.2007208757701933]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.306" endtime="20200228 14:37:30.307"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.306" endtime="20200228 14:37:30.307"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:18.743999958Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1261216512297296]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.307" endtime="20200228 14:37:30.308"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.307" endtime="20200228 14:37:30.308"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:10.351999998Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.996737913018043]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.308" endtime="20200228 14:37:30.308"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.308" endtime="20200228 14:37:30.308"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:45.188999891Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1795200129314396]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.308" endtime="20200228 14:37:30.309"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.308" endtime="20200228 14:37:30.309"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:36.779999971Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.008090178450661]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.309" endtime="20200228 14:37:30.309"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.309" endtime="20200228 14:37:30.309"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:28.400000095Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1898509166781657]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.310" endtime="20200228 14:37:30.310"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.310" endtime="20200228 14:37:30.310"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:19.967999935Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.977173455640178]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.310" endtime="20200228 14:37:30.311"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.310" endtime="20200228 14:37:30.311"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:03.155999898Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1614439526964]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.312" endtime="20200228 14:37:30.312"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.311" endtime="20200228 14:37:30.312"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:54.690000057Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.141638605234931]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.312" endtime="20200228 14:37:30.313"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.312" endtime="20200228 14:37:30.313"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:46.207999944Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.144639867369401]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.313" endtime="20200228 14:37:30.313"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.313" endtime="20200228 14:37:30.313"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:37.723999977Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9354601387607637]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.313" endtime="20200228 14:37:30.314"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.313" endtime="20200228 14:37:30.314"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:29.319999933Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9574182724686873]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.314" endtime="20200228 14:37:30.314"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.314" endtime="20200228 14:37:30.314"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:20.9289999Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.928993501213383]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.314" endtime="20200228 14:37:30.315"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.314" endtime="20200228 14:37:30.315"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.301" endtime="20200228 14:37:30.315"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.300" endtime="20200228 14:37:30.315"></status>
+</kw>
+<doc>request all cluster CPU metrics with cloudlet/operator/developer on openstack
+verify info is correct</doc>
+<timeout value="1 hour"></timeout>
+<status status="PASS" starttime="20200228 14:37:29.261" endtime="20200228 14:37:30.315" critical="yes"></status>
+</test>
+<test id="s1-t2" name="ClusterMetrics - Shall be able to get the cluster CPU metrics with cloudlet/developer only">
+<kw name="Setup" type="setup">
+<kw name="Get Default Time Stamp" library="MexMasterController">
+<assign>
+<var>${timestamp}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.316" level="INFO">${timestamp} = 1582922248-7565382</msg>
+<status status="PASS" starttime="20200228 14:37:30.316" endtime="20200228 14:37:30.317"></status>
+</kw>
+<kw name="Get Default Developer Name" library="MexMasterController">
+<assign>
+<var>${developer_name}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.317" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:30.317" endtime="20200228 14:37:30.317"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>cluster</arg>
+<arg>${timestamp}</arg>
+<arg>-docker</arg>
+</arguments>
+<assign>
+<var>${clustername_docker}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.317" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:30.317" endtime="20200228 14:37:30.317"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${clustername_docker}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:30.318" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:30.318" endtime="20200228 14:37:30.318"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${developer_name}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:30.318" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:30.318" endtime="20200228 14:37:30.318"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:30.316" endtime="20200228 14:37:30.318"></status>
+</kw>
+<kw name="Get cluster metrics with cloudlet/developer only" library="metrics_cluster_library">
+<arguments>
+<arg>${cloudlet_name_openstack_metrics}</arg>
+<arg>${developer_name}</arg>
+<arg>cpu</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metricspre}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.319" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"name": "automationBerlinCloudlet"}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20}</msg>
+<msg timestamp="20200228 14:37:30.837" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T06:54:24.674000024Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.0659758519994518],["2020-02-28T06:54:16.220000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.0677052224917523],["2020-02-28T06:54:07.8039999Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1181204042546082],["2020-02-28T06:53:59.323999881Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1275492270250926],["2020-02-28T06:53:50.852999925Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.981331329598223],["2020-02-28T06:53:42.516000032Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9598820866465547],["2020-02-28T06:53:34.063999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1677317771369013],["2020-02-28T06:53:25.720000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1352646590859816],["2020-02-28T06:53:08.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2087565133918923],["2020-02-28T06:53:00.630000114Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.025460138817591],["2020-02-28T06:52:43.901000022Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.203080135502008],["2020-02-28T06:52:35.492000102Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2007208757701933],["2020-02-28T06:52:18.743999958Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1261216512297296],["2020-02-28T06:52:10.351999998Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.996737913018043],["2020-02-28T06:51:45.188999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1795200129314396],["2020-02-28T06:51:36.779999971Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.008090178450661],["2020-02-28T06:51:28.400000095Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1898509166781657],["2020-02-28T06:51:19.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.977173455640178],["2020-02-28T06:51:03.155999898Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1614439526964],["2020-02-28T06:50:54.690000057Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.141638605234931]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:30.838" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:30.838" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.838" level="WARN">{'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.838" level="INFO">${metricspre} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:54:24.674000024Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:30.319" endtime="20200228 14:37:30.838"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${metricspre['data'][0]}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.838" endtime="20200228 14:37:30.839"></status>
+</kw>
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${metricspre['data'][0]['Series'][0]['values'][0][0]}</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>@{datesplit}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.840" level="INFO">@{datesplit} = [ 2020-02-28T06:54:24 | 674000024Z ]</msg>
+<status status="PASS" starttime="20200228 14:37:30.839" endtime="20200228 14:37:30.840"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>${datesplit[0]}</arg>
+<arg>result_format=epoch</arg>
+<arg>date_format=%Y-%m-%dT%H:%M:%S</arg>
+</arguments>
+<assign>
+<var>${epochpre}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.840" level="INFO">${epochpre} = 1582894464.0</msg>
+<status status="PASS" starttime="20200228 14:37:30.840" endtime="20200228 14:37:30.840"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${epochpre}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.841" endtime="20200228 14:37:30.841"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 3600</arg>
+</arguments>
+<assign>
+<var>${start}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.841" level="INFO">${start} = 1582890864.0</msg>
+<status status="PASS" starttime="20200228 14:37:30.841" endtime="20200228 14:37:30.842"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 30</arg>
+</arguments>
+<assign>
+<var>${end}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.842" level="INFO">${end} = 1582894434.0</msg>
+<status status="PASS" starttime="20200228 14:37:30.842" endtime="20200228 14:37:30.842"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${start}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${start_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.843" level="INFO">${start_date} = 2020-02-28T05:54:24Z</msg>
+<status status="PASS" starttime="20200228 14:37:30.842" endtime="20200228 14:37:30.843"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${end}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${end_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.843" level="INFO">${end_date} = 2020-02-28T06:53:54Z</msg>
+<status status="PASS" starttime="20200228 14:37:30.843" endtime="20200228 14:37:30.843"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${start_date} ${end_date}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:30.843" endtime="20200228 14:37:30.844"></status>
+</kw>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>cloudlet_name=${cloudlet}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>start_time=${start_date}</arg>
+<arg>end_time=${end_date}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<msg timestamp="20200228 14:37:30.844" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"name": "automationBerlinCloudlet"}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20, "starttime": "2020-02-28T05:54:24Z", "endtime": "2020-02-28T06:53:54Z"}</msg>
+<msg timestamp="20200228 14:37:31.304" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T06:53:50.852999925Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.981331329598223],["2020-02-28T06:53:42.516000032Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9598820866465547],["2020-02-28T06:53:34.063999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1677317771369013],["2020-02-28T06:53:25.720000028Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1352646590859816],["2020-02-28T06:53:08.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2087565133918923],["2020-02-28T06:53:00.630000114Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.025460138817591],["2020-02-28T06:52:43.901000022Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.203080135502008],["2020-02-28T06:52:35.492000102Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.2007208757701933],["2020-02-28T06:52:18.743999958Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1261216512297296],["2020-02-28T06:52:10.351999998Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.996737913018043],["2020-02-28T06:51:45.188999891Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1795200129314396],["2020-02-28T06:51:36.779999971Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.008090178450661],["2020-02-28T06:51:28.400000095Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1898509166781657],["2020-02-28T06:51:19.967999935Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.977173455640178],["2020-02-28T06:51:03.155999898Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.1614439526964],["2020-02-28T06:50:54.690000057Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.141638605234931],["2020-02-28T06:50:46.207999944Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",3.144639867369401],["2020-02-28T06:50:37.723999977Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9354601387607637],["2020-02-28T06:50:29.319999933Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.9574182724686873],["2020-02-28T06:50:20.9289999Z","cluster1582840989-090443-k8sdedicated","mobiledgex","automationBerlinCloudlet","TDG",2.928993501213383]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:31.304" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:31.304" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.304" level="WARN">{'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.305" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:30.844" endtime="20200228 14:37:31.305"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Messages']}</arg>
+<arg>${None}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.305" endtime="20200228 14:37:31.306"></status>
+</kw>
+<kw name="Dictionary Should Not Contain Key" library="Collections">
+<doc>Fails if ``key`` is found from ``dictionary``.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]}</arg>
+<arg>partial</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.306" endtime="20200228 14:37:31.306"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${num_readings}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.307" level="INFO">Length is 20</msg>
+<msg timestamp="20200228 14:37:31.307" level="INFO">${num_readings} = 20</msg>
+<status status="PASS" starttime="20200228 14:37:31.307" endtime="20200228 14:37:31.307"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.307" endtime="20200228 14:37:31.308"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20200228 14:37:31.308" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20200228 14:37:31.308" endtime="20200228 14:37:31.308"></status>
+</kw>
+<msg timestamp="20200228 14:37:31.309" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated...</msg>
+<status status="PASS" starttime="20200228 14:37:30.318" endtime="20200228 14:37:31.309"></status>
+</kw>
+<kw name="Metrics Headings Should Be Correct">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['name']}</arg>
+<arg>cluster-cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.309" endtime="20200228 14:37:31.310"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][0]}</arg>
+<arg>time</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.310" endtime="20200228 14:37:31.310"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][1]}</arg>
+<arg>cluster</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.310" endtime="20200228 14:37:31.311"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][2]}</arg>
+<arg>dev</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.311" endtime="20200228 14:37:31.311"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][3]}</arg>
+<arg>cloudlet</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.311" endtime="20200228 14:37:31.312"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][4]}</arg>
+<arg>operator</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.312" endtime="20200228 14:37:31.312"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][5]}</arg>
+<arg>cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.312" endtime="20200228 14:37:31.313"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.309" endtime="20200228 14:37:31.313"></status>
+</kw>
+<kw name="CPU Should Be In Range">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${values}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.314" level="INFO">${values} = [['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.981331329598223], ['2020-02-28T06:53:42.516000032Z', 'cluster1582840989-...</msg>
+<status status="PASS" starttime="20200228 14:37:31.313" endtime="20200228 14:37:31.314"></status>
+</kw>
+<kw name="${reading} IN [ @{values} ]" type="for">
+<kw name="${reading} = ['2020-02-28T06:53:50.852999925Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.981331329598223]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.314" endtime="20200228 14:37:31.315"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.314" endtime="20200228 14:37:31.315"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:42.516000032Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9598820866465547]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.315" endtime="20200228 14:37:31.316"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.315" endtime="20200228 14:37:31.316"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:34.063999891Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1677317771369013]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.316" endtime="20200228 14:37:31.316"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.316" endtime="20200228 14:37:31.316"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:25.720000028Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1352646590859816]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.316" endtime="20200228 14:37:31.317"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.316" endtime="20200228 14:37:31.317"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:08.967999935Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.2087565133918923]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.317" endtime="20200228 14:37:31.318"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.317" endtime="20200228 14:37:31.318"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:53:00.630000114Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.025460138817591]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.318" endtime="20200228 14:37:31.318"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.318" endtime="20200228 14:37:31.318"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:43.901000022Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.203080135502008]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.319" endtime="20200228 14:37:31.319"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.319" endtime="20200228 14:37:31.319"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:35.492000102Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.2007208757701933]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.319" endtime="20200228 14:37:31.320"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.319" endtime="20200228 14:37:31.320"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:18.743999958Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1261216512297296]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.320" endtime="20200228 14:37:31.320"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.320" endtime="20200228 14:37:31.321"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:52:10.351999998Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.996737913018043]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.321" endtime="20200228 14:37:31.321"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.321" endtime="20200228 14:37:31.321"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:45.188999891Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1795200129314396]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.322" endtime="20200228 14:37:31.322"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.321" endtime="20200228 14:37:31.322"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:36.779999971Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.008090178450661]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.322" endtime="20200228 14:37:31.323"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.322" endtime="20200228 14:37:31.323"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:28.400000095Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1898509166781657]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.323" endtime="20200228 14:37:31.323"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.323" endtime="20200228 14:37:31.323"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:19.967999935Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.977173455640178]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.323" endtime="20200228 14:37:31.324"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.323" endtime="20200228 14:37:31.324"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:51:03.155999898Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.1614439526964]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.324" endtime="20200228 14:37:31.325"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.324" endtime="20200228 14:37:31.325"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:54.690000057Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.141638605234931]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.325" endtime="20200228 14:37:31.325"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.325" endtime="20200228 14:37:31.325"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:46.207999944Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 3.144639867369401]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.325" endtime="20200228 14:37:31.326"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.325" endtime="20200228 14:37:31.326"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:37.723999977Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9354601387607637]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.326" endtime="20200228 14:37:31.326"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.326" endtime="20200228 14:37:31.326"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:29.319999933Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.9574182724686873]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.327" endtime="20200228 14:37:31.327"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.327" endtime="20200228 14:37:31.327"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T06:50:20.9289999Z', 'cluster1582840989-090443-k8sdedicated', 'mobiledgex', 'automationBerlinCloudlet', 'TDG', 2.928993501213383]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.327" endtime="20200228 14:37:31.328"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.327" endtime="20200228 14:37:31.328"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.314" endtime="20200228 14:37:31.328"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.313" endtime="20200228 14:37:31.328"></status>
+</kw>
+<doc>request all cluster CPU metrics with cloudlet/developer on openstack
+verify info is correct</doc>
+<timeout value="1 hour"></timeout>
+<status status="PASS" starttime="20200228 14:37:30.315" endtime="20200228 14:37:31.328" critical="yes"></status>
+</test>
+<test id="s1-t3" name="ClusterMetrics - Shall be able to get the cluster CPU metrics with operator/developer only">
+<kw name="Setup" type="setup">
+<kw name="Get Default Time Stamp" library="MexMasterController">
+<assign>
+<var>${timestamp}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.329" level="INFO">${timestamp} = 1582922248-7565382</msg>
+<status status="PASS" starttime="20200228 14:37:31.329" endtime="20200228 14:37:31.329"></status>
+</kw>
+<kw name="Get Default Developer Name" library="MexMasterController">
+<assign>
+<var>${developer_name}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.330" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:31.329" endtime="20200228 14:37:31.330"></status>
+</kw>
+<kw name="Catenate" library="BuiltIn">
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<arguments>
+<arg>SEPARATOR=</arg>
+<arg>cluster</arg>
+<arg>${timestamp}</arg>
+<arg>-docker</arg>
+</arguments>
+<assign>
+<var>${clustername_docker}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.330" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:31.330" endtime="20200228 14:37:31.330"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${clustername_docker}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:31.330" level="INFO">${clustername_docker} = cluster1582922248-7565382-docker</msg>
+<status status="PASS" starttime="20200228 14:37:31.330" endtime="20200228 14:37:31.331"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${developer_name}</arg>
+</arguments>
+<msg timestamp="20200228 14:37:31.331" level="INFO">${developer_name} = mobiledgex</msg>
+<status status="PASS" starttime="20200228 14:37:31.331" endtime="20200228 14:37:31.331"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:31.329" endtime="20200228 14:37:31.331"></status>
+</kw>
+<kw name="Get cluster metrics with operator/developer only" library="metrics_cluster_library">
+<arguments>
+<arg>${operator}</arg>
+<arg>${developer_name}</arg>
+<arg>cpu</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>operator_name=${operator}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metricspre}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.332" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"operator_key": {"name": "TDG"}}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20}</msg>
+<msg timestamp="20200228 14:37:31.862" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T19:26:07.451999902Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4161568649243947],["2020-02-28T19:25:59.240000009Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.409892191453276],["2020-02-28T19:25:51.04399991Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.47160897100865],["2020-02-28T19:25:34.611999988Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.316357062742866],["2020-02-28T19:25:26.391999959Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.51459596980096],["2020-02-28T19:25:18.134000062Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.548357176713284],["2020-02-28T19:25:09.875999927Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5576908538720913],["2020-02-28T19:25:01.66199994Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4942805501572574],["2020-02-28T19:24:53.446000099Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.3203202825285563],["2020-02-28T19:24:37.03699994Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.512591916302659],["2020-02-28T19:24:28.813999891Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.432106345381519],["2020-02-28T19:24:20.605999946Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.430860313266041],["2020-02-28T19:24:04.165999889Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.2201369304803302],["2020-02-28T19:23:55.920000076Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4699019588670525],["2020-02-28T19:23:39.532000064Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5796998596598817],["2020-02-28T19:23:31.288000106Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.602501576739827],["2020-02-28T19:23:23.04399991Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4157850523140736],["2020-02-28T19:23:14.809999942Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.3967533946711725],["2020-02-28T19:23:06.585999965Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.534003637328272],["2020-02-28T19:22:58.365999937Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5284103112954304]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:31.862" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:31.862" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.862" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.862" level="INFO">${metricspre} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T19:26:07.451999902Z', 'cluster1582829664-268538', 'mobiledge...</msg>
+<status status="PASS" starttime="20200228 14:37:31.331" endtime="20200228 14:37:31.862"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${metricspre['data'][0]}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.862" endtime="20200228 14:37:31.863"></status>
+</kw>
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${metricspre['data'][0]['Series'][0]['values'][0][0]}</arg>
+<arg>.</arg>
+</arguments>
+<assign>
+<var>@{datesplit}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.864" level="INFO">@{datesplit} = [ 2020-02-28T19:26:07 | 451999902Z ]</msg>
+<status status="PASS" starttime="20200228 14:37:31.864" endtime="20200228 14:37:31.864"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>${datesplit[0]}</arg>
+<arg>result_format=epoch</arg>
+<arg>date_format=%Y-%m-%dT%H:%M:%S</arg>
+</arguments>
+<assign>
+<var>${epochpre}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.865" level="INFO">${epochpre} = 1582939567.0</msg>
+<status status="PASS" starttime="20200228 14:37:31.864" endtime="20200228 14:37:31.865"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${epochpre}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.865" endtime="20200228 14:37:31.865"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 3600</arg>
+</arguments>
+<assign>
+<var>${start}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.866" level="INFO">${start} = 1582935967.0</msg>
+<status status="PASS" starttime="20200228 14:37:31.866" endtime="20200228 14:37:31.866"></status>
+</kw>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${epochpre} - 30</arg>
+</arguments>
+<assign>
+<var>${end}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.866" level="INFO">${end} = 1582939537.0</msg>
+<status status="PASS" starttime="20200228 14:37:31.866" endtime="20200228 14:37:31.866"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${start}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${start_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.867" level="INFO">${start_date} = 2020-02-28T18:26:07Z</msg>
+<status status="PASS" starttime="20200228 14:37:31.867" endtime="20200228 14:37:31.867"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>date=${end}</arg>
+<arg>result_format=%Y-%m-%dT%H:%M:%SZ</arg>
+</arguments>
+<assign>
+<var>${end_date}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.868" level="INFO">${end_date} = 2020-02-28T19:25:37Z</msg>
+<status status="PASS" starttime="20200228 14:37:31.867" endtime="20200228 14:37:31.868"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${start_date} ${end_date}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:31.868" endtime="20200228 14:37:31.868"></status>
+</kw>
+<kw name="Get Cluster Metrics" library="MexMasterController">
+<arguments>
+<arg>region=${region}</arg>
+<arg>operator_name=${operator}</arg>
+<arg>developer_name=${developer}</arg>
+<arg>selector=${selector}</arg>
+<arg>start_time=${start_date}</arg>
+<arg>end_time=${end_date}</arg>
+<arg>last=20</arg>
+</arguments>
+<assign>
+<var>${metrics}</var>
+</assign>
+<msg timestamp="20200228 14:37:31.869" level="INFO">get cluster metrics on mc at https://console-qa.mobiledgex.net:443/api/v1/auth/metrics/cluster. 
+	{"clusterinst": {"cloudlet_key": {"operator_key": {"name": "TDG"}}, "developer": "mobiledgex"}, "region": "EU", "selector": "cpu", "last": 20, "starttime": "2020-02-28T18:26:07Z", "endtime": "2020-02-28T19:25:37Z"}</msg>
+<msg timestamp="20200228 14:37:32.372" level="INFO">response:
+200
+{"data":[{"Series":[{"name":"cluster-cpu","columns":["time","cluster","dev","cloudlet","operator","cpu"],"values":[["2020-02-28T19:25:34.611999988Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.316357062742866],["2020-02-28T19:25:26.391999959Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.51459596980096],["2020-02-28T19:25:18.134000062Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.548357176713284],["2020-02-28T19:25:09.875999927Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5576908538720913],["2020-02-28T19:25:01.66199994Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4942805501572574],["2020-02-28T19:24:53.446000099Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.3203202825285563],["2020-02-28T19:24:37.03699994Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.512591916302659],["2020-02-28T19:24:28.813999891Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.432106345381519],["2020-02-28T19:24:20.605999946Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.430860313266041],["2020-02-28T19:24:04.165999889Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.2201369304803302],["2020-02-28T19:23:55.920000076Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4699019588670525],["2020-02-28T19:23:39.532000064Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5796998596598817],["2020-02-28T19:23:31.288000106Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.602501576739827],["2020-02-28T19:23:23.04399991Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4157850523140736],["2020-02-28T19:23:14.809999942Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.3967533946711725],["2020-02-28T19:23:06.585999965Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.534003637328272],["2020-02-28T19:22:58.365999937Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.5284103112954304],["2020-02-28T19:22:50.164000034Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.42066779383571],["2020-02-28T19:22:41.980000019Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.4546746111958573],["2020-02-28T19:22:33.723999977Z","cluster1582829664-268538","mobiledgex","automationFrankfurtCloudlet","TDG",3.275656704717364]]}],"Messages":null}]}
+</msg>
+<msg timestamp="20200228 14:37:32.372" level="INFO">Liveness None</msg>
+<msg timestamp="20200228 14:37:32.372" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:32.372" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:32.373" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T19:25:34.611999988Z', 'cluster1582829664-268538', 'mobiledge...</msg>
+<status status="PASS" starttime="20200228 14:37:31.869" endtime="20200228 14:37:32.373"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Messages']}</arg>
+<arg>${None}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.373" endtime="20200228 14:37:32.374"></status>
+</kw>
+<kw name="Dictionary Should Not Contain Key" library="Collections">
+<doc>Fails if ``key`` is found from ``dictionary``.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]}</arg>
+<arg>partial</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.374" endtime="20200228 14:37:32.374"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${num_readings}</var>
+</assign>
+<msg timestamp="20200228 14:37:32.375" level="INFO">Length is 20</msg>
+<msg timestamp="20200228 14:37:32.375" level="INFO">${num_readings} = 20</msg>
+<status status="PASS" starttime="20200228 14:37:32.375" endtime="20200228 14:37:32.375"></status>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<doc>Logs the given message to the console.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.375" endtime="20200228 14:37:32.376"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${num_readings}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20200228 14:37:32.376" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" starttime="20200228 14:37:32.376" endtime="20200228 14:37:32.376"></status>
+</kw>
+<msg timestamp="20200228 14:37:32.376" level="INFO">${metrics} = {'data': [{'Series': [{'name': 'cluster-cpu', 'columns': ['time', 'cluster', 'dev', 'cloudlet', 'operator', 'cpu'], 'values': [['2020-02-28T19:25:34.611999988Z', 'cluster1582829664-268538', 'mobiledge...</msg>
+<status status="PASS" starttime="20200228 14:37:31.331" endtime="20200228 14:37:32.376"></status>
+</kw>
+<kw name="Metrics Headings Should Be Correct">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['name']}</arg>
+<arg>cluster-cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.377" endtime="20200228 14:37:32.377"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][0]}</arg>
+<arg>time</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.377" endtime="20200228 14:37:32.378"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][1]}</arg>
+<arg>cluster</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.378" endtime="20200228 14:37:32.379"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][2]}</arg>
+<arg>dev</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.379" endtime="20200228 14:37:32.379"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][3]}</arg>
+<arg>cloudlet</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.379" endtime="20200228 14:37:32.380"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][4]}</arg>
+<arg>operator</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.380" endtime="20200228 14:37:32.381"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['columns'][5]}</arg>
+<arg>cpu</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.381" endtime="20200228 14:37:32.383"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.377" endtime="20200228 14:37:32.383"></status>
+</kw>
+<kw name="CPU Should Be In Range">
+<arguments>
+<arg>${metrics}</arg>
+</arguments>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${metrics['data'][0]['Series'][0]['values']}</arg>
+</arguments>
+<assign>
+<var>${values}</var>
+</assign>
+<msg timestamp="20200228 14:37:32.385" level="INFO">${values} = [['2020-02-28T19:25:34.611999988Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.316357062742866], ['2020-02-28T19:25:26.391999959Z', 'cluster1582829664-268538', '...</msg>
+<status status="PASS" starttime="20200228 14:37:32.384" endtime="20200228 14:37:32.385"></status>
+</kw>
+<kw name="${reading} IN [ @{values} ]" type="for">
+<kw name="${reading} = ['2020-02-28T19:25:34.611999988Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.316357062742866]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.385" endtime="20200228 14:37:32.387"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.385" endtime="20200228 14:37:32.387"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:25:26.391999959Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.51459596980096]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.387" endtime="20200228 14:37:32.387"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.387" endtime="20200228 14:37:32.388"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:25:18.134000062Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.548357176713284]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.388" endtime="20200228 14:37:32.388"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.388" endtime="20200228 14:37:32.388"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:25:09.875999927Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.5576908538720913]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.389" endtime="20200228 14:37:32.389"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.388" endtime="20200228 14:37:32.389"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:25:01.66199994Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.4942805501572574]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.389" endtime="20200228 14:37:32.390"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.389" endtime="20200228 14:37:32.390"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:24:53.446000099Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.3203202825285563]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.390" endtime="20200228 14:37:32.391"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.390" endtime="20200228 14:37:32.391"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:24:37.03699994Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.512591916302659]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.391" endtime="20200228 14:37:32.391"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.391" endtime="20200228 14:37:32.391"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:24:28.813999891Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.432106345381519]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.391" endtime="20200228 14:37:32.392"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.391" endtime="20200228 14:37:32.392"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:24:20.605999946Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.430860313266041]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.392" endtime="20200228 14:37:32.393"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.392" endtime="20200228 14:37:32.393"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:24:04.165999889Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.2201369304803302]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.393" endtime="20200228 14:37:32.394"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.393" endtime="20200228 14:37:32.394"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:55.920000076Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.4699019588670525]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.394" endtime="20200228 14:37:32.395"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.394" endtime="20200228 14:37:32.395"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:39.532000064Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.5796998596598817]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.395" endtime="20200228 14:37:32.396"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.395" endtime="20200228 14:37:32.396"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:31.288000106Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.602501576739827]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.396" endtime="20200228 14:37:32.397"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.396" endtime="20200228 14:37:32.397"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:23.04399991Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.4157850523140736]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.397" endtime="20200228 14:37:32.398"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.397" endtime="20200228 14:37:32.398"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:14.809999942Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.3967533946711725]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.398" endtime="20200228 14:37:32.399"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.398" endtime="20200228 14:37:32.399"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:23:06.585999965Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.534003637328272]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.399" endtime="20200228 14:37:32.400"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.399" endtime="20200228 14:37:32.400"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:22:58.365999937Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.5284103112954304]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.400" endtime="20200228 14:37:32.401"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.400" endtime="20200228 14:37:32.401"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:22:50.164000034Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.42066779383571]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.401" endtime="20200228 14:37:32.402"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.401" endtime="20200228 14:37:32.402"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:22:41.980000019Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.4546746111958573]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.402" endtime="20200228 14:37:32.403"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.402" endtime="20200228 14:37:32.403"></status>
+</kw>
+<kw name="${reading} = ['2020-02-28T19:22:33.723999977Z', 'cluster1582829664-268538', 'mobiledgex', 'automationFrankfurtCloudlet', 'TDG', 3.275656704717364]" type="foritem">
+<kw name="Should Be True" library="BuiltIn">
+<doc>Fails if the given condition is not true.</doc>
+<arguments>
+<arg>${reading[5]} &gt;= 0 and ${reading[5]} &lt;= 100</arg>
+</arguments>
+<status status="PASS" starttime="20200228 14:37:32.403" endtime="20200228 14:37:32.404"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.403" endtime="20200228 14:37:32.404"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.385" endtime="20200228 14:37:32.404"></status>
+</kw>
+<status status="PASS" starttime="20200228 14:37:32.383" endtime="20200228 14:37:32.404"></status>
+</kw>
+<doc>request all cluster CPU metrics with operator/developer only
+verify info is correct</doc>
+<timeout value="1 hour"></timeout>
+<status status="PASS" starttime="20200228 14:37:31.328" endtime="20200228 14:37:32.404" critical="yes"></status>
+</test>
+<doc>Cluster CPU Metrics with no cluster name</doc>
+<status status="PASS" starttime="20200228 14:37:28.185" endtime="20200228 14:37:32.405"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0">Critical Tests</stat>
+<stat pass="3" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="3" fail="0" id="s1" name="metrics cluster docker noClusterName cpu">metrics cluster docker noClusterName cpu</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20200228 14:37:29.076" level="WARN">sending message</msg>
+<msg timestamp="20200228 14:37:29.814" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:29.814" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.291" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.291" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}, 'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.838" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:30.838" level="WARN">{'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.304" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.304" level="WARN">{'key': {'cloudlet_key': {'name': 'automationBerlinCloudlet'}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.862" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:31.862" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:32.372" level="WARN">clusterf None None flavor1582922248-7565382 mobiledgex
+ClusterInst Dict {'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+<msg timestamp="20200228 14:37:32.372" level="WARN">{'key': {'cloudlet_key': {'operator_key': {'name': 'TDG'}}, 'developer': 'mobiledgex'}}</msg>
+</errors>
+</robot>
