@@ -16,7 +16,7 @@ Test Timeout  ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationBuckhornCloudlet
-${operator}=                       GDDT
+${operator_name_openstack}=                       GDDT
 ${clustername_docker}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
 
@@ -34,7 +34,7 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with cloudlet/o
    ...  request all cluster Memory metrics with cloudlet/operator/developer on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  mem 
+   ${metrics}=  Get cluster metrics with cloudlet/operator/developer only  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  mem 
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -65,7 +65,7 @@ ClusterMetrics - Shall be able to get the cluster Memory metrics with operator/d
    ...  request all cluster Memory metrics with operator/developer only
    ...  verify info is correct
 
-   ${metrics}=  Get cluster metrics with operator/developer only  ${operator}  ${developer_name}  mem 
+   ${metrics}=  Get cluster metrics with operator/developer only  ${operator_name_openstack}  ${developer_name}  mem 
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -91,7 +91,19 @@ ClusterMetrics - Shall be able to get all cluster Memory metrics with developer 
    ...  request all cluster Memory metrics with developer only
    ...  verify info is correct and only returns 2000 metrics
 
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem 
+   [Teardown]  Config Teardown
+
+   Set Max Metrics Data Points Config   1234
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem  1234
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Memory Should be in Range  ${metrics}
+
+   Set Max Metrics Data Points Config   10000
+
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem  10000
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -112,6 +124,9 @@ Setup
 
    Set Suite Variable  ${clustername_docker}
    Set Suite Variable  ${developer_name}
+
+Config Teardown
+   Set Max Metrics Data Points Config   10000
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
@@ -130,21 +145,23 @@ Memory Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 	
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+   END
 
 Metrics Should Match Influxdb
    [Arguments]  ${metrics}  ${metrics_influx}
 
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics_influx}
-   \  @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-   \  ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  @{datesplit2}=  Split String  ${reading['time']}  .
-   \  ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
-   \  ...  ELSE  Exit For Loop  
+   FOR  ${reading}  IN  @{metrics_influx}
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
+      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit2}=  Split String  ${reading['time']}  .
+      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
+      ...  ELSE  Exit For Loop  
+   END
  
    #Run Keyword If  '${metrics['data'][0]['Series'][0]['values'][0][0]}' != '${metrics_influx[0]['time']}'  Remove From List  ${metrics_influx}  0  #remove 1st item if newer than ws
    #...  ELSE  Remove From List  ${metrics_influx}  -1  #remove last item
@@ -155,10 +172,11 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][0]}  ${reading['time']}
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][3]}  ${reading['mem']}
 #   \  ${index}=  Evaluate  ${index}+1
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['mem']}   ${reading[5]}
-   \  ${index}=  Evaluate  ${index}+1
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['mem']}   ${reading[5]}
+      ${index}=  Evaluate  ${index}+1
+   END
 
 Metrics Should Match Different Cluster Names
    [Arguments]  ${metrics}  
@@ -173,16 +191,17 @@ Metrics Should Match Different Cluster Names
    ${found_other_cluster}=  Set Variable  ${False}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  @{datesplit}=  Split String  ${reading[0]}  .
-   \  ${epoch}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   \  Should Be True               ${epoch} <= ${epochlast}
-   \  Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
-   \  ${found_own_cluster}=  Run Keyword If  '${reading[1]}' == '${clustername_docker}'   Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_own_cluster}
-   \  ${found_other_cluster}=  Run Keyword If  '${reading[1]}' != '${clustername_docker}'   Set Variable  ${True}
-   \  ...                                 ELSE  Set Variable  ${found_other_cluster}
-   \  ${epochlast}=  Set Variable  ${epoch}
+   FOR  ${reading}  IN  @{values}
+      @{datesplit}=  Split String  ${reading[0]}  .
+      ${epoch}=  Convert Date  date=${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      Should Be True               ${epoch} <= ${epochlast}
+      Should Match Regexp          ${reading[0]}  \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z  #time
+      ${found_own_cluster}=  Run Keyword If  '${reading[1]}' == '${clustername_docker}'   Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_own_cluster}
+      ${found_other_cluster}=  Run Keyword If  '${reading[1]}' != '${clustername_docker}'   Set Variable  ${True}
+      ...                                 ELSE  Set Variable  ${found_other_cluster}
+      ${epochlast}=  Set Variable  ${epoch}
+   END
 
    Should Be True  ${found_own_cluster}  Didnot find own cluster
    Should Be True  ${found_other_cluster}  Didnot find other cluster
