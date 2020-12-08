@@ -26,7 +26,25 @@ MC - Admin shall be able to show the config
 	Should Contain   ${config}   NotifyEmailAddress
 	Should Contain   ${config}   PasswordMinCrackTimeSec
 	Should Contain   ${config}   AdminPasswordMinCrackTimeSec
+        Should Contain   ${config}   MaxMetricsDataPoints
 
+# ECQ-2927
+MC - Admin shall be able to set the MaxMetricsDataPoints config item
+        [Documentation]
+        ...  - change MaxMetricsDataPoints to a value using the admin token
+        ...  - verify MaxMetricsDataPoints is set
+        ...  - then change MaxMetricsDataPoints back
+
+        ${config}=   Show Config    token=${adminToken}
+        ${maxdata}=  Set Variable  ${config['MaxMetricsDataPoints']}
+
+        Set Max Metrics Data Points Config   1234
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal As Numbers   ${config['MaxMetricsDataPoints']}  1234 
+
+        Set Max Metrics Data Points Config  ${maxdata} 
+        ${config}=   Show Config    token=${adminToken}
+        Should Be Equal As Numbers   ${config['MaxMetricsDataPoints']}  ${maxdata}
 
 # ECQ-2773
 MC - Admin shall be able to set the SkipVerifyEmail config item
