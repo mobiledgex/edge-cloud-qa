@@ -10,7 +10,7 @@ Test Timeout    ${test_timeout_crm}
 
 *** Variables ***
 ${cloudlet_name_openstack_metrics}=   automationSunnydaleCloudlet
-${operator}=                       GDDT
+${operator_name_openstack}=                       GDDT
 ${clustername_k8sshared}=   cluster1574731678-0317152-k8sshared
 ${developer_name}=  developer1574731678-0317152 
 ${app_name}=  xxx
@@ -30,7 +30,7 @@ AppMetrics - Shall be able to get the last k8s shared app Disk metric on opensta
    ...  request app Disk metrics with last=1 
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 	
@@ -44,7 +44,7 @@ AppMetrics - Shall be able to get the last 5 k8s shared app Disk metrics on open
    ...  request app Disk metrics with last=5
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last 5 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -57,7 +57,7 @@ AppMetrics - Shall be able to get the last 10 k8s shared app Disk metrics on ope
    ...  request cluster Disk metrics with last=10
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get the last 10 app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -70,7 +70,7 @@ AppMetrics - Shall be able to get all k8s shared app Disk metrics on openstack
    ...  request all cluster Disk metrics
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get all app metrics on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -83,7 +83,7 @@ AppMetrics - Shall be able to request more k8s shared app Disk metrics than exis
    ...  request cluster Disk metrics with last=<greater than total number of metrics>
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get more app metrics than exist on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -96,7 +96,7 @@ AppMetrics - Shall be able to get k8s shared app Disk metrics with starttime on 
    ...  request cluster Disk metrics with starttime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get app metrics with starttime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -107,7 +107,7 @@ AppMetrics - Shall be able to get k8s shared app Disk metrics with endtime on op
    ...  request cluster Disk metrics with endtime 
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get app metrics with endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}  
 
@@ -120,7 +120,7 @@ AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime
 
    #edgecloud-1338 Metrics - requesting cloudlet metrics with starttime=<time> does not return the reading with that time
 
-   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  Get app metrics with starttime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -133,7 +133,7 @@ AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime
    ...  request cloudlet metrics with starttime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get app metrics with starttime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 AppMetrics - Shall be able to get the k8s shared app Disk metrics with endtime=lastrecord on openstack
    [Documentation]
@@ -142,7 +142,7 @@ AppMetrics - Shall be able to get the k8s shared app Disk metrics with endtime=l
 
    #EDGECLOUD-1648 Metrics - requesting metrics with endtime=lastrecord does not return the last record
 
-   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get app metrics with endtime=lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -153,28 +153,28 @@ AppMetrics - Shall be able to get the k8s shared app Disk metrics with endtime =
    ...  request cloudlet metrics with endtime = firstrecord 
    ...  verify empty list is returned
 
-   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get app metrics with endtime = firstrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime > endtime on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get app metrics with starttime > endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
    ...  request cloudlet metrics with starttime/endtime in the future
    ...  verify empty list is returned
 
-   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   Get app metrics with starttime and endtime > lastrecord on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
 AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime and endtime on openstack
    [Documentation]
    ...  request cluster Disk metrics with starttime and endtime on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get app metrics with starttime and endtime on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -185,7 +185,7 @@ AppMetrics - Shall be able to get the k8s shared app Disk metrics with starttime
    ...  request all cluster Disk metrics with starttime and endtime and last on openstack
    ...  verify info is correct
 
-   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}=  Get app metrics with starttime and endtime and last on openstack     ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -196,7 +196,7 @@ AppMetrics - DeveloperManager shall be able to get k8s shared app Disk metrics
    ...  request the cluster Disk metrics as DeveloperManager
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperManager shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -209,7 +209,7 @@ AppMetrics - DeveloperContributor shall be able to get k8s shared app Disk metri
    ...  request the cluster Disk metrics as DeveloperContributor
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperContributor shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -222,7 +222,7 @@ AppMetrics - DeveloperViewer shall be able to get k8s shared app Disk metrics
    ...  request the cluster Disk metrics as DeveloperViewer
    ...  verify metrics are returned
 
-   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  disk
+   ${metrics}  ${metrics_influx}=  DeveloperViewer shall be able to get app metrics  ${username}  ${password}  ${app_name}  ${app_name_influx}  ${clustername_k8sshared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  disk
 
    Metrics Should Match Influxdb  metrics=${metrics}  metrics_influx=${metrics_influx}
 
@@ -283,7 +283,7 @@ Disk Should Be In Range
       Should Be Equal  ${reading[3]}  ${clustername_k8sshared}
       Should Be Equal  ${reading[4]}  ${developer_name}
       Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
-      Should Be Equal  ${reading[6]}  ${operator}
+      Should Be Equal  ${reading[6]}  ${operator_name_openstack}
       Should Be Equal  ${reading[7]}  ${developer_name}
 
       Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 1000000
