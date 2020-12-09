@@ -3,6 +3,7 @@ Documentation  ShowAlertReceiver
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
+Library  DateTime
      
 #Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -92,7 +93,7 @@ ShowAlertReceiver - org manager should see other receivers
 #   Set Suite Variable  ${developer_name}
 
 Setup Users
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
    ${epochusername1}=  Catenate  SEPARATOR=  ${username}  ${epoch}
