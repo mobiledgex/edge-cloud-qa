@@ -2,6 +2,7 @@
 Documentation  PrivacyPolicy for users
 
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
@@ -50,7 +51,8 @@ ShowPrivacyPolicy - user not in an org shall get an empty list when showing a pr
 
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
