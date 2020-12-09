@@ -61,6 +61,8 @@ namespace RestSample
         static string developerAuthToken = "";
         static UInt32 cellID = 0;
         static string aWebSocketServerFqdn = "";
+        static AppPort appPort = null;
+        static int myPort = 0;
 
 
 
@@ -218,6 +220,10 @@ namespace RestSample
                             // App Ports:
                             foreach (AppPort p in findCloudletReply.ports)
                             {
+                                if(p.public_port == 8085)
+                                {
+                                    appPort = p;
+                                }
                                 Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
                                       ", protocol: " + p.proto +
                                       ", public_port: " + p.public_port +
@@ -227,7 +233,9 @@ namespace RestSample
                             }
                         }
                     }
-                    aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
+                    aWebSocketServerFqdn = me.GetHost(findCloudletInfo, appPort);
+                    myPort = me.GetPort(appPort, 8085);
+                    Console.WriteLine("aWebSocketServerFqdn: " + aWebSocketServerFqdn);
                 }
                 catch (HttpException httpe)
                 {

@@ -66,7 +66,8 @@ namespace RestSample
         //const string aWebSocketServerFqdn = "pingpong-tcp.frankfurt-main.tdg.mobiledgex.net"; // or, localhost.
         //const string connectionTestFqdn = "autoclusterautomation-api-app.automationdusseldorfcloudlet.tdg.mobiledgex.net";
         static string aWebSocketServerFqdn = "";
-
+        static AppPort appPort = null;
+        static int myPort = 0;
 
 
         // For SDK purposes only, this allows continued operation against default app insts.
@@ -223,6 +224,10 @@ namespace RestSample
                             // App Ports:
                             foreach (AppPort p in findCloudletReply.ports)
                             {
+                                if(p.public_port == 2015)
+                                {
+                                    appPort = p;
+                                }
                                 Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
                                       ", protocol: " + p.proto +
                                       ", public_port: " + p.public_port +
@@ -232,7 +237,8 @@ namespace RestSample
                             }
                         }
                     }
-                    aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
+                    aWebSocketServerFqdn = me.GetHost(findCloudletInfo, appPort);
+                    myPort = me.GetPort(appPort, 2015);
                 }
                 catch (HttpException httpe)
                 {
@@ -284,7 +290,7 @@ namespace RestSample
 
                 Console.WriteLine("\nTest TLS 2015 Connection Starting.");
 
-                string test = "{\"Data\": \"ping\"}";
+                string test = "ping";
                 string message = test;
                 byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
 
@@ -294,7 +300,7 @@ namespace RestSample
                 {
                     MatchingEngine.ServerRequiresClientCertificateAuthentication(true);
 
-                    SslStream stream = await me.GetTCPTLSConnection(aWebSocketServerFqdn, 2015, 10000, true);
+                    SslStream stream = await me.GetTCPTLSConnection(findCloudletInfo, appPort, myPort, 10000, true);
                     Console.WriteLine("Authenticated");
 
                     stream.Write(bytesMessage, 0, bytesMessage.Length);
