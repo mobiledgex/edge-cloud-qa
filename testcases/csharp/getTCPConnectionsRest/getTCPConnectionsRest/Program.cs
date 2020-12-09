@@ -63,6 +63,8 @@ namespace RestSample
         static string developerAuthToken = "";
         static UInt32 cellID = 0;
         static string aWebSocketServerFqdn = "";
+        private static AppPort appPort = null;
+        static int myPort = 0;
 
 
 
@@ -185,6 +187,7 @@ namespace RestSample
                 try
                 {
                     FindCloudletReply findCloudletReply = null;
+                    
                     try
                     {
                         findCloudletReply = await me.FindCloudlet(host, MatchingEngine.defaultDmeRestPort, findCloudletRequest);
@@ -220,6 +223,10 @@ namespace RestSample
                             // App Ports:
                             foreach (AppPort p in findCloudletReply.ports)
                             {
+                                if(p.public_port == 2016)
+                                {
+                                    appPort = p;
+                                }
                                 Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
                                       ", protocol: " + p.proto +
                                       ", public_port: " + p.public_port +
@@ -229,7 +236,10 @@ namespace RestSample
                             }
                         }
                     }
-                    aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
+                    //aWebSocketServerFqdn = appName + "10-tcp." + findCloudletReply.fqdn;
+                    aWebSocketServerFqdn = me.GetHost(findCloudletInfo, appPort);
+                    myPort = me.GetPort(appPort, 2016);
+                    Console.WriteLine("MyPort: " + myPort);
                 }
                 catch (HttpException httpe)
                 {
@@ -281,7 +291,7 @@ namespace RestSample
 
                 Console.WriteLine("\nTest TCP 2016 Connection Starting.");
 
-                string test = "{\"Data\": \"ping\"}";
+                string test = "ping";
                 string message = test;
                 byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
 
@@ -289,8 +299,9 @@ namespace RestSample
                 string receiveMessage = "";
                 try
                 {
-                    Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, 2016, 10000);
- 
+
+                    Socket tcpConnection = await me.GetTCPConnection(findCloudletInfo, appPort, myPort, 10000);
+
                     tcpConnection.Send(bytesMessage);
                     Console.WriteLine("Message Sent: " + message.ToString());
 
@@ -310,6 +321,7 @@ namespace RestSample
                     {
                         Console.WriteLine("TCP Get Connection DID NOT work!");
                         Console.WriteLine("Recieved Message: " + receiveMessage);
+                        Console.WriteLine("Test Case Failed!!!");
                         tcpConnection.Close();
                         Environment.Exit(1);
                     }
