@@ -3,6 +3,7 @@ Documentation  VMPools for user roles
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
+Library  DateTime
 
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -235,7 +236,7 @@ VMPool - OperatorViewer shall not be able to manipulate vm pools
 
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
