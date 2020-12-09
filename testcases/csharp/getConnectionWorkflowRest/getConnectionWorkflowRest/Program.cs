@@ -138,8 +138,8 @@ namespace RestSample
             {
                 Console.WriteLine("GetConnectionWorkflowRest Testcase");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
@@ -341,7 +341,7 @@ namespace RestSample
                 // To test the UDP, TCP, and TLS ports send a "ping" to each port and recieve a "pong"
                 // To test the HTTP port send "automation.html" and get the automation.html file
                 string message = "";
-                string test = "{\"Data\": \"ping\"}";
+                string test = "ping";
                 string aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
                 string receiveMessage = "";
 
@@ -360,7 +360,7 @@ namespace RestSample
                             Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                             message = test;
                             byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
-                            Socket tcpConnection = await me.GetTCPConnection(aWebSocketServerFqdn, kvp.Key, 10000);
+                            Socket tcpConnection = await me.GetTCPConnection(findCloudletReply, kvp.Value, kvp.Key, 10000);
 
                             tcpConnection.Send(bytesMessage);
 
