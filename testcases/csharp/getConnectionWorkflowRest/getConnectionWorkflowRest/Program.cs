@@ -138,8 +138,8 @@ namespace RestSample
             {
                 Console.WriteLine("GetConnectionWorkflowRest Testcase");
 
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
                 me.SetTimeout(15000);
                 //port = MatchingEngine.defaultDmeRestPort;
 
