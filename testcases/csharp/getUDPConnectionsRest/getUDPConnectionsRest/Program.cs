@@ -67,6 +67,9 @@ namespace RestSample
         //const string aWebSocketServerFqdn = "pingpong-tcp.fairview-main.gddt.mobiledgex.net"; // or, localhost.
         //const string connectionTestFqdn = "autoclusterautomation-api-app.automationparadisecloudlet.gddt.mobiledgex.net";
         static string aWebSocketServerFqdn = "";
+        static AppPort appPort = null;
+        static int myPort = 0;
+            
 
 
 
@@ -224,6 +227,10 @@ namespace RestSample
                             // App Ports:
                             foreach (AppPort p in findCloudletReply.ports)
                             {
+                                if(p.public_port == 2015)
+                                {
+                                    appPort = p;
+                                }
                                 Console.WriteLine("Port: fqdn_prefix: " + p.fqdn_prefix +
                                       ", protocol: " + p.proto +
                                       ", public_port: " + p.public_port +
@@ -233,7 +240,8 @@ namespace RestSample
                             }
                         }
                     }
-                    aWebSocketServerFqdn = appName + "-tcp." + findCloudletReply.fqdn;
+                    aWebSocketServerFqdn = me.GetHost(findCloudletInfo, appPort);
+                    myPort = me.GetPort(appPort, 2015);
                 }
                 catch (HttpException httpe)
                 {
@@ -285,7 +293,7 @@ namespace RestSample
 
                 Console.WriteLine("\nTest UDP 2015 Connection Starting.");
 
-                string test = "{\"Data\": \"ping\"}";
+                string test = "ping";
                 string message = test;
                 byte[] bytesMessage = Encoding.ASCII.GetBytes(message);
 
@@ -293,7 +301,7 @@ namespace RestSample
                 string receiveMessage = "";
                 try
                 {
-                    Socket stream = await me.GetUDPConnection(aWebSocketServerFqdn, 2015, 10000);
+                    Socket stream = await me.GetUDPConnection(findCloudletInfo, appPort, myPort, 10000);
 
                     stream.Send(bytesMessage);
                     Console.WriteLine("Message Sent: " + message.ToString());
