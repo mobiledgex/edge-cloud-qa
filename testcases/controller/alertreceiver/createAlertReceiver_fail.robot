@@ -2,6 +2,7 @@
 Documentation  CreateAlertReceiver failures
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -69,14 +70,14 @@ CreateAlertReceiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Receiver email is invalid"}')  receiver_name=email  severity=info  type=email  email_address=x.com  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
    # app and cloudlet
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=email  severity=info  developer_org_name=developer  operator_org_name=developer
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info  developer_org_name=developer  operator_org_name=developer
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=developer   developer_org_name=developer  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=email  severity=info  developer_org_name=developer  operator_org_name=developer  token=${super_token}
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info  developer_org_name=developer  operator_org_name=developer  token=${super_token}
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=developer   developer_org_name=developer  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US  token=${super_token}
 
    # cluster and cloudlet
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')   type=email  severity=warning  operator_org_name=operator  cloudlet_name=x  cluster_instance_name=mycluster  cluster_instance_developer_org_name=developer
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=email  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer
-   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=slack_channel  slack_api_url=http://x.com  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer  region=US
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')   type=email  severity=warning  operator_org_name=operator  cloudlet_name=x  cluster_instance_name=mycluster  cluster_instance_developer_org_name=developer  token=${super_token}
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=email  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer  token=${super_token}
+   ('code\=400', 'error\={"message":"AppInst details cannot be specified if this receiver is for cloudlet alerts"}')  type=slack  slack_channel=slack_channel  slack_api_url=http://x.com  severity=info  cluster_instance_developer_org_name=developer  operator_org_name=developer  region=US  token=${super_token}
 
 # ECQ-2910
 CreateAlertReceiver - duplicate create shall return error
@@ -84,9 +85,9 @@ CreateAlertReceiver - duplicate create shall return error
    ...  - send alertreceiver twice for same receiver name
    ...  - verify error is returned
 
-   Create Alert Receiver  developer_org_name=tmus  
+   Create Alert Receiver  developer_org_name=tmus  token=${super_token}
    
-   ${error}=  Run Keyword and Expect Error  *  Create Alert Receiver  developer_org_name=tmus
+   ${error}=  Run Keyword and Expect Error  *  Create Alert Receiver  developer_org_name=tmus  token=${super_token}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  Unable to create a receiver - bad response status 409 Conflict[Receiver Exists - delete it first]
 
@@ -124,7 +125,7 @@ CreateAlertReceiver - create with app from another user shall return error
 
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${super_token}=  Get Super Token
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
    ${epochusername2}=  Set Variable  ${epochusername}2

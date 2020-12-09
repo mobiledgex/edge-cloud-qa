@@ -6,6 +6,7 @@ Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
 Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
 Library  MexApp
 Library  String
+Library  DateTime
 
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
@@ -621,7 +622,7 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg Cloudle
 
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${user_username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${user_username}  ${epoch}
 
