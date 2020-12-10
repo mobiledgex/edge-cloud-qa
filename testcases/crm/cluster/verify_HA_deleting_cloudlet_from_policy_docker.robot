@@ -12,7 +12,7 @@ Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet1}  automationParadiseCloudlet
+${cloudlet1}  automationSunnydaleCloudlet
 ${cloudlet2}  automationBeaconCloudlet
 ${operator_name_openstack}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
@@ -43,7 +43,7 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy with 2 min active instances and add two cloudlet to the policy
 
-   &{cloudlet1}=  create dictionary  name=automationParadiseCloudlet  organization=GDDT
+   &{cloudlet1}=  create dictionary  name=automationSunnydaleCloudlet  organization=GDDT
    &{cloudlet2}=  create dictionary  name=automationBeaconCloudlet  organization=GDDT
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 
