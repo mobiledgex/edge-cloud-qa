@@ -2,6 +2,7 @@
 Documentation   Cluster CPU Metrics forbidden for Developer/Operator
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 		      
 Test Setup       Setup
 Test Teardown    Cleanup provisioning
@@ -123,7 +124,7 @@ ClusterMetrics - DeveloperViewer shall not be able to get cluster CPU metrics fr
 	
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
