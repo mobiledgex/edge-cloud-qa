@@ -37,12 +37,14 @@ User shall be able to create an app instance on azure with a dot in the app name
 
     Log To Console  Creating App and App Instance
     Create App  app_name=${app_name}  image_path=${docker_image}  access_ports=udp:2015  command=${docker_command}  #app_template=${apptemplate}    #   default_flavor_name=flavor1550592128-673488   cluster_name=cl1550691984-633559
-    Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${appInst}=  Create App Instance  app_name=${app_name}  cloudlet_name=${cloudlet_name_azure}  operator_org_name=${operator_name_azure}  cluster_instance_name=${cluster_name_default}  #cluster_instance_name=cl1550691984-633559  flavor_name=flavor1550592128-673488
+    ${version}=  Set Variable  ${appInst.key.app_key.version}
+    ${version}=  Remove String  ${version}  .
 
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-    ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  -udp.
+    ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  ${version} -udp.
 
     # verify dot is gone
     Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}

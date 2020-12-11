@@ -12,7 +12,7 @@ Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet1}  automationParadiseCloudlet
+${cloudlet1}  automationSunnydaleCloudlet
 ${cloudlet2}  automationBeaconCloudlet
 ${operator_name_openstack}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
@@ -43,7 +43,7 @@ Create one k8s and one docker based reservable cluster instnace
 Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy
-   &{cloudlet1}=  create dictionary  name=automationParadiseCloudlet  organization=GDDT
+   &{cloudlet1}=  create dictionary  name=automationSunnydaleCloudlet  organization=GDDT
    &{cloudlet2}=  create dictionary  name=automationBeaconCloudlet  organization=GDDT
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
    ${policy_return}=  Create Auto Provisioning Policy  region=EU  policy_name=${policy_name}   min_active_instances=2  max_instances=4  developer_org_name=${orgname}  token=${user_token}  cloudlet_list=${cloudletlist}
