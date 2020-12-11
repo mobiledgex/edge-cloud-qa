@@ -468,7 +468,7 @@ Metrics - OperatorManager shall be able to get cloudlet utilization metrics
    ...  request the cloudlet utilization metrics as OperatorManager
    ...  verify metrics are returned
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -509,7 +509,7 @@ Metrics - OperatorViewer shall be able to get cloudlet utilization metrics
    ...  request the cloudlet utilization metrics as OperatorViewer
    ...  verify metrics are returned
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -550,7 +550,7 @@ Metrics - OperatorContributor shall be able to get cloudlet utilization metrics
    ...  request the cloudlet utilization metrics as OperatorContributor
    ...  verify metrics are returned
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 

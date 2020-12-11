@@ -2,6 +2,7 @@
 Documentation   Cloudlet Utilization/IPUsage Metrics forbidden for Developer/Operator
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 		      
 Test Setup       Setup
 Test Teardown    Cleanup provisioning
@@ -134,7 +135,7 @@ CloudletMetrics - OperatorViewer shall not be able to get cloudlet metrics from 
 	
 *** Keywords ***
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${orgname}=  Catenate  SEPARATOR=  org  ${epoch}
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}

@@ -396,7 +396,7 @@ Get cluster metrics with starttime and endtime and last on openstack
 DeveloperManager shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
