@@ -93,8 +93,10 @@ ClusterMetrics - Shall be able to get all cluster CPU metrics with developer onl
 
    [Teardown]  Config Teardown
 
-   Set Max Metrics Data Points Config   1234
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu  1234
+   ${num_metrics}    Generate Random String    4    0123456789
+
+   Set Max Metrics Data Points Config  ${num_metrics} 
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu  ${num_metrics}
    Set Max Metrics Data Points Config   10000
 
    Metrics Headings Should Be Correct  ${metrics}
