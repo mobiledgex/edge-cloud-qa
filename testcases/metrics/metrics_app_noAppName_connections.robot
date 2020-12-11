@@ -93,8 +93,10 @@ AppMetrics - Shall be able to get all app Connections metrics with developer onl
 
    [Teardown]  Config Teardown
 
-   Set Max Metrics Data Points Config   1234
-   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  1234
+   ${num_metrics}    Generate Random String    4    0123456789
+
+   Set Max Metrics Data Points Config  ${num_metrics} 
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  ${num_metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
