@@ -25,137 +25,177 @@ ${region}  US
 # add testcase for Developer and Operator user
 
 *** Test Cases ***
-#ECQ-2116
-showDevice - request with id and type shall return device information
-    [Documentation]
-    ...  registerClient with platos app with unique_id and type
-    ...  verify showDevice returns all information supported
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd 
-
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  
-
-      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  abcd 
-      Should Be Equal  ${device[0]['data']['key']['unique_id']}  1234
-      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
-      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
-      Should Be True   ${device[0]['data']['notify_id']} > 0
-
-      Length Should Be   ${device}  1
-
-#ECQ-2117
-showDevice - request with first_seen and seconds shall return device information
-    [Documentation]
-    ...  showDevice displays requested firstseen data
-    ...  verify returns time of first_seen seconds requested
-    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd  
-      ${device}=  Show Device  region=${region}
-       
-      ${found}=  Find Device  ${device}  1234  abcd
- 
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']} 
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
- 
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
-
-      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs} 
-      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
-
-      Length Should Be   ${device}  1
-
-#ECQ-2118
-showDevice - request without first_seen_seconds shall return device information
-    [Documentation]
-    ...  showDevice displays firstseen data without requesting
-    ...  verify showDevice returns first_seen device information
-    ...  firstseen.seconds firstseen.nanos
-
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  1234  abcd
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
-
-      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
-
-      Length Should Be   ${device}  1
-
-#ECQ-2119
-showDevice - request with first_seen_nanos shall return device information
-
-    [Documentation]
-    ...  showDevice check display of first_seen_nanos
-    ...  verify returns time of first_seen_nanos requested
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  1234  abcd
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
-
-      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
-
-      Length Should Be   ${device}  1
-
-
-#ECQ-2120
-showDevice - without first_seen_nanos shall return device information
-
-    [Documentation]
-    ...  showDevice check display of time_seen_nanos without specifying time
-    ...  verify time_seen_nanos is displayed without being requested
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  1234  abcd
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_nanos=${nsecs}  notify_id=1
-
-      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
-
-      Length Should Be   ${device}  1
-
-#ECQ-2121
-showDevice - with notify_id shall return device information
-
-   [Documentation]
-    ...  showDevice check display of notify_id 
-    ...  verify notify_id is displayed as requested
-
-      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  1234  abcd
-
+##ECQ-2116 not supported
+#showDevice - request with id and type shall return device information
+#    [Documentation]
+#    ...  registerClient with platos app with unique_id and type
+#    ...  verify showDevice returns all information supported
+#    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd 
+#
+#      ${device}=  Show Device  region=${region}  unique_id=${epoch}  unique_id_type=abcd  
+#
+#      Should Be Equal  ${device[0]['data']['key']['unique_id_type']}  1234
+#      Should Be Equal  ${device[0]['data']['key']['unique_id']}  1234
+#      Should Be True   ${device[0]['data']['first_seen']['seconds']} > 0
+#      Should Be True   ${device[0]['data']['first_seen']['nanos']} > 0
+#      Should Be True   ${device[0]['data']['notify_id']} > 0
+#
+#      Length Should Be   ${device}  1
+#
+##ECQ-2117
+#showDevice - request with first_seen and seconds shall return device information
+#    [Documentation]
+#    ...  showDevice displays requested firstseen data
+#    ...  verify returns time of first_seen seconds requested
+#    ...  key.uniqueidtype key.uniqueid firstseen.seconds firstseen.nanos lastseen.seconds lastseen.nanos and notify_id
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd  
+#      ${device}=  Show Device  region=${region}
+#       
+#      ${found}=  Find Device  ${device}  1234  abcd
+# 
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']} 
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+# 
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
+#
+#      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs} 
+#      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
+#
+#      Length Should Be   ${device}  1
+#
+##ECQ-2118
+#showDevice - request without first_seen_seconds shall return device information
+#    [Documentation]
+#    ...  showDevice displays firstseen data without requesting
+#    ...  verify showDevice returns first_seen device information
+#    ...  firstseen.seconds firstseen.nanos
+#
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  1234  abcd
+#
 #      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
 #      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${ntfy}=  Set Variable  ${found['data']['notify_id']}	
-      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  notify_id=${ntfy}
+#      
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
+#
+#      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
+#
+#      Length Should Be   ${device}  1
+#
+##ECQ-2119
+#showDevice - request with first_seen_nanos shall return device information
+#
+#    [Documentation]
+#    ...  showDevice check display of first_seen_nanos
+#    ...  verify returns time of first_seen_nanos requested
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  1234  abcd
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  first_seen_seconds=${secs}  first_seen_nanos=${nsecs}  notify_id=1
+#
+#      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
+#
+#      Length Should Be   ${device}  1
+#
+#
+##ECQ-2120
+#showDevice - without first_seen_nanos shall return device information
+#
+#    [Documentation]
+#    ...  showDevice check display of time_seen_nanos without specifying time
+#    ...  verify time_seen_nanos is displayed without being requested
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  1234  abcd
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  #first_seen_nanos=${nsecs}  notify_id=1
+#
+#      Should Be Equal   ${device[0]['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${device[0]['data']['first_seen']['nanos']}  ${nsecs}
+#
+#      Length Should Be   ${device}  1
+#
+##ECQ-2121
+#showDevice - with notify_id shall return device information
+#
+#   [Documentation]
+#    ...  showDevice check display of notify_id 
+#    ...  verify notify_id is displayed as requested
+#
+#      Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=1234  unique_id_type=abcd
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  1234  abcd
+#
+##      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+##      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${ntfy}=  Set Variable  ${found['data']['notify_id']}	
+#      ${device}=  Show Device  region=${region}  unique_id=1234  unique_id_type=abcd  notify_id=${ntfy}
+#
+##      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
+##      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
+#      Should Be Equal   ${device[0]['data']['notify_id']}  ${ntfy}
+#      
+#      Length Should Be   ${device}  1
+#
 
-#      Should Be Equal   ${device['data']['first_seen']['seconds']}  ${secs}
-#      Should Be Equal   ${device['data']['first_seen']['nanos']}  ${nsecs}
-      Should Be Equal   ${device[0]['data']['notify_id']}  ${ntfy}
-      
-      Length Should Be   ${device}  1
+# ECQ-2957
+showDevice - request with platos platform app and non-platos unique_id_type shall not return device information
+    [Documentation]
+    ...  - send showDevice with platos platform app and non-platos unique_id_type
+    ...  - verify showDevice returns no info
+
+    ${timestamp}=  Get Time  epoch
+
+    Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=myid
+
+    ${device}=  Show Device  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
+
+# ECQ-2958
+showDevice - request with platos platform app and platos unique_id_type shall not return device information
+    [Documentation]
+    ...  - send showDevice with platos platform app and platos unique_id_type
+    ...  - verify showDevice returns no info
+
+    ${timestamp}=  Get Time  epoch
+
+    Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=platos
+
+    ${device}=  Show Device  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
+
+# ECQ-2959
+showDevice - request with platos platform app and lower platos unique_id_type shall not return device information
+    [Documentation]
+    ...  - send showDevice with lowercase platos platform app and platos unique_id_type
+    ...  - verify showDevice returns no info
+
+    ${timestamp}=  Get Time  epoch
+
+    Register Client  developer_org_name=${platos_developer_name}  app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=platos
+
+    ${device}=  Show Device  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
 
 #ECQ-2122
 showDevice - without notify_id shall return device information
