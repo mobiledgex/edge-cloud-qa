@@ -93,9 +93,11 @@ AppMetrics - Shall be able to get all app CPU metrics with developer only
 
    [Teardown]  Config Teardown
 
-   Set Max Metrics Data Points Config   1234
+   ${num_metrics}    Generate Random String    4    0123456789
 
-   ${metrics}=  Get all app metrics with developer only  ${developer_name}  cpu  1234
+   Set Max Metrics Data Points Config   ${num_metrics}
+
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  cpu  ${num_metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
