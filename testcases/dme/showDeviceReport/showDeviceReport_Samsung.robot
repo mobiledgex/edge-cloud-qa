@@ -15,7 +15,7 @@ ${samsung_cloudlet_name}  default
 ${samsung_operator_name}  developer
 ${samsung_uri}  automation.samsung.com
 ${samsung_unique_id}  12345
-${samsung_unique_id_type}  abcde
+${samsung_unique_id_type}  Samsung
 ${samsung_begin_seconds}  124
 ${samsung_end_seconds}  1234
 ${samsung_begin_nanos}  1234
@@ -28,317 +28,378 @@ ${count}  1
 # add testcase for Developer and Operator user
 
 *** Test Cases ***
-#ECQ-2128
-showDeviceReport - request unique_id with only begin_nanos shall return device information
+#ECQ-2128 not supported
+#showDeviceReport - request unique_id with only begin_nanos shall return device information
+#    [Documentation]
+#    ...  showDeviceReport returns uuid information
+#    ...  verify showDeviceReport returns uuid device information with only begin_nanos specified parameters
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${samsung_unique_id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${samsung_unique_id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
+#
+#      ${device}=  Show Device Report  region=${region}  unique_id=${uid}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+#    
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
+#      #Should Be True    ${found['data']['key']['unique_id']} > ${shit} -2
+#      #Should Be True    ${found['data']['key']['unique_id']} < ${shit} +2
+
+# ECQ-2949
+showDeviceReport - request with Samsung platform app and non-samsung unique_id_type shall not return device information
     [Documentation]
-    ...  showDeviceReport returns uuid information
-    ...  verify showDeviceReport returns uuid device information with only begin_nanos specified parameters
+    ...  - send showDeviceReport with Samsung platform app and non-samsung unique_id_type
+    ...  - verify showDeviceReport returns no info
 
-      ${timestamp}=  Get Time  epoch
+    ${timestamp}=  Get Time  epoch
 
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
+    Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=myid
+    ${device}=  Show Device  region=${region}
 
-      ${found}=  Find Device  ${device}  ${timestamp}  abcd
+    ${device}=  Show Device Report  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
 
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
-
-      ${device}=  Show Device Report  region=${region}  unique_id=${uid}  #begin_seconds=${secs}  begin_nanos=${nsecs}
-    
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
-      #Should Be True    ${found['data']['key']['unique_id']} > ${shit} -2
-      #Should Be True    ${found['data']['key']['unique_id']} < ${shit} +2
-
-#ECQ-2129
-showDeviceReport - request unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
+# ECQ-2950
+showDeviceReport - request with Samsung platform app and Samsung unique_id_type shall not return device information
     [Documentation]
-    ...  showDeviceReport returns uuid information using begin_seconds and begin_nanos
-    ...  verify showDeviceReport returns uuid device information with unique_id unique_id_type begin_seconds and begin_nanos
+    ...  - send showDeviceReport with Samsung platform app and Samsung unique_id_type
+    ...  - verify showDeviceReport returns no info
 
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=id427912  unique_id_type=april 
-      ${device}=  Show Device  region=${region}
-       
-      ${found}=  Find Device  ${device}  id427912  april
- 
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']} 
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
- 
-      ${device}=  Show Device Report  region=${region}  unique_id=id427912  unique_id_type=april  begin_seconds=${secs}  begin_nanos=${nsecs}  
+    ${timestamp}=  Get Time  epoch
 
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}  
+    Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=Samsung
+    ${device}=  Show Device  region=${region}
 
-     # Length Should Be  ${device}  1
+    ${device}=  Show Device Report  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
 
-
-#ECQ-2130
-showDeviceReport - request unique_id and unique_id_type with begin_nanos shall return device information
+# ECQ-2951
+showDeviceReport - request with Samsung platform app and lower samsung unique_id_type shall not return device information
     [Documentation]
-    ...  showDeviceReport returns uuid using only with unique_id and unique_id_type with begin_nanos
-    ...  verify showDeviceReport returns uuid device information with unique_id and unique_id_type with begin_nanos
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=id427913  unique_id_type=october
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  id427913  october
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-      ${device}=  Show Device Report  region=${region}  unique_id=id427913  unique_id_type=october  begin_nanos=${nsecs}
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-
-     # Length Should Be  ${device}  1
-
-
-#ECQ-2131 
-showDeviceReport - request with only begin_seconds and begin_nanos shall return device information
-
-    [Documentation]
-    ...  showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
-    ...  verify showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=bothbegins
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  bothbegins
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
-      
-      ${device}=  Show Device Report  region=${region}  begin_seconds=${secs}  begin_nanos=${nsecs}
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid} 
-
-
-#ECQ-2132
-showDeviceReport - request uuid with only begin_nano shall return device information
-
-    [Documentation]
-    ...  showDeviceReport returns uuid device information using only begin_nanos
-    ...  verify uuid information is returned using only begin_nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  abcd
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-      ${device}=  Show Device Report  region=${region}  begin_nanos=${nsecs}
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-
-     # Length Should Be  ${device}  1
-
-
-#ECQ-2133
-showDeviceReport - request uuid with only begin_seconds shall returns device information 
-
-    [Documentation]
-    ...  showDeviceReport returns uuid device information with begin_seconds
-    ...  verify returned uuid returns device information
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  abcd
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-      ${device}=  Show Device Report  region=${region}  begin_seconds=${nsecs}
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-
-     # Length Should Be  ${device}  1
-
-#ECQ-2134
-showDeviceReport - request with only end_seconds and end_nanos shall return device information
-
-    [Documentation]
-    ...  showDeviceReport returns uuid device information with begin_seconds and begin_nanos
-    ...  verify returned uuid returns device information with begin_seconds and begin_nanos
-
-
-      ${timestamp}=  Get Time  epoch
-      
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=testcasesix
-      ${device}=  Show Device Report  region=${region}
-     
-
-      ${found}=  Find Device  ${device}  ${timestamp}  testcasesix
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
-
-      ${device}=  Show Device Report  region=${region}  end_seconds=${secs}  end_nanos=${nsecs}
-
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
-#     Should Be True    ${found['data']['key']['unique_id']} > ${uid} -2
-#     Should Be True    ${found['data']['key']['unique_id']} < ${uid} +2
-
-#      Should Be Equal  ${device['data']['key']['unique_id_type']}  abcd
-#      Should Be Equal  ${device['data']['key']['unique_id']}  1234
-#      Should Be True   ${device['data']['first_seen']['seconds']} > 0
-#      Should Be True   ${device['data']['first_seen']['nanos']} > 0
-#      Should Be True   ${device['data']['notify_id']} > 0
-
-
-#ECQ-2135
-showDeviceReport - request with added time to end_seconds shall return device data
-    [Documentation]
-    ...  showDeviceReport returns uuid device information with unique_id end_seconds and end_nanos
-    ...  verify returned uuid returns device information with unique_id end_seconds and end _nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=april
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  april
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
-
-      ${countsec}=  Evaluate  ${secs} + 1
-      ${countnano}=  Evaluate  ${nsecs} + 1
-
-      ${device}=  Show Device Report  region=${region}  unique_id=${uid} end_seconds=${countsec}  end_nanos=${nsecs}
-
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
-
-
-     # Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-     # Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-     # Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}   
-     # Length Should Be  ${device}  1
-
-#ECQ-2136
-showDeviceReport - request with added time to end_nanos shall return device data
-
-    [Documentation]
-    ...  showDeviceReport returns uuid device information with end_seconds and end_nanos
-    ...  verify returned uuid returns device information with end_seconds and end _nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=endnanos2
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  endnanos2
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-     
-     ${countsec}=  Evaluate  ${secs} + 1
-     ${countnano}=  Evaluate  ${nsecs} + 1
-
-
-     ${device}=  Show Device Report  region=${region}  end_seconds=${secs}  end_nanos=${countnano}
-
-
-      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
-      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-      Should Be True   ${found['data']['first_seen']['nanos']} < ${countnano}
-
-     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}    
-     # Should Not Be Equal   ${found['data']['first_seen']['nanos']}  ${count}
-     # Should Be True    ${found['data']['key']['unique_id']} < ${count1}
-     # Length Should Be   ${device}  1
-
-#ECQ-2137
-showDeviceReport - request with unique_id_type with end_seconds and end_nanos shall return device information
-
-    [Documentation]
-    ...  showDeviceReport display uuid using a specified unique_id_type end_seconds and end_nanos
-    ...  verify returned uuid returns device information using a specified unique_id_type end_seconds and end_nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=testeight
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  testeight
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-
-     ${countsec}=  Evaluate  ${secs} + 1
-     ${countnano}=  Evaluate  ${nsecs} + 1
-
-
-     ${device}=  Show Device Report  region=${region}  unique_id_type=testeight  end_seconds=${countsec}  end_nanos=${nsecs}
-
-
-      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be True   ${found['data']['first_seen']['seconds']} < ${countsec}
-
-     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-     
-
-
-#ECQ-2138
-showDeviceReport - request with unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
-    [Documentation]
-    ...  showDeviceReport display uuid using a specified unique_id unique_id_type end_seconds and end_nanos
-    ...  verify returned uuid returns device information using a specified unique_id unique_id_type end_seconds and end_nanos
-
-      ${timestamp}=  Get Time  epoch
-
-      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=testeight
-      ${device}=  Show Device  region=${region}
-
-      ${found}=  Find Device  ${device}  ${timestamp}  testeight
-
-      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
-      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
-      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
-
-      ${countsec}=  Evaluate  ${secs} + 1
-      ${countnano}=  Evaluate  ${nsecs} + 1
-
-
-     ${device}=  Show Device Report  region=${region}  unique_id=${uid}  unique_id_type=testeight  end_seconds=${countsec}  end_nanos=${nsecs}
-
-
-      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
-      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-      Should Be True   ${found['data']['first_seen']['seconds']} < ${countsec}
-
-     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
-     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
-
-
-
-
-  
+    ...  - send showDeviceReport with lowercase samsung platform app and Samsung unique_id_type
+    ...  - verify showDeviceReport returns no info
+
+    ${timestamp}=  Get Time  epoch
+
+    Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=samsung
+    ${device}=  Show Device  region=${region}
+
+    ${device}=  Show Device Report  region=${region}  unique_id=${timestamp}  #begin_seconds=${secs}  begin_nanos=${nsecs}
+    Length Should Be   ${device}  0
+
+#ECQ-2129 not supported
+#showDeviceReport - request unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
+#    [Documentation]
+#    ...  showDeviceReport returns uuid information using begin_seconds and begin_nanos
+#    ...  verify showDeviceReport returns uuid device information with unique_id unique_id_type begin_seconds and begin_nanos
+#
+#      ${id_type}=  Set Variable  Samsungapril
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=id427912  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#       
+#      ${found}=  Find Device  ${device}  id427912  ${id_type} 
+# 
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']} 
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+# 
+#      ${device}=  Show Device Report  region=${region}  unique_id=id427912  unique_id_type=${id_type}  begin_seconds=${secs}  begin_nanos=${nsecs}  
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}  
+#
+#     # Length Should Be  ${device}  1
+#
+#
+##ECQ-2130 not supported
+#showDeviceReport - request unique_id and unique_id_type with begin_nanos shall return device information
+#    [Documentation]
+#    ...  showDeviceReport returns uuid using only with unique_id and unique_id_type with begin_nanos
+#    ...  verify showDeviceReport returns uuid device information with unique_id and unique_id_type with begin_nanos
+#
+#      ${id_type}=  Set Variable  octoberSamsung
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=id427913  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  id427913  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#      ${device}=  Show Device Report  region=${region}  unique_id=id427913  unique_id_type=${id_type}  begin_nanos=${nsecs}
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#
+#     # Length Should Be  ${device}  1
+#
+#
+##ECQ-2131  not supported
+#showDeviceReport - request with only begin_seconds and begin_nanos shall return device information
+#
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
+#    ...  verify showDeviceReport returns uuid device information only using begin_seconds and begin_nanos
+#
+##      ${id_type}=  Set Variable  noveSamsungmber
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
+#      
+#      ${device}=  Show Device Report  region=${region}  begin_seconds=${secs}  begin_nanos=${nsecs}
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid} 
+#
+#
+##ECQ-2132 not supported
+#showDeviceReport - request uuid with only begin_nano shall return device information
+#
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information using only begin_nanos
+#    ...  verify uuid information is returned using only begin_nanos
+#
+#      ${id_type}=  Set Variable  abcdSamsung
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#      ${device}=  Show Device Report  region=${region}  begin_nanos=${nsecs}
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#
+#     # Length Should Be  ${device}  1
+#
+#
+##ECQ-2133 not supported
+#showDeviceReport - request uuid with only begin_seconds shall returns device information 
+#
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information with begin_seconds
+#    ...  verify returned uuid returns device information
+#
+#      ${id_type}=  Set Variable  Samsungabcd
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#      ${device}=  Show Device Report  region=${region}  begin_seconds=${nsecs}
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#
+#     # Length Should Be  ${device}  1
+#
+##ECQ-2134 not supported
+#showDeviceReport - request with only end_seconds and end_nanos shall return device information
+#
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information with begin_seconds and begin_nanos
+#    ...  verify returned uuid returns device information with begin_seconds and begin_nanos
+#
+#      ${id_type}=  Set Variable  testcaSamsungsesix
+#
+#      ${timestamp}=  Get Time  epoch
+#      
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device Report  region=${region}
+#     
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
+#
+#      ${device}=  Show Device Report  region=${region}  end_seconds=${secs}  end_nanos=${nsecs}
+#
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
+##     Should Be True    ${found['data']['key']['unique_id']} > ${uid} -2
+##     Should Be True    ${found['data']['key']['unique_id']} < ${uid} +2
+#
+##      Should Be Equal  ${device['data']['key']['unique_id_type']}  abcd
+##      Should Be Equal  ${device['data']['key']['unique_id']}  1234
+##      Should Be True   ${device['data']['first_seen']['seconds']} > 0
+##      Should Be True   ${device['data']['first_seen']['nanos']} > 0
+##      Should Be True   ${device['data']['notify_id']} > 0
+#
+#
+##ECQ-2135 not supported
+#showDeviceReport - request with added time to end_seconds shall return device data
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information with unique_id end_seconds and end_nanos
+#    ...  verify returned uuid returns device information with unique_id end_seconds and end _nanos
+#
+#      ${id_type}=  Set Variable  apriSamsungl
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
+#
+#      ${countsec}=  Evaluate  ${secs} + 1
+#      ${countnano}=  Evaluate  ${nsecs} + 1
+#
+#      ${device}=  Show Device Report  region=${region}  unique_id=${uid} end_seconds=${countsec}  end_nanos=${nsecs}
+#
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#      Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}
+#
+#
+#     # Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#     # Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#     # Should Be Equal   ${found['data']['key']['unique_id']}  ${uid}   
+#     # Length Should Be  ${device}  1
+#
+##ECQ-2136 not supported
+#showDeviceReport - request with added time to end_nanos shall return device data
+#
+#    [Documentation]
+#    ...  showDeviceReport returns uuid device information with end_seconds and end_nanos
+#    ...  verify returned uuid returns device information with end_seconds and end _nanos
+#
+#      ${id_type}=  Set Variable  Samsungendnanos2
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type} 
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#     
+#     ${countsec}=  Evaluate  ${secs} + 1
+#     ${countnano}=  Evaluate  ${nsecs} + 1
+#
+#
+#     ${device}=  Show Device Report  region=${region}  end_seconds=${secs}  end_nanos=${countnano}
+#
+#
+#      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
+#      Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#      Should Be True   ${found['data']['first_seen']['nanos']} < ${countnano}
+#
+#     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}    
+#     # Should Not Be Equal   ${found['data']['first_seen']['nanos']}  ${count}
+#     # Should Be True    ${found['data']['key']['unique_id']} < ${count1}
+#     # Length Should Be   ${device}  1
+#
+##ECQ-2137 not supported
+#showDeviceReport - request with unique_id_type with end_seconds and end_nanos shall return device information
+#
+#    [Documentation]
+#    ...  showDeviceReport display uuid using a specified unique_id_type end_seconds and end_nanos
+#    ...  verify returned uuid returns device information using a specified unique_id_type end_seconds and end_nanos
+#
+#      ${id_type}=  Set Variable  Samsungtesteight
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#
+#     ${countsec}=  Evaluate  ${secs} + 1
+#     ${countnano}=  Evaluate  ${nsecs} + 1
+#
+#
+#     ${device}=  Show Device Report  region=${region}  unique_id_type=${id_type}  end_seconds=${countsec}  end_nanos=${nsecs}
+#
+#
+#      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be True   ${found['data']['first_seen']['seconds']} < ${countsec}
+#
+#     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#     
+#
+#
+##ECQ-2138 not supported
+#showDeviceReport - request with unique_id unique_id_type begin_seconds and begin_nanos shall return specified device information
+#    [Documentation]
+#    ...  showDeviceReport display uuid using a specified unique_id unique_id_type end_seconds and end_nanos
+#    ...  verify returned uuid returns device information using a specified unique_id unique_id_type end_seconds and end_nanos
+#
+#      ${id_type}=  Set Variable  tesSamsungtcasesix
+#
+#      ${timestamp}=  Get Time  epoch
+#
+#      Register Client  developer_org_name=${samsung_developer_name}  app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=${id_type}
+#      ${device}=  Show Device  region=${region}
+#
+#      ${found}=  Find Device  ${device}  ${timestamp}  ${id_type}
+#
+#      ${secs}=  Set Variable  ${found['data']['first_seen']['seconds']}
+#      ${nsecs}=  Set Variable  ${found['data']['first_seen']['nanos']}
+#      ${uid}=  Set Variable  ${found['data']['key']['unique_id']}
+#
+#      ${countsec}=  Evaluate  ${secs} + 1
+#      ${countnano}=  Evaluate  ${nsecs} + 1
+#
+#
+#     ${device}=  Show Device Report  region=${region}  unique_id=${uid}  unique_id_type=${id_type}  end_seconds=${countsec}  end_nanos=${nsecs}
+#
+#
+#      Should Be True    ${found['data']['key']['unique_id']}  ${timestamp}
+#      Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#      Should Be True   ${found['data']['first_seen']['seconds']} < ${countsec}
+#
+#     #Should Be Equal   ${found['data']['first_seen']['seconds']}  ${secs}
+#     #Should Be Equal   ${found['data']['first_seen']['nanos']}  ${nsecs}
+#
+##
+#
+#
+#  
 #ECQ-2139
 showDeviceReport - request with bad token
   [Documentation]
@@ -348,7 +409,7 @@ showDeviceReport - request with bad token
       # robot function
    #   Run Keyword And Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Show Device Report  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
 
-      ${error}=  Run Keyword And Expect Error  *  Show Device Report  region=${region}  unique_id=1234  unique_id_type=abcd  use_defaults=${False}
+      ${error}=  Run Keyword And Expect Error  *  Show Device Report  region=${region}  unique_id=1234  unique_id_type=abcdSamsung  use_defaults=${False}
       #Should Be Equal  ${error}  ('code=400', 'error={"message":"no bearer token found"}')
       Should Contain  ${error}  no bearer token found
 
