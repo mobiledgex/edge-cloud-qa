@@ -44,7 +44,7 @@ ${region}  US
 #
 #      Length Should Be   ${device}  1
 #
-##ECQ-2117
+##ECQ-2117 not supported
 #showDevice - request with first_seen and seconds shall return device information
 #    [Documentation]
 #    ...  showDevice displays requested firstseen data
@@ -66,7 +66,7 @@ ${region}  US
 #
 #      Length Should Be   ${device}  1
 #
-##ECQ-2118
+##ECQ-2118 not supported
 #showDevice - request without first_seen_seconds shall return device information
 #    [Documentation]
 #    ...  showDevice displays firstseen data without requesting
@@ -89,7 +89,7 @@ ${region}  US
 #
 #      Length Should Be   ${device}  1
 #
-##ECQ-2119
+##ECQ-2119 not supported
 #showDevice - request with first_seen_nanos shall return device information
 #
 #    [Documentation]
@@ -112,7 +112,7 @@ ${region}  US
 #      Length Should Be   ${device}  1
 #
 #
-##ECQ-2120
+##ECQ-2120 not supported
 #showDevice - without first_seen_nanos shall return device information
 #
 #    [Documentation]
@@ -134,7 +134,7 @@ ${region}  US
 #
 #      Length Should Be   ${device}  1
 #
-##ECQ-2121
+##ECQ-2121 not supported
 #showDevice - with notify_id shall return device information
 #
 #   [Documentation]
