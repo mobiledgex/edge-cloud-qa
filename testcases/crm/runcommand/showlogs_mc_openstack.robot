@@ -26,7 +26,7 @@ ${num_lines}=  13
 
 ${test_timeout_crm}  15 min
 
-${since}=  30s
+${since}=  45s
 
 *** Test Cases ***
 # ECQ-1887
@@ -56,7 +56,7 @@ ShowLogs - k8s shared shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  tail=1
 
     # with since
-    Sleep  10 
+    Sleep  60 
     TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
@@ -80,7 +80,7 @@ ShowLogs - k8s shared shall return logs on openstack
     Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
-    Length Should Be  ${stdout_since_lines}        1
+    Length Should Be  ${stdout_since_lines}        2
 
 # ECQ-1888
 ShowLogs - k8s dedicated shall return logs on openstack
@@ -112,7 +112,7 @@ ShowLogs - k8s dedicated shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  tail=1
 
     # with since
-    Sleep  10 
+    Sleep  60 
     TCP Port Should Be Alive  ${app_inst['data']['mapped_ports'][0]['fqdn_prefix']}${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  since=${since}
 
@@ -136,7 +136,7 @@ ShowLogs - k8s dedicated shall return logs on openstack
     Length Should Be  ${stdout_id_lines}           ${num_lines}
     Length Should Be  ${stdout_tail_lines}         1
     Length Should Be  ${stdout_timestamps_lines}   3
-    Length Should Be  ${stdout_since_lines}        1
+    Length Should Be  ${stdout_since_lines}        2
 
 # ECQ-1889
 ShowLogs - docker dedicated shall return logs on openstack
@@ -166,7 +166,7 @@ ShowLogs - docker dedicated shall return logs on openstack
 
     # with since
     Get Time
-    Sleep  10
+    Sleep  60
     Get Time
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     Get Time
@@ -192,7 +192,7 @@ ShowLogs - docker dedicated shall return logs on openstack
     Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
-    Length Should Be  ${stdout_since_lines}  1
+    Length Should Be  ${stdout_since_lines}  2
 
 # ECQ-2066
 ShowLogs - docker shared shall return logs on openstack
@@ -221,7 +221,7 @@ ShowLogs - docker shared shall return logs on openstack
     ${stdout_tail}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  tail=1
 
     # with since
-    Sleep  10
+    Sleep  60
     TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}
     ${stdout_since}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  since=${since}
 
@@ -245,7 +245,7 @@ ShowLogs - docker shared shall return logs on openstack
     Length Should Be  ${stdout_id_lines}  ${num_lines}
     Length Should Be  ${stdout_tail_lines}  1
     Length Should Be  ${stdout_timestamps_lines}  3
-    Length Should Be  ${stdout_since_lines}  1
+    Length Should Be  ${stdout_since_lines}  2
 
 *** Keywords ***
 Setup
