@@ -544,7 +544,7 @@ Get vm app metrics with starttime and endtime and last on openstack
 DeveloperManager shall be able to get app metrics
    [Arguments]  ${username}  ${password}  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -579,7 +579,7 @@ DeveloperManager shall be able to get app metrics
 DeveloperContributor shall be able to get app metrics
    [Arguments]  ${username}  ${password}  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
@@ -614,7 +614,7 @@ DeveloperContributor shall be able to get app metrics
 DeveloperViewer shall be able to get app metrics
    [Arguments]  ${username}  ${password}  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
