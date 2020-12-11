@@ -93,16 +93,16 @@ ClusterMetrics - Shall be able to get all cluster UDP metrics with developer onl
 
    [Teardown]  Config Teardown
 
-   Set Max Metrics Data Points Config   1234
+   ${num_metrics}    Generate Random String    4    0123456789
 
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp  1234
+   Set Max Metrics Data Points Config  ${num_metrics} 
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp  ${num_metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
    UDP Should be in Range  ${metrics}
 
    Set Max Metrics Data Points Config   10000
-
    ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp  10000
 
    Metrics Headings Should Be Correct  ${metrics}

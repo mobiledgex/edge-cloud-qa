@@ -93,16 +93,16 @@ ClusterMetrics - Shall be able to get all cluster Memory metrics with developer 
 
    [Teardown]  Config Teardown
 
-   Set Max Metrics Data Points Config   1234
+   ${num_metrics}    Generate Random String    4    0123456789
 
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem  1234
+   Set Max Metrics Data Points Config   ${num_metrics}
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem  ${num_metrics}
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Memory Should be in Range  ${metrics}
 
    Set Max Metrics Data Points Config   10000
-
    ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  mem  10000
 
    Metrics Headings Should Be Correct  ${metrics}
