@@ -44,7 +44,7 @@ User shall be able to create an app instance on azure with a dot in the app name
     Log To Console  Registering Client and Finding Cloudlet
     Register Client  app_name=${app_name}
     ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-    ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  ${version} -udp.
+    ${app_name_nodot}=    Catenate  SEPARATOR=  app  ${epoch_time}  ${version}-udp.
 
     # verify dot is gone
     Should Be Equal     ${app_name_nodot}  ${cloudlet.ports[0].fqdn_prefix}
