@@ -227,7 +227,10 @@ AppInst - appinst shall not start for docker/direct/shared app inst when cloudle
    # verify it returns the appinst on the 1st cloudlet
    Register Client  app_name=${app_name_default}  developer_org_name=${operator_name}
    ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
-   Should Be Equal              ${cloudlet_1['fqdn']}  ${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   #Should Be Equal              ${cloudlet_1['fqdn']}  ${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   # it now returns a random order so it could be either cloudlet
+   Should Be True              '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net' or '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name2}.${operator_name}.mobiledgex.net'
+
 
 *** Keywords ***
 Setup
