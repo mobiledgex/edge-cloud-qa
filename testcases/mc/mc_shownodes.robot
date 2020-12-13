@@ -103,8 +103,9 @@ DME Should Exist
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  GDDT
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  mexplat-qa-cloudlet 
 
-   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+   # 'build_master': 'v1.2.4-rc4-2-g02efe6d0'
+   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}   #\\-\\d{1,3}-\\b
+   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}     #\\-\\d{1,3}-\\b
 
    \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^dme-
 
@@ -128,8 +129,8 @@ Hawkins CRM Should Exist
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  GDDT
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationHawkinsCloudlet
 
-   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}   #\\-\\d{1,3}-\\b
+   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}   #\\-\\d{1,3}-\\b
 
    \  ${host_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['hostname']}  automationHawkinsCloudlet
 
@@ -154,8 +155,8 @@ Azure CRM Should Exist
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  azure
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationAzureCentralCloudlet
 
-   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}    #\\-\\d{1,3}-\\b
+   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}    #\\-\\d{1,3}-\\b
 
    \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^gitlab-qa
 
@@ -180,8 +181,8 @@ GCP CRM Should Exist
    \  ${operator_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['organization']}  gcp 
    \  ${cloudlet_match}=  Run Keyword And Return Status  Should Be Equal            ${node['data']['key']['cloudlet_key']['name']}  automationGcpCentralCloudlet
 
-   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
-   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\-\\d{1,3}-\\b
+   \  ${master_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_master']}  v\\d{1,3}\\.\\d{1,3}    #\\-\\d{1,3}-\\b
+   \  ${head_match}=  Run Keyword And Return Status  Should Match Regexp          ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}    #\\-\\d{1,3}-\\b
 
    \  ${host_match}=  Run Keyword And Return Status  Should Match Regexp            ${node['data']['hostname']}  ^gitlab-qa
 
