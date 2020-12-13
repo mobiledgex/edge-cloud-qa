@@ -36,6 +36,8 @@ secret_key = '_1x9j2jdzPGHmpQTs9myoiz76wFTl1f_MC3iBXP0mFg'
 def main():
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
+    parser.add_argument('--failed_only', action='store_true')
+
     args = parser.parse_args()
 
     print(os.environ)
@@ -113,17 +115,36 @@ def main():
     #jiraTestcaseQuery = "project=" + project + " AND fixVersion=\"" + version + "\" AND cycleName in (\"" + cycle + "\") AND summary ~ \"" + summary + "\" ORDER BY Issue ASC"
     component_list = component.split(',')
     component_query = ''
+    z_component_query = ''
     for component in component_list:
         component_query += f' AND component = \"{component.strip()}\"'
-    zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
+        z_component_query += f' AND component = \\\"{component.strip()}\\\"'   
+
+    #zephyrQueryUrl = 'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"' + version + '\\\"' + z_component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
+    #if args.failed_only: jiraQueryUrlPre += ' AND executionStatus=Fail'
+
+    if args.failed_only:
+        zephyrQueryUrl = f'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"{version}\\\"{z_component_query} AND cycleName=\\\"{cycle}\\\" AND executionStatus=Fail ORDER BY Issue ASC'
+        failed_tcids = get_zephyr_failed_testcases(z, zephyrQueryUrl, zephyrQueryUrl)
+        if len(failed_tcids) > 0:
+            jiraQueryUrlPre += ' AND key in ('
+            for key in failed_tcids:
+                jiraQueryUrlPre += f'{key},' 
+            jiraQueryUrlPre = jiraQueryUrlPre[:-1]
+            jiraQueryUrlPre += ')' 
+
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
         
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version +  "\\\" ORDER BY Issue ASC"
-    logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
+    #logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
      
     #result = z.execute_query(zephyrQueryUrl)
+    #print(f'len={len(result)}')
+    #query_content = json.loads(result)
+    #print(f'zquery={query_content}')
+    #sys.exit(1)
     startat = 0
     maxresults = 0
     total = 1
@@ -144,6 +165,8 @@ def main():
         
     print('tc_list',tc_list)
     print('lentclist', len(tc_list))
+    num_testcases = len(tc_list)
+    print(f'numtests={num_testcases}')
     #sys.exit(1)
 
     #update_defects(z, tc_list)
@@ -151,9 +174,31 @@ def main():
     
     #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
     exec_status = exec_testcases(z, tc_list)
-    print("exec_status=" + str(exec_status))
+    print(f'exec_status={exec_status}')
           
     sys.exit(exec_status)
+
+def get_zephyr_failed_testcases(z, url, query):
+    print(f'execututing zephyr query={query}')
+    #zephyrQueryUrl = 'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
+    total_count = 9999999 
+    num_returned = 0
+    total_returned = 0
+    tc_list = []
+    while total_returned < total_count:
+        result = z.execute_query(url, offset=total_returned)
+        query_content = json.loads(result)
+        total_count = query_content['totalCount']
+        num_returned = len(query_content['searchObjectList'])
+        total_returned += num_returned
+
+        for exec in query_content['searchObjectList']:
+            print(f"tcid={exec['issueKey']}")
+            tc_list.append(exec['issueKey'])
+
+    print(f'found {len(tc_list)} failed testcases')
+    #sys.exit(1) 
+    return tc_list
 
 def get_testcases(z, result, cycle_id, project_id, version_id):
     query_content = json.loads(result)
@@ -319,6 +364,10 @@ def update_single_defect(z, t):
 def exec_testcases(z, l):
     found_failure = -1
     last_status = 'unset'
+    num_testcases = 0
+    num_testcases_passed = 0
+    num_testcases_failed = 0
+
     linux_os = windows_os = False
     
     if os.name == 'posix':
@@ -339,6 +388,7 @@ def exec_testcases(z, l):
         if t['tc'] == 'noTestcaseInStep':
             logging.info('skipping execution of {}. does not contain a testcase'.format(t['issue_key']))
             found_failure = 1  # consider it a failure if the teststep is missing 
+            num_testcases_failed += 1
             continue  # go to the next testcase. probably should have put the rest of the code in else statement but this was added later
         
         logging.info("executing " + t['issue_key'] + " on os=" + os.name)
@@ -454,6 +504,7 @@ def exec_testcases(z, l):
             logging.debug(f'updatestatus={status}')
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=1)
             last_status = 'pass'
+            num_testcases_passed += 1
             if found_failure == -1:
                 found_failure = 0 
         except subprocess.CalledProcessError as err:
@@ -468,7 +519,7 @@ def exec_testcases(z, l):
             status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2, comment=comment)
             #status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
             last_status = 'fail'
-
+            num_testcases_failed += 1
         try:
             file_output_done = file_output + '_' + str(int(time.time())) + file_extension
             # add ending timestamp to file
@@ -537,6 +588,9 @@ def exec_testcases(z, l):
         #print(r)
 
         #sys.exit(1)
+
+    print(f'num_testcases={num_testcases} passed={num_testcases_passed} failed={num_testcases_failed}')
+
     return found_failure
     
 if __name__ == '__main__':

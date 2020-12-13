@@ -291,7 +291,7 @@ class Zapi(WebService):
             print(self.resp.content)
             return self.resp.content
 
-    def execute_query(self, query=None):
+    def execute_query(self, query=None, offset=0):
         logging.debug('query=' + query)
         relative_path = '/public/rest/api/1.0/zql/search'
         #url = self.base_url + 'zql/executeSearch?zqlQuery=' + query + '&maxRecords=2000'
@@ -299,7 +299,7 @@ class Zapi(WebService):
 
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Version","fields":{"fixVersion":[{"id":10002,"name":"Version 3.0","projectId":10000,"released":false,"archived":false}]}}'
         #query = '{"maxRecords":20,"offset":0,"zqlQuery":"fixVersion = Nimbus"}' #project = "edge-cloud QA" AND fixVersion = "Nimbus"'# AND cycleName = "Supported"'
-        data = '{"maxRecords":50,"offset":0, "zqlQuery":' + '"' + query + '"}'
+        data = f'{{"maxRecords":50,"offset":{offset}, "zqlQuery":"{query}"}}'
         path = 'POST&/public/rest/api/1.0/zql/search&isAdvanced=true'
 
         jwt = self._generate_jwt(path)
