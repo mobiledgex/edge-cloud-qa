@@ -161,7 +161,7 @@ ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics wit
    ...  request cloudlet metrics with starttime > endtime
    ...  verify empty list is returned
 
-   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator}  ${developer_name}  network
+   Get cluster metrics with starttime > endtime on openstack     ${clustername_k8shared}  ${cloudlet_name_openstack_metrics}  ${operator_name_openstack}  ${developer_name}  network
 
 ClusterMetrics - Shall be able to get the k8s shared cluster Network metrics with starttime and endtime > lastrecord on openstack
    [Documentation]
