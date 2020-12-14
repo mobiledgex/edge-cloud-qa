@@ -291,7 +291,7 @@ Disk Should Be In Range
 	
    # verify values
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 1000000
+      Should Be True               ${reading[9]} > 0    #and ${reading[9]} <= 1000000
    END
 
 Metrics Should Match Influxdb
