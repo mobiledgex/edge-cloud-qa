@@ -388,9 +388,9 @@ Metrics Should Match Connected App
    # verify values
    FOR  ${reading}  IN  @{values}
    #\  @{datesplit}=  Split String  ${reading[0]}  .
-      ${found_connection}=  Run Keyword If  '${reading[9]}' == '${port}' and '${reading[10]}' == '1' and '${reading[11]}' == '1' and '${reading[12]}' == '1' and '${reading[13]}' > '0' and '${reading[14]}' > '0'  Set Variable  ${True}
+      ${found_connection}=  Run Keyword If  '${reading[8]}' == '${port}' and '${reading[9]}' == '1' and '${reading[10]}' == '1' and '${reading[11]}' == '1' and '${reading[12]}' > '0' and '${reading[13]}' > '0'  Set Variable  ${True}
       ...                                 ELSE  Set Variable  ${found_connection}
-      ${found_histogram}=  Run Keyword If  '${reading[14]}' > '0' and '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0' and '${reading[22]}' > '0' and '${reading[23]}' > '0'  Set Variable  ${True}
+      ${found_histogram}=  Run Keyword If  '${reading[13]}' > '0' and '${reading[14]}' > '0' and '${reading[15]}' > '0' and '${reading[16]}' > '0' and '${reading[17]}' > '0' and '${reading[18]}' > '0' and '${reading[19]}' > '0' and '${reading[20]}' > '0' and '${reading[21]}' > '0' and '${reading[22]}' > '0'  Set Variable  ${True}
       ...                                 ELSE  Set Variable  ${found_histogram}
    END
 
