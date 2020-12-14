@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  MexApp
 
 Suite Setup  Setup
-#Suite Teardown  Teardown 
+Suite Teardown  Teardown 
 
 Test Timeout    ${test_timeout_crm}
 
