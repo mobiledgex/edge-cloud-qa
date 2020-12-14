@@ -16,6 +16,7 @@ import argparse
 import zipfile
 import zlib
 import html
+import re
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = '***REMOVED***'
@@ -125,17 +126,20 @@ def main():
     #if args.failed_only: jiraQueryUrlPre += ' AND executionStatus=Fail'
 
     if args.failed_only:
+        print('Only executing failed testcases')
         zephyrQueryUrl = f'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"{version}\\\"{z_component_query} AND cycleName=\\\"{cycle}\\\" AND executionStatus=Fail ORDER BY Issue ASC'
         failed_tcids = get_zephyr_failed_testcases(z, zephyrQueryUrl, zephyrQueryUrl)
-        if len(failed_tcids) > 0:
-            jiraQueryUrlPre += ' AND key in ('
-            for key in failed_tcids:
-                jiraQueryUrlPre += f'{key},' 
-            jiraQueryUrlPre = jiraQueryUrlPre[:-1]
-            jiraQueryUrlPre += ')' 
+        if len(failed_tcids) <= 0: failed_tcids = ['EC-1']
+        jiraQueryUrlPre += ' AND key in ('
+        for key in failed_tcids:
+            jiraQueryUrlPre += f'{key},'
+        #jiraQueryUrlPre = jiraQueryUrlPre[:-1]
+        jiraQueryUrlPre = re.sub(r',$', '', jiraQueryUrlPre)
+        jiraQueryUrlPre += ')'
 
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
-        
+    print(f'jiraQuery={jiraQueryUrl}')
+    #sys.exit(1) 
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version +  "\\\" ORDER BY Issue ASC"
     #logging.info("zephyrQueryUrl=" + zephyrQueryUrl)
@@ -193,8 +197,15 @@ def get_zephyr_failed_testcases(z, url, query):
         total_returned += num_returned
 
         for exec in query_content['searchObjectList']:
-            print(f"tcid={exec['issueKey']}")
-            tc_list.append(exec['issueKey'])
+            print(f"tcid={exec['issueKey']} defects={exec['execution']['defects']}")
+            if len(exec['execution']['defects']) == 0:
+                tc_list.append(exec['issueKey'])
+            else:
+                tc_list.append(exec['issueKey'])
+                for defect in exec['execution']['defects']:
+                    if defect['status']['name'] != 'Closed' and defect['status']['name'] != 'Ready To Verify':
+                        tc_list.pop()
+                        break 
 
     print(f'found {len(tc_list)} failed testcases')
     #sys.exit(1) 
@@ -362,7 +373,7 @@ def update_single_defect(z, t):
 
 #def exec_testcases(z, l, rhc, httpTrace, summary):
 def exec_testcases(z, l):
-    found_failure = -1
+    found_failure = 0
     last_status = 'unset'
     num_testcases = 0
     num_testcases_passed = 0
