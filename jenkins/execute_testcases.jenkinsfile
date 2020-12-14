@@ -41,7 +41,7 @@ if (env.openstackenvmetrics) {
 if (env.openstackenvvmpool) {
     envvmpool = "${OpenStackEnvVMPool}"
 }
-if(env.runfailedonly) {
+if(String.valueOf(env.runfailedonly) == "true") {
     runfailedonly_arg = "--failed_only" 
 }
 
