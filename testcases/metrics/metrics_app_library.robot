@@ -259,9 +259,12 @@ Get app metrics with starttime=lastrecord on openstack
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be True  ${num_readings}==2 or ${num_readings}==4
+   Run Keyword If  '${selector}'=='connections'  Should Be True  ${num_readings}==1
+   ...  ELSE  Should Be True  ${num_readings}==2 or ${num_readings}==4
+
+   Run Keyword If  '${selector}'=='connections'  Should Be True  '${metrics['data'][0]['Series'][0]['values'][0][0]}'=='${metricspre['data'][0]['Series'][0]['values'][0][0]}'
    Run Keyword If  ${num_readings}==2  Should Be True  '${metrics['data'][0]['Series'][0]['values'][0][0]}'=='${metricspre['data'][0]['Series'][0]['values'][0][0]}'
-   ...  ELSE  Should Be True  '${metrics['data'][0]['Series'][0]['values'][1][0]}'=='${metricspre['data'][0]['Series'][0]['values'][0][0]}'
+   Run Keyword If  ${num_readings}==4  Should Be True  '${metrics['data'][0]['Series'][0]['values'][2][0]}'=='${metricspre['data'][0]['Series'][0]['values'][0][0]}'
 
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][0][0]}  ${metricspre['data'][0]['Series'][0]['values'][0][0]}
 
