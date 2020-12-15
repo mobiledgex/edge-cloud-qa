@@ -266,22 +266,23 @@ class MexApp(object):
                 else:
                     time.sleep(1)
                 
-    def tcp_port_should_be_alive(self, host, port, wait_time=0, tls=False):
-        logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls}')
+    def tcp_port_should_be_alive(self, host, port, wait_time=0, tls=False, num_tries=4):
+        logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
 
         self.wait_for_dns(host)
-
-        for attempt in range(1,4):
+        e = ''
+        for attempt in range(1,num_tries):
             logging.debug(f'TCP port attempt {attempt}')
             try:
                 self.ping_tcp_port(host, port, wait_time, tls)
                 return True
             except Exception as e:
                 logging.debug(f'tcp exception caught:{e}')
-                if attempt == 3:
-                    raise Exception(e)
-                else:
-                    time.sleep(1)
+                #if attempt == num_tries:
+                #    raise Exception(e)
+                #else:
+                time.sleep(1)
+        raise Exception(e)
 
     def http_port_should_be_alive(self, host, port, page, tls=False):
         logging.info(f'host:{host} port:{port} tls:{tls}')
