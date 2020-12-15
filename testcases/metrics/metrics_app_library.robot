@@ -58,6 +58,25 @@ Get the last 5 app metrics on openstack
 
    [Return]  ${metrics}  ${metrics_influx}
 
+Get the last app metric on openstack with version
+   [Arguments]  ${app}  ${version}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
+
+   ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  app_version=${version}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=1
+
+   ${version_influx}=  Remove String  ${version}  .
+   ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  app_version=${version_influx}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 2  # last record
+   log to console  ${metrics['data'][0]['Series']}
+   log to console  ${metrics_influx}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}  ${metrics_influx}
+
 Get the last 5 app metrics on openstack with version
    [Arguments]  ${app}  ${version}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
