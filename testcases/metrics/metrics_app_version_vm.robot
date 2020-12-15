@@ -6,7 +6,7 @@ Library  MexApp
 Resource  metrics_app_library.robot
 	      
 Suite Setup       Setup
-#Test Teardown    Cleanup provisioning
+Test Teardown    Cleanup provisioning
 
 Test Timeout  ${test_timeout_crm}
 
