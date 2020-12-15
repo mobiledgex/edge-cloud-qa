@@ -213,6 +213,17 @@ CreateApp - error shall be received with deployment=docker and invalid artifacto
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Cannot get manifest from ${manifest_artifactory_invalid}, Invalid URL: ${manifest_artifactory_invalid}, Not Found"
 
+# ECQ-2968
+CreateApp - error shall be received with deployment=kubernetes and scale with cluster but not in manifest
+    [Documentation]
+    ...  - create docker app with deployment=kubernetes and scale with cluster on but the manifest does not support it
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest}  scale_with_cluster=${True}
+
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "DaemonSet required in manifest when ScaleWithCluster set"
+
 *** Keywords ***
 Setup
     #Create Developer            
