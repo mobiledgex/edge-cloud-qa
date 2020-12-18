@@ -11,6 +11,7 @@ import os
 import imaplib
 import email
 import queue
+import sys
 
 from mex_rest import MexRest
 from mex_controller_classes import Organization
@@ -40,6 +41,7 @@ from mex_master_controller.AlertReceiver import AlertReceiver
 from mex_master_controller.Alert import Alert
 from mex_master_controller.User import User
 from mex_master_controller.Stream import Stream 
+from mex_master_controller.Settings import Settings
 
 import shared_variables_mc
 import shared_variables
@@ -80,7 +82,8 @@ class MexMasterController(MexRest):
         #self.password = 'mexadmin123'
         self.password = 'mexadminfastedgecloudinfra'
 
-        self.admin_username = 'mexadmin'
+        self.admin_username = self.username
+        self.admin_password = self.password
        
         self.super_token = None
         self._decoded_token = None
@@ -193,9 +196,10 @@ class MexMasterController(MexRest):
         self.verify_email_mc = VerifyEmail(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert_receiver = AlertReceiver(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.alert = Alert(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
-        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.user = User(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
         self.stream = Stream(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.settings = Settings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -389,6 +393,11 @@ class MexMasterController(MexRest):
                     raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             except Exception as e:
                 self._number_login_requests_fail += 1
+                print('*WARN*', 'queu_obj', self._queue_obj)
+                if self._queue_obj:
+                    print('*WARN*', 'fail login')
+                    self._queue_obj.put({'login_thread':sys.exc_info()})
+
                 raise Exception("post failed:", e)
 
         self._number_login_requests_success += 1
@@ -402,118 +411,15 @@ class MexMasterController(MexRest):
             self._create_classes()
             return self.token
 
+    def login_mexadmin(self):
+        return self.login(username=self.admin_username, password=self.admin_password)
+
     def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
-        namestamp = str(time.time())
-        url = self.root_url + '/usercreate'
-        payload = None
-
-        if not email_password:
-            email_password = password
-            
-        if use_defaults == True:
-            if username == None: username = 'name' + namestamp
-            if password == None: password = 'password' + timestamp
-            if email_address == None: email_address = username + '@email.com'
-
-        shared_variables_mc.username_default = username
-        shared_variables_mc.password_default = password
-        self.emal = email_address
-        
-        if json_data != None:
-            payload = json_data
-        else:
-            user_dict = {}
-            if username is not None:
-                user_dict['name'] = username
-            if password is not None:
-                user_dict['passhash'] = password
-            if email_address is not None:
-                user_dict['email'] = email_address
-
-            payload = json.dumps(user_dict)
-
-        logger.info('usercreate on mc at {}. \n\t{}'.format(url, payload))
-
-        if email_check:
-            logging.info(f'checking email with email={email_address} password={password}')
-            mail = imaplib.IMAP4_SSL(server)
-            mail.login(email_address, email_password)
-            mail.select('inbox')
-            self._mail = mail
-            logging.info('login successful')
-            
-            status, email_list_pre = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
-            mail_ids_pre = email_list_pre[0].split()
-            num_emails_pre = len(mail_ids_pre)
-            self._mail_count = num_emails_pre
-            logging.info(f'number of emails pre is {num_emails_pre}')
-
-        def send_message():
-            self._number_createuser_requests += 1
-
-            try:
-                self.post(url=url, data=payload)
-
-                logger.info('response:\n' + str(self.resp.text))
-
-                if str(self.resp.status_code) != '200':
-                    self._number_createuser_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-
-            except Exception as e:
-                self._number_createuser_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            if auto_delete == True:
-                self.prov_stack.append(lambda:self.delete_user(username, self.super_token, None, False))
-
         self.username = username
         self.password = password
         self.email_address = email_address
 
-        self._number_createuser_requests_success += 1
-
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
-        else:
-            resp = send_message()
-            return self.decoded_data
-            #return username, password, email
-
-#    def get_current_user(self, token=None, use_defaults=True, use_thread=False):
-#        url = self.root_url + '/auth/user/current'
-#
-#        logger.info('user/current on mc at {}'.format(url))
-#
-#        if use_defaults == True:
-#            if token is None: token = self.token
-#
-#        def send_message():
-#            self._number_currentuser_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token)
-#
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_currentuser_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#            except Exception as e:
-#                self._number_currentuser_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#        self._number_currentuser_requests_success += 1
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
+        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, server=server, email_check=email_check, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
 
     def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
         return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
@@ -521,69 +427,21 @@ class MexMasterController(MexRest):
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
 
-    def update_current_user(self, token=None, metadata=None, json_data=None, use_defaults=True):
-        return self.user.update_user(token=token, metadata=metadata, json_data=json_data, use_defaults=use_defaults)
+    def update_current_user(self, token=None, metadata=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user(token=token, metadata=metadata, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def delete_user(self, username=None, token=None, json_data=None, use_defaults=True):
-        url = self.root_url + '/auth/user/delete'
-        payload = None
+    def delete_user(self, username=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.delete_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-        if use_defaults == True:
-            if token is None: token = self.token
-            if username is None: username = self.username
-            #if password is None: password = self.password
-            #if email is None: email = self.username
+    def update_user_restriction(self, username=None, locked=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.user.update_user_restricted(token=token, username=username, locked=locked, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-        if json_data !=  None:
-            payload = json_data
-        else:
-            user_dict = {}
-            if username is not None:
-                user_dict['name'] = username
-
-            payload = json.dumps(user_dict)
-
-        logger.info('delete user on mc at {}. \n\t{}'.format(url, payload))
-
-        self.post(url=url, data=payload, bearer=token)
-
-        logger.info('response:\n' + str(self.resp.text))
-
-        if str(self.resp.text) != '{"message":"user deleted"}':
-            raise Exception("error deleting  user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-
-    def update_user_restriction(self, username=None, locked=None, token=None, json_data=None, use_defaults=True):
-        url = self.root_url + '/auth/restricted/user/update'
-        payload = None
-        
-        if use_defaults == True:
-            if token is None: token = self.super_token
-            if username is None: username = self.username
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            user_dict = {}
-            if username is not None:
-                user_dict['name'] = username
-            if locked is not None:
-                user_dict['locked'] = locked
-
-            payload = json.dumps(user_dict)
-
-        logger.info('update user restriction on mc at {}. \n\t{}'.format(url, payload))
-
-        self.post(url=url, data=payload, bearer=token)
-
-        logger.info('response:\n' + str(self.resp.text))
-
-        #if str(self.resp.text) != '{"message":"user deleted"}':
-        #    raise Exception("error deleting  user. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-
-    def unlock_user(self, token=None, username=None):
+    def unlock_user(self, token=None, username=None, use_thread=False):
         if username is None: username = shared_variables_mc.username_default
+        if token is None: token = self.super_token
+
         logging.info(f'unlocking username={username}')
-        self.update_user_restriction(token=token, username=username, locked=False)
+        return self.update_user_restriction(token=token, username=username, locked=False, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
@@ -975,71 +833,6 @@ class MexMasterController(MexRest):
                 raise Exception("error adding user role. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
             return str(self.resp.text)
 
-#    def show_flavors(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
-#        return self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-#
-#        url = self.root_url + '/auth/ctrl/ShowFlavor'
-#
-#        payload = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            flavor_dict = {}
-#            if region is not None:
-#                flavor_dict['region'] = region
-#
-#            payload = json.dumps(flavor_dict)
-#
-#        logger.info('show flavor on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_showflavor_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                respText = str(self.resp.text)
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_showorg_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#            except Exception as e:
-#                self._number_showflavor_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_showflavor_requests_success += 1
-#
-#            resp_data = self.decoded_data
-#            if type(resp_data) is dict:
-#                resp_data = [resp_data]
-#
-#            reverse = True if sort_order == 'descending' else False
-#            if sort_field == 'flavor_name':
-#                logging.info('sorting by flavor_name')
-#                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse) # sorting since need to check for may apps. this return the sorted list instead of the response itself
-#
-#            return resp_data
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            print('sending message')
-#            resp = send_message()
-#            #if str(self.resp.) != '[]':
-#            #    #match = re.search('.*Name.*Type.*Address.*Phone.*AdminUsername.*CreatedAt.*UpdatedAt.*', str(self.resp.text))
-#            #    # print('*WARN*',match)
-#            #    if not match:
-#            #        raise Exception("error showing organization. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#            #return self.decoded_data
-#            return resp
     def show_flavors(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False, sort_field='flavor_name', sort_order='ascending'):
         resp = self.flavor.show_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
@@ -1126,61 +919,6 @@ class MexMasterController(MexRest):
     def show_cloudlets(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, latitude=latitude, longitude=longitude, number_dynamic_ips=number_dynamic_ips, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, notify_server_address=notify_server_address, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
 
-#        url = self.root_url + '/auth/ctrl/ShowCloudlet'
-#
-#        payload = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cloudlet_dict = {}
-#            if region is not None:
-#                cloudlet_dict['region'] = region
-#
-#            payload = json.dumps(cloudlet_dict)
-#
-#        logger.info('show cloudlet on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_showcloudlet_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                respText = str(self.resp.text)
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_showcloudlet_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#            except Exception as e:
-#                self._number_showcloudlet_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_showcloudlet_requests_success += 1
-#
-#            resp_data = self.decoded_data
-#            if type(resp_data) is dict:
-#                resp_data = [resp_data]
-#
-#            reverse = True if sort_order == 'descending' else False
-#            if sort_field == 'cloudlet_name':
-#                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
-#
-#            return resp_data
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return resp
-
     def show_cluster_instances(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True, sort_field='cluster_name', sort_order='ascending'):
         resp_data = self.cluster_instance.show_cluster_instance(token=token, region=region, cluster_name=cluster_name, cloudlet_name=cloudlet_name, json_data=json_data, use_thread=use_thread, use_defaults=use_defaults)
 
@@ -1192,64 +930,6 @@ class MexMasterController(MexRest):
             resp_data = sorted(resp_data, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
 
         return resp_data
-#        url = self.root_url + '/auth/ctrl/ShowClusterInst'
-#
-#        payload = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            cluster_dict = {}
-#            if cluster_name or cloudlet_name:
-#                clusterinst = ClusterInstance(cluster_name=cluster_name, cloudlet_name=cloudlet_name, use_defaults=False).cluster_instance
-#                cluster_dict = {'clusterinst': clusterinst}
-#
-#            if region is not None:
-#                cluster_dict['region'] = region
-#
-#            payload = json.dumps(cluster_dict)
-#
-#        logger.info('show clusterinst on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_showclusterinst_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#
-#                logger.info('response:\n' + str(self.resp.text))
-#
-#                respText = str(self.resp.text)
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_showclusterinst_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#            except Exception as e:
-#                self._number_showclusterinst_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_showclusterinst_requests_success += 1
-#
-#            resp_data = self.decoded_data
-#            if type(resp_data) is dict:
-#                resp_data = [resp_data]
-#
-#            reverse = True if sort_order == 'descending' else False
-#            if sort_field == 'cluster_name':
-#                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['cluster_key']['name'].casefold(),reverse=reverse)
-#
-#            return resp_data
-#
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return resp
 
     def show_app_instances(self, token=None, region=None, appinst_id=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='app_name', sort_order='ascending'):
         if app_name or app_version or cloudlet_name or operator_org_name or developer_org_name or cluster_instance_name or cluster_instance_developer_org_name:
@@ -1751,6 +1431,7 @@ class MexMasterController(MexRest):
       return self.cluster_instance.get_cluster_metrics(token=token, region=region, cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
         
     def get_app_metrics(self, token=None, region=None, app_name=None, app_version=None, cluster_instance_name=None, developer_org_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
+        print('*WARN*', 'mc version', app_version)
         return self.app_instance.get_app_metrics(token=token, region=region, app_name=app_name, app_version=app_version, cluster_instance_name=cluster_instance_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, selector=selector, last=last, start_time=start_time, end_time=end_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_dme_metrics(self, token=None, region=None, method=None, app_name=None, developer_org_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, selector=None, last=None, start_time=None, end_time=None, cell_id=None, json_data=None, use_defaults=True, use_thread=False):
@@ -1827,52 +1508,6 @@ class MexMasterController(MexRest):
 
     def show_autoscale_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, min_nodes=None, max_nodes=None, scale_up_cpu_threshold=None, scale_down_cpu_threshold=None, trigger_time=None, json_data=None, use_defaults=True, use_thread=False):
         return self.autoscale_policy.show_autoscale_policy(token=token, region=region, policy_name=policy_name, developer_org_name=developer_org_name, min_nodes=min_nodes, max_nodes=max_nodes, scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
-#
-#        url = self.root_url + '/auth/ctrl/ShowAutoScalePolicy'
-#
-#        payload = None
-#        policy = None
-#
-#        if use_defaults == True:
-#            if token == None: token = self.token
-#
-#        if json_data !=  None:
-#            payload = json_data
-#        else:
-#            policy = AutoScalePolicy(policy_name=policy_name, developer_name=developer_name, min_nodes=min_nodes, max_nodes=max_nodes,  scale_up_cpu_threshold=scale_up_cpu_threshold, scale_down_cpu_threshold=scale_down_cpu_threshold, trigger_time=trigger_time, use_defaults=use_defaults).policy
-#            policy_dict = {'autoscalepolicy': policy}
-#            if region is not None:
-#                policy_dict['region'] = region
-#
-#            payload = json.dumps(policy_dict)
-#
-#        logger.info('show autoscalepolicy on mc at {}. \n\t{}'.format(url, payload))
-#
-#        def send_message():
-#            self._number_showautoscalepolicy_requests += 1
-#
-#            try:
-#                self.post(url=url, bearer=token, data=payload)
-#                
-#                logger.info('response:\n' + str(self.resp.status_code) + '\n' + str(self.resp.text))
-#
-#                if str(self.resp.status_code) != '200':
-#                    self._number_showautoscalepolicy_requests_fail += 1
-#                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-#                    
-#            except Exception as e:
-#                self._number_showautoscalepolicy_requests_fail += 1
-#                raise Exception("post failed:", e)
-#
-#            self._number_showautoscalepolicy_requests_success += 1
-#            
-#        if use_thread is True:
-#            t = threading.Thread(target=send_message)
-#            t.start()
-#            return t
-#        else:
-#            resp = send_message()
-#            return self.decoded_data
 
     def create_operator_code (self, token=None, region=None, operator_org_name=None, code=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         return self.operatorcode.create_operator_code(token=token, region=region, operator_org_name=operator_org_name,code=code, json_data=json_data, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
@@ -2083,6 +1718,14 @@ class MexMasterController(MexRest):
     def stream_app_instance(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, cloudlet_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.stream.stream_appinst(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=None, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.settings.show_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
+
+    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, json_data=None, use_defaults=True, use_thread=False):
+        #for key, value in kwargs.items():
+        #  print('*WARN*', "{0} = {1}".format(key, value))
+        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout)
+
     def run_mcctl(self, parms):
         cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
@@ -2124,6 +1767,7 @@ class MexMasterController(MexRest):
         while not self._queue_obj.empty():
             try:
                 exec = self._queue_obj.get(block=False)
+                print('*WARN*', 'exec', exec)
                 logging.error(f'thread {list(exec)[0]} failed with {exec[list(exec)[0]]}')
                 failed_thread_list.append(exec)
             except queue.Empty:
