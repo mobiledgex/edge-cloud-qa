@@ -41,7 +41,7 @@ class MexRest(WebService) :
                 logger.debug('content=' + self.resp.content.decode("utf-8"))
                 self.decoded_data = json.loads(self.resp.content.decode("utf-8"))
         except Exception as e:
-            logger.error(f'expception decoding result {e}')
+            logger.info(f'exception decoding result {e} as json')
             try:
                 datasplit = self.resp.content.decode("utf-8").splitlines()
                 if len(datasplit) == 1:
