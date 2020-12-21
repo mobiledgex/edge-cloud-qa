@@ -133,28 +133,6 @@ class Settings(MexOperation):
 
         return settings_dict
 
-#    def create_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-#        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, use_defaults=use_defaults)
-#        msg_dict = {'privacypolicy': msg}
-#
-#        msg_dict_delete = None
-#        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
-#            msg_delete = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
-#            msg_dict_delete = {'privacypolicy': msg_delete}
-#
-#        msg_dict_show = None
-#        if 'key' in msg  and 'name' in msg['key']:
-#            msg_show = self._build(policy_name=msg['key']['name'], use_defaults=False)
-#            msg_dict_show = {'privacypolicy': msg_show}
-#
-#        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
-#
-#    def delete_privacy_policy(self, token=None, region=None, policy_name=None, developer_org_name=None, rule_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-#        msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, rule_list=rule_list, use_defaults=use_defaults)
-#        msg_dict = {'privacypolicy': msg}
-#
-#        return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
-
     def show_settings(self, token=None, region=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
         msg_dict = {}
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
