@@ -238,7 +238,7 @@ Fail UpdateSettings Via mcctl
 
 Cleanup Settings
    [Arguments]  ${settings}
-   log to console  ${settings}
+
    ${settings_pre}=  Run mcctl  region ShowSettings region=${region}
 
    ${parms_all}=  Set Variable  ${Empty}
