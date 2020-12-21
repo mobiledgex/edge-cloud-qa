@@ -1726,6 +1726,9 @@ class MexMasterController(MexRest):
         #  print('*WARN*', "{0} = {1}".format(key, value))
         return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout)
 
+    def reset_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.settings.reset_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
+
     def run_mcctl(self, parms):
         cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
