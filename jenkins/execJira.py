@@ -375,7 +375,7 @@ def update_single_defect(z, t):
 def exec_testcases(z, l):
     found_failure = 0
     last_status = 'unset'
-    num_testcases = 0
+    num_testcases = len(l)
     num_testcases_passed = 0
     num_testcases_failed = 0
 
