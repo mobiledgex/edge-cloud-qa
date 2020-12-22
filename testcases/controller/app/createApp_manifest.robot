@@ -13,6 +13,7 @@ ${cloudlet_name}  tmocloud-1
 ${qcow_centos_image}  https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:ac10044d053221027c286316aa610ed5
 ${docker_image}  docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded_dummy:1.0
 ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml 
+${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
 ${manifest_artifactory_invalid}  https://artifactory-qa.mobiledgex.net/artifactory/epo-org1588686922/postgres_redis_compose.zip
 
 *** Test Cases ***
@@ -223,6 +224,19 @@ CreateApp - error shall be received with deployment=kubernetes and scale with cl
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "DaemonSet required in manifest when ScaleWithCluster set"
+
+# ECQ-2992
+CreateApp - user shall be to create with deployment=kubernetes and externalport != internalport
+    [Documentation]
+    ...  - create docker app with deployment=kubernetes and manifest has port and target port with non-matching values
+    ...  - verify app is created
+
+    ${app}=  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2116,udp:2115,tcp:8185  deployment_manifest=${manifest_different_ports}
+
+    Should Be Equal  ${app.access_ports}  tcp:2116,udp:2115,tcp:8185
+    Should Contain   ${app.deployment_manifest}  port: 2115\n    targetPort: 2015
+    Should Contain   ${app.deployment_manifest}  port: 2116\n    targetPort: 2016
+    Should Contain   ${app.deployment_manifest}  port: 8185\n    targetPort: 8085
 
 *** Keywords ***
 Setup

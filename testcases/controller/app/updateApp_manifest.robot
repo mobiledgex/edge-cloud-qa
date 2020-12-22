@@ -12,6 +12,7 @@ ${manifest_tcp}  http://35.199.188.102/apps/iperfapp.yml
 ${manifest_udp}  http://35.199.188.102/apps/iperfudpapp.yml
 
 ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
+${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
 
 ${access_ports_tcp}  tcp:2011
 ${access_ports_udp}  udp:2011
@@ -137,7 +138,27 @@ UpdateApp - user shall not be able to update ports only with user manifest
     ${error}=  Run Keyword and Expect Error  *  Update App  access_ports=${access_ports_udp}
 
     Should Contain  ${error}  Kubernetes manifest which was previously specified must be provided again when changing access ports 
-	
+
+# ECQ-2993
+UpdateApp - user shall be able to update manifest/ports with externalports != internalports
+    [Documentation]
+    ...  - create an app with manifest where port and targetport are same value
+    ...  - verify app ports and manifest are correct
+    ...  - update the app with new accessports/manifest which has port and targetport with different values
+    ...  - verify app is updated
+
+    ${app1}=  Create App  access_ports=tcp:2016,udp:2015,tcp:8085  deployment_manifest=${manifest}
+    Should Be Equal  ${app1.access_ports}  tcp:2016,udp:2015,tcp:8085
+    Should Contain   ${app1.deployment_manifest}  port: 2015\n    targetPort: 2015
+    Should Contain   ${app1.deployment_manifest}  port: 2016\n    targetPort: 2016
+    Should Contain   ${app1.deployment_manifest}  port: 8085\n    targetPort: 8085
+
+    ${app2}=  Update App  access_ports=tcp:2116,udp:2115,tcp:8185  deployment_manifest=${manifest_different_ports}
+    Should Be Equal  ${app2.access_ports}  tcp:2116,udp:2115,tcp:8185
+    Should Contain   ${app2.deployment_manifest}  port: 2115\n    targetPort: 2015
+    Should Contain   ${app2.deployment_manifest}  port: 2116\n    targetPort: 2016
+    Should Contain   ${app2.deployment_manifest}  port: 8185\n    targetPort: 8085
+
 *** Keywords ***
 Setup
     #Create Developer            
