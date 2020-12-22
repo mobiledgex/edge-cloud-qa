@@ -30,6 +30,7 @@ ${http_page}       automation.html
 
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${manifest_pod_name}=  server-ping-threaded-udptcphttp
+${manifest_different_ports_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
 	
 ${test_timeout_crm}  15 min
 	
@@ -231,6 +232,32 @@ User shall be able to access UDP,TCP and HTTP ports on openstack with manifest
     ${app_name_default}=  Get Default App Name
 
     Create App  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  deployment_manifest=${manifest_url}  #default_flavor_name=${cluster_flavor_name}
+    Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+
+    Wait For App Instance Health Check OK
+
+    Register Client
+    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+    ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+    ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+    ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+
+    #Wait for k8s pod to be running  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}  pod_name=${manifest_pod_name}
+
+    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[2].public_port}  ${page}
+
+# ECQ-2994
+User shall be able to access UDP,TCP and HTTP ports on openstack with manifest with externalports != interalports
+    [Documentation]
+    ...  - deploy app with 1 UDP and 1 TCP and 1 HTTP ports with manifest when port and targetport have different values
+    ...  - verify all ports are accessible via fqdn
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+
+    Create App  image_path=${docker_image}  access_ports=tcp:2116,udp:2115,tcp:8185  command=${docker_command}  deployment_manifest=${manifest_different_ports_url}  #default_flavor_name=${cluster_flavor_name}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
     Wait For App Instance Health Check OK
