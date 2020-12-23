@@ -125,7 +125,7 @@ class AlertReceiver(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def verify_slack(self, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, wait=30, num_messages_to_check=3):
+    def verify_slack(self, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, wait=30, num_messages_to_check=3):
         now = time.time() - 30
 
         client = WebClient(token=self.slack_token)
@@ -147,10 +147,13 @@ class AlertReceiver(MexOperation):
             if len(response['messages']) > 0:
                logger.info(f"checking {len(response['messages'])} messages")
                for slack_msg in response['messages']:
-                   subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                   if scope == 'Cloudlet':
+                       subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
+                   else:
+                       subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
                    logger.info(f'checking message for alert_type={alert_type} subject={subject_to_check}') 
                    #subject = response['messages'][0]['attachments'][0]['fallback']
-                   subject = slack_msg['attachments'][0]['fallback']
+                   subject = slack_msg['attachments'][0]['title']
                    logger.info(f'message to check: {subject}')
 
                    if alert_type in subject and subject_to_check in subject: 
@@ -168,9 +171,11 @@ class AlertReceiver(MexOperation):
                            if cluster_instance_developer_org_name: check_payload(slack_msg, f'*clusterorg:* {cluster_instance_developer_org_name}')
                            if region: check_payload(slack_msg, f'*region:* {region}')
                            if status: check_payload(slack_msg, f'*status:* {status}')
-                           if scope: check_payload(slack_msg, f'scope = {scope}')
+                           if scope: check_payload(slack_msg, f'*scope:* {scope}')
                            if port: check_payload(slack_msg, f'*port:* {port}')
-                           check_payload(slack_msg, '*job:* MobiledgeX Monitoring')
+                           if description: check_payload(slack_msg, f'*Description:* {description}')
+                           if title: check_payload(slack_msg, f'*Alert:* {title}')
+                           #check_payload(slack_msg, '*job:* MobiledgeX Monitoring')
                        except Exception as e:
                            logger.info(f'check payload failed:{e}')
                            continue
@@ -196,7 +201,7 @@ class AlertReceiver(MexOperation):
 
         raise Exception('slack message not found')
 
-    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, server='imap.gmail.com', wait=30):
         mail = imaplib.IMAP4_SSL(server)
         mail.login(email_address, email_password)
         mail.select('inbox')
@@ -211,7 +216,9 @@ class AlertReceiver(MexOperation):
         for attempt in range(wait):
             mail.recent()
             emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
+            #print('*WARN*', 'email_list', email_list)
             mail_ids = email_list[0].split()
+            #print('*WARN*', 'mail_ids', mail_ids)
             num_emails = len(mail_ids)
             logger.info(f'number of emails found is {num_emails}')
             if num_emails > num_emails_pre:
@@ -222,10 +229,12 @@ class AlertReceiver(MexOperation):
                         raise Exception(f'{text} not found in alert email')
 
                 for newemail in email_list:
-                    logger.info('checking new email')
                     mail_id = newemail.split()
+                    logger.info(f'checking new email with id={mail_id}')
+
                     typ, data = mail.fetch(mail_id[-1], '(RFC822)')
                     for response_part in data:
+                        print('*WARN*', 'response_part', response_part)
                         if isinstance(response_part, tuple):
                             msg = email.message_from_string(response_part[1].decode('utf-8'))
                             email_subject = msg['subject'].replace('\r\n','')
@@ -234,7 +243,10 @@ class AlertReceiver(MexOperation):
                             logger.debug(f'subject={email_subject}')
  
                             #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
-                            subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                            if scope == 'Cloudlet':
+                                subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
+                            else:
+                                subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
                             if alert_type in email_subject and subject_to_check in email_subject:
                                 logger.info(f'subject{email_subject}  verified')
                             else:
@@ -262,7 +274,9 @@ class AlertReceiver(MexOperation):
                                 if status: check_payload(f'status = {status}')
                                 if port: check_payload(f'port = {port}')
                                 if scope: check_payload(f'scope = {scope}')
-                                check_payload('job = MobiledgeX Monitoring')
+                                if description: check_payload(f'description = {description}')
+                                if title: check_payload(f'title = {title}')
+                                #check_payload('job = MobiledgeX Monitoring')
                             except Exception as e:
                                 logger.info(f'check payload failed:{e}')
                                 continue
