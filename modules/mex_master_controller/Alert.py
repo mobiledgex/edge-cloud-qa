@@ -27,6 +27,15 @@ class Alert(MexOperation):
             labels_dict['appver'] = app_version
         if developer_org_name is not None:
             labels_dict['apporg'] = developer_org_name
+        if cloudlet_name is not None:
+            labels_dict['cloudlet'] = cloudlet_name
+        if operator_org_name is not None:
+            labels_dict['cloudletorg'] = operator_org_name
+        if cluster_instance_name is not None:
+            labels_dict['cluster'] = cluster_instance_name
+        if cluster_instance_developer_org_name is not None:
+            labels_dict['clusterorg'] = cluster_instance_developer_org_name
+
         if port is not None:
             labels_dict['port'] = str(port)
 
