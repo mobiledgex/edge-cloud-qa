@@ -3,7 +3,7 @@ Documentation  CreateAlertReceiver on CRM
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
-Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
+Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_OFFLINE}
 Library  MexApp
 Library  String
 Library  DateTime
@@ -18,6 +18,8 @@ ${username}=  qaadmin
 ${password}=  mexadminfastedgecloudinfra
 ${mexadmin_password}=  mexadminfastedgecloudinfra
 ${email}=  mxdmnqa@gmail.com
+
+${cloudlet_name_offline}=  automationBonnCloudlet
 
 ${user_username}=  mextester06
 ${user_password}=  mextester06123mobiledgexisbadass
@@ -38,6 +40,7 @@ ${email_wait}=  300
 ${email_not_wait}=  30
 
 *** Test Cases ***
+# ECQ-2937
 AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailServerFail email alerts with docker/dedicated/loadbalancer
    [Documentation]
    ...  - create alert reciever with appname and apporg
@@ -47,9 +50,6 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
    ...  - start the port on the app
    ...  - verify AppInstDown resolve alert and email are generated
 
-#   ${a}=  Show Alerts  region=${region}  app_name=automation-sdk-porttest2  app_version=1.0  developer_org_name=MobiledgeX  port=2016
-#   log to console  ${a[0]['data']['labels']['app']}
-#   XXXXX
    Create Alert Receiver  app_name=${app_name}  type=email  developer_org_name=${developer}  
 
    Log To Console  Creating Cluster Instance
@@ -81,10 +81,9 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
    ${alerts2}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts2}  0
 
-   # add checks for alerts once filter bug is fixed EDGECLOUD-3743 ShowAlert does not work with optional args
-
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2938
 AlertReceiver - shall be able to create/receive apporg HealthCheckFailServerFail email alerts with docker/shared/loadbalancer
    [Documentation]
    ...  - create docker/shared/loadbalancer appinst
@@ -122,10 +121,12 @@ AlertReceiver - shall be able to create/receive apporg HealthCheckFailServerFail
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
+   ${alerts2}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# 2939
 AlertReceiver - shall be able to create/receive appname/apporg/appversion/appcloudlet/appcloudletorg HealthCheckFailRootlbOffline email alerts with docker/dedicated/loadbalancer
    [Documentation]
    ...  - create alert reciever with appname/apporg/appversion/appcloudlet/appcloudletorg
@@ -155,61 +156,63 @@ AlertReceiver - shall be able to create/receive appname/apporg/appversion/appclo
    ${clusterlb}=  Convert To Lowercase  ${cluster_name}.${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
-   Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
+   #Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
 
    Alert Receiver Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts1}  1
 
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts2}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
-AlertReceiver - shall be able to create/receive cloudletorg HealthCheckFailServerFail email alerts with vm/shared/loadbalancer
-   [Documentation]
-   ...  - create vm/shared/loadbalancer appinst
-   ...  - create alert reciever with cloudletorg
-   ...  - power off the VM
-   ...  - verify AppInstDown firing alert and email are generated
-   ...  - start the port on the app
-   ...  - verify AppInstDown resolve alert and email are generated
+# fail  - no email  - no longer supported for appinstdown
+#AlertReceiver - shall be able to create/receive cloudletorg HealthCheckFailServerFail email alerts with vm/shared/loadbalancer
+#   [Documentation]
+#   ...  - create vm/shared/loadbalancer appinst
+#   ...  - create alert reciever with cloudletorg
+#   ...  - power off the VM
+#   ...  - verify AppInstDown firing alert and email are generated
+#   ...  - start the port on the app
+#   ...  - verify AppInstDown resolve alert and email are generated
+#
+#   Create Flavor  region=${region}  flavor_name=${flavor_name}vm  disk=80
+#   ${app}=  Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016  image_type=ImageTypeQCOW  deployment=vm  access_type=loadbalancer
+#   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}
+#
+#   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+#   Register Client  app_name=${app_name}
+#   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+#
+#   ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
+#
+#   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
+#
+#   Create Alert Receiver  operator_org_name=${operator_name_openstack}
+#
+#   Update App Instance  region=${region}  powerstate=PowerOff
+#
+#   Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
+#
+#   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+#   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+#   Length Should Be  ${alerts1}  1
+#
+#   Update App Instance  region=${region}  powerstate=PowerOn
+#
+#   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+#
+#   Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+#   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+#   Length Should Be  ${alerts2}  0
+#
+#   # add alert silence after EDGECLOUD-3461 is fixed
 
-   Create Flavor  region=${region}  flavor_name=${flavor_name}vm  disk=80
-   ${app}=  Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016  image_type=ImageTypeQCOW  deployment=vm  access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}
-
-   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
-   Register Client  app_name=${app_name}
-   ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-
-   ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
-
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
-
-   Create Alert Receiver  operator_org_name=${operator_name_openstack}
-
-   Update App Instance  region=${region}  powerstate=PowerOff
-
-   Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
-
-   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
-
-   Update App Instance  region=${region}  powerstate=PowerOn
-
-   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
-
-   Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
-
-   # add alert silence after EDGECLOUD-3461 is fixed
-
+# ECQ-2940
 AlertReceiver - shall be able to create/receive email/slack region HealthCheckFailRootlbOffline alerts with vm/shared/loadbalancer
    [Documentation]
    ...  - create vm/shared/loadbalancer appinst
@@ -240,7 +243,7 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    Create Alert Receiver  region=${region}  cluster_instance_developer_org_name=${developer}
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
-   ${clusterlb}=  Convert To Lowercase  ${developer}${app['data']['key']['name']}10.${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.mobiledgex.net
+   ${clusterlb}=  Convert To Lowercase  ${developer}${app['data']['key']['name']}10.${cloudlet_name_openstack_vm}.${operator_name_openstack}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
@@ -248,6 +251,8 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    # verify alerts received for EU region app
    Alert Receiver Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts1}  1
 
    Show Alerts  region=${region}
    # add checks for alerts once filter bug is fixed
@@ -263,9 +268,8 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    # verify alerts received for EU region app
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts2}  0
 
    # verify alerts NOT received for US region app
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailRootlbOffline Should Not Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region_packet}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_not_wait}
@@ -273,6 +277,7 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2941
 AlertReceiver - shall be able to create/receive clusterorg HealthCheckFailServerFail slack alerts with k8s/shared/loadbalancer
    [Documentation]
    ...  - create k8s/shared/loadbalancer appinst
@@ -306,17 +311,18 @@ AlertReceiver - shall be able to create/receive clusterorg HealthCheckFailServer
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts1}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname} 
+   Length Should Be  ${alerts1}  1
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts2}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2942 
 AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg HealthCheckFailServerFail alerts with docker/dedicated/loadbalancer and multiple receivers
    [Documentation]
    ...  - create a new user
@@ -326,8 +332,6 @@ AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg H
    ...  - verify AppInstDown firing alert and email/slack are generated
    ...  - start the port on the app
    ...  - verify AppInstDown resolve alert and email/slack are generated
-
-   #EDGECLOUD-4022  alertreceiver - user unable to see cluster receivers created by them
 
    ${super_token}=  Login  username=mexadmin  password=${mexadmin_password}
 
@@ -365,22 +369,21 @@ AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg H
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
-   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
+   Length Should Be  ${alerts1}  1
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
-   Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}_2  app_name=${app_name}  app_version=${app_version}  developer_org_name=${orgname}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   ${alerts2}=  Show Alerts  region=${region}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2943
 AlertReceiver - shall be able to create/receive appname/apporg alerts with docker/dedicated/loadbalancer installed with bad port
    [Documentation]
    ...  - create alert reciever with appname and apporg
@@ -400,27 +403,28 @@ AlertReceiver - shall be able to create/receive appname/apporg alerts with docke
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
-   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=2000  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=2000  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  developer_org_name=${developer}
+   Length Should Be  ${alerts1}  1
 
-AlertReceiver - shall be able to create/receive cloudletname/cloudletorg slack alerts with docker/dedicated/loadbalancer
+# ECQ-2944 
+AlertReceiver - shall be able to create/receive apporg/appcloudlet slack alerts with docker/dedicated/loadbalancer
    [Documentation]
-   ...  - create slack alert reciever with cloudletname and cloudletorg
+   ...  - create slack alert reciever with appname and appcloudlet
    ...  - create docker/dedicated/loadbalancer appinst
    ...  - stop the port on the app
    ...  - verify AppInstDown firing alert and slack are generated
    ...  - start the port on the app
    ...  - verify AppInstDown resolve alert and slack are generated
 
-   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  app_cloudlet_name=${cloudlet_name_openstack_dedicated}  developer_org_name=${developer}
 
    Log To Console  Creating Cluster Instance
    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated
    Log To Console  Done Creating Cluster Instance
 
    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
    Register Client  app_name=${app_name}
@@ -435,22 +439,20 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg slack a
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts1}  1
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 
-   Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}  developer_org_name=${developer}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2945 
 AlertReceiver - shall be able to create/receive email alerts with email parm and k8s/shared/loadbalancer
    [Documentation]
    ...  - create k8s/shared/loadbalancer appinst
@@ -486,17 +488,18 @@ AlertReceiver - shall be able to create/receive email alerts with email parm and
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}  
+   Length Should Be  ${alerts1}  1
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][2]['public_port']}
 
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2946 
 AlertReceiver - shall be able to create/receive email/slack alerts for 2 apps on same cluster with docker/shared/loadbalancer
    [Documentation]
    ...  - create 2 docker/shared/loadbalancer appinsts
@@ -536,28 +539,31 @@ AlertReceiver - shall be able to create/receive email/slack alerts for 2 apps on
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}  app_version=1.0
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts1}  1
 
    Stop TCP Port  ${fqdn_1}  ${cloudlet_1['ports'][0]['public_port']}
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}  app_version=2.0
    Alert Receiver Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}   wait=${email_wait}
    Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts2}  2
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet_0['ports'][0]['internal_port']}  server_port=${cloudlet_0['ports'][1]['public_port']}
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_0['ports'][0]['internal_port']}  wait=${email_wait}
+   ${alerts3}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts3}  1
 
    Start TCP Port  host=${fqdn_1}  port=${cloudlet_1['ports'][0]['internal_port']}  server_port=${cloudlet_1['ports'][1]['public_port']}
    Alert Receiver Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=2.0  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet_1['ports'][0]['internal_port']}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   ${alerts4}=  Show Alerts  region=${region}  app_name=${app_name}
+   Length Should Be  ${alerts4}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2947
 AlertReceiver - shall be able to create/receive cloudletorg CloudletDown email/slack alerts
    [Documentation]
    ...  - create alert reciever with cloudletorg
@@ -566,27 +572,30 @@ AlertReceiver - shall be able to create/receive cloudletorg CloudletDown email/s
    ...  - start the crm docker container
    ...  - verify AppInstDown resolve alert and email/slack are generated
 
-   [Teardown]  Teardown CloudletDown
+   #[Teardown]  Teardown CloudletDown
 
    Create Alert Receiver  type=email  operator_org_name=${operator_name_openstack}
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  operator_org_name=${operator_name_openstack}
 
-   ${crm_show}=  Get Server Show  ${cloudlet_name_openstack_dedicated}-${operator_name_openstack}-pf
+   ${crm_show}=  Get Server Show  ${cloudlet_name_offline}-${operator_name_openstack}-pf
    @{crm_split}=  Split String  ${crm_show['addresses']}  separator==
-   Stop CRM Docker Container  ${crm_split[1]}
+   Stop CRM Docker Container  ${crm_split[1]}  background=${True}
 
-   Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Slack Message For Firing CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts1}  1
 
    Start CRM Docker Container  ${crm_split[1]}
 
-   Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Slack Message For Resolved CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
+# ECQ-2948
 AlertReceiver - shall be able to create/receive cloudletname/cloudletorg CloudletDown email/slack alerts
    [Documentation]
    ...  - create alert reciever with cloudletname/cloudletorg
@@ -595,28 +604,27 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg Cloudle
    ...  - start the crm docker container
    ...  - verify AppInstDown resolve alert and email/slack are generated
 
-   Create Alert Receiver  type=email  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
-   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
+   Create Alert Receiver  type=email  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
 
-   ${crm_show}=  Get Server Show  ${cloudlet_name_openstack_dedicated}-${operator_name_openstack}-pf
+   ${crm_show}=  Get Server Show  ${cloudlet_name_offline}-${operator_name_openstack}-pf
    @{crm_split}=  Split String  ${crm_show['addresses']}  separator==
 
    #[Teardown]  Teardown CloudletDown  ${crm_split[1]}
 
    Stop CRM Docker Container  ${crm_split[1]}
 
-   Alert Receiver Slack Message For Firing CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Slack Message For Firing CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts1}  1
 
    Start CRM Docker Container  ${crm_split[1]}
 
-   Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-   Alert Receiver Slack Message For Resolved CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
-
-   Show Alerts  region=${region}
-   # add checks for alerts once filter bug is fixed
+   Alert Receiver Email For Resolved CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver Slack Message For Resolved CloudletDown Should Be Received  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   ${alerts2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
+   Length Should Be  ${alerts2}  0
 
    # add alert silence after EDGECLOUD-3461 is fixed
 
@@ -648,6 +656,6 @@ Setup
    Set Suite Variable  ${epochusername}
 
 Teardown CloudletDown
-   [Arguments]  ${crmip}
+   [Arguments]  ${crmip}=${None}
+   Cleanup Provisioning
    Start CRM Docker Container  ${crm_split[1]}
-   Cleanup Provisioning 

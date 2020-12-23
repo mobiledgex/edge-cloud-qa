@@ -106,11 +106,11 @@ class Rootlb(Linux):
 
         return output
 
-    def stop_docker_container(self, container_id):
+    def stop_docker_container(self, container_id, background=False):
         cmd = f'docker stop {container_id}'
 
         logging.info('executing ' + cmd)
-        (output, err, errcode) = self.command(cmd)
+        (output, err, errcode) = self.command(cmd, background=background)
         logging.debug('output=' + str(output))
 
         if errcode != 0:
