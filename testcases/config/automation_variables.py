@@ -12,7 +12,7 @@ cloudlet_name_openstack_metrics = 'automationFrankfurtCloudlet'
 cloudlet_name_openstack_gpu = 'automationHamburgCloudlet'
 cloudlet_name_vmpool = 'automationVMPoolCloudlet'
 cloudlet_name_vsphere = 'DFWVMW2'
-cloudlet_name_openstack_packet = 'packetcloudlet'
+cloudlet_name_openstack_packet = 'packet-qaregression'
 cloudlet_name_openstack_ha1 = 'automationBerlinCloudlet'
 cloudlet_name_openstack_ha2 = 'automationHamburgCloudlet'
 

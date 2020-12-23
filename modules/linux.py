@@ -55,18 +55,27 @@ class Linux():
             logging.error('caught ssh connect error:' + str(err2) + '. Check username/password/keyfile')
             raise ConnectionError
 
-    def command(self, cmd):
-        logging.debug('entry')
-        logging.info('running ' + cmd)
-        stdin, stdout, stderr = self.client.exec_command(cmd)
-        exit_status = stdout.channel.recv_exit_status()
-        o = stdout.readlines()
-        e = stderr.readlines()
-        #logging.debug('stdin=' + str(stdin.readlines()) + ' stdout=' + str(stdout.readlines()) + ' stderr=' + str(stderr.readlines()))
-        logging.debug('exit_status=' + str(exit_status) + ' stdout=' + str(o) + ' stderr=' + str(e))
-        if exit_status != 0 or len(e) > 0:
-            #raise Exception("cmd=" + cmd + " returned non-zero status of " + str(exit_status) + " or has stderr of " + str(e))
-            logging.error("cmd=" + cmd + " returned non-zero status of " + str(exit_status) + " or has stderr of " + str(e))
+    def command(self, cmd, background=False):
+        logger.debug('entry')
+        logger.info(f'running {cmd} with background={background}')
+
+        if background:
+            transport = self.client.get_transport()
+            channel = transport.open_session() 
+            channel.exec_command(cmd + ' &')
+            o = ''
+            e = '' 
+            exit_status = 0
+        else:
+            stdin, stdout, stderr = self.client.exec_command(cmd)
+            exit_status = stdout.channel.recv_exit_status()
+            o = stdout.readlines()
+            e = stderr.readlines()
+            #logging.debug('stdin=' + str(stdin.readlines()) + ' stdout=' + str(stdout.readlines()) + ' stderr=' + str(stderr.readlines()))
+            logging.debug('exit_status=' + str(exit_status) + ' stdout=' + str(o) + ' stderr=' + str(e))
+            if exit_status != 0 or len(e) > 0:
+                #raise Exception("cmd=" + cmd + " returned non-zero status of " + str(exit_status) + " or has stderr of " + str(e))
+                logging.error("cmd=" + cmd + " returned non-zero status of " + str(exit_status) + " or has stderr of " + str(e))
         
         return (o, e, exit_status)
 
