@@ -38,7 +38,7 @@ def parse(result):
 def get_stats(type):
    controller_dict = {}
    for test in test_dict:
-      #print('test', test)
+#      print('test', test)
       if type in test_dict[test]:
 #         test_dict[test].remove(type)
 #         test_dict[test].remove('Automated')
@@ -135,4 +135,19 @@ dme_dict = get_stats('Performance')
 print('Performance Tests')
 for comp in dme_dict:
    print(f'   {comp}: {dme_dict[comp]}')
+
+print('')
+
+dme_dict = get_stats('Security')
+print('Security Tests')
+for comp in dme_dict:
+   print(f'   {comp}: {dme_dict[comp]}')
+
+print('')
+
+dme_dict = get_stats('Mcctl')
+print('Mcctl Tests')
+for comp in dme_dict:
+   print(f'   {comp}: {dme_dict[comp]}')
+
 
