@@ -6,6 +6,7 @@ Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
 Library	 MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_VM_ENV}
 Library  MexApp
 Library  String
+Library  Collections
 
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
@@ -45,16 +46,7 @@ User shall be able to create VM/LB deployment on openstack
     ...  deploy VM app with a Load Balancer on openstack 
     ...  verify security groups are correct
 
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-    ${developer_name_default}=  Get Default Developer Name
-    ${version_default}=  Get Default App Version
-
-    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
-    ${rootlb}=  Convert To Lowercase  ${rootlb}
-    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
-    ${vm}=  Remove String  ${vm}  .
-    ${vm_lb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
+    [Teardown]  Teardown  ${openstack_image}
 
     ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_vm}.${operator_name_openstack}.pf
     ${crm_networks}=  Split String  ${server_info_crm[0]['Networks']}  =
@@ -62,6 +54,15 @@ User shall be able to create VM/LB deployment on openstack
  
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+
+   # verify md5 in createappinst stream
+   ${app_inst_stream_output}=  Get Create App Instance Stream
+   Stream Should Contain  ${app_inst_stream_output}  Creating VM Image from URL: ${openstack_image}
+
+   # verify image is downloaded with md5 in imagename
+   @{image_list}=  Get Image List  name=${openstack_image}
+   Should Be Equal  ${image_list[0]['Status']}  active
+   Length Should Be  ${image_list}  1
 
    # verify dedicated cluster as it own security group
    ${server_show}=  Get Server Show  name=${vm_lb}
@@ -85,17 +86,20 @@ User shall be able to create VM deployment on openstack
     ...  deploy VM app on openstack 
     ...  verify security groups are correct
 
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-    ${developer_name_default}=  Get Default Developer Name
-    ${version_default}=  Get Default App Version
-
-    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
-    ${vm}=  Remove String  ${vm}  .
-
+    [Teardown]  Teardown  ${openstack_image}
+ 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:23-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
 
+   # verify md5 in createappinst stream
+   ${app_inst_stream_output}=  Get Create App Instance Stream
+   Stream Should Contain  ${app_inst_stream_output}  Creating VM Image from URL: ${openstack_image}
+
+   # verify image is downloaded with md5 in imagename
+   @{image_list}=  Get Image List  name=${openstack_image}
+   Should Be Equal  ${image_list[0]['Status']}  active
+   Length Should Be  ${image_list}  1
+ 
    # verify dedicated cluster as it own security group
    ${server_show}=  Get Server Show  name=${vm}
    Security Groups Should Contain  ${server_show['security_groups']}  ${vm}-sg
@@ -109,11 +113,64 @@ User shall be able to create VM deployment on openstack
 
    @{sec_groups}=  Split To Lines  ${server_show['security_groups']} 
    Length Should Be  ${sec_groups}  2
+
+# update after controller is fixed for artifactoryFQDN value
+User shall be able to create VM deployment with md5 argument on openstack
+    [Documentation]
+    ...  deploy VM app on openstack
+    ...  verify security groups are correct
+
+    [Teardown]  Teardown  ${openstack_image}
+
+    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:23-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+
+   # verify md5 in createappinst stream
+   ${app_inst_stream_output}=  Get Create App Instance Stream
+   Stream Should Contain  ${app_inst_stream_output}  Creating VM Image from URL: ${openstack_image}
+
+   # verify image is downloaded with md5 in imagename
+   @{image_list}=  Get Image List  name=${openstack_image}
+   Should Be Equal  ${image_list[0]['Status']}  active
+   Length Should Be  ${image_list}  1
+
+   # verify dedicated cluster as it own security group
+   ${server_show}=  Get Server Show  name=${vm}
+   Security Groups Should Contain  ${server_show['security_groups']}  ${vm}-sg
+   ${openstacksecgroup}=  Get Security Groups  name=${vm}-sg
+   Should Be Equal  ${openstacksecgroup['name']}   ${vm}-sg
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='egress', ethertype='IPv4', id='.*', updated_at
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='2016', port_range_min='23', protocol='tcp', remote_ip_prefix='0.0.0.0/0', updated_at
+   Should Match Regexp  ${openstacksecgroup['rules']}  direction='ingress', ethertype='IPv4', id='.*', port_range_max='40000', port_range_min='2015', protocol='udp', remote_ip_prefix='0.0.0.0/0', updated_at=
+   @{sec_groups}=  Split To Lines  ${openstacksecgroup['rules']}
+   Length Should Be  ${sec_groups}  3
+
+   @{sec_groups}=  Split To Lines  ${server_show['security_groups']}
+   Length Should Be  ${sec_groups}  2
  
 *** Keywords ***
 Setup
-    #Create Developer
-    Create Flavor  disk=80  region=${region}
+   Create Flavor  disk=80  region=${region}
+
+   ${cluster_name_default}=  Get Default Cluster Name
+   ${app_name_default}=  Get Default App Name
+   ${developer_name_default}=  Get Default Developer Name
+   ${version_default}=  Get Default App Version
+
+   ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
+   ${rootlb}=  Convert To Lowercase  ${rootlb}
+   ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
+   ${vm}=  Remove String  ${vm}  .
+   ${vm_lb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
+
+   @{image_split}=  Split String  ${qcow_centos_image}  /
+   @{image_md5_split}=  Split String  ${image_split[-1]}  \#md5:
+   @{image_name_split}=  Split String  ${image_md5_split[0]}  .
+   ${openstack_image}=  Catenate  SEPARATOR=-  ${image_name_split[0]}  ${image_md5_split[1]}
+
+   Set Suite Variable  ${vm}
+   Set Suite Variable  ${vm_lb}
+   Set Suite Variable  ${openstack_image}
 
 Security Groups Should Contain
    [Arguments]  ${grouplist}  ${group}
@@ -130,4 +187,24 @@ Security Groups Should Contain
    END
 
    Should Be True  ${found}  Did not find security group ${group}
+
+Stream Should Contain
+   [Arguments]  ${stream}  ${msg}
+
+   ${found}=  Set Variable  ${False}
+
+   FOR  ${g}  IN  @{stream}
+      ${found}=  Run Keyword If  '${g['data']['message']}' == '${msg}'  Set Variable  ${True}
+      ...  ELSE  Set Variable  ${found}
+   END
+
+   Should Be True  ${found}  Did not find ${msg}
+
+Teardown
+   [Arguments]  ${openstack_image}
+
+   Cleanup Provisioning
+   # verify image is deleted 
+   @{image_list}=  Get Image List  name=${openstack_image}
+   Length Should Be  ${image_list}  0
 	
