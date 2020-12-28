@@ -37,6 +37,7 @@ class MexOperation(MexRest):
         self.super_token = super_token
         self.token = token
         self.thread_queue = thread_queue
+        self.create_stream_output = []
 
     def create(self, token=None, url=None, delete_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None):
         return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
@@ -136,6 +137,9 @@ class MexOperation(MexRest):
 
                 raise Exception(f'code={self.resp.status_code}', f'error={fail_text}')
 
+            if message_type == 'create':
+                self.create_stream_output = self.stream_output
+
             if message and delete_message:
                 logger.debug(f'adding message to delete stack: {delete_message}')
                 if token is None:
@@ -211,3 +215,5 @@ class MexOperation(MexRest):
             resp = send_message()
             return resp
 
+    def get_create_stream_output(self):
+        return self.create_stream_output
