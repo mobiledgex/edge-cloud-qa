@@ -272,19 +272,21 @@ class MexApp(object):
         logging.info(f'host:{host} port:{port} wait_time:{wait_time} tls:{tls} num_tries={num_tries}')
 
         self.wait_for_dns(host)
-        e = ''
+        e_return = ''
+ 
         for attempt in range(1,num_tries):
             logging.debug(f'TCP port attempt {attempt}')
             try:
                 self.ping_tcp_port(host, port, wait_time, tls)
                 return True
             except Exception as e:
+                e_return = e
                 logging.debug(f'tcp exception caught:{e}')
                 #if attempt == num_tries:
                 #    raise Exception(e)
                 #else:
                 time.sleep(1)
-        raise Exception(e)
+        raise Exception(e_return)
 
     def http_port_should_be_alive(self, host, port, page, tls=False):
         logging.info(f'host:{host} port:{port} tls:{tls}')
