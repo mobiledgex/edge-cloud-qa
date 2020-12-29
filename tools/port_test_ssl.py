@@ -6,10 +6,12 @@ import logging
 import socket
 import ssl
 
-host = 'andytls-tcp.automationdusseldorfcloudlet.tdg.mobiledgex.net'
+host = 'automationhamburgcloudlet.tdg.mobiledgex.net'
 #host = 'mobiledgexapp1589470955-622824210.automationdusseldorfcloudlet.tdg.mobiledgex.net'
-tcp_port = 2016
+tcp_port = 2015
 tls = True
+
+logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S', level=logging.DEBUG)
 
 def ping_udp_port(host, port):
     data = 'ping'
