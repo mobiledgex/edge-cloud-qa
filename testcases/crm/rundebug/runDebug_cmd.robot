@@ -25,7 +25,9 @@ ${unknown_cmd}=  Unknown cmd
 ${unknown_cmd1}=  ('code=400('code=400', 'error={"message":"Forbidden"}')
 ${unknown_cmd_oscmd}=  Unknown cmd oscmd
 ${unknown_cmd_crmcmd}=  Unknown cmd crmcmd
-${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
+#Return for unknown command changed after 12-18-2020
+#${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
+${unknown_command_oscmd}=  Unknown cmd oscmd, cmds are disable-debug-levels,disable-sample-logging,dump-cloudlet-pools,enable-debug-levels,enable-sample-logging,get-mem-profile,refresh-internal-certs,show-debug-levels,start-cpu-profile,stop-cpu-profile
 ${not_supported}=  not supported
 ${invalid_txt}=  adjsx
 ${timeout_request}=  request timed out
