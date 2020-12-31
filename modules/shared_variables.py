@@ -19,7 +19,7 @@ vmpool_name_default = 'vmpool' + default_time_stamp
 alert_receiver_name_default = 'alertreceiver' + default_time_stamp.replace('-','')
 alert_receiver_type_default = 'email'
 alert_receiver_severity_default = 'info'
-privacy_policy_name_default = 'privacypolicy' + default_time_stamp
+trust_policy_name_default = 'trustpolicy' + default_time_stamp
 autoprov_policy_name_default = 'autoprovpolicy' + default_time_stamp
 autoscale_policy_name_default = 'autoscalepolicy' + default_time_stamp
 

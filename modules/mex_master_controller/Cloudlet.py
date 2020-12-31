@@ -25,7 +25,7 @@ class Cloudlet(MexOperation):
         self.manifest_url = '/auth/ctrl/GetCloudletManifest'
         self.revoke_url = '/auth/ctrl/RevokeAccessKey'
 
-    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, include_fields=False, use_defaults=True):
 
         _fields_list = []
         _operator_name_field_number = "2.1"
@@ -38,6 +38,7 @@ class Cloudlet(MexOperation):
         _longitude_field_number = "5.2"
         _static_ips_field_number = "7"
         _override_policy_container_version_field_number = "31"
+        _trust_policy_field_number = "37"
 
         if use_defaults:
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
@@ -141,6 +142,10 @@ class Cloudlet(MexOperation):
 
         if infra_api_access is not None:
             cloudlet_dict['infra_api_access'] = infra_api_access 
+
+        if trust_policy is not None:
+            cloudlet_dict['trust_policy'] = trust_policy
+            _fields_list.append(_trust_policy_field_number)
 
         infra_config_dict = {}
         if infra_config_flavor_name is not None:
@@ -261,8 +266,8 @@ class Cloudlet(MexOperation):
 
         return info_dict
  
-    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, use_defaults=use_defaults)
+    def create_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, static_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, access_vars=None, vm_pool=None, crm_override=None, notify_server_address=None, deployment_local=None, container_version=None, override_policy_container_version=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=900):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, static_ips=static_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, access_vars=access_vars, vm_pool=vm_pool, deployment_local=deployment_local, container_version=container_version, override_policy_container_version=override_policy_container_version, crm_override=crm_override, notify_server_address=notify_server_address, infra_api_access=infra_api_access, infra_config_flavor_name=infra_config_flavor_name, infra_config_external_network_name=infra_config_external_network_name, trust_policy=trust_policy, use_defaults=use_defaults)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_delete = None
@@ -271,7 +276,7 @@ class Cloudlet(MexOperation):
             msg_dict_delete = {'cloudlet': msg_delete}
 
         msg_dict_show = None
-        if 'key' in msg:
+        if 'key' in msg and 'name' in msg['key']:
             msg_show = self._build(cloudlet_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'cloudlet': msg_show}
 
@@ -313,8 +318,8 @@ class Cloudlet(MexOperation):
 
         return self.update(token=token, url=self.inject_info_url, show_url=self.show_info_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, show_msg=msg_dict_show)
 
-    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
-        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults, include_fields=include_fields)
+    def update_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, json_data=None, use_defaults=True, auto_delete=True, include_fields=True, use_thread=False, stream=True, stream_timeout=600):
+        msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, maintenance_state=maintenance_state, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, trust_policy=trust_policy, use_defaults=use_defaults, include_fields=include_fields)
         msg_dict = {'cloudlet': msg}
 
         msg_dict_show = None
