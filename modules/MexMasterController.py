@@ -1735,8 +1735,8 @@ class MexMasterController(MexRest):
     def reset_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.reset_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
 
-    def run_mcctl(self, parms):
-        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
+    def run_mcctl(self, parms, version='latest'):
+        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
         logging.info(f'executing mcctl: {cmd}')
         output = self._run_command(cmd).decode('utf-8')
         try:
