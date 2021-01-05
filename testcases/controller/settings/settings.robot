@@ -45,6 +45,7 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  update_app_inst_timeout
    Should Contain  ${settings}  update_cluster_inst_timeout
    Should Contain  ${settings}  update_vm_pool_timeout
+   Should Contain  ${settings}  update_trust_policy_timeout
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -71,6 +72,8 @@ Settings - UpdateSettings should update the settings
 
    Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=100h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
+   Update Settings  region=${region}  update_trust_policy_timeout=1s
+
    ${settings_post}=   Show Settings  region=${region}
 
    Should Be Equal             ${settings_post['shepherd_metrics_collection_interval']}  1s
@@ -96,6 +99,7 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   100h0m0s 
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  1s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        1s
+   Should Be Equal             ${settings_post['update_trust_policy_timeout']}   1s
 
 # ECQ-2990
 Settings - UpdateSettings with bad parms shall return error
@@ -104,8 +108,8 @@ Settings - UpdateSettings with bad parms shall return error
    ...  - verify error is received
 
    # EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
-   # EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
-   # EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
+   # fixed EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
+   # fixed EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
    # EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
    # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
    [Template]  Fail Create UpdateSettings 
@@ -179,14 +183,14 @@ Settings - UpdateSettings with bad parms shall return error
 
     ('code=400', 'error={"message":"Flavor must preexist"}')  master_node_flavor  xx
 
-    xxx  load_balancer_max_port_range  0
+    ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  0
     ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.load_balancer_max_port_range, offset=49"}')  load_balancer_max_port_range  x
-    xxx  load_balancer_max_port_range  -1
-    xxx  load_balancer_max_port_range  70000 
+    ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  -1
+    ('code=400', 'error={"message":"Load Balancer Max Port Range must be less than 65536"}')  load_balancer_max_port_range  70000 
     ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 99999999999999999, field=Settings.load_balancer_max_port_range, offset=63"}')  load_balancer_max_port_range  99999999999999999 
 
-    xxx  max_tracked_dme_clients  0
-    xxx  max_tracked_dme_clients  -1
+    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  0
+    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  -1
     ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.max_tracked_dme_clients, offset=44"}')                               max_tracked_dme_clients  x
     ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 9999999999999999999999999999, field=Settings.max_tracked_dme_clients, offset=69"}')  max_tracked_dme_clients  9999999999999999999999999999
  
@@ -194,7 +198,7 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  chef_client_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  chef_client_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  chef_client_interval  99999999h
-   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')  chef_client_interval  0s
+   ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  0s
    ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  influx_db_metrics_retention  1
@@ -219,6 +223,13 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               update_vm_pool_timeout  99999999h
    ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0"}')                               update_vm_pool_timeout  0s
    ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0"}')                               update_vm_pool_timeout  -1s
+
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_trust_policy_timeout  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_trust_policy_timeout  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       update_trust_policy_timeout  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               update_trust_policy_timeout  99999999h
+   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  0s
+   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  -1s
 
 # ECQ-2991
 Settings - user shall be able to reset the settings
@@ -263,6 +274,7 @@ Settings - user shall be able to reset the settings
    Should Be Equal             ${settings_post['chef_client_interval']}          10m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  5m0s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        20m0s
+   Should Be Equal             ${settings_post['update_trust_policy_timeout']}   10m0s
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   336h0m0s
 
 *** Keywords ***
