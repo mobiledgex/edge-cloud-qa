@@ -1,12 +1,12 @@
 *** Settings ***
 Documentation  CreateTrustPolicy for user roles
 
-Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
 Library  DateTime
 
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+Test Teardown  Teardown
 
 *** Variables ***
 ${username}=  mextester06
@@ -17,11 +17,12 @@ ${region}=  US
 # EDGECLOUD-4193 CreateTrustPolicy should be allowed for Operators and denied for Developers
 
 *** Test Cases ***
-CreateTrustPolicy - OperatorManager shall be able to create a privacy policy
+# ECQ-3070
+CreateTrustPolicy - OperatorManager shall be able to create/show/delete a trust policy
    [Documentation]
-   ...  assign user to org as OperatorManager 
-   ...  do CreateTrustPolicy
-   ...  verify policy is created 
+   ...  - assign user to org as OperatorManager 
+   ...  - do CreateTrustPolicy/ShowTrustPolicy/DeleteTrustPolicy
+   ...  - verify all 3 work
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
@@ -31,7 +32,7 @@ CreateTrustPolicy - OperatorManager shall be able to create a privacy policy
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}  auto_delete=${False}
 
    ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
 
@@ -55,81 +56,12 @@ CreateTrustPolicy - OperatorManager shall be able to create a privacy policy
 
    Should Be Equal As Numbers  ${numrules}  3
 
-CreateTrustPolicy - DeveloperContributor shall be able to create a privacy policy
+# ECQ-3071
+CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a trust policy
    [Documentation]
-   ...  assign user to org as DeveloperContributor
-   ...  do CreateTrustPolicy
-   ...  verify policy is created
-
-   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
-
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
-   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
-
-   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-
-   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
-
-   Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
-
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
-   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
-   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
-
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
-   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
-   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
-
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
-   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
-   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
-   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
-
-   Should Be Equal As Numbers  ${numrules}  3
-
-CreateTrustPolicy - DeveloperViewer shall not be able to create a privacy policy
-   [Documentation]
-   ...  assign user to org as DeveloperViewer
-   ...  do CreateTrustPolicy
-   ...  verify error is returned 
-
-   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperViewer    token=${user_token}     use_defaults=${False}
-
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
-   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
-
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-
-CreateTrustPolicy - OperatorManager shall not be able to create a privacy policy
-   [Documentation]
-   ...  assign user to org as OperatorManager
-   ...  attempt to do CreateTrustPolicy 
-   ...  verify proper error is returned 
-
-   ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
-
-   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
-   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
-   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
-   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
-
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
-
-CreateTrustPolicy - OperatorContributor shall not be able to create a privacy policy
-   [Documentation]
-   ...  assign user to org as OperatorContributor
-   ...  attempt to do CreateTrustPolicy
-   ...  verify proper error is returned
+   ...  - assign user to org as OperatorContributor
+   ...  - do CreateTrustPolicy/ShowTrustPolicy/DeleteTrustPolicy
+   ...  - verify all 3 work
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
@@ -139,13 +71,41 @@ CreateTrustPolicy - OperatorContributor shall not be able to create a privacy po
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
-   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}  auto_delete=${False}
 
-CreateTrustPolicy - OperatorViewer shall not be able to create a privacy policy
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+
+# ECQ-3072
+CreateTrustPolicy - OperatorViewer shall not be able to create/delete but view a trust policy
    [Documentation]
-   ...  assign user to org as OperatorViewer
-   ...  attempt to do CreateTrustPolicy
-   ...  verify proper error is returned
+   ...  - assign user to org as OperatorViewer
+   ...  - do CreateTrustPolicy/DeleteTrustPolicy
+   ...  - verify error is returned 
+   ...  - do CreateTrust policy as org owner
+   ...  - do ShowTrustPolicy as OperatorViewer
+   ...  - verify policy is listed
+
+   [Teardown]  Teardown Forbidden
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
@@ -155,7 +115,226 @@ CreateTrustPolicy - OperatorViewer shall not be able to create a privacy policy
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
    @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
 
+   # create as user2 should be forbidden
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+
+   # create policy as org owner
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}  token=${user_token}  region=${region}  rule_list=${rulelist}
+
+   # show as user2 should return policy
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                              ${orgname}
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${policy_return['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${policy_return['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${policy_return['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+ 
+   Length Should Be  ${show}  1
+
+   # show/delete as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
+
+# ECQ-3073
+CreateTrustPolicy - DeveloperManager shall not be able to create/delete but view a trust policy
+   [Documentation]
+   ...  - assign user to org as DeveloperManager
+   ...  - attempt to do CreateTrustPolicy/DeleteTrustPolicy 
+   ...  - verify proper error is returned 
+   ...  - do CreateTrust policy as org owner
+   ...  - do ShowTrustPolicy as DeveloperManager
+   ...  - verify policy is listed
+
+   [Teardown]  Teardown Forbidden
+
+   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
+   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
+   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+
+   # create as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+
+   # create policy as org owner
+   ${orgname_op}=  Create Org  token=${user_token}  orgname=${orgname}_op  orgtype=operator
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}_op  token=${user_token}  region=${region}  rule_list=${rulelist}
+
+   # show as user2 should return empty list since policy is not tied to a cloudlet 
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   Length Should Be  ${show}  0
+
+   # tie the policy to a cloudlet
+   Create Cloudlet  region=${region}  token=${user_token}  operator_org_name=${orgname}_op  trust_policy=${policy_return['data']['key']['name']}
+
+   # show as user2 should return policy
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   Length Should Be  ${show}  1
+
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
+   Should Be Equal As Numbers  ${numrules}  3
+
+
+   # show/delete as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
+
+# ECQ-3074
+CreateTrustPolicy - DeveloperContributor shall not be able to create/delete but view a trust policy
+   [Documentation]
+   ...  - assign user to org as DeveloperContributor
+   ...  - attempt to do CreateTrustPolicy/DeleteTrustPolicy
+   ...  - verify proper error is returned
+   ...  - do CreateTrust policy as org owner
+   ...  - do ShowTrustPolicy as DeveloperContributor
+   ...  - verify policy is listed
+
+   [Teardown]  Teardown Forbidden
+
+   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperContributor    token=${user_token}     use_defaults=${False}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
+   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
+   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+
+   # create as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+
+   # create policy as org owner
+   ${orgname_op}=  Create Org  token=${user_token}  orgname=${orgname}_op  orgtype=operator
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}_op  token=${user_token}  region=${region}  rule_list=${rulelist}
+
+   # show as user2 should return empty list since policy is not tied to a cloudlet
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   Length Should Be  ${show}  0
+
+   # tie the policy to a cloudlet
+   Create Cloudlet  region=${region}  token=${user_token}  operator_org_name=${orgname}_op  trust_policy=${policy_return['data']['key']['name']}
+
+   # show as user2 should return policy
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+
+   Length Should Be  ${show}  1
+
+   # show/delete as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
+
+# ECQ-3075
+CreateTrustPolicy - DeveloperViewer shall not be able to create/delete but view a trust policy
+   [Documentation]
+   ...  - assign user to org as DeveloperViewer
+   ...  - attempt to do CreateTrustPolicy/DeleteTrustPolicy
+   ...  - verify proper error is returned
+   ...  - do CreateTrust policy as org owner
+   ...  - do ShowTrustPolicy as DeveloperViewer
+   ...  - verify policy is listed
+
+   [Teardown]  Teardown Forbidden
+
+   ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+   ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=DeveloperViewer    token=${user_token}     use_defaults=${False}
+
+   &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
+   &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
+   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+
+   # create as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}  rule_list=${rulelist}
+
+   # create policy as org owner
+   ${orgname_op}=  Create Org  token=${user_token}  orgname=${orgname}_op  orgtype=operator
+   ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}_op  token=${user_token}  region=${region}  rule_list=${rulelist}
+
+   # show as user2 should return empty list since policy is not tied to a cloudlet
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   Length Should Be  ${show}  0
+
+   # tie the policy to a cloudlet
+   Create Cloudlet  region=${region}  token=${user_token}  operator_org_name=${orgname}_op  trust_policy=${policy_return['data']['key']['name']}
+
+   # show as user2 should return policy
+   ${show}=  Show Trust Policy  operator_org_name=${orgname}_op  token=${user_token2}  region=${region}
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal  ${show[0]['data']['key']['name']}                                   ${policy_name}
+   Should Be Equal  ${show[0]['data']['key']['organization']}                              ${orgname}_op
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['protocol']}        icmp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/3
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_min
+   Should Not Contain  ${show[0]['data']['outbound_security_rules'][0]}  port_range_max
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['protocol']}        tcp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][1]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_min']}  1
+   Should Be Equal As Numbers   ${show[0]['data']['outbound_security_rules'][1]['port_range_max']}  65
+
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['protocol']}        udp
+   Should Be Equal  ${show[0]['data']['outbound_security_rules'][2]['remote_cidr']}     1.1.1.1/2
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_min']}  3
+   Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
+
+   Should Be Equal As Numbers  ${numrules}  3
+
+   Length Should Be  ${show}  1
+
+   # show/delete as user2 should be forbidden
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
 
 *** Keywords ***
 Setup
@@ -185,6 +364,15 @@ Setup
    Set Suite Variable  ${policy_name}
    Set Suite Variable  ${developer_name}
 
+   Set Suite Variable  ${super_token}
    Set Suite Variable  ${user_token}
    Set Suite Variable  ${user_token2}
    Set Suite Variable  ${epochusername2}
+
+Teardown
+   Delete Trust Policy  region=${region}  token=${user_token2}
+   Cleanup Provisioning
+
+Teardown Forbidden
+   Cleanup Provisioning
+
