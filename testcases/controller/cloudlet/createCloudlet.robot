@@ -12,6 +12,8 @@ ${oper}  azure
 ${cldlet}  CreateTest
 ${region}  US
 
+${operator_name_fake}=  dmuus
+
 *** Test Cases ***
 # ECQ-904
 CreateCloudlet with all parameters
@@ -132,6 +134,35 @@ CreateCloudlet without physicalname
         #Should Contain  ${resp}   Failed to source access variables as '${oper}/${cldlet}' does not exist in secure secrets storage (Vault)"
         Should Contain  ${resp}   Failed to source access variables from \\'/secret/data/${region}/cloudlet/openstack/${oper}/${cldlet}/openrc.json\\', does not exist in secure secrets storage (Vault)"
 
+# ECQ-3064
+CreateCloudlet - shall be able to create cloudlet with trust policy
+   [Documentation]
+   ...  - send CreateTrustPolicy
+   ...  - send CreateCloudlet witht the policy
+   ...  - verify the cloudlet is assinged the policy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
 ** Keywords **
 Setup
