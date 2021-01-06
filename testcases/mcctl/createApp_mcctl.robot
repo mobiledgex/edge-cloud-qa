@@ -20,6 +20,8 @@ ${cloudconfig_string}=  \#cloud-config\n users:\n - name: demo\n groups: sudo\n 
 ${envvars_config}=  - name: CrmValue\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]\n- name: CrmValue2\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 ${envvars_url}=  http://35.199.188.102/apps/server_ping_threaded_config.yml
 
+${version}=  latest
+
 *** Test Cases ***
 # ECQ-2889
 CreateApp - mcctl shall be able to create/show/delete app 
@@ -92,6 +94,17 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
 
+      # trusted
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}
+       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}
 
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
@@ -154,6 +167,18 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(docker)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
  
 
+      # trusted
+      Unable to parse "trusted" value "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  trusted=x
+      Unable to parse "trusted" value "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=x
+      Unable to parse "trusted" value "xTrue}" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=xTrue}
+      Unable to parse "trusted" value "a" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=a
+      Unable to parse "trusted" value "r" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=r
+      Unable to parse "trusted" value "cccccc" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=cccccc
+      Unable to parse "trusted" value "111" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=111
+      Unable to parse "trusted" value "-1" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=-1
+      Unable to parse "trusted" value "no" as bool: invalid syntax, valid values are true, false      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=no
+      Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes
+
 # ECQ-2829
 UpdateApp - mcctl shall handle update app 
    [Documentation]
@@ -185,6 +210,8 @@ UpdateApp - mcctl shall handle update app
       appname=${app_name_helm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDefaultForDeployment
       appname=${app_name_vm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDefaultForDeployment
  
+      appname=${app_name_vm}  app-org=${developer}  appvers=1.0  trusted=${True}
+      appname=${app_name_vm}  app-org=${developer}  appvers=1.0  trusted=${False}
  
 *** Keywords ***
 Setup
@@ -211,9 +238,9 @@ Success Create/Show/Delete App Via mcctl
    Remove From Dictionary  ${parms_copy}  deploymentmanifest
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   Run mcctl  region CreateApp region=${region} ${parmss} --debug 
-   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss_modify}
-   Run mcctl  region DeleteApp region=${region} ${parmss_modify}
+   Run mcctl  region CreateApp region=${region} ${parmss} --debug  version=${version}
+   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  region DeleteApp region=${region} ${parmss_modify}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
@@ -231,10 +258,10 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeQcow'    Should Be Equal  ${show[0]['deployment']}  vm
  
 
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']} 
    Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
@@ -259,6 +286,10 @@ Success Create/Show/Delete App Via mcctl
    Run Keyword If  'configs:1.kind' in ${parms}  Should Contain  ${show[0]['configs'][1]['kind']}  ${parms['configs:1.kind']}
    Run Keyword If  'configs:1.config' in ${parms}  Should Contain  ${show[0]['configs'][1]['config']}  ${configs1_stripped}
 
+   Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${show[0]['trusted']}  ${True}
+   ...  ELSE  Should Not Contain  ${show[0]}  trusted 
+   Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${False}  Should Not Contain  ${show[0]}  trusted
+
 Update Setup
    ${app_name}=  Get Default App Name
    ${app_name_k8s}=  Set Variable  ${app_name}_k8s
@@ -271,24 +302,24 @@ Update Setup
    Set Suite Variable  ${app_name_vm}
    Set Suite Variable  ${app_name_helm}
 
-   Run mcctl  region CreateApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}
+   Run mcctl  region CreateApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image}  version=${version}
+   Run mcctl  region CreateApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}  version=${version}
+   Run mcctl  region CreateApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}  version=${version}
+   Run mcctl  region CreateApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}  version=${version}
 
 Update Teardown
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0
+   Run mcctl  region DeleteApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  region DeleteApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  region DeleteApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  region DeleteApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0  version=${version}
 
 Success Update/Show App Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateApp region=${region} ${parmss}
-   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss}
+   Run mcctl  region UpdateApp region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss}  version=${version}
 
    #Verify Show  show=${show}  &{parms}
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
@@ -307,6 +338,10 @@ Success Update/Show App Via mcctl
    Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Integers  ${show[0]['image_type']}  1
    Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Integers  ${show[0]['image_type']}  2
    Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeHelm'  Should Be Equal As Integers  ${show[0]['image_type']}  3
+
+   Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${show[0]['trusted']}  ${True}
+   ...  ELSE  Should Not Contain  ${show[0]}  trusted
+   Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${False}  Should Not Contain  ${show[0]}  trusted
 
 Verify Show
    [Arguments]  ${show}  &{parms}
@@ -329,10 +364,10 @@ Verify Show
    Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeQcow'    Should Be Equal  ${show[0]['deployment']}  vm
 
 
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
-   Run Keyword If  'access_type' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']}
    Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
@@ -382,5 +417,5 @@ Fail Create App Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateApp region=${region} ${parmss}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateApp region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
