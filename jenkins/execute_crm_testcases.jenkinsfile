@@ -15,7 +15,7 @@ dmerestcert = "${dmerestcert}"
 currentBuild.displayName = cycle
 
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
-def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests"]
+def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
