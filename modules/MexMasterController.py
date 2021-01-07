@@ -1299,87 +1299,14 @@ class MexMasterController(MexRest):
    
     def verify_email_via_mc(self, token=None):
         return self.verify_email_mc.verify_email(token=token)
- 
+
     def verify_email(self, username=None, password=None, email_address=None, server='imap.gmail.com', wait=30):
         if username is None: username = self.username
         if password is None: password = self.password
         if email_address is None: email_address = self.email_address
-
-        mail = self._mail
-        num_emails_pre = self._mail_count
-        for attempt in range(wait):
-            mail.recent()
-            status, email_list = mail.search(None, '(SUBJECT "Welcome to MobiledgeX!")')
-            mail_ids = email_list[0].split()
-            num_emails = len(mail_ids)
-            logging.info(f'number of emails found is {num_emails}')
-            if num_emails > num_emails_pre:
-                logging.info('new email found')
-                mail_id = email_list[0].split()
-                typ, data = mail.fetch(mail_id[-1], '(RFC822)')
-                for response_part in data:
-                    if isinstance(response_part, tuple):
-                        msg = email.message_from_string(response_part[1].decode('utf-8'))
-                        email_subject = msg['subject']
-                        email_from = msg['from']
-                        date_received = msg['date']
-                        payload = msg.get_payload(decode=True).decode('utf-8')
-                        logging.info(payload)
-
-                        if f'Hi {username},' in payload:
-                            logging.info('greetings found')
-                        else:
-                            raise Exception('Greetings not found')
-
-                        if 'Thanks for creating a MobiledgeX account! You are now one step away from utilizing the power of the edge. Please verify this email account by clicking on the link below. Then you\'ll be able to login and get started.' in payload:
-                            logging.info('body1 found')
-                        else:
-                            raise Exception('Body1 not found')
-
-                        #if f'Click to verify: {self.console_url}/verify?token=' in payload:
-                        if f'Copy and paste to verify your email:' in payload:
-                            for line in payload.split('\n'):
-                                if 'mcctl user verifyemail token=' in line:
-                                    #label, link = line.split('Click to verify:')
-                                    self._verify_link = line.rstrip()
-
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest mcctl login --addr https://{self.mc_address} username=mexadmin password=mexadminfastedgecloudinfra --skipverify'
-                                    logging.info('login with:' + cmd)
-                                    self._run_command(cmd)
-                                    cmd = f'docker run registry.mobiledgex.net:5000/mobiledgex/edge-cloud:latest {line} --addr https://{self.mc_address} --skipverify '
-                                    logging.info('verifying email with:' + cmd)
-                                    self._run_command(cmd)
-
-                                    #cmd = line + f'--addr https://{self.mc_address} --skipverify'
-                                    #logging.info('verifying email with:' + cmd)
-                                    #try:
-                                    #    process = subprocess.Popen(shlex.split(cmd),
-                                    #                               stdout=subprocess.PIPE,
-                                    #                               stderr=subprocess.PIPE,
-                                    #    )
-                                    #    stdout, stderr = process.communicate()
-                                    #    logging.info('verify returned:',stdout, stderr)
-                                    #    if stderr:
-                                    #        raise Exception('runCommandee failed:' + stderr.decode('utf-8'))
-                                    #except subprocess.CalledProcessError as e:
-                                    #    raise Exception("runCommanddd failed:", e)
-                                    #except Exception as e:
-                                    #    raise Exception("runCommanddd failed:", e)
-
-
-                                    break
-                            logging.info('verify link found')
-                        else:
-                            raise Exception('Verify link not found')
-
-                        if f'For security, this request was received for {email_address} from' in payload and 'If you are not expecting this email, please ignore this email or contact MobiledgeX support for assistance.' in payload and 'Thanks!' in payload and 'MobiledgeX Team' in payload:
-                            logging.info('body2 link found')
-                        else:
-                            raise Exception('Body2 not found')
-                        return True
-            time.sleep(1)
-
-        raise Exception('verification email not found')
+        mc_address = self.mc_address
+    
+        return self.user.verify_email(username=username, password=password, email_address=email_address, server='imap.gmail.com', wait=30, mc_address=mc_address)
 
     def _run_command(self, cmd):
         try:
