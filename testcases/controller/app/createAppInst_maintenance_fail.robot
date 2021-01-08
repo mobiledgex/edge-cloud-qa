@@ -760,7 +760,7 @@ AppInst - error shall be received when deleting a vm/lb/shared app inst while cl
 
    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
@@ -783,7 +783,7 @@ AppInst - error shall be received when deleting a vm/lb/dedicated app inst while
 
    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated 
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated 
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
@@ -806,7 +806,7 @@ AppInst - error shall be received when deleting a vm/direct/dedicated app inst w
 
    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=direct
 
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated
 
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
