@@ -9,6 +9,9 @@ Library         Collections
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
+${username}          mextester99
+${password}          ${mextester06_gmail_password}
+${email}             mextester99@gmail.com
 
 *** Test Cases ***
 # ECQ-2929
@@ -44,24 +47,25 @@ MC - User shall be able to get the current status of new user
     ...  - get user/current info
     ...  - verify info is correct
 
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
    Skip Verify Email
-   ${username}  ${password}  ${email}=  Create User   	
+   Create User  ${username1}  ${password}  ${email1}  	
    Unlock User  #username=${username}
    Login
-
-   ${username}=  Get Default Username
-   ${email}=  Get Default Email 
 	
    ${info}=  Get Current User
 
    Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
-   Should Be Equal             ${info['Email']}          ${username}@email.com
+   Should Be Equal             ${info['Email']}          ${email1}
    Should Be Equal             ${info['EmailVerified']}  ${False}
    Should Be Equal             ${info['FamilyName']}     ${EMPTY}
    Should Be Equal             ${info['GivenName']}      ${EMPTY}
    #Should Be Equal  ${info['ID']}  1
    Should Be Equal As Numbers  ${info['Iter']}           0
-   Should Be Equal             ${info['Name']}           ${username}
+   Should Be Equal             ${info['Name']}           ${username1}
    Should Be Equal             ${info['Nickname']}       ${EMPTY}
    Should Be Equal             ${info['Passhash']}       ${EMPTY}
    Should Be Equal             ${info['Picture']}        ${EMPTY}
