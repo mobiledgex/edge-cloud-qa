@@ -11,6 +11,7 @@ ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
 ${qcow_centos_image}  https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:ac10044d053221027c286316aa610ed5
+${qcow_centos_image_dummy}  https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2
 ${docker_image}  docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded_dummy:1.0
 ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml 
 ${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
@@ -23,7 +24,7 @@ CreateApp - error shall be received with ImageTypeQCOW and no manifest md5
     ...  create QCOW app with no md5 in manifest 
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath	
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_dummy}	
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Md5 checksum of image is required. Please append checksum to imagepath: "<url>#md5:checksum"
@@ -34,7 +35,8 @@ CreateApp - error shall be received with ImageTypeQCOW and manifest md5 too shor
     ...  create QCOW app with md5 in manifest is too short
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath#md5:checksum
+    ${image_path}=  Catenate  SEPARATOR=  ${qcow_centos_image_dummy}  #md5:checksum
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:checksum
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Md5 checksum must be at least 32 characters"
@@ -47,7 +49,7 @@ CreateApp - error shall be received with ImageTypeQCOW and manifest md5 invalid
 
     # EDGECLOUD-1571 - error message for invalid md5 checksum should be capitalized
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=mypath#md5:12345678901234567890123456checksum
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:12345678901234567890123456checksum
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Invalid md5 checksum"
