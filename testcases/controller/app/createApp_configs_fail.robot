@@ -58,13 +58,13 @@ CreateApp - User shall not be able to create a vm app with ConfigsKind=envVarsYa
     ...  - create vm app with ConfigsKind=envVarsYaml
     ...  - verify error is received
 
-    EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
+    #EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
+    Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
 
 # ECQ-2580
 CreateApp - User shall not be able to create a vm app with unknown ConfigsKind
