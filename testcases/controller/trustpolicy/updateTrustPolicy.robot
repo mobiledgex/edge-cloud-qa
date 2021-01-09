@@ -20,6 +20,8 @@ UpdateTrustPolicy - shall be able to add rules
    ...  - update the policy by adding rules 
    ...  - verify policy is updated
 
+   [Tags]  TrustPolicy
+
    ${policy_return}=  Create Trust Policy  region=${region}
 
    Should Be Equal  ${policy_return['data']['key']['name']}              ${policy_name}
@@ -52,6 +54,8 @@ UpdateTrustPolicy - shall be able to delete rules
    ...  - send CreateTrustPolicy with rules
    ...  - update the policy by deleting the rules
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
@@ -97,6 +101,8 @@ UpdateTrustPolicy - update with no rules shall not change the rules
    ...  - update the policy with no rules 
    ...  - verify policy is not updated
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
    @{rulelist2}=  Create List  ${rule1}   ${rule2}
@@ -141,6 +147,8 @@ UpdateTrustPolicy - shall be able to update icmp cidr
    ...  - update the cidr
    ...  - verify policy is updated 
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
@@ -170,6 +178,8 @@ UpdateTrustPolicy - shall be able to update with tcp and no maxport
    ...  - send CreateTrustPolicy with tcp and no maxport 
    ...  - update the port
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=15  remote_cidr=1.1.1.1/1
@@ -210,6 +220,8 @@ UpdateTrustPolicy - shall be able to create with tcp and maxport=0
    ...  - update the policy with maxport=0
    ...  - verify policy is updated
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=9  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
@@ -245,6 +257,8 @@ UpdateTrustPolicy - shall be able to update with tcp and minport/maxport
    ...  - send CreateTrustPolicy with tcp and minport/maxport 
    ...  - update the ports
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
@@ -285,6 +299,8 @@ UpdateTrustPolicy - shall be able to update with tcp and min/max port numbers
    ...  - update the port and max portss
    ...  - verify policy is updated
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=16  port_range_maximum=65  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -323,6 +339,8 @@ UpdateTrustPolicy - shall be able to update with udp and no maxport
    ...  - send CreateTrustPolicy with udp and no maxport 
    ...  - update the port
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
@@ -363,6 +381,8 @@ UpdateTrustPolicy - shall be able to update with udp and maxport=0
    ...  - update the port
    ...  - verify policy is updated
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=100  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
 
@@ -401,6 +421,8 @@ UpdateTrustPolicy - shall be able to update with udp and minport/maxport
    ...  - send CreateTrustPolicy with udp and minport/maxport 
    ...  - update the ports
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=5  port_range_maximum=55  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
@@ -441,6 +463,8 @@ UpdateTrustPolicy - shall be able to update with udp and min/max port numbers
    ...  - update with min/max port numbers
    ...  - verify policy is updated
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=12  port_range_maximum=65  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -479,6 +503,8 @@ UpdateTrustPolicy - shall be able to update with tcp/udp/icmp
    ...  - send CreateTrustPolicy with tcp/udp/icmp 
    ...  - update the rules
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
@@ -544,6 +570,8 @@ UpdateTrustPolicy - shall be able to update with duplicate policy items
    ...  - send CreateTrustPolicy with duplicate policy items 
    ...  - update the policy
    ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
@@ -646,6 +674,8 @@ UpdateTrustPolicy - shall be able to update with same rules
    ...  - update the rules to the same rules
    ...  - verify policy is the same 
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
@@ -707,6 +737,8 @@ UpdateTrustPolicy - shall be able to update policy in use by cloudlet
    ...  - update the policy which is in use by the cloudlet
    ...  - verify the policy is updated
    ...  - verify the cloudlet is assinged the policy
+
+   [Tags]  TrustPolicy
 
    Create Flavor  region=${region}
 

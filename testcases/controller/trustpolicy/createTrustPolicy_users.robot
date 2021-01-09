@@ -20,6 +20,8 @@ CreateTrustPolicy - user not in an org shall get an error when creating a trust 
    ...  - send CreateTrustPolicy for user not in an org 
    ...  - verify proper error is received 
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
    &{rule3}=  Create Dictionary  protocol=udp  port_range_minimum=3  port_range_maximum=6   remote_cidr=1.1.1.1/2
@@ -32,6 +34,8 @@ DeleteTrustPolicy - user not in an org shall get an error when deleting a trust 
    [Documentation]
    ...  - send DeleteTrustPolicy for user not in an org
    ...  - verify proper error is received
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
@@ -46,6 +50,8 @@ ShowTrustPolicy - user not in an org shall get an empty list when showing a trus
    ...  - send ShowTrustPolicy for user not in an org
    ...  - verify empty list is returned 
 
+   [Tags]  TrustPolicy
+
    ${result}=  Show Trust Policy  token=${user_token}  region=${region}
 
    ${len}=  Get Length  ${result}
@@ -58,6 +64,8 @@ CreateTrustPolicy - user shall not be able to create a policy in a developer org
    ...  - create a developer org
    ...  - send CreateTrustPolicy with the org
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    ${orgname}=  Create Org  orgname=${organization_name}_1  token=${user_token}  orgtype=developer
 
@@ -74,6 +82,8 @@ CreateTrustPolicy - user shall be able to create a policy in an operator org
    ...  - create an operator org
    ...  - send CreateTrustPolicy with the org
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    ${orgname}=  Create Org  orgname=${organization_name}_2  token=${user_token}  orgtype=operator
 
