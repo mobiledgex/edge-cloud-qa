@@ -206,6 +206,8 @@ UpdateCloudlet - shall be able to update cloudlet with trust policy
    ...  - send UpdateCloudlet with policy2
    ...  - verify cloudlet has policy2
 
+   [Tags]  TrustPolicy
+
    Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
@@ -248,6 +250,8 @@ UpdateCloudlet - shall be able to add trust policy to cloudlet
    ...  - send UpdateCloudlet with the policy
    ...  - verify cloudlet has policy
 
+   [Tags]  TrustPolicy
+
    Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
@@ -281,6 +285,8 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    ...  - send CreateCloudlet with policy
    ...  - send UpdateCloudlet with empty policy
    ...  - verify cloudlet has no policy
+
+   [Tags]  TrustPolicy
 
    Create Flavor  region=${region}
 

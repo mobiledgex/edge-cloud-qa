@@ -22,6 +22,8 @@ CreateAppInst - User shall be able to create a autocluster k8s/docker/helm/vm lo
    ...  - create autocluster k8s/docker/helm/vm lb/direct appinst with trusted=True
    ...  - verify app is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Create Trusted Autocluster AppInst
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       
@@ -41,6 +43,8 @@ CreateAppInst - User shall be able to create a k8s/docker/helm/vm loadbalancer/d
    ...  - create k8s/docker/helm/vm lb/direct appinst with trusted=True
    ...  - verify app is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Create Trusted AppInst
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
@@ -59,6 +63,8 @@ CreateAppInst - User shall be able to create a trusted k8s/docker/helm/vm loadba
    [Documentation]
    ...  - create k8s/docker/helm/vm lb/direct app with RequiredOutboundConnections matching trust policy
    ...  - verify app is created
+
+   [Tags]  TrustPolicy
 
    EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
 
@@ -83,6 +89,8 @@ CreateAppInst - Error shall be received for create with RequiredOutboundConnecti
    ...  - create k8s/docker/helm/vm lb/direct app with RequiredOutboundConnections not matching trust policy
    ...  - verify error is received
 
+   [Tags]  TrustPolicy
+
    EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
 
    [Setup]  Setup RequiredOutboundConnections
@@ -106,6 +114,8 @@ CreateAppInst - Error shall be received for create of untrusted appinst on trust
    ...  - create k8s/docker/helm/vm lb/direct untrusted appinst 
    ...  - verify error is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Fail Create Untrusted AppInst
 
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  
@@ -124,6 +134,8 @@ CreateAppInst - Error shall be received for create of untrusted autocluster appi
    [Documentation]
    ...  - create k8s/docker/helm/vm lb/direct untrusted autocluster appinst on trusted cloudlet
    ...  - verify error is created
+
+   [Tags]  TrustPolicy
 
    [Template]  Fail Create Untrusted AutoCluster AppInst
 
