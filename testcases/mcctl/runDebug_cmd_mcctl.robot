@@ -11,16 +11,17 @@ Test Timeout  2m
 
 *** Variables ***
 
-${cloudlet_name_openstack}=  automationFrankfurtCloudlet
-${cloudlet_name_openstack_shared}=  automationDusseldorfCloudlet
-${cloudlet_name_openstack_dedicated}=  automationDusseldorfCloudlet
+${cloudlet_name_openstack}=  automationHamburgCloudlet
+${cloudlet_name_openstack_shared}=  automationHamburgCloudlet 
+${cloudlet_name_openstack_dedicated}=  automationHamburgCloudlet
 ${operator_name_openstack}=  TDG
+${cloudlet_name_vsphere}=  DFWVMW2
+${region_US}=  US
 ${region}=  EU
 ${developer}=  MobiledgeX
 ${type_shep}=  shepherd
 ${type_crm}=  crm
 ${timeout}=  45s
-
 
 # mcctl --addr https://console-qa.mobiledgex.net region RunDebug cmd=
 # Error: Bad Request (400), No cmd specified
@@ -82,11 +83,11 @@ RunDebug - mcctl shall send available commands to node type shepherd
       api,notify  api,notify,infra  api           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=show-debug-levels timeout=${timeout}
       triggered refresh                           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=refresh-internal-certs timeout=${timeout}
       H4sIAAAAAAAE                                cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=get-mem-profile timeout=${timeout}
-      enabled log sampling                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=enable-sample-logging timeout=${timeout}
+      enabled log sampling  request timed out     cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=enable-sample-logging timeout=${timeout}
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=disable-debug-levels timeout=${timeout}
-
+      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=shepherd  cmd=dump-cloudlet-pools timeout=${timeout}   
 
 
 #ECQ-2872
@@ -104,10 +105,11 @@ RunDebug - mcctl shall send available commands to node type crm
       api,notify  api,notify,infra  api           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=show-debug-levels timeout=${timeout}
       triggered refresh                           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=refresh-internal-certs timeout=${timeout}
       H4sIAAAAAAAE                                cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=get-mem-profile timeout=${timeout}
-      enabled log sampling                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=enable-sample-logging timeout=${timeout}
+      enabled log sampling  request timed out     cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=enable-sample-logging timeout=${timeout}
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=disable-debug-levels timeout=${timeout}
+      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=crm  cmd=dump-cloudlet-pools timeout=${timeout}
 
 # ECQ-2873
 RunDebug - mcctl shall send available commands to any node type or region 
@@ -126,10 +128,11 @@ RunDebug - mcctl shall send available commands to any node type or region
       api,notify  api,notify,infra  api           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=show-debug-levels timeout=${timeout}
       triggered refresh                           cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=refresh-internal-certs timeout=${timeout}
       H4sIAAAAAAAE                                cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=get-mem-profile timeout=${timeout}
-      enabled log sampling                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=enable-sample-logging timeout=${timeout}
+      enabled log sampling  request timed out     cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=enable-sample-logging timeout=${timeout}
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=disable-debug-levels timeout=${timeout}
+      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  cmd=dump-cloudlet-pools timeout=${timeout}
 
 #no region specified only cmd
 
@@ -141,11 +144,11 @@ RunDebug - mcctl shall send available commands to any node type or region
       api,notify  api,notify,infra  api           cloudlet=${cloudlet_name_openstack_dedicated}  cmd=show-debug-levels timeout=${timeout}
       triggered refresh                           cloudlet=${cloudlet_name_openstack_dedicated}  cmd=refresh-internal-certs timeout=${timeout}
       H4sIAAAAAAAE                                cloudlet=${cloudlet_name_openstack_dedicated}  cmd=get-mem-profile timeout=${timeout}
-      enabled log sampling                        cloudlet=${cloudlet_name_openstack_dedicated}  cmd=enable-sample-logging timeout=${timeout}
+      enabled log sampling  request timed out     cloudlet=${cloudlet_name_openstack_dedicated}  cmd=enable-sample-logging timeout=${timeout}
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  cmd=disable-debug-levels timeout=${timeout}
-
+      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              cmd=dump-cloudlet-pools timeout=${timeout}
 
 #ECQ-2874
 RunDebug - mcctl shall send available commands to every cloudlet region and node
@@ -160,24 +163,26 @@ RunDebug - mcctl shall send available commands to every cloudlet region and node
       crm  shepherd  cpu profiling already in progress  started. output will be base64 encoded go tool pprof file contents         cmd=start-cpu-profile timeout=${timeout}
       crm  shepherd  cpu profiling already in progress  started. output will be base64 encoded go tool pprof file contents         cmd=start-cpu-profile timeout=${timeout}
       crm  shepherd  triggered refresh  unknown                                                                                    cmd=refresh-internal-certs timeout=${timeout}
-      crm  shepherd  disabled debug levels, now api,notify,infra,info  disabled debug levels, now api,notify,infra,info,metrics    cmd=disable-debug-levels timeout=${timeout}
+      crm  shepherd  disabled debug levels, now api,notify,infra,info  disabled debug levels, now api,notify,infra,metrics         cmd=disable-debug-levels timeout=${timeout}
       crm  shepherd  api,notify,infra,info  api,notify,infra,metrics                                                               cmd=show-debug-levels timeout=${timeout}
       crm  shepherd  enabled debug levels, now api,notify,infra,info  enabled debug levels, now api,notify,infra,metrics           cmd=enable-debug-levels timeout=${timeout}
       crm  shepherd  enabled log sampling  not needed                                                                              cmd=enable-sample-logging timeout=${timeout}
       crm  shepherd  disabled log sampling  not needed                                                                             cmd=disable-sample-logging timeout=${timeout}
+#dump-cloudlet-pools
+      crm  shepherd  {"{\\"organization\\":\\"packet\\",\\"name\\":\\"DFWVMW2\\"}":{"{\\"organization\\":\\"packet\\",\\"name\\":\\"mcctlautomationpool\\"}":{}}}  {"{\\"organization\\":\\"TDG\\",\\"name\\":\\"automationFrankfurtCloudlet\\"}":{"{\\"organization\\":\\"TDG\\",\\"name\\":\\"RahDemo23\\"}":{}}}                                                                         cmd=dump-cloudlet-pools timeout=${timeout}
+
 
 #note this test is huge and pulls down about 40 mem profiles from nodes to count. If looking at the log in a browser it will take about a minute to expand the run mccttl or get match count
 #      crm  shepherd  H4sIAAAAAAAE*  no cpu profiling in progress                                                                   cmd=get-mem-profile timeout=${timeout}
 #      crm  shepherd  no cpu profiling in progress  H4sIAAAAAAAE*                                                                   cmd=stop-cpu-profile timeout=${timeout}
 
-# Size with tests. If the profile test is left in the return will be 100mM for the log these two tests pass but should not be run daily
+# Size with tests. If the profile test is left in the return will be 100MB for the log these two tests pass but should not be run daily
 # -rw-r--r--@ 1 thomasdunkle  staff   100M Nov 22 13:13 log.htmli
 # -rw-r--r--  1 thomasdunkle  staff   101M Nov 22 13:13 output.xml
 
 #Size without those two profile tests is reducded by 98M
 #-rw-r--r--@ 1 thomasdunkle  staff   2.4M Nov 22 13:27 log.html
 #-rw-r--r--  1 thomasdunkle  staff   3.4M Nov 22 13:27 output.xml
-
 
 
 
