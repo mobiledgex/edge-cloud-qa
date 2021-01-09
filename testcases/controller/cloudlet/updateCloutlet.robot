@@ -274,3 +274,38 @@ UpdateCloudlet - shall be able to add trust policy to cloudlet
    Should Be Equal             ${cloudlet_update['data']['trust_policy']}  ${policy_name}
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  5
 
+# ECQ-3090
+UpdateCloudlet - shall be able to remove trust policy from cloudlet
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet with policy
+   ...  - send UpdateCloudlet with empty policy
+   ...  - verify cloudlet has no policy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet with trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+
+   # update cloudlet with empty trust policy
+   ${cloudlet_update}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
+   Should Not Contain             ${cloudlet_update['data']}  trust_policy
+   Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  1
+
