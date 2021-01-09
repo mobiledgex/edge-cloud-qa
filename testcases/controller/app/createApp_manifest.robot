@@ -65,6 +65,30 @@ CreateApp - error shall be received with ImageTypeQCOW and manifest and command
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Invalid argument, command is not supported for VM based deployments"
 
+# ECQ-3110
+CreateApp - error shall be received with ImageTypeQCOW and non md5 manifest
+    [Documentation]
+    ...  - create QCOW app with non md5 manifest
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#sha1:12345678901234567890123456checksum
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Only md5 checksum is supported"
+
+    ${error_msg2}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#sha2:12345678901234567890123456checksum
+    Should Contain  ${error_msg2}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg2}   details = "Only md5 checksum is supported"
+
+# ECQ-3111
+CreateApp - error shall be received with ImageTypeQCOW and no colon in md5 manifest
+    [Documentation]
+    ...  - create QCOW app with no : in md5 manifest
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-automationdevorg/server_ping_threaded_centos7.qcow2#md512345678901234567890123456checksum
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Incorrect checksum format, valid format: "<url>#md5:checksum"
+
 #ECQ-2160
 CreateApp - error shall be received with deployment=kubernetes and invalid manifest
     [Documentation]
