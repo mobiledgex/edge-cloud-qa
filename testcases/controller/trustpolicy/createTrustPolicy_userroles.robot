@@ -24,6 +24,8 @@ CreateTrustPolicy - OperatorManager shall be able to create/show/delete a trust 
    ...  - do CreateTrustPolicy/ShowTrustPolicy/DeleteTrustPolicy
    ...  - verify all 3 work
 
+   [Tags]  TrustPolicy
+
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
 
@@ -62,6 +64,8 @@ CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a tr
    ...  - assign user to org as OperatorContributor
    ...  - do CreateTrustPolicy/ShowTrustPolicy/DeleteTrustPolicy
    ...  - verify all 3 work
+
+   [Tags]  TrustPolicy
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
@@ -104,6 +108,8 @@ CreateTrustPolicy - OperatorViewer shall not be able to create/delete but view a
    ...  - do CreateTrust policy as org owner
    ...  - do ShowTrustPolicy as OperatorViewer
    ...  - verify policy is listed
+
+   [Tags]  TrustPolicy
 
    [Teardown]  Teardown Forbidden
 
@@ -159,6 +165,8 @@ CreateTrustPolicy - DeveloperManager shall not be able to create/delete but view
    ...  - do CreateTrust policy as org owner
    ...  - do ShowTrustPolicy as DeveloperManager
    ...  - verify policy is listed
+
+   [Tags]  TrustPolicy
 
    [Teardown]  Teardown Forbidden
 
@@ -219,6 +227,8 @@ CreateTrustPolicy - DeveloperContributor shall not be able to create/delete but 
    ...  - do CreateTrust policy as org owner
    ...  - do ShowTrustPolicy as DeveloperContributor
    ...  - verify policy is listed
+
+   [Tags]  TrustPolicy
 
    [Teardown]  Teardown Forbidden
 
@@ -282,6 +292,8 @@ CreateTrustPolicy - DeveloperViewer shall not be able to create/delete but view 
    ...  - do CreateTrust policy as org owner
    ...  - do ShowTrustPolicy as DeveloperViewer
    ...  - verify policy is listed
+
+   [Tags]  TrustPolicy
 
    [Teardown]  Teardown Forbidden
 

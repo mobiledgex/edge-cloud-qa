@@ -25,6 +25,8 @@ UpdateTrustPolicy - update without region shall return error
    ...  - send UpdateTrustPolicy without region
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Update Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-3033
@@ -32,6 +34,8 @@ UpdateTrustPolicy - update without token shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy without token
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Update Trust Policy  region=${region}  use_defaults=${False}
 
@@ -41,6 +45,8 @@ UpdateTrustPolicy - update without parms shall return error
    ...  - send UpdateTrustPolicy with no parms 
    ...  - verify error is returned 
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {} not found"}')  Update Trust Policy  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3035
@@ -48,6 +54,8 @@ UpdateTrustPolicy - update without policy name shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy with no policy name 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"mobiledgex\\\\"} not found"}')  Update Trust Policy  operator_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
@@ -57,6 +65,8 @@ UpdateTrustPolicy - update with unknown org name shall return error
    ...  - send UpdateTrustPolicy with unknown org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"xxxx\\\\"} not found"}')  Update Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3037
@@ -65,6 +75,8 @@ UpdateTrustPolicy - update without org name shall return error
    ...  - send UpdateTrustPolicy with no org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"name\\\\":\\\\"x\\\\"} not found"}')  Update Trust Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3038
@@ -72,6 +84,8 @@ UpdateTrustPolicy - update without protocol shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy without protocol
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    ${name}=  Get Default Trust Policy Name
 
@@ -95,6 +109,8 @@ UpdateTrustPolicy - update with invalid CIDR shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy with invalid CIDR 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Create Org
 
@@ -127,6 +143,8 @@ UpdateTrustPolicy - update with invalid minport shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy with invalid min port 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Create Org
 
@@ -164,6 +182,8 @@ UpdateTrustPolicy - update with invalid maxport shall return error
    ...  - send UpdateTrustPolicy with invalid max port
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Create Org
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
@@ -189,6 +209,8 @@ UpdateTrustPolicy - update with icmp and port range shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy with icmp and port range
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Create Org
 
@@ -218,6 +240,8 @@ UpdateTrustPolicy - update with minport>maxport shall return error
    ...  - send UpdateTrustPolicy with minport>maxport
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Create Org
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
@@ -237,6 +261,8 @@ UpdateTrustPolicy - update with policy not found shall return error
    [Documentation]
    ...  - send UpdateTrustPolicy with a policy that does not exist 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    ${name}=  Get Default Trust Policy Name
    ${org}=   Get Default Operator Name

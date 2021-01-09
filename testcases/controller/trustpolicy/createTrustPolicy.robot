@@ -18,6 +18,8 @@ CreateTrustPolicy - shall be able to create with policy and org name only
    ...  - send CreateTrustPolicy with policy and org name only
    ...  - verify policy is created
 
+   [Tags]  TrustPolicy
+
    ${name}=  Generate Random String  length=10
 
    ${policy_return}=  Create Trust Policy  region=${region}  token=${token}  policy_name=${name}  operator_org_name=${operator_name}  use_defaults=${False}
@@ -31,6 +33,8 @@ CreateTrustPolicy - shall be able to create with long policy name
    ...  - send CreateTrustPolicy with long policy name 
    ...  - verify policy is created 
 
+   [Tags]  TrustPolicy
+
    ${name}=  Generate Random String  length=100
 
    ${policy_return}=  Create Trust Policy  region=US  token=${token}  policy_name=${name}  operator_org_name=${operator_name} 
@@ -42,6 +46,8 @@ CreateTrustPolicy - shall be able to create with numbers in policy name
    [Documentation]
    ...  - send CreateTrustPolicy with numbers in policy name
    ...  - verify policy is created 
+
+   [Tags]  TrustPolicy
 
    ${epoch}=  Get Time  epoch
    ${epoch}=  Convert To String  ${epoch}
@@ -55,6 +61,8 @@ CreateTrustPolicy - shall be able to create with icmp
    [Documentation]
    ...  - send CreateTrustPolicy with icmp 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
@@ -75,6 +83,8 @@ CreateTrustPolicy - shall be able to create with tcp and no maxport
    [Documentation]
    ...  - send CreateTrustPolicy with tcp and no maxport 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
@@ -98,6 +108,8 @@ CreateTrustPolicy - shall be able to create with tcp and maxport=0
    [Documentation]
    ...  - send CreateTrustPolicy with tcp and maxport=0 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=9  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
@@ -123,6 +135,8 @@ CreateTrustPolicy - shall be able to create with tcp and minport/maxport
    ...  - send CreateTrustPolicy with tcp and minport/maxport 
    ...  - verify policy is created
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=55  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -145,6 +159,8 @@ CreateTrustPolicy - shall be able to create with tcp and min/max port numbers
    [Documentation]
    ...  - send CreateTrustPolicy with tcp and min/max port numbers 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65535  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
@@ -169,6 +185,8 @@ CreateTrustPolicy - shall be able to create with udp and no maxport
    ...  - send CreateTrustPolicy with udp and no maxport 
    ...  - verify policy is created
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -191,6 +209,8 @@ CreateTrustPolicy - shall be able to create with udp and maxport=0
    [Documentation]
    ...  - send CreateTrustPolicy with udp and maxport=0 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=100  port_range_maximum=0  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
@@ -215,6 +235,8 @@ CreateTrustPolicy - shall be able to create with udp and minport/maxport
    ...  - send CreateTrustPolicy with udp and minport/maxport 
    ...  - verify policy is created
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=5  port_range_maximum=55  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -238,6 +260,8 @@ CreateTrustPolicy - shall be able to create with udp and min/max port numbers
    ...  - send CreateTrustPolicy with udp and min/max port numbers 
    ...  - verify policy is created
 
+   [Tags]  TrustPolicy
+
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=65535  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule1}
 
@@ -260,6 +284,8 @@ CreateTrustPolicy - shall be able to create with tcp/udp/icmp
    [Documentation]
    ...  - send CreateTrustPolicy with tcp/udp/icmp 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=65  remote_cidr=1.1.1.1/1
@@ -295,6 +321,8 @@ CreateTrustPolicy - shall be able to create with duplicate policy items
    [Documentation]
    ...  - send CreateTrustPolicy with duplicate policy items 
    ...  - verify policy is created
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
