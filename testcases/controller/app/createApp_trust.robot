@@ -21,6 +21,8 @@ CreateApp - User shall be able to create a k8s/docker/helm/vm loadbalancer/direc
    ...  - create k8s/docker/helm.vm lb/direct app with trusted=True/False
    ...  - verify app is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Create Trusted App
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}
@@ -39,6 +41,8 @@ CreateApp - Error shall be received for invalid trusted parm
    [Documentation]
    ...  - create k8s/docker/helm.vm lb/direct app with invalid trusted parm
    ...  - verify error is created
+
+   [Tags]  TrustPolicy
 
    [Template]  Fail Create Trusted App
 
@@ -59,6 +63,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with e
    ...  - send CreateApp with empty RequiredOutboundConnections for k8s/docker/helm/vm lb/direct
    ...  - verify app is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Create Trusted App With Empty RequiredOutboundConnections
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}   required_outbound_connections=
@@ -77,6 +83,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    [Documentation]
    ...  - send CreateApp with icmp/tcp/udp RequiredOutboundConnections for k8s/docker/helm/vm lb/direct
    ...  - verify app is created
+
+   [Tags]  TrustPolicy
 
    [Setup]  Setup RequiredOutboundConnections
 
@@ -144,6 +152,8 @@ UpdateApp - User shall be able to update a k8s/docker/helm/vm loadbalancer/direc
    ...  - update k8s/docker/helm/vm lb/direct app with trusted=True/False
    ...  - verify app is updated
 
+   [Tags]  TrustPolicy
+
    [Template]  Update Trusted App
    
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}
@@ -163,6 +173,8 @@ UpdateApp - Error shall be received for invalid trusted parm
    ...  - update k8s/docker/helm/vm lb/direct app with invalid trusted parm
    ...  - verify error is created
 
+   [Tags]  TrustPolicy
+
    [Template]  Fail Update Trusted App
 
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  trusted=x
@@ -181,6 +193,8 @@ UpdateApp - Error shall be received for updated to non-trusted on trusted cloudl
    [Documentation]
    ...  - update k8s/docker/helm/vm lb/direct app to non-trusted on trusted cloudlet
    ...  - verify error is created
+
+   [Tags]  TrustPolicy
 
    [Setup]  Setup Trusted Cloudlet
 
@@ -203,6 +217,8 @@ UpdateApp - shall be able to remove RequiredOutboundConnections from k8s/docker/
    ...  - send CreateApp with icmp/tcp/udp RequiredOutboundConnections for k8s/docker/helm/vm lb/direct
    ...  - send UpdateApp with empty RequiredOutboundConnections to remove them
    ...  - verify RequiredOutboundConnections is removed
+
+   [Tags]  TrustPolicy
 
    [Setup]  Setup RequiredOutboundConnections
 

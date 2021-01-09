@@ -168,6 +168,8 @@ CreateCloudlet - cloudlet should fail with unknown trust policy
     ...  - send CreateCloudlet with unknown trust policy
     ...  - verify correct error is received
 
+   [Tags]  TrustPolicy
+
     ${epoch}=  Get Time  epoch
     ${cldlet}=  Catenate  SEPARATOR=  ${cldlet}  ${epoch}
 
@@ -178,6 +180,8 @@ CreateCloudlet - create with trust policy on non-openstack shall return error
    [Documentation]
    ...  - send CreateCloudlet with trust policy  with non-openstack platforms
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    @{rulelist}=  Create List  ${rule1}
