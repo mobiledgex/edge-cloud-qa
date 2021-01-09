@@ -77,6 +77,48 @@ User shall be able to access TCP/UDP/HTTP ports for 2 apps on the same rootlb
    UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
    HTTP Port Should Be Alive  ${fqdn_http2}  ${cloudlet2.ports[2].public_port}  ${page}
 
+# ECQ-3113
+User shall be able to access TCP/UDP ports for 2 k8s apps with same name but different versions on the same rootlb
+   [Documentation]
+   ...  - deploy 2 shared k8s apps with same name but different version with with 1 TCP/UDP/ port
+   ...  - verify all the port as accessible via fqdn
+
+   Log to Console  \nCreating k8s shared IP cluster instance
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8s}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  #flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   Log to Console  \nCreating cluster instance done
+
+   Log To Console  Creating App and App Instance
+   Create App  region=${region}  app_name=${app_name_k8s}  app_version=1.0  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
+   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8s}
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8s}  app_version=1.0
+   #App Instance Should Exist  region=${region}  app_name=${app_name_docker}  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+
+   Create App  region=${region}  app_name=${app_name_k8s}  app_version=2.0  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:2016,udp:2016
+   Create App Instance  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_k8s}
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_k8s}  app_version=2.0
+   #App Instance Should Exist  region=${region}  app_name=${app_name_k8s}  app_version=2.0  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}
+
+   Log To Console  Registering Client and Finding Cloudlet for docker
+   Register Client  app_name=${app_name_k8s}  app_version=1.0
+   ${cloudlet1}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${fqdn_tcp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[0].fqdn_prefix}  ${cloudlet1.fqdn}
+   ${fqdn_udp1}=  Catenate  SEPARATOR=  ${cloudlet1.ports[1].fqdn_prefix}  ${cloudlet1.fqdn}
+   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+
+   Log To Console  Checking if port is alive
+   TCP Port Should Be Alive  ${fqdn_tcp1}  ${cloudlet1.ports[0].public_port}
+   UDP Port Should Be Alive  ${fqdn_udp1}  ${cloudlet1.ports[1].public_port}
+
+   Log To Console  Registering Client and Finding Cloudlet for k8s
+   Register Client  app_name=${app_name_k8s}  app_version=2.0
+   ${cloudlet2}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}  carrier_name=${operator_name_openstack}
+   ${fqdn_tcp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[0].fqdn_prefix}  ${cloudlet2.fqdn}
+   ${fqdn_udp2}=  Catenate  SEPARATOR=  ${cloudlet2.ports[1].fqdn_prefix}  ${cloudlet2.fqdn}
+
+   Log To Console  Checking if port is alive
+   TCP Port Should Be Alive  ${fqdn_tcp2}  ${cloudlet2.ports[0].public_port}
+   UDP Port Should Be Alive  ${fqdn_udp2}  ${cloudlet2.ports[1].public_port}
+
 *** Keywords ***
 Setup
    Create Flavor  region=${region}
