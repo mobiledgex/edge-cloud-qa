@@ -173,6 +173,28 @@ CreateCloudlet - cloudlet should fail with unknown trust policy
 
     Run Keyword And Expect Error  ('code=200', 'error={"result":{"message":"TrustPolicy x for organization ${oper} not found","code":400}}')  Create Cloudlet  region=${region}  operator_org_name=${oper}  cloudlet_name=${cldlet}  number_dynamic_ips=5  latitude=35  longitude=-96  trust_policy=x
 
+# ECQ-3031
+CreateCloudlet - create with trust policy on non-openstack shall return error
+   [Documentation]
+   ...  - send CreateCloudlet with trust policy  with non-openstack platforms
+   ...  - verify error is returned
+
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  operator_org_name=${oper}  rule_list=${rulelist}
+   Create Flavor  region=US
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE","code":400}}')    Create Cloudlet  region=US  platform_type=PlatformTypeAzure  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_GCP","code":400}}')      Create Cloudlet  region=US  platform_type=PlatformTypeGCP  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_EDGEBOX","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeEdgebox  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VSPHERE","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVsphere  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EKS","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEks  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EC2","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEc2  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+
+   Create VM Pool  region=${region}  vm_pool_name=${policy_return['data']['key']['name']}_pool  org_name=${oper}  #use_defaults=False
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVmPool  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}  vm_pool=${policy_return['data']['key']['name']}_pool
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token

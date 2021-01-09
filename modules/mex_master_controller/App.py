@@ -17,7 +17,7 @@ class App(MexOperation):
         self.show_url = '/auth/ctrl/ShowApp'
         self.update_url = '/auth/ctrl/UpdateApp'
 
-    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, include_fields=False, use_defaults=True):
+    def _build(self, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], include_fields=False, use_defaults=True):
 
         _fields_list = []
         _app_name_field_number = "2.2"
@@ -27,6 +27,8 @@ class App(MexOperation):
         _autoprov_field_number = "32"
         _official_fqdn_field_number = '25'
         _skiphcports_field_number = '34'
+        _trusted_field_number = '37'
+        _remote_outbound_connections_field_number = '38'
 
         if app_name == 'default': app_name = shared_variables.app_name_default
         if app_version == 'default': app_version = shared_variables.app_version_default
@@ -144,10 +146,35 @@ class App(MexOperation):
         if skip_hc_ports is not None:
             app_dict['skip_hc_ports'] = skip_hc_ports
             _fields_list.append(_skiphcports_field_number)
+        if trusted is not None:
+            app_dict['trusted'] = trusted
+            _fields_list.append(_trusted_field_number)
+
+        rule_dict_list = []
+        for rule in required_outbound_connections_list:
+            rule_dict = {}
+            if 'protocol' in rule and rule['protocol'] is not None:
+                rule_dict['protocol'] = rule['protocol']
+                #_fields_list.append(_protocol_field_number)
+
+            if 'port' in rule and rule['port'] is not None:
+                try:
+                    rule_dict['port'] = int(rule['port'])
+                except:
+                    rule_dict['port'] = rule['port']
+                #_fields_list.append(_port_range_min_field_number)
+
+            if 'remote_ip' in rule and rule['remote_ip'] is not None:
+                rule_dict['remote_ip'] = rule['remote_ip']
+                #_fields_list.append(_remote_cidr_field_number)
+
+            if rule_dict:
+                rule_dict_list.append(rule_dict)
+            app_dict['required_outbound_connections'] = rule_dict_list
+            _fields_list.append(_remote_outbound_connections_field_number)
 
         if configs_dict:
             app_dict['configs'] = [configs_dict]
-            
             
         if include_fields and _fields_list:
             app_dict['fields'] = []
@@ -156,9 +183,8 @@ class App(MexOperation):
 
         return app_dict
 
-
-    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports,  use_defaults=use_defaults)
+    def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, md5=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path, md5=md5, cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, access_type=access_type, configs_kind=configs_kind, configs_config=configs_config, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
         msg_dict_delete = None
@@ -170,7 +196,7 @@ class App(MexOperation):
         if 'key' in msg:
             msg_show = self._build(app_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'app': msg_show}
-
+ 
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
 
     def delete_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, json_data=None, use_defaults=True, use_thread=False):
@@ -185,8 +211,8 @@ class App(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
         
-    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, skip_hc_ports=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, skip_hc_ports=skip_hc_ports, use_defaults=use_defaults, include_fields=True)
+    def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'app': msg}
 
         msg_dict_show = None
