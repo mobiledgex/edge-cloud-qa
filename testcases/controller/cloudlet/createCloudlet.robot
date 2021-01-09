@@ -141,6 +141,8 @@ CreateCloudlet - shall be able to create cloudlet with trust policy
    ...  - send CreateCloudlet witht the policy
    ...  - verify the cloudlet is assinged the policy
 
+   [Tags]  TrustPolicy
+
    Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
@@ -169,6 +171,8 @@ CreateCloudlet - shall be able to create cloudlet with empty trust policy
    [Documentation]
    ...  - send CreateCloudlet with empty trust policy
    ...  - verify the cloudlet is not assinged a policy
+
+   [Tags]  TrustPolicy
 
    ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain  ${cloudlet['data']}  trust_policy
