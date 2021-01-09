@@ -110,7 +110,7 @@ Settings - UpdateSettings with bad parms shall return error
    # EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
    # fixed EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
    # fixed EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
-   # EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
+   # fixed EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
    # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
    [Template]  Fail Create UpdateSettings 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  shepherd_metrics_collection_interval  1
