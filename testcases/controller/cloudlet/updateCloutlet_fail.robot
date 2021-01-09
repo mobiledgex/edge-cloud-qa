@@ -294,12 +294,14 @@ UpdateCloudlet with invalid maintenance mode
 
 # ECQ-3069
 UpdateCloudlet with unknown trust policy
-        [Documentation]
-        ...  - send UpdateCloudlet with trust policy
-        ...  - verify correct error is received
+   [Documentation]
+   ...  - send UpdateCloudlet with trust policy
+   ...  - verify correct error is received
 
-        ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     trust_policy=999      use_defaults=False
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"TrustPolicy 999 for organization ${oper} not found"}') 
+   [Tags]  TrustPolicy
+
+   ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     trust_policy=999      use_defaults=False
+   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"TrustPolicy 999 for organization ${oper} not found"}') 
 
 # ECQ-3095
 UpdateCloudlet - error shall be received for update to trusted with nontrusted app
@@ -309,6 +311,8 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    ...  - create a non-trusted app/appinst on the cloudlet
    ...  - send UpdateCloudlet with trust policy
    ...  - verify error is received
+
+   [Tags]  TrustPolicy
 
    Create Flavor  region=${region}
 
@@ -354,6 +358,8 @@ UpdateCloudlet - update with trust policy on non-openstack shall return error
    [Documentation]
    ...  - send UpdateCloudlet with trust policy with non-openstack platforms
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    # EDGECLOUD-4220 - able to do UpdateCloudlet with trustpolicy on azure/gcp cloudlet 
 

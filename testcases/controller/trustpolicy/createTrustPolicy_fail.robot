@@ -26,6 +26,8 @@ CreateTrustPolicy - create without region shall return error
    ...  - send CreateTrustPolicy without region
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Create Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-3019
@@ -33,6 +35,8 @@ CreateTrustPolicy - create without token shall return error
    [Documentation]
    ...  - send CreateTrustPolicy without token
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Create Trust Policy  region=${region}  use_defaults=${False}
 
@@ -42,6 +46,8 @@ CreateTrustPolicy - create without parms shall return error
    ...  - send CreateTrustPolicy with no parms 
    ...  - verify error is returned 
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid organization, name cannot be empty"}')  Create Trust Policy  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3021
@@ -49,6 +55,8 @@ CreateTrustPolicy - create without policy name shall return error
    [Documentation]
    ...  - send CreateTrustPolicy with no policy name 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Trust Policy  operator_org_name=${developer}  region=${region}  token=${token}  use_defaults=${False}
 
@@ -58,6 +66,8 @@ CreateTrustPolicy - create with unknown org name shall return error
    ...  - send CreateTrustPolicy with unknown org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"org xxxx not found"}')  Create Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3023
@@ -66,6 +76,8 @@ CreateTrustPolicy - create without org name shall return error
    ...  - send CreateTrustPolicy with no org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Invalid organization, name cannot be empty"}')  Create Trust Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3024
@@ -73,6 +85,8 @@ CreateTrustPolicy - create without protocol shall return error
    [Documentation]
    ...  - send CreateTrustPolicy without protocol
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule}=  Create Dictionary  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
@@ -84,6 +98,8 @@ CreateTrustPolicy - create with invalid CIDR shall return error
    [Documentation]
    ...  - send CreateTrustPolicy with invalid CIDR 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  remote_cidr=x 
    @{rulelist}=  Create List  ${rule}
@@ -110,6 +126,8 @@ CreateTrustPolicy - create with invalid minport shall return error
    [Documentation]
    ...  - send CreateTrustPolicy with invalid min port 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule}=  Create Dictionary  protocol=tcp
    @{rulelist}=  Create List  ${rule}
@@ -139,6 +157,8 @@ CreateTrustPolicy - create with invalid maxport shall return error
    ...  - send CreateTrustPolicy with invalid max port
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=1  port_range_maximum=x  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    ${error}=  Run Keyword and Expect Error  *  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
@@ -158,6 +178,8 @@ CreateTrustPolicy - create with icmp and port range shall return error
    [Documentation]
    ...  - send CreateTrustPolicy with icmp and port range
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule}=  Create Dictionary  protocol=icmp  port_range_minimum=10  port_range_maximum=0  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
@@ -181,6 +203,8 @@ CreateTrustPolicy - create with minport>maxport shall return error
    ...  - send CreateTrustPolicy with minport>maxport
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=1  remote_cidr=1.1.1.1/1 
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Min port range: 10 cannot be higher than max: 1"}')  Create Trust Policy  region=${region}  token=${token}  rule_list=${rulelist} 
@@ -194,6 +218,8 @@ CreateTrustPolicy - create with duplicate policy shall return error
    [Documentation]
    ...  - send same CreateTrustPolicy twice 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    &{rule}=  Create Dictionary  protocol=udp  port_range_minimum=10  port_range_maximum=11  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}

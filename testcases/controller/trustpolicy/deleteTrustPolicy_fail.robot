@@ -21,6 +21,8 @@ DeleteTrustPolicy - delete without region shall return error
    ...  - send DeleteTrustPolicy without region
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no region specified"}')  Delete Trust Policy  token=${token}  use_defaults=${False}
 
 # ECQ-2997
@@ -28,6 +30,8 @@ DeleteTrustPolicy - delete without token shall return error
    [Documentation]
    ...  - send DeleteTrustPolicy without token
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"no bearer token found"}')  Delete Trust Policy  region=${region}  use_defaults=${False}
 
@@ -37,6 +41,8 @@ DeleteTrustPolicy - delete without parms shall return error
    ...  - send DeleteTrustPolicy with no parms 
    ...  - verify error is returned 
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {} not found"}')  Delete Trust Policy  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-2999
@@ -44,6 +50,8 @@ DeleteTrustPolicy - delete without policy name shall return error
    [Documentation]
    ...  - send DeleteTrustPolicy with no policy name 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"mobiledgex\\\\"} not found"}')  Delete Trust Policy  operator_org_name=mobiledgex  region=${region}  token=${token}  use_defaults=${False}
 
@@ -53,6 +61,8 @@ DeleteTrustPolicy - delete with unknown org name shall return error
    ...  - send DeleteTrustPolicy with unknown org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
     Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"xxxx\\\\"} not found"}')  Delete Trust Policy  operator_org_name=xxxx  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3001
@@ -61,6 +71,8 @@ DeleteTrustPolicy - delete without org name shall return error
    ...  - send DeleteTrustPolicy with no org name
    ...  - verify error is returned
 
+   [Tags]  TrustPolicy
+
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"name\\\\":\\\\"x\\\\"} not found"}')  Delete Trust Policy  policy_name=x  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3002
@@ -68,6 +80,8 @@ DeleteTrustPolicy - delete with policy not found shall return error
    [Documentation]
    ...  - send DeleteTrustPolicy with a policy that does not exist 
    ...  - verify error is returned
+
+   [Tags]  TrustPolicy
 
    ${name}=  Get Default Trust Policy Name
    ${dev}=   Get Default Operator Name
@@ -81,6 +95,8 @@ DeleteTrustPolicy - delete policy in use by cloudlet shall retun error
    [Documentation]
    ...  - send DeleteTrustPolicy with policy in use by a cloudlet
    ...  - verify proper error is returned 
+
+   [Tags]  TrustPolicy
    
    Create Flavor  region=${region}
 
