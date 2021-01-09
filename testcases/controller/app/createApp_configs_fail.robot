@@ -58,13 +58,13 @@ CreateApp - User shall not be able to create a vm app with ConfigsKind=envVarsYa
     ...  - create vm app with ConfigsKind=envVarsYaml
     ...  - verify error is received
 
-    EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
+    # fixed - EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
+    Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
 
 # ECQ-2580
 CreateApp - User shall not be able to create a vm app with unknown ConfigsKind
@@ -144,8 +144,11 @@ CreateApp - User shall not be able to create a helm app with invalid yaml config
     ...  - create helm app with unknown Configs value
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
+    # EDGECLOUD-4216
+
+    # no longer supported
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
@@ -180,21 +183,35 @@ CreateApp - User shall not be able to create a helm app with invalid config url
     ...  - create helm app with invalid Configs url
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
+    # EDGECLOUD-4216
+
+    # no longer supported
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https://myconfig
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://1.1.1.1
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
+    # no longer supported
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://1.1.1.1
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https:/1.1.1.1
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
-    Should Contain  ${error}  i/o timeout
+    # no longer supported
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
+    #Should Contain  ${error}  i/o timeout
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https://myconfig
     Should Contain  ${error}  i/o timeout
+
+# ECQ-3097
+CreateApp - User shall not be able to create a helm app with ConfigsKind=envVarsYaml
+    [Documentation]
+    ...  - create helm app with ConfigsKind=envVarsYaml
+    ...  - verify error is received
+
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(helm)"}')
 

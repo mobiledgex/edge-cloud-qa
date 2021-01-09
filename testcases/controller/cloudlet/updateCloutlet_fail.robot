@@ -3,6 +3,8 @@
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         String
 
+Test Teardown  Cleanup Provisioning
+
 *** Variables ***
 ${controller_api_address}  127.0.0.1:55001
 ${oper}   tmus
@@ -298,6 +300,79 @@ UpdateCloudlet with unknown trust policy
 
         ${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}     cloudlet_name=${cldlet}     trust_policy=999      use_defaults=False
         Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"TrustPolicy 999 for organization ${oper} not found"}') 
+
+# ECQ-3095
+UpdateCloudlet - error shall be received for update to trusted with nontrusted app
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet without policy
+   ...  - create a non-trusted app/appinst on the cloudlet
+   ...  - send UpdateCloudlet with trust policy
+   ...  - verify error is received
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+   ${app_name}=  Get Default App Name
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${oper}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${oper}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet without trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
+   Should Not Contain  ${cloudlet['data']}  trust_policy
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
+
+   # create a trusted app/appinst on the cloudlet
+   ${app}=  Create App  region=${region}  trusted=${True}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+
+   # update cloudlet with trust policy and remove the policy
+   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${Empty}
+
+   # create a nontrusted app/appinst on the cloudlet
+   ${app}=  Create App  region=${region}  app_name=${app_name}_untrusted
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+
+   # update cloudlet with trust policy
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"MobiledgeX\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
+
+# ECQ-3098
+UpdateCloudlet - update with trust policy on non-openstack shall return error
+   [Documentation]
+   ...  - send UpdateCloudlet with trust policy with non-openstack platforms
+   ...  - verify error is returned
+
+   # EDGECLOUD-4220 - able to do UpdateCloudlet with trustpolicy on azure/gcp cloudlet 
+
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  operator_org_name=azure  rule_list=${rulelist}
+   Create Flavor  region=US
+
+   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE","code":400}}')    Update Cloudlet  region=US  cloudlet_name=automationAzureCentralCloudlet  operator_org_name=azure  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
+
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_GCP","code":400}}')      Create Cloudlet  region=US  platform_type=PlatformTypeGCP  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_EDGEBOX","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeEdgebox  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VSPHERE","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVsphere  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EKS","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEks  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AWS_EC2","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeAwsEc2  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
+
+#   Create VM Pool  region=${region}  vm_pool_name=${policy_return['data']['key']['name']}_pool  org_name=${oper}  #use_defaults=False
+#   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVmPool  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}  vm_pool=${policy_return['data']['key']['name']}_pool
 
 *** Keywords ***
 Setup
