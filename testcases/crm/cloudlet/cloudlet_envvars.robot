@@ -14,6 +14,8 @@ ${region}=  US
 
 ${test_timeout_crm}  60 min
 
+${ntp_wait_time}=  100
+
 *** Test Cases ***
 # ECQ-2995
 CreateCloudlet - User shall be able to create a cloudlet with MEX_NTP_SERVERS 
@@ -25,41 +27,21 @@ CreateCloudlet - User shall be able to create a cloudlet with MEX_NTP_SERVERS
 
    Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_packet}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=MEX_NTP_SERVERS=0.us.pool.ntp.org,1.us.pool.ntp.org
 
-   ${status_crm}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=platformvm  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
-   Should Match Regexp  ${status_crm}  Synchronized to time server .+0\.us\.pool\.ntp\.org
+   Wait For NTP Sync  node_type=platformvm
 
-   ${ntp_crm}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=platformvm  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
-   Should Contain  ${ntp_crm}  0.us.pool.ntp.org
-   Should Contain  ${ntp_crm}  1.us.pool.ntp.org 
-
-   ${status_rootlb}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=sharedrootlb  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
-   Should Match Regexp  ${status_rootlb}  Synchronized to time server .+0\.us\.pool\.ntp\.org
-
-   ${ntp_rootlb}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=sharedrootlb  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
-   Should Contain  ${ntp_rootlb}  0.us.pool.ntp.org
-   Should Contain  ${ntp_rootlb}  1.us.pool.ntp.org
+   Wait For NTP Sync  node_type=sharedrootlb
 
    # create docker clusterinst
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}docker  operator_org_name=${operator_name_openstack_packet}  deployment=docker  cloudlet_name=${cloudlet_name}
-   Sleep  30s  # wait for ntp sync
    ${docker_cluster}=  Catenate  SEPARATOR=.  ${cluster_name}docker  ${cloudlet_name}  ${operator_name_openstack_packet}  mobiledgex.net
-   #${docker_cluster}=  Set Variable  cluster1608656648-5467021.cloudlet1608652591-6507368.packet.mobiledgex.net
-   ${status_docker}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${docker_cluster}  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
-   Should Match Regexp  ${status_docker}  Synchronized to time server .+0\.us\.pool\.ntp\.org
-   ${ntp_docker}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${docker_cluster}  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
-   Should Contain  ${ntp_docker}  0.us.pool.ntp.org
-   Should Contain  ${ntp_docker}  1.us.pool.ntp.org
+
+   Wait For NTP Sync  node_name=${docker_cluster}
 
    # create k8s clusterinst
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}k8s  operator_org_name=${operator_name_openstack_packet}  deployment=kubernetes  number_nodes=1  ip_access=IpAccessDedicated  cloudlet_name=${cloudlet_name}
-   Sleep  30s  # wait for ntp sync
    ${k8s_cluster}=  Catenate  SEPARATOR=.  ${cluster_name}k8s  ${cloudlet_name}  ${operator_name_openstack_packet}  mobiledgex.net
-   ${status_k8s}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${k8s_cluster}  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
-   Should Match Regexp  ${status_k8s}  Synchronized to time server .+0\.us\.pool\.ntp\.org
-   ${ntp_k8s}=  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${k8s_cluster}  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
-   Should Contain  ${ntp_k8s}  0.us.pool.ntp.org
-   Should Contain  ${ntp_k8s}  1.us.pool.ntp.org
 
+   Wait For NTP Sync  node_name=${k8s_cluster}
 
 *** Keywords ***
 Setup
@@ -69,3 +51,27 @@ Setup
 
    Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${cluster_name}
+
+Wait For NTP Sync
+   [Arguments]  ${node_type}=${None}  ${node_name}=${None}
+
+   FOR  ${i}  IN RANGE  ${ntp_wait_time}
+      ${status_crm}=  Run Keyword If  '${node_type}' != '${None}'  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=${node_type}  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
+      ...  ELSE  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${node_name}  command=systemctl status systemd-timesyncd | grep Status  cloudlet_name=${cloudlet_name}
+
+      ${match}=  Run Keyword And Ignore Error  Should Match Regexp  ${status_crm}  Synchronized to time server .+0\.us\.pool\.ntp\.org
+      log to console  ${i} ${ntp_wait_time}   ${match[0]}
+      Exit For Loop If  '${match[0]}'=='PASS'
+      Sleep  10s
+      
+   END
+
+   log to console  ${i} ${ntp_wait_time}
+   Run Keyword If  ${i}==${ntp_wait_time}  Fail  NTP sync wait timeout 
+
+   ${ntp_crm}=  Run Keyword If  '${node_type}' != '${None}'  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_type=${node_type}  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
+   ...  ELSE  Access Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_packet}  node_name=${node_name}  command=grep NTP /etc/systemd/timesyncd.conf  cloudlet_name=${cloudlet_name}
+   Should Contain  ${ntp_crm}  0.us.pool.ntp.org
+   Should Contain  ${ntp_crm}  1.us.pool.ntp.org
+
+
