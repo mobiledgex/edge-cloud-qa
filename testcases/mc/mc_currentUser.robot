@@ -133,8 +133,12 @@ MC - User shall be able to update current metadata
     ...  - set the metadata 
     ...  - get the user data and verify metadata is set 
 
+   ${i}=  Get Time  epoch
+   ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
+   ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
+
    Skip Verify Email
-   ${username}  ${password}  ${email}=  Create User
+   Create User  ${username1}  ${password}  ${email1}
    Unlock User  #username=${username}
    ${token}=  Login
 
@@ -144,13 +148,13 @@ MC - User shall be able to update current metadata
    ${info}=  Get Current User
 
    Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
-   Should Be Equal             ${info['Email']}          ${username}@email.com
+   Should Be Equal             ${info['Email']}          ${email1}
    Should Be Equal             ${info['EmailVerified']}  ${False}
    Should Be Equal             ${info['FamilyName']}     ${EMPTY}
    Should Be Equal             ${info['GivenName']}      ${EMPTY}
    #Should Be Equal  ${info['ID']}  1
    Should Be Equal As Numbers  ${info['Iter']}           0
-   Should Be Equal             ${info['Name']}           ${username}
+   Should Be Equal             ${info['Name']}           ${username1}
    Should Be Equal             ${info['Nickname']}       ${EMPTY}
    Should Be Equal             ${info['Passhash']}       ${EMPTY}
    Should Be Equal             ${info['Picture']}        ${EMPTY}
@@ -158,18 +162,18 @@ MC - User shall be able to update current metadata
    Should Be Equal            ${info['Metadata']}        ${EMPTY}
    Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
-   Update Current User  metadata=xxxx
+   Update Current User  metadata=xxxx  use_defaults=False  token=${token}  
 
    ${info2}=  Get Current User
 
    Convert Date  ${info2['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
-   Should Be Equal             ${info2['Email']}          ${username}@email.com
+   Should Be Equal             ${info2['Email']}          ${email1}
    Should Be Equal             ${info2['EmailVerified']}  ${False}
    Should Be Equal             ${info2['FamilyName']}     ${EMPTY}
    Should Be Equal             ${info2['GivenName']}      ${EMPTY}
    #Should Be Equal  ${info['ID']}  1
    Should Be Equal As Numbers  ${info2['Iter']}           0
-   Should Be Equal             ${info2['Name']}           ${username}
+   Should Be Equal             ${info2['Name']}           ${username1}
    Should Be Equal             ${info2['Nickname']}       ${EMPTY}
    Should Be Equal             ${info2['Passhash']}       ${EMPTY}
    Should Be Equal             ${info2['Picture']}        ${EMPTY}
