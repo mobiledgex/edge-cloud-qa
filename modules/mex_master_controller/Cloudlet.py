@@ -39,6 +39,7 @@ class Cloudlet(MexOperation):
         _static_ips_field_number = "7"
         _override_policy_container_version_field_number = "31"
         _trust_policy_field_number = "37"
+        _env_vars_field_number = "19"
 
         if use_defaults:
             if cloudlet_name is None: cloudlet_name = shared_variables.cloudlet_name_default
@@ -166,6 +167,7 @@ class Cloudlet(MexOperation):
             for index,var in enumerate(var_list[0::2]):
                  env_dict[re.sub('=$', '', var_list[index+(1*index)])] = re.sub(',$', '', var_list[index+1+(1*index)])
             cloudlet_dict['env_var'] = env_dict
+            _fields_list.append(_env_vars_field_number)
 
         access_dict = {}
         if access_vars is not None:
