@@ -53,7 +53,7 @@ User shall be able to create VM/LB deployment on openstack
     ${crm_ip}=  Fetch From Left  ${crm_networks[1]}  "
  
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
    # verify md5 in createappinst stream
    ${app_inst_stream_output}=  Get Create App Instance Stream
@@ -89,7 +89,7 @@ User shall be able to create VM deployment on openstack
     [Teardown]  Teardown  ${openstack_image}
  
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:23-2016,udp:2015-40000   access_type=direct    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
    # verify md5 in createappinst stream
    ${app_inst_stream_output}=  Get Create App Instance Stream

@@ -369,7 +369,7 @@ UpdateCloudlet - update with trust policy on non-openstack shall return error
    ${policy_return}=  Create Trust Policy  region=${region}  operator_org_name=azure  rule_list=${rulelist}
    Create Flavor  region=US
 
-   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE","code":400}}')    Update Cloudlet  region=US  cloudlet_name=automationAzureCentralCloudlet  operator_org_name=azure  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Trust Policy not supported on PLATFORM_TYPE_AZURE"}')    Update Cloudlet  region=US  cloudlet_name=automationAzureCentralCloudlet  operator_org_name=azure  trust_policy=${policy_return['data']['key']['name']}  use_defaults=${False}
 
 #   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_GCP","code":400}}')      Create Cloudlet  region=US  platform_type=PlatformTypeGCP  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
 #   Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_EDGEBOX","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeEdgebox  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}
