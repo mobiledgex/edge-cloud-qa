@@ -45,18 +45,14 @@ DeleteTrustPolicy - user not in an org shall get an error when deleting a trust 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  token=${user_token}  region=${region}  rule_list=${rulelist}
 
 # ECQ-3047
-ShowTrustPolicy - user not in an org shall get an empty list when showing a trust policy
+ShowTrustPolicy - user not in an org shall get an error when showing a trust policy
    [Documentation]
    ...  - send ShowTrustPolicy for user not in an org
-   ...  - verify empty list is returned 
+   ...  - verify proper error is received
 
    [Tags]  TrustPolicy
 
-   ${result}=  Show Trust Policy  token=${user_token}  region=${region}
-
-   ${len}=  Get Length  ${result}
-
-   Should Be Equal As Numbers  ${len}  0
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Trust Policy  token=${user_token}  region=${region}
 
 # ECQ-3076
 CreateTrustPolicy - user shall not be able to create a policy in a developer org
