@@ -271,8 +271,48 @@ UpdateTrustPolicy - update with policy not found shall return error
    @{rulelist}=  Create List  ${rule}
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy key {\\\\"organization\\\\":\\\\"${org}\\\\",\\\\"name\\\\":\\\\"${name}\\\\"} not found"}')  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist}
 
+# ECQ-3118
+UpdateTrustPolicy - update with trust policy and maintenance mode shall return error
+   [Documentation]
+   ...  - send CreateTrustPolicy
+   ...  - send CreateCloudlet with the policy and maintenance mode
+   ...  - verify error is returned
+
+   [Tags]  TrustPolicy
+
+   Create Flavor  region=${region}
+
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   ${cloudlet}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  trust_policy=${policy_return['data']['key']['name']}
+   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_return['data']['key']['name']}
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStart  use_defaults=False
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
+
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
+ 
+   ${policy_name}=  Get Default Trust Policy Name
+   Set Suite Variable  ${policy_name}
+
+   ${cloudlet_name}=  Get Default Cloudlet Name
+   Set Suite Variable  ${cloudlet_name}
 
