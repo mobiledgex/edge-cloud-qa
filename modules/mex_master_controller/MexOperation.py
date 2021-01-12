@@ -108,6 +108,9 @@ class MexOperation(MexRest):
                 elif url.endswith('user/delete'):
                     if str(self.resp.text) != '{"message":"user deleted"}':
                         raise Exception('ERROR: user not deleted successfully:' + str(self.resp_text))
+                elif url.endswith('usercreate'):
+                    if 'user created' not in str(self.resp.text):
+                        raise Exception('ERROR: user not created successfully:' + str(self.resp_text))
 
                 #elif url.endswith('UpdateCloudlet'):
                 #    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
