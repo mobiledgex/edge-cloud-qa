@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  RunConsole for DeveloperManager/DeveloperContributor/DeveloperViewer
+Documentation  RunConsole for DeveloperContributor with novnc and spice env_vars
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 
@@ -23,6 +23,7 @@ ${docker_image_developer}=  mobiledgex
 ${mex_password}=  ${mexadmin_password}
 
 *** Test Cases ***
+# ECQ-3123
 
 RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=novnc
     [Documentation]
