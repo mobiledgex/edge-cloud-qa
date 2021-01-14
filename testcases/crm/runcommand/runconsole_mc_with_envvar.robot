@@ -30,7 +30,6 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-#    [Teardown]  NONE
 
     Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
 
@@ -41,12 +40,8 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     log to console  ${stdout}
     Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-eu.mobiledgex.net:6080
 
-#    should be equal as integers  ${rc}  0
-#    should contain  ${stdout}  message: Cloudlet updated successfully
-    #Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz
-#    Should Contain  ${stdout['console']['url']}  https://127.0.0.1
-#    Should Contain  ${stdout['console']['url']}  token=xyz
 
+#ECQ-3126
 RunConsole - DeveloperContributor shall not be able to do RunConsole with envvar=spice
     [Documentation]
     ...  execute Run Console as DeveloperContributor
