@@ -94,11 +94,11 @@ Values Should Be Valid
    [Arguments]  ${metrics}
 
    FOR  ${m}  IN  @{metrics}
-      Should Be Equal  ${m['data']['client_key']['key']['app_key']['organization']}  ${developer_name} 
-      Should Be Equal  ${m['data']['client_key']['key']['app_key']['name']}  ${app_name}
-      Should Be Equal  ${m['data']['client_key']['key']['app_key']['version']}  ${app_version}
-      Should Be Equal  ${m['data']['client_key']['key']['cluster_inst_key']['cloudlet_key']['organization']}  ${tmus_operator_name}
-      Should Be Equal  ${m['data']['client_key']['key']['cluster_inst_key']['cloudlet_key']['name']}  ${tmus_cloudlet_name}
+      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['organization']}  ${developer_name} 
+      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['name']}  ${app_name}
+      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['version']}  ${app_version}
+      Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['organization']}  ${tmus_operator_name}
+      Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['name']}  ${tmus_cloudlet_name}
 
       ${l}=  Get Length  ${m['data']['client_key']['unique_id']} 
       Should Be True  '${l}' > '0'

@@ -38,6 +38,7 @@ docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedet
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/computervision-gpu:2020-09-22'
 docker_image_samsung = 'docker-qa.mobiledgex.net/samsung/images/server_ping_threaded:6.0'
 docker_image_cpu = 'docker-qa.mobiledgex.net/mobiledgex/images/cpu_generator:1.0'
+docker_image_porttest = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
 
 artifactory_dummy_image_name = 'execJira.py'
 
@@ -71,3 +72,5 @@ gpu_client_image = '3_bodies.png'
 # alert receiver
 slack_channel = '#qa-alertreceiver'
 slack_api_url = 'https://hooks.slack.com/services/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'
+
+trust_policy_server = '35.199.188.102'

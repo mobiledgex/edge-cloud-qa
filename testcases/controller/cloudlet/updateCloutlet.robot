@@ -314,4 +314,3 @@ UpdateCloudlet - shall be able to remove trust policy from cloudlet
    ${cloudlet_update}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${Empty}
    Should Not Contain             ${cloudlet_update['data']}  trust_policy
    Should Be Equal As Numbers  ${cloudlet_update['data']['trust_policy_state']}  1
-

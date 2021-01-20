@@ -20,7 +20,7 @@ ${cloudconfig_string}=  \#cloud-config\n users:\n - name: demo\n groups: sudo\n 
 ${envvars_config}=  - name: CrmValue\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]\n- name: CrmValue2\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 ${envvars_url}=  http://35.199.188.102/apps/server_ping_threaded_config.yml
 
-${version}=  latest
+${version}=  2021-01-12
 
 *** Test Cases ***
 # ECQ-2889
@@ -72,17 +72,11 @@ CreateApp - mcctl shall be able to create/show/delete app
       # configs
       # EDGECLOUD-3163 Support envVarsYaml config for CreateApp on docker
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}" 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config="${envvars_config}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=${envvars_url}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"  configs:1.kind=envVarsYaml  configs:1.config="${envvars_config}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"  configs:1.kind=envVarsYaml  configs:1.config="${envvars_config}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config="${envvars_config}"  configs:1.kind=envVarsYaml  configs:1.config="${envvars_config}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}
 
       # autoprovpolicies
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  autoprovpolicies=${autoprov_name}1
@@ -96,15 +90,25 @@ CreateApp - mcctl shall be able to create/show/delete app
 
       # trusted
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}
-       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}
+
+      # requiredoutboundconnections
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=udp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
 
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
@@ -130,6 +134,7 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Failed to parse public key: ssh: no key found  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  authpublickey=x
 
       # deployment manifest
+      # EDGECLOUD-4002  CreateApp should validate for proper helm chart and docker compose when using deploymentmanifest
       Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \\\'#cloud-config\\\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${manifest_url}
       Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \\\'#cloud-config\\\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=x
       Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=x
@@ -140,32 +145,33 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=${True}
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false, 1, 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false, 1, 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false, 1, 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
-      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false, 1, 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  scalewithcluster=x
+      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
+      Unable to parse "scalewithcluster" value "x" as bool: invalid syntax, valid values are true, false   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=x
 
 
       # androidpackagename and officialfqdn - no errors
 
       #configs
-      # EDGECLOUD-3993 CreateApp with configs.kind only should give an error
-      #EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
+      # fixed EDGECLOUD-3993 CreateApp with configs.kind only should give an error
+      # fixed EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
       # EDGECLOUD-3163 Support envVarsYaml config for CreateApp on docker
-      # EDGECLOUD-3238 no error given with CreateAppInst with bad configs envVarsYaml value
+      # fixed EDGECLOUD-3238 no error given with CreateAppInst with bad configs envVarsYaml value
+      # EDGECLOUD-4216 CreateApp with invalid helmCustomizationYaml config should give an error
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
-      Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}3  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
+      Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}3  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=nvVarsYaml
      Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
       Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}4  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
-      Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}5  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
       Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}6  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=x
+      Error: Bad Request (400), Invalid Config Kind(envVarsYaml) for deployment type(vm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(kubernetes)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(docker)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
- 
+      Error: Bad Request (400), Invalid Config Kind(envVarsYaml) for deployment type(helm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config="${envvars_config}"
 
       # trusted
       Unable to parse "trusted" value "x" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}  trusted=x
@@ -178,6 +184,17 @@ CreateApp - mcctl shall handle create failures
       Unable to parse "trusted" value "-1" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=-1
       Unable to parse "trusted" value "no" as bool: invalid syntax, valid values are true, false      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=no
       Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes
+
+      # requiredoutboundconnections
+      Bad Request (400), Port must be 0 for icmp   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
+      Error: Bad Request (400), Remote port out of range: 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1
+      Error: Bad Request (400), Remote port out of range: 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1
+      Error: Bad Request (400), Invalid protocol specified for remote connection: cmp  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=cmp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
+      Error: Bad Request (400), Invalid remote IP:    appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp
+      Error: Bad Request (400), Invalid remote IP:    appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp 
+      Error: Bad Request (400), Invalid remote IP:    appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.port=1
+      Error: Bad Request (400), Remote port out of range: 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1
+
 
 # ECQ-2829
 UpdateApp - mcctl shall handle update app 
@@ -212,6 +229,12 @@ UpdateApp - mcctl shall handle update app
  
       appname=${app_name_vm}  app-org=${developer}  appvers=1.0  trusted=${True}
       appname=${app_name_vm}  app-org=${developer}  appvers=1.0  trusted=${False}
+
+      appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1
+      appname=${app_name_docker}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
+      appname=${app_name_docker}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
+      appname=${app_name_helm}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.port=1  requiredoutboundconnections:1.remoteip=1.1.1.1
+      appname=${app_name_vm}  app-org=${developer}  appvers=1.0  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.port=10  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.port=1  requiredoutboundconnections:1.remoteip=1.1.1.1
  
 *** Keywords ***
 Setup
@@ -290,6 +313,15 @@ Success Create/Show/Delete App Via mcctl
    ...  ELSE  Should Not Contain  ${show[0]}  trusted 
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${False}  Should Not Contain  ${show[0]}  trusted
 
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['protocol']}  ${parms['requiredoutboundconnections:0.protocol']}
+   Run Keyword If  'requiredoutboundconnections:0.remoteip' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['remote_ip']}  ${parms['requiredoutboundconnections:0.remoteip']}
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][0]}  port
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port']}  ${parms['requiredoutboundconnections:0.port']}
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['protocol']}  ${parms['requiredoutboundconnections:1.protocol']}
+   Run Keyword If  'requiredoutboundconnections:1.remoteip' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['remote_ip']}  ${parms['requiredoutboundconnections:1.remoteip']}
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port']}  ${parms['requiredoutboundconnections:1.port']}
+
 Update Setup
    ${app_name}=  Get Default App Name
    ${app_name_k8s}=  Set Variable  ${app_name}_k8s
@@ -343,74 +375,14 @@ Success Update/Show App Via mcctl
    ...  ELSE  Should Not Contain  ${show[0]}  trusted
    Run Keyword If  'trusted' in ${parms}  Run Keyword If  ${parms['trusted']} == ${False}  Should Not Contain  ${show[0]}  trusted
 
-Verify Show
-   [Arguments]  ${show}  &{parms}
-   #&{parms_copy}=  Set Variable  ${parms}
-
-   #${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
-   #Remove From Dictionary  ${parms_copy}  deploymentmanifest
-   #${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
-
-   Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
-   Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
-   Should Be Equal  ${show[0]['key']['version']}  ${parms['appvers']}
-   Should Be Equal  ${show[0]['image_path']}  ${parms['imagepath']}
-
-   Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Integers  ${show[0]['image_type']}  1
-   Run Keyword If  'deployment' in ${parms}  Should Be Equal  ${show[0]['deployment']}  ${parms['deployment']}
-
-   Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal  ${show[0]['deployment']}  kubernetes
-   Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeHelm'    Should Be Equal  ${show[0]['deployment']}  helm
-   Run Keyword If  'deployment' not in ${parms} and '${parms['imagetype']}' == 'ImageTypeQcow'    Should Be Equal  ${show[0]['deployment']}  vm
-
-
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
-
-   Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']}
-   Run Keyword If  'androidpackagename' in ${parms}  Should Be Equal  ${show[0]['android_package_name']}  ${parms['androidpackagename']}
-
-   ${num_autoprovpolicies}=  Run Keyword If  'autoprovpolicies' in ${parms}  Get Length  ${parms['autoprovpolicies'].split()}  ELSE  Set Variable  0
-   Run Keyword If  'autoprovpolicies' in ${parms}  Should Be Equal  ${show[0]['auto_prov_policies']}[0]  ${parms['autoprovpolicies'].split()}[0]
-   Run Keyword If  ${num_autoprovpolicies} == 2  Should Contain  ${parms['autoprovpolicies'].split()}[1]  ${show[0]['auto_prov_policies']}[1]
-
-   ${authkey_stripped}=   Run Keyword If  'authpublickey' in ${parms}  Remove String  ${parms['authpublickey']}  "
-   Run Keyword If  'authpublickey' in ${parms}  Should Be Equal  ${show[0]['auth_public_key']}  ${authkey_stripped}
-
-   Run Keyword If  'deploymentmanifest' in ${parms} and '${show[0]['deployment']}' == 'vm'  Should Contain  ${show[0]['deployment_manifest']}  cloud-config
-   Run Keyword If  'deploymentmanifest' in ${parms} and '${show[0]['deployment']}' != 'vm'  Should Contain  ${show[0]['deployment_manifest']}  apiVersion
-
-   Run Keyword If  'scalewithcluster' in ${parms}  Run Keyword If  ${parms['scalewithcluster']} == ${True}  Should Be Equal  ${show[0]['scale_with_cluster']}  ${parms['scalewithcluster']}
-   Run Keyword If  'scalewithcluster' in ${parms}  Run Keyword If  ${parms['scalewithcluster']} == ${False}  Should Be True  'scale_with_cluster' not in ${show[0]}
-
-   ${configs0_stripped}=   Run Keyword If  'configs:0.config' in ${parms}  Remove String  ${parms['configs:0.config']}  "
-   ${configs1_stripped}=   Run Keyword If  'configs:1.config' in ${parms}  Remove String  ${parms['configs:1.config']}  "
-   Run Keyword If  'configs:0.kind' in ${parms}  Should Contain  ${show[0]['configs'][0]['kind']}  ${parms['configs:0.kind']}
-   Run Keyword If  'configs:0.config' in ${parms}  Should Contain  ${show[0]['configs'][0]['config']}  ${configs0_stripped}
-   Run Keyword If  'configs:1.kind' in ${parms}  Should Contain  ${show[0]['configs'][1]['kind']}  ${parms['configs:1.kind']}
-   Run Keyword If  'configs:1.config' in ${parms}  Should Contain  ${show[0]['configs'][1]['config']}  ${configs1_stripped}
-
-   Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
-   Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
-   Should Be Equal  ${show[0]['key']['version']}  ${parms['appvers']}
-
-
-   Run Keyword If  'outboundsecurityrules:0.protocol' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][0]['protocol']}  ${parms['outboundsecurityrules:0.protocol']}
-   Run Keyword If  'outboundsecurityrules:0.remotecidr' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][0]['remote_cidr']}  ${parms['outboundsecurityrules:0.remotecidr']}
-   Run Keyword If  'outboundsecurityrules:0.portrangemin' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][0]['port_range_min']}  ${parms['outboundsecurityrules:0.portrangemin']}
-   Run Keyword If  'outboundsecurityrules:0.portrangemax' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][0]['port_range_max']}  ${parms['outboundsecurityrules:0.portrangemax']}
-
-   Run Keyword If  'outboundsecurityrules:1.protocol' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][1]['protocol']}  ${parms['outboundsecurityrules:1.protocol']}
-   Run Keyword If  'outboundsecurityrules:1.remotecidr' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][1]['remote_cidr']}  ${parms['outboundsecurityrules:1.remotecidr']}
-   Run Keyword If  'outboundsecurityrules:1.portrangemin' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][1]['port_range_min']}  ${parms['outboundsecurityrules:1.portrangemin']}
-   Run Keyword If  'outboundsecurityrules:1.portrangemax' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][1]['port_range_max']}  ${parms['outboundsecurityrules:1.portrangemax']}
-
-   Run Keyword If  'outboundsecurityrules:2.protocol' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][2]['protocol']}  ${parms['outboundsecurityrules:2.protocol']}
-   Run Keyword If  'outboundsecurityrules:2.remotecidr' in ${parms}  Should Be Equal  ${show[0]['outbound_security_rules'][2]['remote_cidr']}  ${parms['outboundsecurityrules:2.remotecidr']}
-   Run Keyword If  'outboundsecurityrules:2.portrangemin' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][2]['port_range_min']}  ${parms['outboundsecurityrules:2.portrangemin']}
-   Run Keyword If  'outboundsecurityrules:2.portrangemax' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][2]['port_range_max']}  ${parms['outboundsecurityrules:2.portrangemax']}
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['protocol']}  ${parms['requiredoutboundconnections:0.protocol']}
+   Run Keyword If  'requiredoutboundconnections:0.remoteip' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][0]['remote_ip']}  ${parms['requiredoutboundconnections:0.remoteip']}
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][0]}  port
+   Run Keyword If  'requiredoutboundconnections:0.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:0.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][0]['port']}  ${parms['requiredoutboundconnections:0.port']}
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['protocol']}  ${parms['requiredoutboundconnections:1.protocol']}
+   Run Keyword If  'requiredoutboundconnections:1.remoteip' in ${parms}  Should Contain  ${show[0]['required_outbound_connections'][1]['remote_ip']}  ${parms['requiredoutboundconnections:1.remoteip']}
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' == 'icmp'  Should Not Contain  ${show[0]['required_outbound_connections'][1]}  port
+   Run Keyword If  'requiredoutboundconnections:1.protocol' in ${parms}  Run Keyword If  '${parms['requiredoutboundconnections:1.protocol']}' != 'icmp'  Should Be Equal As Numbers  ${show[0]['required_outbound_connections'][1]['port']}  ${parms['requiredoutboundconnections:1.port']}
 
 Fail Create App Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
