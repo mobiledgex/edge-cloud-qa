@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  RunConsole for DeveloperManager/DeveloperContributor/DeveloperViewer
+Documentation  RunConsole for DeveloperContributor with novnc and spice env_vars
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 
@@ -23,13 +23,13 @@ ${docker_image_developer}=  mobiledgex
 ${mex_password}=  ${mexadmin_password}
 
 *** Test Cases ***
+# ECQ-3123
 
 RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=novnc
     [Documentation]
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-#    [Teardown]  NONE
 
     Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
 
@@ -40,12 +40,8 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     log to console  ${stdout}
     Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-eu.mobiledgex.net:6080
 
-#    should be equal as integers  ${rc}  0
-#    should contain  ${stdout}  message: Cloudlet updated successfully
-    #Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz
-#    Should Contain  ${stdout['console']['url']}  https://127.0.0.1
-#    Should Contain  ${stdout['console']['url']}  token=xyz
 
+#ECQ-3126
 RunConsole - DeveloperContributor shall not be able to do RunConsole with envvar=spice
     [Documentation]
     ...  execute Run Console as DeveloperContributor
