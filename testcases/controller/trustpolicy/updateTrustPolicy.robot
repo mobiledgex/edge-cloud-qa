@@ -94,6 +94,43 @@ UpdateTrustPolicy - shall be able to delete rules
 
    Should Be Equal As Numbers  ${numrules}  1
 
+# ECQ-3119
+UpdateTrustPolicy - shall be able to delete all rules
+   [Documentation]
+   ...  - send CreateTrustPolicy with rules
+   ...  - update the policy by deleting all the rules
+   ...  - verify policy is updated
+
+   [Tags]  TrustPolicy
+
+   &{rule1}=  Create Dictionary  protocol=tcp  port_range_minimum=5  port_range_maximum=6  remote_cidr=1.1.1.1/1
+   &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=2.1.1.1/1
+   @{rulelist2}=  Create List  ${rule1}   ${rule2}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist2}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}                                ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}                           ${operator_name}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        tcp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     1.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  5
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  6
+
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['protocol']}     icmp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][1]['remote_cidr']}  2.1.1.1/1
+
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+
+   Should Be Equal As Numbers  ${numrules}  2
+
+   @{rulelist2}=  Create List  empty
+   ${policy_return2}=  Update Trust Policy  region=${region}  token=${token}  rule_list=${rulelist2}
+
+   Should Be Equal  ${policy_return2['data']['key']['name']}                                ${policy_name}
+   Should Be Equal  ${policy_return2['data']['key']['organization']}                           ${operator_name}
+
+   Should Be Equal             ${policy_return2['data']['outbound_security_rules']}  ${None}
+
 # ECQ-3050
 UpdateTrustPolicy - update with no rules shall not change the rules 
    [Documentation]

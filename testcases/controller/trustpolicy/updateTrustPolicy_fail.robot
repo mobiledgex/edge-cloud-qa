@@ -305,6 +305,61 @@ UpdateTrustPolicy - update with trust policy and maintenance mode shall return e
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Cannot change both maintenance state and trust policy at the same time"}')  Update Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  trust_policy=${cloudlet['data']['trust_policy']}  maintenance_state=MaintenanceStartNoFailover  use_defaults=False
 
+# ECQ-3124
+UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mismatched appinst rules
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet with policy
+   ...  - create app/appinst with required_outbound_connections
+   ...  - send UpdateTrustPolicy with mismatched appinst rules
+   ...  - verify error is received
+
+   [Tags]  TrustPolicy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+   ${app_name}=  Get Default App Name
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/24
+   @{rulelist1}=  Create List  ${rule1}
+
+   &{rule11}=  Create Dictionary  protocol=udp  port_range_minimum=2001  port_range_maximum=3001  remote_cidr=3.1.1.1/24
+   @{rulelist11}=  Create List  ${rule11}
+
+   &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.2.1.1/24
+   @{rulelist2}=  Create List  ${rule2}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator_name_fake}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/24
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet with trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+
+   # add appinst on the cloudlet
+   &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
+   @{tcp1_rulelist}=  Create List  ${rule1}
+   ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}
+
+   # update cloudlet with new trust policy with mismatch port list
+   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}
+   Should Be Equal  ${error}  ('code=200', "error=[{'data': {'message': 'Processed: 1 Cloudlets. ${Space}Passed: 0 Failed: 1'}}, {'result': {'message': 'Failed to update trust policy on any cloudlets', 'code': 400}}]")
+
+   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}
+   Should Be Equal  ${error}  ('code=200', "error=[{'data': {'message': 'Processed: 1 Cloudlets. ${Space}Passed: 0 Failed: 1'}}, {'result': {'message': 'Failed to update trust policy on any cloudlets', 'code': 400}}]")
+
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
