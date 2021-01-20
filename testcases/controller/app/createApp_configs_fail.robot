@@ -215,3 +215,18 @@ CreateApp - User shall not be able to create a helm app with ConfigsKind=envVars
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(helm)"}')
 
+# ECQ-3122
+CreateApp - User shall not be able to create an app without ConfigsConfig
+    [Documentation]
+    ...  - create app without ConfigsConfig  
+    ...  - verify error is received
+
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Empty config for config kind helmCustomizationYaml"}')
+
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Empty config for config kind helmCustomizationYaml"}')
+
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml
+    Should Be Equal  ${error}  ('code=400', 'error={"message":"Empty config for config kind envVarsYaml"}')
+

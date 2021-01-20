@@ -234,6 +234,73 @@ UpdateApp - shall be able to remove RequiredOutboundConnections from k8s/docker/
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
+
+# ECQ-3125
+UpdateApp - shall not be able to update app with mismatched appinst rules
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet with policy
+   ...  - create app/appinst with required_outbound_connections
+   ...  - send UpdateApp with mismatched policy rules
+   ...  - verify error is received
+
+   [Tags]  TrustPolicy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+   ${app_name}=  Get Default App Name
+   ${token}=  Get Super Token
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/24
+   @{rulelist1}=  Create List  ${rule1}
+
+   &{rule11}=  Create Dictionary  protocol=udp  port_range_minimum=2001  port_range_maximum=3001  remote_cidr=3.1.1.1/24
+   @{rulelist11}=  Create List  ${rule11}
+
+   &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.2.1.1/24
+   @{rulelist2}=  Create List  ${rule2}
+
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator_name_fake}
+
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/24
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet with trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
+
+   # add appinst on the cloudlet
+   &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
+   @{tcp1_rulelist}=  Create List  ${rule1}
+   ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}
+
+   # update cloudlet with new trust policy with mismatch port list
+   &{rule4}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
+   @{tcp1_rulelist2}=  Create List  ${rule4}
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+
+   # update cloudlet with new trust policy with mismatch port list
+   &{rule4}=  Create Dictionary  protocol=udp  port=1003  remote_ip=4.1.1.1
+   @{tcp1_rulelist2}=  Create List  ${rule4}
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:4.1.1.1:1003 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+
+   # update cloudlet with new trust policy with mismatch port list
+   &{rule5}=  Create Dictionary  protocol=tcp  port=1001  remote_ip=3.1.1.1
+   @{tcp1_rulelist3}=  Create List  ${rule5}
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist3}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection tcp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
  
 *** Keywords ***
 Setup
