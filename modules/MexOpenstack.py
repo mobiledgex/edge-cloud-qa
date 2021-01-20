@@ -536,16 +536,17 @@ class MexOpenstack():
 
         return limit_dict
 
-    def get_security_group_rules(self, protocol=None, group_id=None, ip_range=None, env_file=None):
+    def get_security_group_rules(self, protocol=None, group_id=None, ip_range=None, env_file=None, direction=None):
         if env_file:
             cmd = f'source {env_file}'
         else:
             cmd = f'source {self.env_file}'
 
-        cmd = f'{cmd};openstack security group rule list {group_id} -f json'
+        cmd = f'{cmd};openstack security group rule list {group_id} -f json --long'
         if protocol:
             cmd = f'{cmd} --protocol {protocol}'
-            
+        if direction:
+            cmd = f'{cmd} --{direction}' 
         logging.debug(f'getting openstack security group rules with cmd = {cmd}')
         o_out=self._execute_cmd(cmd)
 

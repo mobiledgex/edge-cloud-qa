@@ -256,7 +256,9 @@ class AppInstance(MexOperation):
 
     def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=True)
-        app_inst_metric = {'appinstclientkey': app_inst}
+        app_inst_key = {'app_inst_key': app_inst['key']}
+        app_inst_metric = {'appinstclientkey': app_inst_key}
+        
 
         return self.show(token=token, url=self.show_appinst_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=app_inst_metric, stream=True, stream_timeout=5)
 
