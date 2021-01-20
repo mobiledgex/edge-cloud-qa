@@ -67,6 +67,12 @@ class TrustPolicy(MexOperation):
             if 'remote_cidr' in rule and rule['remote_cidr'] is not None:
                 rule_dict['remote_cidr'] = rule['remote_cidr']
                 _fields_list.append(_remote_cidr_field_number)
+
+            if rule == 'empty':
+                _fields_list.append(_protocol_field_number)
+                _fields_list.append(_port_range_min_field_number)
+                _fields_list.append(_port_range_max_field_number)
+                _fields_list.append(_remote_cidr_field_number)
                 
             if rule_dict:
                 rule_dict_list.append(rule_dict)    
