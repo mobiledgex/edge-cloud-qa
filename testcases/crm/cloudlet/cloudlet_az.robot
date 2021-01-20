@@ -4,7 +4,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Test Timeout   25 min 
 
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${cloudlet_name_openstack_az}  automationAz 
@@ -22,9 +22,9 @@ CreateCloudlet - User shall be able to create a cloudlet with availability zone
    ...  - do CreateCloudlet with MEX_COMPUTE_AVAILABILITY_ZONE set
    ...  - verify it is created successfully
 
-#   Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_az}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_az}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=MEX_COMPUTE_AVAILABILITY_ZONE=qa-az,MEX_VOLUME_AVAILABILITY_ZONE=qa-az
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack_az}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack_az}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  env_vars=MEX_COMPUTE_AVAILABILITY_ZONE=qa-az,MEX_VOLUME_AVAILABILITY_ZONE=qa-az
 
-   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_az}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=1  shared_volume_size=1  cloudlet_name=cloudlet1608134578-458848
+   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack_az}  deployment=kubernetes  ip_access=IpAccessDedicated  number_nodes=1  shared_volume_size=1  #cloudlet_name=cloudlet1608134578-458848
 
 CreateCloudlet - CreateClusterInst with shared volumes on cloudlet with bad MEX_VOLUME_AVAILABILITY shall return error
    [Documentation]
