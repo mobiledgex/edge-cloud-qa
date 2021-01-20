@@ -119,7 +119,7 @@ User shall be able to access VM/LB deployment UDP and TCP ports on openstack
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
     #Should Match Regexp  ${app_inst.runtime_info.console_url}  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12} 
     #Should Match Regexp  https://hamedgecloud.telekom.de:6080/vnc_auto.html?token=a7a0df63-709e-4c21-b5ec-a718dc9df900  ^${vm_console_address}\\?token=[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}
@@ -318,7 +318,7 @@ User shall be able to access VM/LB deployment UDP and TCP ports without cloudini
     ${app_name_default}=  Get Default App Name
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image_nocloudinit}  access_ports=tcp:2016,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
-    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   autocluster_ip_access=IpAccessDedicated
+    ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
 

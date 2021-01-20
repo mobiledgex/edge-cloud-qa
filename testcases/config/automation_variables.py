@@ -16,6 +16,8 @@ cloudlet_name_openstack_packet = 'packet-qaregression'
 cloudlet_name_openstack_ha1 = 'automationHamburgCloudlet'
 cloudlet_name_openstack_ha2 = 'automationMunichCloudlet'
 
+master_node_flavor_default = 'automation_api_flavor'
+
 region_packet = 'US'
 region_vsphere = 'US'
 region_gcp = 'US'
