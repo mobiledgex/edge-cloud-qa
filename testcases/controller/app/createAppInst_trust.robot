@@ -66,22 +66,66 @@ CreateAppInst - User shall be able to create a trusted k8s/docker/helm/vm loadba
 
    [Tags]  TrustPolicy
 
-   EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
+   #EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
 
    [Setup]  Setup RequiredOutboundConnections
 
    [Template]  Create Trusted AppInst with RequiredOutboundConnections
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
-#   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${udp1_rulelist}
+   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${icmp1_rulelist}
+   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${icmp1port_rulelist}
+   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${udp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${icmp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
+
+# ECQ-3127
+CreateAppInst - User shall be able to create a trusted appinst with in range RequiredOutboundConnections
+   [Documentation]
+   ...  - create app with RequiredOutboundConnections of the beginning/ending port and beginning/ending ip
+   ...  - verify appInst is created
+
+   [Tags]  TrustPolicy
+
+   [Setup]  Setup In Range RequiredOutboundConnections
+
+   [Template]  Create Trusted AppInst with In Range RequiredOutboundConnections
+
+   required_outbound_connections_list=${tcpstartport_rulelist}
+   required_outbound_connections_list=${tcpendport_rulelist}
+   required_outbound_connections_list=${tcpstartip_rulelist}
+   required_outbound_connections_list=${tcpendip_rulelist}
+
+   required_outbound_connections_list=${udpstartport_rulelist}
+   required_outbound_connections_list=${udpendport_rulelist}
+   required_outbound_connections_list=${udpstartip_rulelist}
+   required_outbound_connections_list=${udpendip_rulelist}
+
+# ECQ-3128
+CreateAppInst - Error shall be received for appinst with out of range RequiredOutboundConnections
+   [Documentation]
+   ...  - create app with RequiredOutboundConnections outside the port/ip range
+   ...  - verify appInst fails with error
+
+   [Tags]  TrustPolicy
+
+   [Setup]  Setup Out Of Range RequiredOutboundConnections
+
+   [Template]  Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
+
+   required_outbound_connections_list=${tcpbeforestartport_rulelist}
+   required_outbound_connections_list=${tcpafterendport_rulelist}
+   required_outbound_connections_list=${tcpbeforeip_rulelist}
+   required_outbound_connections_list=${tcpafterip_rulelist}
+
+   required_outbound_connections_list=${udpbeforestartport_rulelist}
+   required_outbound_connections_list=${udpafterendport_rulelist}
+   required_outbound_connections_list=${udpbeforeip_rulelist}
+   required_outbound_connections_list=${udpafterip_rulelist}
 
 # ECQ-3106
 CreateAppInst - Error shall be received for create with RequiredOutboundConnections not matching the trust policy
@@ -91,22 +135,22 @@ CreateAppInst - Error shall be received for create with RequiredOutboundConnecti
 
    [Tags]  TrustPolicy
 
-   EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
+   #EDGECLOUD-4224 able to CreateAppInst on trusted cloudlet with different requiredoutboundconnections than trust policy
 
    [Setup]  Setup RequiredOutboundConnections
 
-   [Template]  Create Trusted AppInst with RequiredOutboundConnections
+   [Template]  Fail Create Trusted AppInst with RequiredOutboundConnections
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
-#   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-#   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${udp1_rulelist}
+   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${icmp1_rulelist}
+   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${icmp1port_rulelist}
+   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${udp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${icmp1_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
 
 # ECQ-3107
 CreateAppInst - Error shall be received for create of untrusted appinst on trusted cloudlet
@@ -156,6 +200,7 @@ Setup
    ${appname}=  Get Default App Name
    ${cloudlet_name}=  Get Default Cloudlet Name
    ${cluster_name}=  Get Default Cluster Name
+   ${token}=  Get Super Token
 
    ${policy_name}=  Get Default Trust Policy Name
 
@@ -179,6 +224,86 @@ Setup
    Set Suite Variable  ${app_name}  
    Set Suite Variable  ${cloudlet_name}
    Set Suite Variable  ${cluster_name}
+   Set Suite Variable  ${policy_name}
+
+   Set Suite Variable  ${token}
+
+Setup In Range RequiredOutboundConnections
+   Setup
+
+   # startip=3.9.0.0  endip=3.9.127.255
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.9.2.3/17
+   &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=3001  port_range_maximum=3002  remote_cidr=3.9.2.3/17
+   &{rule3}=  Create Dictionary  protocol=icmp  remote_cidr=3.9.2.3/17
+   @{rulelist}=  Create List  ${rule1}  ${rule2}  ${rule3}
+   ${policy_return}=  Update Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3001  remote_ip=3.9.1.2
+   &{rule2}=  Create Dictionary  protocol=udp  port=3001  remote_ip=3.9.1.2
+   &{rule3}=  Create Dictionary  protocol=icmp  remote_ip=3.9.1.2
+   @{rules}=  Create List  ${rule1}  ${rule2}  ${rule3}
+   ${app}=  Create App  region=${region}  app_name=${appname}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${rules}
+
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3001  remote_ip=3.9.5.10
+   @{tcpstartport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.5.10
+   @{tcpendport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.0.0
+   @{tcpstartip_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.127.255
+   @{tcpendip_rulelist}=  Create List  ${rule1}
+
+   &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.9.5.10
+   @{udpstartport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=2001  remote_ip=3.9.5.10
+   @{udpendport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=1111  remote_ip=3.9.0.0
+   @{udpstartip_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=1999  remote_ip=3.9.127.255
+   @{udpendip_rulelist}=  Create List  ${rule1}
+
+   Set Suite Variable  ${tcpstartport_rulelist}
+   Set Suite Variable  ${tcpendport_rulelist}
+   Set Suite Variable  ${tcpstartip_rulelist}
+   Set Suite Variable  ${tcpendip_rulelist}
+
+   Set Suite Variable  ${udpstartport_rulelist}
+   Set Suite Variable  ${udpendport_rulelist}
+   Set Suite Variable  ${udpstartip_rulelist}
+   Set Suite Variable  ${udpendip_rulelist}
+
+Setup Out Of Range RequiredOutboundConnections
+   Setup In Range RequiredOutboundConnections
+
+   # startip=3.9.0.0  endip=3.9.127.255
+
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3000  remote_ip=3.9.5.10
+   @{tcpbeforestartport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3003  remote_ip=3.9.5.10
+   @{tcpafterendport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.8.255.255
+   @{tcpbeforeip_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=tcp  port=3002  remote_ip=3.9.128.0
+   @{tcpafterip_rulelist}=  Create List  ${rule1}
+
+   &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.9.5.10
+   @{udpbeforestartport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=2002  remote_ip=3.9.5.10
+   @{udpafterendport_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=1111  remote_ip=3.8.255.255
+   @{udpbeforeip_rulelist}=  Create List  ${rule1}
+   &{rule1}=  Create Dictionary  protocol=udp  port=1999  remote_ip=3.9.128.0
+   @{udpafterip_rulelist}=  Create List  ${rule1}
+
+   Set Suite Variable  ${tcpbeforestartport_rulelist}
+   Set Suite Variable  ${tcpafterendport_rulelist}
+   Set Suite Variable  ${tcpbeforeip_rulelist}
+   Set Suite Variable  ${tcpafterip_rulelist}
+
+   Set Suite Variable  ${udpbeforestartport_rulelist}
+   Set Suite Variable  ${udpafterendport_rulelist}
+   Set Suite Variable  ${udpbeforeip_rulelist}
+   Set Suite Variable  ${udpafterip_rulelist}
 
 Setup RequiredOutboundConnections
    Setup
@@ -247,6 +372,18 @@ Create Trusted AppInst with RequiredOutboundConnections
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
+   ${rule_list}=  Create List
+   FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
+      log to console  ${rule}
+      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
+      ...   ELSE  Set Variable  ${rule['port']}
+
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+      Append To List  ${rule_list}  ${rule1}
+   END
+
+   ${policy_return}=  Update Trust Policy  region=${region}  policy_name=${policy_name}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
+
    ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
 
    ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
@@ -258,6 +395,66 @@ Create Trusted AppInst with RequiredOutboundConnections
    Should Be Equal  ${app['data']['trusted']}     ${True}
 
    Should Be Equal  ${appinst['data']['key']['app_key']['name']}  ${appname}-${app_counter}
+
+Create Trusted AppInst with In Range RequiredOutboundConnections
+   [Arguments]  &{parms}
+
+   [Teardown]  Teardown In Range RequiredOutboundConnections
+
+   #${app_counter}=  Evaluate  ${app_counter} + 1
+   #Set Suite Variable  ${app_counter}
+
+   ${rule_list}=  Create List
+   FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
+      log to console  ${rule}
+      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
+      ...   ELSE  Set Variable  ${rule['port']}
+
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+      Append To List  ${rule_list}  ${rule1}
+   END
+
+   ${app}=  Update App  region=${region}  app_name=${appname}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
+
+   ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
+
+   Should Be Equal  ${appinst['data']['key']['app_key']['name']}  ${appname}
+
+Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
+   [Arguments]  &{parms}
+
+   ${rule_list}=  Create List
+   FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
+      log to console  ${rule}
+      ${port}=  Run Keyword If  '${rule['protocol']}' == 'icmp' and 'port' not in ${rule}  Set Variable  0
+      ...   ELSE  Set Variable  ${rule['port']}
+
+      &{rule1}=  Create Dictionary  protocol=${rule['protocol']}  port_range_minimum=${port}  port_range_maximum=${port}  remote_cidr=${rule['remote_ip']}/1
+      Append To List  ${rule_list}  ${rule1}
+   END
+
+   ${app}=  Update App  region=${region}  app_name=${appname}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
+
+   ${appinst}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
+
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+
+Fail Create Trusted AppInst with RequiredOutboundConnections
+   [Arguments]  &{parms}
+
+   ${app_counter}=  Evaluate  ${app_counter} + 1
+   Set Suite Variable  ${app_counter}
+
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
+
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
+
+   ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+   ...  ELSE  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}
+
+   ${port}=  Run Keyword If  '${parms['required_outbound_connections_list'][0]['protocol']}' == 'icmp' and 'port' not in ${parms['required_outbound_connections_list'][0]}  Set Variable  0
+   ...   ELSE  Set Variable  ${parms['required_outbound_connections_list'][0]['port']}
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${port} for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
 
 Fail Create Untrusted AppInst
    [Arguments]  ${error_msg}  &{parms}  
@@ -285,3 +482,5 @@ Fail Create Untrusted AutoCluster AppInst
    ${std_create}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}   cluster_instance_name=${cluster_name}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
 
+Teardown In Range RequiredOutboundConnections
+   Delete App Instance  region=${region}  app_name=${appname}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
