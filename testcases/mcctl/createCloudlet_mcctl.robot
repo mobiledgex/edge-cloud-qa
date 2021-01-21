@@ -39,7 +39,7 @@ CreateCloudlet - mcctl shall handle create failures
       #Error: Bad Request (400), Unknown image type IMAGE_TYPE_UNKNOWN  appname=${app_name}  app-org=${developer}  appvers=1.0
 
       # trusted
-      Error: OK (200), TrustPolicy x for organization MobiledgeX not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=x
+      Error: OK (200), TrustPolicy x for organization tmus not found  cloudlet=${cloudlet_name}  cloudlet-org=${operator}  location.latitude=1  location.longitude=1  numdynamicips=1  platformtype=PlatformTypeFake  trustpolicy=x
 
 # ECQ-3087
 UpdateCloudlet - mcctl shall handle update cloudlet 

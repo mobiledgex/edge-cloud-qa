@@ -246,7 +246,7 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
 
    [Tags]  TrustPolicy
 
-   Create Flavor  region=${region}
+   #Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
    ${app_name}=  Get Default App Name
@@ -262,10 +262,10 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
    &{rule2}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.2.1.1/24
    @{rulelist2}=  Create List  ${rule2}
 
-   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator_name_fake}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist1}  operator_org_name=${operator}
 
    Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
-   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator_name_fake}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${operator}
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
    Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/24
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
@@ -274,7 +274,7 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}
    Should Be Equal             ${cloudlet['data']['trust_policy']}  ${policy_name}
    Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  5
 
@@ -282,7 +282,7 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
    &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
    @{tcp1_rulelist}=  Create List  ${rule1}
    ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_name}
 
    # update cloudlet with new trust policy with mismatch port list
    &{rule4}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
