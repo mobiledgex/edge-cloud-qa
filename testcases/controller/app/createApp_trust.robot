@@ -246,7 +246,7 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
 
    [Tags]  TrustPolicy
 
-   #Create Flavor  region=${region}
+#   Create Flavor  region=${region}
 
    ${policy_name}=  Get Default Trust Policy Name
    ${app_name}=  Get Default App Name
