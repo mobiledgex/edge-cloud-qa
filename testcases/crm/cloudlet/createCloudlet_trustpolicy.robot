@@ -34,10 +34,23 @@ ${password}=   ${mextester06_gmail_password}
 # ECQ-3135
 CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust policy
    [Documentation]
-   ...  - send CreateCloudlet with trust policy with multiple icmp/tcp/udp rules
+   ...  - send 2 trusted CreateCloudlets with trust policy with multiple icmp/tcp/udp rules and opening a single port to an external test server
    ...  - verify rules are updated
-   ...  - updated the trust policy rules
-   ...  - verify security policy is updated on openstack
+   ...  - send trusted CreateApp and CreateAppInst on one of the cloudlets
+   ...  - verify external access to the open port is accessible via the app and the other ports are closed
+   ...  - send UpdateTrustPolicy to close the open port and open a different port
+   ...  - verify external access to the new open port is accessible via the app and the previously open  port is closed
+   ...  - send UpdateTrustPolicy with the same rules and verify nothing changed
+   ...  - send UpdateTrustPolicy with an empty list to close all ports
+   ...  - verify external access to both previously open ports are closed
+   ...  - send UpdateCloudlet to remove the trust policy
+   ...  - verify external access to both previously closed ports are now open
+   ...  - send UpdateTrustPolicy with the original rules
+   ...  - send UpdateCloudlet to add the original policy back to the cloudlet
+   ...  - verify external access to the open port is accessible via the app and the other ports are closed as first tested
+   ...  - verify security policy is updated on openstack in all cases above
+
+   [Tags]  trustpolicy
 
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
