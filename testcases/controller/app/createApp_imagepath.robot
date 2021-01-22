@@ -2,6 +2,7 @@
 Documentation   Create App with imagepath
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  String
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -132,12 +133,43 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
     ...  create app with image_type=ImageTypeQCOW deployment=vm image_path=docker.registry.com/app
     ...  verify error is received
 
-    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker.registry.com/app#md5:12345678901234567890123456789012
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=docker.registry.com/app.qcow2#md5:12345678901234567890123456789012
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid registry path"
-    #Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path docker.registry.com/app#md5:12345678901234567890123456789012, Get "docker.registry.com/app#md5:12345678901234567890123456789012": unsupported protocol scheme """ 
+    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path docker.registry.com/app.qcow2#md5:12345678901234567890123456789012, Get "docker.registry.com/app.qcow2#md5:12345678901234567890123456789012": unsupported protocol scheme """ 
+    #Should Contain  ${error_msg}   details = "Missing filename from image path"
+
+# ECQ-3109
+CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path missing filename
+    [Documentation]
+    ...  - create app with image_type=ImageTypeQCOW deployment=vm image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX#md5:5ce8dbcdd8b7c2054779d742f4bf602d
+    ...  - verify error is received
+    ...  - create app with image_type=ImageTypeQCOW deployment=vm image_path=https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX
+    ...  - verify error is received
+
+    ${image_split}=  Split String  ${qcow_centos_image}  \#
+    ${path_split}=  Split String From Right  ${image_split[0]}  /  max_split=1
+
+    # imagepath has proper path and md5 but no filename
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${path_split[0]}\#${image_split[1]}
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Missing filename from image path"
+
+    # imagepath has proper path only and no md5 or filename
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${path_split[0]}
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Missing filename from image path"
+
+# ECQ-3112
+CreateApp - error shall be received with ImageTypeQCOW and invalid image path
+    [Documentation]
+    ...  - create QCOW app with imagepath=https://andy\\a.com
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://andy\\a.com
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Invalid image path: parse "https://andy\\\\a.com": invalid character "\\\\" in host name
 
 # ECQ-1370 - removed from automation since qa vault now has access to artifactory and artifactory-qa. But retested bug manually
 CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm image_path and access denied to registry
@@ -169,6 +201,19 @@ CreateApp - error shall be received wih image_type=ImageTypeQCOW deployment=vm i
 
     ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199
                                                                                                                    
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    #Should Contain  ${error_msg}   details = "Invalid image path"
+    Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199, Get "htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199": unsupported protocol scheme "htt""
+
+CreateApp - shall be to create wih image_type=ImageTypeQCOW deployment=vm image_path but no https prefix
+    [Documentation]
+    ...  create app wih image_type=ImageTypeQCOW deployment=vm image_path=docker.mobiledgex.net/mobiledgex/images/server_ping_threaded:99.9
+    ...  verify error is received
+
+    ${path_split}=  Split String  ${qcow_centos_image}  //  max_split=1
+    log to console  ${path_split}
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=https://${path_split[1]}
+
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     #Should Contain  ${error_msg}   details = "Invalid image path"
     Should Contain  ${error_msg}  details = "Failed to validate VM registry image, path htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199, Get "htt://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c300621167199": unsupported protocol scheme "htt""

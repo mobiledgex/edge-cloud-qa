@@ -285,6 +285,7 @@ Cleanup Settings
       Update Settings  region=${region}  ${key}=${settings['${key}']}
    END
 
+   Update Settings  region=${region}  master_node_flavor=${master_node_flavor_default}
    #Update Settings  region=${region}  @{parms_all}
    
 Fail Create UpdateSettings
