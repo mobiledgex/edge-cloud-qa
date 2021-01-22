@@ -318,8 +318,12 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    Create Flavor  region=${region}
 
+   Create Org
+
    ${policy_name}=  Get Default Trust Policy Name
    ${app_name}=  Get Default App Name
+   ${org_name}=  Get Default Organization Name
+   ${cloudlet_name}=  Get Default Cloudlet Name
 
    # create a trust policy
    &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/24
@@ -355,10 +359,10 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    # update cloudlet with new trust policy with mismatch port list
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}
-   Should Be Equal  ${error}  ('code=200', "error=[{'data': {'message': 'Processed: 1 Cloudlets. ${Space}Passed: 0 Failed: 1'}}, {'result': {'message': 'Failed to update trust policy on any cloudlets', 'code': 400}}]")
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${org_name}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
 
    ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}
-   Should Be Equal  ${error}  ('code=200', "error=[{'data': {'message': 'Processed: 1 Cloudlets. ${Space}Passed: 0 Failed: 1'}}, {'result': {'message': 'Failed to update trust policy on any cloudlets', 'code': 400}}]")
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${org_name}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 *** Keywords ***
 Setup
