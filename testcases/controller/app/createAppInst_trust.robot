@@ -3,6 +3,7 @@ Documentation   Create AppInst with Trusted Parm
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
+Library  String
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
@@ -193,11 +194,43 @@ CreateAppInst - Error shall be received for create of untrusted autocluster appi
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+
+# ECQ-3136
+CreateAppInst - autoprov appinst shall start for trusted k8s/lb/shared on trusted cloudlet
+   [Documentation]
+   ...  - create privacy policy with 2 trusted cloudlets
+   ...  - create 2 reservable clusterInst with k8s/shared
+   ...  - create trusted k8s/lb app with privacy policy
+   ...  - verify appinst starts on cloudlet1
+
+   [Tags]  TrustPolicy
+
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name}  organization=${operator_name_fake}
+   &{cloudlet2}=  Create Dictionary  name=${cloudlet_name}2  organization=${operator_name_fake}
+   @{cloudlets}=  Create List  ${cloudlet1}  ${cloudlet2}
+
+   ${cloudlet2}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
+
+   ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=MobiledgeX  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
+
+   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}  reservable=${True}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  reservable=${True}   cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
+
+   @{policy_list}=  Create List  ${policy['data']['key']['name']}
+   Create App  region=${region}  app_name=${appname}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  trusted=${True}
+
+   #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
+
+   App Instance Should Exist  region=${region}  app_name=${appname}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
  
 *** Keywords ***
 Setup
+   ${epoch}=  Get Time  epoch
    Create Flavor  region=${region}
-   ${appname}=  Get Default App Name
+   #${appname}=  Get Default App Name
+   ${appname}=  Set Variable  app${epoch}
+   #${appname}  ${appname_micro}=  Split String  ${appname}  -
+ 
    ${cloudlet_name}=  Get Default Cloudlet Name
    ${cluster_name}=  Get Default Cluster Name
    ${token}=  Get Super Token
@@ -372,6 +405,8 @@ Create Trusted AppInst with RequiredOutboundConnections
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
+   [Teardown]  Teardown RequiredOutboundConnections  app=${appname}-${app_counter}  cluster=${clustername}${app_counter}  deployment=${parms['deployment']}
+
    ${rule_list}=  Create List
    FOR  ${rule}  IN  @{parms['required_outbound_connections_list']}
       log to console  ${rule}
@@ -384,12 +419,12 @@ Create Trusted AppInst with RequiredOutboundConnections
 
    ${policy_return}=  Update Trust Policy  region=${region}  policy_name=${policy_name}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}  auto_delete=${False}
 
-   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
+   ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  auto_delete=${False}
 
-   ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
-   ...  ELSE  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}
+   ${appinst}=  Run Keyword If  '${parms['deployment']}' == 'vm'  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  auto_delete=${False}
+   ...  ELSE  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${clusterinst['data']['key']['cluster_key']['name']}  auto_delete=${False}
 
    Should Be Equal  ${app['data']['deployment']}  ${parms['deployment']}
    Should Be Equal  ${app['data']['trusted']}     ${True}
@@ -481,6 +516,15 @@ Fail Create Untrusted AutoCluster AppInst
 
    ${std_create}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}   cluster_instance_name=${cluster_name}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
+
+Teardown RequiredOutboundConnections
+   [Arguments]  ${app}  ${cluster}  ${deployment}
+
+    Run Keyword If  '${deployment}' == 'vm'  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+    ...  ELSE  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${cluster}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
+   Delete App  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
+
+   Run Keyword If  '${deployment}' != 'vm'  Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster}
 
 Teardown In Range RequiredOutboundConnections
    Delete App Instance  region=${region}  app_name=${appname}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
