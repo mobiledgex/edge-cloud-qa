@@ -52,8 +52,8 @@ UpdateConfig - mcctl shall handle update failures
 	...  - verify proper error is received
 
 	[Template]  Fail Update Config Via mcctl
-	Unable to parse "locknewaccounts" value "any" as bool: invalid syntax, valid values are true, false, 1, 0  locknewaccounts=any
-	Unable to parse "skipverifyemail" value "any" as bool: invalid syntax, valid values are true, false, 1, 0  skipverifyemail=any
+	Unable to parse "locknewaccounts" value "any" as bool: invalid syntax, valid values are true, false  locknewaccounts=any
+	Unable to parse "skipverifyemail" value "any" as bool: invalid syntax, valid values are true, false  skipverifyemail=any
 	Error: unmarshal err on locknewaccounts, 1, bool, yaml: unmarshal errors:  locknewaccounts=1
 	Error: unmarshal err on locknewaccounts, 0, bool, yaml: unmarshal errors:  locknewaccounts=0
 	Error: unmarshal err on skipverifyemail, 1, bool, yaml: unmarshal errors:  skipverifyemail=1
