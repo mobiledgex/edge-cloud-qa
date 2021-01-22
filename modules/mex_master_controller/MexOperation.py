@@ -112,7 +112,7 @@ class MexOperation(MexRest):
                     if 'user created' not in str(self.resp.text):
                         raise Exception('ERROR: user not created successfully:' + str(self.resp_text))
                 elif url.endswith('UpdateTrustPolicy'):
-                    if 'Failed: 0' not in str(self.resp_text) and 'No cloudlets using trust policy to update' not in str(self.resp_text):
+                    if 'Failed: 0' not in str(self.resp_text) and 'Trust policy updated, no cloudlets affected' not in str(self.resp_text):
                         raise Exception('ERROR: TrustPolicy not updated successfully:' + str(self.resp_text))
 
                 #elif url.endswith('UpdateCloudlet'):
