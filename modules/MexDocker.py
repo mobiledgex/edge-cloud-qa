@@ -15,9 +15,13 @@ class MexDocker():
        pass
 
 
-    def push_image_to_docker(self, username, password, server, app_name, org_name, app_version):
+    def push_image_to_docker(self, username, password, server, app_name, org_name, app_version, gitlab_app_name=None):
         org_name= org_name.lower()
-        cmd = f'docker login -u {username} -p {password} {server} && docker tag {app_name} {server}/{org_name}/images/{app_name}:{app_version} && docker push {server}/{org_name}/images/{app_name}:{app_version}'
+
+        if not gitlab_app_name:
+            gitlab_app_name = f'{app_name}:{app_version}'
+    
+        cmd = f'docker login -u {username} -p {password} {server} && docker tag {app_name}:{app_version} {server}/{org_name}/images/{gitlab_app_name} && docker push {server}/{org_name}/images/{gitlab_app_name}'
         #cmd=f'docker tag {app_name} {server}/{org_name}/images/{app_name}:{app_version} && docker push {server}/{org_name}/images/{app_name}:{app_version}'
         
         logging.info(cmd)
