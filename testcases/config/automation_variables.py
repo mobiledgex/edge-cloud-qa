@@ -32,6 +32,10 @@ operator_name_openstack = 'TDG'
 operator_name_openstack_packet = 'packet'
 operator_name_vsphere = 'packet'
 
+gitlab_server = 'docker-qa.mobiledgex.net'
+gitlab_username = 'root'
+gitlab_password = 'sandhill'
+
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:9.0'
 docker_image_developer = 'MobiledgeX'
 docker_image_facedetection = 'docker-qa.mobiledgex.net/mobiledgex/images/facedetection:latest'
