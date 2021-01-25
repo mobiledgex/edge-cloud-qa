@@ -46,6 +46,8 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  update_cluster_inst_timeout
    Should Contain  ${settings}  update_vm_pool_timeout
    Should Contain  ${settings}  update_trust_policy_timeout
+   Should Contain  ${settings}  dme_api_metrics_collection_interval 
+   Should Contain  ${settings}  persistent_connection_metrics_collection_interval 
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -72,7 +74,7 @@ Settings - UpdateSettings should update the settings
 
    Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=100h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
-   Update Settings  region=${region}  update_trust_policy_timeout=1s
+   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  persistent_connection_metrics_collection_interval=1s
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -100,6 +102,9 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  1s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        1s
    Should Be Equal             ${settings_post['update_trust_policy_timeout']}   1s
+
+   Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}   1s
+   Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1s
 
 # ECQ-2990
 Settings - UpdateSettings with bad parms shall return error
@@ -231,6 +236,20 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  0s
    ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  -1s
 
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               dme_api_metrics_collection_interval  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  dme_api_metrics_collection_interval  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       dme_api_metrics_collection_interval  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               dme_api_metrics_collection_interval  99999999h
+   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  -1s
+
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               persistent_connection_metrics_collection_interval  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  persistent_connection_metrics_collection_interval  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       persistent_connection_metrics_collection_interval  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               persistent_connection_metrics_collection_interval  99999999h
+   ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  -1s
+
 # ECQ-2991
 Settings - user shall be able to reset the settings
    [Documentation]
@@ -269,13 +288,15 @@ Settings - user shall be able to reset the settings
 
    Should Not Contain          ${settings_post}  master_node_flavor
 
-   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  50
-   Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}       100
-   Should Be Equal             ${settings_post['chef_client_interval']}          10m0s
-   Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  5m0s
-   Should Be Equal             ${settings_post['update_vm_pool_timeout']}        20m0s
-   Should Be Equal             ${settings_post['update_trust_policy_timeout']}   10m0s
-   Should Be Equal             ${settings_post['influx_db_metrics_retention']}   336h0m0s
+   Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}                        50
+   Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}                             100
+   Should Be Equal             ${settings_post['chef_client_interval']}                                10m0s
+   Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}                        5m0s
+   Should Be Equal             ${settings_post['update_vm_pool_timeout']}                              20m0s
+   Should Be Equal             ${settings_post['update_trust_policy_timeout']}                         10m0s
+   Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}                 30s
+   Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1h0m0s 
+   Should Be Equal             ${settings_post['influx_db_metrics_retention']}                         336h0m0s
 
 *** Keywords ***
 Cleanup Settings
