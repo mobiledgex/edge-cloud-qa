@@ -38,12 +38,15 @@ def main():
     parser.add_argument('--version')
     parser.add_argument('--project')
     parser.add_argument('--cycle')
+    parser.add_argument('--folder')
+
     args = parser.parse_args()
 
     version = args.version
     project = args.project
     new_cycle = args.cycle
-    
+    new_folder = args.folder
+ 
     logging.basicConfig(
         level=logging.DEBUG,
         format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
@@ -57,6 +60,7 @@ def main():
     content = json.loads(project_info)
     project_id = content['id']
     version_id = None
+    new_cycle_id = None
     for v in content['versions']:
         if v['name'] == version:
             version_id = v['id']
@@ -92,6 +96,11 @@ def main():
             sys.exit(1)
     else:
         logging.info("cycle=%s DOES exist. NOT creating the cycle" % new_cycle)
+        new_cycle_id = new_cycle_exists_id
+
+    if new_folder:
+        logging.info(f'creating folder={new_folder} project_id={project_id} version_id={version_id} cycle_id={new_cycle_id}')
+        new_folder_resp = z.create_folder(folder_name=new_folder, project_id=project_id, version_id=version_id, cycle_id=new_cycle_id)
 
 if __name__ == '__main__':
     main()
