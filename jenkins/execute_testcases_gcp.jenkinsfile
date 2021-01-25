@@ -16,6 +16,7 @@ openstack_vm_env = "openstackenvunset"
 openstack_gpu_env = "openstackenvunset"
 influx = "influxnotset"
 envvmpool = "envvmpoolnotset"
+platform = "platformunset"
 
 //commit_version = "${CommitVersion}"
 commit_version = "commitversionunset"
@@ -68,6 +69,9 @@ if (env.influxdb) {
 }
 if (env.openstackenvvmpool) {
     envvmpool = "${OpenStackEnvVMPool}"
+}
+if (env.platform) {
+    platform = "${Platform}"
 }
 
 echo dme
