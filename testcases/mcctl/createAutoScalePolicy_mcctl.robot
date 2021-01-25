@@ -24,6 +24,9 @@ CreateAutoScalePolicy - mcctl shall be able to create/show/delete policy
    [Template]  Success Create/Show/Delete Autoscale Policy Via mcctl
    
       name=${recv_name}  cluster-org=${developer}  minnodes=1  maxnodes=4  scaleupcputhresh=80  scaledowncputhresh=30  triggertimesec=300
+      name=${recv_name}  cluster-org=${developer}  minnodes=1  maxnodes=4  scaleupcputhresh=80
+      name=${recv_name}  cluster-org=${developer}  minnodes=1  maxnodes=4  scaleupcputhresh=80  triggertimesec=300
+      name=${recv_name}  cluster-org=${developer}  minnodes=1  maxnodes=4  scaleupcputhresh=80  scaledowncputhresh=30
 
 CreateAutoScalePolicy - mcctl shall handle create failures
    [Documentation]
@@ -99,9 +102,9 @@ Success Create/Show/Delete Autoscale Policy Via mcctl
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cluster-org']}
    Should Be Equal As Numbers   ${show[0]['min_nodes']}  ${parms['minnodes']}
    Should Be Equal As Numbers   ${show[0]['max_nodes']}  ${parms['maxnodes']}
-   Should Be Equal As Numbers   ${show[0]['scale_up_cpu_thresh']}  ${parms['scaleupcputhresh']}
-   Should Be Equal As Numbers   ${show[0]['scale_down_cpu_thresh']}  ${parms['scaledowncputhresh']}
-   Should Be Equal As Numbers   ${show[0]['trigger_time_sec']}  ${parms['triggertimesec']}
+   Run Keyword If  'scale_up_cpu_thresh' in ${parms}    Should Be Equal As Numbers   ${show[0]['scale_up_cpu_thresh']}  ${parms['scaleupcputhresh']}
+   Run Keyword If  'scale_down_cpu_thresh' in ${parms}  Should Be Equal As Numbers   ${show[0]['scale_down_cpu_thresh']}  ${parms['scaledowncputhresh']}
+   Run Keyword If  'trigger_time_sec' in ${parms}       Should Be Equal As Numbers   ${show[0]['trigger_time_sec']}  ${parms['triggertimesec']}
 
 Fail Create Autoscale Policy Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
