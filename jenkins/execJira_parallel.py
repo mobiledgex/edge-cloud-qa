@@ -69,6 +69,8 @@ def main():
     #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
+    if 'Platform' in os.environ:
+        component = component + ' ' + os.environ['Platform']
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
@@ -478,7 +480,7 @@ def exec_testcase(z, t):
             region = next_crm['region']
             cloudlet = next_crm['cloudlet']
             operator = next_crm['operator']
-            var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable operator_name_openstack:{operator} --variable region:{region}'
+            var_override_cmd = f'--variable {crm_pool_var}:{cloudlet} --variable operator_name_openstack:{operator} --variable operator_name_crm:{operator} --variable region:{region}'
 
             env_file = find(f'automation_env_{region}.sh', os.environ['WORKSPACE'])
             openstack_file = find(f'openrc_{cloudlet}.mex', os.environ['WORKSPACE'])
