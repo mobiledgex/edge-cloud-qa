@@ -24,7 +24,7 @@ builds7 = [:]
 
 def add_tests_to_folder(version, project, cyclt, folder, components=null, components_omit=null) {
     def status = -1
-    def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  --folder ' + folder_noncrm'
+    def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  ' --folder ' + folder
     if components != null {
         s = s + ' --component ' + components
     }
