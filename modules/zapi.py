@@ -102,6 +102,27 @@ class Zapi(WebService):
             logging.debug('respxx=' + content)
             return content
 
+    def get_folders(self, project_id, version_id, cycle_id):
+        relative_path = '/public/rest/api/1.0/folders'
+        query = 'cycleId=' + str(cycle_id) + '&projectId=' + str(project_id) + '&versionId=' + str(version_id)
+
+        url = self.zephyr_base_url + relative_path + '?' + query
+        logging.debug('url=' + url)
+
+        jwt = self._generate_jwt('GET&' + relative_path + '&' + query)
+
+        self.headers['Content-Type'] = 'text/plain'
+        self.get(url,headers = self.headers)
+
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            logging.debug('respxx=' + content)
+            return content
+
     def get_cycle(self, cycle_id=None, project_id=None, version_id=None):
         relative_path = '/public/rest/api/1.0/cycle/' + str(cycle_id)
         query = 'projectId=' + str(project_id) + '&versionId=' + str(version_id)# + '&expand=executionSummaries'
@@ -138,6 +159,22 @@ class Zapi(WebService):
                 logging.debug('found:' + i['name'])
                 pid = i['id']
                 logging.debug('cycle id is:' + pid)
+                break
+
+        return pid
+
+    def get_folder_id(self, name, project_id, version_id, cycle_id):
+        logging.debug('name=' + name)
+
+        folder_list = self.get_folders(project_id=project_id, version_id=version_id, cycle_id=cycle_id)
+        content = json.loads(folder_list)
+        pid = None
+        for i in content:
+            logging.debug('checking ' + i['name'] + ' against ' + name)
+            if i['name'] == name:
+                logging.debug('found:' + i['name'])
+                pid = i['id']
+                logging.debug('folder id is:' + pid)
                 break
 
         return pid
@@ -507,6 +544,54 @@ class Zapi(WebService):
             print(content)
             return content
 
+    def create_folder(self, folder_name, cycle_id, project_id, version_id):
+        """Create a new folder in a given cycle,project and version
+
+        Example:
+           >>> project_id = z.get_project_id('QA')
+           >>> version_id = z.get_version_id(project_id, 'Automation')
+           >>> z.create_folder(project_id=project_id, version_id=version_id, cycle_name=new_cycle, build=new_cycle)
+
+        Args:
+           - **project_id** (str, mandatory): project id of the project to create the cycle as returned by get_project_id(). No default
+           - **version_id** (str, mandatory): version id of the version to create the cycle as returned by get_version_id(). No default
+           - **cycle_name** (str, mandatory): cycle name to create. No default.
+           - **build** (str, optional): value to set the cycle Build field. Default is empty string.
+
+        Returns:
+           str or None: response from the web service call or None if the response contains an errDesc value
+
+        """
+
+        logging.info("folder_name=%s, cycle_id=%s, project_id=%s, version_id=%s" % (folder_name, cycle_id, project_id, version_id))
+
+        #build_to_set = ''
+        #if build:
+        #    build_to_set = build
+
+        relative_path = '/public/rest/api/1.0/folder'
+        query = ''
+        #data = '{"name":' + cycle_name + ',"build":' + build_to_set + ',"projectId":' + str(project_id) + ',"versionId":' + version_id + '}'
+        path = 'POST&' + relative_path + '&' + query
+
+        jwt = self._generate_jwt(path)
+
+        url = self.zephyr_base_url + relative_path
+        data = '{"name":"' + folder_name + '", "projectId": "' + project_id + '", "versionId":"' + version_id + '", "cycleId":"' + cycle_id + '"}'
+        logging.debug('url=' + url + ' data=' + data)
+
+        self.headers['Content-Type'] = 'application/json'
+        self.post(url, headers = self.headers, data=data)
+
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            print(content)
+            return content
+
     def update_cycle(self, project_id=None, version_id=None, cycle_id=None, name=None, build=None, start_date=None, end_date=None):
         """Update a cycle with the given data
 
@@ -565,10 +650,18 @@ class Zapi(WebService):
         #    print(content)
         #    return content
 
-    def add_tests_to_cycle(self, project_id=None, version_id=None, cycle_id=None, issues=None, jql=None):
-        logging.info("cycle_id=%s, project_id=%s, version_id=%s" % (cycle_id, project_id, version_id))
+    def add_tests_to_cycle(self, project_id=None, version_id=None, cycle_id=None, issues=None, jql=None, folder_id=None):
+        logging.info("cycle_id=%s, project_id=%s, version_id=%s, folder_id=%s" % (cycle_id, project_id, version_id, folder_id))
 
-        relative_path = '/public/rest/api/1.0/executions/add/cycle/' + cycle_id
+        relative_path = '/public/rest/api/1.0/executions/add'
+
+        if folder_id:
+            relative_path = relative_path + '/folder/' + folder_id
+        else:
+            relative_path = relative_path + '/cycle/' + cycle_id
+
+        #relative_path = '/public/rest/api/1.0/executions/add/cycle/' + cycle_id
+        #relative_path = relative_path + cycle_id
         query = ''
         url = self.zephyr_base_url + relative_path
         logging.debug('url=' + url)
@@ -576,7 +669,7 @@ class Zapi(WebService):
         jwt = self._generate_jwt('POST&' + relative_path + '&' + query)
 
         if jql:
-            data = '{"jql":"' + jql + '","versionId":"' + str(version_id) + '","projectId":"' + str(project_id) + '","method":"2"}'
+            data = '{"jql":"' + jql + '","versionId":"' + str(version_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","method":"2"}'
             
         self.headers['Content-Type'] = 'application/json'
         self.post(url,headers = self.headers, data=data)
@@ -602,7 +695,6 @@ class Zapi(WebService):
             print(content)
             return content
 
-        
     def add_attachment(self, id=None, issue_id=None, version_id=None, cycle_id=None, project_id=None, file=None, type='execution'):
         logging.info('id=' + str(id) + " type=" + type + " file=" + file)
 
@@ -707,7 +799,6 @@ class Zapi(WebService):
         #canonical_path = 'GET&' + '/public/rest/api/1.0/serverinfo' + '&'# + '/'
         #ce = hashlib.sha256('foo'.encode('utf-8')).hexdigest()
         #print('ce',ce)
-        print(canonical_path)
         payload = {
             'sub': self.username,
             #'qsh': hashlib.sha256(url.encode('utf-8')).hexdigest(),
