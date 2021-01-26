@@ -99,8 +99,12 @@ def main():
         new_cycle_id = new_cycle_exists_id
 
     if new_folder:
-        logging.info(f'creating folder={new_folder} project_id={project_id} version_id={version_id} cycle_id={new_cycle_id}')
-        new_folder_resp = z.create_folder(folder_name=new_folder, project_id=project_id, version_id=version_id, cycle_id=new_cycle_id)
+        new_folder_exists_id = z.get_folder_id(name=new_folder, project_id=project_id, version_id=version_id, cycle_id=new_cycle_id)
+        if(not new_folder_exists_id): # folder does not exist
+            logging.info(f'creating folder={new_folder} project_id={project_id} version_id={version_id} cycle_id={new_cycle_id}')
+            new_folder_resp = z.create_folder(folder_name=new_folder, project_id=project_id, version_id=version_id, cycle_id=new_cycle_id)
+        else:
+            logging.info(f'folder={new_folder} DOES exist. NOT creating the folder') 
 
 if __name__ == '__main__':
     main()
