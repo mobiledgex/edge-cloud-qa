@@ -41,8 +41,10 @@ node('jenkinsSlave1'){
     //date = date.getAt(Calendar.DATE)
     //tag = Version + '_automation_' + year + month + date
     cycle = Version + '_automation_' + dateValue
-    cycle_console = Version + '_automation_' + dateValue + '_console'
+    folder_noncrm = 'nonCRM'
+    folder_console = 'console'
     folder_vsphere = 'vsphere'
+    folder_vcd = 'vcd'
 
     tag = dateValue
     project = "${project}"
@@ -211,7 +213,16 @@ node('jenkinsSlave1'){
              }
 
              status = -1
-             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle_console
+             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_console
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "${s} failed"
+                 currentBuild.result = 'FAILURE'
+                 throw new Exception("Create cycle failed")
+             }
+
+             status = -1
+             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_openstack
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
                  println "${s} failed"

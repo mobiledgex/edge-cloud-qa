@@ -15,6 +15,7 @@ cloudlet_name_vsphere = 'DFWVMW2'
 cloudlet_name_openstack_packet = 'packet-qaregression'
 cloudlet_name_openstack_ha1 = 'automationHamburgCloudlet'
 cloudlet_name_openstack_ha2 = 'automationMunichCloudlet'
+cloudlet_name_crm = 'automationHamburgCloudlet'
 
 master_node_flavor_default = 'automation_api_flavor'
 
@@ -31,6 +32,7 @@ operator_name_vsphere = 'packet'
 operator_name_openstack = 'TDG'
 operator_name_openstack_packet = 'packet'
 operator_name_vsphere = 'packet'
+operator_name_crm = 'TDG'
 
 gitlab_server = 'docker-qa.mobiledgex.net'
 gitlab_username = 'root'
