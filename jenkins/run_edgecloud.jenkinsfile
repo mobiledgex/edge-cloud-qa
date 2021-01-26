@@ -40,7 +40,8 @@ node('jenkinsSlave1'){
     //month = date[Calendar.MONTH] + 1
     //date = date.getAt(Calendar.DATE)
     //tag = Version + '_automation_' + year + month + date
-    cycle = Version + '_automation_' + dateValue
+    //cycle = Version + '_automation_' + dateValue
+    cycle = dateValue + '_' + Version
     folder_noncrm = 'nonCRM'
     folder_console = 'console'
     folder_vsphere = 'vsphere'
