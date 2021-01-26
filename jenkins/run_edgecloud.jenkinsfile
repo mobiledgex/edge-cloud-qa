@@ -22,6 +22,24 @@ builds5 = [:]
 builds6 = [:]
 builds7 = [:]
 
+def add_tests_to_folder(version, project, cyclt, folder, components=null, components_omit=null) {
+    def status = -1
+    def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  --folder ' + folder_noncrm'
+    if components != null {
+        s = s + ' --component ' + components
+    }
+    if components_omit != null {
+        s = s + ' --componentOmit ' + components_omit
+    }
+    status = sh(script: s, returnStatus: true);
+    println status
+    if(status != 0) {
+        println "copyTestsToRelease.py failed"
+        currentBuild.result = 'FAILURE'
+        throw new Exception("Copy tests to release failed")
+    }
+}
+
 node('jenkinsSlave1'){
     date = new Date()
     sdate = new SimpleDateFormat("yyy-MM-dd")
@@ -42,11 +60,7 @@ node('jenkinsSlave1'){
     //tag = Version + '_automation_' + year + month + date
     //cycle = Version + '_automation_' + dateValue
     cycle = dateValue + '_' + Version
-    folder_noncrm = 'nonCRM'
-    folder_openstack = 'openstack'
-    folder_console = 'console'
-    folder_vsphere = 'vsphere'
-    folder_vcd = 'vcd'
+    folder_list = ['nonCRM', 'openstack', 'console', 'vsphere', 'vcd', 'dme', 'sdk', 'controller']
 
     tag = dateValue
     project = "${project}"
@@ -214,64 +228,52 @@ node('jenkinsSlave1'){
                  throw new Exception("Create cycle failed")
              }
 
-             status = -1
-             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_console
-             status = sh(script: s, returnStatus: true);
-             if(status != 0) {
-                 println "create console folder failed with status=${status}"
-                 currentBuild.result = 'FAILURE'
-                 throw new Exception("Create cycle failed")
+             for(int i=0; i < folder_list.size(); ++i) {
+                def folderName = folder_list[i];
+                echo "folder=" + folderName
+                status = -1
+                   s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folderName
+                   status = sh(script: s, returnStatus: true);
+                   if(status != 0) {
+                       println "create ${folderName} folder failed with status=${status}"
+                       currentBuild.result = 'FAILURE'
+                       throw new Exception("Create folder ${folderName} failed")
+                   }
              }
-
-             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_noncrm
-             status = sh(script: s, returnStatus: true);
-             if(status != 0) {
-                 println "create noncrm folder failed with status=${status}"
-                 currentBuild.result = 'FAILURE'
-                 throw new Exception("Create cycle failed")
-             }
-
-             status = -1
-             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_openstack
-             status = sh(script: s, returnStatus: true);
-             if(status != 0) {
-                 println "create openstack folder failed with status=${status}"
-                 currentBuild.result = 'FAILURE'
-                 throw new Exception("Create cycle failed")
-             }
-
-             status = -1
-             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_vsphere
-             status = sh(script: s, returnStatus: true);
-             if(status != 0) {
-                 println "create vshpere folder failed with status=${status}"
-                 currentBuild.result = 'FAILURE'
-                 throw new Exception("Create cycle failed")
-             }
-
 	  }
-       }
 
           dir('go/src/github.com/mobiledgex/jenkins') {
-              def status = -1
-              def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --componentOmit WebUI'
-              status = sh(script: s, returnStatus: true);
-              println status
-              if(status != 0) {
-                  println "copyTestsToRelease.py failed"
-                  currentBuild.result = 'FAILURE'
-                  throw new Exception("Copy tests to release failed")
-              }
 
-              status = -1
-              s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle_console + ' --component WebUI'
-              status = sh(script: s, returnStatus: true);
-              println status
-              if(status != 0) {
-                  println "copyTestsToRelease.py failed"
-                  currentBuild.result = 'FAILURE'
-                  throw new Exception("Copy tests to release failed")
-              }
+              add_tests_to_folder(version, project, cycle, folder, components: 'WebUI')
+              //def status = -1
+              //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  --folder ' + folder_noncrm + ' --componentOmit WebUI'
+              //status = sh(script: s, returnStatus: true);
+              //println status
+              //if(status != 0) {
+              //    println "copyTestsToRelease.py failed"
+              //    currentBuild.result = 'FAILURE'
+              //    throw new Exception("Copy tests to release failed")
+             // }
+
+              //status = -1
+              //s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --folder ' + folder_console + ' --component WebUI'
+              //status = sh(script: s, returnStatus: true);
+              //println status
+              //if(status != 0) {
+              //    println "copyTestsToRelease.py failed"
+              //    currentBuild.result = 'FAILURE'
+              //    throw new Exception("Copy tests to release failed")
+             // }
+
+              //status = -1
+              //s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --folder ' + folder_vsphere + ' --component Vsphere'
+              //status = sh(script: s, returnStatus: true);
+              //println status
+              //if(status != 0) {
+              //    println "copyTestsToRelease.py failed"
+              //    currentBuild.result = 'FAILURE'
+              //    throw new Exception("Copy tests to release failed")
+             // }
 
           }
     } catch(e) {
