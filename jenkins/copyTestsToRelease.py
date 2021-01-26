@@ -76,9 +76,14 @@ def main():
 
     if cycle_id: 
         #add tests to cycle
-        jql = 'project={} and type=Test and component={} and fixVersion={}'.format(project, component, version)
+        jql = f'project={project} and type=Test and fixVersion={version}'
+        component_list = component.split(',')
+        for comp in component_list:
+            jql += f' and component={comp}'
         if component_omit:
-            jql += f' and component!={component_omit}'
+            component_omit_list = component_omit.split(',')
+            for comp in component_omit_list:
+                jql += f' and component!={comp}'
         print('jql', jql)
         z.add_tests_to_cycle(project_id=project_id, version_id=version_id, cycle_id=cycle_id, folder_id=folder_id, jql=jql)
         #start_date = time.strftime('%Y-%m-%d', time.gmtime())
