@@ -43,6 +43,7 @@ node('jenkinsSlave1'){
     //cycle = Version + '_automation_' + dateValue
     cycle = dateValue + '_' + Version
     folder_noncrm = 'nonCRM'
+    folder_openstack = 'openstack'
     folder_console = 'console'
     folder_vsphere = 'vsphere'
     folder_vcd = 'vcd'
@@ -217,7 +218,15 @@ node('jenkinsSlave1'){
              s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_console
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
-                 println "${s} failed"
+                 println "create console folder failed with status=${status}"
+                 currentBuild.result = 'FAILURE'
+                 throw new Exception("Create cycle failed")
+             }
+
+             s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_noncrm
+             status = sh(script: s, returnStatus: true);
+             if(status != 0) {
+                 println "create noncrm folder failed with status=${status}"
                  currentBuild.result = 'FAILURE'
                  throw new Exception("Create cycle failed")
              }
@@ -226,7 +235,7 @@ node('jenkinsSlave1'){
              s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_openstack
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
-                 println "${s} failed"
+                 println "create openstack folder failed with status=${status}"
                  currentBuild.result = 'FAILURE'
                  throw new Exception("Create cycle failed")
              }
@@ -235,7 +244,7 @@ node('jenkinsSlave1'){
              s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;./createCycleAddTestcases.py --version ${Version} --project ECQ --cycle ' + cycle + ' --folder ' + folder_vsphere
              status = sh(script: s, returnStatus: true);
              if(status != 0) {
-                 println "${s} failed"
+                 println "create vshpere folder failed with status=${status}"
                  currentBuild.result = 'FAILURE'
                  throw new Exception("Create cycle failed")
              }
