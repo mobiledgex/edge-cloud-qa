@@ -22,7 +22,7 @@ builds5 = [:]
 builds6 = [:]
 builds7 = [:]
 
-def add_tests_to_folder(version, project, cyclt, folder, components=null, components_omit=null) {
+def add_tests_to_folder(version, project, cycle, folder, components=null, components_omit=null) {
     def status = -1
     def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  ' --folder ' + folder
     if (components != null) {
@@ -244,37 +244,14 @@ node('jenkinsSlave1'){
 
           dir('go/src/github.com/mobiledgex/jenkins') {
 
-              add_tests_to_folder(version, project, cycle, folder, components: 'WebUI')
-              //def status = -1
-              //def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle +  --folder ' + folder_noncrm + ' --componentOmit WebUI'
-              //status = sh(script: s, returnStatus: true);
-              //println status
-              //if(status != 0) {
-              //    println "copyTestsToRelease.py failed"
-              //    currentBuild.result = 'FAILURE'
-              //    throw new Exception("Copy tests to release failed")
-             // }
-
-              //status = -1
-              //s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --folder ' + folder_console + ' --component WebUI'
-              //status = sh(script: s, returnStatus: true);
-              //println status
-              //if(status != 0) {
-              //    println "copyTestsToRelease.py failed"
-              //    currentBuild.result = 'FAILURE'
-              //    throw new Exception("Copy tests to release failed")
-             // }
-
-              //status = -1
-              //s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./copyTestsToRelease.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --folder ' + folder_vsphere + ' --component Vsphere'
-              //status = sh(script: s, returnStatus: true);
-              //println status
-              //if(status != 0) {
-              //    println "copyTestsToRelease.py failed"
-              //    currentBuild.result = 'FAILURE'
-              //    throw new Exception("Copy tests to release failed")
-             // }
-
+              add_tests_to_folder(version, project, cycle, 'console', 'WebUI', null)
+              add_tests_to_folder(version, project, cycle, 'sdk', 'SDK', null)
+              add_tests_to_folder(version, project, cycle, 'dme', 'DME', 'SDK)
+              add_tests_to_folder(version, project, cycle, 'openstack', 'CRM,Openstack', null)
+              add_tests_to_folder(version, project, cycle, 'vsphere', 'CRM,Vsphere', null)
+              add_tests_to_folder(version, project, cycle, 'vcd', 'CRM,Vsphere', null)
+              add_tests_to_folder(version, project, cycle, 'controller', 'Controller', null)
+              add_tests_to_folder(version, project, cycle, 'controller', 'MasterController', null)
           }
        } 
     } catch(e) {
