@@ -246,7 +246,7 @@ node('jenkinsSlave1'){
 
               add_tests_to_folder(version, project, cycle, 'console', 'WebUI', null)
               add_tests_to_folder(version, project, cycle, 'sdk', 'SDK', null)
-              add_tests_to_folder(version, project, cycle, 'dme', 'DME', 'SDK)
+              add_tests_to_folder(version, project, cycle, 'dme', 'DME', 'SDK')
               add_tests_to_folder(version, project, cycle, 'openstack', 'CRM,Openstack', null)
               add_tests_to_folder(version, project, cycle, 'vsphere', 'CRM,Vsphere', null)
               add_tests_to_folder(version, project, cycle, 'vcd', 'CRM,Vsphere', null)
