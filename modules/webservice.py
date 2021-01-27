@@ -60,7 +60,7 @@ class WebService() :
      
         timeout = None
         if stream:
-            timeout = (3.05, stream_timeout)
+            timeout = (3.05, int(stream_timeout))
         
         try:
             self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
