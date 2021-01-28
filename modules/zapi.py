@@ -425,11 +425,16 @@ class Zapi(WebService):
             print(content)
             return content
 
-    def create_execution(self, execution_id=None, issue_id=None, project_id=None, cycle_id=None, version_id=None, status=None):
+    def create_execution(self, issue_id, project_id, cycle_id, version_id, folder_id=None, status=None):
         logging.info('status=' + str(status))
         relative_path = '/public/rest/api/1.0/execution'
         #data = '{"status":{"id":' + str(status) + '},"id":"' + str(execution_id) + '", "issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
-        data = '{"status":{"id":' + str(status) + '},"issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) +'"}'
+        data = '{"status":{"id":' + str(status) + '},"issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id)
+        if folder_id:
+            data = data + '","folderId":"' + folder_id
+        data = data +'"}'
+        #data = '{"status":{"id":' + str(status) + '},"issueId":"' + str(issue_id) + '","projectId":"' + str(project_id) + '","cycleId":"' + str(cycle_id) + '","versionId":"' + str(version_id) + '","folderId":"' + '4ce1d6ab-1f6a-4df1-9208-ecee18796246' + '"}'
+
         path = 'POST&' + relative_path + '&'
 
         jwt = self._generate_jwt(path)
