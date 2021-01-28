@@ -279,6 +279,30 @@ class Zapi(WebService):
             logging.debug('resp=' + content)
             return content
 
+    def get_execution_list_by_folderid(self, folder_id, cycle_id, version_id, project_id, offset=0):
+        logging.debug(f'folder_id={folder_id} cycle_id={cycle_id} version_id={version_id} project_id={project_id} offset={offset}')
+
+        relative_path = '/public/rest/api/1.0/executions/search/folder/' + str(folder_id)
+        parms = f'cycleId={cycle_id}&offset={offset}&projectId={project_id}&versionId={version_id}'
+
+        path = 'GET&' + relative_path + '&' + parms
+        self._generate_jwt(path)
+
+        url = self.zephyr_base_url + relative_path + '?' + parms
+
+        logging.debug('url=' + url)
+
+        self.headers['Content-Type'] = 'text/plain'
+        self.get(url, headers = self.headers)
+
+        content = self.resp.content.decode('utf-8')
+
+        if "errorDesc" in content:
+            logging.error('ERROR:' + content)
+            return None
+        else:
+            logging.debug('resp=' + content)
+            return content
 
     def get_execution(self, execution_id=None, issue_id=None, project_id=None, offset=0):
         logging.debug('execution_id={} issue_id={} project_id={} offset={}'.format(str(execution_id), str(issue_id), str(project_id), str(offset)))

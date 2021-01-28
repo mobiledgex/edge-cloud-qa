@@ -36,7 +36,9 @@ parser = argparse.ArgumentParser(description='post jira automation report to sla
 parser.add_argument('--version', default='Nimbus', help='jira version. default is \'Nimbus\'')
 parser.add_argument('--project', default='ECQ', help='jira project. default is \'ECQ\'')
 parser.add_argument('--cycle', help='jira cycle. no default')
+parser.add_argument('--folder', default=None, help='jira folder under the cycle. no default')
 parser.add_argument('--jobduration', default=0, help='duration of job. default is 0')
+parser.add_argument('--summaryonly', action='store_true', help='print summary only')
 
 args = parser.parse_args()
 
@@ -44,6 +46,8 @@ project_name = args.project
 version_name = args.version
 cycle_name = args.cycle
 job_duration = int(args.jobduration)
+folder_name = args.folder
+summary_only = args.summaryonly
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -96,7 +100,14 @@ logging.info("project_id=%s version_id=%s" % (project_id, version_id))
 
 cycle_id = z.get_cycle_id(name=cycle_name, project_id=project_id, version_id=version_id)
 
-jiraQueryUrl = 'project="' + project_name + '" AND fixVersion="' + version_name + '" ORDER BY Issue ASC'
+folder_id = None
+if folder_name:
+    folder_id = z.get_folder_id(name=folder_name, project_id=project_id, version_id=version_id, cycle_id=cycle_id)
+    if not folder_id:
+        logger.error(f'folder id not for found for folder={folder_name}')
+        sys.exit(1)
+
+#jiraQueryUrl = 'project="' + project_name + '" AND fixVersion="' + version_name + '" ORDER BY Issue ASC'
 offset = 0
 max_allowed = 0
 total_count = 1
@@ -118,7 +129,10 @@ failed_bugs_string_bybug = ''
 failed_nobugs_string = ''
 bug_dict = {}
 while offset < total_count:
-    result = z.get_execution_list_by_cycleid(cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
+    if folder_id:
+        result = z.get_execution_list_by_folderid(folder_id=folder_id, cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
+    else:
+        result = z.get_execution_list_by_cycleid(cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
     query_content = json.loads(result)
 
     print('length',len(query_content['searchObjectList']))
@@ -159,7 +173,10 @@ print('totalcount', total_count, 'totalcounted', total_counted, 'pass', total_pa
 #total_counted = 1
 report_string = ''
 #report_string = f'*Cycle:*\t{cycle_name}\n\n'
-report_string += f'*Automation Report for {cycle_name}*\n\n'
+report_string += f'*Automation Report for'
+if folder_name:
+    report_string += f' {folder_name}'
+report_string += f' {cycle_name}*\n\n'
 report_string += f'>*Total TCs:* {total_counted}\n'
 report_string += f'>*Total Passed:* {total_pass}   {(total_pass/total_counted)*100:.2f}%\n'
 report_string += f'>*Total Failed:* {total_fail}   {(total_fail/total_counted)*100:.2f}%\n'
@@ -179,26 +196,32 @@ if (total_pass + total_fail + total_unexecuted + total_wip + total_blocked + tot
     report_string += f'*WARNING - sum of exectution types did not add up. counted={total_pass + total_fail + total_unexecuted + total_wip + total_blocked + total_na + total_wontexec} expected={total_counted}*\n'
 summary_string = report_string
 
-if len(failed_nobugs_string) == 0:
-    failed_nobugs_string = '>None\n'
-if len(failed_bugs_string_bytestcase) == 0:
-    failed_bugs_string_bytestcase = '>None\n'
-if len(failed_bugs_string_bybug) == 0:
-    failed_bugs_string_bybug = '>None\n'
-if len(unexecuted_string) == 0:
-    unexecuted_string = '>None\n'
+if not summary_only:
+    if len(failed_nobugs_string) == 0:
+        failed_nobugs_string = '>None\n'
+    if len(failed_bugs_string_bytestcase) == 0:
+        failed_bugs_string_bytestcase = '>None\n'
+    if len(failed_bugs_string_bybug) == 0:
+        failed_bugs_string_bybug = '>None\n'
+    if len(unexecuted_string) == 0:
+        unexecuted_string = '>None\n'
 
     
-report_string += '>\n*Failed testcases without bugs:*\n' + failed_nobugs_string
-report_string += '>\n*Failed testcases with bugs by testcase:*\n' + failed_bugs_string_bytestcase
-report_string += '>\n*Failed testcases with bugs by bug:*\n'
-for bug in bug_dict:
-    report_string += '>' + bug + '\n'
-    for tc in bug_dict[bug]:
-        report_string += '>      ' + tc + '\n'
-report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
-#print(failed_bugs_string_bybug)
-print(report_string)
+    report_string += '>\n*Failed testcases without bugs:*\n' + failed_nobugs_string
+    report_string += '>\n*Failed testcases with bugs by testcase:*\n' + failed_bugs_string_bytestcase
+    report_string += '>\n*Failed testcases with bugs by bug:*\n'
+    if bug_dict:
+        for bug in bug_dict:
+            report_string += '>' + bug + '\n'
+            for tc in bug_dict[bug]:
+                report_string += '>      ' + tc + '\n'
+    else:
+        report_string += '>None\n'
+    report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
+    #print(failed_bugs_string_bybug)
+
+#print(report_string)
+
 #sys.exit(1)
 
 report_attachment = json.dumps(
@@ -243,14 +266,14 @@ report_attachment = json.dumps(
 
 print(report_string)
 
-try:
-    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
-    print('slack message:', response)
-    if 'response_metadata' in response and response['response_metadata']['messages']:
-        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
-except SlackApiError as e:
-    # You will get a SlackApiError if "ok" is False
-    assert e.response["ok"] is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-    print(f"Got an error: {e.response['error']}")
+#try:
+#    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
+#    print('slack message:', response)
+#    if 'response_metadata' in response and response['response_metadata']['messages']:
+#        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
+#except SlackApiError as e:
+#    # You will get a SlackApiError if "ok" is False
+#    assert e.response["ok"] is False
+#    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+#    print(f"Got an error: {e.response['error']}")
 
