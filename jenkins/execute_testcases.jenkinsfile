@@ -65,7 +65,7 @@ node('jenkinsSlave1'){
                 extensions: [
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
-                        [$class:'SparseCheckoutPath', path:'jenkins/execJira.py'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/execJira_parallel.py'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
                         [$class:'SparseCheckoutPath', path:'tools/build_protos.py'],
@@ -117,7 +117,7 @@ node('jenkinsSlave1'){
 
     stage("execute tests") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_VERSION=' + crmversion + ';export AUTOMATION_INFLUXDB_ADDRESS=' + influx + ';export AUTOMATION_OPENSTACK_METRICS_ENV=' + envmetrics + ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + envvmpool + ';./execJira.py ' + runfailedonly_arg, returnStatus: true);
+         status = sh(script:'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;export PATH=$PATH:$WORKSPACE/go/src/github.com/mobiledgex/tools:/home/jenkins/go/bin;export AUTOMATION_CONTROLLER_ADDRESS=' + controller + ';export AUTOMATION_DME_ADDRESS=' + dme + ';export AUTOMATION_DME_REST_ADDRESS=' + dmerest + ';export AUTOMATION_DME_CERT=' + dmerestcert + ';export AUTOMATION_MC_ADDRESS=' + mc + ';export AUTOMATION_MC_CERT=' + mccert + ';export AUTOMATION_VERSION=' + crmversion + ';export AUTOMATION_INFLUXDB_ADDRESS=' + influx + ';export AUTOMATION_OPENSTACK_METRICS_ENV=' + envmetrics + ';export AUTOMATION_OPENSTACK_VMPOOL_ENV=' + envvmpool + ';./execJira_parallel.py ' + runfailedonly_arg, returnStatus: true);
          println status
          if(status != 0) {
             echo "execJira.py failed with statuscode=" + status
