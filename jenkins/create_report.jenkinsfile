@@ -6,7 +6,7 @@ def generate_report(version, project, cycle, folder, duration, summary) {
       s = s + ' --folder ' + folder
    }
    if(duration != null) {
-      s = s + ' --jobduration ' + jobduration 
+      s = s + ' --jobduration ' + duration 
    }
    if(summary == 1) {
       s = s + ' --summaryonly'
@@ -39,7 +39,7 @@ node('jenkinsSlave1') {
 
    stage("create report") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         generate_report(version, project, cycle, null, duration, 1)
+         generate_report(version, project, cycle, null, jobduration, 1)
          generate_report(version, project, cycle, 'controller', null, 0)
          generate_report(version, project, cycle, 'dme', null, 0)
          generate_report(version, project, cycle, 'openstack', null, 0)
