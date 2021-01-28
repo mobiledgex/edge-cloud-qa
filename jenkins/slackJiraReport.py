@@ -266,14 +266,14 @@ report_attachment = json.dumps(
 
 print(report_string)
 
-#try:
-#    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
-#    print('slack message:', response)
-#    if 'response_metadata' in response and response['response_metadata']['messages']:
-#        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
-#except SlackApiError as e:
-#    # You will get a SlackApiError if "ok" is False
-#    assert e.response["ok"] is False
-#    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-#    print(f"Got an error: {e.response['error']}")
+try:
+    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
+    print('slack message:', response)
+    if 'response_metadata' in response and response['response_metadata']['messages']:
+        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
+except SlackApiError as e:
+    # You will get a SlackApiError if "ok" is False
+    assert e.response["ok"] is False
+    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+    print(f"Got an error: {e.response['error']}")
 
