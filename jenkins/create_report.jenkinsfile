@@ -1,5 +1,24 @@
 currentBuild.displayName = cycle
 
+def generate_report(version, project, cycle, folder, duration, summary) {
+   def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackJiraReport.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle 
+   if(folder != null) {
+      s = s + ' --folder ' + folder
+   }
+   if(duration != null) {
+      s = s + ' --jobduration ' + jobduration 
+   }
+   if(summary == 1) {
+      s = s + ' --summaryonly'
+   }
+   status = sh(script:s, returnStatus: true);
+   println status
+   if(status != 0) {
+      echo "slackJiraReport.py failed with statuscode=" + status
+      currentBuild.result = 'FAILURE'
+   }
+}
+
 node('jenkinsSlave1') {
    stage("Checkout") {
            dir('go/src/github.com/mobiledgex') {
@@ -20,13 +39,14 @@ node('jenkinsSlave1') {
 
    stage("create report") {
       dir('go/src/github.com/mobiledgex/jenkins') {
-         def s = 'export PYTHONPATH=$WORKSPACE/go/src/github.com/mobiledgex/modules;python3 ./slackJiraReport.py --version ' + version + ' --project ' + project + ' --cycle ' + cycle + ' --jobduration ' + jobduration
-         status = sh(script:s, returnStatus: true);
-         println status
-         if(status != 0) {
-            echo "slackJiraReport.py failed with statuscode=" + status
-            currentBuild.result = 'FAILURE'
-         }
+         generate_report(version, project, cycle, null, duration, 1)
+         generate_report(version, project, cycle, 'controller', null, 0)
+         generate_report(version, project, cycle, 'dme', null, 0)
+         generate_report(version, project, cycle, 'openstack', null, 0)
+         generate_report(version, project, cycle, 'vsphere', null, 0)
+         generate_report(version, project, cycle, 'vcd', null, 0)
+         generate_report(version, project, cycle, 'console', null, 0)
+ 
       }
    }
 }
