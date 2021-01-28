@@ -66,11 +66,15 @@ def main():
     cycle = os.environ['Cycle']
     version = os.environ['Version']
     project = os.environ['Project']
+    folder = None
     #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
     if 'Platform' in os.environ:
         component = component + ' ' + os.environ['Platform']
+    if 'Folder' in os.environ:
+        folder = os.environ['Folder']
+
     #rhc = os.environ['rhc']
     workspace = os.environ['WORKSPACE']
     #httpTrace = os.environ['httpTrace']
@@ -105,7 +109,7 @@ def main():
     #workspace = "www"
     
     #logging.info("cycle=%s version=%s project=%s summary=%s rhc=%s workspace=%s httpTrace=%s" % (cycle, version, project, summary, rhc, workspace, httpTrace))
-    logger.info(f'cycle={cycle} version={version} project={project} component={component} numexecutors={num_executors} workspace={workspace} cmrpool={crm_pool_dict} crm_pool_round_robin={crm_pool_round_robin}')
+    logger.info(f'cycle={cycle} version={version} project={project} folder={folder} component={component} numexecutors={num_executors} workspace={workspace} cmrpool={crm_pool_dict} crm_pool_round_robin={crm_pool_round_robin}')
 
     #z = zapi.Zapi(username = username, password = password)
     z = zapi.Zapi(username=accountid, access_key=access_key, secret_key=secret_key, debug=False)
@@ -122,7 +126,14 @@ def main():
     if not cycle_id:
         logger.error(f'cycle id not for found for cycle={cycle}')
         sys.exit(1)
-        
+     
+    folder_id = None 
+    if folder: 
+        folder_id = z.get_folder_id(name=folder, project_id=project_id, version_id=version_id, cycle_id=cycle_id)
+        if not folder_id:
+            logger.error(f'folder id not for found for folder={folder}')
+            sys.exit(1)
+
     #z.get_server_info()
     #z.get_cycles(project_id=10006, version_id=10007)
     #sys.exit(1)
@@ -168,7 +179,7 @@ def main():
         total = query_content['total']
         print(startat,maxresults,total)
         #sys.exit(1)
-        tc_list += get_testcases(z, result, cycle_id, project_id, version_id)
+        tc_list += get_testcases(z, result, cycle_id, project_id, version_id, folder_id)
 
         
     print('tc_list',tc_list)
@@ -187,7 +198,7 @@ def main():
 
     sys.exit(exec_status)
 
-def get_testcases(z, result, cycle_id, project_id, version_id):
+def get_testcases(z, result, cycle_id, project_id, version_id, folder_id):
     query_content = json.loads(result)
     tc_list = []
     
@@ -202,7 +213,7 @@ def get_testcases(z, result, cycle_id, project_id, version_id):
             logger.info("found a teststep")
             #tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
             #tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'defects': s['fields']['issuelinks']}
+            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id':version_id, 'cycle_id':cycle_id, 'folder_id':folder_id, 'defects': s['fields']['issuelinks']}
             print(s)
             tmp_list['defect_count'] = len(s['fields']['issuelinks']) # need to check for issueslink section
             #if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
@@ -383,7 +394,11 @@ def exec_testcase(z, t):
     global number_failed
     global crm_pool_round_robin
     global crm_pool_var
-    
+   
+    region = 'notset'
+    cloudlet = 'notset'
+    operator = 'notset'
+ 
     print('tc',t['tc'])
     last_status = 'unset'
 
@@ -398,7 +413,7 @@ def exec_testcase(z, t):
 
     logger.info("executing " + t['issue_key'])
     print('xxxxxx',t['project_id'])
-    status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=3)
+    status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], folder_id=t['folder_id'], status=3)
     query_content = json.loads(status)
     status_s = json.dumps(status)
 
