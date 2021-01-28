@@ -176,17 +176,38 @@ report_string = ''
 report_string += f'*Automation Report for'
 if folder_name:
     report_string += f' {folder_name}'
+
+pass_perc = 0
+fail_perc = 0
+fail_bugs_perc = 0
+fail_nobugs_perc = 0
+unexec_perc = 0
+wip_perc = 0
+blocked_perc = 0
+na_perc = 0
+wontexec_perc = 0
+if total_counted > 0:
+    pass_perc = round((total_pass/total_counted)*100, 2)
+    fail_perc = round((total_fail/total_counted)*100, 2)
+    fail_bugs_perc = round((total_fail_bugs/total_counted)*100, 2)
+    fail_nobugs_perc = round((total_fail_nobugs/total_counted)*100, 2)
+    unexec_perc = round((total_unexecuted/total_counted)*100, 2)
+    wip_perc = round((total_wip/total_counted)*100, 2)
+    blocked_perc = round((total_blocked/total_counted)*100, 2)
+    na_perc = round((total_na/total_counted)*100, 2)
+    wontexec_perc = round((total_wontexec/total_counted)*100, 2)
+
 report_string += f' {cycle_name}*\n\n'
 report_string += f'>*Total TCs:* {total_counted}\n'
-report_string += f'>*Total Passed:* {total_pass}   {(total_pass/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed:* {total_fail}   {(total_fail/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}   {(total_fail_bugs/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}   {(total_fail_nobugs/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Unexec:* {total_unexecuted}   {(total_unexecuted/total_counted)*100:.2f}%\n'
-report_string += f'>*Total WIP:* {total_wip}   {(total_wip/total_counted)*100:.2f}%\n'
-report_string += f'>*Total Blocked:* {total_blocked}   {(total_blocked/total_counted)*100:.2f}%\n'
-report_string += f'>*Total NA:* {total_na}   {(total_na/total_counted)*100:.2f}%\n'
-report_string += f'>*Total WontExec:* {total_wontexec}   {(total_wontexec/total_counted)*100:.2f}%\n'
+report_string += f'>*Total Passed:* {total_pass}   {pass_perc}%\n'
+report_string += f'>*Total Failed:* {total_fail}   {fail_perc}%\n'
+report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}   {fail_bugs_perc}%\n'
+report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}   {fail_nobugs_perc}%\n'
+report_string += f'>*Total Unexec:* {total_unexecuted}   {unexec_perc}%\n'
+report_string += f'>*Total WIP:* {total_wip}   {wip_perc}%\n'
+report_string += f'>*Total Blocked:* {total_blocked}   {blocked_perc}%\n'
+report_string += f'>*Total NA:* {total_na}   {na_perc}%\n'
+report_string += f'>*Total WontExec:* {total_wontexec}   {wontexec_perc}%\n'
 if job_duration > 0:
     report_string += f'>*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs\n'
 
