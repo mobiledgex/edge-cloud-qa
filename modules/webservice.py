@@ -58,8 +58,8 @@ class WebService() :
         self.stream_output_str = []
         self.resp_text = ''
      
-        timeout = None
-        if stream:
+        timeout = 3.05
+        if stream and stream_timeout:
             timeout = (3.05, int(stream_timeout))
         
         try:
