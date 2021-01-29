@@ -27,7 +27,7 @@ class TrustPolicy(MexOperation):
 
         if use_defaults:
             if policy_name is None: policy_name = shared_variables.trust_policy_name_default
-            if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
+            #if operator_org_name is None: operator_org_name = shared_variables.operator_name_default
         
         #"{\"cloudlet\":{\"key\":{\"name\":\"rrrr\",\"developer\":\"dev\"},\"location\":{\"latitude\":5,\"longitude\":5,\"timestamp\":{}},\"ip_support\":2,\"num_dynamic_ips\":2}}"
         policy_dict = {}
