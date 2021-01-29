@@ -11,6 +11,7 @@ import logging
 #import httplib as http_client
 import http.client as http_client
 import time
+from robot.libraries.BuiltIn import BuiltIn
 
 logger = logging.getLogger(__name__)
 logging.getLogger('urllib3').setLevel(logging.CRITICAL)
@@ -49,8 +50,8 @@ class WebService() :
         #if output_format is not None:
         #    self.output_format = output_format
 
-    def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, stream_timeout=5):
-        logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} stream_timeout={stream_timeout}')
+    def post(self, url, data=None, verify_cert=False, headers=None, files=None, stream=False, connection_timeout=3.05, stream_timeout=60):
+        logger.debug(f'url={url} data={data} headers={headers} verify_cert={verify_cert} stream={stream} connection_timeout={connection_timeout}, stream_timeout={stream_timeout}')
         
         #url_to_use = self._buildUrl(url)
         self.stream_output_bytes = []
@@ -58,9 +59,9 @@ class WebService() :
         self.stream_output_str = []
         self.resp_text = ''
      
-        timeout = 3.05
-        if stream and stream_timeout:
-            timeout = (3.05, int(stream_timeout))
+        timeout = (connection_timeout, stream_timeout)
+        #if stream and stream_timeout:
+        #    timeout = (3.05, int(stream_timeout))
         
         try:
             self.resp = requests.post(url, data, verify=verify_cert, headers=headers, files=files, stream=stream, timeout=timeout)
@@ -68,6 +69,7 @@ class WebService() :
             if stream:
                 for line in self.resp.iter_lines():
                     logging.debug(f'stream line={line}')
+                    #BuiltIn().log_to_console(f'console stream line={line}')
                     self.stream_output_str.append(line.decode("utf-8"))
                     self.stream_output.append(json.loads(line.decode("utf-8")))
                     #self.stream_output_bytes.append(line)
