@@ -27,6 +27,7 @@ CreateTrustPolicy - OperatorManager shall be able to create/show/delete a trust 
    [Tags]  TrustPolicy
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+   Set Suite Variable  ${orgname}
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
@@ -58,6 +59,14 @@ CreateTrustPolicy - OperatorManager shall be able to create/show/delete a trust 
 
    Should Be Equal As Numbers  ${numrules}  3
 
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy plus the new policy just created
+   ${cloudlets}=  Show Cloudlets  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy+1}
+   Should Be True  ${num_trust_policys} > 0
+
 # ECQ-3071
 CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a trust policy
    [Documentation]
@@ -68,6 +77,7 @@ CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a tr
    [Tags]  TrustPolicy
 
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+   Set Suite Variable  ${orgname}
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/3
@@ -98,6 +108,14 @@ CreateTrustPolicy - OperatorContributor shall be able to create/show/delete a tr
    Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][2]['port_range_max']}  6
 
    Should Be Equal As Numbers  ${numrules}  3
+
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy plus the new policy just created
+   ${cloudlets}=  Show Cloudlets  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy+1}
+   Should Be True  ${num_trust_policys} > 0
 
 # ECQ-3072
 CreateTrustPolicy - OperatorViewer shall not be able to create/delete but view a trust policy
@@ -152,6 +170,14 @@ CreateTrustPolicy - OperatorViewer shall not be able to create/delete but view a
    Should Be Equal As Numbers  ${numrules}  3
  
    Length Should Be  ${show}  1
+
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy plus the new policy just created
+   ${cloudlets}=  Show Cloudlets  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy+1}
+   Should Be True  ${num_trust_policys} > 0
 
    # show/delete as user2 should be forbidden
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
@@ -214,6 +240,13 @@ CreateTrustPolicy - DeveloperManager shall not be able to create/delete but view
    Should Be Equal As Numbers  ${show[0]['data']['outbound_security_rules'][2]['port_range_max']}  6
    Should Be Equal As Numbers  ${numrules}  3
 
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy
+   ${cloudlets}=  Show Org Cloudlet  token=${user_token2}  region=${region}  org_name=${orgname}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy}
+   Should Be True  ${num_trust_policys} > 0
 
    # show/delete as user2 should be forbidden
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
@@ -280,6 +313,14 @@ CreateTrustPolicy - DeveloperContributor shall not be able to create/delete but 
 
    Length Should Be  ${show}  1
 
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy
+   ${cloudlets}=  Show Org Cloudlet  token=${user_token2}  region=${region}  org_name=${orgname}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy}
+   Should Be True  ${num_trust_policys} > 0
+
    # show/delete as user2 should be forbidden
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
 
@@ -345,6 +386,14 @@ CreateTrustPolicy - DeveloperViewer shall not be able to create/delete but view 
 
    Length Should Be  ${show}  1
 
+   # number of trust policies be should equal to the number of cloudlets that have a trust policy
+   ${cloudlets}=  Show Org Cloudlet  token=${user_token2}  region=${region}  org_name=${orgname}  use_defaults=${False}
+   ${show}=  Show Trust Policy  token=${user_token2}  region=${region}  use_defaults=${False}
+   ${num_trust_policys}=  Get Length  ${show}
+   ${num_cloudlets_with_trustpolicy}=  Get Number Of Cloudlets with Trust Policy  ${cloudlets}
+   Should Be Equal  ${num_trust_policys}  ${num_cloudlets_with_trustpolicy}
+   Should Be True  ${num_trust_policys} > 0
+
    # show/delete as user2 should be forbidden
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Trust Policy  operator_org_name=${orgname}  token=${user_token2}  region=${region}
 
@@ -382,9 +431,22 @@ Setup
    Set Suite Variable  ${epochusername2}
 
 Teardown
-   Delete Trust Policy  region=${region}  token=${user_token2}
+   Delete Trust Policy  region=${region}  operator_org_name=${orgname}  token=${user_token2}
    Cleanup Provisioning
 
 Teardown Forbidden
    Cleanup Provisioning
 
+Get Number Of Cloudlets with Trust Policy
+   [Arguments]  ${cloudlets}
+
+   ${counter}=  Set Variable  ${0}
+   FOR  ${C}  IN  @{cloudlets}
+      log to console  ${c}
+      ${c2}=  Run Keyword If  'data' in ${c}  Set Variable  ${c['data']}
+      ...  ELSE  Set Variable  ${c}
+      ${counter}=  Run Keyword If  'trust_policy' in ${c2}  Set Variable  ${counter+1}
+      ...  ELSE  Set Variable  ${counter}
+
+   [Return]  ${counter}
+   END
