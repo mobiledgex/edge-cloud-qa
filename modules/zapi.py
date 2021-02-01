@@ -102,9 +102,15 @@ class Zapi(WebService):
             logging.debug('respxx=' + content)
             return content
 
-    def get_folders(self, project_id, version_id, cycle_id):
+    def get_folders(self, project_id, version_id, cycle_id, expand=False):
         relative_path = '/public/rest/api/1.0/folders'
-        query = 'cycleId=' + str(cycle_id) + '&projectId=' + str(project_id) + '&versionId=' + str(version_id)
+        #query = 'cycleId=' + str(cycle_id) + '&projectId=' + str(project_id) + '&versionId=' + str(version_id)
+        query = 'cycleId=' + str(cycle_id)
+        if expand:
+            query += '&expand=executionSummaries'
+        query += '&projectId=' + str(project_id) + '&versionId=' + str(version_id)
+
+        #query = 'cycleId=' + str(cycle_id) + '&expand=executionSummaries' + '&projectId=' + str(project_id) + '&versionId=' + str(version_id)
 
         url = self.zephyr_base_url + relative_path + '?' + query
         logging.debug('url=' + url)
