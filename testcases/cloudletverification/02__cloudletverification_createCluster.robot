@@ -16,7 +16,7 @@ ${cloudlet_name}  automationBuckhornCloudlet
 ${operator_name}  GDDT 
 ${mobiledgex_domain}  mobiledgex.net
 ${cluster_name}  cluster
-
+${s_timeout}  1200
 
 ${region}=  EU
 	
@@ -32,7 +32,7 @@ ClusterInst shall create with IpAccessDedicated/docker for Direct App
    ${cluster_name_dockerdedicateddirect_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicateddirect_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_dockerdedicateddirect_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicateddirect_endtime}
 
@@ -56,7 +56,7 @@ ClusterInst shall create with IpAccessDedicated/docker for LB App
    ${cluster_name_dockerdedicatedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_dockerdedicatedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedlb_endtime}
 
@@ -80,7 +80,7 @@ ClusterInst shall create with IpAccessShared/docker for LB App
    ${cluster_name_dockershared_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockersharedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockersharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor_name_medium}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_dockersharedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockersharedlb_endtime}
 
@@ -104,7 +104,7 @@ ClusterInst shall create with IpAccessDedicated/K8s for LB App and num_masters=1
    ${cluster_name_k8sdedicatedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8sdedicatedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor_name_large}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8sdedicatedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor_name_large}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_k8sdedicatedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8sdedicatedlb_endtime}
 
@@ -132,7 +132,7 @@ ClusterInst shall create with IpAccessShared/K8s for LB App and num_masters=1 an
    ${cluster_name_k8ssharedlb_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedlb_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedlb}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_k8ssharedlb_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedlb_endtime}
 
@@ -160,7 +160,7 @@ ClusterInst shall create with K8s and sharedvolumesize
    ${cluster_name_k8ssharedvolumesize_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  shared_volume_size=1  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedvolumesize}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  shared_volume_size=1  flavor_name=${flavor_name_small}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_k8ssharedvolumesize_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedvolumesize_endtime}
 
@@ -189,7 +189,7 @@ ClusterInst shall create with IpAccessDedicated/docker and GPU
    ${cluster_name_dockerdedicatedgpu_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedgpu_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedgpu}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_dockerdedicatedgpu}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_dockerdedicatedgpu_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_dockerdedicatedgpu_endtime}
 
@@ -214,7 +214,7 @@ ClusterInst shall create with IpAccessShared/K8s and GPU and num_masters=1 and n
    ${cluster_name_k8ssharedgpu_starttime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedgpu_starttime}
 
-   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}
+   ${cluster_inst}=  Create Cluster Instance  region=${region}  cluster_name=${cluster_name_k8ssharedgpu}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  number_nodes=1  number_masters=1  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor_name_gpu}  developer_org_name=${developer_organization_name}  timeout=${s_timeout}
    ${cluster_name_k8ssharedgpu_endtime}=  Get Time  epoch
    Set Global Variable  ${cluster_name_k8ssharedgpu_endtime}
 
