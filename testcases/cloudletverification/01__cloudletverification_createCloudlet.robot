@@ -8,24 +8,53 @@ Test Timeout    ${test_timeout}
 ${cloudlet_name}  automationHawkinsCloudlet
 ${operator_name}  GDDT
 ${physical_name}  hawkins
-
+${cloudlet_platform_type}  fromcloudletvarsfile
 
 *** Test Cases ***
-CreateCloudlet - User shall be able to create a cloudlet on Openstack 
+CreateCloudlet - User shall be able to create a cloudlet on platform specified 
    [Documentation]  
    ...  do CreateCloudlet to start a CRM 
    [Tags]  cloudlet  create
 
-   Log To Console  \nCreating Cloudlet
+   Log To Console  \nCreating Cloudlet ${cloudlet_platform_type}
 
+
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeOpenstack'   Platform Type Openstack
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeVsphere'     Platform Type Vsphere
+   Run Keyword If  '${cloudlet_platform_type}' == 'PlatformTypeVcd'         Platform Type VCD   ELSE  Platform Not Supported
+
+*** Keywords ***
+
+Platform Type Openstack
    Create Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  number_dynamic_ips=${cloudlet_numdynamicips}  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  env_vars=${cloudlet_env_vars}
 
    Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
    Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
 
-   Log To Console  \nCreating Cloudlet Done
+   Log To Console  \nCreating Cloudlet ${cloudlet_platform_type} Done
 
-#*** Keywords ***
+Platform Type Vsphere
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  number_dynamic_ips=${cloudlet_numdynamicips}  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  env_vars=${cloudlet_env_vars}
+
+#Options for platform like GPU if supported
+#   Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+#   Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
+
+   Log To Console  \nCreating Cloudlet ${cloudlet_platform_type} Done
+
+Platform Type VCD
+   Create Cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  platform_type=${cloudlet_platform_type}  physical_name=${physical_name}  number_dynamic_ips=${cloudlet_numdynamicips}  latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  env_vars=${cloudlet_env_vars}
+
+#Options for platform like GPU if supported 
+#   Add Cloudlet Resource Mapping  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  mapping=gpu=${gpu_resource_name}
+#   Add Resource Tag  region=${region}  resource_name=${gpu_resource_name}  operator_org_name=${operator_name}  tags=pci=t4gpu:1
+
+   Log To Console  \nCreating Cloudlet ${cloudlet_platform_type} Done
+
+Platform Not Supported
+   Log To Console  \nNot Creating ${cloudlet_platform_type} this platform is not supported  
+   Should Contain Any  ${cloudlet_platform_type}  PlatformTypeOpenstack  PlatformTypeVsphere  PlatformTypeVcd 
+
 #Cleanup Clusters and Apps
 #   [Arguments]  ${region}  ${cloudlet_name}
 #  
