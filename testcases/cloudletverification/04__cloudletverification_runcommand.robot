@@ -50,7 +50,7 @@ User shall be able to do RunCommand on docker dedicated/direct
 
 User shall be able to do RunCommand on docker dedicated/lb
    [Documentation]
-   ...  do RunCommand on docker shared app
+   ...  do RunCommand on docker dedicated app
    ...  verify RunCommand works
    [Tags]  docker  dedicated  loadbalancer  runcommand
 
