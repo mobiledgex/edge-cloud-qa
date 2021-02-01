@@ -39,6 +39,8 @@ parser.add_argument('--cycle', help='jira cycle. no default')
 parser.add_argument('--folder', default=None, help='jira folder under the cycle. no default')
 parser.add_argument('--jobduration', default=0, help='duration of job. default is 0')
 parser.add_argument('--summaryonly', action='store_true', help='print summary only')
+parser.add_argument('--cyclesummary', action='store_true', help='print cycle summary of all folders only')
+parser.add_argument('--slack', action='store_true', help='print report to slack')
 
 args = parser.parse_args()
 
@@ -48,6 +50,8 @@ cycle_name = args.cycle
 job_duration = int(args.jobduration)
 folder_name = args.folder
 summary_only = args.summaryonly
+slack = args.slack
+cycle_summary = args.cyclesummary
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -86,6 +90,11 @@ oauth_scope = 'chat:write:bot'
 slack_token = api_token
 #sc = SlackClient(slack_token)
 sc = WebClient(token=slack_token)
+
+jiraQuery = f'project={project_name} AND fixVersion={version_name} AND (component=Automated AND component!=WebUI)'
+jira_result = json.loads(j.search(jiraQuery, max_results=1))
+total_jira_tests = jira_result['total']
+logging.info(f'total automated jira tests is {total_jira_tests}')
 
 project_info = j.get_project(project_name)
 content = json.loads(project_info)
@@ -128,45 +137,71 @@ failed_bugs_string_bytestcase = ''
 failed_bugs_string_bybug = ''
 failed_nobugs_string = ''
 bug_dict = {}
-while offset < total_count:
-    if folder_id:
-        result = z.get_execution_list_by_folderid(folder_id=folder_id, cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
-    else:
-        result = z.get_execution_list_by_cycleid(cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
-    query_content = json.loads(result)
+report_warning = ''
 
-    print('length',len(query_content['searchObjectList']))
-    
-    total_count =  query_content['totalCount']
-    #max_allowed =  query_content['maxAllowed']
-    #offset = query_content['currentOffset'] + query_content['maxAllowed']
-    offset = offset + query_content['maxAllowed']
-    for tc in query_content['searchObjectList']:
-        print(tc['issueKey'], tc['execution']['status']['name'], tc['execution']['defects'])
-        if tc['execution']['status']['name'] == 'PASS': total_pass += 1
-        elif tc['execution']['status']['name'] == 'FAIL':
-            total_fail += 1
-            if len(tc['execution']['defects']) == 0:
-                total_fail_nobugs += 1
-                failed_nobugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
-            else:
-                failed_bugs_string_bytestcase += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
-                for defect in tc['execution']['defects']:
-                    failed_bugs_string_bytestcase += '>      ' + defect['key'] + ' - ' + defect['summary'] + '\n'
-                    if (defect['key'] + ' - ' + defect['summary']) in bug_dict:
-                        #print('bd', bug_dict[defect['key']])
-                        bug_dict[defect['key'] + ' - ' + defect['summary']].append(tc['issueKey'] + '\t' +  tc['issueSummary'])
-                    else:
-                        bug_dict[defect['key'] + ' - ' + defect['summary']] = [tc['issueKey'] + '\t' +  tc['issueSummary']]
-                total_fail_bugs += 1
-            failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
-        elif tc['execution']['status']['name'] == 'UNEXECUTED':
-            total_unexecuted += 1
-            unexecuted_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
-        elif tc['execution']['status']['name'] == 'WIP': total_wip += 1
-        elif tc['execution']['status']['name'] == 'BLOCKED': total_blocked += 1
+if cycle_summary:
+    result = json.loads(z.get_folders(project_id=project_id, version_id=version_id, cycle_id=cycle_id, expand=True))
+    print('rrrrrrr', result)
+    for folder in result:
+        print('ffff', folder)
+        for status in folder['executionSummaries']:
+            if status['executionStatusName'] == 'FAIL':
+                total_fail += status['count']
+            elif status['executionStatusName'] == 'PASS':
+                total_pass += status['count']
+            elif status['executionStatusName'] == 'UNEXECUTED':
+                total_unexecuted += status['count']
+            elif status['executionStatusName'] == 'WIP':
+                total_wip += status['count']
+            elif status['executionStatusName'] == 'BLOCKED':
+                total_blocked += status['count']
+    total_counted = total_fail + total_pass + total_unexecuted + total_wip + total_blocked
+    total_count = total_jira_tests
+    logging.info(f'folders total={total_counted} pass={total_fail} fail={total_fail} unexec={total_unexecuted} wip={total_wip} blocked={total_blocked}')
 
-        total_counted += 1
+    if total_counted != total_jira_tests:
+        logging.error(f'mismatch in number of tests folder={total_counted} jira={total_jira_tests}')
+        #report_warning = f'mismatch in number of tests folder={total_counted} jira={total_jira_tests}'
+else:
+    while offset < total_count:
+        if folder_id:
+            result = z.get_execution_list_by_folderid(folder_id=folder_id, cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
+        else:
+            result = z.get_execution_list_by_cycleid(cycle_id=cycle_id, version_id=version_id,  project_id=project_id, offset=offset)
+        query_content = json.loads(result)
+
+        print('length',len(query_content['searchObjectList']))
+
+        total_count =  query_content['totalCount']
+        #max_allowed =  query_content['maxAllowed']
+        #offset = query_content['currentOffset'] + query_content['maxAllowed']
+        offset = offset + query_content['maxAllowed']
+        for tc in query_content['searchObjectList']:
+            print(tc['issueKey'], tc['execution']['status']['name'], tc['execution']['defects'])
+            if tc['execution']['status']['name'] == 'PASS': total_pass += 1
+            elif tc['execution']['status']['name'] == 'FAIL':
+                total_fail += 1
+                if len(tc['execution']['defects']) == 0:
+                    total_fail_nobugs += 1
+                    failed_nobugs_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                else:
+                    failed_bugs_string_bytestcase += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+                    for defect in tc['execution']['defects']:
+                        failed_bugs_string_bytestcase += '>      ' + defect['key'] + ' - ' + defect['summary'] + '\n'
+                        if (defect['key'] + ' - ' + defect['summary']) in bug_dict:
+                            #print('bd', bug_dict[defect['key']])
+                            bug_dict[defect['key'] + ' - ' + defect['summary']].append(tc['issueKey'] + '\t' +  tc['issueSummary'])
+                        else:
+                            bug_dict[defect['key'] + ' - ' + defect['summary']] = [tc['issueKey'] + '\t' +  tc['issueSummary']]
+                    total_fail_bugs += 1
+                failed_string +=  tc['issueKey'] + '\t' + tc['issueSummary'] + '\n'
+            elif tc['execution']['status']['name'] == 'UNEXECUTED':
+                total_unexecuted += 1
+                unexecuted_string += '>' + tc['issueKey'] + '\t' +  tc['issueSummary'] + '\n'
+            elif tc['execution']['status']['name'] == 'WIP': total_wip += 1
+            elif tc['execution']['status']['name'] == 'BLOCKED': total_blocked += 1
+
+            total_counted += 1
     
 print('totalcount', total_count, 'totalcounted', total_counted, 'pass', total_pass, 'fail', total_fail, 'unexec', total_unexecuted)
 
@@ -201,13 +236,13 @@ report_string += f' {cycle_name}*\n\n'
 report_string += f'>*Total TCs:* {total_counted}\n'
 report_string += f'>*Total Passed:* {total_pass}   {pass_perc}%\n'
 report_string += f'>*Total Failed:* {total_fail}   {fail_perc}%\n'
-report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}   {fail_bugs_perc}%\n'
-report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}   {fail_nobugs_perc}%\n'
+if not cycle_summary: report_string += f'>*Total Failed w/bugs:* {total_fail_bugs}   {fail_bugs_perc}%\n'
+if not cycle_summary: report_string += f'>*Total Failed wo/bugs:* {total_fail_nobugs}   {fail_nobugs_perc}%\n'
 report_string += f'>*Total Unexec:* {total_unexecuted}   {unexec_perc}%\n'
 report_string += f'>*Total WIP:* {total_wip}   {wip_perc}%\n'
 report_string += f'>*Total Blocked:* {total_blocked}   {blocked_perc}%\n'
-report_string += f'>*Total NA:* {total_na}   {na_perc}%\n'
-report_string += f'>*Total WontExec:* {total_wontexec}   {wontexec_perc}%\n'
+#report_string += f'>*Total NA:* {total_na}   {na_perc}%\n'  # dont think jira reports this
+#report_string += f'>*Total WontExec:* {total_wontexec}   {wontexec_perc}%\n'  # dont think jira reports this
 if job_duration > 0:
     report_string += f'>*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs\n'
 
@@ -217,7 +252,7 @@ if (total_pass + total_fail + total_unexecuted + total_wip + total_blocked + tot
     report_string += f'*WARNING - sum of exectution types did not add up. counted={total_pass + total_fail + total_unexecuted + total_wip + total_blocked + total_na + total_wontexec} expected={total_counted}*\n'
 summary_string = report_string
 
-if not summary_only:
+if not summary_only and not cycle_summary:
     if len(failed_nobugs_string) == 0:
         failed_nobugs_string = '>None\n'
     if len(failed_bugs_string_bytestcase) == 0:
@@ -241,6 +276,9 @@ if not summary_only:
     report_string += '>\n*Unexecuted testcases:*\n' + unexecuted_string
     #print(failed_bugs_string_bybug)
 
+if report_warning:
+    report_string += '\n' + report_warning
+    
 #print(report_string)
 
 #sys.exit(1)
@@ -287,14 +325,16 @@ report_attachment = json.dumps(
 
 print(report_string)
 
-try:
-    response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
-    print('slack message:', response)
-    if 'response_metadata' in response and response['response_metadata']['messages']:
-        response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
-except SlackApiError as e:
-    # You will get a SlackApiError if "ok" is False
-    assert e.response["ok"] is False
-    assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
-    print(f"Got an error: {e.response['error']}")
+if slack:
+    print('slacking report')
+    try:
+        response = sc.chat_postMessage(channel='#qa-automation', text=report_string)
+        print('slack message:', response)
+        if 'response_metadata' in response and response['response_metadata']['messages']:
+            response = sc.chat_postMessage(channel='#qa-automation', text=response['response_metadata']['messages'])
+    except SlackApiError as e:
+        # You will get a SlackApiError if "ok" is False
+        assert e.response["ok"] is False
+        assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
+        print(f"Got an error: {e.response['error']}")
 
