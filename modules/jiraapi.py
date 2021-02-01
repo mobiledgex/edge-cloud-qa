@@ -34,8 +34,8 @@ class Jiraapi(WebService):
         #logging.debug("username=" + username + " password=" + password + " auth=" + auth64_string)
         logging.debug("username=" + username + "token=" + token)
 
-    def search(self, query = None, start_at=0):
-        url = self.base_url + '/search' + '?startAt=' + str(start_at) + '&jql=' + query + '&maxResults=100'
+    def search(self, query = None, start_at=0, max_results=100):
+        url = self.base_url + '/search' + '?startAt=' + str(start_at) + '&jql=' + query + '&maxResults=' + str(max_results)
         logging.debug('url=' + url)
 
         self.get(url,headers = self.headers)
