@@ -77,6 +77,8 @@ FindCloudlet - request shall return dmuus with azure cloudlet provisioned and dm
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${dmuus_cloudlet_latitude}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${dmuus_cloudlet_longitude}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}               ${dmuus_appinst.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}       ${dmuus_appinst.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}         ${dmuus_appinst.mapped_ports[0].public_port}
