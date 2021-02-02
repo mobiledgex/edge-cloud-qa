@@ -111,6 +111,8 @@ FindCloudlet platos - request shall return dmuus with gcp cloudlet provisioned a
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${dmuus_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${dmuus_appinst.mapped_ports[0].fqdn_prefix}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
 *** Keywords ***
 Setup
     ${epoch}=  Get Time  epoch

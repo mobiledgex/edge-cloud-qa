@@ -86,6 +86,7 @@ CreateAlertReceiver - shall be able to create slack alert
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
+      type=slack  slack_channel=xxxx              slack_api_url=${slack_api_url}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
 
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  cloudlet_name=x
@@ -95,6 +96,7 @@ CreateAlertReceiver - shall be able to create slack alert
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error     operator_org_name=${developer}  cloudlet_name=x
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  region=US
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     operator_org_name=${developer}  cloudlet_name=x  region=US
+      type=slack  slack_channel=slack_channel  slack_api_url=${slack_api_url}     severity=info     operator_org_name=${developer}  cloudlet_name=x  region=US
 
       # app
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
@@ -118,6 +120,7 @@ CreateAlertReceiver - shall be able to create slack alert
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=slack  slack_channel=slack_channel  slack_api_url=${slack_api_url}     severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
 
       # receiver name
       receiver_name=x          type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
@@ -128,6 +131,7 @@ CreateAlertReceiver - shall be able to create slack alert
       receiver_name=x,xx       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
       receiver_name=x!xx       type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
       receiver_name=x .&_!,xx  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
+      receiver_name=x .&_!,xq  type=slack  slack_channel=slack_channel     slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
 
 *** Keywords ***
 Setup
@@ -179,7 +183,11 @@ Verify Email Alert
 Verify Slack Alert
    [Arguments]  ${alert}  &{parms}
 
-   Run Keyword If  'slack_channel' in ${parms}  Should Be Equal  ${alert['SlackChannel']}  ${parms['slack_channel']}
-   Run Keyword If  'slack_api_url' in ${parms}  Should Be Equal  ${alert['SlackWebhook']}  <hidden>
-
+   ${channel}=  Run Keyword If  '#' in "${parms['slack_channel']}"  Set Variable  ${parms['slack_channel']}
+   ...  ELSE  Set Variable  \#${parms['slack_channel']}
+ 
+   #Run Keyword If  'slack_channel' in ${parms}  Should Be Equal  ${alert['SlackChannel']}  ${parms['slack_channel']}
+   #Run Keyword If  'slack_api_url' in ${parms}  Should Be Equal  ${alert['SlackWebhook']}  <hidden>
+   Should Be Equal  ${alert['SlackChannel']}  ${channel}
+   Should Be Equal  ${alert['SlackWebhook']}  <hidden>
 
