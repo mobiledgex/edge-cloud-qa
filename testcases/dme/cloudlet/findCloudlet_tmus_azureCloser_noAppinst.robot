@@ -89,6 +89,8 @@ FindCloudlet - request shall return tmus with azure cloudlet closer but no appin
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${tmus_appinst.mapped_ports[0].public_port}
       Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}    ${tmus_appinst.mapped_ports[0].fqdn_prefix}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
 *** Keywords ***
 Setup
     ${epoch}=  Get Time  epoch

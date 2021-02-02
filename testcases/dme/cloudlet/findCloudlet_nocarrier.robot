@@ -103,6 +103,8 @@ FindCloudlet - findCloudlet without carrier shall return cloudlet regardless of 
     Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  ${azure_appinst.mapped_ports[0].public_port}
     Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}  ${azure_appinst.mapped_ports[0].fqdn_prefix}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
     # find att
     ${reg}=  Register Client
     ${cloudlet}=  Find Cloudlet  session_cookie=${reg.session_cookie}  latitude=35  longitude=-96  use_defaults=${False}
@@ -118,6 +120,8 @@ FindCloudlet - findCloudlet without carrier shall return cloudlet regardless of 
     Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  ${att_appinst.mapped_ports[0].public_port}
     Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}  ${att_appinst.mapped_ports[0].fqdn_prefix}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
     # find tmus
     ${reg}=  Register Client
     ${cloudlet}=  Find Cloudlet  session_cookie=${reg.session_cookie}  latitude=35  longitude=-95  use_defaults=${False}
@@ -132,6 +136,8 @@ FindCloudlet - findCloudlet without carrier shall return cloudlet regardless of 
     Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${tmus_appinst.mapped_ports[0].internal_port}
     Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  ${tmus_appinst.mapped_ports[0].public_port}
     Should Be Equal             ${cloudlet.ports[0].fqdn_prefix}  ${tmus_appinst.mapped_ports[0].fqdn_prefix}
+
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
 
 *** Keywords ***
 Setup
