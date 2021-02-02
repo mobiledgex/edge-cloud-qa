@@ -244,7 +244,7 @@ node('jenkinsSlave1'){
 
           dir('go/src/github.com/mobiledgex/jenkins') {
 
-              #add_tests_to_folder(version, project, cycle, 'console', 'Automated,WebUI', null)
+           // add_tests_to_folder(version, project, cycle, 'console', 'Automated,WebUI', null)
               add_tests_to_folder(version, project, cycle, 'sdk', 'Automated,SDK', null)
               add_tests_to_folder(version, project, cycle, 'dme', 'Automated,DME', 'SDK,Metrics,Performance')
               add_tests_to_folder(version, project, cycle, 'openstack', 'Automated,CRM,Openstack', null)
