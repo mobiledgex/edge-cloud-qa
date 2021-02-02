@@ -187,6 +187,8 @@ Register Client and Find Cloudlet
    Should Be Equal  ${cloudlet_3['status']}  FIND_FOUND
    Should Be Equal  ${cloudlet_3['fqdn']}  ${fqdn}
 
+   Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
    # put cloudlet in maintenance mode
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
 
