@@ -104,6 +104,8 @@ Find Cloudlet for tmus closest to latitude ${lat} longitude ${long} should retur
       Should Be True  '${cloudlet.fqdn}' == '${appinst_2.uri}' or '${cloudlet.fqdn}' == '${appinst_3.uri}'
       Should Not Be Equal  ${cloudlet.fqdn}  ${appinst_4.uri}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}  1  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  8888 
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}  8888 

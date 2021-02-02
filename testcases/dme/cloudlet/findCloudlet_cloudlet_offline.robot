@@ -78,6 +78,8 @@ FindCloudlet - request shall not return cloudlet if state=CloudletStateOffline
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${tmus_appinst['data']['mapped_ports'][0]['internal_port']}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${tmus_appinst['data']['mapped_ports'][0]['public_port']}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       FOR  ${state}  IN  @{cloudlet_states}
          # set tmus cloudlet offline
          Show Cloudlet Info    region=${region}  cloudlet_name=${cloudlet_name_default}  #token=${super_token}  use_defaults=${False}
