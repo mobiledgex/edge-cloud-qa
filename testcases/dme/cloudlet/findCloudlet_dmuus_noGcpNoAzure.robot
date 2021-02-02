@@ -40,6 +40,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
@@ -67,6 +69,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond same
       Should Be Equal             ${cloudlet.fqdn}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
+
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
@@ -96,6 +100,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coor
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
@@ -123,6 +129,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coor
       Should Be Equal             ${cloudlet.fqdn}  ${appinst_2.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat2}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long2}
+
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_2.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_2.mapped_ports[0].internal_port}
@@ -158,6 +166,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coor
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
 
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
       Should Be Equal As Numbers  ${cloudlet.ports[0].public_port}    ${appinst_1.mapped_ports[0].public_port}
@@ -185,6 +195,8 @@ FindCloudlet - request shall return dmuus with no gcp/azure provisioned ond coor
       Should Be Equal             ${cloudlet.fqdn}  ${appinst_1.uri}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.latitude}   ${cloudlet_lat1}
       Should Be Equal As Numbers  ${cloudlet.cloudlet_location.longitude}  ${cloudlet_long1}
+
+      Should Be True  len('${cloudlet.edge_events_cookie}') > 100
 
       Should Be Equal As Numbers  ${cloudlet.ports[0].proto}          ${appinst_1.mapped_ports[0].proto}  #LProtoTCP
       Should Be Equal As Numbers  ${cloudlet.ports[0].internal_port}  ${appinst_1.mapped_ports[0].internal_port}
