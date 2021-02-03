@@ -176,6 +176,9 @@ class AlertReceiver(MexOperation):
                            if description: check_payload(slack_msg, f'*Description:* {description}')
                            if title: check_payload(slack_msg, f'*Alert:* {title}')
                            #check_payload(slack_msg, '*job:* MobiledgeX Monitoring')
+                           if 'job:' in slack_msg['attachments'][0]['text']:
+                               raise Exception(f'job found in alert slack message')
+
                        except Exception as e:
                            logger.info(f'check payload failed:{e}')
                            continue
@@ -277,6 +280,10 @@ class AlertReceiver(MexOperation):
                                 if description: check_payload(f'description = {description}')
                                 if title: check_payload(f'title = {title}')
                                 #check_payload('job = MobiledgeX Monitoring')
+
+                                if 'job =' in payload:
+                                    raise Exception(f'job found in alert email')
+
                             except Exception as e:
                                 logger.info(f'check payload failed:{e}')
                                 continue
