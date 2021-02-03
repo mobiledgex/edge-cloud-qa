@@ -972,7 +972,7 @@ class AppInstance():
         if app_key_dict:
             appinst_key_dict['app_key'] = app_pb2.AppKey(**app_key_dict)
         if clusterinst_key_dict:
-            appinst_key_dict['cluster_inst_key'] = clusterinst_pb2.ClusterInstKey(**clusterinst_key_dict)
+            appinst_key_dict['cluster_inst_key'] = appinst_pb2.VirtualClusterInstKey(**clusterinst_key_dict)
         #if cloudlet_key_dict:
         #    appinst_key_dict['cloudlet_key'] = cloudlet_pb2.CloudletKey(**cloudlet_key_dict) 
         #if self.appinst_id is not None:
