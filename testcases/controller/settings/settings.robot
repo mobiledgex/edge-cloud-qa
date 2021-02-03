@@ -48,6 +48,7 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  update_trust_policy_timeout
    Should Contain  ${settings}  dme_api_metrics_collection_interval 
    Should Contain  ${settings}  persistent_connection_metrics_collection_interval 
+   Should Contain  ${settings}  cleanup_reservable_auto_cluster_idletime
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -68,13 +69,15 @@ Settings - UpdateSettings should update the settings
    Update Settings  region=${region}  shepherd_health_check_retries=1 
    Update Settings  region=${region}  shepherd_health_check_interval=1s 
 
+   Update Settings  region=${region}  influx_db_metrics_retention=0h0m0s
+
    Update Settings  region=${region}  auto_deploy_interval_sec=1   auto_deploy_offset_sec=1  auto_deploy_max_intervals=1
 
    Update Settings  region=${region}  create_app_inst_timeout=1m0s  update_app_inst_timeout=1m0s  delete_app_inst_timeout=1m0s  create_cluster_inst_timeout=1m0s   update_cluster_inst_timeout=1m0s   delete_cluster_inst_timeout=1m0s
 
-   Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=100h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
+   Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
-   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  persistent_connection_metrics_collection_interval=1s
+   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  persistent_connection_metrics_collection_interval=1s  cleanup_reservable_auto_cluster_idletime=1s
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -98,13 +101,14 @@ Settings - UpdateSettings should update the settings
    Should Be Equal As Numbers  ${settings_post['load_balancer_max_port_range']}  1  
    Should Be Equal As Numbers  ${settings_post['max_tracked_dme_clients']}       1  
    Should Be Equal             ${settings_post['chef_client_interval']}          1m0s  
-   Should Be Equal             ${settings_post['influx_db_metrics_retention']}   100h0m0s 
+   Should Be Equal             ${settings_post['influx_db_metrics_retention']}   1h0m0s 
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  1s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        1s
    Should Be Equal             ${settings_post['update_trust_policy_timeout']}   1s
 
    Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}   1s
    Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1s
+   Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   1s
 
 # ECQ-2990
 Settings - UpdateSettings with bad parms shall return error
@@ -116,7 +120,7 @@ Settings - UpdateSettings with bad parms shall return error
    # fixed EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
    # fixed EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
    # fixed EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
-   # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
+   # fixed EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
    [Template]  Fail Create UpdateSettings 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  shepherd_metrics_collection_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  shepherd_metrics_collection_interval  1x
@@ -206,14 +210,15 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  0s
    ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  -1s
 
-   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  influx_db_metrics_retention  1
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               influx_db_metrics_retention  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  influx_db_metrics_retention  1x
-   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  influx_db_metrics_retention  x
-   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  influx_db_metrics_retention  99999999h
-   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')  influx_db_metrics_retention  0s
-   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 61"}')  influx_db_metrics_retention  -1s
-   ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')  influx_db_metrics_retention  1s
-   ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')  influx_db_metrics_retention  1h0m0s
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       influx_db_metrics_retention  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               influx_db_metrics_retention  99999999h
+   #('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')                 influx_db_metrics_retention  0s      # now supported
+   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 61"}')          influx_db_metrics_retention  -1s
+   ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  1s
+   #('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  1h0m0s  # now supported
+   ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  0h59m0s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               cloudlet_maintenance_timeout  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cloudlet_maintenance_timeout  1x
@@ -250,13 +255,20 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  0s
    ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  -1s
 
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               cleanup_reservable_auto_cluster_idletime  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cleanup_reservable_auto_cluster_idletime  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       cleanup_reservable_auto_cluster_idletime  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               cleanup_reservable_auto_cluster_idletime  99999999h
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  0s
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  -1s
+
 # ECQ-2991
 Settings - user shall be able to reset the settings
    [Documentation]
    ...  - send ResetSettings 
    ...  - verify settings are reset
 
-   # EDGECLOUD-4156     ResetSettings removes the influxdbmetricsretention setting
+   # fixed EDGECLOUD-4156     ResetSettings removes the influxdbmetricsretention setting
 
    ${settings}=   Show Settings  region=${region}
 
@@ -296,7 +308,8 @@ Settings - user shall be able to reset the settings
    Should Be Equal             ${settings_post['update_trust_policy_timeout']}                         10m0s
    Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}                 30s
    Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1h0m0s 
-   Should Be Equal             ${settings_post['influx_db_metrics_retention']}                         336h0m0s
+   Should Be Equal             ${settings_post['influx_db_metrics_retention']}                         672h0m0s
+   Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}            30m0s
 
 *** Keywords ***
 Cleanup Settings
