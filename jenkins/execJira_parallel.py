@@ -154,7 +154,7 @@ def main():
     component_list = component.split(',')
     component_query = ''
     for component in component_list:
-        component_query += ' AND component = ' + component
+        component_query += f' AND component = \"{component.strip()}\"' 
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
