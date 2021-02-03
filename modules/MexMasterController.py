@@ -1240,6 +1240,33 @@ class MexMasterController(MexRest):
             
             raise Exception(f'app instance DOES exist.')
 
+    def wait_for_cluster_instance_to_be_ready(self, token=None, region=None, cluster_name=None, cloudlet_name=None, use_defaults=False, timeout=180):
+        for x in range(1, timeout):
+            clusterinstance = self.cluster_instance.show_cluster_instance(token=token, region=region, cloudlet_name=cloudlet_name, cluster_name=cluster_name, use_defaults=use_defaults)
+            if clusterinstance:
+                if clusterinstance and clusterinstance[0]['data']['state'] == 5:
+                    logging.info(f'Cluster Instance is Ready')
+                    return clusterinstance
+                else:
+                    logging.debug(f'cluster instance not ready. got {clusterinstance[0]["data"]["state"]}. sleeping and trying again')
+                    time.sleep(1)
+            else:
+                logging.debug(f'cluster instance is NOT found. sleeping and trying again')
+
+        raise Exception(f'cluster instance is NOT ready. Got {clusterinstance[0]["data"]["state"]} but expected 5')
+
+    def wait_for_cluster_instance_to_be_deleted(self, token=None, region=None, cloudlet_name=None, cluster_name=None, use_defaults=False, use_thread=False, timeout=180):
+        for x in range(1, timeout):
+            clusterinstance = self.cluster_instance.show_cluster_instance(token=token, region=region, cloudlet_name=cloudlet_name, cluster_name=cluster_name, use_defaults=use_defaults)
+            if clusterinstance:
+                logging.debug(f'cluster instance still exists. got state={clusterinstance[0]["data"]["state"]}. sleeping and trying again')
+                time.sleep(1)
+            else:
+                logging.info(f'cluster instance is NOT found.')
+                return True
+
+        raise Exception(f'cluster instance still exists. Got cluster_name={clusterinstance[0]["data"]["key"]["cluster_key"]["name"]}  state={clusterinstance[0]["data"]["state"]}')
+
     def wait_for_app_instance_to_be_ready(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, privacy_policy=None, shared_volume_size=None, crm_override=None, json_data=None, use_defaults=False, auto_delete=True, use_thread=False, timeout=180):
         for x in range(1, timeout):
             appinstance = self.app_instance.show_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
@@ -1654,10 +1681,10 @@ class MexMasterController(MexRest):
     def show_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.show_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
 
-    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, json_data=None, use_defaults=True, use_thread=False):
+    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, cleanup_reservable_auto_cluster_idletime=None, json_data=None, use_defaults=True, use_thread=False):
         #for key, value in kwargs.items():
         #  print('*WARN*', "{0} = {1}".format(key, value))
-        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, persistent_connection_metrics_collection_interval=persistent_connection_metrics_collection_interval)
+        return self.settings.update_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread, shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, persistent_connection_metrics_collection_interval=persistent_connection_metrics_collection_interval, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime)
 
     def reset_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.reset_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
