@@ -2081,14 +2081,17 @@ class MexController(MexGrpc):
             if not success:
                 raise Exception('Error creating app instance:{}xxx'.format(str(resp)))
 
+            #resp =  self.show_app_instances(app_instance)
+            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_org_name=app_instance.key.app_key.organization, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_org_name=app_instance.key.cluster_inst_key.cloudlet_key.organization, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
+
             if auto_delete:
+                if resp[0].real_cluster_name:
+                    self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_name=resp[0].real_cluster_name, developer_org_name=resp[0].key.cluster_inst_key.organization, cloudlet_name=resp[0].key.cluster_inst_key.cloudlet_key.name))
+
                 if del_thread:
                     self.prov_stack.append(lambda:self.delete_app_instance(use_thread=True, **kwargs))
                 else:
                     self.prov_stack.append(lambda:self.delete_app_instance(app_instance))
-
-            #resp =  self.show_app_instances(app_instance)
-            resp =  self.show_app_instances(app_name=app_instance.key.app_key.name, developer_org_name=app_instance.key.app_key.organization, cloudlet_name=app_instance.key.cluster_inst_key.cloudlet_key.name, operator_org_name=app_instance.key.cluster_inst_key.cloudlet_key.organization, cluster_instance_name=app_instance.key.cluster_inst_key.cluster_key.name, use_defaults=False)
 
             return resp[0]
         
