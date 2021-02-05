@@ -109,7 +109,7 @@ class MexOperation(MexRest):
                     if str(self.resp.text) != '{"message":"user deleted"}':
                         raise Exception('ERROR: user not deleted successfully:' + str(self.resp_text))
                 elif url.endswith('usercreate'):
-                    if 'user created' not in str(self.resp.text):
+                    if 'user created' not in str(self.resp.text) and 'User created' not in str(self.resp.text):
                         raise Exception('ERROR: user not created successfully:' + str(self.resp_text))
                 elif url.endswith('UpdateTrustPolicy'):
                     if 'Failed: 0' not in str(self.resp_text) and 'Trust policy updated, no cloudlets affected' not in str(self.resp_text):
