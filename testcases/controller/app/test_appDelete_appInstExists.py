@@ -57,8 +57,9 @@ class tc(unittest.TestCase):
                                                   cloudlet_name=cloud_name,
                                                   developer_org_name=developer_name,
                                                   cluster_instance_name='autocluster',
-                                                  cluster_instance_developer_org_name=developer_name,
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   operator_org_name=operator_name)
+
         self.app = mex_controller.App(image_type='ImageTypeDocker',
                                       app_name=app_name,
                                       app_version=app_version,
@@ -76,7 +77,9 @@ class tc(unittest.TestCase):
         #self.controller.create_cluster(self.cluster.cluster)
         self.controller.create_app(self.app.app)
         self.controller.create_app_instance(self.app_instance.app_instance)
-
+        self.appinst = self.controller.show_app_instances(self.app_instance.app_instance)
+        
+    # ECQ-1106
     def test_DeleteApp_appInstance_exists(self):
         # [Documentation] App - User shall not be able to delete an app if in use by application instance 
         # ... delete an app which is in use by an application instance
@@ -84,7 +87,7 @@ class tc(unittest.TestCase):
 
         # print apps before add
         apps_pre = self.controller.show_apps()
-
+        
         # delete app
         error = None
         try:
@@ -108,6 +111,16 @@ class tc(unittest.TestCase):
     @classmethod
     def tearDownClass(self):
         self.controller.delete_app_instance(self.app_instance.app_instance)
+
+        cluster_instance = mex_controller.ClusterInstance(
+                                                  cloudlet_name=cloud_name,
+                                                  cluster_name=self.appinst[0].real_cluster_name,
+                                                  developer_org_name='MobiledgeX',
+                                                  operator_org_name=operator_name)
+
+        #self.cluster_instance.cluster_name=self.appinst[0].real_cluster_name
+        self.controller.delete_cluster_instance(cluster_instance.cluster_instance)
+
         self.controller.delete_app(self.app.app)
         #self.controller.delete_cluster(self.cluster.cluster)
 #        self.controller.delete_developer(self.developer.developer)

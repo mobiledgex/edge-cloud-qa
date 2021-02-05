@@ -1201,7 +1201,9 @@ class MexMasterController(MexRest):
         if developer_org_name is None:
             if self.organization_name:
                 developer_org_name = self.organization_name
-                cluster_instance_developer_org_name = self.organization_name
+        if cluster_instance_developer_org_name is None:
+            if self.organization_name:
+                if cluster_instance_name is not None and not cluster_instance_name.startswith('autocluster'): cluster_instance_developer_org_name = self.organization_name
         return self.app_instance.create_app_instance(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, privacy_policy=privacy_policy, shared_volume_size=shared_volume_size, crm_override=crm_override, use_defaults=use_defaults, auto_delete=auto_delete, use_thread=use_thread)
 
     def get_create_app_instance_stream(self):
