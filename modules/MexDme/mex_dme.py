@@ -11,6 +11,7 @@ import math
 import time
 import base64
 import json
+import queue
 
 from mex_grpc import MexGrpc
 
@@ -89,6 +90,44 @@ class FindCloudletRequest():
         #print(loc_dict)
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
 
+class StreamEdgeEvent():
+    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
+        request_dict = {}
+        self.session_cookie = session_cookie
+        self.edge_events_cookie = edge_events_cookie
+        self.event_type = event_type
+        self.carrier_name = carrier_name
+        self.latitude = latitude
+        self.longitude = longitude
+
+        if session_cookie == 'default':
+            self.session_cookie = session_cookie_global
+            
+        if use_defaults:
+            if not session_cookie: self.session_cookie = session_cookie_global
+            if not carrier_name: self.carrier_name = shared_variables.operator_name_default
+
+        loc_dict = {}
+        if self.latitude is not None:
+            loc_dict['latitude'] = float(self.latitude)
+        if self.longitude is not None:
+            loc_dict['longitude'] = float(self.longitude)
+
+        if self.session_cookie is not None:
+            request_dict['session_cookie'] = self.session_cookie
+        if self.carrier_name is not None:
+            request_dict['carrier_name'] = self.carrier_name
+        if self.edge_events_cookie is not None:
+            request_dict['edge_events_cookie'] = self.edge_events_cookie
+        if self.event_type is not None:
+            request_dict['event_type'] = int(self.event_type)
+
+        if loc_dict:
+            request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
+
+        #print(loc_dict)
+        self.request = app_client_pb2.ClientEdgeEvent(**request_dict)
+        print('*WARN*', 'request', self.request)
 class PlatformFindCloudletRequest():
     def __init__(self, session_cookie=None, carrier_name=None, client_token=None, use_defaults=True):
         request_dict = {}
@@ -341,6 +380,30 @@ class Dme(MexGrpc):
 
         return resp
 
+    def client_edge_event(self, client_edge_event_obj=None, **kwargs):
+        resp = None
+
+        if not client_edge_event_obj:
+            #if len(kwargs) == 0:
+            #    kwargs = {'use_defaults': True}
+            #if 'session_cookie' not in kwargs:
+            #    kwargs['session_cookie'] = self.session_cookie
+            request = StreamEdgeEvent(**kwargs).request
+
+        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+                   
+        send_queue = queue.SimpleQueue()
+        my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None)) 
+        send_queue.put(request)
+        #resp = self.match_engine_stub.StreamEdgeEvent(request)
+        response = next(my_event_stream)
+        print('*WARN*', 'edgeresp', response, type(response), dir(response))
+        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+
+        return response
+    
     def platform_find_cloudlet(self, find_cloudlet_obj=None, **kwargs):
         resp = None
 
