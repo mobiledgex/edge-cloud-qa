@@ -23,7 +23,7 @@ class User(MexOperation):
         self.update_url = '/auth/user/update'
         self.update_restricted_url = '/auth/restricted/user/update'
 
-    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, use_defaults=True):
+    def _build(self, username=None, password=None, email_address=None, metadata=None, locked=None, family_name=None, given_name=None, nickname=None, enable_totp=None, role=None, organization=None, use_defaults=True):
         if username == 'default':
             username = shared_variables_mc.username_default
             
@@ -47,6 +47,18 @@ class User(MexOperation):
             user_dict['metadata'] = metadata
         if locked is not None:
             user_dict['locked'] = locked
+        if family_name is not None:
+            user_dict['familyname'] = family_name
+        if given_name is not None:
+            user_dict['givenname'] = given_name
+        if nickname is not None:
+            user_dict['nickname'] = nickname
+        if enable_totp is not None:
+            user_dict['enabletotp'] = enable_totp
+        if role is not None:
+            user_dict['role'] = role
+        if organization is not None:
+            user_dict['org'] = organization 
 
         return user_dict
 
@@ -70,11 +82,11 @@ class User(MexOperation):
 
         return user_dict
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_user(self, username=None, password=None, email_address=None, family_name=None, given_name=None, nickname=None, email_password=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         if not email_password:
             email_password = password
 
-        msg = self._build(username=username, password=password, email_address=email_address, use_defaults=use_defaults)
+        msg = self._build(username=username, password=password, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_show = None
@@ -108,8 +120,8 @@ class User(MexOperation):
         return self.create(token=None, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=None, json_data=json_data, use_defaults=False, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=None, stream_timeout=None)
 
 
-    def show_user(self, token=None, username=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(username=username, use_defaults=use_defaults)
+    def show_user(self, token=None, username=None, email_address=None, given_name=None, family_name=None, nickname=None, role=None, organization=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(username=username, email_address=email_address, given_name=given_name, family_name=family_name, nickname=nickname, role=role, organization=organization, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.show_url, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
