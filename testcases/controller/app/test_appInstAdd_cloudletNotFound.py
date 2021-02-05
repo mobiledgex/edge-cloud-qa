@@ -196,6 +196,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1128
     def test_CreateAppInstCloudletNotFound_cloudletNotFound(self):
         # [Documentation] AppInst - User shall not be able to create an app instance with cloudlet not found
         # ... create an app instance with cloudlet that does not exist
@@ -205,9 +206,9 @@ class tc(unittest.TestCase):
         appinst_pre = self.controller.show_app_instances()
 
         # create the app instance
-        app_instance = mex_controller.AppInstance(app_name='someApplication',
+        app_instance = mex_controller.AppInstance(app_name='automation_api_app',
                                                   app_version='1.0',
-                                                  developer_org_name='dev',
+                                                  developer_org_name='MobiledgeX',
                                                   cloudlet_name='nocloud',
                                                   operator_org_name='TMUS')
 

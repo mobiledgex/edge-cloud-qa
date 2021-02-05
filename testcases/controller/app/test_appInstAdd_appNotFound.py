@@ -44,6 +44,7 @@ class tc(unittest.TestCase):
         #self.controller.create_operator(self.operator.operator)
         #self.controller.create_cloudlet(self.cloudlet.cloudlet)
 
+    # ECQ-1116
     def test_CreateAppInstAppNotFound_nodata(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with no app data
         # ... create an app instance sending no app data
@@ -58,7 +59,7 @@ class tc(unittest.TestCase):
                                                   developer_org_name=developer_name,
                                                   app_version=version,
                                                   cluster_instance_name='autocluster',
-                                                  cluster_instance_developer_org_name=developer_name,
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   operator_org_name=operator_name)
 
         resp = None
@@ -75,6 +76,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1117
     def test_CreateAppInstAppNotFound_idonly(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with appInstId only
         # ... create an app instance sending appInstId only
@@ -88,7 +90,7 @@ class tc(unittest.TestCase):
                                                   app_name=app_name,
                                                   developer_org_name=developer_name,
                                                   app_version=version,
-                                                  cluster_instance_developer_org_name=developer_name,
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
                                                   operator_org_name=operator_name)
@@ -108,6 +110,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1118
     def test_CreateAppInstAppNotFound_appnameonly(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with unknown app name
         # ... create an app instance sending unknown app name
@@ -121,7 +124,7 @@ class tc(unittest.TestCase):
                                                   developer_org_name=developer_name,
                                                   app_version=version,
                                                   cloudlet_name=cloud_name,
-                                                  cluster_instance_developer_org_name=developer_name,
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   cluster_instance_name='autocluster',
                                                   operator_org_name=operator_name)
 
@@ -140,6 +143,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1119
     def test_CreateAppInstAppNotFound_versiononly(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with appVersion only
         # ... create an app instance sending appVersion only
@@ -153,7 +157,7 @@ class tc(unittest.TestCase):
                                                   app_name=app_name,
                                                   developer_org_name=developer_name,
                                                   cloudlet_name=cloud_name,
-                                                  cluster_instance_developer_org_name=developer_name,
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   cluster_instance_name='autocluster',
                                                   operator_org_name=operator_name)
 
@@ -172,6 +176,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1120
     def test_CreateAppInstAppNotFound_developeronly(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with appDeveloper only
         # ... create an app instance sending appDeveloper only
@@ -186,7 +191,7 @@ class tc(unittest.TestCase):
                                                   app_version=version,
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
-                                                  cluster_instance_developer_org_name='dev',
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   operator_org_name=operator_name)
 
         resp = None
@@ -204,6 +209,7 @@ class tc(unittest.TestCase):
         #expect_equal(len(appinst_pre), len(appinst_post), 'same number of app ainst')
         assert_expectations()
 
+    # ECQ-1121
     def test_CreateAppInstAppNotFound_nameVersionDeveloperonly(self):
         # [Documentation] AppInst - User shall be not be able to create app instance with appName/appVersion/appDeveloper only
         # ... create an app instance sending appName/appVersion/appDeveloper only
@@ -218,7 +224,7 @@ class tc(unittest.TestCase):
                                                   developer_org_name='dev',
                                                   cloudlet_name=cloud_name,
                                                   cluster_instance_name='autocluster',
-                                                  cluster_instance_developer_org_name='dev',
+                                                  cluster_instance_developer_org_name='MobiledgeX',
                                                   operator_org_name=operator_name)
 
         resp = None

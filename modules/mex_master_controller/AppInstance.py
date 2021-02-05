@@ -4,6 +4,7 @@ import logging
 import shared_variables
 
 from mex_master_controller.MexOperation import MexOperation
+from mex_master_controller.ClusterInstance import ClusterInstance
 
 logger = logging.getLogger('mex_app rest')
 
@@ -20,6 +21,7 @@ class AppInstance(MexOperation):
         self.metrics_client_url = '/auth/metrics/client'
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
+        self.root_url = root_url
 
     def _build(self, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, powerstate=None, configs_kind=None, configs_config=None, use_defaults=True, include_fields=False):
  
@@ -43,7 +45,11 @@ class AppInstance(MexOperation):
             #if not cluster_instance_developer_name: self.developer_name = shared_variables.developer_name_default
             if not developer_org_name: developer_org_name = shared_variables.developer_name_default
             if not cluster_instance_name: cluster_instance_name = shared_variables.cluster_name_default
-            if not cluster_instance_developer_org_name: cluster_instance_developer_org_name = developer_org_name
+            if not cluster_instance_developer_org_name: 
+                if cluster_instance_name.startswith('autocluster'):
+                    cluster_instance_developer_org_name = 'MobiledgeX'
+                else:
+                    cluster_instance_developer_org_name = developer_org_name
             if not app_version: app_version = shared_variables.app_version_default
             if not cloudlet_name: cloudlet_name = shared_variables.cloudlet_name_default
             if not operator_org_name: operator_org_name = shared_variables.operator_name_default
@@ -184,17 +190,24 @@ class AppInstance(MexOperation):
 
         msg_dict_delete = None
         if auto_delete and 'key' in msg:
-            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
+            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): 
+                msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
+                clusterinst = ClusterInstance(root_url=self.root_url)
+                cluster_delete_url = clusterinst.delete_url
+                cluster_delete_msg = {'clusterinst': clusterinst._build(cluster_name='namenotset', cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)}
+                    
             msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_delete = {'appinst': msg_delete}
-
+ 
         msg_dict_show = None
         if 'key' in msg:
             if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
             msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
             msg_dict_show = {'appinst': msg_show}
         
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
+        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, delete_autocluster_url=cluster_delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, delete_autocluster_msg=cluster_delete_msg, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
+        #return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
+
 
     def create_app_instance_stream(self):
         return self.get_create_stream_output()
