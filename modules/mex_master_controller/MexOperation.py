@@ -39,8 +39,8 @@ class MexOperation(MexRest):
         self.thread_queue = thread_queue
         self.create_stream_output = []
 
-    def create(self, token=None, url=None, delete_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None):
-        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
+    def create(self, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, use_thread=False, json_data=None, use_defaults=False, create_msg=None, delete_msg=None, delete_autocluster_msg=None, show_msg=None, thread_name=None, stream=False, stream_timeout=None):
+        return self.send(message_type='create', token=token, url=url, delete_url=delete_url, delete_autocluster_url=delete_autocluster_url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=create_msg, delete_message=delete_msg, delete_autocluster_message=delete_autocluster_msg, show_message=show_msg, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
 
     def delete(self, token=None, url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, stream=False, stream_timeout=None):
         return self.send(message_type='delete', token=token, url=url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=message, stream=stream, stream_timeout=stream_timeout)
@@ -56,7 +56,7 @@ class MexOperation(MexRest):
     def update(self, token=None, url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, show_msg=None, stream=False, stream_timeout=None, thread_name=None):
         return self.send(message_type='update', token=token, url=url, show_url=show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, thread_name=thread_name, message=message, show_message=show_msg, stream=stream, stream_timeout=stream_timeout)
 
-    def send(self, message_type, token=None, url=None, delete_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5):
+    def send(self, message_type, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, delete_autocluster_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5):
         url = self.root_url + url
     
         payload = None
@@ -79,6 +79,7 @@ class MexOperation(MexRest):
 
         def send_message(thread_name='Thread'):
             self.counter_dict[message_type]['req_attempts'] += 1
+            show_resp = None
             
             try:
                 self.post(url=url, bearer=token, data=payload, stream=stream, stream_timeout=stream_timeout)
@@ -146,14 +147,6 @@ class MexOperation(MexRest):
             if message_type == 'create':
                 self.create_stream_output = self.stream_output
 
-            if message and delete_message:
-                logger.debug(f'adding message to delete stack: {delete_message}')
-                if token is None:
-                    delete_token = self.super_token
-                else:
-                    delete_token = token
-
-                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=delete_token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
             self.counter_dict[message_type]['req_success'] += 1
 
             if message and show_message is not None:
@@ -163,7 +156,24 @@ class MexOperation(MexRest):
                 else:
                     show_token = token
                 #resp = self.send(message_type='show', region=region, url=show_url, token=self.super_token, message=show_message, use_defaults=False)
-                resp = self.send(message_type='show', region=region, url=show_url, token=show_token, message=show_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout)
+                show_resp = self.send(message_type='show', region=region, url=show_url, token=show_token, message=show_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout)
+
+                if delete_autocluster_url and delete_autocluster_message:
+                    if message['appinst']['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'):
+                        delete_autocluster_message['clusterinst']['key']['cluster_key']['name'] = show_resp[0]['data']['real_cluster_name']
+                        self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_autocluster_url, region=region, token=delete_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
+
+            if message and delete_message:
+                logger.debug(f'adding message to delete stack: {delete_message}')
+                if token is None:
+                    delete_token = self.super_token
+                else:
+                    delete_token = token
+
+                self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=delete_token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
+
+            return show_resp
+
         if use_thread is True:
             thread_name = f'Thread-{thread_name}-{str(time.time())}'
             t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
