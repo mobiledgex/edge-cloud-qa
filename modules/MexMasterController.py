@@ -42,6 +42,7 @@ from mex_master_controller.Alert import Alert
 from mex_master_controller.User import User
 from mex_master_controller.Stream import Stream 
 from mex_master_controller.Settings import Settings
+from mex_master_controller.Role import Role 
 
 import shared_variables_mc
 import shared_variables
@@ -200,6 +201,7 @@ class MexMasterController(MexRest):
         self.stream = Stream(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.settings = Settings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
+        self.role = Role(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -417,15 +419,15 @@ class MexMasterController(MexRest):
     def login_mexadmin(self):
         return self.login(username=self.admin_username, password=self.admin_password)
 
-    def create_user(self, username=None, password=None, email_address=None, email_password=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_user(self, username=None, password=None, email_address=None, email_password=None, family_name=None, given_name=None, nickname=None, enable_totp=None, server='imap.gmail.com', email_check=False, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         self.username = username
         self.password = password
         self.email_address = email_address
 
-        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, server=server, email_check=email_check, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
+        return self.user.create_user(username=username, password=password, email_address=email_address, email_password=email_password, family_name=family_name, given_name=given_name, nickname=nickname, enable_totp=enable_totp, server=server, email_check=email_check, auto_delete=auto_delete, use_defaults=use_defaults, use_thread=use_thread)
 
-    def show_users(self,  username=None, token=None, json_data=None, use_defaults=True):
-        return self.user.show_user(token=token, username=username, json_data=json_data, use_defaults=use_defaults)
+    def show_user(self,  username=None, email_address=None, family_name=None, given_name=None, nickname=None, role=None, organization=None, token=None, json_data=None, use_defaults=True):
+        return self.user.show_user(token=token, username=username, email_address=email_address, family_name=family_name, given_name=given_name, nickname=nickname, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults)
 
     def get_current_user(self, token=None, json_data=None, use_defaults=True):
         return self.user.current_user(token=token, json_data=json_data, use_defaults=use_defaults)
@@ -445,6 +447,9 @@ class MexMasterController(MexRest):
 
         logging.info(f'unlocking username={username}')
         return self.update_user_restriction(token=token, username=username, locked=False, use_thread=use_thread)
+
+    def show_user_role(self, role=None, organization=None, token=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.role.role_show(token=token, role=role, organization=organization, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
     def new_password(self, password=None, token=None, json_data=None, use_defaults=True):
         url = self.root_url + '/auth/user/newpass'
