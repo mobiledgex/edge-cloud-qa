@@ -66,6 +66,7 @@ node('jenkinsSlave1'){
                     [$class: 'SparseCheckoutPaths',  sparseCheckoutPaths:[
                         [$class:'SparseCheckoutPath', path:'testcases/*'],
                         [$class:'SparseCheckoutPath', path:'jenkins/execJira_parallel.py'],
+                        [$class:'SparseCheckoutPath', path:'jenkins/execJira.py'],
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
                         [$class:'SparseCheckoutPath', path:'tools/build_protos.py'],
