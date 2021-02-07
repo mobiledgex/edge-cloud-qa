@@ -188,6 +188,8 @@ class AppInstance(MexOperation):
         if 'key' in msg and 'app_key' in msg['key']:
             thread_name = msg['key']['app_key']['name']
 
+        cluster_delete_url = None
+        cluster_delete_msg = None
         msg_dict_delete = None
         if auto_delete and 'key' in msg:
             if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): 
