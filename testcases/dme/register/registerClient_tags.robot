@@ -2,9 +2,6 @@
 Documentation   RegisterClient with uuid 
 
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
-Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
-
-Test Teardown	Cleanup provisioning
 
 *** Variables ***
 
