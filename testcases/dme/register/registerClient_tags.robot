@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   RegisterClient with uuid 
+Documentation   RegisterClient with tags
 
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 
