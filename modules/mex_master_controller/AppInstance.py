@@ -180,6 +180,18 @@ class AppInstance(MexOperation):
 
         return metric_dict
 
+    def _build_appinst_client(self, app_dict=None, uuid=None, uuid_type=None, use_defaults=True):
+        client_dict = {}
+
+        if app_dict is not None:
+            client_dict.update(app_dict)
+        if uuid is not None:
+            client_dict['unique_id'] = uuid
+        if uuid_type is not None:
+            client_dict['unique_id_type'] = uuid_type
+
+        return client_dict
+
     def create_app_instance(self, token=None, region=None, appinst_id = None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, flavor_name=None, config=None, uri=None, latitude=None, longitude=None, autocluster_ip_access=None, shared_volume_size=None, privacy_policy=None, crm_override=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
         msg = self._build(appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, crm_override=crm_override, use_defaults=use_defaults)
         msg_dict = {'appinst': msg}
@@ -269,11 +281,14 @@ class AppInstance(MexOperation):
 
         return self.show(token=token, url=self.metrics_app_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, json_data=None, use_defaults=True, use_thread=False):
-        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=True)
+    def show_app_instance_client_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, cluster_instance_developer_name=None, uuid=None, uuid_type=None, json_data=None, use_defaults=True, use_thread=False):
+        app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults)
         app_inst_key = {'app_inst_key': app_inst['key']}
-        app_inst_metric = {'appinstclientkey': app_inst_key}
-        
+
+        app_inst_client = self._build_appinst_client(app_dict=app_inst_key, uuid=uuid, uuid_type=uuid_type)
+
+        app_inst_metric = {'appinstclientkey': app_inst_client}
+        #app_inst_metric = {'client_key': app_inst_client}
 
         return self.show(token=token, url=self.show_appinst_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=app_inst_metric, stream=True, stream_timeout=5)
 
