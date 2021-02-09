@@ -26,6 +26,9 @@ region_azure = 'US'
 
 vmpool_name = 'automationVMPool'
 
+app_name_fake = 'automation_api_app'
+developer_org_name_fake = 'automation_dev_org'
+
 operator_name_azure = 'azure'
 operator_name_gcp = 'gcp'
 operator_name_vsphere = 'packet'
