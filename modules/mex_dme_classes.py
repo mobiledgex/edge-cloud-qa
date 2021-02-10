@@ -13,7 +13,7 @@ token_global = None
 class RegisterClientObject():
     request = None
 
-    def __init__(self, developer_org_name=None, app_name=None, app_version=None, auth_token=None, cell_id=None, unique_id=None, unique_id_type=None, use_defaults=True):
+    def __init__(self, developer_org_name=None, app_name=None, app_version=None, tags=None, auth_token=None, cell_id=None, unique_id=None, unique_id_type=None, use_defaults=True):
         client_dict = {}
         self.dev_name = developer_org_name
         self.app_name = app_name
@@ -22,6 +22,7 @@ class RegisterClientObject():
         self.cell_id = cell_id
         self.unique_id = unique_id
         self.unique_id_type = unique_id_type
+        self.tags = tags
         global auth_token_global
         
         if use_defaults:
@@ -46,6 +47,8 @@ class RegisterClientObject():
             client_dict['unique_id'] = str(self.unique_id)
         if self.unique_id_type is not None:
             client_dict['unique_id_type'] = self.unique_id_type
+        if self.tags is not None:
+            client_dict['tags'] = self.tags
 
         #self.request = app_client_pb2.RegisterClientRequest(**client_dict)
         self.request = json.dumps(client_dict)
