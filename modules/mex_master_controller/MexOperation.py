@@ -58,7 +58,7 @@ class MexOperation(MexRest):
 
     def send(self, message_type, token=None, url=None, delete_url=None, delete_autocluster_url=None, show_url=None, region=None, json_data=None, use_defaults=True, use_thread=False, message=None, delete_message=None, delete_autocluster_message=None, show_message=None, thread_name='thread_name', stream=False, stream_timeout=5):
         url = self.root_url + url
-    
+ 
         payload = None
         msg_dict = None
  
@@ -161,13 +161,15 @@ class MexOperation(MexRest):
                 if delete_autocluster_url and delete_autocluster_message:
                     if message['appinst']['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'):
                         delete_autocluster_message['clusterinst']['key']['cluster_key']['name'] = show_resp[0]['data']['real_cluster_name']
-                        self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_autocluster_url, region=region, token=delete_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
+                        logger.debug(f'adding autocluster message to delete stack with super token: {delete_autocluster_message}')
+                        self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_autocluster_url, region=region, token=self.super_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
 
             if message and delete_message:
-                logger.debug(f'adding message to delete stack: {delete_message}')
                 if token is None:
+                    logger.debug(f'adding message to delete stack with super token: {delete_message}')
                     delete_token = self.super_token
                 else:
+                    logger.debug(f'adding message to delete stack with passed token: {delete_message}')
                     delete_token = token
 
                 self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_url, region=region, token=delete_token, message=delete_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
