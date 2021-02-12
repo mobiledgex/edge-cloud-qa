@@ -15,7 +15,7 @@ ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
-${developer}=  MobiledgeX
+${developer}=  automation_dev_org
 
 ${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
