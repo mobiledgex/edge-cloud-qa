@@ -45,11 +45,12 @@ showDevice - developer viewer does not have permission to use command to return 
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
+      #${pool_return}=        Show Device  region=US  token=${user_token2}
 
 
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+      #${devicelength}=  Get length  ${pool_return}
+      #Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2142
 showDeviceReport - developer viewer does not have permission to use command to return device information
@@ -70,10 +71,12 @@ showDeviceReport - developer viewer does not have permission to use command to r
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2143
 showDevice - developer manager does not have permission to use command to return device information
@@ -93,11 +96,13 @@ showDevice - developer manager does not have permission to use command to return
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2144
 showDeviceReport - developer manager does not have permission to use command to return device information
@@ -117,11 +122,13 @@ showDeviceReport - developer manager does not have permission to use command to 
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2145
 showDevice - developer contributor does not have permission to use command to return device information
@@ -141,11 +148,13 @@ showDevice - developer contributor does not have permission to use command to re
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2146
 showDeviceReport - developer contributor does not have permission to use command to return device information
@@ -165,11 +174,13 @@ showDeviceReport - developer contributor does not have permission to use command
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2147
 showDevice - mexadmin has permission to use command to return device information from orgtype developer
@@ -241,11 +252,13 @@ showDevice - operator viewer does not have permission to use command to return d
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2150
 showDeviceReport - operator viewer does not have permission to use command to return device information
@@ -266,10 +279,12 @@ showDeviceReport - operator viewer does not have permission to use command to re
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2151
 showDevice - operator manager does not have permission to use command to return device information
@@ -289,11 +304,13 @@ showDevice - operator manager does not have permission to use command to return 
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2152
 showDeviceReport - operator manager does not have permission to use command to return device information
@@ -313,11 +330,13 @@ showDeviceReport - operator manager does not have permission to use command to r
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 
 #ECQ-2153
@@ -338,11 +357,13 @@ showDevice - operator contributor does not have permission to use command to ret
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
-      ${pool_return}=        Show Device  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2154
 showDeviceReport - operator contributor does not have permission to use command to return device information
@@ -362,11 +383,13 @@ showDeviceReport - operator contributor does not have permission to use command 
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
-      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+      Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
-
-      ${devicelength}=  Get length  ${pool_return}
-      Should Be Equal As Integers  ${devicelength}  0
+#      ${pool_return}=        Show Device Report  region=US  token=${user_token2}
+#
+#
+#      ${devicelength}=  Get length  ${pool_return}
+#      Should Be Equal As Integers  ${devicelength}  0
 
 #ECQ-2155
 showDevice - mexadmin has permission to use command to return device information from orgtype operator
