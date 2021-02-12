@@ -176,8 +176,8 @@ DeleteCloudlet - User shall be able to delete a fake cloudlet
         [Documentation]
         ...  do DeleteCloudlet to delete a fake CRM 
 
-        Update Cloudlet  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus  maintenance_state=NormalOperation
-        Update Cloudlet  region=US  cloudlet_name=tmocloud-2  operator_org_name=dmuus  maintenance_state=NormalOperation
+        Run Keyword and Continue on Failure  Update Cloudlet  region=US  cloudlet_name=tmocloud-1  operator_org_name=dmuus  maintenance_state=NormalOperation
+        Run Keyword and Continue on Failure  Update Cloudlet  region=US  cloudlet_name=tmocloud-2  operator_org_name=dmuus  maintenance_state=NormalOperation
 
         Cleanup Clusters and Apps  region=US  cloudlet_name=tmocloud-1  crm_override=IgnoreCrmAndTransientState
         Run Keyword and Continue on Failure  Delete Cloudlet  region=US  operator_org_name=dmuus  cloudlet_name=tmocloud-1
