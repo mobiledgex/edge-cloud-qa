@@ -12,6 +12,7 @@ import time
 import base64
 import json
 import queue
+import threading
 
 from mex_grpc import MexGrpc
 
@@ -91,7 +92,7 @@ class FindCloudletRequest():
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
 
 class StreamEdgeEvent():
-    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, use_defaults=True):
+    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, samples=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.edge_events_cookie = edge_events_cookie
@@ -99,6 +100,7 @@ class StreamEdgeEvent():
         self.carrier_name = carrier_name
         self.latitude = latitude
         self.longitude = longitude
+        self.samples = samples
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -121,6 +123,17 @@ class StreamEdgeEvent():
             request_dict['edge_events_cookie'] = self.edge_events_cookie
         if self.event_type is not None:
             request_dict['event_type'] = int(self.event_type)
+
+        samples_list = []
+        samples_dict = {}
+        if self.samples is not None:
+            for s in self.samples:
+                print('*WARN*', 's', s)
+                sample_dict = {'value': int(s)}
+                samples_list.append(loc_pb2.Sample(**sample_dict))
+                print('*WARN*', 'sl', samples_list)
+
+            request_dict['samples'] = samples_list
 
         if loc_dict:
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
@@ -382,27 +395,44 @@ class Dme(MexGrpc):
 
     def client_edge_event(self, client_edge_event_obj=None, **kwargs):
         resp = None
+        use_threading = False
+        thread_name = 'edgeevent'
 
         if not client_edge_event_obj:
             #if len(kwargs) == 0:
             #    kwargs = {'use_defaults': True}
             #if 'session_cookie' not in kwargs:
             #    kwargs['session_cookie'] = self.session_cookie
+            if 'use_thread' in kwargs:
+                logging.debug('using threading')
+                use_threading = True
+                del kwargs['use_thread']
             request = StreamEdgeEvent(**kwargs).request
 
-        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+        def send_message(thread_name='Thread'):
+            logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
                    
-        send_queue = queue.SimpleQueue()
-        my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None)) 
-        send_queue.put(request)
-        #resp = self.match_engine_stub.StreamEdgeEvent(request)
-        response = next(my_event_stream)
-        print('*WARN*', 'edgeresp', response, type(response), dir(response))
-        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
-        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
-            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+            send_queue = queue.SimpleQueue()
+            my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None)) 
+            send_queue.put(request)
+            #resp = self.match_engine_stub.StreamEdgeEvent(request)
+            response = next(my_event_stream)
+            print('*WARN*', 'edgeresp', response, type(response), dir(response))
+            print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+            time.sleep(60)
+            if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+                raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
 
-        return response
+            return response
+
+        if use_threading is True:
+            thread_name = f'Thread-{thread_name}-{str(time.time())}'
+            t = threading.Thread(target=send_message, name=thread_name, args=(thread_name,))
+            t.start()
+            return t
+        else:
+            logging.info('threading not set')
+        #return response
     
     def platform_find_cloudlet(self, find_cloudlet_obj=None, **kwargs):
         resp = None

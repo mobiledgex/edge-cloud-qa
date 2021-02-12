@@ -208,8 +208,8 @@ class ClusterInstance(MexOperation):
         return self.update(token=token, url=self.update_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, show_msg=msg_dict_show, message=msg_dict, stream=True, stream_timeout=600)[0]
 
 
-    def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, json_data=None, use_thread=False, use_defaults=True, stream=True, stream_timeout=600):
-        msg = self._build(cluster_name=cluster_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults)
+    def show_cluster_instance(self, token=None, region=None, cluster_name=None, cloudlet_name=None, developer_org_name=None, json_data=None, use_thread=False, use_defaults=True, stream=True, stream_timeout=600):
+        msg = self._build(cluster_name=cluster_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
