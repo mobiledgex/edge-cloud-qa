@@ -91,7 +91,7 @@ RegisterClient - request with auth shall return proper JWT for deployment=vm
    ...  Verify returned JWT is correct
 
    Create App                  auth_public_key=${app_key}  deployment=vm  image_type=ImageTypeQCOW
-   Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster
+   Create App Instance         cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  
 
    ${developer_name_default}=  Get Default Developer Name
    ${app_name_default}=  Get Default App Name
