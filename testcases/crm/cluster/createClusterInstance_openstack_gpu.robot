@@ -104,13 +104,15 @@ GPU - 1 GPU shall be allocated for Docker IpAccessDedicated on openstack
    ...  verify GPU is allocated
 
    ${cluster_name}=  Get Default Cluster Name
+   ${developer_name}=  Get Default Developer Name
+   ${developer_name2}=  Replace String  ${developer_name}  _  -  # replace underscore with dash for openstack lookup
 
    Log to Console  START creating cluster instance
    ${cluster_inst}=  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_gpu}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
    Log to Console  DONE creating cluster instance
 
    ${clusterlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
-   ${clustervm}=  Set Variable  mex-docker-vm-${cloudlet_name_openstack_gpu}-${cluster_name}-mobiledgex
+   ${clustervm}=  Set Variable  mex-docker-vm-${cloudlet_name_openstack_gpu}-${cluster_name}-${developer_name2}
 
    ${server_info}=    Get Server List  name=${clusterlb}
    ${server_info_vm}=    Get Server List  name=${clustervm}
