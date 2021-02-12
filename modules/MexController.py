@@ -2086,7 +2086,7 @@ class MexController(MexGrpc):
 
             if auto_delete:
                 if resp[0].real_cluster_name:
-                    self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_name=resp[0].real_cluster_name, developer_org_name=resp[0].key.cluster_inst_key.organization, cloudlet_name=resp[0].key.cluster_inst_key.cloudlet_key.name))
+                    self.prov_stack.append(lambda:self.delete_cluster_instance(cluster_name=resp[0].real_cluster_name, developer_org_name=resp[0].key.cluster_inst_key.organization, cloudlet_name=resp[0].key.cluster_inst_key.cloudlet_key.name, operator_org_name=resp[0].key.cluster_inst_key.cloudlet_key.organization))
 
                 if del_thread:
                     self.prov_stack.append(lambda:self.delete_app_instance(use_thread=True, **kwargs))
