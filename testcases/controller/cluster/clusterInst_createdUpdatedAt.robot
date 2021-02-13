@@ -10,7 +10,7 @@ Suite Teardown	Cleanup provisioning
 ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
-${developer_name}=  MobiledgeX
+${developer_name}=  automation_dev_org
 ${region}=  US
 
 *** Test Cases ***

@@ -18,7 +18,7 @@ ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
-${developer}=  MobiledgeX
+${developer}=  automation_dev_org
 
 ${qcow_centos_image}=  https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7.qcow2#md5:5ce8dbcdd8b7c2054779d742f4bf602d
 	
@@ -31,7 +31,7 @@ RunCommand - shall return error with appname not found
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_ap  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=ls
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"automation_api_ap\\\\",\\\\"version\\\\":\\\\"1.0\\\\"} not found"}')
 
 # ECQ-1479
 RunCommand - shall return error with app version not found
@@ -41,7 +41,7 @@ RunCommand - shall return error with app version not found
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  app_name=automation_api_app  app_version=1.1  developer_org_name=${developer}  cluster_instance_name=autocluster  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=ls
 
-    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"} not found"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"App key {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"automation_api_app\\\\",\\\\"version\\\\":\\\\"1.1\\\\"} not found"}')
 
 # ECQ-1480
 RunCommand - shall return error with developer not found
