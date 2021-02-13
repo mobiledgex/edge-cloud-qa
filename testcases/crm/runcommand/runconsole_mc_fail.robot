@@ -12,7 +12,7 @@ ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
-${developer}=  MobiledgeX
+${developer}=  automation_dev_org
 	
 *** Test Cases ***
 # ECQ-2075

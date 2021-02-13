@@ -287,20 +287,20 @@ UpdateApp - shall not be able to update app with mismatched appinst rules
    # update cloudlet with new trust policy with mismatch port list
    &{rule4}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
    @{tcp1_rulelist2}=  Create List  ${rule4}
-   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=automation_dev_org  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
    # update cloudlet with new trust policy with mismatch port list
    &{rule4}=  Create Dictionary  protocol=udp  port=1003  remote_ip=4.1.1.1
    @{tcp1_rulelist2}=  Create List  ${rule4}
-   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:4.1.1.1:1003 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=automation_dev_org  required_outbound_connections_list=${tcp1_rulelist2}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:4.1.1.1:1003 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
    # update cloudlet with new trust policy with mismatch port list
    &{rule5}=  Create Dictionary  protocol=tcp  port=1001  remote_ip=3.1.1.1
    @{tcp1_rulelist3}=  Create List  ${rule5}
-   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=MobiledgeX  required_outbound_connections_list=${tcp1_rulelist3}  use_defaults=${False}  token=${token}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection tcp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   ${error}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=automation_dev_org  required_outbound_connections_list=${tcp1_rulelist3}  use_defaults=${False}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection tcp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
  
 *** Keywords ***
 Setup
