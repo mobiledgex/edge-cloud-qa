@@ -18,9 +18,13 @@ ShowCloudletPool - users shall get empty list
    ...  - send ShowCloudletPool with user token 
    ...  - verify empty list is received 
 
-   ${pool_return}=  Show Cloudlet Pool  region=US  token=${userToken}
+   ${error}=  Run Keyword and Expect Error  *  Show Cloudlet Pool  region=US  token=${userToken}
+   Should Contain   ${error}  code=403
+   Should Contain   ${error}  error={"message":"Forbidden"}
 
-   Should Be Empty  ${pool_return}
+   #${pool_return}=  Show Cloudlet Pool  region=US  token=${userToken}
+
+   #Should Be Empty  ${pool_return}
 
 # ECQ-1674
 CreateCloudletPool - users shall get error when creating cloudlet pool 
