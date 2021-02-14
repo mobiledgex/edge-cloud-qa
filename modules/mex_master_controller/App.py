@@ -62,7 +62,7 @@ class App(MexOperation):
                     if image_path is None:
                         image_path = 'https://artifactory-qa.mobiledgex.net/artifactory/mobiledgex/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d'
 
-        shared_variables.app_name_default = app_name
+        if app_name: shared_variables.app_name_default = app_name
         
         if image_type == 'ImageTypeDocker':
             image_type = 1
@@ -209,12 +209,12 @@ class App(MexOperation):
         msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, use_defaults=use_defaults)
         msg_dict = {'app': msg}
 
-        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
         
     def update_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, use_thread=False):
         msg = self._build(app_name=app_name, app_version=app_version, ip_access=ip_access, access_ports=access_ports, image_type=image_type, image_path=image_path,cluster_name=cluster_name, developer_org_name=developer_org_name, default_flavor_name=default_flavor_name, config=config, command=command, app_template=app_template, auth_public_key=auth_public_key, permits_platform_apps=permits_platform_apps, deployment=deployment, deployment_manifest=deployment_manifest, scale_with_cluster=scale_with_cluster, official_fqdn=official_fqdn, annotations=annotations, auto_prov_policies=auto_prov_policies, skip_hc_ports=skip_hc_ports, trusted=trusted, required_outbound_connections_list=required_outbound_connections_list, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'app': msg}
-
+ 
         msg_dict_show = None
         if 'key' in msg:
             msg_show = self._build(app_name=msg['key']['name'], app_version=msg['key']['version'], developer_org_name=msg['key']['organization'], use_defaults=False)
