@@ -26,10 +26,9 @@ CreateApp - OperatorManager shall be not able to create/show/delete/update an ap
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App  region=${region}  access_ports=tcp:1
-   ${apps}=  Show Apps  region=${region}  
-   Should Be Empty  ${apps}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App  region=${region}  access_ports=tcp:1
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App  region=${region}  access_ports=tcp:1
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Apps  region=${region}
 
 # ECQ-3165
 CreateApp - OperatorContributor shall not be able to create/show/delete/update an app
@@ -43,10 +42,9 @@ CreateApp - OperatorContributor shall not be able to create/show/delete/update a
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App  region=${region}  access_ports=tcp:1
-   ${apps}=  Show Apps  region=${region}
-   Should Be Empty  ${apps}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App  region=${region}  access_ports=tcp:1
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App  region=${region}  access_ports=tcp:1
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Apps  region=${region}
 
 # ECQ-3166
 CreateApp - OperatorViewer shall not be able to create/show/delete/update an app
@@ -59,10 +57,9 @@ CreateApp - OperatorViewer shall not be able to create/show/delete/update an app
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App  region=${region}  access_ports=tcp:1
-   ${apps}=  Show Apps  region=${region}
-   Should Be Empty  ${apps}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App  region=${region}  access_ports=tcp:1
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App  region=${region}  access_ports=tcp:1
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Apps  region=${region}
 
 # ECQ-3167
 CreateApp - DeveloperManager shall be able to create/show/delete/update an app
@@ -79,11 +76,11 @@ CreateApp - DeveloperManager shall be able to create/show/delete/update an app
    ${app}=  Create App  region=${region}  access_ports=tcp:1
    Length Should Be  ${app}  1
 
-   ${apps}=  Show Apps  region=${region}
-   Length Should Be  ${apps}  1
-
    ${app_u}=  Update App  region=${region}  access_ports=tcp:2  developer_org_name=${orgname}
    Length Should Be  ${app_u}  1
+
+   ${apps}=  Show Apps  region=${region}
+   Length Should Be  ${apps}  1
 
 # ECQ-3168
 CreateApp - DeveloperContributor shall be able to create/show/delete/update an app
@@ -100,11 +97,11 @@ CreateApp - DeveloperContributor shall be able to create/show/delete/update an a
    ${app}=  Create App  region=${region}  access_ports=tcp:1
    Length Should Be  ${app}  1
 
-   ${apps}=  Show Apps  region=${region}
-   Length Should Be  ${apps}  1
-
    ${app_u}=  Update App  region=${region}  access_ports=tcp:2  developer_org_name=${orgname}
    Length Should Be  ${app_u}  1
+
+   ${apps}=  Show Apps  region=${region}
+   Length Should Be  ${apps}  1
 
 # ECQ-3169
 CreateApp - DeveloperViewer shall not be able to create/show/delete/update an app
@@ -118,7 +115,7 @@ CreateApp - DeveloperViewer shall not be able to create/show/delete/update an ap
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App  region=${region}  access_ports=tcp:1
    ${apps}=  Show Apps  region=${region}
-   Should Be Empty  ${apps}
+   Length Should Be  ${apps}  0
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App  region=${region}  access_ports=tcp:1
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App  region=${region}  access_ports=tcp:1
 
