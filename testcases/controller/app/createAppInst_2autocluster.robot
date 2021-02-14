@@ -20,31 +20,31 @@ AppInst - Shall be able to create to AppInsts with autocluster on the same app w
     ...  create an app instance with cluster name of 'autocluster' on each app
     ...  verify autocluster is created in cluster instance table with proper developer name
 
-    Create App Instance  developer_org_name=${developer_name_1}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_org_name=${developer_name_1}
-    Create App Instance  developer_org_name=${developer_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_org_name=${developer_name_2}
+    ${app1}=  Create App Instance  developer_org_name=${developer_name_1}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_org_name=MobiledgeX
+    ${app2}=  Create App Instance  developer_org_name=${developer_name_2}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  cluster_instance_developer_org_name=MobiledgeX
 
     #${cluster_flavor_name_default}=  Get Default Cluster Flavor Name
     #${app_name_default}=  Get Default App Name
 
     Show Cluster Instances
     #${cluster_name}=  Catenate   SEPARATOR=  autocluster  ${app_name_default}
-    ${clusterInst_1}=  Show Cluster Instances  developer_org_name=${developer_name_1}  cluster_name=autocluster  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  liveness=LivenessDynamic
-    ${clusterInst_2}=  Show Cluster Instances  developer_org_name=${developer_name_2}  cluster_name=autocluster  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  liveness=LivenessDynamic
+    ${clusterInst_1}=  Show Cluster Instances  developer_org_name=MobiledgeX  cluster_name=${app1.real_cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  liveness=LivenessDynamic
+    ${clusterInst_2}=  Show Cluster Instances  developer_org_name=MobiledgeX  cluster_name=${app2.real_cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  liveness=LivenessDynamic
 
     Should Be Equal As Integers  ${clusterInst_1[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst_1[0].flavor.name}                         ${flavor_name_default}	
-    Should Be Equal              ${clusterInst_1[0].key.cluster_key.name}                autocluster	
+    Should Be Equal              ${clusterInst_1[0].key.cluster_key.name}                ${app1.real_cluster_name}
     Should Be Equal              ${clusterInst_1[0].key.cloudlet_key.name}               ${cloudlet_name}	
-    Should Be Equal              ${clusterInst_1[0].key.cloudlet_key.organization}  ${operator_name}	
-    Should Be Equal              ${clusterInst_1[0].key.organization}                       ${developer_name_1}
+    Should Be Equal              ${clusterInst_1[0].key.cloudlet_key.organization}       ${operator_name}	
+    Should Be Equal              ${clusterInst_1[0].key.organization}                    MobiledgeX 
     Length Should Be   ${clusterInst_1}  1
 
     Should Be Equal As Integers  ${clusterInst_2[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst_2[0].flavor.name}                         ${flavor_name_default}
-    Should Be Equal              ${clusterInst_2[0].key.cluster_key.name}                autocluster
+    Should Be Equal              ${clusterInst_2[0].key.cluster_key.name}                ${app2.real_cluster_name} 
     Should Be Equal              ${clusterInst_2[0].key.cloudlet_key.name}               ${cloudlet_name}
-    Should Be Equal              ${clusterInst_2[0].key.cloudlet_key.organization}  ${operator_name}
-    Should Be Equal              ${clusterInst_2[0].key.organization}                       ${developer_name_2}
+    Should Be Equal              ${clusterInst_2[0].key.cloudlet_key.organization}       ${operator_name}
+    Should Be Equal              ${clusterInst_2[0].key.organization}                    MobiledgeX 
     Length Should Be   ${clusterInst_2}  1
 
 *** Keywords ***

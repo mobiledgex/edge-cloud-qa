@@ -141,6 +141,6 @@ Setup
 
 Teardown
     Cleanup provisioning
-    Should Be True  ${num_found_1}/${num_finds}*100 > 40
-    Should Be True  ${num_found_2}/${num_finds}*100 > 40
+    Should Be True  ${num_found_1}/${num_finds}*100 > 30
+    Should Be True  ${num_found_2}/${num_finds}*100 > 30
  
