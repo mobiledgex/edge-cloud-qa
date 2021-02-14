@@ -19,8 +19,10 @@ FindCloudlet - request shall not return appinst for k8s/lb/shared app inst when 
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=kubernetes  number_masters=1  number_nodes=1  ip_access=IpAccessShared
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessShared
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1} 
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
@@ -33,11 +35,13 @@ FindCloudlet - request shall not return appinst for k8s/lb/dedicated app inst wh
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=kubernetes  number_masters=1  number_nodes=1  ip_access=IpAccessDedicated
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1} 
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2535
 FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst when cloudlet is maintenance mode
@@ -47,11 +51,13 @@ FindCloudlet - request shall not return appinst for docker/lb/dedicated app inst
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=docker  ip_access=IpAccessDedicated
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2536
 FindCloudlet - request shall not return appinst for docker/lb/shared app inst when cloudlet is maintenance mode
@@ -61,8 +67,10 @@ FindCloudlet - request shall not return appinst for docker/lb/shared app inst wh
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=docker  ip_access=IpAccessShared
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessShared
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
@@ -75,11 +83,13 @@ FindCloudlet - request shall not return appinst for docker/direct/dedicated app 
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=docker  ip_access=IpAccessDedicated
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2538
 FindCloudlet - request shall not return appinst for vm/direct app inst when cloudlet is maintenance mode
@@ -117,8 +127,10 @@ FindCloudlet - request shall not return appinst for helm/shared/lb app inst when
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=kubernetes  ip_access=IpAccessShared
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessShared
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
@@ -131,11 +143,13 @@ FindCloudlet - request shall not return appinst for helm/dedicated/lb app inst w
    ...  - put cloudlet in maintenance mode
    ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
 
+   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=kubernetes  ip_access=IpAccessDedicated
+
    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=autocluster${cluster1}  autocluster_ip_access=IpAccessDedicated
+   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
     App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
-   Register Client And Find Cloudlet  fqdn=autocluster${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 *** Keywords ***
 Setup
@@ -187,7 +201,7 @@ Register Client and Find Cloudlet
    Should Be Equal  ${cloudlet_3['status']}  FIND_FOUND
    Should Be Equal  ${cloudlet_3['fqdn']}  ${fqdn}
 
-   Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+   Should Be True  len('${cloudlet_3['edge_events_cookie']}') > 100
 
    # put cloudlet in maintenance mode
    Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover

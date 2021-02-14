@@ -862,61 +862,21 @@ class MexMasterController(MexRest):
     def delete_flavor(self, token=None, region=None, flavor_name=None, ram=None, vcpus=None, disk=None, json_data=None, use_defaults=True, use_thread=False):
         return self.flavor.delete_flavor(token=token, region=region, flavor_name=flavor_name, ram=ram, vcpus=vcpus, disk=disk, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
         
-    def show_apps(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False, sort_field='app_name', sort_order='ascending'):
-        url = self.root_url + '/auth/ctrl/ShowApp'
-
-        payload = None
-
-        if use_defaults == True:
-            if token == None: token = self.token
-
-        if json_data !=  None:
-            payload = json_data
-        else:
-            app_dict = {}
-            if region is not None:
-                app_dict['region'] = region
-
-            payload = json.dumps(app_dict)
-
-        logger.info('show app on mc at {}. \n\t{}'.format(url, payload))
-
-        def send_message():
-            #self._number_showapp_requests += 1
-
-            try:
-                self.post(url=url, bearer=token, data=payload)
-
-                logger.info('response:\n' + str(self.resp.text))
-
-                respText = str(self.resp.text)
-
-                if str(self.resp.status_code) != '200':
-                    #self._number_showapp_requests_fail += 1
-                    raise Exception("ws did not return a 200 response. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
-            except Exception as e:
-                #self._number_showapp_requests_fail += 1
-                raise Exception("post failed:", e)
-
-            #self._number_showapp_requests_success += 1
-
-            resp_data = self.decoded_data
+    def show_apps(self, token=None, region=None, app_name=None, app_version=None, developer_org_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='app_name', sort_order='ascending'):
+        if app_name or app_version or developer_org_name:
+            resp_data = self.app.show_app(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
             if type(resp_data) is dict:
                 resp_data = [resp_data]
 
             reverse = True if sort_order == 'descending' else False
             if sort_field == 'app_name':
-                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['name'].casefold(),reverse=reverse)
+                resp_data = sorted(resp_data, key=lambda x: x['data']['key']['app_key']['name'].casefold(),reverse=reverse)
 
             return resp_data
 
-        if use_thread is True:
-            t = threading.Thread(target=send_message)
-            t.start()
-            return t
         else:
-            resp = send_message()
-            return resp
+            resp_data = self.app.show_app(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, use_defaults=use_defaults, use_thread=use_thread)
+            return resp_data
 
     def show_cloudlet_info(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False, sort_field='cloudlet_name', sort_order='ascending'):
         return self.cloudlet.show_cloudlet_info(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
