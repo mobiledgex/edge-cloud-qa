@@ -56,7 +56,7 @@ AppInst - User shall not be able to create a docker AppInst with ipaccess=shared
 
 *** Keywords ***
 Setup
-    Create Flavor  region=${region}  disk=80
+    Create Flavor  region=${region}  #disk=80
 
     ${flavor_name_default}=  Get Default Flavor Name
     Set Suite Variable  ${flavor_name_default}
