@@ -56,7 +56,8 @@ DeleteCloudlet with a static app assigned
 	
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet in use by static AppInst"
+	#Should Contain  ${error_msg}   details = "Cloudlet in use by static AppInst"
+        Should Contain  ${error_msg}   details = "Cloudlet in use by ClusterInst name reservable0, reserved by Organization MobiledgeX"
 
 	[Teardown]  Cleanup Provisioning
 
