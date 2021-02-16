@@ -15,7 +15,8 @@ ${username}=   mextester06
 ${password}=   mextester06123
 #${email}=      mextester06@gmail.com
 
-${developer}=  automation_dev_org
+#${developer}=  MobiledgeX
+${developer}=  ${developer_org_name_automation}
 
 ${cloudlet_name_openstack_vm}  automationBonnCloudlet
 ${operator_name_openstack}  TDG
@@ -138,15 +139,15 @@ ShowLogs - shall return error without invalid parms
 
 #    EDGECLOUD-2081 - ShowLogs should give better error handling for invalid tail/timestamps/follow
 
-    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   since=x
+    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=tmus  cloudlet_name=tmocloud-1   since=x
 
-    ${error2}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=x
+    ${error2}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=x
 
-    ${error3}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   time_stamps=x
+    ${error3}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=tmus  cloudlet_name=tmocloud-1   time_stamps=x
 
-    ${error4}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   follow=x
+    ${error4}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=tmus  cloudlet_name=tmocloud-1   follow=x
 
-    ${error5}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=999999999999999
+    ${error5}=  Run Keyword And Expect Error  *  Show Logs  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  cluster_instance_developer_org_name=MobiledgeX  operator_org_name=tmus  cloudlet_name=tmocloud-1   tail=999999999999999
 
     Should Be Equal  ${error1}  ('code=400', 'error={"message":"Unable to parse Since field as duration or RFC3339 formatted time"}') 
     Should Contain  ${error2}  ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=ExecRequest.log.tail, offset=
@@ -167,6 +168,6 @@ ShowLogs - shall return error for VM apps
     Create App  region=US  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=${developer_artifactory} 
     ${app_inst}=  Create App Instance  region=US  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${developer_artifactory}  cluster_instance_developer_org_name=${developer_artifactory}
 
-    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=tmus 
+    ${error1}=  Run Keyword And Expect Error  *  Show Logs  region=US  cloudlet_name=tmocloud-1  operator_org_name=tmus  developer_org_name=${developer_artifactory}
 
     Should Contain  ${error1}  ('code=400', 'error={"message":"ShowLogs not available for vm deployments"}')
