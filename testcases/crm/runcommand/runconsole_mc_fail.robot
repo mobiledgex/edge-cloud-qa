@@ -121,7 +121,7 @@ RunConsole - shall return error with non-vm app
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=dmuus  cloudlet_name=tmocloud-1  token=${token}  command=ls
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  app_name=automation_api_app  app_version=1.0  developer_org_name=${developer}  cluster_instance_name=autoclusterautomation  operator_org_name=dmuus  cloudlet_name=tmocloud-1  cluster_instance_developer_org_name=MobiledgeX  token=${token}  command=ls
 
     Should Contain  ${error}  ('code=400', 'error={"message":"RunConsole only available for VM deployments, use RunCommand instead"}') 
 

@@ -67,11 +67,12 @@ DeleteCloudlet with a static cluster instance assigned
 	...  Expect this test case to fail with a Cloudlet in use by static Cluster Instance error
 
 	[Setup]  Setup
-	Create Cluster Instance	
-
+	${clusterInst}=  Create Cluster Instance
+        ${cluster_name}=  Set Variable  ${clusterInst.key.cluster_key.name}
+ 
 	${error_msg}=  Run Keyword And Expect Error  *  Delete Cloudlet	   operator_org_name=${oper}   cloudlet_name=${cldlet}     use_defaults=False
 	Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	Should Contain  ${error_msg}   details = "Cloudlet in use by static ClusterInst"
+	Should Contain  ${error_msg}   details = "Cloudlet in use by ClusterInst name ${cluster_name} Organization MobiledgeX"
 
 	[Teardown]  Cleanup Provisioning
 
