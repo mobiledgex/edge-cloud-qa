@@ -26,7 +26,7 @@ namespace RestSample
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
         //static string orgName = "EmptyMatchEngineApp";
-        static string orgName = "MobiledgeX_leon";
+        static string orgName = "automation_dev_org_leon";
         static string appName = "automation_api_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
