@@ -19,7 +19,7 @@ ${password}=   ${mextester06_gmail_password}
 #${email}=      mextester06@gmail.com
 
 ${docker_image}=  image
-${docker_image_developer}=  mobiledgex
+${developer}=   automation_dev_org
 ${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
@@ -29,13 +29,13 @@ RunConsole - DeveloperManager shall be able to do RunConsole
     ...  execute Run Console as DeveloperManager
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${docker_image_developer}
+    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${developer}
 
     ${token}=  Login
 
 #    ${stdout}=  Run Console  region=US  app_name=app1587252144-180521  app_version=1.0  developer_org_name=MobiledgeX  cluster_instance_name=cluster1587252144-180521  operator_org_name=tmus  cloudlet_name=tmocloud-1  command=whoami
 
-    ${stdout}=  Run Console  region=US  developer_org_name=${docker_image_developer}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+    ${stdout}=  Run Console  region=US  developer_org_name=${developer}  operator_org_name=tmus  cloudlet_name=tmocloud-1
     Should Contain  ${stdout['console']['url']}  https://127.0.0.1
     Should Contain  ${stdout['console']['url']}  token=xyz 
 
@@ -45,11 +45,11 @@ RunConsole - DeveloperContributor shall be able to do RunConsole
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
+    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer}
 
     ${token}=  Login
 
-    ${stdout}=  Run Console  region=US  developer_org_name=${docker_image_developer}  operator_org_name=tmus  cloudlet_name=tmocloud-1
+    ${stdout}=  Run Console  region=US  developer_org_name=${developer}  operator_org_name=tmus  cloudlet_name=tmocloud-1
 
     #Should Be Equal  ${stdout['console']['url']}  https://127.0.0.1:39791?token=xyz
     Should Contain  ${stdout['console']['url']}  https://127.0.0.1
@@ -63,11 +63,11 @@ RunConsole - DeveloperViewer shall not be able to do RunConsole
 
     #EDGECLOUD-1446 RunConsole for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${docker_image_developer}
+    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${developer}
 
     ${token}=  Login
 
-    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  command=whoami  developer_org_name=${docker_image_developer}
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  command=whoami  developer_org_name=${developer}
 
     Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
