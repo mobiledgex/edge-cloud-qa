@@ -12,7 +12,7 @@ Test Timeout  10m
 
 *** Variables ***
 ${region}=  US
-${developer}=  MobiledgeX
+${developer}=  ${developer_org_name_automation}
 
 *** Test Cases ***
 # ECQ-2892
@@ -22,9 +22,9 @@ RunCommand - mcctl shall be able to run command on app
    ...  - verify command is successful
 
    [Template]  Success RunCommand Via mcctl
-      appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
-      appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami  containerid=x
-      appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  command=whoami
+      #appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  command=whoami
+      appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  command=whoami  containerid=x
+      appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=MobiledgeX  command=whoami
 
 # ECQ-2893
 RunCommand - mcctl shall handle failures
@@ -36,18 +36,18 @@ RunCommand - mcctl shall handle failures
       # missing values
       Error: missing required args:  ${Empty} 
       Error: missing required args:  appname=automation_api_app
-      Error: missing required args:  appname=automation_api_app  app-org=MobiledgeX
-      Error: missing required args:  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0
-      Error: missing required args:  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1
-      Error: missing required args:  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus
-      Error: missing required args:  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation
-      Bad Request (400), App key {"organization":"MobiledgeX","name":"utomation_api_app","version":"1.0"} not found  appname=utomation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
+      Error: missing required args:  appname=automation_api_app  app-org=${developer}
+      Error: missing required args:  appname=automation_api_app  app-org=${developer}  appvers=1.0
+      Error: missing required args:  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1
+      Error: missing required args:  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus
+      Error: missing required args:  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation
+      Bad Request (400), App key {"organization":"${developer}","name":"utomation_api_app","version":"1.0"} not found  appname=utomation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
       Bad Request (400), App key {"organization":"obiledgeX","name":"automation_api_app","version":"1.0"} not found  appname=automation_api_app  app-org=obiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
-      Bad Request (400), App key {"organization":"MobiledgeX","name":"automation_api_app","version":"111.0"} not found  appname=automation_api_app  app-org=MobiledgeX  appvers=111.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
-      Error: Bad Request (400), AppInst key {"app_key":{"organization":"MobiledgeX","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"mocloud-1"},"organization":"MobiledgeX"}} not found  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=mocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
-      Error: Bad Request (400), AppInst key {"app_key":{"organization":"MobiledgeX","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmu","name":"tmocloud-1"},"organization":"MobiledgeX"}} not found  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmu  cluster=autoclusterautomation  command=whoami
-      Error: Bad Request (400), AppInst key {"app_key":{"organization":"MobiledgeX","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"utoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"MobiledgeX"}} not found  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=utoclusterautomation  command=whoami
-      Error: Bad Request (400), AppInst key {"app_key":{"organization":"MobiledgeX","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"obiledgeX"}} not found  appname=automation_api_app  app-org=MobiledgeX  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=obiledgeX  command=whoami
+      Bad Request (400), App key {"organization":"${developer}","name":"automation_api_app","version":"111.0"} not found  appname=automation_api_app  app-org=${developer}  appvers=111.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
+      Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"mocloud-1"},"organization":"${developer}"}} not found  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=mocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  command=whoami
+      Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmu","name":"tmocloud-1"},"organization":"${developer}"}} not found  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmu  cluster=autoclusterautomation  command=whoami
+      Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"utoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"${developer}"}} not found  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=utoclusterautomation  command=whoami
+      Error: Bad Request (400), AppInst key {"app_key":{"organization":"${developer}","name":"automation_api_app","version":"1.0"},"cluster_inst_key":{"cluster_key":{"name":"autoclusterautomation"},"cloudlet_key":{"organization":"tmus","name":"tmocloud-1"},"organization":"obiledgeX"}} not found  appname=automation_api_app  app-org=${developer}  appvers=1.0  cloudlet=tmocloud-1  cloudlet-org=tmus  cluster=autoclusterautomation  cluster-org=obiledgeX  command=whoami
 
 *** Keywords ***
 Success RunCommand Via mcctl

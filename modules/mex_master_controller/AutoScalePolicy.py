@@ -42,7 +42,7 @@ class AutoScalePolicy(MexOperation):
             
         if use_defaults:
             if policy_name is None: policy_name = shared_variables.autoscale_policy_name_default
-            if developer_name is None: developer_name = shared_variables.developer_name_default
+            #if developer_name is None: developer_name = shared_variables.developer_name_default
             if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
             if min_nodes is None: min_nodes = 1
             if max_nodes is None: max_nodes = 2
@@ -118,8 +118,8 @@ class AutoScalePolicy(MexOperation):
             msg_dict_delete = {'autoscalepolicy': msg_delete}
 
         msg_dict_show = None
-        if 'key' in msg and 'name' in msg['key'] and 'developer' in msg['key']:
-            msg_show = self._build(policy_name=msg['key']['name'], developer_name=msg['key']['developer'], use_defaults=False)
+        if 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_show = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_show = {'autoscalepolicy': msg_show}
         
         return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)
