@@ -31,12 +31,14 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     ...  verify RunConsole is successful
 
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
+    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
 
     ${usertoken}=  Login
 
     ${stdout}=  update cloudlet  region=EU  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet  env_vars=MEX_CONSOLE_TYPE=novnc  token=${token}
-    ${stdout}=  Run Console  region=EU  developer_org_name=${docker_image_developer}  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet
+    #${stdout}=  Run Console  region=EU  developer_org_name=${docker_image_developer}  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet
+    ${stdout}=  Run Console  region=EU  developer_org_name=${developer_org_name_automation}  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet
+
     log to console  ${stdout}
     Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-eu.mobiledgex.net:6080
 
@@ -47,12 +49,12 @@ RunConsole - DeveloperContributor shall not be able to do RunConsole with envvar
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${docker_image_developer}
+    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
 
     ${usertoken}=  Login
 
     update cloudlet  region=EU  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
-    ${error}=  Run Keyword And Expect Error  *  Run Console  region=EU  developer_org_name=${docker_image_developer}  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=EU  developer_org_name=${developer_org_name_automation}  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet
     log to console  ${error}
 
     update cloudlet  region=EU  operator_org_name=TDG  cloudlet_name=automationMunichCloudlet  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
