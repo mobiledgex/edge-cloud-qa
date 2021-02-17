@@ -447,6 +447,9 @@ def exec_testcase(z, t):
     elif '.sln' in t['tc']:
         tc_type = 'csharp'
         tc = t['tc']
+    elif '.cpp' in t['tc']:
+        tc_type = 'cpp'
+        tc = t['tc']
     else:
         tc = os.path.basename(t['tc'])
 
@@ -531,6 +534,10 @@ def exec_testcase(z, t):
         dll = os.path.dirname(tc_file) + f'/{dirname}/bin/Release/netcoreapp2.1/{dirname}.dll'
         csproj = os.path.dirname(tc_file) + f'/{dirname}/{dirname}.csproj'
         exec_cmd = f'dotnet clean {csproj} && dotnet build {tc_file} -c Release /p:Version=1.0 && dotnet {dll} > {file_output} 2>&1'
+    elif tc_type == 'cpp':
+        dirname,cppname = tc.split('/')
+        tc_file = find(cppname, os.environ['WORKSPACE'])
+        exec_cmd = f'cd {os.path.dirname(tc_file)};make clean  && make && ./{dirname} > {file_output} 2>&1'
     else:
         exec_cmd = "export AUTOMATION_HTTPTRACE=" + str(httpTrace) + ";export AUTOMATION_RHCIP=" + rhc + ";./" + tc + " " +  t['issue_key'] + " > " + file_output + " 2>&1"
     #exec_cmd = "export AUTOMATION_IP=" + rhc + ";" + "pwd" + " > /tmp/" + file_output + " 2>&1"
