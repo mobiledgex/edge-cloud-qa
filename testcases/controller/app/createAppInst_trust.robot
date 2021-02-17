@@ -211,7 +211,7 @@ CreateAppInst - autoprov appinst shall start for trusted k8s/lb/shared on truste
 
    ${cloudlet2}=  Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  trust_policy=${policy_name}
 
-   ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=MobiledgeX  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
+   ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=automation_dev_org  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
 
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}  reservable=${True}   cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  reservable=${True}   cloudlet_name=${cloudlet_name}2  operator_org_name=${operator_name_fake}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
@@ -472,7 +472,7 @@ Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
 
    ${appinst}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
 
-   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
 
 Fail Create Trusted AppInst with RequiredOutboundConnections
    [Arguments]  &{parms}
@@ -489,7 +489,7 @@ Fail Create Trusted AppInst with RequiredOutboundConnections
 
    ${port}=  Run Keyword If  '${parms['required_outbound_connections_list'][0]['protocol']}' == 'icmp' and 'port' not in ${parms['required_outbound_connections_list'][0]}  Set Variable  0
    ...   ELSE  Set Variable  ${parms['required_outbound_connections_list'][0]['port']}
-   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${port} for App {\\\\"organization\\\\":\\\\"MobiledgeX\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${port} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}-${app_counter}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
 
 Fail Create Untrusted AppInst
    [Arguments]  ${error_msg}  &{parms}  

@@ -351,7 +351,7 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
 
    # update cloudlet with trust policy
    ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"MobiledgeX\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"automation_dev_org\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
 
 # ECQ-3098
 UpdateCloudlet - update with trust policy on non-openstack shall return error
