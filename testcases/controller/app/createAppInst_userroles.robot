@@ -28,8 +28,7 @@ CreateAppInst - OperatorManager shall be not able to create/show/delete/update a
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorManager    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App Instance  region=${region}  
-   ${apps}=  Show App Instances  region=${region}  
-   Should Be Empty  ${apps}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show App Instances  region=${region}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region} 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App Instance  region=${region}
 
@@ -45,8 +44,7 @@ CreateAppInst - OperatorContributor shall not be able to create/show/delete/upda
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorContributor    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App Instance  region=${region}  
-   ${apps}=  Show App Instances  region=${region}
-   Should Be Empty  ${apps}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show App Instances  region=${region}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance  region=${region} 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App Instance  region=${region}
 
@@ -61,8 +59,7 @@ CreateAppInst - OperatorViewer shall not be able to create/show/delete/update an
    ${adduser}=   Adduser Role   orgname=${orgname}   username=${epochusername2}   role=OperatorViewer    token=${user_token}     use_defaults=${False}
 
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Create App Instance
-   ${apps}=  Show App Instances  region=${region}
-   Should Be Empty  ${apps}
+   Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show App Instances  region=${region}
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete App Instance
    Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Update App Instance
 

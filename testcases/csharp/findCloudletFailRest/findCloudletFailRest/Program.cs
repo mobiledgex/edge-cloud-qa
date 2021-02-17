@@ -26,7 +26,7 @@ namespace RestSample
         static string carrierName = "dmuus";
         //static string appName = "EmptyMatchEngineApp";
         //static string orgName = "EmptyMatchEngineApp";
-        static string orgName = "MobiledgeX";
+        static string orgName = "automation_dev_org";
         static string appName = "automation_api_auth_app";
         static string appVers = "1.0";
         static string developerAuthToken = "";
@@ -62,7 +62,7 @@ namespace RestSample
                 string pubkey = "/home/jenkins/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 //string pubkey = "/Users/leon.adams/go/src/github.com/mobiledgex/edge-cloud-qa/certs/authtoken_private.pem";
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo("genauthtoken");
-                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey;
+                psi.Arguments = "-appname automation_api_auth_app -appvers 1.0 -devname automation_dev_org -privkeyfile " + pubkey;
                 psi.RedirectStandardOutput = true;
                 System.Diagnostics.Process genauthtoken;
                 genauthtoken = System.Diagnostics.Process.Start(psi);
