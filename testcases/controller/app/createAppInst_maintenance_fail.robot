@@ -11,233 +11,236 @@ ${region}=  US
 
 *** Test Cases ***
 # ECQ-2466
-AppInst - error shall be received when creating a docker/direct/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a docker/direct/shared autocluster app instance on the cloudlet 
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2467
-AppInst - error shall be received when creating a docker/direct/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a docker/direct/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2468
-AppInst - error shall be received when creating a docker/lb/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a docker/lb/shared autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2469
-AppInst - error shall be received when creating a docker/lb/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a docker/lb/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2470
-AppInst - error shall be received when creating a k8s/lb/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
-   ...  - create a k8s/lb/shared autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2471
-AppInst - error shall be received when creating a k8s/lb/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a k8s/lb/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2472
-AppInst - error shall be received when creating a helm/lb/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a helm/lb/shared autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2473
-AppInst - error shall be received when creating a helm/lb/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a helm/lb/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2474
-AppInst - error shall be received when creating a vm/lb/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a vm/lb/shared autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2475
-AppInst - error shall be received when creating a vm/lb/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a vm/lb/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2476
-AppInst - error shall be received when creating a vm/direct/shared autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a vm/direct/shared autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=direct
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessShared
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-# ECQ-2477
-AppInst - error shall be received when creating a vm/direct/dedicated autocluster app inst while cloudlet is maintenance mode
-   [Documentation]
-   ...  - put cloudlet in maintenance mode
-   ...  - create a vm/direct/dedicated autocluster app instance on the cloudlet
-   ...  - verify proper error is received
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=direct
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
-   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated 
-   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
-
-   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  autocluster_ip_access=IpAccessDedicated
-   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
-
+#AppInst - error shall be received when creating a docker/direct/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a docker/direct/shared autocluster app instance on the cloudlet 
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2467
+#AppInst - error shall be received when creating a docker/direct/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a docker/direct/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2468
+#AppInst - error shall be received when creating a docker/lb/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a docker/lb/shared autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessShared
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2469
+#AppInst - error shall be received when creating a docker/lb/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a docker/lb/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2470
+#AppInst - error shall be received when creating a k8s/lb/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance_state=MaintenanceStartNoFailover
+#   ...  - create a k8s/lb/shared autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2471
+#AppInst - error shall be received when creating a k8s/lb/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a k8s/lb/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+###
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2472
+#AppInst - error shall be received when creating a helm/lb/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a helm/lb/shared autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2473
+#AppInst - error shall be received when creating a helm/lb/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a helm/lb/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2474
+#AppInst - error shall be received when creating a vm/lb/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a vm/lb/shared autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2475
+#AppInst - error shall be received when creating a vm/lb/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a vm/lb/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=loadbalancer
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated  cluster_instance_name=autoclusterxxx
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2476
+#AppInst - error shall be received when creating a vm/direct/shared autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a vm/direct/shared autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=direct
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessShared
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+## ECQ-2477
+#AppInst - error shall be received when creating a vm/direct/dedicated autocluster app inst while cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - put cloudlet in maintenance mode
+#   ...  - create a vm/direct/dedicated autocluster app instance on the cloudlet
+#   ...  - verify proper error is received
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  image_path=${qcow_centos_image}  deployment=vm  app_version=1.0   access_type=direct
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+#   ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated 
+#   Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+#   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+#
+#   ${error_msg2}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  #autocluster_ip_access=IpAccessDedicated
+#   Should Be Equal  ${error_msg2}  ('code=400', 'error={"message":"Cloudlet under maintenance, please try again later"}')
+#
 # ECQ-2478
 AppInst - error shall be received when creating a docker/direct/shared app inst while cloudlet is maintenance mode
    [Documentation]
