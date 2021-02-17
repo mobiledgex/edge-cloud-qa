@@ -184,16 +184,16 @@ CreateAppInst - Error shall be received for create of untrusted autocluster appi
 
    [Template]  Fail Create Untrusted AutoCluster AppInst
 
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image} 
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image} 
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image} 
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image} 
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
+   ('code\=200', 'error\={"result":{"message":"Cannot start non trusted App on trusted cloudlet","code":400}}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
 # ECQ-3136
 CreateAppInst - autoprov appinst shall start for trusted k8s/lb/shared on trusted cloudlet
@@ -472,7 +472,7 @@ Fail Create Trusted AppInst with Out Of Range RequiredOutboundConnections
 
    ${appinst}=  Run Keyword and Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  auto_delete=${False}
 
-   Should Be Equal  ${appinst}  ('code=400', 'error={"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}\')
+   Should Be Equal  ${appinst}  ('code=200', 'error={"result":{"message":"App is not compatible with cloudlet trust policy: No outbound rule in policy to match required connection ${parms['required_outbound_connections_list'][0]['protocol']}:${parms['required_outbound_connections_list'][0]['remote_ip']}:${parms['required_outbound_connections_list'][0]['port']} for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${appname}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}","code":400}}\')
 
 Fail Create Trusted AppInst with RequiredOutboundConnections
    [Arguments]  &{parms}
