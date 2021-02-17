@@ -520,11 +520,11 @@ Fail Create Untrusted AutoCluster AppInst
 Teardown RequiredOutboundConnections
    [Arguments]  ${app}  ${cluster}  ${deployment}
 
-    Run Keyword If  '${deployment}' == 'vm'  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
-    ...  ELSE  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${cluster}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
-   Delete App  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
+    Run Keyword If  '${deployment}' == 'vm'  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=automation_dev_org  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}
+    ...  ELSE  Delete App Instance  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=automation_dev_org  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=${cluster}  cluster_instance_developer_org_name=automation_dev_org  token=${token}  use_defaults=${False}
+   Delete App  region=${region}  app_name=${app}  app_version=1.0  developer_org_name=automation_dev_org  token=${token}  use_defaults=${False}
 
    Run Keyword If  '${deployment}' != 'vm'  Delete Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster}
 
 Teardown In Range RequiredOutboundConnections
-   Delete App Instance  region=${region}  app_name=${appname}  app_version=1.0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
+   Delete App Instance  region=${region}  app_name=${appname}  app_version=1.0  developer_org_name=automation_dev_org  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${appname}  cluster_instance_developer_org_name=MobiledgeX  token=${token}  use_defaults=${False}
