@@ -16,6 +16,7 @@ cloudlet_name_openstack_packet = 'packet-qaregression'
 cloudlet_name_openstack_ha1 = 'automationHamburgCloudlet'
 cloudlet_name_openstack_ha2 = 'automationMunichCloudlet'
 cloudlet_name_crm = 'automationHamburgCloudlet'
+cloudlet_name_automation = 'tmocloud-1'
 
 master_node_flavor_default = 'automation_api_flavor'
 
@@ -37,6 +38,7 @@ operator_name_openstack = 'TDG'
 operator_name_openstack_packet = 'packet'
 operator_name_vsphere = 'packet'
 operator_name_crm = 'TDG'
+operator_name_automation = 'tmus'
 
 gitlab_server = 'docker-qa.mobiledgex.net'
 gitlab_username = 'root'
