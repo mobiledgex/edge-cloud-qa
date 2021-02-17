@@ -448,5 +448,5 @@ Get Number Of Cloudlets with Trust Policy
       ${counter}=  Run Keyword If  'trust_policy' in ${c2}  Set Variable  ${counter+1}
       ...  ELSE  Set Variable  ${counter}
 
-   [Return]  ${counter}
    END
+   [Return]  ${counter}
