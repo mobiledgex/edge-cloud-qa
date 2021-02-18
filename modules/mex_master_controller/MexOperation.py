@@ -159,7 +159,7 @@ class MexOperation(MexRest):
                 show_resp = self.send(message_type='show', region=region, url=show_url, token=show_token, message=show_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout)
 
                 if delete_autocluster_url and delete_autocluster_message:
-                    if message['appinst']['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'):
+                    if message['appinst']['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in message['appinst']:
                         delete_autocluster_message['clusterinst']['key']['cluster_key']['name'] = show_resp[0]['data']['real_cluster_name']
                         logger.debug(f'adding autocluster message to delete stack with super token: {delete_autocluster_message}')
                         self.prov_stack.append(lambda:self.send(message_type='delete', url=delete_autocluster_url, region=region, token=self.super_token, message=delete_autocluster_message, use_defaults=False, stream=stream, stream_timeout=stream_timeout))
