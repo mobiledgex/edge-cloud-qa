@@ -32,6 +32,7 @@ ${manifest_pod_name}=  server-ping-threaded-udptcphttp
 ${test_timeout_crm}  15 min
 	
 *** Test Cases ***
+# ECQ-1908
 Shall be able to configure IpAccessDedicated k8s cluster/app with shared volume mounts
     [Documentation]
     ...  deploy IpAccessDedicated cluster and app with manifest with shared volume mounts
