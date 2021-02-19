@@ -18,10 +18,10 @@ ShowOrgCloudletPool - users shall get empty list
    ...  - send ShowOrgCloudletPool with user token 
    ...  - verify empty list is received 
 
-   ${pool_return}=  Show Org Cloudlet Pool  region=US  token=${userToken}
-   log to console  xxx ${pool_return}
+   ${error}=  Run Keyword and Expect Error  *  Show Org Cloudlet Pool  region=US  token=${userToken}
 
-   Should Be Empty  ${pool_return}
+   Should Contain   ${error}  code=403
+   Should Contain   ${error}  error={"message":"Forbidden"}
 
 # ECQ-1686
 CreateOrgCloudletPool - users shall get error when creating org cloudlet pool 
