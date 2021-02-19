@@ -27,7 +27,7 @@ class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
     const string appName = "automation_api_auth_app"; // Your application name
-    const string orgName = "MobiledgeX"; // Your developer org name
+    const string orgName = "automation_dev_org"; // Your developer org name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
     //const string orgName = "EmptyMatchEngineApp"; // Your developer org name
     const string appVersionStr = "1.0";
@@ -339,7 +339,7 @@ int main() {
     } else {
       cout << "Removing Token File Failed!" << endl;
     }
-    int authToken = system(("genauthtoken -appname automation_api_auth_Leon -appvers 1.0 -devname MobiledgeX -privkeyfile " + pubkey + " >token.txt").c_str());
+    int authToken = system(("genauthtoken -appname automation_api_auth_Leon -appvers 1.0 -devname automation_dev_org -privkeyfile " + pubkey + " >token.txt").c_str());
     std::ifstream tokenFile("token.txt");
      if (tokenFile.is_open()){
        tokenFile >> tstr;
