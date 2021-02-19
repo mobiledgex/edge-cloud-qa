@@ -403,7 +403,7 @@ int main() {
 		    exit (EXIT_FAILURE);
 		}
 		string orgName =  e.second.to_json().get("orgname").get<string>().c_str();
-		if(orgName == "MobiledgeX") {
+		if(orgName == "automation_dev_org") {
 		    cout << "ORG NAME CORRECT! " << orgName << endl;
 		} else {
 		    cout << "ORG NAME INCORRECT! " << orgName << endl;
