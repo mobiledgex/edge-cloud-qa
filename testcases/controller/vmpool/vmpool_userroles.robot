@@ -30,8 +30,11 @@ VMPool - developer org owner shall not be able to manipulate vm pools
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-   ${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
-   Length Should Be  ${pool}  0
+   ${error}=  Run Keyword and Expect Error  *  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
+
+   #${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   #Length Should Be  ${pool}  0
 
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -56,8 +59,11 @@ VMPool - operator org owner shall not be able to manipulate vm pools
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-   ${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
-   Length Should Be  ${pool}  0
+   ${error}=  Run Keyword and Expect Error  *  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
+
+   #${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   #Length Should Be  ${pool}  0
 
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -84,8 +90,8 @@ VMPool - DeveloperManager shall not be able to manipulate vm pools
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-   ${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
-   Length Should Be  ${pool}  0
+   ${error}=  Run Keyword and Expect Error  *  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -113,8 +119,8 @@ VMPool - DeveloperContributor shall not be able to manipulate vm pools
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-   ${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
-   Length Should Be  ${pool}  0
+   ${error}=  Run Keyword and Expect Error  *  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
@@ -141,8 +147,8 @@ VMPool - DeveloperViewer shall not be able to manipulate vm pools
    ${error}=  Run Keyword and Expect Error  *  Update VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
-   ${pool}=  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
-   Length Should Be  ${pool}  0
+   ${error}=  Run Keyword and Expect Error  *  Show VM Pool  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
+   Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
 
    ${error}=  Run Keyword and Expect Error  *  Add VM Pool Member  region=US  token=${user_token2}  vm_pool_name=name  org_name=MobiledgeX  use_defaults=False
    Should Be Equal  ${error}  ('code=403', 'error={"message":"Forbidden"}')
