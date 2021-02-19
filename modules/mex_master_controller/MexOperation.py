@@ -83,7 +83,7 @@ class MexOperation(MexRest):
             
             try:
                 self.post(url=url, bearer=token, data=payload, stream=stream, stream_timeout=stream_timeout)
-                logger.info(f'response:{self.resp.status_code} {self.resp_text}')
+                logger.info(f'{url} response:{self.resp.status_code} {self.resp_text}')
                 # failures return a 200 for http streaming, so have to check the output for failure
                 if 'CreateAppInst' in url:
                     if 'Created AppInst successfully' not in str(self.resp_text):
@@ -115,7 +115,11 @@ class MexOperation(MexRest):
                 elif url.endswith('UpdateTrustPolicy'):
                     if 'Failed: 0' not in str(self.resp_text) and 'Trust policy updated, no cloudlets affected' not in str(self.resp_text):
                         raise Exception('ERROR: TrustPolicy not updated successfully:' + str(self.resp_text))
-
+                elif 'DeleteIdleReservableClusterInsts' in url:
+                    if 'Delete done' not in str(self.resp_text):
+                        raise Exception('ERROR: Idle Reservable Cluster Instances not deleted successfully:' + str(self.resp_text))
+                else:
+                    logger.info(f'not checking specific url response for {url}')
                 #elif url.endswith('UpdateCloudlet'):
                 #    if 'Updated Cloudlet successfully' in str(self.resp.text) or 'Upgraded Cloudlet successfully' in str(self.resp.text) or 'Cloudlet updated successfully' in str(self.resp.text):
                 #        pass

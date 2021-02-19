@@ -19,6 +19,7 @@ class ClusterInstance(MexOperation):
         #self.metrics_client_url = '/auth/metrics/client'
         self.metrics_cluster_url = '/auth/metrics/cluster'
         #self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
+        self.delete_idle_url = '/auth/ctrl/DeleteIdleReservableClusterInsts'
 
     def _build(self, cluster_name=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, number_masters=None, number_nodes=None, crm_override=None, deployment=None, shared_volume_size=None, privacy_policy=None, reservable=None, autoscale_policy_name=None, use_defaults=True, include_fields=False, auto_delete=True):
 
@@ -158,6 +159,14 @@ class ClusterInstance(MexOperation):
 
         return metric_dict
 
+    def _build_idledelete(self, idle_time=None, use_defaults=True):
+        idle_dict = {}
+
+        if idle_time is not None:
+            idle_dict['idle_time'] = idle_time
+
+        return idle_dict
+
     def create_cluster_instance(self, token=None, region=None, cluster_name=None, operator_org_name=None, cloudlet_name=None, developer_org_name=None, flavor_name=None, liveness=None, ip_access=None, deployment=None, number_masters=None, number_nodes=None, shared_volume_size=None, privacy_policy=None, autoscale_policy_name=None, reservable=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True, stream=True, stream_timeout=600):
         msg = self._build(cluster_name=cluster_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, flavor_name=flavor_name, liveness=liveness, ip_access=ip_access, deployment=deployment, number_masters=number_masters, number_nodes=number_nodes, shared_volume_size=shared_volume_size, privacy_policy=privacy_policy, autoscale_policy_name=autoscale_policy_name, reservable=reservable, auto_delete=auto_delete, use_defaults=use_defaults)
         msg_dict = {'clusterinst': msg}
@@ -224,3 +233,11 @@ class ClusterInstance(MexOperation):
         msg_dict = self._build_metrics(type_dict=inst_metric, selector=selector, last=last, start_time=start_time, end_time=end_time)
 
         return self.show(token=token, url=self.metrics_cluster_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+
+    def delete_idle_clusters(self, token=None, region=None, idle_time=None, json_data=None, use_defaults=True, use_thread=False):
+        inst = self._build_idledelete(idle_time=idle_time, use_defaults=False)
+
+        msg_dict = {'idlereservableclusterinsts': inst}
+
+        return self.delete(token=token, url=self.delete_idle_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict, stream=True, stream_timeout=600)
+
