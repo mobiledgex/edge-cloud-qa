@@ -1,12 +1,12 @@
 export OS_AUTH_URL=https://beredgecloud.telekom.de:5000/v3
-export OS_PROJECT_ID=b6565354422a454c965078640ad4398e
+export OS_PROJECT_ID=ef298c5745de45349bfac648404baf23
 export OS_PROJECT_NAME="mex"
 export OS_USER_DOMAIN_NAME="Default"
 export OS_PROJECT_DOMAIN_ID="default"
 unset OS_TENANT_ID
 unset OS_TENANT_NAME
 export OS_USERNAME="mexadmin"
-export OS_PASSWORD=ED2\%jdB7-Ef\]b8\^x
+export OS_PASSWORD=zO%b8HJsc*eW
 export OS_REGION_NAME="RegionOne"
 export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
