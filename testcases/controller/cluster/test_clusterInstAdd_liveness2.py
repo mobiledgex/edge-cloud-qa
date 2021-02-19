@@ -77,7 +77,7 @@ class tc(unittest.TestCase):
 
         # look for the cluster
         t = self.cluster_instance
-        t.liveness = 1
+        t.liveness = 2
         found_cluster = t.exists(clusterinst_resp)
 
         expect_equal(found_cluster, True, 'found new cluster')
