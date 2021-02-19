@@ -75,35 +75,36 @@ FindCloudlet - request shall not return appinst for docker/lb/shared app inst wh
 
    Register Client And Find Cloudlet  fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net
 
+# direct no longer supported
 # ECQ-2537
-FindCloudlet - request shall not return appinst for docker/direct/dedicated app inst when cloudlet is maintenance mode
-   [Documentation]
-   ...  - create a docker/direct/dedicated autocluster app instance on the cloudlet
-   ...  - send RegisterClient/FindCloudlet and verify appinst is returned
-   ...  - put cloudlet in maintenance mode
-   ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
-
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=docker  ip_access=IpAccessDedicated
-
-   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
-   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
-
-   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
-
+#FindCloudlet - request shall not return appinst for docker/direct/dedicated app inst when cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - create a docker/direct/dedicated autocluster app instance on the cloudlet
+#   ...  - send RegisterClient/FindCloudlet and verify appinst is returned
+#   ...  - put cloudlet in maintenance mode
+#   ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
+#
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_name=${cluster1}  deployment=docker  ip_access=IpAccessDedicated
+#
+#   Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+#   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name}  cluster_instance_name=${cluster1}
+#   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+#
+#   Register Client And Find Cloudlet  fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+#
 # ECQ-2538
-FindCloudlet - request shall not return appinst for vm/direct app inst when cloudlet is maintenance mode
-   [Documentation]
-   ...  - create a vm/direct app instance on the cloudlet
-   ...  - send RegisterClient/FindCloudlet and verify appinst is returned
-   ...  - put cloudlet in maintenance mode
-   ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
-
-   Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  deployment=vm  app_version=1.0   access_type=direct
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name} 
-   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
-
-   Register Client And Find Cloudlet  fqdn=${operator_name}${app_name_default}10.${cloudlet_name1}.${operator_name}.mobiledgex.net
+#FindCloudlet - request shall not return appinst for vm/direct app inst when cloudlet is maintenance mode
+#   [Documentation]
+#   ...  - create a vm/direct app instance on the cloudlet
+#   ...  - send RegisterClient/FindCloudlet and verify appinst is returned
+#   ...  - put cloudlet in maintenance mode
+#   ...  - send RegisterClient/FindCloudlet and verify appinst is not returned
+#
+#   Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeQcow  deployment=vm  app_version=1.0   access_type=direct
+#   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=${operator_name} 
+#   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+#
+#   Register Client And Find Cloudlet  fqdn=${operator_name}${app_name_default}10.${cloudlet_name1}.${operator_name}.mobiledgex.net
 
 # ECQ-2539
 FindCloudlet - request shall not return appinst for vm/lb app inst when cloudlet is maintenance mode

@@ -1135,6 +1135,9 @@ class MexMasterController(MexRest):
             logging.info(f'deleting {cluster}')
             self.cluster_instance.delete_cluster_instance(token=self.token, region=region, cluster_name=cluster['data']['key']['cluster_key']['name'], developer_org_name=cluster['data']['key']['organization'], cloudlet_name=cloudlet_name, operator_org_name=cluster['data']['key']['cloudlet_key']['organization'], crm_override=crm_override, use_defaults=False)
 
+    def delete_idle_reservable_cluster_instances(self, token=None, region=None, idle_time=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.cluster_instance.delete_idle_clusters(token=token, region=region, idle_time=idle_time, use_defaults=use_defaults, use_thread=use_thread)
+
     def create_app(self, token=None, region=None, app_name=None, app_version=None, ip_access=None, access_ports=None, image_type=None, image_path=None, cluster_name=None, developer_org_name=None, default_flavor_name=None, config=None, command=None, app_template=None, auth_public_key=None, permits_platform_apps=None, deployment=None, deployment_manifest=None,  scale_with_cluster=False, official_fqdn=None, annotations=None, auto_prov_policies=None, access_type=None, configs_kind=None, configs_config=None, skip_hc_ports=None, trusted=None, required_outbound_connections_list=[], json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         """ Send region CreateApp
         """
