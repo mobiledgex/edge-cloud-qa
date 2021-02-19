@@ -24,7 +24,7 @@ class MexGrpcClient {
   public:
     unsigned long timeoutSec = 5000;
     const string appName = "automation_api_app"; // Your application name
-    const string orgName = "MobiledegX"; // Your developer org name
+    const string orgName = "automation_dev_org"; // Your developer org name
     //const string appName = "EmptyMatchEngineApp"; // Your application name
     //const string orgName = "EmptyMatchEngineApp"; // Your developer org name
     const string appVersionStr = "3.0";
