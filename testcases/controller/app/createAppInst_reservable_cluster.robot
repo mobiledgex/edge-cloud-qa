@@ -17,68 +17,90 @@ ${qcow_centos_image}  qcowimage
 ${region}=  US
 
 *** Test Cases ***
+# ECQ-3204
 CreateAppInst - deployment with autocluster shall create reservable cluster
    [Documentation]
-   ...  create an App/AppInstance with autocluster for various deployment types
-   ...  verify reservable cluster is created
+   ...  - create an App/AppInstance with autocluster for various deployment types
+   ...  - verify reservable cluster is created
 
-  [Template]  Reservable Cluster Should Be Created
+   [Tags]  ReservableCluster
 
-  developer_org_name=MobiledgeX  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=MobiledgeX  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=MobiledgeX  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   [Template]  Reservable Cluster Should Be Created
 
-  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+ 
+   developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
 
+# ECQ-3205
 CreateAppInst - delete autocluster appinst shall not delete reservable cluster
    [Documentation]
-   ...  create an App/AppInstance with autocluster for various deployment types
-   ...  verify reservable cluster is created
+   ...  - create an App/AppInstance with autocluster for various deployment types
+   ...  - verify reservable cluster is created
+   ...  - delete the appinst
+   ...  - verify reservable cluster is not deleted
 
-  [Template]  DeleteAppInst Should Not Delete Reservable Cluster
+   [Tags]  ReservableCluster
 
-  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   [Template]  DeleteAppInst Should Not Delete Reservable Cluster
 
+   developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+
+# ECQ-3206
 CreateAppInst - reservable clusters shall be able to be reused
    [Documentation]
-   ...  create an App/AppInstance with autocluster for various deployment types
-   ...  verify reservable cluster is created
+   ...  - create an App/AppInstance with autocluster for various deployment types
+   ...  - verify reservable cluster is created
+   ...  - delete and recreate the appinst
+   ...  - verify the same reserable cluster is used
 
-  [Template]  Reservable Cluster Shall Be Reused
+   [Tags]  ReservableCluster
 
-  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   [Template]  Reservable Cluster Shall Be Reused
 
+   developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+
+# ECQ-3207
 CreateAppInst - shall be able to create multiple reservable clusters
    [Documentation]
-   ...  create an App/AppInstance with autocluster for various deployment types
-   ...  verify reservable cluster is created
+   ...  - create multiple App/AppInstances with autocluster for various deployment types
+   ...  - verify all reservable cluster are created
 
-  [Template]  Shall Create Multiple Reservable Clusters
+   [Tags]  ReservableCluster
 
-  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   [Template]  Shall Create Multiple Reservable Clusters
 
+   developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+
+# ECQ-3208
 CreateAppInst - shall be able to create app inst with real_cluster_name
    [Documentation]
-   ...  create an App/AppInstance with autocluster for various deployment types
-   ...  verify reservable cluster is created
+   ...  - create an App/AppInstance with autocluster for various deployment types
+   ...  - verify reservable cluster is created
+   ...  - delete the appinst
+   ...  - recreate the appinst using the real_cluster_name parm
+   ...  - verify cluster is created on the cluster specified
 
-  [Template]  Shall CreatAppInst with Real Cluster Name
+   [Tags]  ReservableCluster
 
-  cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   [Template]  Shall CreatAppInst with Real Cluster Name
 
-  cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-  cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-  cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   cluster_name=autocluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+
+   cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
+   cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
+   cluster_name=cluster${app_name_default}  developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
 
 *** Keywords ***
 Setup

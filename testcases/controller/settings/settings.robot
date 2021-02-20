@@ -19,6 +19,9 @@ ${region}=  US
 *** Test Cases ***
 # ECQ-2988
 Settings - ShowSettings should return the settings
+
+   [Tags]  ReservableCluster
+
    [Documentation]
    ...  - call ShowSettings
    ...  - verify the settings items are returned
@@ -55,6 +58,8 @@ Settings - UpdateSettings should update the settings
    [Documentation]
    ...  - call UpdateSettings for each setting
    ...  - verify the settings items are changed
+
+   [Tags]  ReservableCluster
 
    ${settings}=   Show Settings  region=${region}
 
@@ -115,6 +120,8 @@ Settings - UpdateSettings with bad parms shall return error
    [Documentation]
    ...  - call UpdateSettings for each setting with various errors
    ...  - verify error is received
+
+   [Tags]  ReservableCluster
 
    # EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
    # fixed EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
@@ -190,18 +197,18 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Delete Cluster Inst Timeout must be greater than 0"}')                          delete_cluster_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   delete_cluster_inst_timeout  99999999999999999999s
 
-    ('code=400', 'error={"message":"Flavor must preexist"}')  master_node_flavor  xx
+   ('code=400', 'error={"message":"Flavor must preexist"}')  master_node_flavor  xx
 
-    ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  0
-    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.load_balancer_max_port_range, offset=49"}')  load_balancer_max_port_range  x
-    ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  -1
-    ('code=400', 'error={"message":"Load Balancer Max Port Range must be less than 65536"}')  load_balancer_max_port_range  70000 
-    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 99999999999999999, field=Settings.load_balancer_max_port_range, offset=63"}')  load_balancer_max_port_range  99999999999999999 
+   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  0
+   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.load_balancer_max_port_range, offset=49"}')  load_balancer_max_port_range  x
+   ('code=400', 'error={"message":"Load Balancer Max Port Range must be greater than 0"}  load_balancer_max_port_range  -1
+   ('code=400', 'error={"message":"Load Balancer Max Port Range must be less than 65536"}')  load_balancer_max_port_range  70000 
+   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 99999999999999999, field=Settings.load_balancer_max_port_range, offset=63"}')  load_balancer_max_port_range  99999999999999999 
 
-    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  0
-    ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  -1
-    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.max_tracked_dme_clients, offset=44"}')                               max_tracked_dme_clients  x
-    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 9999999999999999999999999999, field=Settings.max_tracked_dme_clients, offset=69"}')  max_tracked_dme_clients  9999999999999999999999999999
+   ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  0
+   ('code=400', 'error={"message":"Max Tracked Dme Clients must be greater than 0"}')  max_tracked_dme_clients  -1
+   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.max_tracked_dme_clients, offset=44"}')                               max_tracked_dme_clients  x
+   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 9999999999999999999999999999, field=Settings.max_tracked_dme_clients, offset=69"}')  max_tracked_dme_clients  9999999999999999999999999999
  
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  chef_client_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  chef_client_interval  1x
@@ -267,6 +274,8 @@ Settings - user shall be able to reset the settings
    [Documentation]
    ...  - send ResetSettings 
    ...  - verify settings are reset
+
+   [Tags]  ReservableCluster
 
    # fixed EDGECLOUD-4156     ResetSettings removes the influxdbmetricsretention setting
 
