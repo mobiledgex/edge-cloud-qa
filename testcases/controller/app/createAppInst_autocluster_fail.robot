@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   CreateAppInst with accesstype failures 
+Documentation   CreateAppInst with autocluster failures 
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 
@@ -90,6 +90,7 @@ CreateAppInst - User shall not be able to create an AppInst with autocluster_ip_
     ${error_msg4}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor  autocluster_ip_access=1
     Should Be Equal  ${error_msg4}  ('code=400', 'error={"message":"Invalid field specified: AutoClusterIpAccess, this field is only for internal use"}')
 
+# ECQ-3201
 CreateAppInst - User shall not be able to create an AppInst with reservable cluster already reserved
     [Documentation]
     ...  - send CreateApp with different deployment types
@@ -122,6 +123,7 @@ CreateAppInst - User shall not be able to create an AppInst with reservable clus
     Should Be Equal  ${error_msg41}  ('code=400', 'error={"message":"Specified ClusterInst is already reserved by another AppInst"}')
     Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
 
+# ECQ-3202
 CreateAppInst - User shall not be able to create an AppInst with bad real_cluster_name
     [Documentation]
     ...  - send CreateApp with different deployment types
@@ -154,6 +156,7 @@ CreateAppInst - User shall not be able to create an AppInst with bad real_cluste
     Should Be Equal  ${error_msg41}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
     Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
 
+# ECQ-3203
 CreateAppInst - User shall not be able to create a reservable cluster on a mismatched deployment
     [Documentation]
     ...  - send CreateApp/CreateAppInst with different deployment types
