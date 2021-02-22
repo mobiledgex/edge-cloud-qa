@@ -34,18 +34,19 @@ CreateAppInst - User shall not be able to create an autocluster AppInst without 
     ${error_msg3}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
     Should Be Equal  ${error_msg3}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App must have default flavor defined"}')
 
+# direct not supported
 # ECQ-3190
-CreateAppInst - User shall not be able to create an autocluster AppInst with direct access
-    [Documentation]
-    ...  - send CreateApp with direct access
-    ...  - send autocluster CreateAppInst
-    ...  - verify proper error is received
-
-    [Tags]  ReservableCluster
-
-    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App access type direct is not supported"}')
+#CreateAppInst - User shall not be able to create an autocluster AppInst with direct access
+#    [Documentation]
+#    ...  - send CreateApp with direct access
+#    ...  - send autocluster CreateAppInst
+#    ...  - verify proper error is received
+#
+#    [Tags]  ReservableCluster
+#
+#    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
+#    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
+#    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"For auto-provisioning or auto-clusters, App access type direct is not supported"}')
 
 # ECQ-3191
 CreateAppInst - User shall not be able to create an autocluster VM AppInst
@@ -56,7 +57,7 @@ CreateAppInst - User shall not be able to create an autocluster VM AppInst
 
     [Tags]  ReservableCluster
 
-    # EDGECLOUD-4440 
+    # EDGECLOUD-4440  able to do VM CreateAppInst with autocluster and realclustername
     Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:8008,tcp:8011
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"No cluster required for App deployment type vm, cannot use cluster name autocluster which attempts to use or create a ClusterInst"}')
