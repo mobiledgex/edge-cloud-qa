@@ -33,8 +33,8 @@ CreateApp - User shall be able to create a k8s/docker/helm/vm loadbalancer/direc
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}
 
 # ECQ-3084
 CreateApp - Error shall be received for invalid trusted parm
@@ -54,8 +54,8 @@ CreateApp - Error shall be received for invalid trusted parm
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=cccccc
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=111
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=-1
-   ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=no
-   ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=yes
+   #('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=no
+   #('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=yes
 
 # ECQ-3101
 CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with empty RequiredOutboundConnections
@@ -75,8 +75,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with e
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=
 
 # ECQ-3102
 CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with icmp/tcp/udp RequiredOutboundConnections
@@ -98,8 +98,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${icmp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1_rulelist}
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}   required_outbound_connections=${tcp1_rulelist}
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${tcp1_rulelist}
@@ -109,8 +109,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${tcp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${tcp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${tcp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${tcp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${tcp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${tcp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${tcp1_rulelist}
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}   required_outbound_connections=${udp1_rulelist}
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${udp1_rulelist}
@@ -120,8 +120,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${udp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udp1_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udp1_rulelist}
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}   required_outbound_connections=${icmp1port_rulelist}
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${icmp1port_rulelist}
@@ -131,8 +131,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${icmp1port_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1port_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1port_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1port_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1port_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${icmp1port_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${icmp1port_rulelist}
 
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
@@ -142,8 +142,8 @@ CreateApp - shall be able to create with k8s/docker/helm/vm lb/direct app with i
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
 
 
 # ECQ-3088
@@ -164,8 +164,8 @@ UpdateApp - User shall be able to update a k8s/docker/helm/vm loadbalancer/direc
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}
 
 # ECQ-3089
 UpdateApp - Error shall be received for invalid trusted parm
@@ -185,8 +185,8 @@ UpdateApp - Error shall be received for invalid trusted parm
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=cccccc
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=111
    ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=-1
-   ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=no
-   ('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=yes
+   #('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=no
+   #('code\=400', 'error\={"message":"Invalid POST data, Unmarshal type error: expected\=bool, got\=string, field\=App.trusted, offset\=  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=yes
 
 # ECQ-3099
 UpdateApp - Error shall be received for updated to non-trusted on trusted cloudlet
@@ -208,8 +208,8 @@ UpdateApp - Error shall be received for updated to non-trusted on trusted cloudl
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}   
    ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
    ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
 # ECQ-3100
 UpdateApp - shall be able to remove RequiredOutboundConnections from k8s/docker/helm/vm lb/direct app
@@ -232,8 +232,8 @@ UpdateApp - shall be able to remove RequiredOutboundConnections from k8s/docker/
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}       trusted=${False}  required_outbound_connections=${icmp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${tcp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${True}   required_outbound_connections=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  trusted=${False}  required_outbound_connections=${udptcpicmp_rulelist}
 
 # ECQ-3125
 UpdateApp - shall not be able to update app with mismatched appinst rules
@@ -363,7 +363,7 @@ Setup RequiredOutboundConnections
 Update Trusted App
    [Arguments]  &{parms}
 
-   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016 
+   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016 
 
    ${app}=  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${parms['trusted']}
 
@@ -378,7 +378,7 @@ Update Trusted App
 Create Trusted App
    [Arguments]  &{parms}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
+   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
 
    Should Be Equal  ${app['data']['deployment']}  ${parms['deployment']}
 
@@ -394,7 +394,7 @@ Create Trusted App With RequiredOutboundConnections
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
+   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
 
    ${num_connections_req}=  Get Length  ${parms['required_outbound_connections']}
    
@@ -417,7 +417,7 @@ Create Trusted App With Empty RequiredOutboundConnections
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
+   ${app}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
 
    Should Not Contain  ${app['data']}  required_outbound_connections
 
@@ -430,7 +430,7 @@ Remove RequiredOutboundConnections from Trusted App
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app1}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
+   ${app1}=  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}  required_outbound_connections_list=${parms['required_outbound_connections']}
    Should Be True  len(${app1['data']['required_outbound_connections']}) > 0
 
    ${app2}=  Update App  region=${region}  required_outbound_connections_list=empty
@@ -443,13 +443,13 @@ Remove RequiredOutboundConnections from Trusted App
 Fail Create Trusted App
    [Arguments]  ${error_msg}  &{parms}  
 
-   ${std_create}=  Run Keyword and Expect Error  *  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
+   ${std_create}=  Run Keyword and Expect Error  *  Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
 
 Fail Update Trusted App
    [Arguments]  ${error_msg}  &{parms}
 
-   ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
+   ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
 
 Fail Update Non-Trusted App on Trusted Cloudlet
@@ -458,7 +458,7 @@ Fail Update Non-Trusted App on Trusted Cloudlet
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
+   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
    ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
 
    ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${False}
