@@ -165,55 +165,56 @@ CreateAppInst - User shall be able to add TLS and non-TLS ports with cluster=doc
 
    Length Should Be   ${appInst['data']['mapped_ports']}  5
 
+# direct not supported
 # ECQ-2238
-CreateAppInst - User shall be able to add non TLS ports with cluster=docker/dedicated and app=docker/direct
-   [Documentation]
-   ...  deploy docker/dedicated clusterinst
-   ...  deploy docker/direct app with TLS and non-TLS port
-   ...  verify tls ports are marked tls
-
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
-
-   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2000-2002,tcp:999,tcp:2016,tcp:8086,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   ${appInst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
-
-   ${app_default}=  Get Default App Name
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['end_port']}       2002
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2000
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['public_port']}    2000
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  tls
-   #Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['public_port']}    999
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['public_port']}    2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  tls
-   #Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8086
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8086
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  tls
-   #Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['public_port']}    2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls
-
-   Length Should Be   ${appInst['data']['mapped_ports']}  5
+#CreateAppInst - User shall be able to add non TLS ports with cluster=docker/dedicated and app=docker/direct
+#   [Documentation]
+#   ...  deploy docker/dedicated clusterinst
+#   ...  deploy docker/direct app with TLS and non-TLS port
+#   ...  verify tls ports are marked tls
+#
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  deployment=docker  ip_access=IpAccessDedicated
+#
+#   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2000-2002,tcp:999,tcp:2016,tcp:8086,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   ${appInst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
+#
+#   ${app_default}=  Get Default App Name
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['end_port']}       2002
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2000
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['public_port']}    2000
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  tls
+#   #Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['public_port']}    999
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['public_port']}    2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  tls
+#   #Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8086
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8086
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  tls
+#   #Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['public_port']}    2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls
+#
+#   Length Should Be   ${appInst['data']['mapped_ports']}  5
 
 # ECQ-2239
 CreateAppInst - User shall be able to add TLS and non-TLS ports with cluster=docker/shared and app=docker/lb
@@ -267,49 +268,50 @@ CreateAppInst - User shall be able to add TLS and non-TLS ports with cluster=doc
 
    Length Should Be   ${appInst['data']['mapped_ports']}  6
 
+# direct not supported
 # ECQ-2240
-CreateAppInst - User shall be able to add TLS and non-TLS ports with app=vm/direct
-   [Documentation]
-   ...  deploy vm/direct app with TLS and non-TLS port
-   ...  verify tls ports are marked tls
-
-   Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2000-2002:tls,tcp:999,tcp:2016:tls,tcp:8086:tls,udp:2016  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   ${appInst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
-
-   ${app_default}=  Get Default App Name
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['end_port']}  2002
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2000
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['public_port']}    2000
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
-   Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  fqdn_prefix
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['public_port']}    999
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['public_port']}    2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  fqdn_prefix
-   Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8086
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8086
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  fqdn_prefix
-   Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
-
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['public_port']}    2016
-   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  fqdn_prefix
-   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls
-
-   Length Should Be   ${appInst['data']['mapped_ports']}  5
+#CreateAppInst - User shall be able to add TLS and non-TLS ports with app=vm/direct
+#   [Documentation]
+#   ...  deploy vm/direct app with TLS and non-TLS port
+#   ...  verify tls ports are marked tls
+#
+#   Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2000-2002:tls,tcp:999,tcp:2016:tls,tcp:8086:tls,udp:2016  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   ${appInst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
+#
+#   ${app_default}=  Get Default App Name
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['end_port']}  2002
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['internal_port']}  2000
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['public_port']}    2000
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][0]['proto']}          1  #LProtoTCP
+#   Should Be Equal              ${appInst['data']['mapped_ports'][0]['tls']}            ${True}
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][0]}  fqdn_prefix
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['internal_port']}  999
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['public_port']}    999
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][1]['proto']}          1  #LProtoTCP
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][1]}  tls
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['internal_port']}  2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['public_port']}    2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][2]['proto']}          1  #LProtoTCP
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][2]}  fqdn_prefix
+#   Should Be Equal              ${appInst['data']['mapped_ports'][2]['tls']}            ${True}
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['internal_port']}  8086
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['public_port']}    8086
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][3]['proto']}          1
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][3]}  fqdn_prefix
+#   Should Be Equal              ${appInst['data']['mapped_ports'][3]['tls']}            ${True}
+#
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['internal_port']}  2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['public_port']}    2016
+#   Should Be Equal As Integers  ${appInst['data']['mapped_ports'][4]['proto']}          2
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  fqdn_prefix
+#   Dictionary Should Not Contain Key   ${appInst['data']['mapped_ports'][4]}  tls
+#
+#   Length Should Be   ${appInst['data']['mapped_ports']}  5
 
 # ECQ-2241
 CreateAppInst - User shall be able to add TLS and non-TLS ports with app=vm/lb
