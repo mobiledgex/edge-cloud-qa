@@ -41,19 +41,20 @@ ${region}=  US
 #
 #    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot specify AutoClusterIpAccess as IP_ACCESS_SHARED if App access type is ACCESS_TYPE_DIRECT"}')
 
+# direct not supported
 # ECQ-2029
-AppInst - User shall not be able to create a docker AppInst with ipaccess=shared and accesstype=direct
-    [Documentation]
-    ...  create a docker app instances with ipaccess=shared and accesstype=direct
-    ...  verify proper error is received
-
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker
-
-    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
-
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  
-
-    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Direct Access App cannot be deployed on IP_ACCESS_SHARED ClusterInst"}')
+#AppInst - User shall not be able to create a docker AppInst with ipaccess=shared and accesstype=direct
+#    [Documentation]
+#    ...  create a docker app instances with ipaccess=shared and accesstype=direct
+#    ...  verify proper error is received
+#
+#    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=docker
+#
+#    Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=direct
+#
+#    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  
+#
+#    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Direct Access App cannot be deployed on IP_ACCESS_SHARED ClusterInst"}')
 
 *** Keywords ***
 Setup
