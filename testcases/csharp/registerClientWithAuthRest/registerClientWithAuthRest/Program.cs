@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using DistributedMatchEngine;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,6 +18,36 @@ namespace RestSample
         string UniqueID.GetUniqueID()
         {
             return "";
+        }
+    }
+
+    class DummyDeviceInfo : DeviceInfo
+    {
+        Dictionary<string, string> DeviceInfo.GetDeviceInfo()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict["one"] = "ONE";
+            dict["two"] = "TWO";
+            return dict;
+        }
+
+    }
+
+    class DummyCarrierInfo : CarrierInfo
+    {
+        public ulong GetCellID()
+        {
+            return 0;
+        }
+
+        public string GetCurrentCarrierName()
+        {
+            return "26201";
+        }
+
+        public string GetMccMnc()
+        {
+            return "26201";
         }
     }
 
@@ -51,8 +82,8 @@ namespace RestSample
 
                 Console.WriteLine("RegisterClientWithAuthRest Testcase");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 //port = MatchingEngine.defaultDmeRestPort;
 
                 // Generate the authToken
