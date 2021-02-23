@@ -16,11 +16,11 @@ ${appinst_timeout}=  600
 
 *** Test Cases ***
 # ECQ-2555
-AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
+AppInst - openstack-to-vsphere appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 cloudlets. 1 in openstack and 1 in vsphere 
    ...  - create 2 reservable clusterInst with docker/dedicated
-   ...  - create docker/direct app with privacy policy
+   ...  - create docker/lb app with privacy policy
    ...  - verify appinst starts on openstack cloudlet1
    ...  - verify RegisterClient/FindCloudlet returns appinst on openstack cloudlet1
    ...  - put openstack cloudlet1 in maintenance mode
@@ -40,7 +40,7 @@ AppInst - openstack-to-vsphere appinst shall start for docker/direct/dedicated a
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_vsphere}    operator_org_name=${operator_name_vsphere}    developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
 
    @{policy_list}=  Create List  ${policy['data']['key']['name']}
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_packet}  operator1=${operator_name_openstack_packet}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_packet}.${operator_name_openstack_packet}.mobiledgex.net  cloudlet2=${cloudlet_name_vsphere}  operator2=${operator_name_vsphere}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vsphere}.${operator_name_vsphere}.mobiledgex.net
 
