@@ -23,12 +23,13 @@ CreateApp - timestamps shall be created for CreateApp
    image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}
 
    image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
-   image_type=ImageTypeDocker  deployment=docker      access_type=direct  image_path=${docker_image}
+# direct not supported
+#   image_type=ImageTypeDocker  deployment=docker      access_type=direct  image_path=${docker_image}
 
    image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}
 
    image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}
-   image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
+#   image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}
 
 *** Keywords ***
 Setup

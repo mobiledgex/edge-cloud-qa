@@ -68,7 +68,7 @@ User shall be able to deploy docker compose zip filed from artifactory
 
     ${compose_artifactory}=  Set Variable  https://${artifactory_server}/artifactory/repo-${orgname}/${docker_compose_zip}
 
-    Create App  region=${region}  token=${super_token}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${compose_artifactory}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
+    Create App  region=${region}  token=${super_token}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${compose_artifactory}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  token=${super_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest
@@ -84,7 +84,7 @@ User shall be able to deploy docker compose zip filed from url
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
+    Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest
@@ -100,7 +100,7 @@ User shall be able to deploy docker compose zip filed from url with no image_pat
     ${cluster_name_default}=  Get Default Cluster Name
     ${app_name_default}=  Get Default App Name
 
-    Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=no_default  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
+    Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=no_default  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
     Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest

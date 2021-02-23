@@ -22,8 +22,9 @@ CreateApp - User shall not be able to create a docker app with ConfigsKind=helmC
     ...  - create docker app with ConfigsKind=helmCustomizationYaml 
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=direct  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig	
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(docker)"}') 
+    # direct not supported
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=direct  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig	
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(docker)"}') 
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
     Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(docker)"}')
@@ -34,8 +35,8 @@ CreateApp - User shall not be able to create a k8s app with ConfigsKind=helmCust
     ...  - create k8s app with ConfigsKind=helmCustomizationYaml 
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(kubernetes)"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(kubernetes)"}')
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
     Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(kubernetes)"}')
@@ -46,8 +47,8 @@ CreateApp - User shall not be able to create a vm app with ConfigsKind=helmCusto
     ...  - create vm app with ConfigsKind=helmCustomizationYaml 
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
     Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)"}')
@@ -60,8 +61,8 @@ CreateApp - User shall not be able to create a vm app with ConfigsKind=envVarsYa
 
     # fixed - EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
 
     ${error2}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  configs_kind=envVarsYaml  configs_config=myconfig
     Should Be Equal  ${error2}  ('code=400', 'error={"message":"Invalid Config Kind(envVarsYaml) for deployment type(vm)"}')
@@ -72,8 +73,8 @@ CreateApp - User shall not be able to create a vm app with unknown ConfigsKind
     ...  - create vm app with unknown ConfigsKind
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=xx  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}') 
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  configs_kind=xx  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}') 
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  configs_kind=xx  configs_config=myconfig
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
@@ -84,8 +85,8 @@ CreateApp - User shall not be able to create a docker app with unknown ConfigsKi
     ...  - create docker app with unknown ConfigsKind
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
@@ -96,8 +97,8 @@ CreateApp - User shall not be able to create a k8s app with unknown ConfigsKind
     ...  - create k8s app with unknown ConfigsKind
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
@@ -108,8 +109,8 @@ CreateApp - User shall not be able to create a helm app with unknown ConfigsKind
     ...  - create helm app with unknown ConfigsKind 
     ...  - verify error is received
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
-    Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=direct  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
+    #Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=xx  configs_config=myconfig
     Should Be Equal  ${error}  ('code=400', 'error={"message":"Invalid Config Kind - xx"}')

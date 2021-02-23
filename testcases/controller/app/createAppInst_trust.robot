@@ -33,10 +33,11 @@ CreateAppInst - User shall be able to create a autocluster k8s/docker/helm/vm lo
    image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}    
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}   
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  
-   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  
-   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image} 
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+# do not support autocluster for VM
+   #image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  
+   #image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image} 
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
 # ECQ-3104
 CreateAppInst - User shall be able to create a k8s/docker/helm/vm loadbalancer/direct appinst with trusted parm
@@ -56,8 +57,9 @@ CreateAppInst - User shall be able to create a k8s/docker/helm/vm loadbalancer/d
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+# direct not supported
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
 # ECQ-3105
 CreateAppInst - User shall be able to create a trusted k8s/docker/helm/vm loadbalancer/direct appinst with RequiredOutboundConnections
@@ -81,8 +83,9 @@ CreateAppInst - User shall be able to create a trusted k8s/docker/helm/vm loadba
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${udp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${icmp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
+# direct not supported
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
 
 # ECQ-3127
 CreateAppInst - User shall be able to create a trusted appinst with in range RequiredOutboundConnections
@@ -150,8 +153,9 @@ CreateAppInst - Error shall be received for create with RequiredOutboundConnecti
    image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}  required_outbound_connections_list=${tcp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${udp1_rulelist}
    image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}  required_outbound_connections_list=${icmp1_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
-   image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
+# direct not supported
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${udptcpicmp_rulelist}
+   #image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}  required_outbound_connections_list=${tcp1_rulelist}
 
 # ECQ-3107
 CreateAppInst - Error shall be received for create of untrusted appinst on trusted cloudlet
@@ -171,8 +175,9 @@ CreateAppInst - Error shall be received for create of untrusted appinst on trust
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image} 
    ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+# direct not supported
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Cannot start non trusted App on trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
 # ECQ-3108
 CreateAppInst - Error shall be received for create of untrusted autocluster appinsts on trusted cloudlet
@@ -370,7 +375,7 @@ Create Trusted Autocluster AppInst
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
 
    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${appname}  ${app_counter}
 
@@ -387,7 +392,7 @@ Create Trusted AppInst
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
 
    ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
 
@@ -419,7 +424,7 @@ Create Trusted AppInst with RequiredOutboundConnections
 
    ${policy_return}=  Update Trust Policy  region=${region}  policy_name=${policy_name}  rule_list=${rulelist}  operator_org_name=${operator_name_fake}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}  auto_delete=${False}
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}  auto_delete=${False}
 
    ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}  auto_delete=${False}
 
@@ -480,7 +485,7 @@ Fail Create Trusted AppInst with RequiredOutboundConnections
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${parms['required_outbound_connections_list']}
 
    ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
 
@@ -497,7 +502,7 @@ Fail Create Untrusted AppInst
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016
 
    ${clusterinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_name=${cluster_name}${app_counter}  deployment=${parms['deployment']}
 
@@ -510,7 +515,7 @@ Fail Create Untrusted AutoCluster AppInst
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
 
-   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016
+   ${app}=  Create App  region=${region}  app_name=${appname}-${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016
 
    ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${appname}  ${app_counter}
 

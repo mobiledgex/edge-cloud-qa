@@ -18,12 +18,13 @@ CreateApp - create with reserved port tcp:20800 shall return error
 
    [Template]  Fail Create App port tcp:20800
 
-   image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+# direct not supported
+#   image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=direct
 
    image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
@@ -53,12 +54,12 @@ CreateApp - create with reserved port tcp:20800 shall return error
    image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
 
-   image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeQcow  deployment=vm  access_type=direct
-   image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeQcow  deployment=vm  access_type=direct
+#   image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=direct
 
 *** Keywords ***
 Setup
