@@ -140,42 +140,43 @@ User shall be able to access TCP TLS ports with cluster=docker/dedicated and app
 
    HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
 
+# direct not supported
 # ECQ-2255
-User shall be able to access TCP TLS ports with cluster=docker/dedicated and app=docker/direct
-   [Documentation]
-   ...  deploy docker/dedicated clusterinst
-   ...  deploy docker/lb app with 2 TCP TLS port with 1 for HTTP access
-   ...  verify all ports are accessible via fqdn
-
-   ${cluster_name_default}=  Get Default Cluster Name
-   ${app_name_default}=  Get Default App Name
-
-   #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
-   #EDGECLOUD-2796 unable to terminate https tls connections
-   # EDGECLOUD-3192 - TLS connections not working with port ranges
-
-   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
-
-   #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-
-   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
-
-   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
-
-   Register Client
-   ${cloudlet}=  Find Cloudlet        latitude=${latitude}  longitude=${longitude}
-   ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-   ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
-   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
-
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
-   TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[0].end_port}  tls=${True}
-
-   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
-
-   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
+#User shall be able to access TCP TLS ports with cluster=docker/dedicated and app=docker/direct
+#   [Documentation]
+#   ...  deploy docker/dedicated clusterinst
+#   ...  deploy docker/lb app with 2 TCP TLS port with 1 for HTTP access
+#   ...  verify all ports are accessible via fqdn
+#
+#   ${cluster_name_default}=  Get Default Cluster Name
+#   ${app_name_default}=  Get Default App Name
+#
+#   #EDGECLOUD-2794 envoy not starting for docker dedicated with tls
+#   #EDGECLOUD-2796 unable to terminate https tls connections
+#   # EDGECLOUD-3192 - TLS connections not working with port ranges
+#
+#   Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  ip_access=IpAccessDedicated  deployment=docker
+#
+#   #Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2016:tls,tcp:2015:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+#   Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016:tls,tcp:8085:tls,udp:2016  image_type=ImageTypeDocker  deployment=docker  access_type=direct
+#
+#   Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
+#
+#   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
+#
+#   Register Client
+#   ${cloudlet}=  Find Cloudlet        latitude=${latitude}  longitude=${longitude}
+#   ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+#   ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+#   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+#   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
+#
+#   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}  tls=${True}
+#   TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[0].end_port}  tls=${True}
+#
+#   UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
+#
+#   HTTP Port Should Be Alive  ${cloudlet.fqdn}  ${cloudlet.ports[1].public_port}  ${page}  tls=${True}
 
 # ECQ-2256 
 User shall be able to access TCP TLS ports with cluster=docker/shared and app=docker/loadbalancer
