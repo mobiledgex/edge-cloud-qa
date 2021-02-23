@@ -16,17 +16,20 @@ ${region}=  EU
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
-CreateApp - User shall be able to create an app with docker compose and access_type=direct
-    [Documentation]
-    ...  create app with docker compose access_type=direct
-    ...  verify app is created
+# direct not supported
+# ECQ-1994
+#CreateApp - User shall be able to create an app with docker compose and access_type=direct
+#    [Documentation]
+#    ...  create app with docker compose access_type=direct
+#    ...  verify app is created
+#
+#    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
+#
+#    Should Be Equal As Numbers  ${app['data']['access_type']}          1  #AccessTypeDirect
+#    Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
+#    Should Contain              ${app['data']['deployment_manifest']}  image
 
-    ${app}=  Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
-
-    Should Be Equal As Numbers  ${app['data']['access_type']}          1  #AccessTypeDirect
-    Should Be Equal As Numbers  ${app['data']['image_type']}           1  #docker
-    Should Contain              ${app['data']['deployment_manifest']}  image
-
+# ECQ-1995
 CreateApp - User shall be able to create an app with docker compose and no access_type
     [Documentation]
     ...  create app with docker compose with no access_type
@@ -50,6 +53,7 @@ CreateApp - User shall be able to create an app with docker compose and no acces
 #   Should Contain  ${error}  code=400
 #   Should Contain  ${error}  "message":"ACCESS_TYPE_LOAD_BALANCER not supported for docker deployment type: docker-compose" 
 
+# ECQ-1997
 CreateApp - User shall be able to create an app with docker compose and access_type=default
     [Documentation]
     ...  create app with docker compose access_type=direct

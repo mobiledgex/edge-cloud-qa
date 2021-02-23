@@ -29,7 +29,7 @@ ${test_timeout_crm}  15 min
 
 *** Test Cases ***
 # ECQ-2169
-User shall be able to create app with large port range on openstack with docker and access_type=direct
+User shall be able to create app with large port range on openstack with docker and access_type=loadbalancer
    [Documentation]
    ...  deploy app with large port range with docker
    ...  verify ports are added to security group
@@ -38,7 +38,7 @@ User shall be able to create app with large port range on openstack with docker 
    ${app_name_default}=  Get Default App Name
 
    Log To Console  Creating App and App Instance
-   Create App  image_path=${docker_image}  access_ports=udp:1-30000,tcp:2000-10000  command=${docker_command}  image_type=ImageTypeDocker  access_type=direct  deployment=docker  #default_flavor_name=${cluster_flavor_name}
+   Create App  image_path=${docker_image}  access_ports=udp:1-30000,tcp:2000-10000  command=${docker_command}  image_type=ImageTypeDocker  access_type=loadbalancer  deployment=docker  #default_flavor_name=${cluster_flavor_name}
    Create App Instance  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}
 
    ${server_info_crm}=      Get Server List  name=${cloudlet_name_openstack_dedicated}.${operator_name_openstack}.pf

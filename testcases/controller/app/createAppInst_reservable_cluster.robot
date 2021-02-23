@@ -2,6 +2,7 @@
 Documentation   CreateAppInst Reservable Cluster
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  Collections
 Library  String
 
 Test Setup	Setup
@@ -177,14 +178,33 @@ Reservable Cluster Shall Be Reused
    Create App  region=${region}   developer_org_name=${developer_org_name}  deployment=${deployment}  image_type=${image_type}  image_path=${image_path}  access_ports=tcp:1
 
    ${app_inst1}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}  auto_delete=${False}
+
+   ${cluster_inst1}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   Length Should Be  ${cluster_inst1}  1
+   Should Be True  ${cluster_inst1[0]['data']['reservable']}
+   Should Be Equal  ${cluster_inst1[0]['data']['reserved_by']}  ${developer_org_name_automation}
+   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']} > 0
+   Should Be True  ${cluster_inst1[0]['data']['reservation_ended_at']['nanos']} > 0
+
    Delete App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}  cluster_instance_developer_org_name=MobiledgeX
 
-   ${cluster_inst}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
-   Length Should Be  ${cluster_inst}  1
+   ${cluster_inst11}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   Length Should Be  ${cluster_inst11}  1
+   Dictionary Should Not Contain Key  ${cluster_inst11[0]['data']}  reserved_by
+   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']} > ${cluster_inst1[0]['data']['reservation_ended_at']['seconds']}
+   Should Be True  ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']} > 0
+   Should Be True  ${cluster_inst11[0]['data']['created_at']['seconds']} == ${cluster_inst1[0]['data']['created_at']['seconds']}
+   Should Be True  ${cluster_inst11[0]['data']['created_at']['nanos']} == ${cluster_inst1[0]['data']['created_at']['nanos']}
 
    ${app_inst2}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default} 
-
    Should Be Equal  ${app_inst1['data']['real_cluster_name']}  ${app_inst2['data']['real_cluster_name']}
+
+   ${cluster_inst2}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst1['data']['real_cluster_name']}  developer_org_name=MobiledgeX
+   Length Should Be  ${cluster_inst2}  1
+   Should Be True  ${cluster_inst2[0]['data']['reservable']}
+   Should Be Equal  ${cluster_inst2[0]['data']['reserved_by']}  ${cluster_inst1[0]['data']['reserved_by']}
+   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['seconds']} == ${cluster_inst11[0]['data']['reservation_ended_at']['seconds']}
+   Should Be True  ${cluster_inst2[0]['data']['reservation_ended_at']['nanos']} == ${cluster_inst11[0]['data']['reservation_ended_at']['nanos']}
 
 DeleteAppInst Should Not Delete Reservable Cluster
    [Arguments]  ${developer_org_name}  ${deployment}  ${image_type}  ${image_path}
@@ -211,6 +231,7 @@ DeleteAppInst Should Not Delete Reservable Cluster
 
    ${cluster_inst_post}=  Show Cluster Instances  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
    Length Should Be  ${cluster_inst_post}  1
+   Dictionary Should Not Contain Key  ${cluster_inst_post[0]['data']}  reserved_by
 
    Delete Cluster Instance  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
 
