@@ -46,11 +46,11 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_openstack_ha2}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 
 # ECQ-2551
-AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet is maintenance mode
+AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is maintenance mode
    [Documentation]
    ...  - create privacy policy with 2 openstack cloudlets
    ...  - create 2 reservable clusterInst with docker/dedicated
-   ...  - create docker/direct app with privacy policy
+   ...  - create docker/lb app with privacy policy
    ...  - verify appinst starts on cloudlet1
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet1
    ...  - put cloudlet1 in maintenance mode
@@ -69,7 +69,7 @@ AppInst - appinst shall start for docker/direct/dedicated app inst when cloudlet
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha2}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
 
    #AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name_openstack_ha2}.${operator_name_openstack}.mobiledgex.net
 

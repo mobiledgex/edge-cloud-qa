@@ -35,32 +35,33 @@ ${region}=  EU
 ${test_timeout_crm}  15 min
 
 *** Test Cases ***
+# direct not supported
 # ECQ-1383
-User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=direct
-    [Documentation]
-    ...  deploy app with 2 UDP and 2 TCP ports with docker compose
-    ...  verify all ports are accessible via fqdn
-
-    ${cluster_name_default}=  Get Default Cluster Name
-    ${app_name_default}=  Get Default App Name
-
-    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
-    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
-
-    Register Client  developer_org_name=${developer_org_name}
-    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
-    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
-    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
-    ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
-    ${fqdn_3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
-
-#    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
-
-    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
-    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
-
-    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
-    UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
+#User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and access_type=direct
+#    [Documentation]
+#    ...  deploy app with 2 UDP and 2 TCP ports with docker compose
+#    ...  verify all ports are accessible via fqdn
+#
+#    ${cluster_name_default}=  Get Default Cluster Name
+#    ${app_name_default}=  Get Default App Name
+#
+#    Create App  region=${region}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  deployment_manifest=${docker_compose_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=direct
+#    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
+#
+#    Register Client  developer_org_name=${developer_org_name}
+#    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
+#    ${fqdn_0}=  Catenate  SEPARATOR=  ${cloudlet.ports[0].fqdn_prefix}  ${cloudlet.fqdn}
+#    ${fqdn_1}=  Catenate  SEPARATOR=  ${cloudlet.ports[1].fqdn_prefix}  ${cloudlet.fqdn}
+#    ${fqdn_2}=  Catenate  SEPARATOR=  ${cloudlet.ports[2].fqdn_prefix}  ${cloudlet.fqdn}
+#    ${fqdn_3}=  Catenate  SEPARATOR=  ${cloudlet.ports[3].fqdn_prefix}  ${cloudlet.fqdn}
+#
+##    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=${docker_image}
+#
+#    TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet.ports[0].public_port}
+#    TCP Port Should Be Alive  ${fqdn_1}  ${cloudlet.ports[1].public_port}
+#
+#    UDP Port Should Be Alive  ${fqdn_2}  ${cloudlet.ports[2].public_port}
+#    UDP Port Should Be Alive  ${fqdn_3}  ${cloudlet.ports[3].public_port}
 
 # ECQ-1998
 User shall be able to access 2 UDP and 2 TCP ports on openstack with docker compose and no access_type
