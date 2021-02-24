@@ -231,6 +231,9 @@ class MexMasterController(MexRest):
     def get_default_cluster_name(self):
         return shared_variables.cluster_name_default
 
+    def set_default_cluster_name(self, name):
+        shared_variables.cluster_name_default = name
+
     def get_default_app_name(self):
         return shared_variables.app_name_default
 
