@@ -32,6 +32,10 @@ ShowOrgCloudlet - developer org owner shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
 
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
+
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
@@ -57,6 +61,10 @@ ShowOrgCloudlet - operator org owner shall be able to see all cloudlets
    ${orgname}=  Create Org  token=${user_token}  orgtype=operator
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token}  org_name=${orgname}
+
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
 
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
@@ -84,6 +92,10 @@ ShowOrgCloudlet - DeveloperManager shall be able to see all cloudlets
    Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager   token=${user_token}
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
+
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
 
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
@@ -113,6 +125,10 @@ ShowOrgCloudlet - DeveloperContributor shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
+
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
@@ -139,6 +155,10 @@ ShowOrgCloudlet - DeveloperViewer shall be able to see all cloudlets
    Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer   token=${user_token}
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
+
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
 
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
@@ -167,6 +187,11 @@ ShowOrgCloudlet - OperatorManager shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
+      ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
+
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
@@ -194,6 +219,11 @@ ShowOrgCloudlet - OperatorContributor shall be able to see all cloudlets
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
 
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
+      ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
+
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
 
@@ -220,6 +250,11 @@ ShowOrgCloudlet - OperatorViewer shall be able to see all cloudlets
    Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
    ${pool_return}=        Show Org Cloudlet  region=US  token=${user_token2}  org_name=${orgname}
+
+   FOR  ${pool_cloudlet}  IN  @{pool_return}
+      Run Keyword If  "${pool_cloudlet['key']['organization']}" == "${orgname}"  Operator Cloudlet Info Should Be Correct  ${pool_cloudlet}
+      ...  ELSE  Developer Cloudlet Info Should Be Correct  ${pool_cloudlet}
+   END
 
    ${public_cloudlets}=  Get Public Cloudlets  region=US
    ${num_public_cloudlets}=  Get Length  ${public_cloudlets}
@@ -268,3 +303,48 @@ Setup
    Set Suite Variable  ${user_token2}
    Set Suite Variable  ${epochusername2}
    Set Suite Variable  ${cloudlets}
+
+Developer Cloudlet Info Should Be Correct
+   [Arguments]  ${show}
+
+   Dictionary Should Not Contain Key  ${show}  container_version
+   Should Be Empty  ${show['created_at']}
+   Dictionary Should Not Contain Key  ${show}  default_resource_alert_threshold
+   Dictionary Should Not Contain Key  ${show}  deployment
+   Should Be Empty  ${show['flavor']}
+   Dictionary Should Not Contain Key  ${show}  notify_srv_addr
+   Dictionary Should Not Contain Key  ${show}  physical_name
+
+   Should Be True  ${show['ip_support']} > 0
+   Should Not Be Empty  ${show['key']['name']}
+   Should Not Be Empty  ${show['key']['organization']}
+   Should Be True  ${show['location']['latitude']} >= -90 and ${show['location']['latitude']} <= 90
+   Should Not Be Empty  ${show['location']['longitude']} >= -180 and ${show['location']['longitude']} <= 180
+   Should Be True  ${show['state']} > 0
+   Should Be True  ${show['num_dynamic_ips']} > 0
+   #Should Be True  'trust_policy_state' in ${show} or 'trust_policy' in ${show}
+   Run Keyword If  'trust_policy_state' in ${show}  Should Be True  ${show['trust_policy_state']} > 0
+   Run Keyword If  'trust_policy' in ${show}  Should Not Be Empty  ${show['trust_policy']}
+
+Operator Cloudlet Info Should Be Correct
+   [Arguments]  ${show}
+
+   ${key_length}=  Get Length  ${show['crm_access_public_key']}
+   Should Be True  len("${show['container_version']}") > 0
+   Should Be True  ${show['created_at']['seconds']} > 0
+   Should Be True  ${show['created_at']['nanos']} > 0
+   Should Be True  ${key_length} > 0
+   Should Be True  ${show['default_resource_alert_threshold']} > 0
+   Should Be True  len("${show['deployment']}") > 0
+   Should Be True  len("${show['flavor']}") > 0
+   Should Be True  ${show['ip_support']} > 0
+   Should Be Equal  ${show['key']['name']}  ${cloudlet}
+   Should Be Equal  ${show['key']['organization']}  ${operator}
+   Should Be True  ${show['location']['latitude']} > 0
+   Should Be True  ${show['location']['longitude']} > 0
+   Should Be True  ${show['num_dynamic_ips']} > 0
+   Should Be True  len("${show['notify_srv_addr']}") > 0
+   Should Be Equal  ${show['physical_name']}  ${cloudlet}
+   Should Be Equal As Numbers  ${show['state']}  5
+   Should Be Equal As Numbers  ${show['trust_policy_state']}  1
+

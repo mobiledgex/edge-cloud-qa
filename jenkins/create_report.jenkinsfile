@@ -42,6 +42,7 @@ node('jenkinsSlave1') {
          generate_report(version, project, cycle, null, jobduration, 1)
          generate_report(version, project, cycle, 'controller', null, 0)
          generate_report(version, project, cycle, 'dme', null, 0)
+         generate_report(version, project, cycle, 'sdk', null, 0)
          generate_report(version, project, cycle, 'openstack', null, 0)
          generate_report(version, project, cycle, 'vsphere', null, 0)
          generate_report(version, project, cycle, 'vcd', null, 0)
