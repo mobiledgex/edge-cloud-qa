@@ -18,27 +18,27 @@ AppMetrics - get with no app shall return error
    # cpu	
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=cpu  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"App details must be present"}
+   Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # mem
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=mem  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # network 
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=network  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # connections 
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=connections  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # disk 
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=disk  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
 AppMetrics - get with no cloudlet/operator name shall return error
    [Documentation]
@@ -50,27 +50,27 @@ AppMetrics - get with no cloudlet/operator name shall return error
    # cpu
    ${error}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  selector=cpu  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"App details must be present"}
+   Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # mem
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  selector=mem  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # network
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  selector=network  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # connections 
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  selector=connections  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # disk
    ${error2}=  Run Keyword and Expect Error  *  Get App Metrics  region=US  cluster_instance_name=autoclusterautomation  selector=disk  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"App details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
 AppMetrics - get with no token name shall return error
    [Documentation]
