@@ -28,13 +28,21 @@ CreateAppInst - deployment with autocluster shall create reservable cluster
 
    [Template]  Reservable Cluster Should Be Created
 
-   developer_org_name=MobiledgeX  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-   developer_org_name=MobiledgeX  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-   developer_org_name=MobiledgeX  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=docker      access_type=${None}  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=kubernetes  access_type=${None}  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=MobiledgeX  deployment=helm        access_type=${None}  image_type=ImageTypeHelm    image_path=${docker_image}
  
-   developer_org_name=automation_dev_org  deployment=docker      image_type=ImageTypeDocker  image_path=${docker_image}
-   developer_org_name=automation_dev_org  deployment=kubernetes  image_type=ImageTypeDocker  image_path=${docker_image}
-   developer_org_name=automation_dev_org  deployment=helm        image_type=ImageTypeHelm    image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=docker      access_type=${None}  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  access_type=${None}  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        access_type=${None}  image_type=ImageTypeHelm    image_path=${docker_image}
+
+   developer_org_name=automation_dev_org  deployment=docker      access_type=loadbalancer  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  access_type=loadbalancer  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        access_type=loadbalancer  image_type=ImageTypeHelm    image_path=${docker_image}
+
+   developer_org_name=automation_dev_org  deployment=docker      access_type=default  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=kubernetes  access_type=default  image_type=ImageTypeDocker  image_path=${docker_image}
+   developer_org_name=automation_dev_org  deployment=helm        access_type=default  image_type=ImageTypeHelm    image_path=${docker_image}
 
 # ECQ-3205
 CreateAppInst - delete autocluster appinst shall not delete reservable cluster
@@ -236,13 +244,13 @@ DeleteAppInst Should Not Delete Reservable Cluster
    Delete Cluster Instance  region=${region}  cluster_name=${app_inst['data']['real_cluster_name']}  developer_org_name=MobiledgeX
 
 Reservable Cluster Should Be Created
-   [Arguments]  ${developer_org_name}  ${deployment}  ${image_type}  ${image_path}
+   [Arguments]  ${developer_org_name}  ${deployment}  ${access_type}  ${image_type}  ${image_path}
 
    [Teardown]  Cleanup Provisioning
 
    Create Flavor  region=${region}
 
-   Create App  region=${region}   developer_org_name=${developer_org_name}  deployment=${deployment}  image_type=${image_type}  image_path=${image_path}  access_ports=tcp:1
+   Create App  region=${region}   developer_org_name=${developer_org_name}  deployment=${deployment}  access_type=${access_type}  image_type=${image_type}  image_path=${image_path}  access_ports=tcp:1
 
    ${app_inst}=  Create App Instance  region=${region}  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autocluster${app_name_default}
 

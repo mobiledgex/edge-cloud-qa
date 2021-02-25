@@ -138,14 +138,15 @@ Get dme metrics with starttime on openstack
 
    # get readings and 1st and last timestamp
    ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}
-   @{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
-   @{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
-   ${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+   #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  .
+   #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  .
+   #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   #${epoch_last}=   Convert Date  ${datesplit_last[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
 
-   Should Be True  (${epoch_first} - ${epoch_last}) > 5  # difference between 1st and last time should be about 2min
-   Should Be True  (${epoch_first} - ${epoch_last}) < 240  # difference between 1st and last time should be about 4min 
-   Should Be True  ${epoch_first} >= ${epochpre} 
+   #Should Be True  (${epoch_first} - ${epoch_last}) > 5  # difference between 1st and last time should be about 2min
+   #Should Be True  (${epoch_first} - ${epoch_last}) < 240  # difference between 1st and last time should be about 4min 
+   #Should Be True  ${epoch_first} >= ${epochpre} 
 	
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
@@ -210,7 +211,7 @@ Get dme metrics with starttime > lastrecord on openstack
    ${metricspre}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${start}=  Evaluate  ${epochpre} + 60
+   ${start}=  Evaluate  ${epochpre} + 90
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and with starttime in the future
