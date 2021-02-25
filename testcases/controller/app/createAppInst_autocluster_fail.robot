@@ -62,7 +62,15 @@ CreateAppInst - User shall not be able to create an autocluster VM AppInst
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor 
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"No cluster required for App deployment type vm, cannot use cluster name autocluster which attempts to use or create a ClusterInst"}')
 
-    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:8008,tcp:8011
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.1  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQcow  deployment=vm  access_type=default  image_path=${qcow_centos_image}  access_ports=tcp:8008,tcp:8011
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"No cluster required for App deployment type vm, cannot use cluster name autocluster which attempts to use or create a ClusterInst"}')
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.2  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image}  access_ports=tcp:8008,tcp:8011
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor
+    Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"No cluster required for App deployment type vm, cannot use cluster name autocluster which attempts to use or create a ClusterInst"}')
+
+    Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.3  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQcow  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:8008,tcp:8011
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=autoclustervm  flavor_name=automation_api_flavor  real_cluster_name=reservable0
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"No cluster required for App deployment type vm, cannot use cluster name autocluster which attempts to use or create a ClusterInst"}')
 
