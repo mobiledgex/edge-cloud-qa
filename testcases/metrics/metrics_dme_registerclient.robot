@@ -241,32 +241,32 @@ DMEMetrics - DeveloperViewer shall be able to get DME RegisterClient metrics
 
 *** Keywords ***
 Setup
-   ${developer_name}=  Get Default Developer Name 
+   ${developer_org_name}=  Get Default Developer Name 
 
-   Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_name}
+   Register Client  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name}
+
+   Set Suite Variable  ${developer_org_name}
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        dme-api 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  100ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  10ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  25ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  50ms 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  5ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  app
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudletorg
-   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  errs 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  inf
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  0s
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  100ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  10ms 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  25ms 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  50ms 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  5ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  app
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
-   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  oper
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
 
@@ -284,15 +284,15 @@ Values Should Be In Range
       Should Be True   ${reading[3]} >= 0
       Should Be True   ${reading[4]} >= 0
       Should Be True   ${reading[5]} >= 0
-      Should Be Equal  ${reading[6]}  ${appname}
-      Should Be Equal  ${reading[7]}  ${developer_org_name} 
-      Should Be True   ${reading[8]} == 0
-      Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
-      Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be True   ${reading[11]} >= 0
-      Should Be True   ${reading[12]} == ${None} 
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} >= 0
+      Should Be True   ${reading[6]} >= 0
+      Should Be Equal  ${reading[7]}  ${appname}
+      Should Be Equal  ${reading[8]}  ${developer_org_name} 
+      Should Be True   ${reading[9]} == 0
+      Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
+      Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
+      Should Be True   ${reading[12]} >= 0
+      Should Be True   ${reading[13]} == ${None} 
+      Should Be True   ${reading[14]} == ${None}
       Should Be Equal  ${reading[15]}  RegisterClient 
       Should Be True   ${reading[16]} > 0
       Should Be True   ${reading[17]} >= 0
@@ -323,23 +323,21 @@ Metrics Should Match Influxdb
 #   \  ${index}=  Evaluate  ${index}+1
    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
       Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}   ${reading[1]}
-      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}   ${reading[2]}
-      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}   ${reading[3]}
-      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}   ${reading[4]}
-      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}   ${reading[5]}
-      Should Be Equal  ${metrics_influx_t[${index}]['app']}   ${reading[6]}
-      Should Be Equal  ${metrics_influx_t[${index}]['apporg']}   ${reading[7]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}   ${reading[8]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}   ${reading[9]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}   ${reading[10]}
-      #Should Be Equal  ${metrics_influx_t[${index}]['dev']}   ${reading[11]}
-      Should Be Equal  ${metrics_influx_t[${index}]['errs']}   ${reading[11]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}   ${reading[12]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}   ${reading[13]}
-      Should Be Equal  ${metrics_influx_t[${index}]['inf']}   ${reading[14]}
+      Should Be Equal  ${metrics_influx_t[${index}]['0s']}   ${reading[1]}
+      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}   ${reading[2]}
+      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}   ${reading[3]}
+      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}   ${reading[4]}
+      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}   ${reading[5]}
+      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}   ${reading[6]}
+      Should Be Equal  ${metrics_influx_t[${index}]['app']}   ${reading[7]}
+      Should Be Equal  ${metrics_influx_t[${index}]['apporg']}   ${reading[8]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}   ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}   ${reading[10]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}   ${reading[11]}
+      Should Be Equal  ${metrics_influx_t[${index}]['errs']}   ${reading[12]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}   ${reading[13]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}   ${reading[14]}
       Should Be Equal  ${metrics_influx_t[${index}]['method']}   ${reading[15]}
-      #Should Be Equal  ${metrics_influx_t[${index}]['oper']}   ${reading[17]}
       Should Be Equal  ${metrics_influx_t[${index}]['reqs']}   ${reading[16]}
       Should Be Equal  ${metrics_influx_t[${index}]['ver']}   ${reading[17]}
 
