@@ -134,6 +134,8 @@ Get the last 10 app metrics on openstack
 Get all app metrics on openstack
    [Arguments]  ${app}  ${dbapp}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
+   ${app}=  Convert To Lowercase  ${app}
+
    ${metrics}=         Get App Metrics  region=${region}  app_name=${app}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}
    ${metrics_influx}=  Run Keyword  Get Influx App ${selector} Metrics  app_name=${dbapp}  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=ORDER BY DESC  # last 5
 
