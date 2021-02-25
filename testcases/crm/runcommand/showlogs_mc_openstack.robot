@@ -6,7 +6,7 @@ Library  MexApp
 Library  Collections
 Library  String
 
-#Test Setup      Setup
+Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
 Test Timeout    ${test_timeout_crm} 
@@ -247,15 +247,59 @@ ShowLogs - docker shared shall return logs on openstack
     Length Should Be  ${stdout_timestamps_lines}  3
     Length Should Be  ${stdout_since_lines}  2
 
+# ECQ-3221
+ShowLogs - docker autocluster shall return logs on CRM
+    [Documentation]
+    ...  - deploy docker autocluster app
+    ...  - verify ShowLogs works
+
+    [Tags]  ReservableCluster
+
+    Log To Console  Creating App and App Instance
+    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  deployment=docker  developer_org_name=${developer_org_name_automation}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+    Sleep  10 seconds  # wait for app to fully start
+
+    # without containerid
+    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+
+    # with containerid
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+
+    Should Contain   ${stdout_id}  all threads started
+    Should Contain   ${stdout_noid}  all threads started
+
+# ECQ-3222
+ShowLogs - k8s autocluster shall return logs on CRM
+    [Documentation]
+    ...  - deploy k8s autocluster app
+    ...  - verify ShowLogs works
+
+    [Tags]  ReservableCluster
+
+    Log To Console  Creating App and App Instance
+    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015  command=${docker_command}  deployment=kubernetes  developer_org_name=${developer_org_name_automation}
+    ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_crm}  operator_org_name=${operator_name_crm}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+    Sleep  10 seconds  # wait for app to fully start
+
+    # without containerid
+    ${stdout_noid}=  Show Logs  region=${region}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+
+    # with containerid
+    ${stdout_id}=  Show Logs  region=${region}  container_id=${app_inst['data']['runtime_info']['container_ids'][0]}  cluster_instance_name=autocluster${app['data']['key']['name']}  cluster_instance_developer_org_name=MobiledgeX
+
+    Should Contain   ${stdout_id}  all threads started
+    Should Contain   ${stdout_noid}  all threads started
+
 *** Keywords ***
 Setup
     #Create Developer
-    #Create Flavor
-    Log To Console  Creating Cluster Instance
-    Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  #deployment=kubernetes  ip_access=IpAccessShared
-    #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
+    Create Flavor  region=${region}
+    #Log To Console  Creating Cluster Instance
+    #Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack}  operator_name=${operator_name_openstack}  flavor_name=${cluster_flavor_name}  #deployment=kubernetes  ip_access=IpAccessShared
+    ##Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name}  operator_name=${operator_name}  flavor_name=${cluster_flavor_name}
 
-    Log To Console  Done Creating Cluster Instance
+    #Log To Console  Done Creating Cluster Instance
 
     #${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack}  ${operator_name_openstack}  ${mobiledgex_domain}
     #${rootlb}=  Convert To Lowercase  ${rootlb}
