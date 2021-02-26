@@ -14,7 +14,7 @@ ${email}             mextester99@gmail.com
 ${mextester99_gmail_password}  rfbixqomqidobmcb
 ${server}            docker-qa.mobiledgex.net
 ${app_name}          server_ping_threaded
-${app_version}       latest
+${app_version}       5.0
 ${OPorgname}         oporgtester01
 ${DEVorgname}        jdevorg
 ${i}                 1
