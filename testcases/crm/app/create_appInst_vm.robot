@@ -158,6 +158,7 @@ Setup
    ${developer_name_default}=  Get Default Developer Name
    ${version_default}=  Get Default App Version
 
+   ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
    ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
    ${rootlb}=  Convert To Lowercase  ${rootlb}
    ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}

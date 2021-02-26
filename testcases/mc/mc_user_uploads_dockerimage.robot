@@ -286,7 +286,7 @@ MC - User shall not be able to upload docker image as Operator Viewer
 *** Keywords ***
 Setup
     Pull Image From Docker  username=root  password=sandhill  server=${server}  org_name=mobiledgex  app_name=${app_name}  app_version=${app_version}
-    Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0
+    Tag Image               username=root  password=sandhill  server=${server}  app_name=${app_name}  source_name=docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:5.0  target_name=server_ping_threaded:5.0
 
 Teardown
     Skip Verify Email   skip_verify_email=True
