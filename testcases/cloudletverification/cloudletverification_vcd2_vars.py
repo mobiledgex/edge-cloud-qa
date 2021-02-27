@@ -40,9 +40,8 @@ developer_organization_name = 'MobiledgeX'
 
 # test will create flavors or not.  Requires mexadmin username/password.  Sometimes flavors will be predefined and we wont have permissions to create our own
 create_flavors = True 
-
-# mcctl --addr https://console-qa.mobiledgex.net:443 region --skipverify CreateCloudlet cloudlet=qa-vcd-01 region=US cloudlet-org=packet physicalname=qa-lab infraapiaccess=DirectAccess platformtype=PlatformTypeVcd  location.latitude=33 location.longitude=-96 numdynamicips=4 envvar=MEX_DATASTORE=datastore1 envvar=MEX_EXTERNAL_NETWORK_MASK=29 envvar=MEX_NETWORK_SCHEME=cidr=10.102.X.0/24 envvar=MEX_IMAGE_DISK_FORMAT=vmdk deployment=docker infraconfig.flavorname=x1.medium envvar=MEX_EXT_NETWORK=ext-net envvar=MEX_VDC_TEMPLATE=mobiledgex-v4.2.1-rc1-vcd envvar=MEX_CATALOG=MEX-Cat01
-
+# mcctl command to create this cloudlet
+# date;time mcctl --addr https://console-qa.mobiledgex.net:443 region --skipverify CreateCloudlet cloudlet=automation-qa2-vcd-01 region=US cloudlet-org=packet physicalname=qa2-lab infraapiaccess=DirectAccess platformtype=PlatformTypeVcd location.latitude=33 location.longitude=-96 numdynamicips=10 envvar=MEX_VDC_TEMPLATE=mobiledgex-v4.2.1-vcd envvar=MEX_CATALOG=qa2-cat envvar=MEX_DATASTORE=datastore1 envvar=MEX_EXTERNAL_NETWORK_MASK=28 envvar=MEX_EXTERNAL_NETWORK_GATEWAY=139.178.87.225 envvar=MEX_NETWORK_SCHEME=cidr=10.102.X.0/24 envvar=MEX_IMAGE_DISK_FORMAT=vmdk deployment=docker infraconfig.flavorname=vcd-medium envvar=MEX_EXT_NETWORK=external-network-qa2 envvar=MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS='protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32' envvar=MEX_CLOUDLET_FIREWALL_WHITELIST_INGRESS='protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32' --debug
 
 
 # env_vars=${cloudlet_env_vars}
@@ -56,7 +55,7 @@ cloudlet_infraapiaccess = 'directaccess'
 cloudlet_numdynamicips = '10'
 cloudlet_security_group = 'cloudletverification'
 cloudlet_external_subnet = 'external-subnet'  # used for cloudlet metrics verification
-cloudlet_infraconfig_flavorname = 'x1.medium'
+cloudlet_infraconfig_flavorname = 'vcd-medium'
 cloudlet_infraconfig_externalnetworkname = 'eexternal-network-qa'
 deployment = 'docker'
 
@@ -83,7 +82,8 @@ cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_netmask},{cloudlet_ext_n
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
 #docker_image = 'docker-qa.mobiledgex.net/tomdev/images/server-ping-threaded:6.0'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:2020-06-16-GPU'
-docker_image_privacypolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
+#docker_image_privacypolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
+docker_image_trustpolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
 
 # QCOW image used for VM deployments which has the test app running on it
 qcow_centos_image = 'https://artifactory-qa.mobiledgex.net/artifactory/repo-MobiledgeX/server_ping_threaded_centos7_http.qcow2#md5:c7f7e312dd18b1c9ea586650721c75ba'
@@ -128,24 +128,27 @@ flavor_name = 'flavorpoc' + timestamp
 app_name = 'apppoc' + timestamp
 #cluster_name = 'clusterpoc' + timestamp
 cluster_name = 'cpoc' + timestamp
-privacy_policy_name = 'privacypolicypoc' + timestamp
+#privacy policy no longer supported - now trust policy
+#privacy_policy_name = 'privacypolicypoc' + timestamp
+trust_policy_name = 'trustpolicypoc' + timestamp
 
-flavor_name_small = flavor_name + 'small'
-flavor_name_medium = flavor_name + 'medium'
-flavor_name_large = flavor_name + 'large'
-flavor_name_vm = flavor_name + 'vm'
-flavor_name_gpu = flavor_name + 'gpu'
-master_flavor_name_small = 'vsphere.smallest'
-master_flavor_name_medium = 'vsphere.medium'
-master_flavor_name_large = 'vsphere.large'
-master_flavor_name_gpu = 'vsphere.large-gpu'
+flavor_name_small = flavor_name + 'vcd-' + 'small'
+flavor_name_medium = flavor_name + 'vcd-' + 'medium'
+flavor_name_large = flavor_name + 'vcd-' + 'large'
+flavor_name_vm = flavor_name + 'vcd-' + 'vm'
+flavor_name_gpu = flavor_name + 'vcd-' + 'gpu'
+master_flavor_name_small = 'vcd-small'
+master_flavor_name_medium = 'vcd-medium'
+master_flavor_name_large = 'vcd-large'
+master_flavor_name_gpu = 'vcd-large-gpu'
 #master_flavor_name_gpu = 'm4.small' all the above were small
 #node_flavor_name_small = 'm4.small'
-node_flavor_name_small =  'vsphere.smallest'
-node_flavor_name_medium = 'vsphere.medium'
-node_flavor_name_large = 'vsphere.large'
-node_flavor_name_gpu = 'vsphere.large-gpu'
+node_flavor_name_small =  'vcd-small'
+node_flavor_name_medium = 'vcd-medium'
+node_flavor_name_large = 'vcd-largest'
+node_flavor_name_gpu = 'vcd-large-gpu'
 
+#note direct not supported using for negative test cases
 app_name_dockerdedicateddirect = app_name + 'dockerdedicateddirect'
 app_name_dockerdedicatedlb = app_name + 'dockerdedicatedlb'
 app_name_dockerdedicatedgpu = app_name + 'dockerdedicatedgpu'
@@ -170,9 +173,11 @@ cluster_name_k8ssharedgpu = cluster_name + 'k8shrdgpu'
 cluster_name_k8sdedicatedlb = cluster_name + 'k8sdedlb'
 cluster_name_k8ssharedlb = cluster_name + 'k8shrdlb'
 cluster_name_k8ssharedvolumesize = cluster_name + 'k8shrdvolsze'
-cluster_name_vm = 'autoclustervm'
-cluster_name_vmgpu = 'autoclustervmgpu'
-
+#note changed naming as autocluster is no longer supported in naming covention Feb 2021
+#cluster_name_vm = 'autoclustervm'
+#cluster_name_vmgpu = 'autoclustervmgpu'
+cluster_name_vm = 'vcd2vm'
+cluster_name_vmgpu = 'vcd2vmgpu'
 # metrics wait time
 metrics_wait_docker = 20*60  # 20mins
 metrics_wait_k8s = 20*60     # 20mins
