@@ -72,7 +72,7 @@ def main():
     component = os.environ['Components']
     crm_pool_name = 'crm_pool_name_notset'
     if 'Platform' in os.environ:
-        component = component + ' AND component="' + os.environ['Platform'] + '"'
+        component = component + ' ,' + os.environ['Platform'] 
         folder = os.environ['Platform'].lower()
         crm_pool_name = 'CRMPool' + os.environ['Platform']
     if 'Folder' in os.environ:
