@@ -70,8 +70,11 @@ def main():
     #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
+    crm_pool_name = 'crm_pool_name_notset'
     if 'Platform' in os.environ:
         component = component + ' ' + os.environ['Platform']
+        folder = os.environ['Platform'].lower()
+        crm_pool_name = 'CRMPool' + os.environ['Platform']
     if 'Folder' in os.environ:
         folder = os.environ['Folder']
 
@@ -83,9 +86,9 @@ def main():
 
     #export CRMPool="{\"cloudlet_name_openstack_shared\":[{\"cloudlet\":\"automationHawkinsCloudlet\",\"operator\":\"GDDT\",\"region\":\"EU\"},{\"cloudlet\":\"packet-qaregression\",\"operator\":\"packet\",\"region\":\"US\"},{\"cloudlet\":\"automationParadiseCloudlet\",\"operator\":\"GDDT\",\"region\":\"EU\"}]}"
     crm_pool_dict = None
-    if 'CRMPool' in os.environ:
+    if crm_pool_name in os.environ:
         try:
-            crm_pool_dict = json.loads(os.environ['CRMPool'])
+            crm_pool_dict = json.loads(os.environ[crm_pool_name])
             logging.info(f'crm_pool_dict={crm_pool_dict}')
         except Exception as e:
             logging.error(f'error loading CRMPool:{e}')
