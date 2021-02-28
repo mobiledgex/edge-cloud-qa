@@ -774,97 +774,97 @@ Metrics shall collect Cluster Network metrics for IpAccessShared/LB/k8s
 #
 #   App Connections Should Be In Range  ${metrics}
 
-Metrics shall collect App CPU metrics for IpAccessDedicated/Direct/docker 
-   [Documentation]
-   ...  request App CPU metrics with last=5
-   ...  verify info is correct
-   [Tags]  app  docker  dedicated  direct  metrics
-
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
-   Log To Console  Waiting for ${waittime} seconds for metrics collection
-   Sleep  ${waittime} seconds
-
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   App CPU Metrics Headings Should Be Correct  ${metrics}
-
-   App CPU Should Be In Range  ${metrics}
-
-Metrics shall collect App Disk metrics for IpAccessDedicated/Direct/docker 
-   [Documentation]
-   ...  request App Disk metrics with last=5
-   ...  verify info is correct
-   [Tags]  app  docker  dedicated  direct  metrics
-
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
-   Log To Console  Waiting for ${waittime} seconds for metrics collection
-   Sleep  ${waittime} seconds
-
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   App Disk Metrics Headings Should Be Correct  ${metrics}
-
-   App Disk Should Be In Range  ${metrics}
-
-Metrics shall collect App Memory metrics for IpAccessDedicated/Direct/docker 
-   [Documentation]
-   ...  request App Memory metrics with last=5
-   ...  verify info is correct
-   [Tags]  app  docker  dedicated  direct  metrics
-
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
-   Log To Console  Waiting for ${waittime} seconds for metrics collection
-   Sleep  ${waittime} seconds
-
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   App Memory Metrics Headings Should Be Correct  ${metrics}
-
-   App Memory Should Be In Range  ${metrics}
-
-Metrics shall collect App Network metrics for IpAccessDedicated/Direct/docker 
-   [Documentation]
-   ...  request App Network metrics with last=5
-   ...  verify info is correct
-   [Tags]  app  docker  dedicated  direct  metrics
-
-   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
-   Log To Console  Waiting for ${waittime} seconds for metrics collection
-   Sleep  ${waittime} seconds
-
-   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
-
-   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
-
-   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
-
-   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
-   Should Be Equal As Integers  ${num_readings}  5
-
-   App Network Metrics Headings Should Be Correct  ${metrics}
-
-   App Network Should Be In Range  ${metrics}
+#Metrics shall collect App CPU metrics for IpAccessDedicated/Direct/docker 
+#   [Documentation]
+#   ...  request App CPU metrics with last=5
+#   ...  verify info is correct
+#   [Tags]  app  docker  dedicated  direct  metrics
+#
+#   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+#   Log To Console  Waiting for ${waittime} seconds for metrics collection
+#   Sleep  ${waittime} seconds
+#
+#   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=cpu  last=5
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   App CPU Metrics Headings Should Be Correct  ${metrics}
+#
+#   App CPU Should Be In Range  ${metrics}
+#
+#Metrics shall collect App Disk metrics for IpAccessDedicated/Direct/docker 
+#   [Documentation]
+#   ...  request App Disk metrics with last=5
+#   ...  verify info is correct
+#   [Tags]  app  docker  dedicated  direct  metrics
+#
+#   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+#   Log To Console  Waiting for ${waittime} seconds for metrics collection
+#   Sleep  ${waittime} seconds
+#
+#   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=disk  last=5
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   App Disk Metrics Headings Should Be Correct  ${metrics}
+#
+#   App Disk Should Be In Range  ${metrics}
+#
+#Metrics shall collect App Memory metrics for IpAccessDedicated/Direct/docker 
+#   [Documentation]
+#   ...  request App Memory metrics with last=5
+#   ...  verify info is correct
+#   [Tags]  app  docker  dedicated  direct  metrics
+#
+#   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+#   Log To Console  Waiting for ${waittime} seconds for metrics collection
+#   Sleep  ${waittime} seconds
+#
+#   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=mem  last=5
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   App Memory Metrics Headings Should Be Correct  ${metrics}
+#
+#   App Memory Should Be In Range  ${metrics}
+#
+#Metrics shall collect App Network metrics for IpAccessDedicated/Direct/docker 
+#   [Documentation]
+#   ...  request App Network metrics with last=5
+#   ...  verify info is correct
+#   [Tags]  app  docker  dedicated  direct  metrics
+#
+#   ${waittime}=  Calculate Wait Time  ${cluster_name_dockerdedicateddirect_endtime}  ${metrics_wait_docker}
+#   Log To Console  Waiting for ${waittime} seconds for metrics collection
+#   Sleep  ${waittime} seconds
+#
+#   ${metrics}=  Get App Metrics  region=${region}  app_name=${app_name_dockerdedicateddirect}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_organization_name}  selector=network  last=5
+#
+#   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+#
+#   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+#
+#   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+#   Should Be Equal As Integers  ${num_readings}  5
+#
+#   App Network Metrics Headings Should Be Correct  ${metrics}
+#
+#   App Network Should Be In Range  ${metrics}
 
 Metrics shall collect App Connections metrics for IpAccessDedicated/LB/docker 
    [Documentation]
@@ -1515,6 +1515,7 @@ Metrics shall collect App Network metrics for VM lb
    App Network Should Be In Range  ${metrics}
 
 *** Keywords ***
+
 Setup Cloudlet Metrics
    Login  username=${username_mexadmin}  password=${password_mexadmin}
 
@@ -1536,10 +1537,11 @@ Setup Cloudlet Metrics
    @{servers}=    evaluate    json.loads('''${run_debug_out['data']['output']}''')    json
    #@{servers}=  Get Server List
    ${networkcount}=  Set Variable  0
-   : FOR  ${server}  IN  @{servers}
-   \  ${contains}=  Evaluate  'external-network-shared' in '${server['Networks']}'
+   FOR  ${server}  IN  @{servers}
+          ${contains}=  Evaluate  'external-network-shared' in '${server['Networks']}'
    #\  log to console  ${contains}
-   \  ${networkcount}=  Run Keyword If  ${contains} == ${True}  Evaluate  ${networkcount} + 1  ELSE  Set Variable  ${networkcount}
+          ${networkcount}=  Run Keyword If  ${contains} == ${True}  Evaluate  ${networkcount} + 1  ELSE  Set Variable  ${networkcount}
+   END
    #log to console  ${networkcount}
    Set Suite Variable  ${networkcount}
 
@@ -1747,11 +1749,12 @@ Cloudlet IPUsage Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[3]} >= 0
-   \  Should Be True               ${reading[4]} > 0
-   \  Should Be True               ${reading[5]} > 0
-   \  Should Be True               ${reading[6]} > 0
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[3]} >= 0
+            Should Be True               ${reading[4]} > 0
+            Should Be True               ${reading[5]} > 0
+            Should Be True               ${reading[6]} > 0
+     END
 
 Cloudlet Utilization Should Be In Range
   [Arguments]  ${metrics}
@@ -1759,13 +1762,14 @@ Cloudlet Utilization Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[3]} >= 0
-   \  Should Be True               ${reading[4]} >= -1 
-   \  Should Be True               ${reading[5]} >= 0
-   \  Should Be True               ${reading[6]} >= -1
-   \  Should Be True               ${reading[7]} >= 0
-   \  Should Be True               ${reading[8]} >= -1 
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[3]} >= 0
+            Should Be True               ${reading[4]} >= -1 
+            Should Be True               ${reading[5]} >= 0
+            Should Be True               ${reading[6]} >= -1
+            Should Be True               ${reading[7]} >= 0
+            Should Be True               ${reading[8]} >= -1 
+     END
 
 CPU Should Be In Range
   [Arguments]  ${metrics}
@@ -1773,8 +1777,9 @@ CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[5]} >= 0 and ${reading[5]} <= 100
+     END
 
 Disk Should Be In Range
   [Arguments]  ${metrics}
@@ -1782,8 +1787,9 @@ Disk Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+     END
 
 Memory Should Be In Range
   [Arguments]  ${metrics}
@@ -1791,8 +1797,9 @@ Memory Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[5]} > 0 and ${reading[5]} <= 100
+     END
 
 Network Should Be In Range
   [Arguments]  ${metrics}
@@ -1800,8 +1807,9 @@ Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} > 0 and ${reading[6]} > 0
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[5]} > 0 and ${reading[6]} > 0
+     END
 
 TCP Should Be In Range
   [Arguments]  ${metrics}
@@ -1809,8 +1817,9 @@ TCP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0
+     END
 
 UDP Should Be In Range
   [Arguments]  ${metrics}
@@ -1818,8 +1827,9 @@ UDP Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+     FOR    ${reading}  IN  @{values}
+               Should Be True    ${reading[5]} >= 0 and ${reading[6]} >= 0 and ${reading[7]} >= 0
+     END
 
 App Connections Should Be In Range
   [Arguments]  ${metrics}
@@ -1827,22 +1837,23 @@ App Connections Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0
-   \  Should Be True               ${reading[10]} >= 0
-   \  Should Be True               ${reading[11]} >= 0
-   \  Should Be True               ${reading[12]} >= 0
-   \  Should Be True               ${reading[13]} >= 0
-   \  Should Be True               ${reading[14]} >= 0
-   \  Should Be True               ${reading[15]} >= 0
-   \  Should Be True               ${reading[16]} >= 0
-   \  Should Be True               ${reading[17]} >= 0
-   \  Should Be True               ${reading[18]} >= 0
-   \  Should Be True               ${reading[19]} >= 0
-   \  Should Be True               ${reading[20]} >= 0
-   \  Should Be True               ${reading[21]} >= 0
-   \  Should Be True               ${reading[22]} >= 0
-   \  Should Be True               ${reading[23]} >= 0
+     FOR  ${reading}  IN  @{values}
+             Should Be True               ${reading[9]} >= 0
+             Should Be True               ${reading[10]} >= 0
+             Should Be True               ${reading[11]} >= 0
+             Should Be True               ${reading[12]} >= 0
+             Should Be True               ${reading[13]} >= 0
+             Should Be True               ${reading[14]} >= 0
+             Should Be True               ${reading[15]} >= 0
+             Should Be True               ${reading[16]} >= 0
+             Should Be True               ${reading[17]} >= 0
+             Should Be True               ${reading[18]} >= 0
+             Should Be True               ${reading[19]} >= 0
+             Should Be True               ${reading[20]} >= 0
+             Should Be True               ${reading[21]} >= 0
+             Should Be True               ${reading[22]} >= 0
+             Should Be True               ${reading[23]} >= 0
+     END
 
 App CPU Should Be In Range
   [Arguments]  ${metrics}
@@ -1850,8 +1861,9 @@ App CPU Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
+     END
 
 App Disk Should Be In Range
   [Arguments]  ${metrics}
@@ -1859,8 +1871,9 @@ App Disk Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 1000000000
+     END
 
 App Memory Should Be In Range
   [Arguments]  ${metrics}
@@ -1868,8 +1881,9 @@ App Memory Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 400000000
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 400000000
+     END
 
 App Network Should Be In Range
    [Arguments]  ${metrics}
@@ -1877,6 +1891,7 @@ App Network Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+     FOR  ${reading}  IN  @{values}
+            Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+     END
 
