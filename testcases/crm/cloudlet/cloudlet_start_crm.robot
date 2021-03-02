@@ -102,9 +102,9 @@ CreateCloudlet - User shall be able to create a fake cloudlet
         [Documentation]
         ...  do CreateCloudlet to start a fake CRM 
 
-        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=tmus  cloudlet_name=tmocloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91
-        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=tmus  cloudlet_name=tmocloud-2  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-95
-        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=att  cloudlet_name=attcloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-96
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=tmus  cloudlet_name=tmocloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=31  longitude=-91  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=tmus  cloudlet_name=tmocloud-2  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-95  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
+        Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=att  cloudlet_name=attcloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-96  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
 
         Create App Instance  region=US  app_name=${app_name_automation}       app_version=1.0  developer_org_name=${developer_org_name_automation}  cluster_instance_name=autoclusterAutomation      cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=${flavor_name_automation}
         #Create App Instance  region=US  app_name=automation_api_auth_app  app_version=1.0  cluster_instance_name=autoclusterAutomationAuth  cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
