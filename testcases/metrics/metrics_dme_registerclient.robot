@@ -19,9 +19,9 @@ Test Timeout  ${test_timeout}
 ${cloudlet_name_dme}=  mexplat-qa-cloudlet
 ${operator_org_name_dme}=  GDDT
 
-${app_name}=  automation_api_app
+${app_name}=  ${app_name_automation}
 ${app_version}=  1.0
-${developer_org_name}=  MobiledgeX
+${developer_org_name}=  ${developer_org_name_automation}
 
 ${username_admin}=  mexadmin
 ${password_admin}=  ${mexadmin_password}
