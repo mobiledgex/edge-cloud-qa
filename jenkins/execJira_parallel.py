@@ -70,11 +70,11 @@ def main():
     #project = 'ECQ'
     #summary = os.environ['testsetname']
     component = os.environ['Components']
-    crm_pool_name = 'crm_pool_name_notset'
+    crm_pool_name = 'CRMPool'
     if 'Platform' in os.environ:
         component = component + ' ,' + os.environ['Platform'] 
         folder = os.environ['Platform'].lower()
-        crm_pool_name = 'CRMPool' + os.environ['Platform']
+        crm_pool_name = crm_pool_name + os.environ['Platform']
     if 'Folder' in os.environ:
         folder = os.environ['Folder']
 
