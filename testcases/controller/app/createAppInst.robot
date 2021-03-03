@@ -24,10 +24,11 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
-    Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
+    ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
+    ${real_cluster_name}=  Set Variable  ${appInst.real_cluster_name}
 
     Show Cluster Instances
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${real_cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  liveness=LivenessDynamic
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}	
@@ -113,8 +114,9 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
     ${cluster_name}=  Catenate  SEPARATOR=-  autocluster  ${epoch_time}
 
     ${appInst}=  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  autocluster_ip_access=IpAccessDedicated
+    ${real_cluster_name}=  Set Variable  ${appInst.real_cluster_name}
 
-    ${clusterInst}=  Show Cluster Instances  cluster_name=${cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  use_defaults=${False}
+    ${clusterInst}=  Show Cluster Instances  cluster_name=${real_cluster_name}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${developer_name_default}  use_defaults=${False}
 
     Should Be Equal              ${appInst.key.app_key.organization}             ${developer_name_default}
     Should Be Equal              ${appInst.key.cluster_inst_key.organization}             ${developer_name_default}
