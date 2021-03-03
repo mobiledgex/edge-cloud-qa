@@ -133,7 +133,7 @@ Get dme metrics with starttime on openstack
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${start}=  Evaluate  ${epochpre} - 120
+   ${start}=  Evaluate  ${epochpre} - 240
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and 1st and last timestamp
