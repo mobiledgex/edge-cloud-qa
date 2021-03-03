@@ -16,6 +16,8 @@ ${operator_org_name_dme}=  TDG
 
 ${region}=  US
 
+${metrics_wait_time}=  45 s
+
 *** Test Cases ***
 # ECQ-2047
 DMEMetrics - FindCloudlet shall generate metrics
@@ -35,7 +37,7 @@ DMEMetrics - FindCloudlet shall generate metrics
    Find Cloudlet       carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Find Cloudlet       carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
    Find Cloudlet       carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
-   Sleep  10 seconds  # give time for the metrics to show in db
+   Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}  
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
@@ -64,7 +66,7 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
    Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=6  latitude=35  longitude=-94
    Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=7  latitude=35  longitude=-94
    Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=8  latitude=35  longitude=-94
-   Sleep  10 seconds  # give time for the metrics to show in db
+   Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${last_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
@@ -91,11 +93,11 @@ DMEMetrics - FindCloudlet with error shall generate metrics
    Run Keyword and Expect Error  *  Find Cloudlet       carrier_name=xx  longitude=-194
    Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
 
-   Sleep  10 seconds  # give time for the metrics to show in db
+   Sleep  ${metrics_wait_time}  # give time for the metrics to show in db
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][11]}
+   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][12]}
    Should Be Equal As Numbers  ${req_count}  7  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count}  7  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics}
@@ -126,23 +128,22 @@ Metrics Headings Should Be Correct
 
    Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}        dme-api
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  100ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  10ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  25ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  50ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  5ms
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  app
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  cellID
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  0s
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  100ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  10ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  25ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  50ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  5ms
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  app
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cellID
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  cloudletorg
    #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  inf
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
-   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  oper
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
 
@@ -158,15 +159,15 @@ Values Should Be In Range
       Should Be True   ${reading[3]} >= 0
       Should Be True   ${reading[4]} >= 0
       Should Be True   ${reading[5]} >= 0 
-      Should Be Equal  ${reading[6]}  ${app}
-      Should Be Equal  ${reading[7]}  ${developer}
-      Should Be True   ${reading[8]} == 0 
-      Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
-      Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be True   ${reading[11]} >= 0
-      Should Be Equal  ${reading[12]}  ${cloudlet} 
-      Should Be Equal  ${reading[13]}  ${operator}
-      Should Be True   ${reading[14]} == 0
+      Should Be True   ${reading[6]} >= 0
+      Should Be Equal  ${reading[7]}  ${app}
+      Should Be Equal  ${reading[8]}  ${developer}
+      Should Be True   ${reading[9]} == 0 
+      Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
+      Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
+      Should Be True   ${reading[12]} >= 0
+      Should Be Equal  ${reading[13]}  ${cloudlet} 
+      Should Be Equal  ${reading[14]}  ${operator}
       Should Be Equal  ${reading[15]}  FindCloudlet
       Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${appvers}
@@ -186,17 +187,16 @@ Values With Error Should Be In Range
       Should Be True   ${reading[3]} >= 0
       Should Be True   ${reading[4]} >= 0
       Should Be True   ${reading[5]} >= 0 
-      Should Be Equal  ${reading[6]}  ${app_arg}
-      Should Be Equal  ${reading[7]}  ${dev_arg}
-      Should Be True   ${reading[8]} == 0
-      Should Be Equal  ${reading[9]}  ${cloudlet_name_dme}
-      Should Be Equal  ${reading[10]}  ${operator_org_name_dme}
-      Should Be True   ${reading[11]} == ${reading[16]}
-      Should Be True   ${reading[12]} == ${None}
+      Should Be True   ${reading[6]} >= 0
+      Should Be Equal  ${reading[7]}  ${app_arg}
+      Should Be Equal  ${reading[8]}  ${dev_arg}
+      Should Be True   ${reading[9]} == 0
+      Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
+      Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
+      Should Be True   ${reading[12]} == ${reading[16]}
       Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == 0
+      Should Be True   ${reading[14]} == ${None}
       Should Be Equal  ${reading[15]}  FindCloudlet
-      Should Be True   ${reading[16]} > 0
       Should Be Equal  ${reading[17]}  ${ver_arg}
       ${sum}=  Evaluate  ${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}
       Should Be Equal As Numbers  ${sum}  ${reading[16]}  # sum of ms fields
