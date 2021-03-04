@@ -61,7 +61,7 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port when inv
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tc:2016
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeLoadBalancer  skip_hc_ports=tc:2016
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot parse skipHcPorts: Unsupported protocol: tc"}')
 
 CreateApp - User shall not be able to CreateApp to include skip_hc_port when invalid port number is specified
@@ -72,7 +72,7 @@ CreateApp - User shall not be able to CreateApp to include skip_hc_port when inv
     ${app_name_default}=  Get Default App Name
 
     Log To Console  Creating App
-    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeDirect  skip_hc_ports=tcp:0
+    ${error_msg}=  Run Keyword And Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016  ip_access=AccessTypeLoadBalancer  skip_hc_ports=tcp:0
     Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Cannot parse skipHcPorts: App ports out of range"}')
 
 *** Keywords ***

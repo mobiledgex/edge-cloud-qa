@@ -449,7 +449,7 @@ Fail Create Trusted App
 Fail Update Trusted App
    [Arguments]  ${error_msg}  &{parms}
 
-   ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  access_type=${parms['access_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
+   ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${parms['trusted']}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
 
 Fail Update Non-Trusted App on Trusted Cloudlet
