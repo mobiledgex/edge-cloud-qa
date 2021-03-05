@@ -206,25 +206,43 @@ class AppInstance(MexOperation):
         cluster_delete_url = None
         cluster_delete_msg = None
         msg_dict_delete = None
+        print('*WARN*', msg)
+        if 'cluster_key' in msg['key']['cluster_inst_key']:
+            cluster_name = msg['key']['cluster_inst_key']['cluster_key']['name'].lower() if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') else msg['key']['cluster_inst_key']['cluster_key']['name']
+            cluster_org = msg['key']['cluster_inst_key']['organization']
+        else:
+            cluster_name = None
+            cluster_org = None
+
         if auto_delete and 'key' in msg:
-            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in msg: 
-                msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
-                clusterinst = ClusterInstance(root_url=self.root_url)
-                cluster_delete_url = clusterinst.delete_url
-                cluster_delete_msg = {'clusterinst': clusterinst._build(cluster_name='namenotset', cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)}
-                    
-            msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
+            if 'cluster_key' in msg['key']['cluster_inst_key']:
+                if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster') or 'real_cluster_name' in msg: 
+                    #msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
+                    clusterinst = ClusterInstance(root_url=self.root_url)
+                    cluster_delete_url = clusterinst.delete_url
+                    cluster_delete_msg = {'clusterinst': clusterinst._build(cluster_name='namenotset', cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)}
+            
+            #msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
+            msg_delete = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=cluster_name, cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=cluster_org, use_defaults=False)
+
             msg_dict_delete = {'appinst': msg_delete}
  
         msg_dict_show = None
         if 'key' in msg:
-            if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
-            msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
+            if 'cluster_key' in msg['key']['cluster_inst_key']:
+                if msg['key']['cluster_inst_key']['cluster_key']['name'].startswith('autocluster'): msg['key']['cluster_inst_key']['cluster_key']['name'] = msg['key']['cluster_inst_key']['cluster_key']['name'].lower()
+            #msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=msg['key']['cluster_inst_key']['cluster_key']['name'], cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=msg['key']['cluster_inst_key']['organization'], use_defaults=False)
+            msg_show = self._build(app_name=msg['key']['app_key']['name'], developer_org_name=msg['key']['app_key']['organization'], app_version=msg['key']['app_key']['version'], cluster_instance_name=cluster_name, cloudlet_name=msg['key']['cluster_inst_key']['cloudlet_key']['name'], operator_org_name=msg['key']['cluster_inst_key']['cloudlet_key']['organization'], cluster_instance_developer_org_name=cluster_org, use_defaults=False)
+
             msg_dict_show = {'appinst': msg_show}
         
-        return self.create(token=token, url=self.create_url, delete_url=self.delete_url, delete_autocluster_url=cluster_delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, delete_autocluster_msg=cluster_delete_msg, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
+        create_return = self.create(token=token, url=self.create_url, delete_url=self.delete_url, delete_autocluster_url=cluster_delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, delete_autocluster_msg=cluster_delete_msg, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)
         #return self.create(token=token, url=self.create_url, delete_url=self.delete_url, show_url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show, thread_name=thread_name, stream=stream, stream_timeout=stream_timeout)[0]
 
+        if use_thread:
+            return create_return
+        else:
+            return create_return[0]
 
     def create_app_instance_stream(self):
         return self.get_create_stream_output()
