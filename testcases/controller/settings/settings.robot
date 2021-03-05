@@ -329,6 +329,8 @@ Cleanup Settings
    END
 
    Update Settings  region=${region}  master_node_flavor=${master_node_flavor_default}
+   Update Settings  region=${region}  influx_db_metrics_retention=120h0m0s
+
    #Update Settings  region=${region}  @{parms_all}
    
 Fail Create UpdateSettings
