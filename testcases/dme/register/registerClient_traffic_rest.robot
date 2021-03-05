@@ -22,7 +22,7 @@ ${longitude}	  -91
 #${token_server_local_url}  http://127.0.0.1:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc
 
 ${number_batches}   10
-${number_requests}  100
+${number_requests}  50
 
 ${region}=  US
 	
