@@ -32,7 +32,7 @@ AppInst - autocluster shall be created when app instance is created with cluster
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}	
-    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}	
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${real_cluster_name}	
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}	
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}       ${operator_name}	
     Should Be Equal              ${clusterInst[0].key.organization}                    ${developer_name_default}
@@ -123,7 +123,7 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
 
     Should Be Equal As Integers  ${clusterInst[0].liveness}                            2  # LivenessDynamic
     Should Be Equal              ${clusterInst[0].flavor.name}                         ${flavor_name_default}
-    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${cluster_name}
+    Should Be Equal              ${clusterInst[0].key.cluster_key.name}                ${real_cluster_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
     Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
