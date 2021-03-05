@@ -127,7 +127,7 @@ AppInst - appinst shall be created when app instance is created with auto-cluste
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.name}               ${cloudlet_name}
     Should Be Equal              ${clusterInst[0].key.cloudlet_key.organization}  ${operator_name}
     Should Be Equal              ${clusterInst[0].key.organization}                       ${developer_name_default}
-    Should Be Equal As Integers  ${clusterInst[0].ip_access}                           1  # IpAccessDedicated
+    Should Be Equal As Integers  ${clusterInst[0].ip_access}                           3  # IpAccessShared
     Should Be Equal              ${clusterInst[0].deployment}                          kubernetes 
     Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1 
     Should Be Equal As Integers  ${clusterInst[0].num_masters}                         1 
