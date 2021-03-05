@@ -69,6 +69,9 @@ vm_console_address =  'https://bonnedgecloud.telekom.de:6080/vnc_auto.html'
 mextester99_gmail_password = 'rfbixqomqidobmcb'
 mextester06_gmail_password = 'thequickbrownfoxjumpedoverthelazydog9$'
 mexadmin_password = 'mexadminfastedgecloudinfra'
+admin_manager_username = 'qaadmin'
+admin_manager_password = mexadmin_password
+
 token_server_url = 'http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc'
 expired_cookie = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODQ1NzQ5MDIsImlhdCI6MTU4NDQ4ODUwMiwia2V5Ijp7InBlZXJpcCI6IjEwLjI0MC4wLjQiLCJvcmduYW1lIjoiU2Ftc3VuZyIsImFwcG5hbWUiOiJTYW1zdW5nRW5hYmxpbmdMYXllciIsImFwcHZlcnMiOiIxLjAiLCJ1bmlxdWVpZHR5cGUiOiJkbWUta3N1aWQiLCJ1bmlxdWVpZCI6IjFaSEdGVlFKNERxUXdnWUlvTlVLVnNZTjJ5ZyIsImtpZCI6Mn19.WK_vIYpsjlgtzRznPOd0PMwRytxA6dzI62OKV2upQM1-51hfVMZQANPpzckbkJgai5imvARQAYshlMZR9w8KkQ'
 
