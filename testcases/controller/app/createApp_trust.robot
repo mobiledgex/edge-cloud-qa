@@ -459,7 +459,8 @@ Fail Update Non-Trusted App on Trusted Cloudlet
    Set Suite Variable  ${app_counter}
 
    Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${True}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
+   ${appinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create App Instance  region=${region}  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
+   ...  ELSE  Create App Instance  region=${region}  operator_org_name=${operator}
 
    ${std_create}=  Run Keyword and Expect Error  *  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${False}
    Should Contain Any  ${std_create}  ${error_msg}  #${error_msg2}
