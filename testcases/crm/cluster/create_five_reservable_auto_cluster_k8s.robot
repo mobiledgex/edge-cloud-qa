@@ -167,6 +167,16 @@ Setup
 Cleanup
 
     sleep  3 minutes
+    ${appInst1}=  Show App Instances  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${appInst2}=  Show App Instances  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${appInst3}=  Show App Instances  region=${region}  app_name=${app_name_3}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${appInst4}=  Show App Instances  region=${region}  app_name=${app_name_4}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${appInst5}=  Show App Instances  region=${region}  app_name=${app_name_5}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    ${reservable1_cluster_name}=  Set Variable  ${appInst1[0]['data']['real_cluster_name']}
+    ${reservable2_cluster_name}=  Set Variable  ${appInst2[0]['data']['real_cluster_name']}
+    ${reservable3_cluster_name}=  Set Variable  ${appInst3[0]['data']['real_cluster_name']}
+    ${reservable4_cluster_name}=  Set Variable  ${appInst4[0]['data']['real_cluster_name']}
+    ${reservable5_cluster_name}=  Set Variable  ${appInst5[0]['data']['real_cluster_name']}
 
     delete app instance  region=${region}  app_name=${app_name_1}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
     delete app instance  region=${region}  app_name=${app_name_2}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
@@ -176,11 +186,11 @@ Cleanup
 
     sleep  30 seconds
 
-    delete cluster instance  region=${region}  cluster_name=reservable0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
-    delete cluster instance  region=${region}  cluster_name=reservable1  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
-    delete cluster instance  region=${region}  cluster_name=reservable2  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
-    delete cluster instance  region=${region}  cluster_name=reservable3  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
-    delete cluster instance  region=${region}  cluster_name=reservable4  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable1_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable2_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable3_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable4_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable5_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
 
     cleanup provisioning
 

@@ -55,12 +55,14 @@ Delete app instance and verify auto deployment works again
     delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
     sleep  1 minutes
     Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}  #cluster_instance_name=${cluster_name}
+    ${appInst}=  Show App Instances  region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${user_token}
+    ${reservable_cluster_name}=  Set Variable  ${appInst[0]['data']['real_cluster_name']}
+    Set Suite Variable  ${reservable_cluster_name}
 
 Remove auto provisioning policy from App
    [Tags]  ReservableCluster
     update app  region=${region}  app_name=${app_name}  developer_org_name=${orgname}  auto_prov_policies=@{EMPTY}  app_version=v1  token=${user_token}
-    sleep  2 minutes
-    app instance should not exist  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}
+    Wait For App Instance To Be Deleted  app_name=${app_name}  region=${region}  app_version=v1  developer_org_name=${orgname}
 
 *** Keywords ***
 Setup
@@ -88,7 +90,7 @@ Setup
 
 
 Cleanup
-    delete cluster instance  region=${region}  cluster_name=reservable0  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
+    delete cluster instance  region=${region}  cluster_name=${reservable_cluster_name}  developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  token=${super_token}
 
     cleanup provisioning
 
