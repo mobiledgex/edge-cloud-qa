@@ -191,20 +191,21 @@ CreateApp - User shall not be able to create a helm app with invalid config url
     #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
 
     ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https://myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
+    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from https://myconfig
 
     # no longer supported
     #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://1.1.1.1
     #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https:/1.1.1.1
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
+    # not supported since validation of helm chart prior to deployment is not possible
+    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https:/1.1.1.1
+    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars
 
     # no longer supported
     #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=https://myconfig
     #Should Contain  ${error}  i/o timeout
 
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=https://myconfig
+    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=http://35.199.188.10
     Should Contain  ${error}  i/o timeout
 
 # ECQ-3097
