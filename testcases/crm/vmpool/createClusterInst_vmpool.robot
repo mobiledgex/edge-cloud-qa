@@ -53,8 +53,8 @@ VM should be free after CreateClusterInst and UpdateVMPool state=VmForceFree
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
+   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
@@ -70,7 +70,7 @@ VM should be free after CreateClusterInst and UpdateVMPool state=VmForceFree
    ${pool}=  Show VM Pool  region=${region}  vm_pool_name=${vmpool_name}  org_name=${operator_name_vmpool}
    @{update_list}=  Create List
    FOR  ${vm}  IN  @{pool[0]['data']['vms']}
-      &{update_dict}=  Run Keyword If  'group_name' in $vm   Build Update  group_name=${group_name}  vm_group_name=${vm['group_name']}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=VmForceFree
+      &{update_dict}=  Run Keyword If  'group_name' in $vm   Build Update  group_name=${group_name}  vm_group_name=${vm['group_name']}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=6
       ...  ELSE  Build Update  group_name=${None}  vm_group_name=${None}  name=${vm['name']}  external_ip=${vm['net_info']['external_ip']}  internal_ip=${vm['net_info']['internal_ip']}  state=${None}
       Append To List  ${update_list}  ${update_dict}
    END
@@ -433,7 +433,7 @@ ClusterInst/AppInst shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node1}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node2}=  Set Variable  mex-k8s-node-2-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
@@ -569,7 +569,7 @@ ClusterInst shall update with VMPool IpAccessDedicated/k8s/lb nummasters=1 numno
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_lb}=  Set Variable  ${cluster_inst['data']['key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
    ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
    ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${cluster_inst['data']['key']['cluster_key']['name']}-automation-dev-org
@@ -647,7 +647,7 @@ Setup
 Build Update
     [Arguments]  ${name}  ${group_name}  ${vm_group_name}  ${external_ip}  ${internal_ip}  ${state}
 
-      &{update_dict}=  Run Keyword If  '${vm_group_name}' == '${group_name}'  Create Dictionary  name=${name}  external_ip=${external_ip}  internal_ip=${internal_ip}  state=VmForceFree
+      &{update_dict}=  Run Keyword If  '${vm_group_name}' == '${group_name}'  Create Dictionary  name=${name}  external_ip=${external_ip}  internal_ip=${internal_ip}  state=${state}
       ...  ELSE  Create Dictionary  name=${name}  external_ip=${external_ip}  internal_ip=${internal_ip}
 
 #      &{update_dict}=  Create Dictionary  name=${name}  external_ip=${external_ip}  internal_ip=${internal_ip}  state=${state}
