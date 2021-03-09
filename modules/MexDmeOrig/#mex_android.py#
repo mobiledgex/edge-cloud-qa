@@ -1,0 +1,14 @@
+import logging
+#import socket
+import sys
+#import os
+#import subprocess
+import time
+
+#import shared_variables
+
+class MexAndroid(object):
+    def __init__(self, appium_server='http://localhost:4723/wd/hub', platform_name='Android', device_name='device', app_package='com.mobiledgex.sdkdemo', app_activity='MainActivity', automation_name='UiAutomator2'):
+
+        
+    def ping_udp_port(self, host, port):
