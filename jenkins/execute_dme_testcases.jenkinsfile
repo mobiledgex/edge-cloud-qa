@@ -12,7 +12,7 @@ dmerestcert = "${DMERestCert}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runFindCloudletTests","runOperatorCodeTests","runOperatorCodeDmeTests","runRegisterClientTests", "runVerifyLocationTests", "runGetLocationTests", "runDmeProcessTests", "runShowDeviceTests", "runGetQosPositionKpiTests"]
+def jobList1Parallel = ["runFindCloudletTests","runOperatorCodeTests","runOperatorCodeDmeTests","runRegisterClientTests", "runVerifyLocationTests", "runGetLocationTests", "runDmeProcessTests", "runShowDeviceTests", "runGetQosPositionKpiTests", "runDMEPersistentConnectionTests", "runRequestAppInstLatencyTests"]
 def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests","runShowDeviceReportTests"]
  
 builds1 = [:]
