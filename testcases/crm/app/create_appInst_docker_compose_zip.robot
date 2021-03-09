@@ -3,6 +3,7 @@ Documentation  CreateApp with zipped docker compose file
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  MexDme  dme_address=%{AUTOMATION_DME_ADDRESS}
+Library  MexOpenstack   environment_file=%{AUTOMATION_OPENSTACK_DEDICATED_ENV}
 Library  MexApp
 Library  MexArtifactory
 Library  String
@@ -71,8 +72,8 @@ User shall be able to deploy docker compose zip filed from artifactory
     Create App  region=${region}  token=${super_token}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${compose_artifactory}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  token=${super_token}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
 
 # ECQ-2163
 User shall be able to deploy docker compose zip filed from url
@@ -87,8 +88,8 @@ User shall be able to deploy docker compose zip filed from url
     Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=${docker_image}  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
 
 # ECQ-2270
 User shall be able to deploy docker compose zip filed from url with no image_path
@@ -103,8 +104,8 @@ User shall be able to deploy docker compose zip filed from url with no image_pat
     Create App  region=${region}  access_ports=tcp:8008,tcp:8011  image_path=no_default  deployment_manifest=${docker_compose_zip_url}  image_type=ImageTypeDocker  deployment=docker  developer_org_name=${developer_org_name}  app_version=1.0   access_type=loadbalancer
     Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name_default}  developer_org_name=${developer_org_name}  cluster_instance_developer_org_name=${developer_org_name}
 
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest
-    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=redis:latest  node=${server_info_node[0]['Networks']}
+    Wait for docker container to be running  root_loadbalancer=${rootlb}  docker_image=postgres:latest  node=${server_info_node[0]['Networks']}
 
 *** Keywords ***
 Setup
@@ -138,11 +139,16 @@ Setup
 
     ${cluster_name}=  Get Default Cluster Name
     ${rootlb}=  Catenate  SEPARATOR=.  ${cluster_name}  ${rootlb}
-    
+   
+    ${cloudlet_lowercase}=  Convert To Lowercase  ${cloudlet_name_openstack_dedicated}
+    ${openstack_node_name}=    Catenate  SEPARATOR=-  docker  vm  ${cloudlet_lowercase}  ${cluster_name}
+    ${server_info_node}=    Get Server List  name=${openstack_node_name}
+ 
     Set Suite Variable  ${rootlb}
     Set Suite Variable  ${orgname}
     Set Suite Variable  ${username1}
     Set Suite Variable  ${email1}
+    Set Suite Variable  ${server_info_node}
 
 Teardown
     Skip Verify Email   skip_verify_email=True
