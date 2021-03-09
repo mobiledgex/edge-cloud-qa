@@ -43,7 +43,7 @@ from mex_master_controller.User import User
 from mex_master_controller.Stream import Stream 
 from mex_master_controller.Settings import Settings
 from mex_master_controller.Role import Role 
-from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
+#from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
 
 import shared_variables_mc
 import shared_variables
@@ -203,7 +203,7 @@ class MexMasterController(MexRest):
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.settings = Settings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.role = Role(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
-        self.request_appinst_latency = RequestAppInstLatency(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        #self.request_appinst_latency = RequestAppInstLatency(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
 
     def find_file(self, filename):
         return self._findFile(filename)
