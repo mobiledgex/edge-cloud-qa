@@ -13,6 +13,7 @@ import base64
 import json
 import queue
 import threading
+from robot.libraries.BuiltIn import BuiltIn
 
 from mex_grpc import MexGrpc
 
@@ -21,6 +22,7 @@ import shared_variables
 import app_client_pb2
 import app_client_pb2_grpc
 import loc_pb2
+import appcommon_pb2
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(funcName)s line:%(lineno)d - %(message)s',datefmt='%d-%b-%y %H:%M:%S')
 logger = logging.getLogger('mex_dme')
@@ -92,7 +94,7 @@ class FindCloudletRequest():
         self.request = app_client_pb2.FindCloudletRequest(**request_dict)
 
 class StreamEdgeEvent():
-    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, samples=None, use_defaults=True):
+    def __init__(self, session_cookie=None, edge_events_cookie=None, event_type=None, carrier_name=None, latitude=None, longitude=None, samples=None, device_info_data_network_type=None, device_info_os=None, device_info_model=None, device_info_signal_strength=None, use_defaults=True):
         request_dict = {}
         self.session_cookie = session_cookie
         self.edge_events_cookie = edge_events_cookie
@@ -101,6 +103,10 @@ class StreamEdgeEvent():
         self.latitude = latitude
         self.longitude = longitude
         self.samples = samples
+        self.device_info_data_network_type = device_info_data_network_type
+        self.device_info_os = device_info_os
+        self.device_info_model = device_info_model
+        self.device_info_signal_strength = device_info_signal_strength
 
         if session_cookie == 'default':
             self.session_cookie = session_cookie_global
@@ -128,19 +134,29 @@ class StreamEdgeEvent():
         samples_dict = {}
         if self.samples is not None:
             for s in self.samples:
-                print('*WARN*', 's', s)
-                sample_dict = {'value': int(s)}
+                sample_dict = {'value': float(s)}
                 samples_list.append(loc_pb2.Sample(**sample_dict))
-                print('*WARN*', 'sl', samples_list)
 
             request_dict['samples'] = samples_list
+
+        device_dict = {}
+        if self.device_info_data_network_type:
+            device_dict['data_network_type'] = self.device_info_data_network_type
+        if self.device_info_os:
+            device_dict['device_os'] = self.device_info_os
+        if self.device_info_model:
+            device_dict['device_model'] = self.device_info_model
+        if self.device_info_signal_strength:
+            device_dict['signal_strength'] = int(self.device_info_signal_strength)
 
         if loc_dict:
             request_dict['gps_location'] = loc_pb2.Loc(**loc_dict)
 
-        #print(loc_dict)
+        if device_dict:
+            request_dict['device_info'] = appcommon_pb2.DeviceInfo(**device_dict)
+
         self.request = app_client_pb2.ClientEdgeEvent(**request_dict)
-        print('*WARN*', 'request', self.request)
+ 
 class PlatformFindCloudletRequest():
     def __init__(self, session_cookie=None, carrier_name=None, client_token=None, use_defaults=True):
         request_dict = {}
@@ -302,6 +318,39 @@ class GetLocation():
         print(request_dict)
         self.request = app_client_pb2.GetLocationRequest(**request_dict)
 
+#class EdgeEventClient():
+#    def __init__(self, address, client_edge_event_obj=None, **kwargs):
+#        self.edge_event_queue = queue.SimpleQueue()
+#        self.edge_event_stream = None
+#
+#        self.create_dme_persistent_connection(address, client_edge_event_obj, **kwargs)
+#
+#    def create_dme_persistent_connection(self, address, client_edge_event_obj=None, **kwargs):
+#        response = None
+#
+#        if not client_edge_event_obj:
+#            kwargs['event_type'] = 1
+#            request = StreamEdgeEvent(**kwargs).request
+#
+#        logger.info('stream edge event on {}. \n\t{}'.format(address, str(request).replace('\n','\n\t')))
+#
+#        #send_queue = queue.SimpleQueue()
+#        #my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+#        self.edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(self.edge_event_queue.get, None))
+#        print('*WARN*', 'stream created')
+#        self.edge_event_queue.put(request)
+#        print('*WARN*', 'stream in queue')
+#
+#        response = next(self.edge_event_stream)
+#        logger.info(f'response={response}')
+#        #print('*WARN*', 'edgeresp', response, type(response), dir(response))
+#        #print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+#
+#        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+#            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+#
+#        #return edge_event_stream, send_queue
+
 class Dme(MexGrpc):
     ROBOT_LIBRARY_SCOPE = 'TEST SUITE'
     
@@ -315,6 +364,9 @@ class Dme(MexGrpc):
         self._decoded_session_cookie = None
         self._token_server_uri = None
         #self._auth_token = None
+
+        self.edge_event_queue = queue.SimpleQueue()
+        self.edge_event_stream = None
 
         self.client_token = None
         self._decoded_client_token = None
@@ -392,6 +444,176 @@ class Dme(MexGrpc):
             raise Exception('find cloudlet not found:{}'.format(str(resp)))
 
         return resp
+
+    def create_dme_persistent_connection(self, client_edge_event_obj=None, **kwargs):
+#        client = EdgeEventClient(self.address, client_edge_event_obj=None, **kwargs)
+#        return client
+        response = None
+ 
+        if not client_edge_event_obj:
+            kwargs['event_type'] = 1
+            request = StreamEdgeEvent(**kwargs).request
+
+        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+
+        #send_queue = queue.SimpleQueue()
+        #my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+        self.edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(self.edge_event_queue.get, None))
+        #edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+        print('*WARN*', 'stream created')
+        self.edge_event_queue.put(request)
+        #send_queue.put(request)
+        print('*WARN*', 'stream in queue')
+
+        #send_queue.put(request)
+        #resp = self.match_engine_stub.StreamEdgeEvent(request)
+        response = next(self.edge_event_stream)
+        #response = next(edge_event_stream)
+        logger.info(f'response={response}')
+        #print('*WARN*', 'edgeresp', response, type(response), dir(response))
+        #print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+
+        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+
+#        return edge_event_stream, send_queue
+
+    def terminate_dme_persistent_connection(self, client_edge_event_obj=None, **kwargs):
+        response = None
+
+        if not client_edge_event_obj:
+            kwargs['event_type'] = 2
+            request = StreamEdgeEvent(**kwargs).request
+
+        logger.info('terminate dme persistent connection on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+
+        #self.edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(self.edge_event_queue.get, None))
+        print('*WARN*', 'stream created')
+        self.edge_event_queue.put(request)
+        print('*WARN*', 'stream in queue')
+
+        try:
+            response = next(self.edge_event_stream)
+        except StopIteration:
+            logger.info('stream closed')
+        except Exception as e:
+            raise Exception(f'terminate stream error. expected event_type: {e}')
+
+        self.edge_event_stream = None
+        self.edge_event_queue = queue.SimpleQueue()
+
+    def create_client_edge_event(self, client_edge_event_obj=None, **kwargs):
+        response = None
+        print('*WARN*', 'xxxobj', client_edge_event_obj, 'xxxkwargs', kwargs)
+        if not client_edge_event_obj:
+            request = StreamEdgeEvent(**kwargs).request
+
+        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+        print('*WARN*', 'x00', self.edge_event_queue)
+        #send_queue = queue.SimpleQueue()
+        #my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+#        self.edge_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(self.edge_event_queue.get, None))
+
+        self.edge_event_queue.put(request)
+        #edge_event_stream[1].put(request)
+
+        #send_queue.put(request)
+        #resp = self.match_engine_stub.StreamEdgeEvent(request)
+        response = next(self.edge_event_stream)
+        #response = next(edge_event_stream[0])
+
+        print('*WARN*', 'edgeresp', response, type(response), dir(response))
+        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+
+        if kwargs['event_type'] == 3:  # EVENT_LATENCY_REQUEST
+            if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_PROCESSED: 
+                raise Exception(f'stream edge event error. expected event_type: EVENT_LATENCY_REQUEST, got {response}')
+        
+        #BuiltIn().log_to_console(f'xxxx1')
+        #print('*WARN*', 'x0', self.edge_event_queue)
+        return response
+ 
+    def send_latency_edge_event(self, client_edge_event_obj=None, **kwargs):
+        resp = None
+
+        #create_request = {'carrier_name': kwargs['carrier_name'], 'edge_events_cookie': kwargs['edge_events_cookie'], 'event_type':app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, 'latitude': kwargs['latitude'], 'longitude': kwargs['longitude']}
+        #self.create_client_edge_event(create_request)
+#        self.create_client_edge_event(carrier_name=kwargs['carrier_name'], edge_events_cookie=kwargs['edge_events_cookie'], event_type=app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, latitude=kwargs['latitude'], longitude=kwargs['longitude'])
+#        print('*WARN*', 'x1', self.edge_event_queue)
+#        time.sleep(5)
+#        print('*WARN*', 'x0', self.edge_event_queue)
+#        request = StreamEdgeEvent(carrier_name=kwargs['carrier_name'], edge_events_cookie=kwargs['edge_events_cookie'], event_type=app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, latitude=kwargs['latitude'], longitude=kwargs['longitude']).request
+#
+#        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+#
+#        send_queue = queue.SimpleQueue()
+#        my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+#        send_queue.put(request)
+#        #resp = self.match_engine_stub.StreamEdgeEvent(request)
+#        response = next(my_event_stream)
+#        print('*WARN*', 'edgeresp', response, type(response), dir(response))
+#        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+#
+#        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+#            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+        #print('*WARN*', 'sleeping')
+        #time.sleep(10)
+        #resp = latency_request = {'carrier_name': kwargs['carrier_name'], 'edge_events_cookie': kwargs['edge_events_cookie'], 'event_type':3, 'latitude': kwargs['latitude'], 'longitude': kwargs['longitude'], 'samples': kwargs['samples']}
+        #self.create_client_edge_event(latency_request)
+        #self.create_client_edge_event(carrier_name=kwargs['carrier_name'], edge_events_cookie=kwargs['edge_events_cookie'], event_type=app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_REQUEST, latitude=kwargs['latitude'], longitude=kwargs['longitude'], samples=[1,2,3])
+        #resp = self.create_client_edge_event(carrier_name=kwargs['carrier_name'], edge_events_cookie=kwargs['edge_events_cookie'], event_type=3, latitude=kwargs['latitude'], longitude=kwargs['longitude'], samples=kwargs['samples'])
+        kwargs['event_type'] = 3
+        resp = self.create_client_edge_event(**kwargs)
+      
+#        request = StreamEdgeEvent(carrier_name=kwargs['carrier_name'], edge_events_cookie=kwargs['edge_events_cookie'], event_type=3, latitude=kwargs['latitude'], longitude=kwargs['longitude'], samples=kwargs['samples']).request
+#        send_queue.put(request)
+#        resp = next(my_event_stream)
+#        print('*WARN*', 'edgeresp', response, type(response), dir(response))
+#        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+# 
+        #if not client_edge_event_obj:
+        #    request = StreamEdgeEvent(**kwargs).request
+#
+#        logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
+#
+#        send_queue = queue.SimpleQueue()
+#        my_event_stream = self.match_engine_stub.StreamEdgeEvent(iter(send_queue.get, None))
+#        send_queue.put(request)
+#        #resp = self.match_engine_stub.StreamEdgeEvent(request)
+#        response = next(my_event_stream)
+#        print('*WARN*', 'edgeresp', response, type(response), dir(response))
+#        print('*WARN*', repr(response), app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION, type(response), type(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION), dir(app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION))
+#
+#        if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION: # FIND_FOUND
+#            raise Exception(f'stream edge event error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_INIT_CONNECTION}, got {response}')
+
+        return resp
+
+    def receive_edge_event(self, timeout=10):
+        BuiltIn().log_to_console('***** receive edge event')
+        #for m in self.edge_event_stream:
+        #    BuiltIn().log_to_console(f'mmm {m}')
+        #BuiltIn().log_to_console('***** receive edge event 2222')
+        #queue_size = sum(1 for _ in self.edge_event_stream)
+        #BuiltIn().log_to_console(f'qs {queue_size}') 
+        #logger.info(f'qs {queue_size}')
+        #while sum(1 for _ in self.edge_event_stream) == 0:
+        #    BuiltIn().log_to_console(f'sleeping')
+        #    time.sleep(1)
+
+        #for _ in 1 to 100{
+        #BuiltIn().log_to_console(f'done sleeping') 
+        request = next(self.edge_event_stream, 'nothing')
+        #request = self.edge_event_queue.get()
+        logger.info(f'received edge event {request}')
+
+        return request
+
+    def receive_latency_edge_request(self):
+        request = self.receive_edge_event()
+
+        if request.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_REQUEST:
+            raise Exception(f'stream edge event request error. expected event_type: {app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_REQUEST}, got {request}')
 
     def client_edge_event(self, client_edge_event_obj=None, **kwargs):
         resp = None
