@@ -43,6 +43,7 @@ from mex_master_controller.User import User
 from mex_master_controller.Stream import Stream 
 from mex_master_controller.Settings import Settings
 from mex_master_controller.Role import Role 
+from mex_master_controller.RequestAppInstLatency import RequestAppInstLatency
 
 import shared_variables_mc
 import shared_variables
@@ -202,6 +203,7 @@ class MexMasterController(MexRest):
         self.autoscale_policy = AutoScalePolicy(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.settings = Settings(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token)
         self.role = Role(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
+        self.request_appinst_latency = RequestAppInstLatency(root_url=self.root_url, prov_stack=self.prov_stack, token=self.token, super_token=self.super_token, thread_queue=self._queue_obj)
 
     def find_file(self, filename):
         return self._findFile(filename)
@@ -1661,6 +1663,9 @@ class MexMasterController(MexRest):
 
     def reset_settings(self, token=None, region=None, json_data=None, use_defaults=True, use_thread=False):
         return self.settings.reset_settings(token=token, region=region, use_defaults=use_defaults, use_thread=use_thread)
+
+    def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
     def run_mcctl(self, parms, version='latest'):
         cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
