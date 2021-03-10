@@ -38,7 +38,6 @@ CreateAlertReceiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Receiver name is invalid"}')  receiver_name=%name  type=email  severity=info  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Receiver name is invalid"}')  receiver_name=n#ame  type=email  severity=info  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Receiver name is invalid"}')  receiver_name=@name  type=email  severity=info  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
-   ('code\=400', 'error\={"message":"Unable to create a receiver - Receiver name cannot contain dashes(\\\\"-\\\\"), or colons(\\\\":\\\\")"}')  receiver_name=n-ame  type=email  severity=info  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Receiver name is invalid"}')  receiver_name=n:ame  type=email  severity=info  app_name=x  app_version=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Receiver name is invalid"}')  receiver_name=!@@#$%%#@$  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}   developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
 
