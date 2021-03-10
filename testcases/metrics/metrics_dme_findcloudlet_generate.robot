@@ -75,7 +75,7 @@ DMEMetrics - FindCloudlet Not Found shall generate metrics
 
    Metrics Headings Should Be Correct  ${metrics}
 
-   Values Should Be In Range  ${metrics}  ${app}  ${None}  ${None}
+   Values Should Be In Range  ${metrics}  ${app}  ${Empty}  ${Empty}
 
 # ECQ-2049
 DMEMetrics - FindCloudlet with error shall generate metrics
@@ -97,7 +97,7 @@ DMEMetrics - FindCloudlet with error shall generate metrics
 
    ${metrics}=  Get Find Cloudlet API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][13]}
    Should Be Equal As Numbers  ${req_count}  7  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count}  7  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics}
@@ -139,13 +139,13 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cellID
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  cloudletorg
-   #Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  dev
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  dmeId
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  foundOperator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  ver
 
 Values Should Be In Range
   [Arguments]  ${metrics}  ${app}  ${cloudlet}  ${operator}
@@ -165,14 +165,15 @@ Values Should Be In Range
       Should Be True   ${reading[9]} == 0 
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} >= 0
-      Should Be Equal  ${reading[13]}  ${cloudlet} 
-      Should Be Equal  ${reading[14]}  ${operator}
-      Should Be Equal  ${reading[15]}  FindCloudlet
-      Should Be True   ${reading[16]} > 0
-      Should Be Equal  ${reading[17]}  ${appvers}
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} >= 0
+      Should Be Equal  ${reading[14]}  ${cloudlet} 
+      Should Be Equal  ${reading[15]}  ${operator}
+      Should Be Equal  ${reading[16]}  FindCloudlet
+      Should Be True   ${reading[17]} > 0
+      Should Be Equal  ${reading[18]}  ${appvers}
       ${sum}=  Evaluate  ${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}
-      Should Be Equal As Numbers  ${sum}  ${reading[16]}  # sum of ms fields
+      Should Be Equal As Numbers  ${sum}  ${reading[17]}  # sum of ms fields
    END
 
 Values With Error Should Be In Range
@@ -193,12 +194,13 @@ Values With Error Should Be In Range
       Should Be True   ${reading[9]} == 0
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} == ${reading[16]}
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be Equal  ${reading[15]}  FindCloudlet
-      Should Be Equal  ${reading[17]}  ${ver_arg}
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} == ${reading[17]}
+      Should Be True   len('${reading[14]}') == 0
+      Should Be True   len('${reading[15]}') == 0 
+      Should Be Equal  ${reading[16]}  FindCloudlet
+      Should Be Equal  ${reading[18]}  ${ver_arg}
       ${sum}=  Evaluate  ${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}
-      Should Be Equal As Numbers  ${sum}  ${reading[16]}  # sum of ms fields
+      Should Be Equal As Numbers  ${sum}  ${reading[17]}  # sum of ms fields
    END
 
