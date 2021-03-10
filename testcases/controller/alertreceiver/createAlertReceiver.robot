@@ -29,6 +29,7 @@ CreateAlertReceiver - shall be able to create email alert
       type=email  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
       type=email  email_address=x@x.com  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
       type=email  email_address=x@x.com  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
+      type=email  email_address=x-1@x.com  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
       type=email  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
 
       # cloudlet
@@ -36,6 +37,7 @@ CreateAlertReceiver - shall be able to create email alert
       type=email  severity=warning     operator_org_name=${operator}
       type=email  severity=warning     operator_org_name=${operator}  cloudlet_name=x
       type=email  email_address=x@x.com  severity=error     operator_org_name=${operator}
+      type=email  email_address=my-email@x.com  severity=error     operator_org_name=${operator}
       type=email  severity=info     operator_org_name=${operator}  region=US
       type=email  severity=warning     operator_org_name=${operator}  cloudlet_name=x  region=US
 
@@ -59,6 +61,7 @@ CreateAlertReceiver - shall be able to create email alert
       type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
       type=email  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
       type=email  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=email  email_address=my-email@x.com  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  region=US
 
       # receiver name
       receiver_name=x          type=email  severity=info     developer_org_name=${developer}
@@ -72,6 +75,7 @@ CreateAlertReceiver - shall be able to create email alert
       receiver_name=dfafasfasfasfafafafafafasffafafafasfafafafa af asf asdf asdf asdf asdf asdfasdfas dfasdfasdf  type=email  severity=error     operator_org_name=${developer}  cloudlet_name=x
       receiver_name=12345  type=email  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
       receiver_name=my alert  type=email  email_address=x@x.com  severity=info     operator_org_name=${developer}  cloudlet_name=x
+      receiver_name=my alert2  type=email  email_address=x-email@x.com  severity=info     operator_org_name=${developer}  cloudlet_name=x
 
 # ECQ-2908
 CreateAlertReceiver - shall be able to create slack alert
