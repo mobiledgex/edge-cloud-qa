@@ -93,7 +93,7 @@ AppMetrics - Shall be able to get all app Disk metrics with developer only
 
    [Teardown]  Config Teardown
 
-   ${num_metrics}    Generate Random String    4    0123456789
+   ${num_metrics}    Generate Random String    3    012345678
 
    Set Max Metrics Data Points Config   ${num_metrics} 
    ${metrics}=  Get all app metrics with developer only  ${developer_name}  disk  ${num_metrics}
@@ -127,7 +127,7 @@ Setup
    Set Suite Variable  ${developer_name}
 
 Config Teardown
-   Set Max Metrics Data Points Config   10000
+   Set Max Metrics Data Points Config   1000
  
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
