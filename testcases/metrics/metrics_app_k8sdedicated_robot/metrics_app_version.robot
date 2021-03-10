@@ -13,6 +13,7 @@ ${cloudlet_name_openstack_metrics}=   automationBonnCloudlet
 ${operator_name_openstack}=                       TDG
 ${clustername_k8shared}=   cluster1574731678-0317152-k8sdedicated
 ${developer_name}=  developer1574731678-0317152 
+${app_version}=  1.0
 
 ${username_admin}=  mexadmin
 ${password_admin}=  mexadmin123
@@ -74,7 +75,7 @@ Setup
    ${clustername_k8dedicated}=  Get Default Cluster Name
    #${clustername_kdedicated}=  Catenate  SEPARATOR=  cluster  ${timestamp}  -k8sdedicated
 
-   #${app_name}=  Set Variable  MyAppK8s1585261834-0104609k8s
+   #${app_name}=  Set Variable  MyAppK8s1615333128-322516k8s 
    #${clustername_k8dedicated}=   Set Variable  cluster-1585261834-0104609-k8sdedicated
    #${flavor_name}=  Set Variable  flavor1585261834-0104609
 
@@ -97,43 +98,51 @@ Setup
 Metrics Headings Should Be Correct
   [Arguments]  ${metrics}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}       appinst-network 
-   Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}       appinst-mem
-   Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}       appinst-disk 
-   Should Be Equal  ${metrics['data'][0]['Series'][3]['name']}       appinst-cpu 
-   Should Be Equal  ${metrics['data'][0]['Series'][4]['name']}       appinst-connections
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}       appinst-udp
+   Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}       appinst-network 
+   Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}       appinst-mem
+   Should Be Equal  ${metrics['data'][0]['Series'][3]['name']}       appinst-disk 
+   Should Be Equal  ${metrics['data'][0]['Series'][4]['name']}       appinst-cpu 
+   Should Be Equal  ${metrics['data'][0]['Series'][5]['name']}       appinst-connections
 
    FOR  ${i}  IN RANGE  0  5
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  app 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  ver
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  pod
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  cluster
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  clusterorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  cloudlet
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  cloudletorg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  apporg
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  cpu
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  mem
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  disk
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  sendBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  recvBytes 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  port 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][15]}  active 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][16]}  handled 
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][17]}  accepts
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][18]}  bytesSent
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][19]}  bytesRecvd
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][20]}  P0
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][21]}  P25
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][22]}  P50
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][23]}  P75
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][24]}  P90
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][25]}  P95
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][26]}  P99
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][27]}  P99.5
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][28]}  P99.9
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][29]}  P100
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][3]}  cluster
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][4]}  clusterorg
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][5]}  cloudlet
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][6]}  cloudletorg
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][7]}  apporg
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][8]}  pod
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][9]}  bytesSent_1
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][10]}  bytesRecvd_1
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][11]}  datagramsSent
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][12]}  datagramsRecvd
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][13]}  sentErrs
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][14]}  recvErrs
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][15]}  missed
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][16]}  cpu
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][17]}  mem
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][18]}  disk
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][19]}  sendBytes 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][20]}  recvBytes 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][21]}  port_1
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][22]}  active 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][23]}  handled 
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][24]}  accepts
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][25]}  bytesSent_1
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][26]}  bytesRecvd_1
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][27]}  P0
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][28]}  P25
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][29]}  P50
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][30]}  P75
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][31]}  P90
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][32]}  P95
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][33]}  P99
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][34]}  P99.5
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][35]}  P99.9
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][36]}  P100
    END 
 
 CPU Should Be In Range

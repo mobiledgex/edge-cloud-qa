@@ -240,7 +240,7 @@ Setup
    #${clustername_k8sdedicated}=  Catenate  SEPARATOR=-  cluster  ${t}  k8sdedicated 
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   #${app_name}=  Set Variable  app1582226010-873146k8s 
+   #${app_name}=  Set Variable   MyAppK8s1615333128-322516k8s
    #${clustername_k8sdedicated}=   Set Variable  cluster-1582226010-873146-k8sdedicated 
    #${developer_name}=  Set Variable  mobiledgex 
 
@@ -263,12 +263,12 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][0]}  time
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][1]}  app
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][2]}  ver
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  pod
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  cluster
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  clusterorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][3]}  cluster
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][4]}  clusterorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][5]}  cloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][6]}  cloudletorg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][7]}  apporg
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][8]}  pod
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cpu
 
 CPU Should Be In Range
@@ -280,12 +280,12 @@ CPU Should Be In Range
    FOR  ${reading}  IN  @{values}
       Should Be Equal  ${reading[1]}  ${app_name_influx}
       Should Be Equal  ${reading[2]}  10
-      Should Be Equal  ${reading[3]}  ${pod}
-      Should Be Equal  ${reading[4]}  ${clustername_k8sshared}
-      Should Be Equal  ${reading[5]}  ${developer_name}
-      Should Be Equal  ${reading[6]}  ${cloudlet_name_openstack_metrics}
-      Should Be Equal  ${reading[7]}  ${operator_name_openstack}
-      Should Be Equal  ${reading[8]}  ${developer_name}
+      Should Be Equal  ${reading[3]}  ${clustername_k8sdedicated}
+      Should Be Equal  ${reading[4]}  ${developer_name}
+      Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics}
+      Should Be Equal  ${reading[6]}  ${operator_name_openstack}
+      Should Be Equal  ${reading[7]}  ${developer_name}
+      Should Be Equal  ${reading[8]}  ${pod}
  
       Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100
    END
