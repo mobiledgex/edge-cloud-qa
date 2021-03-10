@@ -35,7 +35,7 @@ class tc(unittest.TestCase):
             self.dme_list.append(dme)
 
 # ECQ-3240 
-    def test_CreateAppDockerConfig_inline(self):
+    def test_dmePersistentConnection_latency_multiple(self):
         # [Documentation] DMEPersistentConnection - shall be able to make multiple connections and latency edge events
         # ...  - make multiple persistent connections
         # ...  - send a latency edge event on each connection
