@@ -179,9 +179,10 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  dmeId
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  ver
 
 
 
@@ -204,13 +205,14 @@ Values Should Be In Range
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
       Should Be True   ${reading[12]} == 0
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be Equal  ${reading[15]}  RegisterClient
-      Should Be True   ${reading[16]} > 0
-      Should Be Equal  ${reading[17]}  ${appvers} 
+      Should Be True   len('${reading[13]}') == 0
+      Should Be True   len('${reading[14]}') == 0
+      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be Equal  ${reading[16]}  RegisterClient
+      Should Be True   ${reading[17]} > 0
+      Should Be Equal  ${reading[18]}  ${appvers} 
 
-      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]} + ${reading[6]}) == ${reading[17]}
    END
 
 Values With Cellid Should Be In Range
@@ -232,13 +234,14 @@ Values With Cellid Should Be In Range
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
       Should Be True   ${reading[12]} == 0
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be Equal  ${reading[15]}  RegisterClient
-      Should Be True   ${reading[16]} > 0
-      Should Be Equal  ${reading[17]}  ${appvers}
+      Should Be True   len('${reading[13]}') == 0
+      Should Be True   len('${reading[14]}') == 0
+      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be Equal  ${reading[16]}  RegisterClient
+      Should Be True   ${reading[17]} > 0
+      Should Be Equal  ${reading[18]}  ${appvers}
 
-      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]} + ${reading[6]}) == ${reading[17]}
    END
 
 Values With Auth Should Be In Range
@@ -260,13 +263,14 @@ Values With Auth Should Be In Range
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
       Should Be True   ${reading[12]} == 0
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be Equal  ${reading[15]}  RegisterClient
-      Should Be True   ${reading[16]} > 0
-      Should Be Equal  ${reading[17]}  ${appvers}
+      Should Be True   len('${reading[13]}') == 0
+      Should Be True   len('${reading[14]}') == 0
+      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be Equal  ${reading[16]}  RegisterClient
+      Should Be True   ${reading[17]} > 0
+      Should Be Equal  ${reading[18]}  ${appvers}
 
-      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]} + ${reading[6]}) == ${reading[17]}
    END
 
 Values With Error Should Be In Range
@@ -288,12 +292,13 @@ Values With Error Should Be In Range
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
       Should Be True   ${reading[12]} == ${reading[16]}
-      Should Be True   ${reading[13]} == ${None}
-      Should Be True   ${reading[14]} == ${None}
-      Should Be Equal  ${reading[15]}  RegisterClient
-      Should Be True   ${reading[16]} > 0
-      Should Be Equal  ${reading[17]}  ${ver_arg}
+      Should Be True   len('${reading[13]}') == 0
+      Should Be True   len('${reading[14]}') == 0
+      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be Equal  ${reading[16]}  RegisterClient
+      Should Be True   ${reading[17]} > 0
+      Should Be Equal  ${reading[18]}  ${appvers}
 
-      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]}) == ${reading[16]}
+      Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]} + ${reading[6]}) == ${reading[17]}
    END
 
