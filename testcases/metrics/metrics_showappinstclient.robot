@@ -33,7 +33,7 @@ ShowAppInstClient - request shall return the FindCloudlet requests
 
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
 
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
@@ -65,7 +65,7 @@ ShowAppInstClient - request with unique_id shall return the FindCloudlet request
 #   Show App Instance Client Metrics  region=US  app_name=automation_api_app  developer_org_name=MobiledgeX  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=dmuus  cluster_instance_name=autoclusterautomation
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
 
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 
@@ -135,7 +135,7 @@ ShowAppInstClient Metrics Shall return FindCloudlet Request
 
    ${pre}=  Get Show App Instance Client Metrics Output
    ${len_pre}=  Get Length  ${pre}
-   ${pre_last}=  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
 
    ${cloudlet}=  Find Cloudlet  carrier_name=${dmuus_operator_name}  latitude=35  longitude=-94
 

@@ -431,10 +431,12 @@ DeveloperManager shall be able to get cluster metrics
 DeveloperContributor shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+   #${epoch}=  Get Time  epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
    #Verify Email  email_address=${emailepoch}
@@ -465,10 +467,13 @@ DeveloperContributor shall be able to get cluster metrics
 DeveloperViewer shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+
+   #${epoch}=  Get Time  epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
+   Skip Verify Email
    Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
    Unlock User
    #Verify Email  email_address=${emailepoch}
@@ -502,7 +507,10 @@ Get cluster metrics with cloudlet/operator/developer only
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
-   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1  #remove Z from end of time
+   @{datesplit}=  Split String  ${datez}  .
+
+   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
    ${start}=  Evaluate  ${epochpre} - 3600
@@ -542,7 +550,10 @@ Get cluster metrics with cloudlet/developer only
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get Cluster Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
-   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1  #remove Z from end of time
+   @{datesplit}=  Split String  ${datez}  .
+   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
    ${start}=  Evaluate  ${epochpre} - 3600
@@ -582,7 +593,10 @@ Get cluster metrics with operator/developer only
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get Cluster Metrics  region=${region}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
-   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1  #remove Z from end of time
+   @{datesplit}=  Split String  ${datez}  .
+
+   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
    ${start}=  Evaluate  ${epochpre} - 3600
@@ -622,7 +636,10 @@ Get cluster metrics with developer only
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get Cluster Metrics  region=${region}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
-   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1  #remove Z from end of time
+   @{datesplit}=  Split String  ${datez}  .
+
+   #@{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
    ${start}=  Evaluate  ${epochpre} - 3600
