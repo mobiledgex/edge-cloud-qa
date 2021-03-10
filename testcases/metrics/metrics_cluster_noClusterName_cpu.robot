@@ -97,13 +97,13 @@ ClusterMetrics - Shall be able to get all cluster CPU metrics with developer onl
 
    Set Max Metrics Data Points Config  ${num_metrics} 
    ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu  ${num_metrics}
-   Set Max Metrics Data Points Config   10000
+   Set Max Metrics Data Points Config   1000
 
    Metrics Headings Should Be Correct  ${metrics}
 
    CPU Should be in Range  ${metrics}
 
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu  10000
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  cpu  1000
 
    Metrics Headings Should Be Correct  ${metrics}
 
