@@ -25,7 +25,7 @@ class VMPool(MexOperation):
         _fields_list = []
         _operator_name_field_number = '2.1'
         _pool_name_field_number = '2.2'
-        _vms_field_number = '4'
+        _vms_field_number = '3'
 
         # "key":{"name":"andypool","organization":"GDDT"},"vms":[{"name":"andypool","net_info":{"external_ip":"1.1.1.1","internal_ip":"2.2.2.2"}}]}}
         
