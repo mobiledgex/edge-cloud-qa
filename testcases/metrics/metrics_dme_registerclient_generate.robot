@@ -118,7 +118,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get appauth metrics
    ${metrics}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${appauth}  app_version=${appvers}
    ${req_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count}=  Set Variable  ${metrics['data'][0]['Series'][0]['values'][0][13]}
    Should Be Equal As Numbers  ${req_count}  2  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count}  2  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics}
@@ -127,7 +127,7 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get app ver=2.0 metrics
    ${metrics2}=  Get Register Client API Metrics  region=${region}  developer_org_name=${developer}  app_name=${app}  app_version=2.0
    ${req_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count2}=  Set Variable  ${metrics2['data'][0]['Series'][0]['values'][0][13]}
    Should Be Equal As Numbers  ${req_count2}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count2}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics2}
@@ -136,11 +136,11 @@ DMEMetrics - RegisterClient with error shall generate metrics
    # get app dev=2.0 metrics
    ${metrics3}=  Get Register Client API Metrics  region=${region}  developer_org_name=2.0  app_name=${app}
    ${req_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][-2]}
-   ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][12]}
+   ${error_count3}=  Set Variable  ${metrics3['data'][0]['Series'][0]['values'][0][13]}
    Should Be Equal As Numbers  ${req_count3}  1  # should be 2 register client requests
    Should Be Equal As Numbers  ${error_count3}  1  # should be 2 register client requests
    Metrics Headings Should Be Correct  ${metrics3}
-   Values With Error Should Be In Range  ${metrics3}  ${app}  2.0  ${appvers}
+   Values With Error Should Be In Range  ${metrics3}  ${app}  2.0  1.0 
 
 *** Keywords ***
 Setup
@@ -176,15 +176,13 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cellID
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  dmeId
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  dmeId
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  errs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  foundOperator
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  reqs
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  ver
-
-
 
 Values Should Be In Range
   [Arguments]  ${metrics}
@@ -204,10 +202,10 @@ Values Should Be In Range
       Should Be True   ${reading[9]} == 0
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} == 0
-      Should Be True   len('${reading[13]}') == 0
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} == 0
       Should Be True   len('${reading[14]}') == 0
-      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be True   len('${reading[15]}') == 0
       Should Be Equal  ${reading[16]}  RegisterClient
       Should Be True   ${reading[17]} > 0
       Should Be Equal  ${reading[18]}  ${appvers} 
@@ -233,10 +231,10 @@ Values With Cellid Should Be In Range
       Should Be True   ${reading[9]} == 123 
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} == 0
-      Should Be True   len('${reading[13]}') == 0
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} == 0
       Should Be True   len('${reading[14]}') == 0
-      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be True   len('${reading[15]}') == 0
       Should Be Equal  ${reading[16]}  RegisterClient
       Should Be True   ${reading[17]} > 0
       Should Be Equal  ${reading[18]}  ${appvers}
@@ -262,10 +260,10 @@ Values With Auth Should Be In Range
       Should Be True   ${reading[9]} == 0
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} == 0
-      Should Be True   len('${reading[13]}') == 0
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} == 0
       Should Be True   len('${reading[14]}') == 0
-      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be True   len('${reading[15]}') == 0
       Should Be Equal  ${reading[16]}  RegisterClient
       Should Be True   ${reading[17]} > 0
       Should Be Equal  ${reading[18]}  ${appvers}
@@ -291,13 +289,13 @@ Values With Error Should Be In Range
       Should Be True   ${reading[9]} == 0
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} == ${reading[16]}
-      Should Be True   len('${reading[13]}') == 0
+      Should Be True   '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} == ${reading[17]}
       Should Be True   len('${reading[14]}') == 0
-      Should Be True   '${reading[15]}'.startswith('dme-')
+      Should Be True   len('${reading[15]}') == 0
       Should Be Equal  ${reading[16]}  RegisterClient
       Should Be True   ${reading[17]} > 0
-      Should Be Equal  ${reading[18]}  ${appvers}
+      Should Be Equal  ${reading[18]}  ${ver_arg}
 
       Should Be True  (${reading[1]} + ${reading[2]} + ${reading[3]} + ${reading[4]} + ${reading[5]} + ${reading[6]}) == ${reading[17]}
    END

@@ -267,12 +267,13 @@ Metrics Headings Should Be Correct
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][9]}  cellID
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][10]}  cloudlet
    Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][11]}  cloudletorg
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  errs 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  foundCloudlet
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundOperator
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  method
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  reqs
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  ver
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][12]}  dmeId
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][13]}  errs 
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][14]}  foundCloudlet
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][15]}  foundOperator
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][16]}  method
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][17]}  reqs
+   Should Be Equal  ${metrics['data'][0]['Series'][0]['columns'][18]}  ver
 
  
 
@@ -294,14 +295,15 @@ Values Should Be In Range
       Should Be True   ${reading[9]} == 0
       Should Be Equal  ${reading[10]}  ${cloudlet_name_dme}
       Should Be Equal  ${reading[11]}  ${operator_org_name_dme}
-      Should Be True   ${reading[12]} >= 0
-      Run Keyword If  '${reading[13]}' == '0'  Check Found Cloudlet  ${reading[13]}  ${reading[14]}
+      Should Be True  '${reading[12]}'.startswith('dme-')
+      Should Be True   ${reading[13]} >= 0
+      Run Keyword If  '${reading[14]}' == '0'  Check Found Cloudlet  ${reading[14]}  ${reading[15]}
       ...  ELSE  Check Not Found Cloudlet  ${None}  ${None}
-      #Should Be True  '${reading[12]}' == '${cloudlet_name}' or '${reading[13]}' == '${None}' 
+      #Should Be True  '${reading[14]}' == '${cloudlet_name}' or '${reading[15]}' == '${None}' 
       #Should Be True  '${reading[13]}' == '${operator}' or '${reading[14]}' == '${None}'
-      Should Be Equal  ${reading[15]}  FindCloudlet 
-      Should Be True   ${reading[16]} > 0
-      Should Be True   ${reading[17]} >= 0
+      Should Be Equal  ${reading[16]}  FindCloudlet 
+      Should Be True   ${reading[17]} > 0
+      Should Be True   ${reading[18]} >= 0
    END
 
 Check Found Cloudlet
@@ -343,24 +345,25 @@ Metrics Should Match Influxdb
 #   \  Should Be Equal  ${metrics['data'][0]['Series'][0]['values'][${index}][5]}  ${reading['cpu']}
 #   \  ${index}=  Evaluate  ${index}+1
    FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
-      Should Be Equal  ${metrics_influx_t[${index}]['0s']}   ${reading[1]}
-      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}   ${reading[2]}
-      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}   ${reading[3]}
-      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}   ${reading[4]}
-      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}   ${reading[5]}
-      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}   ${reading[6]}
-      Should Be Equal  ${metrics_influx_t[${index}]['app']}   ${reading[7]}
-      Should Be Equal  ${metrics_influx_t[${index}]['apporg']}   ${reading[8]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}   ${reading[9]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}   ${reading[10]}
-      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}   ${reading[11]}
-      Should Be Equal  ${metrics_influx_t[${index}]['errs']}   ${reading[12]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}   ${reading[13]}
-      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}   ${reading[14]}
-      Should Be Equal  ${metrics_influx_t[${index}]['method']}   ${reading[15]}
-      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}   ${reading[16]}
-      Should Be Equal  ${metrics_influx_t[${index}]['ver']}   ${reading[17]}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}           ${reading[0]}
+      Should Be Equal  ${metrics_influx_t[${index}]['0s']}             ${reading[1]}
+      Should Be Equal  ${metrics_influx_t[${index}]['100ms']}          ${reading[2]}
+      Should Be Equal  ${metrics_influx_t[${index}]['10ms']}           ${reading[3]}
+      Should Be Equal  ${metrics_influx_t[${index}]['25ms']}           ${reading[4]}
+      Should Be Equal  ${metrics_influx_t[${index}]['50ms']}           ${reading[5]}
+      Should Be Equal  ${metrics_influx_t[${index}]['5ms']}            ${reading[6]}
+      Should Be Equal  ${metrics_influx_t[${index}]['app']}            ${reading[7]}
+      Should Be Equal  ${metrics_influx_t[${index}]['apporg']}         ${reading[8]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cellID']}         ${reading[9]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudlet']}       ${reading[10]}
+      Should Be Equal  ${metrics_influx_t[${index}]['cloudletorg']}    ${reading[11]}
+      Should Be Equal  ${metrics_influx_t[${index}]['dmeId']}          ${reading[12]}
+      Should Be Equal  ${metrics_influx_t[${index}]['errs']}           ${reading[13]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundCloudlet']}  ${reading[14]}
+      Should Be Equal  ${metrics_influx_t[${index}]['foundOperator']}  ${reading[15]}
+      Should Be Equal  ${metrics_influx_t[${index}]['method']}         ${reading[16]}
+      Should Be Equal  ${metrics_influx_t[${index}]['reqs']}           ${reading[17]}
+      Should Be Equal  ${metrics_influx_t[${index}]['ver']}            ${reading[18]}
 
       ${index}=  Evaluate  ${index}+1
    END
