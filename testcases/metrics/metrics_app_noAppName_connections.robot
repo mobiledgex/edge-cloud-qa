@@ -102,9 +102,9 @@ AppMetrics - Shall be able to get all app Connections metrics with developer onl
 
    Connections Should be in Range  ${metrics}
 
-   Set Max Metrics Data Points Config   10000
+   Set Max Metrics Data Points Config   1000
 
-   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  10000
+   ${metrics}=  Get all app metrics with developer only  ${developer_name}  connections  1000
 
    Metrics Headings Should Be Correct  ${metrics}
 
