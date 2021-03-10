@@ -102,8 +102,8 @@ ClusterMetrics - Shall be able to get all cluster UDP metrics with developer onl
 
    UDP Should be in Range  ${metrics}
 
-   Set Max Metrics Data Points Config   10000
-   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp  10000
+   Set Max Metrics Data Points Config   1000
+   ${metrics}=  Get all cluster metrics with developer only  ${developer_name}  udp  1000
 
    Metrics Headings Should Be Correct  ${metrics}
 
