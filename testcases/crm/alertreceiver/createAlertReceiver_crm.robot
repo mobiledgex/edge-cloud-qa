@@ -9,7 +9,7 @@ Library  String
 Library  DateTime
 
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+#Test Teardown  Cleanup Provisioning
 
 Test Timeout  25m
 
@@ -31,7 +31,7 @@ ${region}=  EU
 ${app_name}=  app1601997927-351176 
 ${app_version}=  1.0
 
-${developer}=  MobiledgeX
+${developer}=  ${developer_org_name_automation}
 
 ${latitude}       32.7767
 ${longitude}      -96.7970
@@ -349,6 +349,7 @@ AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg H
    # create email and slack alert as the new user
    Create Alert Receiver  token=${user_token}  receiver_name=${recv_name}_1  type=email  severity=info  email_address=${email}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
    Create Alert Receiver  token=${user_token}  receiver_name=${recv_name}_2  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
+   Create Alert Receiver  token=${user_token}  receiver_name=${recv_name}_3  type=pagerduty  pagerduty_integration_key=${pagerduty_key}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${orgname}
 
    Log To Console  Creating Cluster Instance
    Create Cluster Instance  region=${region}  token=${user_token}  developer_org_name=${orgname}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated
@@ -357,6 +358,10 @@ AlertReceiver - shall be able to create/receive email/slack cluster/clusterorg H
    ${app}=  Create App  region=${region}  token=${user_token}  developer_org_name=${orgname}  image_path=${docker_image}  access_ports=tcp:2015,tcp:2016,tcp:4015  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  token=${user_token}  developer_org_name=${orgname}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
 
+#   ${app_name}=  Set Variable  app1615408647-869235
+#   ${orgname}=  Set Variable  org1615408647-869235
+#   ${recv_name}=  Set Variable  alertreceiver1615408647869235
+#   ${flavor_name}=  Set Variable  flavor1615408647-869235
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
    Register Client  app_name=${app_name}  developer_org_name=${orgname}
    ${cloudlet}=  Find Cloudlet  latitude=${latitude}  longitude=${longitude}
