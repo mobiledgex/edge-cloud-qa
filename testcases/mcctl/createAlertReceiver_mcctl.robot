@@ -13,6 +13,8 @@ Test Timeout  5m
 ${region}=  US
 ${developer}=  MobiledgeX
 
+${version}=  latest
+
 *** Test Cases ***
 # ECQ-2905
 CreateAlertReceiver - mcctl shall be able to create/delete email/slack alert
@@ -48,6 +50,19 @@ CreateAlertReceiver - mcctl shall be able to create/delete email/slack alert
       name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cluster-org=${developer}
       name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  cluster=x  cluster-org=${developer}
 
+      # pagerduty app
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v1  severity=info  appname=x  app-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v2  severity=info  appvers=x  app-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-cloudlet=x  app-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-cloudlet-org=x  app-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x
+
+      # pagerduty cluster
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  cluster-org=${developer}
+      name=${recv_name}  type=pagerduty  pagerduty-integration-key=01234567890123456789012345678901  severity=info  cluster=x  cluster-org=${developer}
+
       # email cloudlet 
       name=${recv_name}  type=email  severity=info  cloudlet-org=${developer}
       name=${recv_name}  type=email  severity=info  cloudlet=x  cloudlet-org=${developer}
@@ -76,6 +91,8 @@ CreateAlertReceiver - mcctl shall handle create failures
       Error: Bad Request (400), Alert severity has to be one of "info", "warning", "error"                               name=${recv_name}  type=email  severity=inf  app-org=${developer}
       Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
       Error: Bad Request (400), Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]  name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=http://  app-org=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must contain 32 characters                                     name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=0123456789012345678901234567890  app-org=${developer}
+      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v3  app-org=${developer}
 
       # missing values
       Error: missing required args: name                                                               type=email  severity=info  app-org=${developer}
@@ -85,6 +102,9 @@ CreateAlertReceiver - mcctl shall handle create failures
       Error: missing required args: severity                                                           name=${recv_name}  type=slack  app-org=${developer}
       Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-channel=x  app-org=${developer}
       Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-api-url=x  app-org=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  app-org=${developer}
+      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=pagerduty  severity=info  pagerduty-api-version=v2  app-org=${developer}
 
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
@@ -97,6 +117,15 @@ Setup
    ${recv_name}=  Get Default Alert Receiver Name
    Set Suite Variable  ${recv_name}
 
+Modify Channel
+   [Arguments]  &{parms}
+
+   ${startshash}=  Evaluate  '${parms['slack-channel']}'.startswith('#')
+   ${c}=  Run Keyword If  ${startshash} == ${True}  Set Variable  ${parms['slack-channel']}
+   ...  ELSE  Set Variable  \#${parms['slack-channel']}
+
+   [Return]  ${c}
+
 Success Create/Delete Alert Receiver Via mcctl
    [Arguments]  &{parms}
 
@@ -104,12 +133,15 @@ Success Create/Delete Alert Receiver Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
    Remove From Dictionary  ${parms_copy}  slack-api-url  # this is not allowed since it is secret
+   ${modify_channel}=  Run Keyword If  'slack-channel' in ${parms}  Modify Channel  &{parms}
+   
+   Remove From Dictionary  ${parms_copy}  slack-channel 
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
 
-   Run mcctl  alertreceiver create ${parmss} 
-   ${show}=  Run mcctl  alertreceiver show ${parmss_modify} 
+   Run mcctl  alertreceiver create ${parmss}  version=${version} 
+   ${show}=  Run mcctl  alertreceiver show ${parmss_modify}  version=${version}
 
-   Run mcctl  alertreceiver delete ${parmss}
+   Run mcctl  alertreceiver delete ${parmss}  version=${version}
 
    Should Be Equal  ${show[0]['Name']}  ${parms['name']}
    Should Be Equal  ${show[0]['Type']}  ${parms['type']}
@@ -119,8 +151,13 @@ Success Create/Delete Alert Receiver Via mcctl
    Run Keyword If  '${parms['type']}' == 'email' and 'email' in ${parms}  Should Be Equal  ${show[0]['Email']}  ${parms['email']}
    Run Keyword If  '${parms['type']}' == 'email' and 'email' not in ${parms}  Should Be Equal  ${show[0]['Email']}  mexadmin@mobiledgex.net
 
-   Run Keyword If  '${parms['type']}' == 'slack' and 'slack-channel' in ${parms}  Should Be Equal  ${show[0]['SlackChannel']}  ${parms['slack-channel']}
+   Run Keyword If  '${parms['type']}' == 'slack' and 'slack-channel' in ${parms}  Should Be Equal  ${show[0]['SlackChannel']}  ${modify_channel}  #${parms['slack-channel']}
    Run Keyword If  '${parms['type']}' == 'slack' and 'slack-api-url' in ${parms}  Should Be Equal  ${show[0]['SlackWebhook']}  <hidden>
+
+   ${apicheck}=  Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-api-version' in ${parms}  Set Variable  ${parms['pagerduty-api-version']}
+   ...  ELSE  Set Variable  v2
+   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-api-version' in ${parms}  Should Be Equal  ${show[0]['PagerDutyApiVersion']}  ${apicheck}
+   Run Keyword If  '${parms['type']}' == 'pagerduty' and 'pagerduty-integration-key' in ${parms}  Should Be Equal  ${show[0]['PagerDutyIntegrationKey']}  <hidden>
  
    Run Keyword If  'appname' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['name']}  ${parms['appname']}
    Run Keyword If  'app-org' in ${parms}  Should Be Equal  ${show[0]['AppInst']['app_key']['organization']}  ${parms['app-org']}
@@ -141,5 +178,5 @@ Fail Create Alert Receiver Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  alertreceiver create ${parmss}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  alertreceiver create ${parmss}  version=${version}
    Should Contain  ${std_create}  ${error_msg}

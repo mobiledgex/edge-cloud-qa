@@ -13,7 +13,7 @@ Test Timeout  10m
 *** Variables ***
 ${region}=  US
 ${developer}=  MobiledgeX
-${version}=  latest
+${version}=  2021-03-11
 
 *** Test Cases ***
 CreateAutoScalePolicy - mcctl shall be able to create/show/delete policy
@@ -36,9 +36,10 @@ CreateAutoScalePolicy - mcctl shall handle create failures
    [Template]  Fail Create Autoscale Policy Via mcctl
       # missing values
 
-      Error: missing required args: cluster-org name minnodes maxnodes   #not sending any args with mcctl
-      Error: missing required args: name minnodes maxnodes  cluster-org=${developer}
-      Error: missing required args: minnodes maxnodes  cluster-org=${developer}  name=${recv_name}
+      # removed the args since they comeback in different order
+      Error: missing required args:    #cluster-org name minnodes maxnodes   #not sending any args with mcctl
+      Error: missing required args:  cluster-org=${developer}
+      Error: missing required args:  cluster-org=${developer}  name=${recv_name}
       Error: missing required args: maxnodes  cluster-org=${developer}  name=${recv_name}  minnodes=1
       Error: Bad Request (400), Max nodes must be greater than Min nodes  cluster-org=${developer}  name=${recv_name}  minnodes=2  maxnodes=1  scaleupcputhresh=50  scaledowncputhresh=10
       Error: Bad Request (400), Scale down cpu threshold must be less than scale up cpu threshold  cluster-org=${developer}  name=${recv_name}  minnodes=1  maxnodes=2
