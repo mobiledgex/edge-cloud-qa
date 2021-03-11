@@ -19,7 +19,7 @@ timestamp = str(time.time()).replace('.','')
 # this is the time to wait before aborting the testcase. This avoids testcases hanging or wasting time
 test_timeout = '32 min'
 # this is the time to wait for the https stream message to comeback for create Cluster Inst
-# stream_timeout = 1200
+# s_timeout = 1200
 # this is the controller region used to run the tests
 region = 'US'
 
@@ -29,8 +29,6 @@ username_mexadmin = 'mexadmin'
 password_mexadmin = 'mexadminfastedgecloudinfra'
 username_developer = 'andyanderson'
 password_developer = 'mexadminfastedgecloudinfra'
-# username_developer = 'tomdevmanager'
-# password_developer = '58a8dd77baf9b8833f9753c93a62a5f5f3f35b11'
 username_operator = 'andyanderson'
 password_operator = 'mexadminfastedgecloudinfra'
 #developer_organization_name = 'tomdev'
@@ -56,8 +54,13 @@ cloudlet_numdynamicips = '10'
 cloudlet_security_group = 'cloudletverification'
 cloudlet_external_subnet = 'external-subnet'  # used for cloudlet metrics verification
 cloudlet_infraconfig_flavorname = 'vcd-medium'
-cloudlet_infraconfig_externalnetworkname = 'eexternal-network-qa'
 deployment = 'docker'
+# default infra property {"key": "MEX_SHARED_ROOTLB_VCPUS", "val": "2"}
+# default infra property {"key": "MEX_SHARED_ROOTLB_DISK", "val": "40"}
+# default infra property {"key": "MEX_SHARED_ROOTLB_RAM", "val": "4096"}
+cloudlet_rootlb_ram = 'MEX_SHARED_ROOTLB_RAM=4096'
+cloudlet_rootlb_disk = 'MEX_SHARED_ROOTLB_DISK=42'
+cloudlet_rootlb_vcpus = 'MEX_SHARED_ROOTLB_VCPUS=4'
 
 
 # for VCD qa2org /28
@@ -76,11 +79,10 @@ cloudlet_ext_netscheme = 'MEX_NETWORK_SCHEME=cidr=10.102.X.0/24'
 
 #vcd format
 
-cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_netmask},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_ext_gateway},{cloudlet_image_disk_format},{cloudlet_vdc_template},{cloudlet_mex_catalog},{cloudlet_whitelist_in},{cloudlet_whitelist_eg}'
+cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_rootlb_ram},{cloudlet_rootlb_disk},{cloudlet_rootlb_vcpus},{cloudlet_ext_netmask},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_ext_gateway},{cloudlet_image_disk_format},{cloudlet_vdc_template},{cloudlet_mex_catalog},{cloudlet_whitelist_in},{cloudlet_whitelist_eg}'
 
 # docker image used for docker/k8s deployments
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
-#docker_image = 'docker-qa.mobiledgex.net/tomdev/images/server-ping-threaded:6.0'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:2020-06-16-GPU'
 #docker_image_privacypolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
 docker_image_trustpolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
