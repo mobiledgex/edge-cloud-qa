@@ -20,7 +20,7 @@ ${cloudconfig_string}=  \#cloud-config\n users:\n - name: demo\n groups: sudo\n 
 ${envvars_config}=  - name: CrmValue\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]\n- name: CrmValue2\n${SPACE*2}value: [[ .Deployment.ClusterIp ]]
 ${envvars_url}=  http://35.199.188.102/apps/server_ping_threaded_config.yml
 
-${version}=  2021-01-12
+${version}=  latest
 
 *** Test Cases ***
 # ECQ-2889
@@ -79,14 +79,14 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=${envvars_url}  configs:1.kind=envVarsYaml  configs:1.config=${envvars_url}
 
       # autoprovpolicies
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  autoprovpolicies=${autoprov_name}1
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow  deployment=vm  imagepath=${qcow_centos_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1  vm not supported
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          imagepath=${qcow_centos_image}  defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2  vm not supported
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
+      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        imagepath=${docker_image}       defaultflavor=${flavor_name_automation}  autoprovpolicies=${autoprov_name}1 autoprovpolicies=${autoprov_name}2
 
       # trusted
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}
@@ -97,8 +97,8 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${False}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${True}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=${False}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  direct no longer supported
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${False}  direct no longer supported
 
       # requiredoutboundconnections
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=0  requiredoutboundconnections:0.remoteip=1.1.1.1
@@ -106,15 +106,17 @@ CreateApp - mcctl shall be able to create/show/delete app
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker      accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=udp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=icmp  requiredoutboundconnections:1.remoteip=1.1.1.1  
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1  requiredoutboundconnections:0.port=2  requiredoutboundconnections:1.protocol=tcp  requiredoutboundconnections:1.remoteip=1.1.1.1  requiredoutboundconnections:1.port=2
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
 
 # ECQ-2890
 CreateApp - mcctl shall handle create failures
    [Documentation]
    ...  - send CreateApp via mcctl with various error cases
    ...  - verify proper error is received
+
+   # EDGECLOUD-4577 CreateApp should disallow deploymentmanifest for helm
+   # EDGECLOUD-4576 CreateApp should valide the deploymentmanifest for docker
 
    [Template]  Fail Create App Via mcctl
       # missing values
@@ -158,15 +160,15 @@ CreateApp - mcctl shall handle create failures
       # fixed EDGECLOUD-3232 CreateApp with deployment=vm and configs=envVarsYaml should give error
       # EDGECLOUD-3163 Support envVarsYaml config for CreateApp on docker
       # fixed EDGECLOUD-3238 no error given with CreateAppInst with bad configs envVarsYaml value
-      # EDGECLOUD-4216 CreateApp with invalid helmCustomizationYaml config should give an error
+      # fixed EDGECLOUD-4216 CreateApp with invalid helmCustomizationYaml config should give an error
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=nvVarsYam
       Error: Bad Request (400), Invalid Config Kind - nvVarsYam  appname=${app_name}3  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=nvVarsYaml
      Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
-      Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}4  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
-      Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}6  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=x
+      #Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}4  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml  configs:0.config=x
+      #Error: Bad Request (400), Cannot unmarshal env vars: x - yaml: unmarshal errors:\\n  line 1: cannot unmarshal !!str `x` into []v1.EnvVar  appname=${app_name}6  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml  configs:0.config=x  we dont support helm config verifcation since it is freeform
       Error: Bad Request (400), Invalid Config Kind(envVarsYaml) for deployment type(vm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=envVarsYaml
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(vm)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
       Error: Bad Request (400), Invalid Config Kind(helmCustomizationYaml) for deployment type(kubernetes)  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker    deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  configs:0.kind=helmCustomizationYaml
@@ -182,8 +184,8 @@ CreateApp - mcctl shall handle create failures
       Unable to parse "trusted" value "cccccc" as bool: invalid syntax, valid values are true, false  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=cccccc
       Unable to parse "trusted" value "111" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=111
       Unable to parse "trusted" value "-1" as bool: invalid syntax, valid values are true, false       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeLoadBalancer  imagepath=${qcow_centos_image}  trusted=-1
-      Unable to parse "trusted" value "no" as bool: invalid syntax, valid values are true, false      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=no
-      Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes
+      #Unable to parse "trusted" value "no" as bool: invalid syntax, valid values are true, false      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=no  direct not supported
+      #Unable to parse "trusted" value "yes" as bool: invalid syntax, valid values are true, false     appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm          accesstype=AccessTypeDirect        imagepath=${qcow_centos_image}  trusted=yes  direct not supported
 
       # requiredoutboundconnections
       Bad Request (400), Port must be 0 for icmp   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=icmp  requiredoutboundconnections:0.port=1  requiredoutboundconnections:0.remoteip=1.1.1.1
@@ -194,6 +196,7 @@ CreateApp - mcctl shall handle create failures
       Error: Bad Request (400), Invalid remote IP:    appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp 
       Error: Bad Request (400), Invalid remote IP:    appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=udp  requiredoutboundconnections:0.port=1
       Error: Bad Request (400), Remote port out of range: 0   appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=tcp  requiredoutboundconnections:0.remoteip=1.1.1.1
+      Error: Bad Request (400), Invalid remote IP:  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm    deployment=helm        accesstype=AccessTypeLoadBalancer  imagepath=${docker_image}       trusted=${True}  requiredoutboundconnections:0.protocol=  # remove the ports
 
 
 # ECQ-2829
@@ -218,10 +221,10 @@ UpdateApp - mcctl shall handle update app
 
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeLoadBalancer
       appname=${app_name_docker}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeLoadBalancer 
-      appname=${app_name_docker}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDirect
+      #appname=${app_name_docker}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDirect  direct not supported
       appname=${app_name_helm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeLoadBalancer 
       appname=${app_name_vm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeLoadBalancer
-      appname=${app_name_vm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDirect
+      #appname=${app_name_vm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDirect  direct not supported
       appname=${app_name_k8s}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDefaultForDeployment
       appname=${app_name_docker}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDefaultForDeployment
       appname=${app_name_helm}  app-org=${developer}  appvers=1.0  accesstype=AccessTypeDefaultForDeployment
@@ -283,7 +286,7 @@ Success Create/Show/Delete App Via mcctl
 
    Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Integers  ${show[0]['access_type']}  2
    Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'helm'        Should Be Equal As Integers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  1
+   Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'vm'          Should Be Equal As Integers  ${show[0]['access_type']}  2
    Run Keyword If  'accesstype' not in ${parms} and '${show[0]['deployment']}' == 'docker'      Should Be Equal As Integers  ${show[0]['access_type']}  2
 
    Run Keyword If  'officialfqdn' in ${parms}  Should Be Equal  ${show[0]['official_fqdn']}  ${parms['officialfqdn']} 
@@ -365,7 +368,7 @@ Success Update/Show App Via mcctl
    Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'docker'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
    Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'kubernetes'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
    Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'helm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
-   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal As Numbers  ${show[0]['access_type']}  1
+   Run Keyword If  'accesstype' in ${parms}  Run Keyword If  '${parms['accesstype']}' == 'AccessTypeDefaultForDeployment'  Run Keyword If  '${show[0]['deployment']}' == 'vm'  Should Be Equal As Numbers  ${show[0]['access_type']}  2
 
    Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeDocker'  Should Be Equal As Integers  ${show[0]['image_type']}  1
    Run Keyword If  'imagetype' in ${parms}  Run Keyword If  '${parms['imagetype']}' == 'ImageTypeQcow'  Should Be Equal As Integers  ${show[0]['image_type']}  2
