@@ -87,5 +87,7 @@ gpu_client_image = '3_bodies.png'
 # alert receiver
 slack_channel = '#qa-alertreceiver'
 slack_api_url = 'https://hooks.slack.com/services/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'
+#pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
+pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'
 
 trust_policy_server = '35.199.188.102'
