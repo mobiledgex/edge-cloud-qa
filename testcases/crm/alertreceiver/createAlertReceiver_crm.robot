@@ -3,7 +3,7 @@ Documentation  CreateAlertReceiver on CRM
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}  auto_login=${False}
 Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
-Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_OFFLINE}
+Library  MexOpenstack  environment_file=%{AUTOMATION_OPENSTACK_OFFLINE_ENV}
 Library  MexApp
 Library  String
 Library  DateTime
