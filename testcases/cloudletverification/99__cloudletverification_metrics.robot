@@ -22,7 +22,7 @@ Metrics shall collect cloudlet ipusage metric
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
-   [Tags]  cloudlet  metrics
+   [Tags]  cloudlet  metrics  openstack
 
    [Setup]  Setup Cloudlet Metrics
 
@@ -43,7 +43,7 @@ Metrics shall collect cloudlet utilization metric
    [Documentation]
    ...  request the last cloudlet ipusage metric
    ...  verify info is correct
-   [Tags]  cloudlet  metrics
+   [Tags]  cloudlet  metrics  openstack
 
    [Setup]  Setup Cloudlet Metrics
 
