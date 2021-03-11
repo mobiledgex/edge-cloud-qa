@@ -39,17 +39,19 @@ ShowAlertReceiver - users should only see their own receivers
 
    ${alert11}=  Create Alert Receiver  receiver_name=${receiver_name}11  type=email  severity=info  developer_org_name=${orgname}  token=${user_token1}
    ${alert12}=  Create Alert Receiver  receiver_name=${receiver_name}12  type=slack  severity=info  developer_org_name=${orgname}  token=${user_token1}  slack_channel=mychannel  slack_api_url=http://slack.com
+   ${alert13}=  Create Alert Receiver  receiver_name=${receiver_name}12  type=pagerduty  severity=info  developer_org_name=${orgname}  token=${user_token1}  pagerduty_integration_key=${pagerduty_key}
 
    ${alert21}=  Create Alert Receiver  receiver_name=${receiver_name}21  type=email  severity=info  developer_org_name=${orgname}  token=${user_token2}
    ${alert22}=  Create Alert Receiver  receiver_name=${receiver_name}22  type=slack  severity=info  developer_org_name=${orgname}  token=${user_token2}  slack_channel=mychannel  slack_api_url=http://slack.com
+   ${alert23}=  Create Alert Receiver  receiver_name=${receiver_name}12  type=pagerduty  severity=info  developer_org_name=${orgname}  token=${user_token2}  pagerduty_integration_key=${pagerduty_key}
 
    ${show1}=  Show Alert Receivers  token=${user_token1}  use_defaults=${False}
    ${show2}=  Show Alert Receivers  token=${user_token2}  use_defaults=${False}
    ${show_admin}=  Show Alert Receivers  token=${super_token}  developer_org_name=${orgname}  use_defaults=${False}
 
-   Length Should Be  ${show1}  2
-   Length Should Be  ${show2}  2
-   Length Should Be  ${show_admin}  4
+   Length Should Be  ${show1}  3
+   Length Should Be  ${show2}  3
+   Length Should Be  ${show_admin}  6
 
    Should Be Equal  ${show1[0]['User']}  ${epochusername1}
    Should Be Equal  ${show1[1]['User']}  ${epochusername1}
@@ -134,7 +136,7 @@ Receivers Data Should Be Good
 
    FOR  ${a}  IN  @{alert}
       Should Be True  len('${a['Name']}') > 0
-      Should Be True  '${a['Type']}' == 'email' or '${a['Type']}' == 'slack'
+      Should Be True  '${a['Type']}' == 'email' or '${a['Type']}' == 'slack'  or '${a['Type']}' == 'pagerduty'
       Should Be True  '${a['Severity']}' == 'info' or '${a['Severity']}' == 'error' or '${a['Severity']}' == 'warn'
       Should Be True  len('${a['User']}') > 0
       #Should Be True  len('${a['Email']}') > 0
