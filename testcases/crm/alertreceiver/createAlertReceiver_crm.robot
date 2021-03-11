@@ -9,7 +9,7 @@ Library  String
 Library  DateTime
 
 Test Setup  Setup
-#Test Teardown  Cleanup Provisioning
+Test Teardown  Cleanup Provisioning
 
 Test Timeout  25m
 
