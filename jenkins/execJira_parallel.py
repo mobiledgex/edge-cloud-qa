@@ -55,6 +55,8 @@ def main():
 
     parser = argparse.ArgumentParser(description='copy tests to release')
     parser.add_argument('--version_from_load', action='store_true')
+    parser.add_argument('--failed_only', action='store_true')
+
     args = parser.parse_args()
 
     num_executors = 1
@@ -160,6 +162,18 @@ def main():
         component_query += f' AND component = \"{component.strip()}\"' 
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
+
+    if args.failed_only:
+        print('Only executing failed testcases')
+        zephyrQueryUrl = f'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"{version}\\\"{z_component_query} AND cycleName=\\\"{cycle}\\\" AND executionStatus=Fail ORDER BY Issue ASC'
+        failed_tcids = get_zephyr_failed_testcases(z, zephyrQueryUrl, zephyrQueryUrl)
+        if len(failed_tcids) <= 0: failed_tcids = ['EC-1']
+        jiraQueryUrlPre += ' AND key in ('
+        for key in failed_tcids:
+            jiraQueryUrlPre += f'{key},'
+        jiraQueryUrlPre = re.sub(r',$', '', jiraQueryUrlPre)
+        jiraQueryUrlPre += ')'
+
     jiraQueryUrl = jiraQueryUrlPre + ' ORDER BY Issue ASC'
         
     #zephyrQueryUrl = "project=\\\"" + project + "\\\" AND fixVersion=\\\"" + version + "\\\" AND component in (" + component + ") ORDER BY Issue ASC"
@@ -200,6 +214,34 @@ def main():
     print(f'test duration is {(endtime-starttime)/60} minutes')
 
     sys.exit(exec_status)
+
+def get_zephyr_failed_testcases(z, url, query):
+    print(f'execututing zephyr query={query}')
+    total_count = 9999999
+    num_returned = 0
+    total_returned = 0
+    tc_list = []
+    while total_returned < total_count:
+        result = z.execute_query(url, offset=total_returned)
+        query_content = json.loads(result)
+        total_count = query_content['totalCount']
+        num_returned = len(query_content['searchObjectList'])
+        total_returned += num_returned
+
+        for exec in query_content['searchObjectList']:
+            print(f"tcid={exec['issueKey']} defects={exec['execution']['defects']}")
+            if len(exec['execution']['defects']) == 0:
+                tc_list.append(exec['issueKey'])
+            else:
+                tc_list.append(exec['issueKey'])
+                for defect in exec['execution']['defects']:
+                    if defect['status']['name'] != 'Closed' and defect['status']['name'] != 'Ready To Verify':
+                        tc_list.pop()
+                        break
+
+    print(f'found {len(tc_list)} failed testcases')
+ 
+    return tc_list
 
 def get_testcases(z, result, cycle_id, project_id, version_id, folder_id):
     query_content = json.loads(result)
