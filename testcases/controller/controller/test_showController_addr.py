@@ -43,6 +43,7 @@ class tc(unittest.TestCase):
         re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
         re_master2 = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
         re_master3 = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-rc\d{1,9}-*')
+        re_master4 = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,9}-*')
 
         re_host = re.compile('^controller-')
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
@@ -61,7 +62,7 @@ class tc(unittest.TestCase):
             foundip = False
             foundbuild = False
 
-            if re_master.match(resp[0].build_master) or re_master2.match(resp[0].build_master) or re_master3.match(resp[0].build_master):
+            if re_master.match(resp[0].build_master) or re_master2.match(resp[0].build_master) or re_master3.match(resp[0].build_master) or re_master4.match(resp[0].build_master):
                foundmaster=True
             if re_host.match(resp[0].hostname):
                foundhost=True
