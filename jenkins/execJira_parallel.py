@@ -158,8 +158,11 @@ def main():
     #jiraTestcaseQuery = "project=" + project + " AND fixVersion=\"" + version + "\" AND cycleName in (\"" + cycle + "\") AND summary ~ \"" + summary + "\" ORDER BY Issue ASC"
     component_list = component.split(',')
     component_query = ''
+    z_component_query = ''
     for component in component_list:
         component_query += f' AND component = \"{component.strip()}\"' 
+        z_component_query += f' AND component = \\\"{component.strip()}\\\"'
+
     zephyrQueryUrl = 'project=\\\"' + project + '\\\" AND fixVersion=\\\"' + version + '\\\"' + component_query + ' ORDER BY Issue ASC'
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
 
