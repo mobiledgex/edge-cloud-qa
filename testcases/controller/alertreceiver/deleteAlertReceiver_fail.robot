@@ -40,6 +40,10 @@ DeleteAlertReveiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type slack and severity info for user \\\\"mexadmin\\\\"]"}')  type=slack  severity=info
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type slack and severity error for user \\\\"mexadmin\\\\"]"}')  type=slack  severity=error
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type slack and severity warn for user \\\\"mexadmin\\\\"]"}')  type=slack  severity=warn
+   ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type pagerduty and severity info for user \\\\"mexadmin\\\\"]"}')  type=pagerduty  severity=info
+   ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type pagerduty and severity error for user \\\\"mexadmin\\\\"]"}')  type=pagerduty  severity=error
+   ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type pagerduty and severity warn for user \\\\"mexadmin\\\\"]"}')  type=pagerduty  severity=warn
+
    ('code\=400', 'error\={"message":"Unable to delete a receiver - bad response status 404 Not Found[No receiver \\\\"${receiver_name}\\\\" of type z and severity a for user \\\\"mexadmin\\\\"]"}')  type=z  severity=a
 
    ('code\=400', 'error\={"message":"Org details must be present to manage a specific receiver"}')  token=${super_token}  receiver_name=${receiver_name}  type=email  severity=info  user=xxx  use_defaults=${False}

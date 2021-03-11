@@ -137,6 +137,66 @@ CreateAlertReceiver - shall be able to create slack alert
       receiver_name=x .&_!,xx  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
       receiver_name=x .&_!,xq  type=slack  slack_channel=slack_channel     slack_api_url=${slack_api_url}  severity=info     developer_org_name=${developer}
 
+# ECQ-3260
+CreateAlertReceiver - shall be able to create pagerduty alert
+   [Documentation]
+   ...  - send alertreceiver create with type=pagerduty and suppored severities and app/cluster/cloudlets
+   ...  - verify alertreceiver is created
+
+   [Template]  Create an Alert Receiver
+      # cluster
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     cluster_instance_developer_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning  cluster_instance_developer_org_name=${developer}  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
+      type=pagerduty  pagerduty_integration_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx             severity=warning  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer}  region=US
+
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     operator_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     operator_org_name=${developer}  cloudlet_name=x
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     operator_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     operator_org_name=${developer}  cloudlet_name=x
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     operator_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     operator_org_name=${developer}  cloudlet_name=x
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     operator_org_name=${developer}  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     operator_org_name=${developer}  cloudlet_name=x  region=US
+      type=pagerduty  pagerduty_integration_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxj     severity=info     operator_org_name=${developer}  cloudlet_name=x  region=US
+
+      # app
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     developer_org_name=${developer}  app_name=x  app_version=1
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     developer_org_name=${developer}  app_version=1
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  cluster_instance_name=y
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  cluster_instance_developer_org_name=corg
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_cloudlet_name=appcloudlet
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     developer_org_name=${developer}  app_cloudlet_org=appcloudlet
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=error     developer_org_name=${developer}  app_name=x  app_version=1  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+      type=pagerduty  pagerduty_integration_key=slack_channelxxxxxxxxxxxxxxxxxxj     severity=warning     developer_org_name=${developer}  app_name=x  app_version=1  app_cloudlet_name=appcloudlet  app_cloudlet_org=apporg  cluster_instance_name=y  cluster_instance_developer_org_name=corg  region=US
+
+      # receiver name
+      receiver_name=x          type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=1          type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=0x         type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x_x        type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x.xx       type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x,xx       type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x!xx       type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x .&_!,xx  type=pagerduty  pagerduty_integration_key=${pagerduty_key}  severity=info     developer_org_name=${developer}
+      receiver_name=x .&_!,xq  type=pagerduty  pagerduty_integration_key=slack_channelxxxxxxxxxxxxxxxxxxx     severity=info     developer_org_name=${developer}
+
 *** Keywords ***
 Setup
    ${token}=  Get Super Token
@@ -169,6 +229,7 @@ Create An Alert Receiver
    #Run Keyword If  'email_address' in ${parms}  Should Be Equal  ${alert['Email']}  ${parms['email_address']}  ELSE  Should Be Equal  ${alert['Email']}  mexadmin@mobiledgex.net 
    Run Keyword If  'email_address' in ${parms}  Verify Email Alert  ${alert}  &{parms}
    Run Keyword If  'slack_channel' in ${parms} or 'slack_api_url' in ${parms}  Verify Slack Alert  ${alert}  &{parms}
+   Run Keyword If  'pagerduty_integration_key' in ${parms}  Verify PagerDuty Alert  ${alert}  &{parms}
    Run Keyword If  'operator_org_name' in ${parms}  Should Be Equal  ${alert['Cloudlet']['organization']}  ${parms['operator_org_name']}  
    Run Keyword If  'cloudlet_name' in ${parms}  Should Be Equal  ${alert['Cloudlet']['name']}  ${parms['cloudlet_name']}  
    Run Keyword If  'developer_org_name' in ${parms}  Should Be Equal  ${alert['AppInst']['app_key']['organization']}  ${parms['developer_org_name']}  
@@ -183,6 +244,12 @@ Verify Email Alert
    [Arguments]  ${alert}  &{parms}
 
    Run Keyword If  'email_address' in ${parms}  Should Be Equal  ${alert['Email']}  ${parms['email_address']}  ELSE  Should Be Equal  ${alert['Email']}  mexadmin@mobiledgex.net
+
+Verify PagerDuty Alert
+   [Arguments]  ${alert}  &{parms}
+
+   Run Keyword If  'pagerduty_integration_key' in ${parms}  Should Be Equal  ${alert['PagerDutyIntegrationKey']}  <hidden>
+   Run Keyword If  'pagerduty_integration_key' in ${parms}  Should Be Equal  ${alert['PagerDutyApiVersion']}  v2
 
 Verify Slack Alert
    [Arguments]  ${alert}  &{parms}
