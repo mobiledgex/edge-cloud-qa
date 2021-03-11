@@ -64,6 +64,12 @@ CreateAlertReceiver - missing/invalid/empty parms shall return error
    ('code\=400', 'error\={"message":"Unable to create a receiver - Invalid Slack api URL"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=x  slack_api_url=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]"}')  receiver_name=xxx  severity=info  type=slack  slack_channel=x  slack_api_url=http://  developer_org_name=x  token=${super_token}  use_defaults=${False}
 
+   # no/invalid pagerduty key
+   ('code\=400', 'error\={"message":"PagerDuty Integration Key must be present"}')  receiver_name=xxx  severity=info  type=pagerduty  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"PagerDuty Integration Key must contain 32 characters"}')  receiver_name=xxx  severity=info  type=pagerduty  pagerduty_integration_key=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"PagerDuty Integration Key must contain 32 characters"}')  receiver_name=xxx  severity=info  type=pagerduty  pagerduty_integration_key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  developer_org_name=x  token=${super_token}  use_defaults=${False}
+   ('code\=400', 'error\={"message":"PagerDuty Integration Key must be present"}')  receiver_name=xxx  severity=info  type=pagerduty  pagerduty_integration_key=${Empty}  developer_org_name=x  token=${super_token}  use_defaults=${False}
+
    # invalid email
    ('code\=400', 'error\={"message":"Receiver email is invalid"}')  receiver_name=email  severity=info  type=email  email_address=x  developer_org_name=x  token=${super_token}  use_defaults=${False}
    ('code\=400', 'error\={"message":"Receiver email is invalid"}')  receiver_name=email  severity=info  type=email  email_address=x.com  developer_org_name=x  token=${super_token}  use_defaults=${False}
