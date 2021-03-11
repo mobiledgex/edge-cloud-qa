@@ -557,7 +557,8 @@ def exec_testcase(z, t):
             my_env['AUTOMATION_OPENSTACK_SHARED_ENV'] = openstack_file
             my_env['AUTOMATION_OPENSTACK_VM_ENV'] = openstack_file
             my_env['AUTOMATION_OPENSTACK_GPU_ENV'] = openstack_file
-            
+            my_env['AUTOMATION_OPENSTACK_OFFLINE_ENV'] = openstack_file
+ 
             with open(env_file) as f:
                 lines = f.readlines()
                 for line in lines:
