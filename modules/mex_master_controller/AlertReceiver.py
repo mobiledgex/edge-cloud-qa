@@ -23,7 +23,7 @@ class AlertReceiver(MexOperation):
         self.slack_token = '***REMOVED***' 
         self.slack_channel = 'C01CE9BNV6J'  # qa-alertreceiver
 
-    def _build(self, region=None, receiver_name=None, type=None, severity=None, email_address=None, user=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=True):
+    def _build(self, region=None, receiver_name=None, type=None, severity=None, email_address=None, user=None, pagerduty_integration_key=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, use_defaults=True):
 
         if use_defaults:
             if receiver_name is None: receiver_name = shared_variables.alert_receiver_name_default
@@ -52,6 +52,9 @@ class AlertReceiver(MexOperation):
             receiver_dict['severity'] = severity
         if user is not None:
             receiver_dict['user'] = user 
+
+        if pagerduty_integration_key is not None:
+            receiver_dict['pagerdutyintegrationkey'] = pagerduty_integration_key
 
         if slack_channel is not None:
             receiver_dict['slackchannel'] = slack_channel
@@ -96,8 +99,8 @@ class AlertReceiver(MexOperation):
 
         return receiver_dict
 
-    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, email_address=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(region=region, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, use_defaults=use_defaults)
+    def create_alert_receiver(self, token=None, region=None, receiver_name=None, type=None, severity=None, email_address=None, pagerduty_integration_key=None, slack_channel=None, slack_api_url=None, app_name=None, app_version=None, app_cloudlet_name=None, app_cloudlet_org=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(region=region, receiver_name=receiver_name, type=type, severity=severity, email_address=email_address, pagerduty_integration_key=pagerduty_integration_key, slack_channel=slack_channel, slack_api_url=slack_api_url, app_name=app_name, app_version=app_version, app_cloudlet_name=app_cloudlet_name, app_cloudlet_org=app_cloudlet_org, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_delete = None
