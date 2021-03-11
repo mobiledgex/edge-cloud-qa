@@ -13,7 +13,7 @@ Test Timeout  10m
 *** Variables ***
 ${region}=  US
 ${developer}=  MobiledgeX
-${version}=  2021-02-19
+${version}=  latest
 
 *** Test Cases ***
 # ECQ-3196
