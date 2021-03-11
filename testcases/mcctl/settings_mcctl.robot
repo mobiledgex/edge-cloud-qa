@@ -93,10 +93,10 @@ Settings - mcctl shall handle update settings failures
    ...  - verify proper error is received
 
    # EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
-   # EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
-   # EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
-   # EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
-   # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
+   # EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values  - closed
+   # EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values - closed
+   # EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values  - closed
+   # EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message - closed
 
    [Template]  Fail UpdateSettings Via mcctl
       error decoding \\\'Settings.ShepherdMetricsCollectionInterval\\\': time: missing unit in duration "1"       shepherdmetricscollectioninterval=1
@@ -157,14 +157,14 @@ Settings - mcctl shall handle update settings failures
 
       Flavor must preexist  masternodeflavor=xx
 
-      xxx  loadbalancermaxportrange=0
+      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=0
       Unable to parse "loadbalancermaxportrange" value "x" as int: invalid syntax  loadbalancermaxportrange=x
-      xxx  loadbalancermaxportrange=-1
-      xxx  loadbalancermaxportrange=70000
+      Load Balancer Max Port Range must be greater than 0  loadbalancermaxportrange=-1
+      Load Balancer Max Port Range must be less than 65536  loadbalancermaxportrange=70000
       Unable to parse "loadbalancermaxportrange" value "99999999999999999" as int: value out of range  loadbalancermaxportrange=99999999999999999
 
-      xxx  maxtrackeddmeclients=0
-      xxx  maxtrackeddmeclients=-1
+      Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=0
+      Max Tracked Dme Clients must be greater than 0  maxtrackeddmeclients=-1
       Unable to parse "maxtrackeddmeclients" value "x" as int: invalid syntax  maxtrackeddmeclients=x
 
       error decoding \\\'Settings.ChefClientInterval\\\': time: missing unit in duration "1"  chefclientinterval=1
@@ -175,7 +175,7 @@ Settings - mcctl shall handle update settings failures
       error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: missing unit in duration "1"  influxdbmetricsretention=1
       error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: unknown unit "x" in duration "1x"  influxdbmetricsretention=1x
       error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: invalid duration "x"  influxdbmetricsretention=x
-      Influx Db Metrics Retention must be greater than 0  influxdbmetricsretention=0s
+      #Influx Db Metrics Retention must be greater than 0  influxdbmetricsretention=0s  supported
       Error parsing query: found -, expected duration at line 1, char 61  influxdbmetricsretention=-1s
       Retention policy duration must be at least 1h0m0s  influxdbmetricsretention=1s
 
@@ -195,7 +195,7 @@ Settings - mcctl shall be able to reset the settings
    ...  - send ResetSettings via mcctl
    ...  - verify settings are reset
 
-   # EDGECLOUD-4156 	ResetSettings removes the influxdbmetricsretention setting 
+   # EDGECLOUD-4156 	ResetSettings removes the influxdbmetricsretention setting  - closed
 
    ${settings}=  Run mcctl  region ShowSettings region=${region}
    [Teardown]  Cleanup Settings  ${settings}
@@ -227,7 +227,7 @@ Settings - mcctl shall be able to reset the settings
    Should Be Equal             ${settings_post['chef_client_interval']}          10m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  5m0s 
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        20m0s 
-   Should Be Equal             ${settings_post['influx_db_metrics_retention']}   336h0m0s
+   Should Be Equal             ${settings_post['influx_db_metrics_retention']}   672h0m0s
 
 *** Keywords ***
 Fail UpdateSettings Via mcctl
