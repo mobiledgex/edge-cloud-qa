@@ -16,6 +16,7 @@ import subprocess
 import argparse
 import html
 import itertools
+import re
 
 username = 'andy.anderson@mobiledgex.com'
 #jira_token = 'cop6UQnmK4mwodXzijsY407F'
