@@ -60,6 +60,7 @@ class tc(unittest.TestCase):
         re_master = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-\d{1,9}-*')
         re_master2 = re.compile('v\d{1,3}\.\d{0,3}\-\d{1,9}-*')
         re_master3 = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,3}\-rc\d{1,9}-*')
+        re_master4 = re.compile('v\d{1,3}\.\d{0,3}\.\d{1,9}-*')
 
         re_host = re.compile('^controller-')
         re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}')
@@ -76,7 +77,7 @@ class tc(unittest.TestCase):
         foundhost1 = False
         foundip1 = False
 
-        if re_master.match(resp[0].build_master) or re_master2.match(resp[0].build_master) or re_master3.match(resp[0].build_master):
+        if re_master.match(resp[0].build_master) or re_master2.match(resp[0].build_master) or re_master3.match(resp[0].build_master) or re_master4.match(resp[0].build_master):
            foundmaster0=True
         if re_host.match(resp[0].hostname):
            foundhost0=True
@@ -95,7 +96,7 @@ class tc(unittest.TestCase):
 #        if resp[1].build_head == build_head1 or resp[1].build_head == resp[1].build_master:
 #           foundhead1 = True
  
-        expect_equal(len(resp), 1, 'number of controllers')
+        expect_equal(len(resp), 2, 'number of controllers')
         expect_equal(foundmaster0, True, 'buildmaster')
         expect_equal(foundhost0, True, 'host')
         expect_equal(foundip0, True, 'host')
