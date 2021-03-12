@@ -16,7 +16,7 @@ class Settings(MexOperation):
         self.reset_url = '/auth/ctrl/ResetSettings'
 
     # '{"region":"US","settings":{"fields":["2"],"shepherd_metrics_collection_interval":"5s"}}'
-    def _build(self, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, cleanup_reservable_auto_cluster_idletime=None, include_fields=False, use_defaults=True):
+    def _build(self, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, cleanup_reservable_auto_cluster_idletime=None, include_fields=False, use_defaults=True):
         _fields_list = []
         _shepherd_metrics_collection_interval_field_number = '2'
         _shepherd_alert_evaluation_interval_field_number = '20'
@@ -42,6 +42,9 @@ class Settings(MexOperation):
         _dme_api_metrics_collection_interval_field_number = '23'
         _persistent_connection_metrics_collection_interval_field_number = '24'
         _cleanup_reservable_auto_cluster_idletime_field_number = '25'
+        _influx_db_cloudlet_usage_metrics_retention_field_number = '26'
+        _create_cloudlet_timeout_field_number = '27'
+        _update_cloudlet_timeout_field_number = '28'
 
         settings_dict = {}
         
@@ -100,6 +103,13 @@ class Settings(MexOperation):
             settings_dict['delete_cluster_inst_timeout'] = delete_cluster_inst_timeout
             _fields_list.append(_delete_cluster_inst_timeout_field_number)
 
+        if create_cloudlet_timeout is not None:
+            settings_dict['create_cloudlet_timeout'] = create_cloudlet_timeout
+            _fields_list.append(_create_cloudlet_timeout_field_number)
+        if update_cloudlet_timeout is not None:
+            settings_dict['update_cloudlet_timeout'] = update_cloudlet_timeout
+            _fields_list.append(_update_cloudlet_timeout_field_number)
+
         if master_node_flavor is not None:
             settings_dict['master_node_flavor'] = master_node_flavor
             _fields_list.append(_master_node_flavor_field_number)
@@ -121,6 +131,10 @@ class Settings(MexOperation):
         if influx_db_metrics_retention is not None:
             settings_dict['influx_db_metrics_retention'] = influx_db_metrics_retention
             _fields_list.append(_influx_db_metrics_retention_field_number)
+        if influx_db_cloudlet_usage_metrics_retention is not None:
+            print('*WARN*', 'xxxx')
+            settings_dict['influx_db_cloudlet_usage_metrics_retention'] = influx_db_cloudlet_usage_metrics_retention 
+            _fields_list.append(_influx_db_cloudlet_usage_metrics_retention_field_number)
         if cloudlet_maintenance_timeout is not None:
             settings_dict['cloudlet_maintenance_timeout'] = cloudlet_maintenance_timeout
             _fields_list.append(_cloudlet_maintenance_timeout_field_number)
@@ -158,8 +172,8 @@ class Settings(MexOperation):
         msg_dict = {}
         return self.show(token=token, url=self.reset_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
-    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, cleanup_reservable_auto_cluster_idletime=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
-        msg = self._build(shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, persistent_connection_metrics_collection_interval=persistent_connection_metrics_collection_interval, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, use_defaults=use_defaults, include_fields=True)
+    def update_settings(self, token=None, region=None, shepherd_metrics_collection_interval=None, shepherd_alert_evaluation_interval=None, shepherd_health_check_retries=None, shepherd_health_check_interval=None, auto_deploy_interval_sec=None, auto_deploy_offset_sec=None, auto_deploy_max_intervals=None, create_cloudlet_timeout=None, update_cloudlet_timeout=None, create_app_inst_timeout=None, update_app_inst_timeout=None, delete_app_inst_timeout=None, create_cluster_inst_timeout=None, update_cluster_inst_timeout=None, delete_cluster_inst_timeout=None, master_node_flavor=None, load_balancer_max_port_range=None, max_tracked_dme_clients=None, chef_client_interval=None, influx_db_cloudlet_usage_metrics_retention=None, influx_db_metrics_retention=None, cloudlet_maintenance_timeout=None, update_vm_pool_timeout=None, update_trust_policy_timeout=None, dme_api_metrics_collection_interval=None, persistent_connection_metrics_collection_interval=None, cleanup_reservable_auto_cluster_idletime=None, json_data=None, auto_delete=True, use_defaults=True, use_thread=False):
+        msg = self._build(shepherd_metrics_collection_interval=shepherd_metrics_collection_interval, shepherd_alert_evaluation_interval=shepherd_alert_evaluation_interval, shepherd_health_check_retries=shepherd_health_check_retries, shepherd_health_check_interval=shepherd_health_check_interval, auto_deploy_interval_sec=auto_deploy_interval_sec, auto_deploy_offset_sec=auto_deploy_offset_sec, auto_deploy_max_intervals=auto_deploy_max_intervals, create_cloudlet_timeout=create_cloudlet_timeout, update_cloudlet_timeout=update_cloudlet_timeout, create_app_inst_timeout=create_app_inst_timeout, update_app_inst_timeout=update_app_inst_timeout, delete_app_inst_timeout=delete_app_inst_timeout, create_cluster_inst_timeout=create_cluster_inst_timeout, update_cluster_inst_timeout=update_cluster_inst_timeout, delete_cluster_inst_timeout=delete_cluster_inst_timeout, master_node_flavor=master_node_flavor, load_balancer_max_port_range=load_balancer_max_port_range, max_tracked_dme_clients=max_tracked_dme_clients, chef_client_interval=chef_client_interval, influx_db_metrics_retention=influx_db_metrics_retention, influx_db_cloudlet_usage_metrics_retention=influx_db_cloudlet_usage_metrics_retention, cloudlet_maintenance_timeout=cloudlet_maintenance_timeout, update_vm_pool_timeout=update_vm_pool_timeout, update_trust_policy_timeout=update_trust_policy_timeout, dme_api_metrics_collection_interval=dme_api_metrics_collection_interval, persistent_connection_metrics_collection_interval=persistent_connection_metrics_collection_interval, cleanup_reservable_auto_cluster_idletime=cleanup_reservable_auto_cluster_idletime, use_defaults=use_defaults, include_fields=True)
         msg_dict = {'settings': msg}
 
         msg_dict_show = {}
