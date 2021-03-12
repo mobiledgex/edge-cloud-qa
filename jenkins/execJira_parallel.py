@@ -431,6 +431,9 @@ def exec_testcases_parallel(z, l, num_executors):
         for x in threads:
             x.join()
 
+    if args.failed_only and str(len(l)) == 0: 
+        print('running failed only and found no failed testcases to execute. setting found_failure to 0')
+        found_failure = 0
     print('found_failure', found_failure)
     print('number_testcases', len(l), 'number_passed', number_passed, 'number_failed', number_failed)
     
