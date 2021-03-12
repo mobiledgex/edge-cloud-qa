@@ -211,7 +211,7 @@ def main():
     #sys.exit(1)
     
     #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
-    exec_status = exec_testcases_parallel(z, tc_list, num_executors)
+    exec_status = exec_testcases_parallel(z, tc_list, num_executors, args.failed_only)
     print("exec_status=" + str(exec_status))
 
     endtime = time.time()
@@ -407,7 +407,7 @@ def update_single_defect(z, t):
     else:
         logger.info('no defects found')
 
-def exec_testcases_parallel(z, l, num_executors):
+def exec_testcases_parallel(z, l, num_executors, failed_only):
     global found_failure
     global number_passed
     global number_failed
@@ -431,7 +431,7 @@ def exec_testcases_parallel(z, l, num_executors):
         for x in threads:
             x.join()
 
-    if args.failed_only and str(len(l)) == 0: 
+    if failed_only and str(len(l)) == 0: 
         print('running failed only and found no failed testcases to execute. setting found_failure to 0')
         found_failure = 0
     print('found_failure', found_failure)
