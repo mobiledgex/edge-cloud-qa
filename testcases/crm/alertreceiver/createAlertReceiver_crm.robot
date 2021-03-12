@@ -15,7 +15,7 @@ Test Timeout  25m
 
 *** Variables ***
 ${username}=  qaadmin
-${password}=  mexadminfastedgecloudinfra
+${password}=  zudfgojfrdhqntzm
 ${mexadmin_password}=  mexadminfastedgecloudinfra
 ${email}=  mxdmnqa@gmail.com
 
@@ -639,7 +639,7 @@ Setup
    ${emailepoch}=  Catenate  SEPARATOR=  ${user_username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${user_username}  ${epoch}
 
-   Login  username=${username}  password=${password} 
+   Login  username=${username}  password=${mexadmin_password} 
    Create Flavor  region=${region}
 
    ${flavor_name}=  Get Default Flavor Name
