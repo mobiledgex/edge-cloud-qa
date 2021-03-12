@@ -129,7 +129,7 @@ AppInst - openstack-to-vmpool appinst shall start for docker/direct/dedicated ap
    Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name_openstack_ha1}  operator_org_name=${operator_name_openstack}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
    Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name_vmpool}    operator_org_name=${operator_name_openstack}    developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=direct
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1=${cloudlet_name_openstack_ha1}  operator1=${operator_name_openstack}  cloudlet1_fqdn=${cluster1}.${cloudlet_name_openstack_ha1}.${operator_name_openstack}.mobiledgex.net  cloudlet2=${cloudlet_name_vmpool}  operator2=${operator_name_openstack}  cloudlet2_fqdn=${cluster2}.${cloudlet_name_vmpool}.${operator_name_openstack}.mobiledgex.net
 

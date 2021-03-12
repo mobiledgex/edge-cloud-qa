@@ -208,7 +208,7 @@ class tc(unittest.TestCase):
         # create the app instance
         app_instance = mex_controller.AppInstance(app_name='automation_api_app',
                                                   app_version='1.0',
-                                                  developer_org_name='MobiledgeX',
+                                                  developer_org_name='automation_dev_org',
                                                   cloudlet_name='nocloud',
                                                   operator_org_name='DMUUS')
 
