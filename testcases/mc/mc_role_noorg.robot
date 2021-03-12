@@ -2,6 +2,7 @@
 Documentation   MasterController assign roles with no org 
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 
 Test Setup	Setup
 Test Teardown	Teardown
@@ -350,7 +351,8 @@ MC - Admin user shall not be able assign AdminViewer with a weak password
 Setup
    ${adminToken}=  Get Supertoken
 
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
    ${adminuser}=   Catenate  SEPARATOR=  ${username}  ${epoch}  01	
