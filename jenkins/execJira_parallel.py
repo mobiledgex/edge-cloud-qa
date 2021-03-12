@@ -168,7 +168,7 @@ def main():
     jiraQueryUrlPre = 'project="' + project + '" AND fixVersion="' + version + '"' + component_query
 
     if args.failed_only:
-        print('Only executing failed testcases')
+        logger.info('Only executing failed testcases')
         zephyrQueryUrl = f'project=\\\"edge-cloud QA\\\" AND fixVersion=\\\"{version}\\\"{z_component_query} AND cycleName=\\\"{cycle}\\\" AND executionStatus=Fail ORDER BY Issue ASC'
         failed_tcids = get_zephyr_failed_testcases(z, zephyrQueryUrl, zephyrQueryUrl)
         if len(failed_tcids) <= 0: failed_tcids = ['EC-1']
@@ -212,10 +212,10 @@ def main():
     
     #exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
     exec_status = exec_testcases_parallel(z, tc_list, num_executors, args.failed_only)
-    print("exec_status=" + str(exec_status))
+    logger.info("exec_status=" + str(exec_status))
 
     endtime = time.time()
-    print(f'test duration is {(endtime-starttime)/60} minutes')
+    logger.info(f'test duration is {(endtime-starttime)/60} minutes')
 
     sys.exit(exec_status)
 
@@ -431,7 +431,7 @@ def exec_testcases_parallel(z, l, num_executors, failed_only):
         for x in threads:
             x.join()
 
-    if failed_only and str(len(l)) == 0: 
+    if failed_only and len(l) == 0: 
         print('running failed only and found no failed testcases to execute. setting found_failure to 0')
         found_failure = 0
     print('found_failure', found_failure)
