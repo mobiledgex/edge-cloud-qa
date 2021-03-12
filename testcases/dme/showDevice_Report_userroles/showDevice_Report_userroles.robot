@@ -3,6 +3,8 @@
 Library  MexDmeRest     dme_address=%{AUTOMATION_DME_REST_ADDRESS}  root_cert=%{AUTOMATION_DME_CERT}
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}  root_cert=%{AUTOMATION_MC_CERT}
 #Library  MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
+Library  DateTime
+
 Test Setup      Setup
 Test Teardown   CleanUp
 
@@ -448,7 +450,8 @@ CleanUp
    MexMasterController.Cleanup Provisioning
 
 Setup
-   ${epoch}=  Get Time  epoch
+   ${epoch}=  Get Current Date  result_format=epoch
+   #${epoch}=  Get Time  epoch
    ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
    ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
    ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
