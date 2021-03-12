@@ -13,7 +13,7 @@ Test Timeout  10m
 *** Variables ***
 ${region}=  US
 ${developer}=  MobiledgeX
-${version}=  2021-03-11
+${version}=  latest
 
 *** Test Cases ***
 CreateAutoScalePolicy - mcctl shall be able to create/show/delete policy
