@@ -58,7 +58,7 @@ Create App, Add Autoprovisioning Policy and Deploy an App Instance
    ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  latitude=12  longitude=50  carrier_name=TDG
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=autocluster-autoprov  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
@@ -99,7 +99,7 @@ Setup
 
 Cleanup
 
-    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
     cleanup provisioning
 
 
