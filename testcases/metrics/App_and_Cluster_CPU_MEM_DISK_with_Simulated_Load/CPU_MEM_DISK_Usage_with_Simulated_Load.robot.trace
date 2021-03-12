@@ -1,0 +1,90 @@
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:34
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-cpu%22+where+cluster%3D%27docker-stress%27+and+app%3D%27docker-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-cpu","tags":{"cluster":"docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","cpu","pod","ver"],"values":[["2021-03-12T22:37:32.925466378Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",182.95,"docker-stress-dedicated","v1"],["2021-03-12T22:37:23.897839575Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",181.19,"docker-stress-dedicated","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:34
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-mem%22+where+cluster%3D%27docker-stress%27+and+app%3D%27docker-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-mem","tags":{"cluster":"docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","mem","pod","ver"],"values":[["2021-03-12T22:37:32.925466378Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",126143692,"docker-stress-dedicated","v1"],["2021-03-12T22:37:23.897839575Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",178887065,"docker-stress-dedicated","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:35
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-disk%22+where+cluster%3D%27docker-stress%27+and+app%3D%27docker-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-disk","tags":{"cluster":"docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","disk","pod","ver"],"values":[["2021-03-12T22:37:32.925466378Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",223346688,"docker-stress-dedicated","v1"],["2021-03-12T22:37:23.897839575Z","docker-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",223346688,"docker-stress-dedicated","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:35
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-cpu%22+where+cluster%3D%27shared-docker-stress%27+and+app%3D%27docker-stress-shared%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-cpu","tags":{"cluster":"shared-docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","cpu","pod","ver"],"values":[["2021-03-12T22:37:28.121836044Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",181.86,"docker-stress-shared","v1"],["2021-03-12T22:37:19.116834343Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",176.03,"docker-stress-shared","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:36
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-mem%22+where+cluster%3D%27shared-docker-stress%27+and+app%3D%27docker-stress-shared%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-mem","tags":{"cluster":"shared-docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","mem","pod","ver"],"values":[["2021-03-12T22:37:28.121836044Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",125199974,"docker-stress-shared","v1"],["2021-03-12T22:37:19.116834343Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",35945185,"docker-stress-shared","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:36
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-disk%22+where+cluster%3D%27shared-docker-stress%27+and+app%3D%27docker-stress-shared%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-disk","tags":{"cluster":"shared-docker-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","disk","pod","ver"],"values":[["2021-03-12T22:37:28.121836044Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",223346688,"docker-stress-shared","v1"],["2021-03-12T22:37:19.116834343Z","docker-stress-shared","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",223346688,"docker-stress-shared","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:37
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-cpu%22+where+cluster%3D%27k8s-stress%27+and+app%3D%27k8s-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-cpu","tags":{"cluster":"k8s-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","cpu","pod","ver"],"values":[["2021-03-12T22:37:35.546999931Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",1.2091400790500004,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"],["2021-03-12T22:37:30.176000118Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",1.7805044365259068,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:37
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-mem%22+where+cluster%3D%27k8s-stress%27+and+app%3D%27k8s-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-mem","tags":{"cluster":"k8s-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","mem","pod","ver"],"values":[["2021-03-12T22:37:35.585999965Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",185450496,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"],["2021-03-12T22:37:30.207000017Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",185450496,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"]]}]}]}
+
+==================================================================
+
+REQUEST: 12 Mar 2021 16:37:37
+   GET https://eu-qa.influxdb.mobiledgex.net:8086/query?u=root&p=root&db=metrics&q=select+%2A+from+%22appinst-disk%22+where+cluster%3D%27k8s-stress%27+and+app%3D%27k8s-stress-dedicated%27+and+cloudlet%3D%27automationMunichCloudlet%27+and+apporg%3D%27org1615588082-781363%27+and+cloudletorg%3D%27TDG%27+GROUP+BY+cluster+ORDER+BY+DESC+LIMIT+2
+      headers: {'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'}
+      body: None
+RESPONSE:
+   status_code:200
+   body:{"results":[{"statement_id":0,"series":[{"name":"appinst-disk","tags":{"cluster":"k8s-stress"},"columns":["time","app","apporg","cloudlet","cloudletorg","clusterorg","disk","pod","ver"],"values":[["2021-03-12T22:37:35.60800004Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",86016,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"],["2021-03-12T22:37:30.230000019Z","k8s-stress-dedicated","org1615588082-781363","automationMunichCloudlet","TDG","org1615588082-781363",86016,"k8s-stress-dedicatedv1-deployment-84778cdbdb-shfp4","v1"]]}]}]}
+
