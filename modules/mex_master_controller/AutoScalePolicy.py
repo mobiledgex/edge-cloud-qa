@@ -113,8 +113,8 @@ class AutoScalePolicy(MexOperation):
         msg_dict = {'autoscalepolicy': msg}
 
         msg_dict_delete = None
-        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'developer' in msg['key']:
-            msg_delete = self._build(policy_name=msg['key']['name'], developer_name=msg['key']['developer'], developer_org_name=msg['key']['organization'], use_defaults=False)
+        if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+            msg_delete = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
             msg_dict_delete = {'autoscalepolicy': msg_delete}
 
         msg_dict_show = None

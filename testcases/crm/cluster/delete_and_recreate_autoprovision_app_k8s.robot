@@ -63,7 +63,7 @@ Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 #   Should Be Equal As Numbers  ${cloudlet.status}  FIND_NOTFOUND
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=autocluster-autoprov  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
@@ -75,13 +75,13 @@ Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 #   sleep  15s
 
    log to console  show app instances status
-   show app instances  region=${region}  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}
+   show app instances  region=${region}  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  operator_org_name=${operator_name_openstack}  cluster_instance_name=autocluster-autoprov
    log to console  App Instnace is running successfully!
 
 #   sleep  20s
 
    log to console  delete app instance
-   delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+   delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
    log to console  App Instnace Deleted!
 
    sleep  15s
@@ -92,7 +92,7 @@ Create App, Add Autoprovisioning Polivy and Deploy an App Instance
 #   Should Be Equal As Numbers  ${cloudlet.status}  FIND_NOTFOUND
    Should Contain  ${error_msg}  FIND_NOTFOUND
 
-   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  token=${user_token}
+   Wait For App Instance To Be Ready   region=${region}   developer_org_name=${orgname}  app_version=v1  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=autocluster-autoprov  token=${user_token}
 
    log to console  Send RegisterClient and FindCloudlet to verify AutoProvisioning is Successful
    Register Client  developer_org_name=${orgname}  app_version=v1  app_name=${app_name}
@@ -125,6 +125,6 @@ Setup
 
 
 Cleanup
-    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
+    delete app instance  region=${region}  app_name=${app_name}  cluster_instance_name=autocluster-autoprov  cluster_instance_developer_org_name=MobiledgeX  developer_org_name=${orgname}  app_version=v1
     cleanup provisioning
 

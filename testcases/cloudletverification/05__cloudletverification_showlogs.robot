@@ -41,19 +41,20 @@ User shall be able to do ShowLogs on k8s dedicated lb app
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
    Should Contain  ${stdout_noid}  all threads started
 
-User shall be able to do ShowLogs on docker dedicated/direct
-   [Documentation]
-   ...  do ShowLogs on docker dedicated app
-   ...  verify ShowLogs works
-   [Tags]  docker  dedicated  direct  showlogs
-
-   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockerdedicateddirect}
-   ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockerdedicateddirect}*
-
-   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  container_id=${ids[0]}
-
+#Test no longer supported for direct access
+#User shall be able to do ShowLogs on docker dedicated/direct
+#   [Documentation]
+#   ...  do ShowLogs on docker dedicated app
+#   ...  verify ShowLogs works
+#   [Tags]  docker  dedicated  direct  showlogs
+#
+#   ${appinst}=  Show App Instances  region=${region}  app_name=${app_name_dockerdedicateddirect}
+#   ${ids}=  Get Matches  ${appinst[0]['data']['runtime_info']['container_ids']}  ${app_name_dockerdedicateddirect}*
+#
+#   ${stdout_noid}=  Show Logs  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  container_id=${ids[0]}
+#
 #   List Should Contain Value  ${stdout_noid}  all threads started\r\n
-   Should Contain  ${stdout_noid}  all threads started
+#   Should Contain  ${stdout_noid}  all threads started
 
 User shall be able to do ShowLogs on docker dedicated/loadbalancer
    [Documentation]
