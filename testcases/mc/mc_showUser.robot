@@ -103,6 +103,8 @@ MC - shall be able to show user by emailverified
 Show User by Role Should Return Correct Users
    [Arguments]  ${role}
 
+   ${super_token}=  Get Super Token
+
    ${roles}=  Show User Role  role=${role}  token=${super_token}
    ${info}=  Show User  role=${role}  token=${super_token}  use_defaults=${False}
 
