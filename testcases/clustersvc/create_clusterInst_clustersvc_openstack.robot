@@ -31,6 +31,7 @@ ${longitude}      -96.7970
 #${app_template}    http://35.199.188.102/apps/apptemplate.yaml
 	
 *** Test Cases ***
+# ECQ-1289
 Create clusterInst for clustersvc on openstack
     [Documentation]
     ...  create a clusterInst on openstack
@@ -44,8 +45,9 @@ Create clusterInst for clustersvc on openstack
     #App Should Exist  app_name=MEXMetricsExporter  app_version=1.0  developer_name=MobiledgeX  image_path=docker.mobiledgex.net/mobiledgex/images/metrics-exporter:latest  default_flavor_name=x1.medium  deployment=kubernetes
 
     # check that pods are running
-    : FOR  ${pod}  IN  @{clustersvc_pods}
-    \  Wait for k8s pod to be running  pod_name=${pod}  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}
+    FOR  ${pod}  IN  @{clustersvc_pods}
+       Wait for k8s pod to be running  pod_name=${pod}  root_loadbalancer=${rootlb}  cluster_name=${cluster_name_default}  operator_name=${operator_name_openstack}
+    END
 
     # check that app instances are created
     App Instance Should Exist  app_name=MEXPrometheusAppName  app_version=1.0  developer_org_name=MobiledgeX  flavor_name=x1.medium  cluster_instance_name=default  cloudlet_name=${cloudlet_name_openstack_shared}  operator_org_name=${operator_name_openstack}

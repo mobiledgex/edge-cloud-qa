@@ -86,7 +86,7 @@ Verify Controller
    ${found_properties}=  Run Keyword If  'properties' in ${node['data']}  Set Variable  1
    ...  ELSE  Set Variable  ${found_properties}
 
-   Should Be Equal      ${node['data']['internal_pki']}  useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki   #useVaultCAs,useVaultCerts
 
    [Return]  ${found_properties}
 
@@ -120,7 +120,7 @@ DME Should Exist
       Run Keyword If  "${node['data']['key']['type']}" == 'dme'  Verify DME  ${node}
    END
 
-   Run keyword if  ${num_found}!=${2}  fail  DMEs Not Found
+   Run keyword if  ${num_found}!=${1}  fail  DMEs Not Found
 
 Verify DME 
    [Arguments]  ${node}
@@ -139,7 +139,7 @@ Verify DME
    Should Match Regexp  ${node['data']['properties']['TDGOperatorBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
    Should Match Regexp  ${node['data']['properties']['TDGOperatorBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+ 
    Should Be Equal  ${node['data']['properties']['TDGOperatorBuildHead']}  ${node['data']['properties']['TDGOperatorBuildMaster']}
-   Should Be Equal      ${node['data']['internal_pki']}  useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki  #useVaultCAs,useVaultCerts
 
 AutoProv Should Exist
    [Arguments]  ${nodes}
@@ -182,7 +182,7 @@ Verify AutoProv
    Should Match Regexp  ${node['data']['properties']['InfraBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
    Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
    Should Be Equal  ${node['data']['properties']['InfraBuildHead']}  ${node['data']['properties']['InfraBuildMaster']}
-   Should Be Equal      ${node['data']['internal_pki']}  useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki    #useVaultCAs,useVaultCerts
 
 ClusterSvc Should Exist
    [Arguments]  ${nodes}
@@ -226,7 +226,7 @@ Verify ClusterSvc
    Should Match Regexp  ${node['data']['properties']['InfraClusterSvcBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
    Should Be Equal  ${node['data']['properties']['InfraClusterSvcBuildHead']}  ${node['data']['properties']['InfraClusterSvcBuildMaster']}
 
-   Should Be Equal      ${node['data']['internal_pki']}  useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki    #useVaultCAs,useVaultCerts
 
 Shepherd Should Exist
    [Arguments]  ${nodes}
@@ -273,7 +273,7 @@ Verify Shepherd
    Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
    Should Be Equal  ${node['data']['properties']['InfraBuildHead']}  ${node['data']['properties']['InfraBuildMaster']}
 
-   Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,UseVaultPki    #useAccessKey,useVaultCAs,useVaultCerts
 
 CRM Should Exist
    [Arguments]  ${nodes}
@@ -320,7 +320,7 @@ Verify CRM
    Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Match Regexp  ${node['data']['properties']['PlatformBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
    Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Be Equal  ${node['data']['properties']['PlatformBuildHead']}  ${node['data']['properties']['PlatformBuildMaster']} 
 
-   Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,useVaultCAs,useVaultCerts
+   Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,UseVaultPki   #useAccessKey,useVaultCAs,useVaultCerts
 
 #Hamburg CRM Should Exist
 #   [Arguments]  ${nodes}

@@ -229,11 +229,12 @@ MC - User shall be able to create a new user with all TLDs
 
         Login Mexadmin  # login again as mexadmin since running the suite logs in as anothe user once it gets here
 
-        ${tlds}=  Get File  ${tld_file}
+        ${tldsf}=  Find File  ${tld_file}
+        ${tlds}=  Get File  ${tldsf} 
         @{tlds_split}=  Split String  ${tlds}
 
         ${x}=  Set Variable  0
-        ${step}=  Set Variable  40
+        ${step}=  Set Variable  20
         ${num_tlds}=  Get Length  ${tlds_split}
 
         [Teardown]  Teardown TLDs  ${tlds_split}  ${step}
