@@ -38,19 +38,20 @@ User shall be able to do RunCommand on k8s dedicated lb app
 
    Should Be Equal  ${stdout_noid}  root\r\n
 
-User shall be able to do RunCommand on docker dedicated/direct
-   [Documentation]
-   ...  do RunCommand on docker dedicated app
-   ...  verify RunCommand works
-   [Tags]  docker  dedicated  direct  runcommand
-
-   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
-
-   Should Be Equal  ${stdout_noid}  root\r\n
+#not suppported 02-20-2021
+#User shall be able to do RunCommand on docker dedicated/direct
+#   [Documentation]
+#   ...  do RunCommand on docker dedicated app
+#   ...  verify RunCommand works
+#   [Tags]  docker  dedicated  direct  runcommand
+#
+#   ${stdout_noid}=  Run Command  region=${region}  app_name=${app_name_dockerdedicateddirect}  app_version=${app_version}  developer_org_name=${developer_organization_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  token=${token}  command=whoami
+#
+#   Should Be Equal  ${stdout_noid}  root\r\n
 
 User shall be able to do RunCommand on docker dedicated/lb
    [Documentation]
-   ...  do RunCommand on docker dedicated app
+   ...  do RunCommand on docker loadbalancer app
    ...  verify RunCommand works
    [Tags]  docker  dedicated  loadbalancer  runcommand
 

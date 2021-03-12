@@ -25,6 +25,7 @@ ClusterInst shall create with IpAccessDedicated/docker for Direct App
    [Documentation]
    ...  create a cluster with IpAccessDedicated and deploymenttype=docker
    ...  verify it creates lb only
+   ...  verify cluster is used for error case to test Direct App no longer supported
    [Tags]  cluster  docker  dedicated  direct  create
 
    Log to Console  \nCreating docker dediciated IP cluster instance
