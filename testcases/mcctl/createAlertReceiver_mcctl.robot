@@ -92,7 +92,7 @@ CreateAlertReceiver - mcctl shall handle create failures
       Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
       Error: Bad Request (400), Unable to create a receiver - bad response status 400 Bad Request[missing host for URL]  name=${recv_name}  type=slack  severity=info  slack-channel=x  slack-api-url=http://  app-org=${developer}
       Error: Bad Request (400), PagerDuty Integration Key must contain 32 characters                                     name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=0123456789012345678901234567890  app-org=${developer}
-      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v3  app-org=${developer}
+      Error: Bad Request (400), Unable to create a receiver - PagerDuty Integration Api version must be "v1" or "v2"("v2" will be used if not specified)  name=${recv_name}  type=pagerduty  severity=info  pagerduty-integration-key=01234567890123456789012345678901  pagerduty-api-version=v3  app-org=${developer}
 
       # missing values
       Error: missing required args: name                                                               type=email  severity=info  app-org=${developer}
@@ -104,7 +104,7 @@ CreateAlertReceiver - mcctl shall handle create failures
       Error: Bad Request (400), Both slack URL and slack channel must be specified                     name=${recv_name}  type=slack  severity=info  slack-api-url=x  app-org=${developer}
       Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  slack-channel=x  slack-api-url=x  app-org=${developer}
       Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  app-org=${developer}
-      Error: Bad Request (400), Unable to create a receiver - Invalid Slack api URL                                      name=${recv_name}  type=pagerduty  severity=info  pagerduty-api-version=v2  app-org=${developer}
+      Error: Bad Request (400), PagerDuty Integration Key must be present                              name=${recv_name}  type=pagerduty  severity=info  pagerduty-api-version=v2  app-org=${developer}
 
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=email  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}
       AppInst details cannot be specified if this receiver is for cloudlet alerts  name=${recv_name}  type=slack  slack-channel=x  slack-api-url=http://slack.com  severity=info  app-org=${developer}  appname=x  appvers=x  app-cloudlet=x  app-cloudlet-org=x  cluster=x  cluster-org=x  cloudlet=x  cloudlet-org=${developer}

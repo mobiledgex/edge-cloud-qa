@@ -171,15 +171,15 @@ UpdateVMPool - shall be able to update VM status from free to free
    Should Be Equal  ${update_return['data']['vms'][0]['name']}  vm1
    Should Be Equal  ${update_return['data']['vms'][0]['net_info']['external_ip']}  80.187.128.11
    Should Be Equal  ${update_return['data']['vms'][0]['net_info']['internal_ip']}  2.2.2.1
-   Should Be Equal As Numbers  ${update_return['data']['vms'][0]['state']}  6
+   Should Be True   'state' not in ${update_return['data']['vms'][0]}  
    Should Be Equal  ${update_return['data']['vms'][1]['name']}  vm2
    Should Be Equal  ${update_return['data']['vms'][1]['net_info']['external_ip']}  80.187.128.12
    Should Be Equal  ${update_return['data']['vms'][1]['net_info']['internal_ip']}  2.2.2.2
-   Should Be Equal As Numbers  ${update_return['data']['vms'][1]['state']}  6
+   Should Be True   'state' not in ${update_return['data']['vms'][1]}
    Should Be Equal  ${update_return['data']['vms'][2]['name']}  vm3
    Should Be Equal  ${update_return['data']['vms'][2]['net_info']['external_ip']}  80.187.128.13
    Should Be Equal  ${update_return['data']['vms'][2]['net_info']['internal_ip']}  2.2.2.3
-   Should Be Equal As Numbers  ${update_return['data']['vms'][2]['state']}  6
+   Should Be True   'state' not in ${update_return['data']['vms'][2]}
    Length Should Be   ${update_return['data']['vms']}  3
 
 *** Keywords ***
