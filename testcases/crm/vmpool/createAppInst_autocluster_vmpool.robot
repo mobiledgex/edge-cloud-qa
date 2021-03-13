@@ -47,7 +47,7 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/direct
 
    Log to Console  START creating cluster instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=direct
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  autocluster_ip_access=IpAccessDedicated
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  #autocluster_ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${organization_lc}=  Convert To Lowercase  ${organization}
@@ -104,15 +104,15 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/docker/lb
 
    Log to Console  START creating cluster instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  autocluster_ip_access=IpAccessDedicated
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  #autocluster_ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_lb}=  Set Variable  ${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
+   ${internal_name_vm}=  Set Variable  mex-docker-vm-${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
+   ${internal_name_lb}=  Set Variable  ${app_inst['data']['real_cluster_name']}.${cloudlet_name_vmpool}.${operator_lc}.mobiledgex.net
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_vm}=  Convert To Lowercase  ${internal_name_vm}
    ${internal_name_lb}=  Convert To Lowercase  ${internal_name_lb}
@@ -156,7 +156,7 @@ AppInst autocluster shall create with VMPool IpAccessShared/docker/lb
 
    Log to Console  START creating cluster instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  autocluster_ip_access=IpAccessShared
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  #autocluster_ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${organization_lc}=  Convert To Lowercase  ${organization}
@@ -205,15 +205,15 @@ AppInst autocluster shall create with VMPool IpAccessShared/k8s/lb nummasters=1 
 
    Log to Console  START creating cluster instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  autocluster_ip_access=IpAccessShared
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  #autocluster_ip_access=IpAccessShared
    Log to Console  DONE creating cluster instance
 
    ${organization_lc}=  Convert To Lowercase  ${organization}
    ${operator_lc}=  Convert To Lowercase  ${operator_name_vmpool}
 
-   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
-   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst['data']['key']['cluster_inst_key']['cluster_key']['name']}-mobiledgex
+   ${group_name}=  Set Variable  ${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
+   ${internal_name_master}=  Set Variable  mex-k8s-master-${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
+   ${internal_name_node}=  Set Variable  mex-k8s-node-1-${cloudlet_name_vmpool}-${app_inst['data']['real_cluster_name']}-mobiledgex
    ${group_name}=  Convert To Lowercase  ${group_name}
    ${internal_name_master}=  Convert To Lowercase  ${internal_name_master}
    ${internal_name_node}=  Convert To Lowercase  ${internal_name_node}
@@ -256,7 +256,7 @@ AppInst autocluster shall create with VMPool IpAccessDedicated/k8s/lb nummasters
 
    Log to Console  START creating cluster instance
    Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015,udp:2015,tcp:8085  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  autocluster_ip_access=IpAccessDedicated
+   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_vmpool}  operator_org_name=${operator_name_vmpool}  cluster_instance_name=autocluster${cluster_name_default}  #autocluster_ip_access=IpAccessDedicated
    Log to Console  DONE creating cluster instance
 
    ${organization_lc}=  Convert To Lowercase  ${organization}
