@@ -36,13 +36,15 @@ ${manifest_url_sharedvolumesize}  http://35.199.188.102/apps/server_ping_threade
 ${region}=  EU
 	
 *** Test Cases ***
-User shall be able to create a direct access App for docker dedicated
+User shall not be able to create a direct access App for docker dedicated
    [Documentation]
    ...  create direct access app for IpAccessDedicated docker with TCP/UDP/HTTP port
    ...  Verify app is created successfull
    [Tags]  app  docker  direct  dedicated  app
 
-   Create App  region=${region}  app_name=${app_name_dockerdedicateddirect}  deployment=docker  access_type=direct  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
+   ${error}=  Run Keyword And Expect Error  *  Create App  region=${region}  app_name=${app_name_dockerdedicateddirect}  deployment=docker  access_type=direct  image_path=${docker_image}  access_ports=tcp:2016,udp:2015,tcp:8085  command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
+   Should Contain  ${error}  ('code=400', 'error={"message":"Access Type Direct no longer supported"}')
+
 
 User shall be able to create a lb access App for docker shared
    [Documentation]
@@ -60,20 +62,21 @@ User shall be able to create a lb access App for docker dedicated
 
    Create App  region=${region}  app_name=${app_name_dockerdedicatedlb}     deployment=docker  access_type=loadbalancer    image_path=${docker_image}       access_ports=tcp:2016,udp:2015,tcp:8085   command=${docker_command}  developer_org_name=${developer_organization_name}  default_flavor_name=${flavor_name_small}
 
-User shall be able to deploy a direct access App Instance on docker dedicated
-   [Documentation]
-   ...  deploy direct access app instance on IpAccessDedicated docker with TCP/UDP/HTTP port
-   ...  Verify deployment is successfull
-   [Tags]  app  docker  direct  dedicated  appinst
 
-   Log To Console  \nCreate direct access app instance for docker dedicated 
-
-   Create App Instance  region=${region}  app_name=${app_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
-
-   Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockerdedicateddirect}
-   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockerdedicateddirect}
-
-   Log To Console  \nCreate app instance done 
+#User shall be able to deploy a direct access App Instance on docker dedicated
+#   [Documentation]
+#   ...  deploy direct access app instance on IpAccessDedicated docker with TCP/UDP/HTTP port
+#   ...  Verify deployment is successfull
+#   [Tags]  app  docker  direct  dedicated  appinst
+#
+#   Log To Console  \nCreate direct access app instance for docker dedicated 
+#
+#   Create App Instance  region=${region}  app_name=${app_name_dockerdedicateddirect}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
+#
+#   Wait For App Instance To Be Ready      region=${region}  app_name=${app_name_dockerdedicateddirect}
+#   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_dockerdedicateddirect}
+#
+#   Log To Console  \nCreate app instance done 
 
 User shall be able to deploy a lb access App Instance on docker shared
    [Documentation]
@@ -182,21 +185,24 @@ User shall be able to create a VM direct App
 
    Create App  region=${region}  app_name=${app_name_vmdirect}  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
 
+#changing to test that default is loadbalancer and fixing the test case
 User shall be able to create a VM lb App
    [Documentation]
    ...  create a VM app
    ...  Verify app is created successfull
    [Tags]  app  vm  app  loadbalancer
 
-   Create App  region=${region}  app_name=${app_name_vmlb}  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
+   Create App  region=${region}  app_name=${app_name_vmlb}  deployment=vm  access_type=default  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
+#   Create App  region=${region}  app_name=${app_name_vmlb}  deployment=vm  access_type=direct  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  developer_org_name=${developer_organization_name}
 
+# Modified test case to now be a loadbalancer test and adding missing tag cloudconfig
 User shall be able to create a VM with cloud-config
    [Documentation]
    ...  create a VM app with cloud-config
    ...  Verify app is created successfull
-   [Tags]  app  vm  app  direct  cloudconfig
+   [Tags]  app  vm  app  loadbalancer  cloudconfig
 
-   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  access_type=direct  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  deployment_manifest=${vm_cloudconfig}  developer_org_name=${developer_organization_name}
+   Create App  region=${region}  app_name=${app_name_vm_cloudconfig}  deployment=vm  access_type=loadbalancer  image_path=${qcow_centos_image_notrunning}  access_ports=tcp:2016,udp:2015,tcp:8085  image_type=ImageTypeQCOW  default_flavor_name=${flavor_name_vm}  deployment_manifest=${vm_cloudconfig}  developer_org_name=${developer_organization_name}
 
 User shall be able to create a VM GPU App
    [Documentation]
@@ -242,11 +248,12 @@ User shall be able to deploy a VM lb App Instance
 
    Set Global Variable  ${vmlb_endtime}
 
+#fixed tag to include cloudconfig
 User shall be able to deploy VM App Instance with cloud-config
    [Documentation]
    ...  deploy VM app with 1 UDP and 1 TCP port with cloud-config
    ...  verify all ports are accessible via fqdn
-   [Tags]  app  vm  appinst
+   [Tags]  app  vm  appinst  cloudconfig
 
    Log To Console  \nCreate VM app instance with cloud-config
 
@@ -317,28 +324,29 @@ User shall be able to deploy a GPU VM App Instance
    Set Global Variable  ${vmgpu_starttime}
    Set Global Variable  ${vmgpu_endtime}
 
-User shall be able to access UDP/TCP port on docker dedicated direct app 
-   [Documentation]
-   ...  deploy app with 1 UDP port
-   ...  verify the port as accessible via fqdn
-   [Tags]  app  docker  dedicated  direct  portaccess 
-
-   Log To Console  \nRegistering Client and Finding Cloudlet for docker dedicated direct app
-   Register Client  app_name=${app_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
-   ${cloudlet}=  Find Cloudlet	 latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
-   ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
-   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
-
-   Log To Console  \nChecking if port ${fqdn_0}:${cloudlet['ports'][0]['public_port']} is alive
-   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
-
-   Log To Console  \nChecking if port ${fqdn_1}:${cloudlet['ports'][1]['public_port']} is alive
-   UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
-
-   Log To Console  \nChecking if port ${cloudlet['fqdn']}:${cloudlet['ports'][2]['public_port']} is alive
-   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
+#direct app not support 02-20-2021
+#User shall be able to access UDP/TCP port on docker dedicated direct app 
+#   [Documentation]
+#   ...  deploy app with 1 UDP port
+#   ...  verify the port as accessible via fqdn
+#   [Tags]  app  docker  dedicated  direct  portaccess 
+#
+#   Log To Console  \nRegistering Client and Finding Cloudlet for docker dedicated direct app
+#   Register Client  app_name=${app_name_dockerdedicateddirect}  developer_org_name=${developer_organization_name}
+#   ${cloudlet}=  Find Cloudlet	 latitude=${cloudlet_latitude}  longitude=${cloudlet_longitude}  carrier_name=${operator_name}
+#   ${fqdn_0}=  Catenate  SEPARATOR=   ${cloudlet['ports'][0]['fqdn_prefix']}  ${cloudlet['fqdn']}
+#   ${fqdn_1}=  Catenate  SEPARATOR=   ${cloudlet['ports'][1]['fqdn_prefix']}  ${cloudlet['fqdn']}
+#   ${fqdn_2}=  Catenate  SEPARATOR=   ${cloudlet['ports'][2]['fqdn_prefix']}  ${cloudlet['fqdn']}
+#   ${page}=    Catenate  SEPARATOR=   /  ${http_page}
+#
+#   Log To Console  \nChecking if port ${fqdn_0}:${cloudlet['ports'][0]['public_port']} is alive
+#   TCP Port Should Be Alive  ${fqdn_0}  ${cloudlet['ports'][0]['public_port']}
+#
+#   Log To Console  \nChecking if port ${fqdn_1}:${cloudlet['ports'][1]['public_port']} is alive
+#   UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
+#
+#   Log To Console  \nChecking if port ${cloudlet['fqdn']}:${cloudlet['ports'][2]['public_port']} is alive
+#   HTTP Port Should Be Alive  ${fqdn_2}  ${cloudlet['ports'][2]['public_port']}  ${page}
 
 User shall be able to access UDP/TCP port on docker dedicated lb app
    [Documentation]
@@ -462,11 +470,12 @@ User shall be able to access UDP/TCP/HTTP port on VM direct App
    UDP Port Should Be Alive  ${fqdn_1}  ${cloudlet['ports'][1]['public_port']}
    HTTP Port Should Be Alive  ${cloudlet['fqdn']}  ${cloudlet['ports'][2]['public_port']}  ${http_page}
 
+#adding tag cloudconfig
 User shall be able to access UDP/TCP port on VM with cloudconfig
    [Documentation]
    ...  deploy app with 1 UDP port
    ...  verify the port as accessible via fqdn
-   [Tags]  app  vm  portaccess
+   [Tags]  app  vm  portacces  cloudconfig
 
    Log To Console  \nRegistering Client and Finding Cloudlet for VM with cloudconfig
    Register Client  app_name=${app_name_vm_cloudconfig}  developer_org_name=${developer_organization_name}

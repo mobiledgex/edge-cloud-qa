@@ -602,14 +602,18 @@ class MexApp(object):
 
         raise Exception('docker start failed on ' + node)
 
-    def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, wait_time=600):
+    def wait_for_docker_container_to_be_running(self, root_loadbalancer=None, docker_image=None, node=None, wait_time=600):
 
         self.wait_for_dns(root_loadbalancer)
         
         rb = None
         if root_loadbalancer is not None:
-            rb = rootlb.Rootlb(host=root_loadbalancer)
-
+            if node is not None:
+                network, node = node.split('=')
+                rb = rootlb.Rootlb(host=root_loadbalancer, proxy_to_node=node)
+            else:
+                rb = rootlb.Rootlb(host=root_loadbalancer)
+        
         container_ids = rb.get_docker_container_id()
         logging.debug(f'container_ids={container_ids}')
 
