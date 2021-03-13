@@ -27,13 +27,9 @@ region = 'US'
 username_mexadmin = 'mexadmin'
 password_mexadmin = 'mexadminfastedgecloudinfra'
 username_developer = 'andyanderson'
-#username_developer = 'tomdevmanager'
-#password_developer = '58a8dd77baf9b8833f9753c93a62a5f5f3f35b11'
-#password_developer = 'password'
 password_developer = 'mexadminfastedgecloudinfra'
 username_operator = 'andyanderson'
 password_operator = 'mexadminfastedgecloudinfra'
-#developer_organization_name = 'tomdev'
 developer_organization_name = 'MobiledgeX'
 
 # test will create flavors or not.  Requires mexadmin username/password.  Sometimes flavors will be predefined and we wont have permissions to create our own
@@ -72,8 +68,8 @@ cloudlet_ext_netscheme = 'MEX_NETWORK_SCHEME=cidr=10.103.X.0/24'
 cloudlet_ext_network = 'MEX_EXT_NETWORK=DPGAdminQA2'
 cloudlet_image_disk_format = 'MEX_IMAGE_DISK_FORMAT=vmdk'
 cloudlet_internal_vswitch = 'MEX_INTERNAL_VSWITCH=InternalVSwitchQA2'
-cloudlet_whitelist = 'MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS=protocol=tcp,portrange=443,remotecidr=0.0.0.0/0,protocol=tcp,portrange=53'
-#cloudlet_whitelist = 'MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS='
+cloudlet_whitelist_in = 'MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS=protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32'
+cloudlet_whitelist_eg = 'MEX_CLOUDLET_FIREWALL_WHITELIST_INGRESS=protocol=tcp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=udp,portrange=1:65535,remotecidr=0.0.0.0/0;protocol=icmp,remotecidr=0.0.0.0/0;protocol=tcp,portrange=22,remotecidr=76.184.227.212/32;protocol=tcp,portrange=22,remotecidr=35.199.188.102/32'
 
 ##############################################################
 #
@@ -83,13 +79,12 @@ cloudlet_whitelist = 'MEX_CLOUDLET_FIREWALL_WHITELIST_EGRESS=protocol=tcp,portra
 #
 #############################################################
 
-cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_ip_range},{cloudlet_ext_gateway},{cloudlet_ext_netmask},{cloudlet_ext_vswitch},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_internal_vswitch},{cloudlet_whitelist}'
+cloudlet_env_vars= f'{cloudlet_datastore},{cloudlet_ext_ip_range},{cloudlet_ext_gateway},{cloudlet_ext_netmask},{cloudlet_ext_vswitch},{cloudlet_ext_netscheme},{cloudlet_ext_network},{cloudlet_image_disk_format},{cloudlet_internal_vswitch},{cloudlet_whitelist_in},{cloudlet_whitelist_eg}'
 
 
 
 # docker image used for docker/k8s deployments
 docker_image = 'docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0'
-#docker_image = 'docker-qa.mobiledgex.net/tomdev/images/server-ping-threaded:6.0'
 docker_image_gpu = 'docker-qa.mobiledgex.net/mobiledgex/images/mobiledgexsdkdemo20:2020-06-16-GPU'
 docker_image_privacypolicy = 'docker-qa.mobiledgex.net/mobiledgex/images/port_test_server:1.0'
 

@@ -20,7 +20,7 @@ ${latitude}       32.7767
 ${longitude}      -96.7970
 
 ${qcow_centos_image}    https://artifactory.mobiledgex.net/artifactory/qa-repo-automationdevorg/server_ping_threaded_centos7.qcow2#md5:eddafc541f1642b76a1c30062116719d
-${image_name}    server_ping_threaded_centos7
+${image}    server_ping_threaded_centos7
 ${test_timeout_crm}  30 min
 
 *** Test Cases ***
@@ -134,11 +134,17 @@ User shall be able to poweroff/poweron VM based App Inst with AccessTypeLoadBala
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
 
+    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
     ${vm}=  Remove String  ${vm}  .
 
     Log To Console  Creating App and App Instance
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer  region=${region}
+    ${app}=  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer  region=${region}
+    ${image_path}=  Set Variable  ${app['data']['image_path']}
+    @{array}=  Split String  ${image_path}  :
+    ${checksum}=  Set Variable  ${array[2]}
+
+    ${image_name}=  Catenate  SEPARATOR=-  ${image}  ${checksum}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}
@@ -197,11 +203,17 @@ User shall be able to reboot VM based App Inst with AccessTypeLoadBalancer
     ${developer_name_default}=  Get Default Developer Name
     ${version_default}=  Get Default App Version
 
+    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
     ${vm}=  Remove String  ${vm}  .
 
     Log To Console  Creating App and App Instance
-    Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer   region=${region}
+    ${app}=  Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015   access_type=loadbalancer  region=${region}
+    ${image_path}=  Set Variable  ${app['data']['image_path']}
+    @{array}=  Split String  ${image_path}  :
+    ${checksum}=  Set Variable  ${array[2]}
+
+    ${image_name}=  Catenate  SEPARATOR=-  ${image}  ${checksum}
     Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}
 
     Wait For App Instance Health Check OK  region=${region}  app_name=${app_name_default}

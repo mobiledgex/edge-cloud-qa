@@ -38,6 +38,37 @@ namespace RestSample
             return "";
         }
     }
+
+    class DummyDeviceInfo : DeviceInfo
+    {
+        Dictionary<string, string> DeviceInfo.GetDeviceInfo()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict["one"] = "ONE";
+            dict["two"] = "TWO";
+            return dict;
+        }
+
+    }
+
+    class DummyCarrierInfo : CarrierInfo
+    {
+        public ulong GetCellID()
+        {
+            return 0;
+        }
+
+        public string GetCurrentCarrierName()
+        {
+            return "26201";
+        }
+
+        public string GetMccMnc()
+        {
+            return "26201";
+        }
+    }
+
     class Program
     {
         //static string tokenServerURI = "http://mexdemo.tok.mobiledgex.net:9999/its?followURL=https://dme.mobiledgex.net/verifyLoc";
@@ -131,8 +162,8 @@ namespace RestSample
             {
                 Console.WriteLine("Get TCP Connections Testcase!!");
 
-                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID());
-                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID());
+                //MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new MacNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
+                MatchingEngine me = new MatchingEngine(null, new SimpleNetInterface(new LinuxNetworkInterfaceName()), new DummyUniqueID(), new DummyDeviceInfo());
                 me.SetTimeout(15000);
 
                 FindCloudletReply findCloudletInfo = null;

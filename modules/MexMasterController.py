@@ -1211,7 +1211,7 @@ class MexMasterController(MexRest):
                 appinstance = self.app_instance_should_exist(token=token, region=region, appinst_id=appinst_id, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, developer_org_name=developer_org_name, flavor_name=flavor_name, config=config, uri=uri, latitude=latitude, longitude=longitude, autocluster_ip_access=autocluster_ip_access, crm_override=crm_override, use_defaults=use_defaults, use_thread=use_thread)
             except Exception as err:
                 logging.info('app instance does NOT exist.')
-                return True
+                return True    
             
             raise Exception(f'app instance DOES exist.')
 
