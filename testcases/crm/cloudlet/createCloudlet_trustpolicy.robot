@@ -100,8 +100,9 @@ CreateCloudlet - shall be able to create/update cloudlet with icmp/tcp/udp trust
    &{apprule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.9.5.10
    @{app_rulelist}=  Create List  ${apprule1}
    ${app}=  Create App  region=${region}  developer_org_name=${org_name_dev}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image_porttest}  access_ports=tcp:3015  trusted=${True}  required_outbound_connections_list=${app_rulelist}  token=${tokendev}
-   Create App Instance  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app['data']['key']['name']}  token=${tokendev}
-   ${fqdn}=  Set Variable  autocluster${app['data']['key']['name']}.${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
+   ${appInst}=  Create App Instance  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack_packet}  cluster_instance_name=autocluster${app['data']['key']['name']}  token=${tokendev}
+   ${real_cluster_name}=  Set Variable  ${appInst['data']['real_cluster_name']}  
+   ${fqdn}=  Set Variable  ${real_cluster_name}.${cloudlet_name}.${operator_name_openstack_packet}.mobiledgex.net
 
    # openstack security group show cloudlet1609891618-9118872.packet.mobiledgex.net-sg
    ${cloudname}=  Convert To Lowercase  ${cloudlet_name}

@@ -13,7 +13,7 @@ Test Timeout  10m
 #ECQ-3137
 *** Variables ***
 ${region}=  US
-${developer}=  MobiledgeX
+${developer}=  automation_dev_org
 ${manifest_url}=  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${server_ping_threaded_cloudconfig}  http://35.199.188.102/apps/server_ping_threaded_cloudconfig.yml
 ${manifest_string}=  apiVersion: v1\nkind: Service\nmetadata:\n  name: server-ping-threaded-udptcphttp-tcpservice\n  labels:\n    run: server-ping-threaded-udptcphttpapp\nspec:\n  type: LoadBalancer\n  ports:\n  - port: 2016\n    targetPort: 2016\n    protocol: TCP\n    name: tcp2016\n  selector:\n    run: server-ping-threaded-udptcphttpapp
@@ -28,19 +28,24 @@ Add/RemoveAppAutoProvPolicy - mcctl shall be able to add AutoProvPolicy to App
 
    [Template]  Add/Remove auto prov. policy to App via mcctl
 
-      appkey.organization=${developer}  appkey.name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
+      app-org=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=${autoprov_name}1
 
 Add/RemoveAppAutoProvPolicy - mcctl shall handle create failures
 
    [Template]   Fail to Add Auto Provisioning Policy Via mcctl
       # missing values
-      Error: Bad Request (400), App key {} not found:  Error: Bad Request (400), App key {} not found  #not sending any args with mcctl
-      Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {} not found  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
-      Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}"} not found  appkey.organization=${developer}  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
-      Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found  appkey.organization=${developer}  appkey.name=${app_name}
-      Error: invalid args: app-org:  Error: invalid args: app-org  app-org=${developer}  appkey.name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
-      Error: invalid args: name:  Error: invalid args: name  appkey.name=${developer}  name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
-      Error: invalid args: version:  Error: invalid args: version  appkey.name=${developer}  appkey.name=${app_name}  version=1.0  autoprovpolicy=${autoprov_name}1
+      Error: missing required args:   #not sending any args with mcctl
+      Error: missing required args:  app-org=${developer}  #missing args
+      Error: missing required args: appname appvers  app-org=${developer}  autoprovpolicy=${autoprov_name}1  #missing args
+      Error: missing required args: appname  app-org=${developer}  autoprovpolicy=${autoprov_name}1  appvers=1.0  #missing args
+      Error: Bad Request (400), App key {"organization":"${developer}","name":"x","version":"1.0"} not found  app-org=${developer}  appname=x  appvers=1.0  autoprovpolicy=${autoprov_name}1  #invalid appname
+      Error: Bad Request (400), Policy key {"organization":"${developer}","name":"x"} not found  app-org=${developer}  appname=${app_name}  appvers=1.0  autoprovpolicy=x  #invalid autoprovpolicy
+      #Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {} not found  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
+      #Error: Bad Request (400), App key {"organization":"${developer}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}"} not found  appkey.organization=${developer}  #Error: Bad Request (400), App key {"organization":"${developer}"} not found
+      #Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found:  Error: Bad Request (400), App key {"organization":"${developer}","name":"${app_name}"} not found  appkey.organization=${developer}  appkey.name=${app_name}
+      #Error: invalid args: app-org:  Error: invalid args: app-org  app-org=${developer}  appkey.name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
+      #Error: invalid args: name:  Error: invalid args: name  appkey.name=${developer}  name=${app_name}  appkey.version=1.0  autoprovpolicy=${autoprov_name}1
+      #Error: invalid args: version:  Error: invalid args: version  appkey.name=${developer}  appkey.name=${app_name}  version=1.0  autoprovpolicy=${autoprov_name}1
 
 
 *** Keywords ***
