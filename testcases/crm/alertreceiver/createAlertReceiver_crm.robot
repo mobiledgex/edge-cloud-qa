@@ -243,7 +243,8 @@ AlertReceiver - shall be able to create/receive email/slack region HealthCheckFa
    Create Alert Receiver  region=${region}  cluster_instance_developer_org_name=${developer}
    Create Alert Receiver  type=slack  slack_channel=${slack_channel}  slack_api_url=${slack_api_url}  severity=error  region=${region}  cluster_instance_developer_org_name=${developer}
 
-   ${clusterlb}=  Convert To Lowercase  ${developer}${app['data']['key']['name']}10.${cloudlet_name_openstack_vm}.${operator_name_openstack}.mobiledgex.net
+   ${developer_dash}=  Replace String  ${developer}  _  -
+   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app['data']['key']['name']}10.${cloudlet_name_openstack_vm}.${operator_name_openstack}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
