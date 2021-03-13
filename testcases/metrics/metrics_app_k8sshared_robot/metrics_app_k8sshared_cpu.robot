@@ -191,12 +191,12 @@ AppMetrics - Shall be able to get the k8s shared app CPU metrics with starttime 
 
    CPU Should be in Range  ${metrics}
 
-AppMetrics - Shall be able to get the k8s shared app CPU metrics without cluster name on openstack
-   [Documentation]
-   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
-   ...  verify info is correct
-
-   ADD test for all selectors
+#AppMetrics - Shall be able to get the k8s shared app CPU metrics without cluster name on openstack
+#   [Documentation]
+#   ...  request all cluster CPU metrics with starttime and endtime and last on openstack
+#   ...  verify info is correct
+#
+#   ADD test for all selectors
 
 AppMetrics - DeveloperManager shall be able to get k8s shared app CPU metrics
    [Documentation]
