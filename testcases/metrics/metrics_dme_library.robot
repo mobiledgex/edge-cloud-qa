@@ -371,7 +371,7 @@ Get dme metrics with starttime and endtime and last on openstack
    log to console  ${epoch_last}
    Should Be True  (${epoch_last} - ${epoch_first}) < 30  # difference should be about 30s
    Should Be True  ${epoch_last} < ${epochpre}
-   Should Be True  (${end} - ${epoch_first}) - 60  #should be within 1 min of last requested
+   Should Be True  (${end} - ${epoch_first}) <= 620  #should be within 10 min of last requested
 
    Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
    Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial

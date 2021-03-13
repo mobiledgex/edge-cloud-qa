@@ -303,7 +303,7 @@ Connections Should Be In Range
       Should Be Equal  ${reading[5]}  ${cloudlet_name_openstack_metrics} 
       Should Be Equal  ${reading[6]}  ${operator_name_openstack}
       Should Be Equal  ${reading[7]}  ${developer_name}
-      Should Be Equal  ${reading[8]}  ${port}
+      Should Be Equal As Numbers  ${reading[8]}  ${port}
 
       Should Be True               ${reading[9]} >= 0
       Should Be True               ${reading[10]} >= 0
