@@ -214,7 +214,7 @@ Docker Dedicated App CPU Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 50 and ${reading[9]} <= 200
+      Should Be True               ${reading[9]} > 100 and ${reading[9]} <= 200
    END
 
 
@@ -225,7 +225,7 @@ Docker Shared App CPU Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 50 and ${reading[9]} <= 200
+      Should Be True               ${reading[9]} > 100 and ${reading[9]} <= 200
    END
 
 
@@ -236,7 +236,7 @@ k8s Dedicated App Instance CPU Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 0.1 and ${reading[9]} <= 50
+      Should Be True               ${reading[9]} >= 0.1 and ${reading[9]} <= 3.0
    END
 
 Docker Dedicated App MEM Headings Should Be Correct
@@ -246,7 +246,7 @@ Docker Dedicated App MEM Should Be In Range
   [Arguments]  ${metrics}
   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
   FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 100000 and ${reading[9]} <= 200000000
+      Should Be True               ${reading[9]} >= 10000000 and ${reading[9]} <= 300000000
   END
 
 Docker Shared App MEM Headings Should Be Correct
@@ -258,7 +258,7 @@ Docker Shared App MEM Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 100000 and ${reading[9]} <= 200000000
+      Should Be True               ${reading[9]} >= 10000000 and ${reading[9]} <= 300000000
    END
 
 k8s Dedicated App Instance MEM Headings Should Be Correct
@@ -269,7 +269,7 @@ k8s Dedicated App Instance MEM Headings Should Be In Range
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
 
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} >= 1 and ${reading[9]} <= 200000000
+      Should Be True               ${reading[9]} >= 1000000 and ${reading[9]} <= 300000000
    END
 
 Docker Dedicated App DISK Headings Should Be Correct
@@ -281,7 +281,7 @@ Docker Dedicated App DISK Should Be In Range
    [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 1000 and ${reading[9]} <= 4028653056
+      Should Be True               ${reading[9]} > 100000000 and ${reading[9]} <= 4028653056
    END
 
 Docker Shared App DISK Headings Should Be Correct
@@ -293,7 +293,7 @@ Docker Shared App DISK Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 1000 and ${reading[9]} <= 4028653056
+      Should Be True               ${reading[9]} > 100000000 and ${reading[9]} <= 4028653056
    END
 
 k8s Dedicated App Instance DISK Headings Should Be Correct
@@ -304,7 +304,7 @@ k8s Dedicated App Instance DISK Should Be In Range
    [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 1000 and ${reading[9]} <= 200000000
+      Should Be True               ${reading[9]} > 1000 and ${reading[9]} <= 100000
    END
 
 Cleanup
