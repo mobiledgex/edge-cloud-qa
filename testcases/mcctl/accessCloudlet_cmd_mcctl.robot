@@ -33,7 +33,7 @@ ${cluster_name_mcctl_access}=  cluster-16mcctlaccess  #want to be specific yet s
 ${region_EU}=  EU
 ${region_US}=  US
 ${operator_org_name}=  packet
-#${cloudlet_name_vsphere}=  DFWVMW2
+${cloudlet_name_vsphere}=  DFWVMW2
 ${cloudlet_name_vcd}=  automation-qa2-vcd-01
 ${operator_name_vsphere}=  packet
 ${operator_name_openstack}=  TDG
@@ -103,8 +103,6 @@ AccessCloudlet - mcctl shall pass cli commands to specified cloudlet and node
       command2c  envoy     empty               region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=sharedrootlb  node-name=${sharedrootlb}  command="ls -lcth | grep nothing;exit"
 
 
-# Test Setup  Create K8s Cluster
-# Test Setup  Setup
 #ECQ-2967
 AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
    [Documentation]
