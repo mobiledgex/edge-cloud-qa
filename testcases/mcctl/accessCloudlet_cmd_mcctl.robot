@@ -5,9 +5,13 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  Collections
 Library  String
 
+
+Test Teardown  Cleanup Provisioning
+
 Test Timeout  8m
 
 *** Variables ***
+
 
 ${cloudlet_name_openstack}=  automationFairviewCloudlet
 ${cloudlet_name_openstack_shared}=  automationParadiseCloudlet
@@ -29,8 +33,8 @@ ${cluster_name_mcctl_access}=  cluster-16mcctlaccess  #want to be specific yet s
 ${region_EU}=  EU
 ${region_US}=  US
 ${operator_org_name}=  packet
-${cloudlet_name_vsphere}=  DFWVMW2
-${cloudlet_name_vcd}=  qa2-cld
+#${cloudlet_name_vsphere}=  DFWVMW2
+${cloudlet_name_vcd}=  automation-qa2-vcd-01
 ${operator_name_vsphere}=  packet
 ${operator_name_openstack}=  GDDT
 ${operator_name_vcd}=  packet
@@ -40,10 +44,15 @@ ${cloudlet_platform_type}=  PlatformTypeOpenstack
 #${cloudlet_platform_type}=  PlatformTypevSphere
 #${cloudlet_platform_type}=  PlatformTypeVCD
 ${mobiledgex_domain}=  mobiledgex.net
-${nodename}=
+${vs_nodename}=
+${os_nodename}=
 ${vsphere_cluster_flavor_name}=  vsphere.m4.small
+${cluster_flavor_name} =  vsphere.m4.small
 ${vs_clusterk8sconfigfile}=
 ${os_clusterk8sconfigfile}=
+${nodenamevs} =
+${nodenameos} =
+${cluster_org} =
 
 # mcctl --addr https://console-qa.mobiledgex.net:443 --skipverify region AccessCloudlet region=EU cloudlet=automationParadiseCloudlet cloudlet-org=GDDT node-type=sharedrootlb command=ls;exit
 
@@ -94,8 +103,8 @@ AccessCloudlet - mcctl shall pass cli commands to specified cloudlet and node
       command2c  envoy     empty               region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=sharedrootlb  node-name=${sharedrootlb}  command="ls -lcth | grep nothing;exit"
 
 
-Test Setup  Setup
-
+# Test Setup  Create K8s Cluster
+# Test Setup  Setup
 #ECQ-2967
 AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
    [Documentation]
@@ -105,46 +114,23 @@ AccessCloudlet - mcctl shall pass cli commands to a dedicatedrootlb
 
    [Template]  Check Dedicated Cluster For CLI Sent
 
-#dedicatedrootlb openstack
-#      CONTAINER  ID  envoy                           region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=dedicatedrootlb  node-name=${nodename}  command="docker ps;exit"
-#      REPOSITORY  TAG  SIZE                          region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=dedicatedrootlb  node-name=${nodename}  command="ls -l;exit"
-#      ${os_clusterk8sconfigfile}  kubeconfig  empty  region=${region_EU}  cloudlet=${cloudlet_name_openstack_dedicated}  cloudlet-org=${operator_name_openstack}  node-type=dedicatedrootlb  node-name=${nodename}  command="ls -l;exit"
-
 #dedicatedrootlb vsphere - using to conservere resources
-       CONTAINER  ID  envoy                           region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${nodename}  command="docker ps;exit"
-       REPOSITORY  TAG  SIZE                          region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${nodename}  command="docker images;exit"
-       ${vs_clusterk8sconfigfile}  kubeconfig  empty  region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${nodename}  command="ls -l;exit"
+      CONTAINER  ID  envoy                            region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="docker ps;exit"
+      REPOSITORY  TAG  SIZE                           region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="docker images;exit"
+      ${vs_clusterk8sconfigfile}  kubeconfig  empty   region=${region_US}  cloudlet=${cloudlet_name_vsphere}  cloudlet-org=${operator_name_vsphere}  node-type=dedicatedrootlb  node-name=${vs_nodename}  command="ls -l;exit"
 
-Test Teardown  Cleanup Provisioning
+
 
 *** Keywords ***
 Setup
-
-    Log To Console  \nCreating Cluster Instance
-    Create Cluster Instance  cluster_name=${cluster_name_mcctl_access}  cloudlet_name=${cloudlet_name_vsphere}  operator_org_name=${operator_name_vsphere}  ip_access=1  region=${region_US}  flavor_name=${vsphere_cluster_flavor_name}
-    Log To Console  \nDone Creating Cluster Instance
-
     ${vs_clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  operator_org_name=${operator_name_vsphere}  kubeconfig   #cluster-16mcctlaccess.packet.kubeconfig
     Set Suite Variable  ${vs_clusterk8sconfigfile}
 
-    ${cloudnodes}=  Show Cloudlet Info  region=${region_US}  cloudlet_name=${cloudlet_name_vsphere}
-#    Log To Console  \n${cloudnodes}     #Sanity Check Cloudlet Info in case errors
+    ${cloudnodesvs}=  Show Cloudlet Info  region=${region_US}  cloudlet_name=${cloudlet_name_vsphere}
+    ${vs_nodename}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  ${cloudlet_name_vsphere}  ${operator_name_vsphere}  ${mobiledgex_domain}
+    ${vs_nodename}=  Convert To Lowercase  ${nodenamevs}
 
-    ${nodename}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  ${cloudlet_name_vsphere}  ${operator_name_vsphere}  ${mobiledgex_domain}
-    ${nodename}=  Convert To Lowercase  ${nodename}
-
-    Set Suite Variable  ${nodename}
-
-# Openstack Setup In Case of reverting
-#    Create Flavor  region=${region_EU}  #note vcd and vsphere do not need create flavor they have to exist already so a new flavor will not be known , unless you restart the crmserver on the platform - it will match an existing  flavor
-#    Create Cluster Instance  cluster_name=${cluster_name_mcctl_access}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  ip_access=1  region=${region_EU}  #flavor_name=${cluster_flavor_name}
-#    ${os_clusterk8sconfigfile}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  operator_org_name=${operator_name_openstack}  kubeconfig   #cluster-16mcctlaccess.GDDT.kubeconfig
-#    Set Suite Variable  ${os_clusterk8sconfigfile}
-#    ${cloudnodes}=  Show Cloudlet Info  region=${region_EU}  cloudlet_name=${cloudlet_name_openstack_dedicated}
-#    Log To Console  \n${cloudnodes}     #Sanity Check Cloudlet Info in case errors
-#    ${node_name}=  Catenate  SEPARATOR=.  ${cluster_name_mcctl_access}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${mobiledgex_domain}
-#    ${node_name}=  Convert To Lowercase  ${node_name}
-#    Set Suite Variable  ${node_name}
+    Set Suite Variable  ${vs_nodename}
 
 
 Check Dedicated Cluster For CLI Sent
