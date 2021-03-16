@@ -38,6 +38,7 @@ VM - healthcheck shows HealthCheckFailRootlbOffline when docker container is sto
 
     ${rootlb}=  Catenate  SEPARATOR=.  ${cloudlet_name_openstack_vm}  ${operator_name_openstack}  ${mobiledgex_domain}
     ${rootlb}=  Convert To Lowercase  ${rootlb}
+    ${developer_name_default}=  Replace String  ${developer_name_default}  _  -
     ${vm}=  Convert To Lowercase  ${developer_name_default}${app_name_default}${version_default}
     ${vm}=  Remove String  ${vm}  .
     ${clusterlb}=  Catenate  SEPARATOR=.  ${vm}  ${rootlb}
