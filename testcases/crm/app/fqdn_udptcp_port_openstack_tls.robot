@@ -226,7 +226,7 @@ User shall be able to access TCP TLS ports with VM/LB deployment
     ${app_name_default}=  Get Default App Name
 
     ${time}=  Get Time  epoch
-    Create Flavor  region=${region}  flavor_name=flavor${time}  disk=80
+    Create Flavor  region=${region}  flavor_name=flavor${time}1  disk=80
 
     Create App  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016:tls,tcp:2015,udp:2015,tcp:8085   access_type=loadbalancer    region=${region}   #default_flavor_name=${cluster_flavor_name}
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=dummycluster  region=${region}   #autocluster_ip_access=IpAccessDedicated
