@@ -246,18 +246,28 @@ class AlertReceiver(MexOperation):
                             email_subject = msg['subject'].replace('\r\n','')
                             email_from = msg['from']
                             date_received = msg['date']
-                            logger.debug(f'subject={email_subject}')
+                            logger.debug(f'subject={email_subject} scope={scope}')
  
                             #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
                             if scope == 'Cloudlet':
-                                subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
+                                if 'PagerDuty' in email_subject:
+                                    logger.debug(f'pagerduty')
+                                    subject_to_check = f'TRIGGERED Incidents'
+                                else:
+                                    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
                             else:
-                                subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                                print('*WARN*', email_subject)
+                                if 'PagerDuty' in email_subject:
+                                    logger.debug(f'pagerduty')
+                                    subject_to_check = f'TRIGGERED Incidents'
+                                else:
+                                    logger.debug(f'not pagerduty')
+                                    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
                             if alert_type in email_subject and subject_to_check in email_subject:
                                 logger.info(f'subject{email_subject}  verified')
                             else:
                                 #raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
-                                logger.info(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
+                                logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
                                 continue 
  
                             if msg.is_multipart():
