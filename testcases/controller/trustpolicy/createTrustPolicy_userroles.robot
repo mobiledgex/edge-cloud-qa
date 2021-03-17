@@ -209,7 +209,7 @@ CreateTrustPolicy - DeveloperManager shall not be able to create/delete but view
 
    # create policy as org owner
    ${orgname_op}=  Create Org  token=${user_token}  orgname=${orgname}_op  orgtype=operator
-   ${adduser}=   Adduser Role   orgname=${orgname_op}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
+   #${adduser}=   Adduser Role   orgname=${orgname_op}   username=${epochusername2}   role=DeveloperManager    token=${user_token}     use_defaults=${False}
 
    ${policy_return}=  Create Trust Policy  operator_org_name=${orgname}_op  token=${user_token}  region=${region}  rule_list=${rulelist}
 
