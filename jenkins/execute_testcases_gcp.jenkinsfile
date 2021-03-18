@@ -21,6 +21,8 @@ platform = "platformunset"
 //commit_version = "${CommitVersion}"
 commit_version = "commitversionunset"
 
+build_name = cycle
+
 if (env.dme) {
     dme = "${DME}"
 }
@@ -72,13 +74,14 @@ if (env.openstackenvvmpool) {
 }
 if (env.platform) {
     platform = "${Platform}"
+    build_name = cycle + "_" + platform
 }
 
 echo dme
 echo cycle
 echo controller
 
-currentBuild.displayName = cycle
+currentBuild.displayName = build_name
 
 node('jenkinsGcpSlave1'){
     stage('Checkout') {
