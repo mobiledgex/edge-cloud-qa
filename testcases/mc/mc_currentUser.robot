@@ -21,19 +21,19 @@ MC - User shall be able to get the current status of superuser
     ...  - get user/current info
     ...  - verify info is correct
 
-   Login
+   Login  username=${admin_manager_username}  password=${admin_manager_password}
    ${info}=  Get Current User
    log to console  ${info}
 
    Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
-   Should Be Equal             ${info['Email']}          mexadmin@mobiledgex.net
+   Should Be Equal             ${info['Email']}          ${admin_manager_email} 
    Should Be Equal             ${info['EmailVerified']}  ${True}
-   Should Be Equal             ${info['FamilyName']}     mexadmin
-   Should Be Equal             ${info['GivenName']}      mexadmin
+   Should Be Empty             ${info['FamilyName']}     #mexadmin
+   Should Be Empty             ${info['GivenName']}      #mexadmin
    #Should Be Equal  ${info['ID']}  1
    Should Be Equal As Numbers  ${info['Iter']}           0
-   Should Be Equal             ${info['Name']}           mexadmin
-   Should Be Equal             ${info['Nickname']}       mexadmin
+   Should Be Equal             ${info['Name']}           qaadmin
+   Should Be Empty             ${info['Nickname']}       #mexadmin
    Should Be Equal             ${info['Passhash']}       ${EMPTY}
    Should Be Equal             ${info['Picture']}        ${EMPTY}
    Should Be Equal             ${info['Salt']}           ${EMPTY}

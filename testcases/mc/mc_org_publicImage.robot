@@ -3,13 +3,14 @@ Documentation   Docker push/pull with different roles
 
 Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library     MexDocker
+Library  DateTime
 
 Test Setup       Setup
-#Test Teardown    Teardown
+Test Teardown    Teardown
 
 *** Variables ***
 ${username}          mextester99
-${password}          mextester99123
+${password}          ${mextester06_gmail_password}
 ${email}             mextester99@gmail.com
 ${mextester99_gmail_password}  rfbixqomqidobmcb
 ${server}            docker-qa.mobiledgex.net
@@ -20,74 +21,89 @@ ${DEVorgname}        jdevorg
 ${i}                 1
 
 *** Test Cases ***
-
+# ECQ-3291
 MC - User shall not be able to pull docker image from another org
     [Documentation]
-    ...  create a new user
-    ...  verify docker push/pull doesnt work if locked and unverified
-    ...  create a new developer org
-    ...  add user to org as Developer Manager
-    ...  upload docker image
-    ...  delete the user
+    ...  - create user1/org1 and user2/org2
+    ...  - user1 pushes docker image
+    ...  - user2 pulls the image but gets denied
+    ...  - add user2 to org1
+    ...  - user2 can pull the image
 
-    ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
-    ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-    ${email2}=  Catenate  SEPARATOR=  ${username}  +  2  @gmail.com
-    ${username2}=  Catenate  SEPARATOR=  ${username}  2 
+    ${epoch}=  Get Current Date  result_format=epoch
+
+    ${username1}=  Set Variable  user${epoch}_1
+    ${username2}=  Set Variable  user${epoch}_2
+    ${orgname}=  Set Variable  org${epoch}
+    ${email1}=  Catenate  SEPARATOR=  ${username1}  @gmail.com
+    ${email2}=  Catenate  SEPARATOR=  ${username2}  @gmail.com
 
     # create user1
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
+    Skip Verify Email
     Unlock User  username=${username1}
-    Verify Email
-    Create Org  orgname=${DEVorgname}  orgtype=developer
-    Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperManager
-    Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${token}=  Login  username=${username1}  password=${password}
+    Verify Email Via MC  token=${token}
+    Login Mexadmin
+    Create Org  orgname=${orgname}  orgtype=developer
+    Adduser Role  orgname=${orgname}  username=${username1}  role=DeveloperManager
+    Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version}
 
     # create user2
     Create user  username=${username2}  password=${password}  email_address=${email2}  email_password=${mextester99_gmail_password}
     Unlock User  username=${username2}
-    Verify Email
-    ${org2}=  Catenate  SEPARATOR=  ${DEVorgname}  2 
+    Skip Verify Email
+    ${token}=  Login  username=${username2}  password=${password}
+    Verify Email Via MC  token=${token}
+    ${org2}=  Catenate  SEPARATOR=  ${orgname}  2 
+    Login Mexadmin
     Create Org  orgname=${org2}  orgtype=developer
     Adduser Role  orgname=${org2}  username=${username2}  role=DeveloperManager
 
-    ${pullerror}=  Run Keyword and Expect Error  *  Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${pullerror}=  Run Keyword and Expect Error  *  Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version}
     Should Contain  ${pullerror}  denied: requested access to the resource is denied
 
-    Adduser Role  orgname=${DEVorgname}  username=${username2}  role=DeveloperManager
-    Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version} 
+    Adduser Role  orgname=${orgname}  username=${username2}  role=DeveloperManager
+    Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version} 
 
+# ECQ-3292
 MC - User shall be able to pull docker image from another org with publicimages 
     [Documentation]
-    ...  create a new user
-    ...  verify docker push/pull doesnt work if locked and unverified
-    ...  create a new developer org
-    ...  add user to org as Developer Manager
-    ...  upload docker image
-    ...  delete the user
+    ...  - create user1/org1 with publicimages=true and user2/org2
+    ...  - user1 pushes docker image
+    ...  - user2 can pull the image since it is public
 
-    ${email1}=  Catenate  SEPARATOR=  ${username}  +  ${i}  @gmail.com
-    ${username1}=  Catenate  SEPARATOR=  ${username}  ${i}
-    ${email2}=  Catenate  SEPARATOR=  ${username}  +  2  @gmail.com
-    ${username2}=  Catenate  SEPARATOR=  ${username}  2
+    ${epoch}=  Get Current Date  result_format=epoch
+
+    ${username1}=  Set Variable  user${epoch}_1
+    ${username2}=  Set Variable  user${epoch}_2
+    ${orgname}=  Set Variable  org${epoch}
+    ${email1}=  Catenate  SEPARATOR=  ${username1}  @gmail.com
+    ${email2}=  Catenate  SEPARATOR=  ${username2}  @gmail.com
+    ${orgname}=  Set Variable  org${epoch}
 
     # create user1
     Create user  username=${username1}  password=${password}  email_address=${email1}  email_password=${mextester99_gmail_password}
     Unlock User  username=${username1}
-    Verify Email
-    Create Org  orgname=${DEVorgname}  orgtype=developer  public_images=${True}
-    Adduser Role  orgname=${DEVorgname}  username=${username1}  role=DeveloperManager
-    Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    ${token}=  Login  username=${username1}  password=${password}
+    Verify Email Via MC  token=${token}
+    Login Mexadmin
+    Create Org  orgname=${orgname}  orgtype=developer  public_images=${True}
+    Adduser Role  orgname=${orgname}  username=${username1}  role=DeveloperManager
+    Push Image To Docker  username=${username1}  password=${password}  server=${server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version}
 
     # create user2
     Create user  username=${username2}  password=${password}  email_address=${email2}  email_password=${mextester99_gmail_password}
     Unlock User  username=${username2}
-    Verify Email
-    ${org2}=  Catenate  SEPARATOR=  ${DEVorgname}  2
+    ${token}=  Login  username=${username2}  password=${password}
+    Verify Email Via MC  token=${token}
+    Login Mexadmin
+
+    ${org2}=  Catenate  SEPARATOR=  ${orgname}  2
     Create Org  orgname=${org2}  orgtype=developer
     Adduser Role  orgname=${org2}  username=${username2}  role=DeveloperManager
 
-    Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${DEVorgname}  app_name=${app_name}  app_version=${app_version}
+    Pull Image From Docker  username=${username2}  password=${password}  server=${server}  org_name=${orgname}  app_name=${app_name}  app_version=${app_version}
 
 *** Keywords ***
 Setup
