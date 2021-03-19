@@ -26,29 +26,30 @@ MC - User shall be able to create a new user
 	
 	@{usernames}=  Create List  1  a  _username  123lkjsdfh12jsd12  MYNAME  a-----   dlfjoiwefmsifqwleko23kjsdlijalskdfjqoiwjlkadsjfoiajlrejqwoiejalksdjfoiqwjflkajsdoifjqwiojfaoifjaiosjfiwjefoiajsdflkajlfkjaskldfjaoijfalksdjfoiajsdflkjasoifjasdlkjfalisjdfklajsdflkajsflkajsflkj  my_username
 	
-	: FOR  ${name}  IN  @{usernames}
-	\  ${email}=  Catenate  SEPARATOR=  ${name}  @auto.com
-	\  ${username}=   Set Variable   ${name}
-	\  Create User  username=${name}  password=${password}  email_address=${email}
-	\  Unlock User  username=${name}
-	\  Login   username=${name}  password=${password}
-	
-	\  ${info}=   Get Current User
+	FOR  ${name}  IN  @{usernames}
+	  ${email}=  Catenate  SEPARATOR=  ${name}  @auto.com
+	  ${username}=   Set Variable   ${name}
+	  Create User  username=${name}  password=${password}  email_address=${email}
+	  Unlock User  username=${name}
+	  Login   username=${name}  password=${password}
 
-	\  Should Be Equal             ${info['Email']}          ${email}
-	\  Should Be Equal             ${info['EmailVerified']}  ${False}
-	\  Should Be Equal             ${info['FamilyName']}     ${EMPTY}
-	\  Should Be Equal             ${info['GivenName']}      ${EMPTY}
-	\  Should Be Equal As Numbers  ${info['Iter']}           0
-	\  Should Be Equal             ${info['Name']}           ${username}
-	\  Should Be Equal             ${info['Nickname']}       ${EMPTY}
-	\  Should Be Equal             ${info['Passhash']}       ${EMPTY}
-	\  Should Be Equal             ${info['Picture']}        ${EMPTY}
-	\  Should Be Equal             ${info['Salt']}           ${EMPTY}
-	\  Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
-	\  Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+	  ${info}=   Get Current User
+
+	  Should Be Equal             ${info['Email']}          ${email}
+	  Should Be Equal             ${info['EmailVerified']}  ${False}
+	  Should Be Equal             ${info['FamilyName']}     ${EMPTY}
+	  Should Be Equal             ${info['GivenName']}      ${EMPTY}
+	  Should Be Equal As Numbers  ${info['Iter']}           0
+	  Should Be Equal             ${info['Name']}           ${username}
+	  Should Be Equal             ${info['Nickname']}       ${EMPTY}
+	  Should Be Equal             ${info['Passhash']}       ${EMPTY}
+	  Should Be Equal             ${info['Picture']}        ${EMPTY}
+	  Should Be Equal             ${info['Salt']}           ${EMPTY}
+	  Convert Date  ${info['CreatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
+	  Convert Date  ${info['UpdatedAt']}  date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	
-	\  Login  username=${name}  password=${password}
+	  Login  username=${name}  password=${password}
+       END
 
 # ECQ-2716
 MC - User shall not be able to create a new user with no username
@@ -249,7 +250,7 @@ MC - User shall be able to create a new user with all TLDs
 
 *** Keywords ***
 Setup
-	Login
+	Login  username=${admin_manager_username}  password=${admin_manager_password}
         Skip Verify Email
 
 Create Users In Background
