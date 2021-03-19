@@ -13,7 +13,7 @@ ${dev_orgname}=    DevOrg
 ${op_orgname}=     OperOrg
 
 ${username}=  mextester06
-${password}=  mextester06123
+${password}=  ${mextester06_gmail_password}
 ${mex_password}=  ${mexadmin_password}
 	
 *** Test Cases ***
@@ -26,6 +26,7 @@ ${mex_password}=  ${mexadmin_password}
 #	
 #	Should Be Empty    ${org}
 
+# ECQ-1615
 MC - Admin shall not be able to add an Admin org 
 	[Documentation]
 	...  admin user can create an Admin org 
@@ -38,6 +39,7 @@ MC - Admin shall not be able to add an Admin org
 	Should Be Equal As Numbers   ${status_code}  400	
 	Should Be Equal              ${body}         {"message":"Organization type must be developer, or operator"}
 
+# ECQ-1616
 MC - Admin shall be able to add a developer org
 	[Documentation]
 	...  admin user can create an developer org 
@@ -52,9 +54,10 @@ MC - Admin shall be able to add a developer org
 	${orgs}=  Show Organizations   token=${adminToken}
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
+          Exit For Loop If  ${found}
+        END
 
         Should Be Equal       ${org["Name"]}                   ${dev_orgname}
 	Should Be Equal       ${org["Type"]}                   developer
@@ -64,6 +67,7 @@ MC - Admin shall be able to add a developer org
 	Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1617
 MC - Admin shall be able to add an operator org
 	[Documentation]
 	...  admin user can create an operator org 
@@ -78,9 +82,10 @@ MC - Admin shall be able to add an operator org
 	${orgs}=  Show Organizations   token=${adminToken}
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
+          Exit For Loop If  ${found}
+        END
 
 	Should Be Equal       ${org["Name"]}                   ${op_orgname}
 	Should Be Equal       ${org["Type"]}                   operator
@@ -89,6 +94,7 @@ MC - Admin shall be able to add an operator org
 	Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1618
 MC - Admin shall be able to create multiple organizations
 	[Documentation]
 	...  admin user can create multiple orgs 
@@ -105,10 +111,11 @@ MC - Admin shall be able to create multiple organizations
 	${orgs}=  Show Organizations   token=${adminToken}
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
-        \  ${orgfound}=  Set Variable  ${org}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
+          ${orgfound}=  Set Variable  ${org}
+          Exit For Loop If  ${found}
+        END
 
         Should Be Equal       ${org["Name"]}                   ${dev_orgname}
 	Should Be Equal       ${org["Type"]}                   developer
@@ -118,10 +125,11 @@ MC - Admin shall be able to create multiple organizations
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
-        \  ${orgfound}=  Set Variable  ${org}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
+          ${orgfound}=  Set Variable  ${org}
+          Exit For Loop If  ${found}
+        END
 
 	Should Be Equal       ${org["Name"]}                   ${op_orgname}
 	Should Be Equal       ${org["Type"]}                   operator
@@ -130,6 +138,7 @@ MC - Admin shall be able to create multiple organizations
 	Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1619
 MC - Admin shall be able to see orgs created by other users
 	[Documentation]
 	...  admin user can see orgs created by other users 
@@ -143,15 +152,15 @@ MC - Admin shall be able to see orgs created by other users
 
         Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
         Unlock User
-        Verify Email  email_address=${emailepoch}
+        ${userToken}=  Login  username=${epochusername}  password=${password}
 
         Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
         Unlock User
-        Verify Email  email_address=${emailepoch2}
-
-        ${userToken}=  Login  username=${epochusername}  password=${password}
         ${user2Token}=  Login  username=${epochusername2}  password=${password}
-	
+
+        Verify Email Via MC  token=${userToken}
+        Verify Email Via MC  token=${user2Token}
+
 	Create Org    orgname=${dev_orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}     use_defaults=${False}
 	${body}=         Response Body
 	Should Be Equal               ${body}         {"message":"Organization created"}
@@ -177,10 +186,11 @@ MC - Admin shall be able to see orgs created by other users
 	${orgs}=  Show Organizations   token=${adminToken}
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
-        \  ${orgfound}=  Set Variable  ${org}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${dev_orgname}
+          ${orgfound}=  Set Variable  ${org}
+          Exit For Loop If  ${found}
+        END
 
         Should Be Equal       ${org["Name"]}                   ${dev_orgname}
 	Should Be Equal       ${org["Type"]}                   developer
@@ -190,10 +200,11 @@ MC - Admin shall be able to see orgs created by other users
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
         ${found}=  Set Variable  ${False}
-        : FOR  ${org}  IN  @{orgs}
-        \  ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
-        \  ${orgfound}=  Set Variable  ${org}
-        \  Exit For Loop If  ${found}
+        FOR  ${org}  IN  @{orgs}
+          ${found}=  Run Keyword And Return Status  Should Be Equal  ${org['Name']}  ${op_orgname}
+          ${orgfound}=  Set Variable  ${org}
+          Exit For Loop If  ${found}
+        END
 
 	Should Be Equal       ${org["Name"]}                   ${op_orgname}
 	Should Be Equal       ${org["Type"]}                   operator
@@ -202,6 +213,7 @@ MC - Admin shall be able to see orgs created by other users
 	Convert Date          ${org["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1292
 MC - Shall not be able to create an org without a token	
 	[Documentation]
 	...  create an org without a token
@@ -215,6 +227,7 @@ MC - Shall not be able to create an org without a token
 	#Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
         Should Be Equal              ${body}  {"message":"no bearer token found"}
 
+# ECQ-1293
 MC - Shall not be able to create an org with an empty token	
 	[Documentation]
 	...  create an org with an empty token
@@ -227,6 +240,7 @@ MC - Shall not be able to create an org with an empty token
 	Should Be Equal As Numbers   ${status_code}  400	
 	Should Be Equal              ${body}         {"message":"no bearer token found"}
 
+# ECQ-1620
 MC - Shall not be able to create an org with a bad token	
 	[Documentation]
 	...  create an org with a bad token
@@ -239,6 +253,7 @@ MC - Shall not be able to create an org with a bad token
 	Should Be Equal As Numbers   ${status_code}  401	
 	Should Be Equal              ${body}         {"message":"invalid or expired jwt"}
 
+# ECQ-1621
 MC - Shall not be able to create an org with an expired token	
 	[Documentation]
 	...  create an org with an expired token
