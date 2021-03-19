@@ -589,7 +589,7 @@ class MexMasterController(MexRest):
             #return self.decoded_data
             return resp
 
-    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, token=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
+    def create_org(self, orgname=None, orgtype=None, address=None, phone=None, public_images=None, token=None, json_data=None, use_defaults=True, use_thread=False, auto_delete=True):
         #orgstamp = str(time.time())
         url = self.root_url + '/auth/org/create'
         payload = None
@@ -604,7 +604,7 @@ class MexMasterController(MexRest):
         if json_data !=  None:
             payload = json_data
         else:
-            org_dict = Organization(organization_name=orgname, organization_type=orgtype, phone=phone, address=address, use_defaults=use_defaults).organization
+            org_dict = Organization(organization_name=orgname, organization_type=orgtype, phone=phone, address=address, public_images=public_images, use_defaults=use_defaults).organization
             if 'name' in org_dict:
                 self.organization_name = org_dict['name']
             #org_dict = {}
