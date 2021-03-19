@@ -4,8 +4,8 @@ Documentation   MasterController Org Create by User
 Library		MexMasterController   mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
 
-Suite Setup	Setup
-Suite Teardown	Teardown
+Test Setup	Setup
+Test Teardown	Teardown
 #Test Teardown  Cleanup Provisioning
 
 *** Variables ***
@@ -16,6 +16,7 @@ ${username}=  mextester06
 ${password}=  ${mextester06_gmail_password} 
 	
 *** Test Cases ***
+# ECQ-1622
 MC - User shall be able to query empty orgs
        [Documentation]
        ...  user can show orgs when no orgs exist
@@ -25,6 +26,7 @@ MC - User shall be able to query empty orgs
 
        Should Be Empty    ${org}
 
+# ECQ-1623
 MC - User shall be able to create a developer org
 	[Documentation]
 	...  new user can create a developer org 
@@ -43,6 +45,7 @@ MC - User shall be able to create a developer org
 	Convert Date          ${org[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1624
 MC - User shall be able to create an operator org
 	[Documentation]
 	...  new user can create a operator org 
@@ -61,6 +64,7 @@ MC - User shall be able to create an operator org
 	Convert Date          ${org[0]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 	Convert Date          ${org[0]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1625
 MC - User shall be able to create multiple organizations
 	[Documentation]
 	...  new user can create multiple orgs 
@@ -106,6 +110,7 @@ MC - User shall be able to create multiple organizations
 #	Convert Date          ${orgs[1]["CreatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 #	Convert Date          ${orgs[1]["UpdatedAt"]}              date_format=%Y-%m-%dT%H:%M:%S.%f%z
 
+# ECQ-1626
 MC - User shall not be able to create an org without an org name	
 	[Documentation]
 	...  create an org without an org name
@@ -118,6 +123,7 @@ MC - User shall not be able to create an org without an org name
 	Should Be Equal As Numbers   ${status_code}  400	
 	Should Be Equal              ${body}         {"message":"Name not specified"}
 
+# ECQ-1627
 MC - User shall not be able to create an org without an org type	
 	[Documentation]
 	...  create an org without an org type
@@ -130,30 +136,33 @@ MC - User shall not be able to create an org without an org type
 	Should Be Equal As Numbers   ${status_code}  400	
 	Should Be Equal              ${body}         {"message":"Organization type must be developer, or operator"}
 
-MC - User shall not be able to create an org without an address	
-	[Documentation]
-	...  create an org without an org address
-	...  verify the correct error message is returned
+# no longer supported
+# ECQ-1628
+#MC - User shall not be able to create an org without an address	
+#	[Documentation]
+#	...  create an org without an org address
+#	...  verify the correct error message is returned
+#
+#	${org}=   Run Keyword and Expect Error  *   Create Org     orgname=${dev_orgname}    orgtype=developer   phone=111-222-3333    token=${userToken}     use_defaults=${False}
+#	${status_code}=  Response Status Code
+#	${body}=         Response Body
+#	
+#	Should Be Equal As Numbers   ${status_code}  400	
+#	Should Be Equal              ${body}         {"message":"Address not specified"}
+#  ECQ-1629
+#MC - User shall not be able to create an org without a phone	
+#	[Documentation]
+#	...  create an org without an org phone
+#	...  verify the correct error message is returned
+#
+#	${org}=   Run Keyword and Expect Error  *   Create Org     orgname=${dev_orgname}    orgtype=developer   address=222 somewhere dr    token=${userToken}     use_defaults=${False}
+#	${status_code}=  Response Status Code
+#	${body}=         Response Body
+#	
+#	Should Be Equal As Numbers   ${status_code}  400	
+#	Should Be Equal              ${body}         {"message":"Phone number not specified"}
 
-	${org}=   Run Keyword and Expect Error  *   Create Org     orgname=${dev_orgname}    orgtype=developer   phone=111-222-3333    token=${userToken}     use_defaults=${False}
-	${status_code}=  Response Status Code
-	${body}=         Response Body
-	
-	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"Address not specified"}
-
-MC - User shall not be able to create an org without a phone	
-	[Documentation]
-	...  create an org without an org phone
-	...  verify the correct error message is returned
-
-	${org}=   Run Keyword and Expect Error  *   Create Org     orgname=${dev_orgname}    orgtype=developer   address=222 somewhere dr    token=${userToken}     use_defaults=${False}
-	${status_code}=  Response Status Code
-	${body}=         Response Body
-	
-	Should Be Equal As Numbers   ${status_code}  400	
-	Should Be Equal              ${body}         {"message":"Phone number not specified"}
-
+#  ECQ-1630
 MC - User shall not be able to create an org named mobiledgex 
         [Documentation]
         ...  create an org without an org phone
