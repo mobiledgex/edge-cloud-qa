@@ -4,7 +4,7 @@ import shared_variables_mc
 class Organization():
     organization = None
 
-    def __init__(self, organization_name=None, organization_type=None, phone=None, address=None, use_defaults=True):
+    def __init__(self, organization_name=None, organization_type=None, phone=None, address=None, public_images=None, use_defaults=True):
         org_dict = {}
 
         self.org_name = organization_name
@@ -28,6 +28,8 @@ class Organization():
             org_dict['address'] = self.address
         if self.org_type is not None:
             org_dict['type'] = self.org_type
+        if public_images is not None:
+            org_dict['publicimages'] = public_images
 
         self.organization = org_dict
 
