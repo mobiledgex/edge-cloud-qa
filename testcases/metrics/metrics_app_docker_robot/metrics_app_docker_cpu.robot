@@ -254,8 +254,8 @@ Setup
    #${clustername_docker}=  Catenate  SEPARATOR=-  cluster  ${t}  docker 
    #${app_name}=     Catenate  SEPARATOR=  ${app_name}  k8s
 
-   #${app_name}=  Set Variable  app1582226010-873146k8s 
-   #${clustername_docker}=   Set Variable  cluster-1582226010-873146-docker 
+#   ${app_name}=  Set Variable  appmetricsdocker1616185116-976558docker
+#   ${clustername_docker}=   Set Variable  cluster-1616185116-976558-docker
    #${developer_name}=  Set Variable  mobiledgex 
 
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
@@ -301,10 +301,10 @@ Metrics Should Match Influxdb
    ${metrics_influx_t}=  Set Variable  ${metrics_influx}
    ${index}=  Set Variable  0
    FOR  ${reading}  IN  @{metrics_influx}
-      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  .
-      ${metricsepoch}=  Convert Date  ${datesplit1[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-      @{datesplit2}=  Split String  ${reading['time']}  .
-      ${influxepoch}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+      @{datesplit1}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][${index}]}  Z
+      ${metricsepoch}=  Convert Date  ${datesplit1[0][:25]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S.%f
+      @{datesplit2}=  Split String  ${reading['time']}  Z
+      ${influxepoch}=  Convert Date  ${datesplit2[0][:25]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S.%f
       Run Keyword If  '${metricsepoch}' < '${influxepoch}'  Remove From List  ${metrics_influx_t}  ${index}
       ...  ELSE  Exit For Loop  
    END
