@@ -35,8 +35,7 @@ Setup
 
    Create Cluster Instance  region=${region}  cluster_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  deployment=docker  ip_access=IpAccessDedicated 
  
-   Create App  region=${region}  app_name=${appname}     deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
-
+   Create App  region=${region}  app_name=${appname}  app_version=1.0   deployment=docker  image_path=${docker_image}  access_ports=tcp:2015,udp:2015
    ${appinst}=  Create App Instance  region=${region}  app_name=${appname}  cluster_instance_name=${clustername_docker}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}  #autocluster_ip_access=IpAccessDedicated
 
    Create App  region=${region}  app_name=${appname}  app_version=2.0  default_flavor_name=${flavor_name}  deployment=docker  image_path=${docker_image}  access_ports=tcp:2017,udp:2018
@@ -51,7 +50,7 @@ Setup
    TCP Port Should Be Alive  ${appinst['data']['uri']}  ${appinst['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
-   Sleep  3 mins
+   Sleep  5 mins
 
 Teardown
    Cleanup Provisioning
