@@ -13,6 +13,8 @@ MC - User shall be able to show nodes
     ...  - run ShowNode on system
     ...  - verify info is correct
 
+   Login  username=${admin_manager_username}  password=${admin_manager_password}
+
    ${nodes}=  Show Nodes  region=US
 
    Controller Should Exist  ${nodes}
@@ -30,7 +32,7 @@ Verify Common Data
 
    Should Match Regexp  ${node['data']['build_date']}  ^\\D{3} \\D{3}
    Should Be Equal      ${node['data']['key']['region']}  US
-   Should Match Regexp  ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Should Match Regexp  ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
    Should Be Equal      ${node['data']['build_head']}  ${node['data']['build_master']}
    Should Be Equal As Numbers      ${node['data']['notify_id']}  1
 
@@ -81,7 +83,7 @@ Verify Controller
    Should Match Regexp  ${node['data']['hostname']}  ^controller-.+
 
    Run Keyword If  'properties' in ${node['data']}  Should Match Regexp  ${node['data']['properties']['PlatformBuildDate']}  ^\\D{3} \\D{3}
-   Run Keyword If  'properties' in ${node['data']}  Should Match Regexp  ${node['data']['properties']['PlatformBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Run Keyword If  'properties' in ${node['data']}  Should Match Regexp  ${node['data']['properties']['PlatformBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+
    Run Keyword If  'properties' in ${node['data']}  Should Be Equal  ${node['data']['properties']['PlatformBuildHead']}  ${node['data']['properties']['PlatformBuildMaster']}
    ${found_properties}=  Run Keyword If  'properties' in ${node['data']}  Set Variable  1
    ...  ELSE  Set Variable  ${found_properties}
@@ -134,10 +136,10 @@ Verify DME
 
    Should Match Regexp  ${node['data']['hostname']}  ^dme-.+
    Should Match Regexp  ${node['data']['properties']['EdgeEventsBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Should Match Regexp  ${node['data']['properties']['EdgeEventsBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Should Match Regexp  ${node['data']['properties']['EdgeEventsBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+
    Should Be Equal  ${node['data']['properties']['EdgeEventsBuildHead']}  ${node['data']['properties']['EdgeEventsBuildMaster']}
    Should Match Regexp  ${node['data']['properties']['TDGOperatorBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Should Match Regexp  ${node['data']['properties']['TDGOperatorBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+ 
+   Should Match Regexp  ${node['data']['properties']['TDGOperatorBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+ 
    Should Be Equal  ${node['data']['properties']['TDGOperatorBuildHead']}  ${node['data']['properties']['TDGOperatorBuildMaster']}
    Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki  #useVaultCAs,useVaultCerts
 
@@ -180,7 +182,7 @@ Verify AutoProv
 
    Should Match Regexp  ${node['data']['hostname']}  ^autoprov-.+
    Should Match Regexp  ${node['data']['properties']['InfraBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+
    Should Be Equal  ${node['data']['properties']['InfraBuildHead']}  ${node['data']['properties']['InfraBuildMaster']}
    Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki    #useVaultCAs,useVaultCerts
 
@@ -223,7 +225,7 @@ Verify ClusterSvc
 
    Should Match Regexp  ${node['data']['hostname']}  ^cluster-svc-.+
    Should Match Regexp  ${node['data']['properties']['InfraClusterSvcBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Should Match Regexp  ${node['data']['properties']['InfraClusterSvcBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Should Match Regexp  ${node['data']['properties']['InfraClusterSvcBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+
    Should Be Equal  ${node['data']['properties']['InfraClusterSvcBuildHead']}  ${node['data']['properties']['InfraClusterSvcBuildMaster']}
 
    Should Be Equal      ${node['data']['internal_pki']}  UseVaultPki    #useVaultCAs,useVaultCerts
@@ -270,7 +272,7 @@ Verify Shepherd
 
    Should Be True  len("${node['data']['key']['cloudlet_key']['name']}") > 0
    Should Match Regexp  ${node['data']['properties']['InfraBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Should Match Regexp  ${node['data']['properties']['InfraBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
    Should Be Equal  ${node['data']['properties']['InfraBuildHead']}  ${node['data']['properties']['InfraBuildMaster']}
 
    Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,UseVaultPki    #useAccessKey,useVaultCAs,useVaultCerts
@@ -317,7 +319,7 @@ Verify CRM
 
    Should Be True  len("${node['data']['hostname']}") > 0
    Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Match Regexp  ${node['data']['properties']['PlatformBuildDate']}  ^\\b\\w{3}\\b \\b\\w{3}\\b
-   Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Match Regexp  ${node['data']['properties']['PlatformBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\-.+
+   Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Match Regexp  ${node['data']['properties']['PlatformBuildHead']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.+
    Run Keyword If  not "${node['data']['key']['name']}".startswith('controller')  Should Be Equal  ${node['data']['properties']['PlatformBuildHead']}  ${node['data']['properties']['PlatformBuildMaster']} 
 
    Should Be Equal      ${node['data']['internal_pki']}  useAccessKey,UseVaultPki   #useAccessKey,useVaultCAs,useVaultCerts
