@@ -133,7 +133,7 @@ Get dme metrics with starttime on openstack
    log to console  ${metricspre['data'][0]}
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
-   ${start}=  Evaluate  ${epochpre} - 240
+   ${start}=  Evaluate  ${epochpre} - 600
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    # get readings and 1st and last timestamp
@@ -313,7 +313,7 @@ Get dme metrics with starttime and endtime on openstack
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
-   ${start}=  Evaluate  ${epochpre} - 600 
+   ${start}=  Evaluate  ${epochpre} - 900 
    ${end}=    Evaluate  ${epochpre} - 30
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
@@ -352,7 +352,7 @@ Get dme metrics with starttime and endtime and last on openstack
    @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
-   ${start}=  Evaluate  ${epochpre} - 600
+   ${start}=  Evaluate  ${epochpre} - 900
    ${end}=    Evaluate  ${epochpre} - 30 
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
