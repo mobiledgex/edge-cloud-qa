@@ -40,6 +40,8 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  delete_cluster_inst_timeout
    Should Contain  ${settings}  influx_db_metrics_retention
    Should Contain  ${settings}  influx_db_cloudlet_usage_metrics_retention
+   Should Contain  ${settings}  influx_db_downsampled_metrics_retention
+   Should Contain  ${settings}  influx_db_edge_events_metrics_retention
    Should Contain  ${settings}  load_balancer_max_port_range
    Should Contain  ${settings}  master_node_flavor
    Should Contain  ${settings}  max_tracked_dme_clients
@@ -53,8 +55,11 @@ Settings - ShowSettings should return the settings
    Should Contain  ${settings}  update_vm_pool_timeout
    Should Contain  ${settings}  update_trust_policy_timeout
    Should Contain  ${settings}  dme_api_metrics_collection_interval 
-   Should Contain  ${settings}  persistent_connection_metrics_collection_interval 
+   Should Contain  ${settings}  edge_events_metrics_collection_interval 
+   Should Contain  ${settings}  edge_events_metrics_continuous_queries_collection_intervals
    Should Contain  ${settings}  cleanup_reservable_auto_cluster_idletime
+   Should Contain  ${settings}  location_tile_side_length_km
+   Should Contain  ${settings}  appinst_client_cleanup_interval
 
 # ECQ-2989
 Settings - UpdateSettings should update the settings
@@ -84,9 +89,10 @@ Settings - UpdateSettings should update the settings
 
    Update Settings  region=${region}  create_app_inst_timeout=1m0s  update_app_inst_timeout=1m0s  delete_app_inst_timeout=1m0s  create_cluster_inst_timeout=1m0s   update_cluster_inst_timeout=1m0s   delete_cluster_inst_timeout=1m0s  create_cloudlet_timeout=1m0s  update_cloudlet_timeout=1m0s
 
-   Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
+   Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
-   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  persistent_connection_metrics_collection_interval=1s  cleanup_reservable_auto_cluster_idletime=1s
+   @{collection_intervals}=  Create List  1s  1s  1s 
+   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=1s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -114,13 +120,20 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['chef_client_interval']}          1m0s  
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}   1h0m0s 
    Should Be Equal             ${settings_post['influx_db_cloudlet_usage_metrics_retention']}   1h0m0s
+   Should Be Equal             ${settings_post['influx_db_downsampled_metrics_retention']}   1h0m0s
+   Should Be Equal             ${settings_post['influx_db_edge_events_metrics_retention']}   1h0m0s
    Should Be Equal             ${settings_post['cloudlet_maintenance_timeout']}  1s
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}        1s
    Should Be Equal             ${settings_post['update_trust_policy_timeout']}   1s
 
    Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}   1s
-   Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1s
+   Should Be Equal             ${settings_post['edge_events_metrics_collection_interval']}   1s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}   1s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}   1s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}   1s
    Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   1s
+   Should Be Equal As Numbers  ${settings_post['location_tile_side_length_km']}               1
+   Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}   1h0m0s
 
 # ECQ-2990
 Settings - UpdateSettings with bad parms shall return error
@@ -130,11 +143,13 @@ Settings - UpdateSettings with bad parms shall return error
 
    [Tags]  ReservableCluster
 
-   # EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
+   # fixed EDGECLOUD-4164 	UpdateSettings for autodeployintervalsec with large values give wrong error message 
    # fixed EDGECLOUD-4167 	UpdateSettings for loadbalancermaxportrange should only allow valid values 
    # fixed EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
    # fixed EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
    # fixed EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
+   # EDGECLOUD-4631  settings update for appinstclientcleanupinterval give bad error message
+   # EDGECLOUD-4633  UpdateSettings for autodeployintervalsec with values <= 0 give bad error message
    [Template]  Fail Create UpdateSettings 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  shepherd_metrics_collection_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  shepherd_metrics_collection_interval  1x
@@ -165,7 +180,6 @@ Settings - UpdateSettings with bad parms shall return error
 
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=float64, got=string, field=Settings.auto_deploy_interval_sec, offset=46"}')  auto_deploy_interval_sec  1x
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=float64, got=string, field=Settings.auto_deploy_interval_sec, offset=45"}')  auto_deploy_interval_sec  x
-   ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=number 9999999999999999999, field=Settings.shepherd_health_check_retries, offset=66"}')  auto_deploy_interval_sec  9999999999999999999
    ('code=400', 'error={"message":"Auto Deploy Interval Sec must be greater than 0"}')  auto_deploy_interval_sec  0
    ('code=400', 'error={"message":"Auto Deploy Interval Sec must be greater than 0"}')  auto_deploy_interval_sec  -1 
 
@@ -238,7 +252,7 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       influx_db_metrics_retention  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               influx_db_metrics_retention  99999999h
    #('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')                 influx_db_metrics_retention  0s      # now supported
-   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 61"}')          influx_db_metrics_retention  -1s
+   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 65"}')          influx_db_metrics_retention  -1s
    ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  1s
    #('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  1h0m0s  # now supported
    ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_metrics_retention  0h59m0s
@@ -247,7 +261,7 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  influx_db_cloudlet_usage_metrics_retention  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       influx_db_cloudlet_usage_metrics_retention  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               influx_db_cloudlet_usage_metrics_retention  99999999h
-   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 93"}')          influx_db_cloudlet_usage_metrics_retention  -1s
+   ('code=400', 'error={"message":"Error parsing query: found -, expected duration at line 1, char 97"}')          influx_db_cloudlet_usage_metrics_retention  -1s
    ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_cloudlet_usage_metrics_retention  1s
    ('code=400', 'error={"message":"Retention policy duration must be at least 1h0m0s"}')                           influx_db_cloudlet_usage_metrics_retention  0h59m0s
 
@@ -279,12 +293,12 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  0s
    ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  -1s
 
-   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               persistent_connection_metrics_collection_interval  1
-   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  persistent_connection_metrics_collection_interval  1x
-   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       persistent_connection_metrics_collection_interval  x
-   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               persistent_connection_metrics_collection_interval  99999999h
-   ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  0s
-   ('code=400', 'error={"message":"Persistent Connection Metrics Collection Interval must be greater than 0"}')    persistent_connection_metrics_collection_interval  -1s
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               edge_events_metrics_collection_interval  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  edge_events_metrics_collection_interval  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       edge_events_metrics_collection_interval  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               edge_events_metrics_collection_interval  99999999h
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              edge_events_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              edge_events_metrics_collection_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               cleanup_reservable_auto_cluster_idletime  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cleanup_reservable_auto_cluster_idletime  1x
@@ -292,6 +306,18 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               cleanup_reservable_auto_cluster_idletime  99999999h
    ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  0s
    ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  -1s
+
+   ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  0
+   ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  -1
+   ValueError: invalid literal for int() with base 10: 'x'                                               location_tile_side_length_km  x
+   ValueError: invalid literal for int() with base 10: '1h'                                              location_tile_side_length_km  1h
+
+   ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               appinst_client_cleanup_interval  1
+   ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  appinst_client_cleanup_interval  1x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       appinst_client_cleanup_interval  x
+   ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               appinst_client_cleanup_interval  99999999h
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              appinst_client_cleanup_interval  0s
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              appinst_client_cleanup_interval  -1s
 
 # ECQ-2991
 Settings - user shall be able to reset the settings
@@ -342,25 +368,35 @@ Settings - user shall be able to reset the settings
    Should Be Equal             ${settings_post['update_vm_pool_timeout']}                              20m0s
    Should Be Equal             ${settings_post['update_trust_policy_timeout']}                         10m0s
    Should Be Equal             ${settings_post['dme_api_metrics_collection_interval']}                 30s
-   Should Be Equal             ${settings_post['persistent_connection_metrics_collection_interval']}   1h0m0s 
+   Should Be Equal             ${settings_post['edge_events_metrics_collection_interval']}   1h0m0s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}   24h0m0s
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}   168h0m0s  
+   Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}   672h0m0s 
    Should Be Equal             ${settings_post['influx_db_metrics_retention']}                         672h0m0s
    Should Be Equal             ${settings_post['influx_db_cloudlet_usage_metrics_retention']}          8760h0m0s
+   Should Be Equal             ${settings_post['influx_db_downsampled_metrics_retention']}          8760h0m0s
+   Should Be Equal             ${settings_post['influx_db_edge_events_metrics_retention']}          672h0m0s
    Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}            30m0s
+   Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}            24h0m0s
 
 *** Keywords ***
 Cleanup Settings
    [Arguments]  ${settings}
 
+   Update Settings  region=${region}  master_node_flavor=${master_node_flavor_default}
+   Update Settings  region=${region}  influx_db_metrics_retention=120h0m0s
+   Update Settings  region=${region}  influx_db_cloudlet_usage_metrics_retention=120h0m0s
+
    FOR  ${key}  IN  @{settings.keys()}
-      Update Settings  region=${region}  ${key}=${settings['${key}']}
+      @{int_list}=  Run Keyword If  '${key}' == 'edge_events_metrics_continuous_queries_collection_intervals'  Create List  ${settings['${key}'][0]['interval']}  ${settings['${key}'][1]['interval']}  ${settings['${key}'][2]['interval']}
+      Run Keyword If  '${key}' == 'edge_events_metrics_continuous_queries_collection_intervals'  Update Settings  region=${region}  ${key}=${int_list} 
+      ...  ELSE  Update Settings  region=${region}  ${key}=${settings['${key}']}
    END
 
    Update Settings  region=${region}  master_node_flavor=${master_node_flavor_default}
    Update Settings  region=${region}  influx_db_metrics_retention=120h0m0s
    Update Settings  region=${region}  influx_db_cloudlet_usage_metrics_retention=120h0m0s
 
-   #Update Settings  region=${region}  @{parms_all}
-   
 Fail Create UpdateSettings
    [Arguments]  ${error_msg}  ${parm}  ${value}
    log to console  ${parm}
