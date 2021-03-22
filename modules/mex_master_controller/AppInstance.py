@@ -18,7 +18,7 @@ class AppInstance(MexOperation):
         self.show_url = '/auth/ctrl/ShowAppInst'
         self.update_url = '/auth/ctrl/UpdateAppInst'
         self.refresh_url = '/auth/ctrl/RefreshAppInst'
-        self.metrics_client_url = '/auth/metrics/client'
+        self.metrics_client_api_url = '/auth/metrics/clientapiusage'
         self.metrics_app_url = '/auth/metrics/app'
         self.show_appinst_client_url = '/auth/ctrl/ShowAppInstClient'
         self.root_url = root_url
@@ -290,7 +290,7 @@ class AppInstance(MexOperation):
 
         msg_dict = self._build_metrics(type_dict=app_inst_metric, method=method, cell_id=cell_id, selector='api', last=last, start_time=start_time, end_time=end_time)
 
-        return self.show(token=token, url=self.metrics_client_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
+        return self.show(token=token, url=self.metrics_client_api_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)[0]
 
     def get_app_metrics(self, token=None, region=None, app_name=None, developer_org_name=None, app_version=None, cluster_instance_name=None, operator_org_name=None, cloudlet_name=None, selector=None, last=None, start_time=None, end_time=None, json_data=None, use_defaults=True, use_thread=False):
         app_inst = self._build(app_name=app_name, developer_org_name=developer_org_name, app_version=app_version, cluster_instance_name=cluster_instance_name, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=False)
