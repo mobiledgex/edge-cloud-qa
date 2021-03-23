@@ -91,13 +91,13 @@ DMEPersistentConnection - persistent connection with edge cookie = session cooki
 
    [Tags]  DMEPersistentConnection
 
-   # EDGECLOUD-4542 able to create DME persistent connection with edge_event_cookie = session_cookie
+   # fixed EDGECLOUD-4542 able to create DME persistent connection with edge_event_cookie = session_cookie
    ${r}=  Register Client  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
 
    ${reply}=  Run Keyword and Expect Error  *  Create DME Persistent Connection  session_cookie=${r.session_cookie}  edge_events_cookie=${r.session_cookie}  carrier_name=${operator_name_fake}  latitude=36  longitude=-96  use_defaults=${False}
 
    Should Contain  ${reply}  status = StatusCode.UNAUTHENTICATED
-   Should Contain  ${reply}  details = "token is expired
+   Should Contain  ${reply}  details = "No Key data in cookie"
 
 # ECQ-3258
 DMEPersistentConnection - persistent connection with bad session cookie shall fail
