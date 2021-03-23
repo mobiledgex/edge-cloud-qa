@@ -58,12 +58,12 @@ CreateApp - mcctl shall be able to create/show/delete app
       # manifest
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest="${manifest_string}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest="${cloudconfig_string}"
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${server_ping_threaded_cloudconfig}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
-      appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
+      #appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm  deployment=helm  imagepath=${docker_image}  deploymentmanifest=${manifest_url}
 
       # scalewithcluster
       appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=kubernetes  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
@@ -137,11 +137,11 @@ CreateApp - mcctl shall handle create failures
 
       # deployment manifest
       # EDGECLOUD-4002  CreateApp should validate for proper helm chart and docker compose when using deploymentmanifest
-      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \\\'#cloud-config\\\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${manifest_url}
-      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \\\'#cloud-config\\\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=x
+      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=${manifest_url}
+      Error: Bad Request (400), Invalid deployment manifest, only cloud-init script support, must start with \'#cloud-config\'  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeQcow    deployment=vm  imagepath=${qcow_centos_image}  deploymentmanifest=x
       Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=kubernetes  imagepath=${docker_image}  deploymentmanifest=x
       Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}1  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker   deployment=docker  imagepath=${docker_image}  deploymentmanifest=x
-      Error: Bad Request (400), Invalid deployment manifest, parse kubernetes deployment yaml failed  appname=${app_name}2  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm   deployment=helm  imagepath=${docker_image}  deploymentmanifest=x
+      Error: Bad Request (400), Manifest is not used for Helm deployments. Use config files for customizations  appname=${app_name}2  app-org=${developer}  appvers=1.0  imagetype=ImageTypeHelm   deployment=helm  imagepath=${docker_image}  deploymentmanifest=x
 
       # scalewithcluster
       Error: Bad Request (400), App scaling is only supported for Kubernetes deployments  appname=${app_name}  app-org=${developer}  appvers=1.0  imagetype=ImageTypeDocker  deployment=docker  imagepath=${docker_image}  accessports=tcp:2015  scalewithcluster=${True}
@@ -264,9 +264,9 @@ Success Create/Show/Delete App Via mcctl
    Remove From Dictionary  ${parms_copy}  deploymentmanifest
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   Run mcctl  region CreateApp region=${region} ${parmss} --debug  version=${version}
-   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss_modify}  version=${version}
-   Run mcctl  region DeleteApp region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  app create region=${region} ${parmss} --debug  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  app delete region=${region} ${parmss_modify}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
@@ -337,24 +337,24 @@ Update Setup
    Set Suite Variable  ${app_name_vm}
    Set Suite Variable  ${app_name_helm}
 
-   Run mcctl  region CreateApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image}  version=${version}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}  version=${version}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}  version=${version}
-   Run mcctl  region CreateApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=kubernetes imagepath=${docker_image}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0 imagetype=ImageTypeDocker deployment=docker imagepath=${docker_image}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0 imagetype=ImageTypeHelm deployment=helm imagepath=${docker_image}  version=${version}
+   Run mcctl  app create region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0 imagetype=ImageTypeQcow deployment=vm imagepath=${qcow_centos_image}  version=${version}
 
 Update Teardown
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0  version=${version}
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0  version=${version}
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0  version=${version}
-   Run mcctl  region DeleteApp region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_k8s} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_docker} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_helm} app-org=${developer} appvers=1.0  version=${version}
+   Run mcctl  app delete region=${region} appname=${app_name_vm} app-org=${developer} appvers=1.0  version=${version}
 
 Success Update/Show App Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateApp region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  region ShowApp region=${region} ${parmss}  version=${version}
+   Run mcctl  app update region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  app show region=${region} ${parmss}  version=${version}
 
    #Verify Show  show=${show}  &{parms}
    Should Be Equal  ${show[0]['key']['name']}  ${parms['appname']}
@@ -392,5 +392,5 @@ Fail Create App Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateApp region=${region} ${parmss}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app create region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}

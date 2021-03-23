@@ -27,7 +27,7 @@ ${timeout}=  45s
 ${pool_name}=  mcctlpool
 ${cpoc}=  cpoc
 
-# mcctl --addr https://console-qa.mobiledgex.net region RunDebug cmd=
+# mcctl --addr https://console-qa.mobiledgex.net debug rundebug cmd=
 # Error: Bad Request (400), No cmd specified
 
 
@@ -52,10 +52,10 @@ RunDebug - mcctl shall handle cmd without val format
    ...  - send RunDebug cmd via mcctl with incorrect val format
    ...  - verify proper error is received
 
-   ${no_cmd}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug
+   ${no_cmd}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug
    Should Contain Any  ${no_cmd}  missing required args: cmd  Error: missing required args: cmd
 
-   ${cmd_format}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug cmd
+   ${cmd_format}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug cmd
    Should Contain Any  ${cmd_format}  Error: arg  val format  
 
 
@@ -193,21 +193,21 @@ RunDebug - mcctl shall send available commands to every cloudlet region and node
 *** Keywords ***
 Cleanup Provisioning
    Log to Console  \nCleaning up CloudletPool ${mcctlautomationpool} 
-   Run mcctl  region DeleteCloudletPool region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   Run mcctl  cloudletpool delete region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
    MexMasterController.Cleanup Provisioning
 
 Setup
    ${epoch}=  Get Time  epoch
    ${mcctlautomationpool}=  Catenate  ${cpoc}${epoch}${pool_name}
    Set Suite Variable  ${mcctlautomationpool} 
-   Run mcctl  region CreateCloudletPool region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   Run mcctl  cloudletpool create region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
    
 
 Check Output For All Known Cmd Node Shepherd
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_shep}
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
 
@@ -215,7 +215,7 @@ Check Output For All Known Cmd Node Crm
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_crm}
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
 
@@ -223,7 +223,7 @@ Check Output For All Known Cmd Node All
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_crm}  ${type_shep}    
    Should Contain Any  ${std_output}[1][node][type]  ${type_crm}  ${type_shep}  
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
@@ -234,7 +234,7 @@ Check Output For All Known Cmd Cloudlet All
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
 
-   ${sample}=  Run mcctl  region RunDebug ${parmss}
+   ${sample}=  Run mcctl  debug rundebug ${parmss}
    ${cnt}=  Get Length  ${sample}
          @{Enabled}=  Create List  #${output}
          @{Node_Type}=  Create List  #${ntype}
@@ -255,7 +255,7 @@ Check Output For Unknown Cmd
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][output]  ${error_msg}  ${error_msg2}
 
 Fail RunDebug Command Via mcctl
@@ -263,7 +263,7 @@ Fail RunDebug Command Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}  ${error_msg}  ${error_msg2}
 
 
