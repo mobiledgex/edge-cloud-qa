@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  CreateFlavor mcctl
+Documentation  flavor create mcctl
 
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
@@ -74,10 +74,10 @@ Success Create/Delete Flavor Via mcctl
    Remove From Dictionary  ${parms_copy}  slack-api-url  # this is not allowed since it is secret
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
 
-   Run mcctl  region CreateFlavor region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  region ShowFlavor region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  flavor create region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  flavor show region=${region} ${parmss_modify}  version=${version}
 
-   Run mcctl  region DeleteFlavor region=${region} ${parmss}  version=${version}
+   Run mcctl  flavor delete region=${region} ${parmss}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal As Numbers  ${show[0]['ram']}          ${parms['ram']}
@@ -93,5 +93,5 @@ Fail Create Flavor Via mcctl
    [Arguments]  ${error_msg}  &{parms}
    
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items()) 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateFlavor region=${region} ${parmss}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  flavor create region=${region} ${parmss}  version=${version}
    Should Contain  ${std_create}  ${error_msg}
