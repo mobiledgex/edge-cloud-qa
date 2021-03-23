@@ -14,7 +14,7 @@ Test Timeout  10m
 ${region}=  US
 ${operator}=  dmuus
 
-${version}=  latest
+${version}=  2021-03-22
 
 *** Test Cases ***
 # ECQ-3085
@@ -74,9 +74,9 @@ Success Create/Show/Delete Cloudlet Via mcctl
    Remove From Dictionary  ${parms_copy}  deploymentmanifest
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   Run mcctl  region CreateCloudlet region=${region} ${parmss} --debug  version=${version}
-   ${show}=  Run mcctl  region ShowCloudlet region=${region} ${parmss_modify}  version=${version}
-   Run mcctl  region DeleteCloudlet region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  cloudlet create region=${region} ${parmss} --debug  version=${version}
+   ${show}=  Run mcctl  cloudlet show region=${region} ${parmss_modify}  version=${version}
+   Run mcctl  cloudlet delete region=${region} ${parmss_modify}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
@@ -96,18 +96,18 @@ Update Setup
 
    Setup 
 
-   Run mcctl  region CreateCloudlet region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1 platformtype=PlatformTypeFake 
+   Run mcctl  cloudlet create region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1 platformtype=PlatformTypeFake 
 
 Update Teardown
-   Run mcctl  region DeleteCloudlet region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1
+   Run mcctl  cloudlet delete region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator} location.latitude=1 location.longitude=1 numdynamicips=1
 
 Success Update/Show Cloudlet Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateCloudlet region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  region ShowCloudlet region=${region} ${parmss}  version=${version}
+   Run mcctl  cloudlet update region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  cloudlet show region=${region} ${parmss}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['cloudlet']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
@@ -123,5 +123,5 @@ Fail Create Cloudlet Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateCloudlet region=${region} ${parmss}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudlet create region=${region} ${parmss}  version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
