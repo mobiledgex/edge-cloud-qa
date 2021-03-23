@@ -14,7 +14,7 @@ Test Timeout  10m
 ${region}=  US
 ${operator}=  dmuus
 
-${version}=  2021-03-22
+${version}=  latest
 
 *** Test Cases ***
 # ECQ-3085
