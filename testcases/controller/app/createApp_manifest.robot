@@ -264,6 +264,17 @@ CreateApp - user shall be to create with deployment=kubernetes and externalport 
     Should Contain   ${app.deployment_manifest}  port: 2116\n    targetPort: 2016
     Should Contain   ${app.deployment_manifest}  port: 8185\n    targetPort: 8085
 
+# ECQ-3294
+CreateApp - error shall be received with deployment=helm and deployment manifest
+    [Documentation]
+    ...  - create helm app with a deployment manifest
+    ...  - verify error is received
+
+    ${error_msg}=  Run Keyword and Expect Error  *  Create App  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:2014-2018  deployment_manifest=${manifest_artifactory_invalid}
+
+    Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+    Should Contain  ${error_msg}   details = "Manifest is not used for Helm deployments. Use config files for customizations"
+
 *** Keywords ***
 Setup
     #Create Developer            
