@@ -48,51 +48,54 @@ FindCloudlet - request without lat/long should return 'Missing GpsLocation'
 #   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
 #   Should Contain  ${error_msg}   details = "Missing carrierName"
 
+# these work now. We assume a 0 value if not passed which is a valid coord
 # ECQ-966
-FindCloudlet - request with latitude only should return error 
-   [Documentation]
-   ...  send FindCloudlet with latitude only
-   ...  verify proper error is received
-
-   Register Client
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
-
-   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
-
-# ECQ-967
-FindCloudlet - request with longitude only should return error 
-   [Documentation]
-   ...  send FindCloudlet with longitude only
-   ...  verify proper error is received
-
-   Register Client
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  longitude=35  use_defaults=${False}
-
-   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
-
-FindCloudlet - request with carrier_name and latitude only should fail
-   [Documentation]
-   ...  send FindCloudlet with carrier name and latitude only
-   ...  verify error is received
-
-   Register Client
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  latitude=35  use_defaults=${False}  # no error should be received
-
-   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
-
-FindCloudlet - request with carrier_name and longitude only should fail
-   [Documentation]
-   ...  send FindCloudlet with carrier name and longitude only
-   ...  verify error is received
-
-   Register Client
-   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${False}  # no error should be received
-
-   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
-   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+#FindCloudlet - request with latitude only should return error 
+#   [Documentation]
+#   ...  send FindCloudlet with latitude only
+#   ...  verify proper error is received
+#
+#   Register Client
+#   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  latitude=35  use_defaults=${False}
+#
+#   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+#   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+#
+## ECQ-967
+#FindCloudlet - request with longitude only should return error 
+#   [Documentation]
+#   ...  send FindCloudlet with longitude only
+#   ...  verify proper error is received
+#
+#   Register Client
+#   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  longitude=35  use_defaults=${False}
+#
+#   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+#   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+#
+# ECQ-968
+#FindCloudlet - request with carrier_name and latitude only should fail
+#   [Documentation]
+#   ...  send FindCloudlet with carrier name and latitude only
+#   ...  verify error is received
+#
+#   Register Client
+#   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  latitude=35  use_defaults=${False}  # no error should be received
+#
+#   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+#   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
+#
+# ECQ-969
+#FindCloudlet - request with carrier_name and longitude only should fail
+#   [Documentation]
+#   ...  send FindCloudlet with carrier name and longitude only
+#   ...  verify error is received
+#
+#   Register Client
+#   ${error_msg}=  Run Keyword And Expect Error  *  Find Cloudlet  session_cookie=default  carrier_name=${carrier_name}  longitude=35  use_defaults=${False}  # no error should be received
+#
+#   Should Contain  ${error_msg}   status = StatusCode.INVALID_ARGUMENT
+#   Should Contain  ${error_msg}   details = "Invalid GpsLocation"
 
 *** Keywords ***
 Setup
