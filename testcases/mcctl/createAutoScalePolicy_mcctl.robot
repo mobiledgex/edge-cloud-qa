@@ -95,9 +95,9 @@ Success Create/Show/Delete Autoscale Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region CreateAutoScalePolicy region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  region ShowAutoScalePolicy region=${region} ${parmss}  version=${version}
-   Run mcctl  region DeleteAutoScalePolicy region=${region} ${parmss}  version=${version}
+   Run mcctl  autoscalepolicy create region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  autoscalepolicy show region=${region} ${parmss}  version=${version}
+   Run mcctl  autoscalepolicy delete region=${region} ${parmss}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cluster-org']}
@@ -112,22 +112,22 @@ Fail Create Autoscale Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateAutoScalePolicy region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  autoscalepolicy create region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Update Setup
-   Run mcctl  region CreateAutoScalePolicy region=${region} name=${recv_name} cluster-org=${developer} minnodes=1 maxnodes=4 scaleupcputhresh=80 scaledowncputhresh=40   version=${version}
+   Run mcctl  autoscalepolicy create region=${region} name=${recv_name} cluster-org=${developer} minnodes=1 maxnodes=4 scaleupcputhresh=80 scaledowncputhresh=40   version=${version}
 
 Update Teardown
-   Run mcctl  region DeleteAutoScalePolicy region=${region} name=${recv_name} cluster-org=${developer}    version=${version}
+   Run mcctl  autoscalepolicy delete region=${region} name=${recv_name} cluster-org=${developer}    version=${version}
 
 Success Update/Show Autoscale Policy Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateAutoScalePolicy region=${region} ${parmss}    version=${version}
-   ${show}=  Run mcctl  region ShowAutoScalePolicy region=${region} ${parmss}    version=${version}
+   Run mcctl  autoscalepolicy update region=${region} ${parmss}    version=${version}
+   ${show}=  Run mcctl  autoscalepolicy show region=${region} ${parmss}    version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cluster-org']}
@@ -143,6 +143,6 @@ Fail Update Autoscale Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region UpdateAutoScalePolicy region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  autoscalepolicy update region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
