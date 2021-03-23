@@ -135,7 +135,7 @@ Check Dedicated Cluster For CLI Sent
    [Arguments]  ${output_msg}  ${output_msg2}  ${output_msg3}  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region AccessCloudlet ${parmss}
+   ${std_output}=  Run mcctl  accesscloudlet ${parmss}
    Set Test Variable  ${std_output}
    Should Contain Any  ${std_output}  ${output_msg}  ${output_msg2}  ${output_msg3}
 
@@ -154,7 +154,7 @@ Check Response For CLI Sent
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region AccessCloudlet ${parmss}
+   ${std_output}=  Run mcctl  accesscloudlet ${parmss}
    Set Test Variable  ${std_output}   
    ${cnt}=  Get Line Count  ${std_output}
    Set Test Variable  ${cnt}
@@ -179,7 +179,7 @@ Fail AccessCloudlet Command Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  region AccessCloudlet ${parmss}
+   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  accesscloudlet ${parmss}
    Should Contain Any  ${std_output}  ${error_msg}
 
 
