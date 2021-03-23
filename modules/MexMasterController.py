@@ -368,7 +368,7 @@ class MexMasterController(MexRest):
     def login(self, username=None, password=None, json_data=None, use_defaults=True, use_thread=False):
         url = self.root_url + '/login'
         payload = None
-
+ 
         if json_data is not None:
             payload = json_data
         else:
@@ -1665,8 +1665,11 @@ class MexMasterController(MexRest):
     def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
-    def run_mcctl(self, parms, version='latest'):
-        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} --output-format json'
+    def run_mcctl(self, parms, version='latest', output_format='json'):
+        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} ' 
+        if output_format:
+            cmd += f'--output-format {output_format}'
+
         logging.info(f'executing mcctl: {cmd}')
         output = self._run_command(cmd).decode('utf-8')
         try:

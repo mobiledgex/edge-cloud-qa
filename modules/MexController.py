@@ -738,6 +738,8 @@ class App():
             self.image_type = 1
         elif self.image_type == 'imagetypeqcow':
             self.image_type = 2
+        elif self.image_type == 'imagetypehelm':
+            self.image_type = 3
         elif self.image_type == 'imagetypeunknown':
             self.image_type = 0
 
