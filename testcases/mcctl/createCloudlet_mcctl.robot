@@ -14,7 +14,7 @@ Test Timeout  10m
 ${region}=  US
 ${operator}=  tmus
 
-${version}=  2021-03-22
+${version}=  latest
 
 *** Test Cases ***
 # ECQ-3085
