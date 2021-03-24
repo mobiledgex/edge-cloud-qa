@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   CreateAppInst 
+Documentation   CreateAppInst VM
 
 Library		MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 
@@ -14,6 +14,7 @@ ${mobile_longitude}  1
 ${qcow_centos_image}  qcowimage
 
 *** Test Cases ***
+# ECQ-1460
 AppInst - VM deployment without cluster shall create clustername='DefaultVMCluster'
     [Documentation]
     ...  create a VM app instance without cluster 
@@ -26,10 +27,11 @@ AppInst - VM deployment without cluster shall create clustername='DefaultVMClust
 
     ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}  no_auto_delete=${True}
     
-    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultVMCluster
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
 
-    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultVMCluster
+    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultCluster
 
+# ECQ-1461
 AppInst - VM deployment shall be created with clustername
     [Documentation]
     ...  create a VM app instance with cluster name
@@ -42,6 +44,23 @@ AppInst - VM deployment shall be created with clustername
     ${app_inst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}
 
     Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  ${cluster_name}
+
+# ECQ-3296
+AppInst - VM deployment without cluster shall be deleted without clustername
+    [Documentation]
+    ...  - create a VM app instance without cluster
+    ...  - verify delete works without the cluster info
+
+    ${cluster_name_default}=  Get Default Cluster Name
+    ${app_name_default}=  Get Default App Name
+    ${developer_name_default}=  Get Default Developer Name
+    ${app_version_default}=  Get Default App Version
+
+    ${app_inst}=  Create App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}  no_auto_delete=${True}
+
+    Should Be Equal  ${app_inst.key.cluster_inst_key.cluster_key.name}  DefaultCluster  #changed from DefaultVMCluster
+
+    Delete App Instance  app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}   #cluster_instance_developer_org_name=${developer_name_default}  cluster_instance_name=DefaultCluster
 
 *** Keywords ***
 Setup
