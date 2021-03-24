@@ -72,9 +72,9 @@ Add/Remove auto prov. policy to App via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   run mcctl  region AddAppAutoProvPolicy region=${region} ${parmss}
+   run mcctl  app addautoprovpolicy region=${region} ${parmss}
 
-   run mcctl  region RemoveAppAutoProvPolicy region=${region} ${parmss}
+   run mcctl  app removeautoprovpolicy region=${region} ${parmss}
 
 Fail to Add Auto Provisioning Policy Via mcctl
 
@@ -82,7 +82,7 @@ Fail to Add Auto Provisioning Policy Via mcctl
 
   ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-  ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region AddAppAutoProvPolicy region=${region} ${parmss}
+  ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  app addautoprovpolicy region=${region} ${parmss}
   Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 
