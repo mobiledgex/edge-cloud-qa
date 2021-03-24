@@ -271,9 +271,7 @@ DMEPersistentConnection - client for docker app shall be able to receive Latency
     ...  - make DME persistent connection
     ...  - request App Inst Latency 
     ...  - verify client receives the request 
-
     [Tags]  DMEPersistentConnection
-
     Create Flavor  region=${region}
     Create App  region=${region}  access_ports=tcp:1  deployment=docker
     Create Cluster Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  deployment=docker
@@ -291,6 +289,35 @@ DMEPersistentConnection - client for docker app shall be able to receive Latency
     ${developer_org_name}=  Get Default Developer Name
     ${cluster_name}=  Get Default Cluster Name
     Request App Instance Latency  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer_org_name}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}
+
+    Receive Latency Edge Request
+
+# ECQ-3248
+DMEPersistentConnection - client for docker autocluster app shall be able to receive Latency request
+    [Documentation]
+    ...  - create a docker autocluster appinst
+    ...  - make DME persistent connection
+    ...  - request App Inst Latency 
+    ...  - verify client receives the request 
+
+    [Tags]  DMEPersistentConnection
+
+    Create Flavor  region=${region}
+    Create App  region=${region}  access_ports=tcp:1  deployment=docker
+    ${tmus_appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autoclusterxx  cluster_instance_developer_org_name=MobiledgeX
+
+    Register Client  #app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}
+    ${cloudlet}=  Find Cloudlet       carrier_name=${operator_name_fake}  latitude=36  longitude=-96
+
+    Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
+    Should Be True  len('${cloudlet.edge_events_cookie}') > 100
+
+    Create DME Persistent Connection  carrier_name=TDG  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
+
+    ${app_name}=  Get Default App Name
+    ${developer_org_name}=  Get Default Developer Name
+    ${cluster_name}=  Get Default Cluster Name
+    Request App Instance Latency  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer_org_name}  cluster_instance_name=autoclusterxx  cluster_instance_developer_org_name=MobiledgeX  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}
 
     Receive Latency Edge Request
 
@@ -364,7 +391,7 @@ DMEPersistentConnection - client for vm app shall be able to receive Latency req
 
     [Tags]  DMEPersistentConnection
 
-    # EDGECLOUD-4523 RequestAppInstLatency - request doesnt work for VM apps since it has no cluster instance
+    # fixed EDGECLOUD-4523 RequestAppInstLatency - request doesnt work for VM apps since it has no cluster instance
 
     ${app_name}=  Get Default App Name
     ${developer_org_name}=  Get Default Developer Name
@@ -383,7 +410,6 @@ DMEPersistentConnection - client for vm app shall be able to receive Latency req
 
     Create DME Persistent Connection  carrier_name=TDG  edge_events_cookie=${cloudlet.edge_events_cookie}  latitude=36  longitude=-96
 
-    #Request App Instance Latency  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer_org_name}  cluster_instance_name=DefaultVMCluster  cluster_instance_developer_org_name=${developer_org_name}  cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}
     Request App Instance Latency  token=${token}  region=${region}  app_name=${app_name}  app_version=1.0  developer_org_name=${developer_org_name}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  use_defaults=${False}
 
     Receive Latency Edge Request
