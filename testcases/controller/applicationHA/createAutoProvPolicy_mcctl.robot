@@ -90,9 +90,9 @@ Success Create/Show/Delete Auto Prov Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region CreateAutoProvPolicy region=${region} ${parmss}
-   ${show}=  Run mcctl  region ShowAutoProvPolicy region=${region} ${parmss}
-   Run mcctl  region DeleteAutoProvPolicy region=${region} ${parmss}
+   Run mcctl  autoprovpolicy create region=${region} ${parmss}
+   ${show}=  Run mcctl  autoprovpolicy show region=${region} ${parmss}
+   Run mcctl  autoprovpolicy delete region=${region} ${parmss}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
@@ -104,18 +104,18 @@ Success Create/Show/Delete Auto Prov Policy Via mcctl
    Run Keyword If  'cloudlets:1.key.name' in ${parms}  Should Be Equal  ${show[0]['cloudlets'][1]['key']['name']}  ${parms['cloudlets:1.key.name']}
 
 Update Setup
-   Run mcctl  region CreateAutoProvPolicy region=${region} name=${recv_name} app-org=${developer} deployclientcount=1
+   Run mcctl  autoprovpolicy create region=${region} name=${recv_name} app-org=${developer} deployclientcount=1
 
 Update Teardown
-   Run mcctl  region DeleteAutoProvPolicy region=${region} name=${recv_name} app-org=${developer}
+   Run mcctl  autoprovpolicy delete region=${region} name=${recv_name} app-org=${developer}
 
 Success Update/Show Privacy Policy Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateAutoProvPolicy app-org=${developer} region=${region} ${parmss}
-   ${show}=  Run mcctl  region ShowAutoProvPolicy app-org=${developer} region=${region} ${parmss}
+   Run mcctl  autoprovpolicy update app-org=${developer} region=${region} ${parmss}
+   ${show}=  Run mcctl  autoprovpolicy show app-org=${developer} region=${region} ${parmss}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['app-org']}
@@ -132,5 +132,5 @@ Fail Create Auto Provisioning Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateAutoProvPolicy region=${region} ${parmss}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  autoprovpolicy create region=${region} ${parmss}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
