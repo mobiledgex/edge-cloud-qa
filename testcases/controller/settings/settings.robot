@@ -148,22 +148,22 @@ Settings - UpdateSettings with bad parms shall return error
    # fixed EDGECLOUD-4168 	UpdateSettings for maxtrackeddmeclients should only allow valid values 
    # fixed EDGECLOUD-4169 	UpdateSettings for chefclientinterval should only allow valid values 
    # fixed EDGECLOUD-4163 	UpdateSettings for influxdbmetricsretention should give better error message 
-   # EDGECLOUD-4631  settings update for appinstclientcleanupinterval give bad error message
+   # fixed EDGECLOUD-4631  settings update for appinstclientcleanupinterval give bad error message
    # EDGECLOUD-4633  UpdateSettings for autodeployintervalsec with values <= 0 give bad error message
    [Template]  Fail Create UpdateSettings 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  shepherd_metrics_collection_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  shepherd_metrics_collection_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  shepherd_metrics_collection_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  shepherd_metrics_collection_interval  99999999h 
-   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')  shepherd_metrics_collection_interval  0s
-   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0"}')  shepherd_metrics_collection_interval  -1s
+   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0s"}')  shepherd_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Shepherd Metrics Collection Interval must be greater than 0s"}')  shepherd_metrics_collection_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')  shepherd_alert_evaluation_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  shepherd_alert_evaluation_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  shepherd_alert_evaluation_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  shepherd_alert_evaluation_interval  99999999h
-   ('code=400', 'error={"message":"Shepherd Alert Evaluation Interval must be greater than 0"}')  shepherd_alert_evaluation_interval  0s
-   ('code=400', 'error={"message":"Shepherd Alert Evaluation Interval must be greater than 0"}')  shepherd_alert_evaluation_interval  -1s 
+   ('code=400', 'error={"message":"Shepherd Alert Evaluation Interval must be greater than 0s"}')  shepherd_alert_evaluation_interval  0s
+   ('code=400', 'error={"message":"Shepherd Alert Evaluation Interval must be greater than 0s"}')  shepherd_alert_evaluation_interval  -1s 
 
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.shepherd_health_check_retries, offset=51"}')  shepherd_health_check_retries  1x
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=int32, got=string, field=Settings.shepherd_health_check_retries, offset=50"}')  shepherd_health_check_retries  x
@@ -175,8 +175,8 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  shepherd_health_check_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  shepherd_health_check_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  shepherd_health_check_interval  99999999h
-   ('code=400', 'error={"message":"Shepherd Health Check Interval must be greater than 0"}')  shepherd_health_check_interval  0s
-   ('code=400', 'error={"message":"Shepherd Health Check Interval must be greater than 0"}')  shepherd_health_check_interval  -1s 
+   ('code=400', 'error={"message":"Shepherd Health Check Interval must be greater than 0s"}')  shepherd_health_check_interval  0s
+   ('code=400', 'error={"message":"Shepherd Health Check Interval must be greater than 0s"}')  shepherd_health_check_interval  -1s 
 
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=float64, got=string, field=Settings.auto_deploy_interval_sec, offset=46"}')  auto_deploy_interval_sec  1x
    ('code=400', 'error={"message":"Invalid POST data, Unmarshal type error: expected=float64, got=string, field=Settings.auto_deploy_interval_sec, offset=45"}')  auto_deploy_interval_sec  x
@@ -194,37 +194,37 @@ Settings - UpdateSettings with bad parms shall return error
 
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  create_app_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               create_app_inst_timeout  1
-   ('code=400', 'error={"message":"Create App Inst Timeout must be greater than 0"}')                              create_app_inst_timeout  0s
+   ('code=400', 'error={"message":"Create App Inst Timeout must be greater than 0s"}')                              create_app_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   create_app_inst_timeout  99999999999999999999s
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_app_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_app_inst_timeout  1
-   ('code=400', 'error={"message":"Update App Inst Timeout must be greater than 0"}')                              update_app_inst_timeout  0s
+   ('code=400', 'error={"message":"Update App Inst Timeout must be greater than 0s"}')                              update_app_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   update_app_inst_timeout  99999999999999999999s
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  delete_app_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               delete_app_inst_timeout  1
-   ('code=400', 'error={"message":"Delete App Inst Timeout must be greater than 0"}')                              delete_app_inst_timeout  0s
+   ('code=400', 'error={"message":"Delete App Inst Timeout must be greater than 0s"}')                              delete_app_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   delete_app_inst_timeout  99999999999999999999s
 
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  create_cluster_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               create_cluster_inst_timeout  1
-   ('code=400', 'error={"message":"Create Cluster Inst Timeout must be greater than 0"}')                          create_cluster_inst_timeout  0s
+   ('code=400', 'error={"message":"Create Cluster Inst Timeout must be greater than 0s"}')                          create_cluster_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   create_cluster_inst_timeout  99999999999999999999s
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_cluster_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_cluster_inst_timeout  1
-   ('code=400', 'error={"message":"Update Cluster Inst Timeout must be greater than 0"}')                          update_cluster_inst_timeout  0s
+   ('code=400', 'error={"message":"Update Cluster Inst Timeout must be greater than 0s"}')                          update_cluster_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   update_cluster_inst_timeout  99999999999999999999s
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  delete_cluster_inst_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               delete_cluster_inst_timeout  1
-   ('code=400', 'error={"message":"Delete Cluster Inst Timeout must be greater than 0"}')                          delete_cluster_inst_timeout  0s
+   ('code=400', 'error={"message":"Delete Cluster Inst Timeout must be greater than 0s"}')                          delete_cluster_inst_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   delete_cluster_inst_timeout  99999999999999999999s
 
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  create_cloudlet_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               create_cloudlet_timeout  1
-   ('code=400', 'error={"message":"Create Cloudlet Timeout must be greater than 0"}')                              create_cloudlet_timeout  0s
+   ('code=400', 'error={"message":"Create Cloudlet Timeout must be greater than 0s"}')                              create_cloudlet_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   create_cloudlet_timeout  99999999999999999999s
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_cloudlet_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_cloudlet_timeout  1
-   ('code=400', 'error={"message":"Update Cloudlet Timeout must be greater than 0"}')                              update_cloudlet_timeout  0s
+   ('code=400', 'error={"message":"Update Cloudlet Timeout must be greater than 0s"}')                              update_cloudlet_timeout  0s
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999999999999999s\\\\""}')   update_cloudlet_timeout  99999999999999999999s
 
    ('code=400', 'error={"message":"Flavor must preexist"}')  master_node_flavor  xx
@@ -244,8 +244,8 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  chef_client_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')  chef_client_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')  chef_client_interval  99999999h
-   ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  0s
-   ('code=400', 'error={"message":"Chef Client Interval must be greater than 0"}')  chef_client_interval  -1s
+   ('code=400', 'error={"message":"Chef Client Interval must be greater than 0s"}')  chef_client_interval  0s
+   ('code=400', 'error={"message":"Chef Client Interval must be greater than 0s"}')  chef_client_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               influx_db_metrics_retention  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  influx_db_metrics_retention  1x
@@ -269,43 +269,43 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cloudlet_maintenance_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       cloudlet_maintenance_timeout  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               cloudlet_maintenance_timeout  99999999h
-   ('code=400', 'error={"message":"Cloudlet Maintenance Timeout must be greater than 0"}')                         cloudlet_maintenance_timeout  0s
-   ('code=400', 'error={"message":"Cloudlet Maintenance Timeout must be greater than 0"}')                         cloudlet_maintenance_timeout  -1s
+   ('code=400', 'error={"message":"Cloudlet Maintenance Timeout must be greater than 0s"}')                         cloudlet_maintenance_timeout  0s
+   ('code=400', 'error={"message":"Cloudlet Maintenance Timeout must be greater than 0s"}')                         cloudlet_maintenance_timeout  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_vm_pool_timeout  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_vm_pool_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       update_vm_pool_timeout  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               update_vm_pool_timeout  99999999h
-   ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0"}')                               update_vm_pool_timeout  0s
-   ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0"}')                               update_vm_pool_timeout  -1s
+   ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0s"}')                               update_vm_pool_timeout  0s
+   ('code=400', 'error={"message":"Update Vm Pool Timeout must be greater than 0s"}')                               update_vm_pool_timeout  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               update_trust_policy_timeout  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  update_trust_policy_timeout  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       update_trust_policy_timeout  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               update_trust_policy_timeout  99999999h
-   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  0s
-   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0"}')                          update_trust_policy_timeout  -1s
+   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0s"}')                          update_trust_policy_timeout  0s
+   ('code=400', 'error={"message":"Update Trust Policy Timeout must be greater than 0s"}')                          update_trust_policy_timeout  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               dme_api_metrics_collection_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  dme_api_metrics_collection_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       dme_api_metrics_collection_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               dme_api_metrics_collection_interval  99999999h
-   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  0s
-   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0"}')                  dme_api_metrics_collection_interval  -1s
+   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0s"}')                  dme_api_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Dme Api Metrics Collection Interval must be greater than 0s"}')                  dme_api_metrics_collection_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               edge_events_metrics_collection_interval  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  edge_events_metrics_collection_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       edge_events_metrics_collection_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               edge_events_metrics_collection_interval  99999999h
-   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              edge_events_metrics_collection_interval  0s
-   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              edge_events_metrics_collection_interval  -1s
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0s"}')              edge_events_metrics_collection_interval  0s
+   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0s"}')              edge_events_metrics_collection_interval  -1s
 
    ('code=400', 'error={"message":"Invalid POST data, time: missing unit in duration \\\\"1\\\\""}')               cleanup_reservable_auto_cluster_idletime  1
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cleanup_reservable_auto_cluster_idletime  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       cleanup_reservable_auto_cluster_idletime  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               cleanup_reservable_auto_cluster_idletime  99999999h
-   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  0s
-   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0"}')             cleanup_reservable_auto_cluster_idletime  -1s
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0s"}')             cleanup_reservable_auto_cluster_idletime  0s
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0s"}')             cleanup_reservable_auto_cluster_idletime  -1s
 
    ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  0
    ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  -1
@@ -316,8 +316,9 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  appinst_client_cleanup_interval  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       appinst_client_cleanup_interval  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               appinst_client_cleanup_interval  99999999h
-   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              appinst_client_cleanup_interval  0s
-   ('code=400', 'error={"message":"Edge Events Metrics Collection Interval must be greater than 0"}')              appinst_client_cleanup_interval  -1s
+   ('code=400', 'error={"message":"Appinst Client Cleanup Interval must be greater than 2s"}')                     appinst_client_cleanup_interval  0s
+   ('code=400', 'error={"message":"Appinst Client Cleanup Interval must be greater than 2s"}')                     appinst_client_cleanup_interval  1s
+   ('code=400', 'error={"message":"Appinst Client Cleanup Interval must be greater than 2s"}')                     appinst_client_cleanup_interval  -1s
 
 # ECQ-2991
 Settings - user shall be able to reset the settings

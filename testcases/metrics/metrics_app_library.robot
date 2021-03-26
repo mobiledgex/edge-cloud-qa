@@ -696,19 +696,24 @@ Get app metrics with cloudlet/operator/developer only
    # get last metric and set starttime = 1 hour earlier
    ${metricspre}=  Get App Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=20
    log to console  ${metricspre['data'][0]}
-   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
+   @{datesplit}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  Z
    @{datesplit}=  Split String  ${datesplit[0]}  .
    ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   @{datesplit2}=  Split String  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  Z
+   @{datesplit2}=  Split String  ${datesplit2[0]}  .
+   ${epochpost}=  Convert Date  ${datesplit2[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
    log to console  ${epochpre}
-   ${start}=  Evaluate  ${epochpre} - 14400
-   ${end}=    Evaluate  ${epochpre} - 30
+   #${start}=  Evaluate  ${epochpre} - 14400
+   #${end}=    Evaluate  ${epochpre} - 30
+   ${start}=  Evaluate  ${epochpre} - 1
+   ${end}=    Evaluate  ${epochpost} - 1
    ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
    ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
 
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get App Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   ${metrics}=  Get App Metrics  region=${region}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=5
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  Z
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  Z
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -727,7 +732,7 @@ Get app metrics with cloudlet/operator/developer only
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be Equal As Integers  ${num_readings}  20
+   Should Be Equal As Integers  ${num_readings}  5
 	
    [Return]  ${metrics}
 
