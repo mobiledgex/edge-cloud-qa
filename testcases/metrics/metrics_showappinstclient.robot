@@ -128,7 +128,7 @@ RegisterClient Setup
    Register Client      app_name=${app_name_automation}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}  unique_id=123456789012345678901234567  unique_id_type=automation
 
 ShowAppInstClient Metrics Shall return FindCloudlet Request
-   [Arguments]  ${app_name}=${None}  ${app_version}=${None}  ${developer_org_name}=${None}  ${unique_id}=${None}  ${unique_id_type}=${None}
+   [Arguments]  ${app_name}=${None}  ${app_version}=${None}  ${developer_org_name}=${None}  ${cloudlet_name}=${None}  ${operator_org_name}=${None}  ${unique_id}=${None}  ${unique_id_type}=${None}
 
    ${t}=  Show App Instance Client Metrics  region=US  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer_org_name}  unique_id=${unique_id}  unique_id_type=${unique_id_type}  token=${super_token}  use_thread=${True}  use_defaults=False
    Sleep  2 second
@@ -151,26 +151,32 @@ ShowAppInstClient Metrics Shall return FindCloudlet Request
    Should Be True  ${len_metrics} == ${len_pre}+1
    Should Be True  ${metrics_last} > ${pre_last}
 
-   Values Should Be Valid  ${pre}
+   Values Should Be Valid  ${pre}  app_check=${app_name}  version_check=${app_version}  developer_check=${developer_org_name}  cloudlet_check=${cloudlet_name}  operator_check=${operator_org_name}  id_check=${unique_id}  type_check=${unique_id_type}
 
-   Values Should Be Valid  ${metrics}
+   Values Should Be Valid  ${metrics}  app_check=${app_name}  version_check=${app_version}  developer_check=${developer_org_name}  cloudlet_check=${cloudlet_name}  operator_check=${operator_org_name}  id_check=${unique_id}  type_check=${unique_id_type}
 
 Values Should Be Valid
-   [Arguments]  ${metrics}
+   [Arguments]  ${metrics}  ${app_check}=${app_name}  ${version_check}=${app_version}  ${developer_check}=${developer_name}  ${cloudlet_check}=${dmuus_operator_name}  ${operator_check}=${dmuus_cloudlet_name}  ${id_check}=${None}  ${type_check}=${None} 
 
    FOR  ${m}  IN  @{metrics}
-      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['organization']}  ${developer_name} 
-      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['name']}  ${app_name}
-      Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['version']}  ${app_version}
-      Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['organization']}  ${dmuus_operator_name}
-      Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['name']}  ${dmuus_cloudlet_name}
+      log to console  ${app_check} ${developer_check} ${id_check} ${type_check}
+      Run Keyword If  '${developer_check}' != '${None}'  Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['organization']}  ${developer_check} 
+      Run Keyword If  '${app_check}' != '${None}'  Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['name']}  ${app_check}
+      Run Keyword If  '${version_check}' != '${None}'  Should Be Equal  ${m['data']['client_key']['app_inst_key']['app_key']['version']}  ${app_version}
+      Run Keyword If  '${operator_check}' != '${None}'  Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['organization']}  ${dmuus_operator_name}
+      Run Keyword If  '${cloudlet_check}' != '${None}'  Should Be Equal  ${m['data']['client_key']['app_inst_key']['cluster_inst_key']['cloudlet_key']['name']}  ${dmuus_cloudlet_name}
 
       ${l}=  Get Length  ${m['data']['client_key']['unique_id']} 
       Should Be True  '${l}' > '0'
-      Should Be True   '${m['data']['client_key']['unique_id_type']}' == 'dme-ksuid' or '${m['data']['client_key']['unique_id_type']}' == 'automation' 
+      #Should Be True   '${m['data']['client_key']['unique_id_type']}' == 'dme-ksuid' or '${m['data']['client_key']['unique_id_type']}' == 'automation'
+      ${t}=  Get Length  ${m['data']['client_key']['unique_id_type']}
+      Should Be True  '${t}' > '0'
 
-      Should Be True  ${m['data']['location']['latitude']} > -90 and ${m['data']['location']['latitude']} < 90
-      Should Be True  ${m['data']['location']['longitude']} > -180 and ${m['data']['location']['longitude']} < 180 
+      Run Keyword If  '${id_check}' != '${None}'     Should Be Equal   ${m['data']['client_key']['unique_id']}  ${id_check}
+      Run Keyword If  '${type_check}' != '${None}'   Should Be Equal   ${m['data']['client_key']['unique_id_type']}  ${type_check}
+
+      Run Keyword If  'latitude' in ${m['data']['location']}  Should Be True  ${m['data']['location']['latitude']} > -90 and ${m['data']['location']['latitude']} < 90
+      Run Keyword If  'longitude' in ${m['data']['location']}  Should Be True  ${m['data']['location']['longitude']} > -180 and ${m['data']['location']['longitude']} < 180 
       #Should Be True  ${m['data']['location']['horizontal_accuracy']} > 0
       #Should Be True  ${m['data']['location']['vertical_accuracy']} > 0
       #Should Be True  ${m['data']['location']['altitude']} > 0
