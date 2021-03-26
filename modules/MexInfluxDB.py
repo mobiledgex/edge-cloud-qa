@@ -27,6 +27,7 @@ class MexInfluxDB(WebService) :
     appinst_memory_table = 'appinst-mem'
     appinst_network_table = 'appinst-network'
     appinst_connections_table = 'appinst-connections'
+    appinst_udp_table = 'appinst-udp'
 
     auto_prov_counts_table = 'auto-prov-counts'
 
@@ -126,7 +127,10 @@ class MexInfluxDB(WebService) :
 
     def get_influx_app_connections_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
         return self.get_influx_app_metrics(table=self.appinst_connections_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
-    
+   
+    def get_influx_app_udp_metrics(self, cluster_instance_name=None, app_name=None, app_version=None, cloudlet_name=None, developer_org_name=None, operator_org_name=None, condition=None):
+        return self.get_influx_app_metrics(table=self.appinst_udp_table, cluster_instance_name=cluster_instance_name, app_name=app_name, app_version=app_version, cloudlet_name=cloudlet_name, developer_org_name=developer_org_name, operator_org_name=operator_org_name, condition=condition)
+ 
     def get_influx_cloudlet_metrics(self, selector=None, cloudlet_name=None, operator_org_name=None, condition=None):
         query = f'select * from '
         if selector == 'utilization':
