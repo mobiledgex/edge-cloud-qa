@@ -154,23 +154,24 @@ UpdateCloudlet with a ipsupport of -8
 	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
 	#Should Contain  ${error_msg}   details = "Invalid IpSupport"
 
+# we now support 0,0
 # ECQ-945
-UpdateCloudlet with a location of 0 0 
-	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
-	...  The test case will try and update a Cloudlet with an invalid location lat and long of 0 0.
-	...  A 'location is missing; 0,0 is not a valid location' error is expected
-
-	#[Setup]  Setup
-
-	${locat}    Convert To Integer 	0
-
-	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
-        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid latitude value"}')
-
-	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-	#Should Contain  ${error_msg}   details = "Invalid latitude value"
-
-	#[Teardown]  Cleanup provisioning
+#UpdateCloudlet with a location of 0 0 
+#	[Documentation]   UpdateCloudlet -  Trys to update a cloudlet with an invalid cloudlet location value
+#	...  The test case will try and update a Cloudlet with an invalid location lat and long of 0 0.
+#	...  A 'location is missing; 0,0 is not a valid location' error is expected
+#
+#	#[Setup]  Setup
+#
+#	${locat}    Convert To Integer 	0
+#
+#	${error_msg}=  Run Keyword And Expect Error  *  Update Cloudlet	 region=${region}  operator_org_name=${oper}      cloudlet_name=${cldlet}      latitude=${locat}      longitude=${locat}       use_defaults=False
+#        Should Be Equal  ${error_msg}  ('code=400', 'error={"message":"Invalid latitude value"}')
+#
+#	#Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
+#	#Should Contain  ${error_msg}   details = "Invalid latitude value"
+#
+#	#[Teardown]  Cleanup provisioning
 
 # ECQ-946
 UpdateCloudlet with a location of 100 200 
