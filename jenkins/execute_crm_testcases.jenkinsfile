@@ -9,6 +9,10 @@ dmeazuregcp = "${dmeazuregcp}"
 commit_version = "${CommitVersion}"
 dmerest = "${dmerest}"
 dmerestcert = "${dmerestcert}"
+// the current number of tests to run in vcd and vsphere have been set to 1 until a stable number can be determined and will be modifed below and are used in jobList1Platform
+number_parallel_executionsOpenstack = '6'
+number_parallel_executionsVsphere = '1'
+number_parallel_executionsVCD = '1'
 
 //jobName = "${components}"
 
@@ -18,6 +22,8 @@ currentBuild.displayName = cycle
 def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmRunCommandTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
+def jobList1Platform = ["runCrmRunCommandTests"]
+def platform_list = ["Openstack", "VCD", "Vsphere"] 
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
 builds1 = [:]
@@ -87,6 +93,24 @@ node('jenkinsSlave1'){
                build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controllerazuregcp), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dmeazuregcp), string(name: 'CommitVersion', value: commit_version)]
             }
          }
+         for(int i=0; i < jobList1Platform.size(); ++i) {
+           for(int i2=0; i2 < platform_list.size(); ++i2) {
+            def jobName = jobList1Platform[i];
+            def platform = platform_list[i2]
+            def jobName_platform = jobName + platform
+            echo "i1=" + jobName + " " + platform
+               if(platform == 'VCD') {
+                   number_parallel_executions = number_parallel_executionsVCD
+               } else if (platform == 'Vsphere') {
+                   number_parallel_executions = number_parallel_executionsVsphere
+               } else {
+                   number_parallel_executions = number_parallel_executionsOpenstack
+               }
+            builds1[jobName_platform] = {
+               build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'Controller', value: controller), string(name: 'MasterController', value: mastercontroller), string(name: 'DME', value: dme), string(name: 'CommitVersion', value: commit_version), string(name: 'NumberParallelExecutions', value: number_parallel_executions), string(name: 'DMERest', value: dmerest), string(name: 'DMERestCert', value: dmerestcert), string(name: 'Platform', value: platform)]
+	    }
+           }
+           }
 
          try {
             parallel builds1
