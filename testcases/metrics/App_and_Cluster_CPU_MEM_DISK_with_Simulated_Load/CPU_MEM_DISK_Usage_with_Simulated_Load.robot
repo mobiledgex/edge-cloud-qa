@@ -16,7 +16,7 @@ Suite Teardown  Cleanup
 *** Variables ***
 
 ${cloudlet_name_openstack_dedicated}  automationSunnydaleCloudlet
-${operator_name_openstack}  GDDT
+${operator_name_openstack_gddt}  GDDT
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
@@ -45,9 +45,9 @@ Create Cluster and App Instnce
   ...  Create 3 different types of Cluster/App Instance k8s Dedicated & Docker Dedicated/Shared
   ...  Verify they are created successfully
   log to console  Creating Cluster Instances
-  ${handle1}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_1}  operator_org_name=${operator_name_openstack}  flavor_name=${default_flavor_name}  ip_access=IpAccessDedicated  deployment=docker  token=${user_token}  use_thread=${True}
-  ${handle2}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_2}  operator_org_name=${operator_name_openstack}  flavor_name=${default_flavor_name}  ip_access=IpAccessShared  deployment=docker  token=${user_token}  use_thread=${True}
-  ${handle3}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_3}  operator_org_name=${operator_name_openstack}  flavor_name=${default_flavor_name}  ip_access=IpAccessDedicated  deployment=kubernetes  token=${user_token}  use_thread=${True}
+  ${handle1}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_1}  operator_org_name=${operator_name_openstack_gddt}  flavor_name=${default_flavor_name}  ip_access=IpAccessDedicated  deployment=docker  token=${user_token}  use_thread=${True}
+  ${handle2}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_2}  operator_org_name=${operator_name_openstack_gddt}  flavor_name=${default_flavor_name}  ip_access=IpAccessShared  deployment=docker  token=${user_token}  use_thread=${True}
+  ${handle3}=  create cluster instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_name=${cluster_name_3}  operator_org_name=${operator_name_openstack_gddt}  flavor_name=${default_flavor_name}  ip_access=IpAccessDedicated  deployment=kubernetes  token=${user_token}  use_thread=${True}
 
   Log To Console  Waiting for ClusterIntance Thread
   Wait For Replies  ${handle1}  ${handle2}  ${handle3}
@@ -58,9 +58,9 @@ Create Cluster and App Instnce
   create app  region=${region}  app_name=${app_name_2}  deployment=docker  developer_org_name=${orgname}  image_path=${docker_image_1}  access_ports=udp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
   create app  region=${region}  app_name=${app_name_3}  deployment=kubernetes  developer_org_name=${orgname}  image_path=${kubernetes_image_1}  access_ports=udp:8080  app_version=v1  default_flavor_name=${default_flavor_name}  token=${user_token}
 
-  ${handle1}=  create app instance  region=${region}  app_name=${app_name_1}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_1}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack}  token=${user_token}  use_thread=${True}
-  ${handle2}=  create app instance  region=${region}  app_name=${app_name_2}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_2}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack}  token=${user_token}  use_thread=${True}
-  ${handle3}=  create app instance  region=${region}  app_name=${app_name_3}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_3}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack}  token=${user_token}  use_thread=${True}
+  ${handle1}=  create app instance  region=${region}  app_name=${app_name_1}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_1}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack_gddt}  token=${user_token}  use_thread=${True}
+  ${handle2}=  create app instance  region=${region}  app_name=${app_name_2}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_2}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack_gddt}  token=${user_token}  use_thread=${True}
+  ${handle3}=  create app instance  region=${region}  app_name=${app_name_3}  app_version=v1  cloudlet_name=${cloudlet_name_openstack_dedicated}  cluster_instance_name=${cluster_name_3}   developer_org_name=${orgname}  operator_org_name=${operator_name_openstack_gddt}  token=${user_token}  use_thread=${True}
 
   Log To Console  Waiting for AppInst threads
   Wait For Replies  ${handle1}  ${handle2}  ${handle3}
@@ -72,7 +72,7 @@ Docker Dedicated App Instance CPU Usage
    ...  request app CPU metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  cpu
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  cpu
    log  ${metrics}
    Docker Dedicated App CPU Headings Should Be Correct  ${metrics}
    Docker Dedicated App CPU Should Be In Range  ${metrics}
@@ -82,7 +82,7 @@ Docker Dedicated App Instance MEM Usage
    ...  request app MEM metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  mem
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  mem
    log  ${metrics}
    Docker Dedicated App MEM Headings Should Be Correct  ${metrics}
    Docker Dedicated App MEM Should Be In Range  ${metrics}
@@ -92,7 +92,7 @@ Docker Dedicated App Instance DISK Usage
    ...  request app CPU metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  disk
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_1}  ${app_name_influx_1}  ${cluster_name_1}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  disk
    log  ${metrics}
    Docker Dedicated App DISK Headings Should Be Correct  ${metrics}
    Docker Dedicated App DISK Should Be In Range  ${metrics}
@@ -102,7 +102,7 @@ Docker Shared App Instance CPU Usage
    ...  request app CPU metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  cpu
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  cpu
    log  ${metrics}
    Docker Shared App CPU Headings Should Be Correct  ${metrics}
    Docker Shared App CPU Should Be In Range  ${metrics}
@@ -112,7 +112,7 @@ Docker Shared App Instance MEM Usage
    ...  request app MEM metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  mem
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  mem
    log  ${metrics}
    Docker Shared App MEM Headings Should Be Correct  ${metrics}
    Docker Shared App MEM Should Be In Range  ${metrics}
@@ -123,7 +123,7 @@ Docker Shared App Instance DISK Usage
    ...  request app DISK metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  disk
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_2}  ${app_name_influx_2}  ${cluster_name_2}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  disk
    log  ${metrics}
    Docker Shared App DISK Headings Should Be Correct  ${metrics}
    Docker Shared App DISK Should Be In Range  ${metrics}
@@ -133,7 +133,7 @@ k8s Dedicated App Instance CPU Usage
    ...  request app CPU metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  cpu
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  cpu
    log  ${metrics}
    k8s Dedicated App Instance CPU Headings Should Be Correct  ${metrics}
    k8s Dedicated App Instance CPU Should Be In Range  ${metrics}
@@ -144,7 +144,7 @@ k8s Dedicated App Instance MEM Usage
    ...  request app MEM metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  mem
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  mem
    log  ${metrics}
    k8s Dedicated App Instance MEM Headings Should Be Correct  ${metrics}
    k8s Dedicated App Instance MEM Headings Should Be In Range  ${metrics}
@@ -155,7 +155,7 @@ k8s Dedicated App Instance DISK Usage
    ...  request app DISK metrics with last=1
    ...  verify info is correct
 
-   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack}  ${orgname}  disk
+   ${metrics}  ${metrics_influx}=  Get the last app metric on openstack   ${app_name_3}  ${app_name_influx_3}  ${cluster_name_3}  ${cloudlet_name_openstack_dedicated}  ${operator_name_openstack_gddt}  ${orgname}  disk
    log  ${metrics}
    k8s Dedicated App Instance DISK Headings Should Be Correct  ${metrics}
    k8s Dedicated App Instance DISK Should Be In Range  ${metrics}
