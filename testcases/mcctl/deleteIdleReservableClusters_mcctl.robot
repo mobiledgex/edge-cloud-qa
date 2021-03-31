@@ -54,7 +54,7 @@ Success DeleteIdleReservableClusterInsts Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items() if val is not None) 
 
-   ${out}=  Run mcctl  region DeleteIdleReservableClusterInsts region=${region} ${parmss}  version=${version}
+   ${out}=  Run mcctl  clusterinst deleteidlereservables region=${region} ${parmss}  version=${version}
 
    Should Be Equal As Strings  ${out}  {'message': 'Delete done'}
 
@@ -63,5 +63,5 @@ Fail DeleteIdleReservableClusterInsts Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region DeleteIdleReservableClusterInsts region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  clusterinst deleteidlereservables region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
