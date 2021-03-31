@@ -129,9 +129,9 @@ Success Create/Show/Delete Trust Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region CreateTrustPolicy region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  region ShowTrustPolicy region=${region} ${parmss}  version=${version}
-   Run mcctl  region DeleteTrustPolicy region=${region} ${parmss}  version=${version}
+   Run mcctl  trustpolicy create region=${region} ${parmss}  version=${version}
+   ${show}=  Run mcctl  trustpolicy show region=${region} ${parmss}  version=${version}
+   Run mcctl  trustpolicy delete region=${region} ${parmss}  version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']} 
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
@@ -152,18 +152,18 @@ Success Create/Show/Delete Trust Policy Via mcctl
    Run Keyword If  'outboundsecurityrules:2.portrangemax' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][2]['port_range_max']}  ${parms['outboundsecurityrules:2.portrangemax']}
 
 Update Setup
-   Run mcctl  region CreateTrustPolicy region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
+   Run mcctl  trustpolicy create region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
 
 Update Teardown
-   Run mcctl  region DeleteTrustPolicy region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
+   Run mcctl  trustpolicy delete region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
 
 Success Update/Show Trust Policy Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   Run mcctl  region UpdateTrustPolicy region=${region} ${parmss}    version=${version}
-   ${show}=  Run mcctl  region ShowTrustPolicy region=${region} ${parmss}    version=${version}
+   Run mcctl  trustpolicy update region=${region} ${parmss}    version=${version}
+   ${show}=  Run mcctl  trustpolicy show region=${region} ${parmss}    version=${version}
 
    Should Be Equal  ${show[0]['key']['name']}  ${parms['name']}
    Should Be Equal  ${show[0]['key']['organization']}  ${parms['cloudlet-org']}
@@ -188,5 +188,5 @@ Fail Create Trust Policy Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region CreateTrustPolicy region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  trustpolicy create region=${region} ${parmss}    version=${version}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}

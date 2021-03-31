@@ -12,7 +12,7 @@ Suite Setup      Setup
 Suite Teardown  Cleanup
 
 *** Variables ***
-${cloudlet1}  packetcloudlet
+${cloudlet1}  packet-qaregression
 ${cloudlet2}  DFWVMW2
 ${operator_name_openstack_packet}  packet
 ${mobiledgex_domain}  mobiledgex.net
@@ -43,7 +43,7 @@ Create Auto Provisioning Policy
 
    Log to Console  Create Auto Provisioning Policy with 1 min active instances and add two cloudlet to the policy
 
-   &{cloudlet1}=  create dictionary  name=packetcloudlet  organization=packet
+   &{cloudlet1}=  create dictionary  name=packet-qaregression  organization=packet
    &{cloudlet2}=  create dictionary  name=DFWVMW2  organization=packet
    @{cloudletlist}=  create list  ${cloudlet1}  ${cloudlet2}
 
