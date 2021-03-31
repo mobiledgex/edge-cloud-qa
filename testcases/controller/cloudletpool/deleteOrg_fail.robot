@@ -37,6 +37,8 @@ DeleteOrg - delete org in use by cloudlet pool invitation/confirmation shall ret
    ...  - send DeleteOrg
    ...  - verify proper error is received
 
+   [Tags]  CloudletPoolAccess
+
    Create Org
    Create Cloudlet Pool  region=US  operator_org_name=tmus
 

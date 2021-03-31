@@ -6,6 +6,9 @@ Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
+*** Variables ***
+${region}=  US
+
 *** Test Cases ***
 # ECQ-1689
 DeleteCloudletPool - delete without region shall return error 
@@ -44,31 +47,61 @@ DeleteCloudletPool - delete with name not found shall return error
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"CloudletPool key {\\\\"organization\\\\":\\\\"tmus\\\\",\\\\"name\\\\":\\\\"xpoolx\\\\"} not found"}
 
+# orgcloudletpool not supported
 # ECQ-1692
-DeleteCloudletPool - delete when assinged to an org shall return error 
+#DeleteCloudletPool - delete when assinged to an org shall return error 
+#   [Documentation]
+#   ...  - send CreateCloudletPool
+#   ...  - assign via orgcloudletpool create
+#   ...  - send DeleteCloudletPool
+#   ...  - verify proper error is received
+#
+#   #EDGECLOUD-1728 able to do DeleteCloudletPool when the pool is assigned to an org  closed
+#   # EDGECLOUD-3401 able to do DeleteCloudletPool when the pool is assigned to an org
+#
+#   ${pool_name}=  Get Default Cloudlet Pool Name
+#   ${org_name}=   Get Default Organization Name
+#
+#   Create Org
+#
+#   ${pool_return1}=  Create Cloudlet Pool  region=US  
+#   log to console  xxx ${pool_return1}
+#
+#   ${pool_return}=  Create Org Cloudlet Pool  region=US  
+#
+#   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  
+#
+#   Should Contain   ${error}  code=400
+#   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region US name ${pool_name} because it is in use by OrgCloudletPool org ${org_name}"}
+
+# ECQ-3310
+DeleteCloudletPool - delete when assinged to an invitation/confirmation shall return error
    [Documentation]
    ...  - send CreateCloudletPool
-   ...  - assign via orgcloudletpool create
+   ...  - create invitation and confirmation
    ...  - send DeleteCloudletPool
    ...  - verify proper error is received
 
-   #EDGECLOUD-1728 able to do DeleteCloudletPool when the pool is assigned to an org  closed
-   # EDGECLOUD-3401 able to do DeleteCloudletPool when the pool is assigned to an org
+   [Tags]  CloudletPoolAccess
 
    ${pool_name}=  Get Default Cloudlet Pool Name
    ${org_name}=   Get Default Organization Name
 
    Create Org
 
-   ${pool_return1}=  Create Cloudlet Pool  region=US  
-   log to console  xxx ${pool_return1}
+   ${pool_return1}=  Create Cloudlet Pool  region=US
 
-   ${pool_return}=  Create Org Cloudlet Pool  region=US  
+   Create Cloudlet Pool Access Invitation    region=${region}  
 
-   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  
-
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region US name ${pool_name} because it is in use by OrgCloudletPool org ${org_name}"}
+   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation"}
+
+   Create Cloudlet Pool Access Confirmation  region=${region} 
+
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation, automation_dev_org confirmation"}
 
 *** Keywords ***
 Setup
