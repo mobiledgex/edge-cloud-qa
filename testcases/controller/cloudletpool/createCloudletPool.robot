@@ -4,8 +4,8 @@ Documentation  CreateCloudletPool
 Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  String
      
-Suite Setup  Setup
-Suite Teardown  Cleanup Provisioning
+Test Setup  Setup
+Test Teardown  Cleanup Provisioning
 
 *** Variables ***
 ${region}=  US
