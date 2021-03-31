@@ -7,7 +7,7 @@ mastercontroller = "${mastercontroller}"
 
 currentBuild.displayName = cycle
 
-def jobList1Parallel = ["runCloudletPoolTests", "runCloudletPoolMemberTests", "runOrgCloudletTests", "runOrgCloudletPoolTests"]
+def jobList1Parallel = ["runCloudletPoolTests", "runCloudletPoolMemberTests", "runOrgCloudletTests"]
  
 builds1 = [:]
 
