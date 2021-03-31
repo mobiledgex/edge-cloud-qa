@@ -20,7 +20,7 @@ Settings - mcctl shall be able to show the settings
    ...  - send ShowSettings via mcctl
    ...  - verify settings are returned
 
-   ${settings}=  Run mcctl  region ShowSettings region=${region} 
+   ${settings}=  Run mcctl  settings show region=${region} 
 
    Should Contain  ${settings}  auto_deploy_interval_sec
    Should Contain  ${settings}  auto_deploy_max_intervals
@@ -49,18 +49,19 @@ Settings - mcctl shall be able to update the settings
    ...  - send UpdateSettings via mcctl
    ...  - verify settings are updated
 
-   ${settings}=  Run mcctl  region ShowSettings region=${region} 
+   ${settings}=  Run mcctl  settings show region=${region}
+   Remove from Dictionary  ${settings}  edge_events_metrics_continuous_queries_collection_intervals 
    [Teardown]  Cleanup Settings  ${settings}
 
-   Run mcctl  region UpdateSettings region=${region} shepherdmetricscollectioninterval=1s
-   Run mcctl  region UpdateSettings region=${region} shepherdalertevaluationinterval=1s
-   Run mcctl  region UpdateSettings region=${region} shepherdhealthcheckretries=1
-   Run mcctl  region UpdateSettings region=${region} shepherdhealthcheckinterval=1s
-   Run mcctl  region UpdateSettings region=${region} autodeployintervalsec=1 autodeployoffsetsec=1 autodeploymaxintervals=1
-   Run mcctl  region UpdateSettings region=${region} createappinsttimeout=1m0s updateappinsttimeout=1m0s deleteappinsttimeout=1m0s createclusterinsttimeout=1m0s updateclusterinsttimeout=1m0s deleteclusterinsttimeout=1m0s
-   Run mcctl  region UpdateSettings region=${region} masternodeflavor=x1.medium loadbalancermaxportrange=1 maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
+   Run mcctl  settings update region=${region} shepherdmetricscollectioninterval=1s
+   Run mcctl  settings update region=${region} shepherdalertevaluationinterval=1s
+   Run mcctl  settings update region=${region} shepherdhealthcheckretries=1
+   Run mcctl  settings update region=${region} shepherdhealthcheckinterval=1s
+   Run mcctl  settings update region=${region} autodeployintervalsec=1 autodeployoffsetsec=1 autodeploymaxintervals=1
+   Run mcctl  settings update region=${region} createappinsttimeout=1m0s updateappinsttimeout=1m0s deleteappinsttimeout=1m0s createclusterinsttimeout=1m0s updateclusterinsttimeout=1m0s deleteclusterinsttimeout=1m0s
+   Run mcctl  settings update region=${region} masternodeflavor=x1.medium loadbalancermaxportrange=1 maxtrackeddmeclients=1 chefclientinterval=1m0s influxdbmetricsretention=100h0m0s cloudletmaintenancetimeout=1s updatevmpooltimeout=1s
 
-   ${settings_post}=  Run mcctl  region ShowSettings region=${region}
+   ${settings_post}=  Run mcctl  settings show region=${region}
 
    Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    1s
    Should Be Equal             ${settings_post['shepherd_health_check_interval']}        1s
@@ -197,12 +198,13 @@ Settings - mcctl shall be able to reset the settings
 
    # EDGECLOUD-4156 	ResetSettings removes the influxdbmetricsretention setting  - closed
 
-   ${settings}=  Run mcctl  region ShowSettings region=${region}
+   ${settings}=  Run mcctl  settings show region=${region}
+   Remove from Dictionary  ${settings}  edge_events_metrics_continuous_queries_collection_intervals
    [Teardown]  Cleanup Settings  ${settings}
 
-   Run mcctl  region ResetSettings region=${region}
+   Run mcctl  settings reset region=${region}
 
-   ${settings_post}=  Run mcctl  region ShowSettings region=${region}
+   ${settings_post}=  Run mcctl  settings show region=${region}
 
    Should Be Equal             ${settings_post['shepherd_alert_evaluation_interval']}    15s
    Should Be Equal             ${settings_post['shepherd_health_check_interval']}        5s
@@ -233,13 +235,13 @@ Settings - mcctl shall be able to reset the settings
 Fail UpdateSettings Via mcctl
    [Arguments]  ${error_msg}  ${parms}
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region UpdateSettings region=${region} ${parms}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  settings update region=${region} ${parms}
    Should Contain  ${std_create}  ${error_msg}
 
 Cleanup Settings
    [Arguments]  ${settings}
 
-   ${settings_pre}=  Run mcctl  region ShowSettings region=${region}
+   ${settings_pre}=  Run mcctl  settings show region=${region}
 
    ${parms_all}=  Set Variable  ${Empty}
    FOR  ${key}  IN  @{settings.keys()}
@@ -247,7 +249,7 @@ Cleanup Settings
       ${parms_all}=  Catenate  SEPARATOR=${SPACE}  ${parms_all}  ${parm}=${settings['${key}']} 
    END
 
-   Run mcctl  region UpdateSettings region=${region} ${parms_all}
+   Run mcctl  settings update region=${region} ${parms_all}
 
-   ${settings_post}=  Run mcctl  region ShowSettings region=${region}
+   ${settings_post}=  Run mcctl  settings show region=${region}
 

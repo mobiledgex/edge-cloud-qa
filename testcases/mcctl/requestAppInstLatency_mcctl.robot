@@ -26,7 +26,7 @@ RequestAppInstLatency - mcctl shall be able to request latency
    [Tags]  DMEPersistentConnection
 
    [Template]  Success RequestAppInstLatency Via mcctl
-      appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0 cluster=autoclusterautomation cluster-org=${developer_org_name_automation}  cloudlet=${cloudlet_name_fake} cloudlet-org=${operator_name_fake}
+      appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0 cluster=autoclusterautomation cluster-org=${developer}  cloudlet=${cloudlet_name_fake} cloudlet-org=${operator_name_fake}
 
 # ECQ-3239
 RequestAppInstLatency - mcctl shall handle create failures
@@ -61,7 +61,7 @@ Success RequestAppInstLatency Via mcctl
    Remove From Dictionary  ${parms_copy}  slack-api-url  # this is not allowed since it is secret
    ${parmss_modify}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
 
-   ${result}=  Run mcctl  region RequestAppInstLatency region=${region} ${parmss}  version=${version}
+   ${result}=  Run mcctl  appinstlatency request region=${region} ${parmss}  version=${version}
 
    Should Be Equal  ${result['message']}  successfully sent latency request
 
@@ -69,5 +69,5 @@ Fail RequestAppInstLatency Via mcctl
    [Arguments]  ${error_msg}  &{parms}
    
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items()) 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region RequestAppInstLatency region=${region} ${parmss}  version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  appinstlatency request region=${region} ${parmss}  version=${version}
    Should Contain  ${std_create}  ${error_msg}
