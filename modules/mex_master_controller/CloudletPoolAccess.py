@@ -28,7 +28,8 @@ class CloudletPoolAccess(MexOperation):
 
         if use_defaults:
             if cloudlet_pool_name is None: cloudlet_pool_name = shared_variables.cloudletpool_name_default
-            if developer_org_name is None: operator_org_name = shared_variables.developer_name_default
+            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
+            if cloudlet_pool_org_name is None: cloudlet_pool_org_name = shared_variables.operator_name_default
 
         invite_dict = {}
         if cloudlet_pool_name is not None:

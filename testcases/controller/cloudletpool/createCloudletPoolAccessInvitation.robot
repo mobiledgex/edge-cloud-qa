@@ -20,6 +20,8 @@ CreateCloudletPoolAccess - shall be able to create a cloudlet pool access invita
    ...  - send CreateCloudletPoolAccessInvitation with various names
    ...  - verify invitation is created 
 
+   [Tags]  CloudletPoolAccess
+
    [Template]  Create Invitation
 
    cloudlet_pool_name=${long_name}
@@ -36,6 +38,8 @@ CreateCloudletPoolAccess - shall be able to create a cloudlet pool access confir
    [Documentation]
    ...  - send CreateCloudletPoolAccessConfirmation with various names
    ...  - verify pool is created
+
+   [Tags]  CloudletPoolAccess
 
    [Template]  Create Confirmation
 
