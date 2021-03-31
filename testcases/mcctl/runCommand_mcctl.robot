@@ -56,7 +56,7 @@ Success RunCommand Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms_copy}.items())
  
-   ${out}=  Run mcctl  region RunCommand region=${region} ${parmss} --debug 
+   ${out}=  Run mcctl  runcommand region=${region} ${parmss} --debug 
    @{outsplit}=  Split To Lines  ${out}
    Should Be Equal  ${outsplit[1]}  root
 
@@ -65,5 +65,5 @@ Fail RunCommand Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  region RunCommand region=${region} ${parmss}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  runcommand region=${region} ${parmss}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
