@@ -108,6 +108,7 @@ Setup
    ${user_token}=  Login  username=${epochusername}  password=${password}
 
    Create Org  orgtype=operator
+   RestrictedOrg Update
    Create Cloudlet  region=${region}
 
    Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
