@@ -121,6 +121,18 @@ class MexOperation(MexRest):
                 elif 'RequestAppInstLatency' in url:
                     if 'successfully sent latency request' not in str(self.resp_text):
                         raise Exception('ERROR: RequestAppInstLatency not sent successfully:' + str(self.resp_text))
+                elif url.endswith('cloudletpoolaccessinvitation/create'):
+                    if str(self.resp.text) != '{"message":"invitation created"}':
+                        raise Exception('ERROR: cloudletpoolaccessinvitation not created successfully:' + str(self.resp_text))
+                elif url.endswith('cloudletpoolaccessinvitation/delete'):
+                    if str(self.resp.text) != '{"message":"invitation deleted"}':
+                        raise Exception('ERROR: cloudletpoolaccessinvitation not deleted successfully:' + str(self.resp_text))
+                elif url.endswith('cloudletpoolaccessconfirmation/create'):
+                    if str(self.resp.text) != '{"message":"confirmation created"}':
+                        raise Exception('ERROR: cloudletpoolaccessconfirmation not created successfully:' + str(self.resp_text))
+                elif url.endswith('cloudletpoolaccessconfirmation/delete'):
+                    if str(self.resp.text) != '{"message":"confirmation deleted"}':
+                        raise Exception('ERROR: cloudletpoolaccessconfirmation not deleted successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
                 #elif url.endswith('UpdateCloudlet'):
