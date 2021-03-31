@@ -23,6 +23,8 @@ CreateCloudletPoolAccess - shall be able to show the granted invitations/confirm
    ...  - delete the invitation/confirmation
    ...  - verify it is removed from the granted list
 
+   [Tags]  CloudletPoolAccess
+
    ${granted_pre}=  Show Cloudlet Pool Access Granted
    ${granted_pre_length}=  Get Length  ${granted_pre}
 
