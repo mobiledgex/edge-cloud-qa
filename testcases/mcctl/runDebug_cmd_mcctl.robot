@@ -5,7 +5,8 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  Collections
 Library  String
 
-Suite Teardown  Cleanup Provisioning
+Suite Setup  Setup
+Suite Teardown   Cleanup Provisioning
 
 Test Timeout  2m
 
@@ -21,9 +22,12 @@ ${region}=  EU
 ${developer}=  MobiledgeX
 ${type_shep}=  shepherd
 ${type_crm}=  crm
+${type_notifyroot}=  notifyroot
 ${timeout}=  45s
+${pool_name}=  mcctlpool
+${cpoc}=  cpoc
 
-# mcctl --addr https://console-qa.mobiledgex.net region RunDebug cmd=
+# mcctl --addr https://console-qa.mobiledgex.net debug rundebug cmd=
 # Error: Bad Request (400), No cmd specified
 
 
@@ -48,10 +52,10 @@ RunDebug - mcctl shall handle cmd without val format
    ...  - send RunDebug cmd via mcctl with incorrect val format
    ...  - verify proper error is received
 
-   ${no_cmd}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug
+   ${no_cmd}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug
    Should Contain Any  ${no_cmd}  missing required args: cmd  Error: missing required args: cmd
 
-   ${cmd_format}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug cmd
+   ${cmd_format}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug cmd
    Should Contain Any  ${cmd_format}  Error: arg  val format  
 
 
@@ -87,7 +91,7 @@ RunDebug - mcctl shall send available commands to node type shepherd
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=shepherd  cmd=disable-debug-levels timeout=${timeout}
-      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=shepherd  cmd=dump-cloudlet-pools timeout=${timeout}   
+      ${mcctlautomationpool}                      cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=shepherd  cmd=dump-cloudlet-pools timeout=${timeout}   
 
 
 #ECQ-2872
@@ -109,7 +113,7 @@ RunDebug - mcctl shall send available commands to node type crm
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  type=crm  cmd=disable-debug-levels timeout=${timeout}
-      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=crm  cmd=dump-cloudlet-pools timeout=${timeout}
+      ${mcctlautomationpool}                      cloudlet=${cloudlet_name_vsphere}              region=${region_US}  type=crm  cmd=dump-cloudlet-pools timeout=${timeout}
 
 # ECQ-2873
 RunDebug - mcctl shall send available commands to any node type or region 
@@ -132,7 +136,7 @@ RunDebug - mcctl shall send available commands to any node type or region
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  region=${region}  cmd=disable-debug-levels timeout=${timeout}
-      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              region=${region_US}  cmd=dump-cloudlet-pools timeout=${timeout}
+      ${mcctlautomationpool}                      cloudlet=${cloudlet_name_vsphere}              region=${region_US}  cmd=dump-cloudlet-pools timeout=${timeout}
 
 #no region specified only cmd
 
@@ -148,7 +152,7 @@ RunDebug - mcctl shall send available commands to any node type or region
       enabled debug levels                        cloudlet=${cloudlet_name_openstack_dedicated}  cmd=enable-debug-levels timeout=${timeout}
       disabled log sampling                       cloudlet=${cloudlet_name_openstack_dedicated}  cmd=disable-sample-logging timeout=${timeout}
       disabled debug levels                       cloudlet=${cloudlet_name_openstack_dedicated}  cmd=disable-debug-levels timeout=${timeout}
-      mcctlautomationpool                         cloudlet=${cloudlet_name_vsphere}              cmd=dump-cloudlet-pools timeout=${timeout}
+      ${mcctlautomationpool}                      cloudlet=${cloudlet_name_vsphere}              cmd=dump-cloudlet-pools timeout=${timeout}
 
 #ECQ-2874
 RunDebug - mcctl shall send available commands to every cloudlet region and node
@@ -169,7 +173,7 @@ RunDebug - mcctl shall send available commands to every cloudlet region and node
       crm  shepherd  enabled log sampling  not needed                                                                              cmd=enable-sample-logging timeout=${timeout}
       crm  shepherd  disabled log sampling  not needed                                                                             cmd=disable-sample-logging timeout=${timeout}
 #dump-cloudlet-pools
-      crm  shepherd  {"{\\"organization\\":\\"packet\\",\\"name\\":\\"DFWVMW2\\"}":{"{\\"organization\\":\\"packet\\",\\"name\\":\\"mcctlautomationpool\\"}":{}}}  {"{\\"organization\\":\\"TDG\\",\\"name\\":\\"automationFrankfurtCloudlet\\"}":{"{\\"organization\\":\\"TDG\\",\\"name\\":\\"RahDemo23\\"}":{}}}                                                                         cmd=dump-cloudlet-pools timeout=${timeout}
+      crm  shepherd  dump-cloudlet-pools  ${mcctlautomationpool}                                                              cmd=dump-cloudlet-pools timeout=${timeout}
 
 
 #note this test is huge and pulls down about 40 mem profiles from nodes to count. If looking at the log in a browser it will take about a minute to expand the run mccttl or get match count
@@ -187,12 +191,23 @@ RunDebug - mcctl shall send available commands to every cloudlet region and node
 
 
 *** Keywords ***
+Cleanup Provisioning
+   Log to Console  \nCleaning up CloudletPool ${mcctlautomationpool} 
+   Run mcctl  cloudletpool delete region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   MexMasterController.Cleanup Provisioning
+
+Setup
+   ${epoch}=  Get Time  epoch
+   ${mcctlautomationpool}=  Catenate  ${cpoc}${epoch}${pool_name}
+   Set Suite Variable  ${mcctlautomationpool} 
+   Run mcctl  cloudletpool create region=US cloudlets=DFWVMW2 name=${mcctlautomationpool} org=packet
+   
 
 Check Output For All Known Cmd Node Shepherd
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_shep}
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
 
@@ -200,7 +215,7 @@ Check Output For All Known Cmd Node Crm
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_crm}
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
 
@@ -208,7 +223,7 @@ Check Output For All Known Cmd Node All
    [Arguments]  ${output_msg}  ${output_msg2}=Unknown  ${output_msg3}=cmds are  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][node][type]  ${type_crm}  ${type_shep}    
    Should Contain Any  ${std_output}[1][node][type]  ${type_crm}  ${type_shep}  
    Should Contain Any  ${std_output}[0][output]  ${output_msg}  ${output_msg2}  ${output_msg3}
@@ -218,7 +233,8 @@ Check Output For All Known Cmd Cloudlet All
    [Arguments]  ${ntype}  ${ntype2}  ${output}  ${output2}  &{parms}
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${sample}=  Run mcctl  region RunDebug ${parmss}
+
+   ${sample}=  Run mcctl  debug rundebug ${parmss}
    ${cnt}=  Get Length  ${sample}
          @{Enabled}=  Create List  #${output}
          @{Node_Type}=  Create List  #${ntype}
@@ -228,20 +244,18 @@ Check Output For All Known Cmd Cloudlet All
        END
          Log List  ${Enabled}
          Log List  ${Node_Type}
-         ${count_enabled}     Get Match Count   ${Enabled}  ${output}
-         ${count_enabled2}    Get Match Count   ${Enabled}  ${output2}
          ${count_ntype}       Get Match Count   ${Node_Type}   ${ntype}
          ${count_ntype2}      Get Match Count   ${Node_Type}   ${ntype2}
          ${passvalue}=  Set Variable  ${cnt} / 3
-         Should Be True  ${passvalue} < ${count_enabled}+${count_enabled2}
          Should Be True  ${passvalue} < ${count_ntype}+${count_ntype2}
+
 
 Check Output For Unknown Cmd
    [Arguments]  ${error_msg}  ${error_msg2}=Unknown cmd  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}[0][output]  ${error_msg}  ${error_msg2}
 
 Fail RunDebug Command Via mcctl
@@ -249,7 +263,7 @@ Fail RunDebug Command Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  region RunDebug ${parmss}
+   ${std_output}=  Run Keyword and Expect Error  *  Run mcctl  debug rundebug ${parmss}
    Should Contain Any  ${std_output}  ${error_msg}  ${error_msg2}
 
 
