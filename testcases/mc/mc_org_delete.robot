@@ -34,7 +34,7 @@ MC - Delete an org that doesn't exist with admin token
 	Run Keyword and Expect Error  *    Delete Org     orgname=madeuporgnname    token=${adminToken}     use_defaults=${False}
 	${body}=         Response Body
 	
-	Should Be Equal              ${body}         {"message":"org not found"}
+	Should Be Equal              ${body}         {"message":"org madeuporgnname not found"}
 
 
 # ECQ-2783
