@@ -6,25 +6,49 @@ Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_
 Suite Setup  Setup
 Suite Teardown  Cleanup Provisioning
 
+*** Variables ***
+${region}=  US
+
 *** Test Cases ***
 # ECQ-1699
-DeleteOrg - delete org in use by org cloudlet pool shall return error
+#DeleteOrg - delete org in use by org cloudlet pool shall return error
+#   [Documentation]
+#   ...  - send CreateOrg
+#   ...  - send CreateOrgCloudletPool
+#   ...  - send DeleteOrg
+#   ...  - verify proper error is received
+#
+#   #EDGECLOUD-1725 deleting an org which is in use by orgcloudletpool gives database error
+#
+#   Create Org
+#   Create Cloudlet Pool  region=US  operator_org_name=tmus
+#   Create Org Cloudlet Pool  region=US  cloudlet_pool_org_name=tmus
+#
+#   ${error}=  Run Keyword And Expect Error  *  Delete Org 
+#
+#   Should Contain   ${error}  code=400
+#   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPool"}
+
+# ECQ-3309
+DeleteOrg - delete org in use by cloudlet pool invitation/confirmation shall return error
    [Documentation]
    ...  - send CreateOrg
-   ...  - send CreateOrgCloudletPool
+   ...  - send CreateCloudletPoolInvitation/Confirmation
    ...  - send DeleteOrg
    ...  - verify proper error is received
 
-   #EDGECLOUD-1725 deleting an org which is in use by orgcloudletpool gives database error
-
    Create Org
    Create Cloudlet Pool  region=US  operator_org_name=tmus
-   Create Org Cloudlet Pool  region=US  cloudlet_pool_org_name=tmus
 
-   ${error}=  Run Keyword And Expect Error  *  Delete Org 
-
+   Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}
+   ${error}=  Run Keyword And Expect Error  *  Delete Org
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPool"}
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPoolxxx"}
+
+   Create Cloudlet Pool Access Confirmation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}
+   ${error}=  Run Keyword And Expect Error  *  Delete Org
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPoolxxx"}
 
 *** Keywords ***
 Setup
