@@ -32,6 +32,8 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    ...  - send ShowOrgCloudlet for org1 and verify it returns the 1 cloudlet
    ...  - send ShowOrgCloudlet for org2 and verify it returns the other cloudlets 
 
+   [Tags]  CloudletPoolAccess
+
    @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
 
    Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${epochusernameop}  role=OperatorManager
@@ -81,6 +83,8 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    ...  - send ShowOrgCloudlet for org1 and verify it returns the 2 cloudlets
    ...  - send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
 
+   [Tags]  CloudletPoolAccess
+
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool      region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus
@@ -126,6 +130,8 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
    ...  - send ShowOrgCloudlet for org1 and verify it returns all the cloudlets
    ...  - send ShowOrgCloudlet for org2 and verify it returns no cloudlets
 
+   [Tags]  CloudletPoolAccess
+
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
    FOR  ${cloudlet}  IN  @{cloudlets}
@@ -163,6 +169,8 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
    [Documentation]
    ...  - assign different cloudlets to 2 different orgs 
    ...  - send ShowOrgCloudlet for each org and verify the cloudlets 
+
+   [Tags]  CloudletPoolAccess
 
    Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
@@ -222,6 +230,8 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
    ...  - assign same cloudlet to 2 different orgs
    ...  - send ShowOrgCloudlet for each org and verify the cloudlets
 
+   [Tags]  CloudletPoolAccess
+
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=dmuus
@@ -271,6 +281,8 @@ ShowOrgCloudlet - orgs shall be assigned the same pool
    ...  - assign 2 orgs to same orgcloudletpool
    ...  - send ShowOrgCloudlet for each org and verify the cloudlets
 
+   [Tags]  CloudletPoolAccess
+
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=dmuus
@@ -315,6 +327,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
    ...  - send ShowOrgCloudlet for each org and verify the cloudlets
    ...  - send orgcloudletpool delete and re-create by swithing the orgs
    ...  - send ShowOrgCloudlet for each org and verify the cloudlets have switched orgs
+
+   [Tags]  CloudletPoolAccess
 
    Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
@@ -439,6 +453,8 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    ...  - send ShowOrgCloudlet for each org
    ...  - verify empty list are returned for each org since all the cloudlets are still in a pool
 
+   [Tags]  CloudletPoolAccess
+
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
    FOR  ${cloudlet}  IN  @{cloudlets}
@@ -524,6 +540,8 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
    ...  - delete some of the members
    ...  - send ShowOrgCloudlet for each org
    ...  - verify proper cloudlets are returned
+
+   [Tags]  CloudletPoolAccess
 
    Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
@@ -631,6 +649,8 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    ...  - send ShowOrgCloudlet for each org
    ...  - verify proper cloudlets are returned
 
+   [Tags]  CloudletPoolAccess
+
    # create a cloudlet pool for every org
    &{org_dict}=  Create Dictionary
    FOR  ${cloudlet}  IN  @{cloudlets}
@@ -730,6 +750,8 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
    ...  - send ShowOrgCloudlet for each org
    ...  - verify proper cloudlets are returned
 
+   [Tags]  CloudletPoolAccess
+
    Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
 
@@ -807,6 +829,8 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
    ...  - create new user and assign to org 
    ...  - send ShowOrgCloudlet for each user 
    ...  - verify proper cloudlets are returned
+
+   [Tags]  CloudletPoolAccess
 
    Adduser Role  token=${super_token}  orgname=dmuus  username=${epochusernameop}  role=OperatorManager
 
