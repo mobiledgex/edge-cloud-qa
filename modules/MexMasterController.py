@@ -1693,8 +1693,11 @@ class MexMasterController(MexRest):
     def request_app_instance_latency(self, token=None, region=None, app_name=None, app_version=None, cloudlet_name=None, operator_org_name=None, developer_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.request_appinst_latency.request_appinst_latency(token=token, region=region, app_name=app_name, app_version=app_version, developer_org_name=developer_org_name, cluster_instance_name=cluster_instance_name, cluster_instance_developer_org_name=cluster_instance_developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults, use_thread=use_thread)
 
-    def run_mcctl(self, parms, version='latest', output_format='json'):
-        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={self.token} {parms} ' 
+    def run_mcctl(self, parms, version='latest', output_format='json', token=None):
+        if token is None:
+            token = self.token
+
+        cmd = f'docker run --rm registry.mobiledgex.net:5000/mobiledgex/edge-cloud:{version} mcctl --addr https://{self.mc_address} --skipverify --token={token} {parms} ' 
         if output_format:
             cmd += f'--output-format {output_format}'
 
@@ -1717,7 +1720,10 @@ class MexMasterController(MexRest):
             temp_prov_stack.reverse()
             for obj in temp_prov_stack:
                 logging.debug('deleting obj' + str(obj))
-                obj()
+                try:
+                    obj()
+                except:
+                    logging.warn(f'cleanup of object failed. Continuing anyway')
                 del self.prov_stack[-1]
         else:
             logging.info('cleanup disable since AUTOMATION_NO_CLEANUP is set')
