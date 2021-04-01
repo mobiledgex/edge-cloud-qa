@@ -236,4 +236,4 @@ Setup
    ${token}=  Get Super Token
    Set Suite Variable  ${token}
 
-   Create Org
+   Create Org  orgtype=operator
