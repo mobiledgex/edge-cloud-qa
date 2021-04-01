@@ -25,17 +25,17 @@ CreateCloudletPoolAccess - shall be able to show the granted invitations/confirm
 
    [Tags]  CloudletPoolAccess
 
-   ${granted_pre}=  Show Cloudlet Pool Access Granted
+   ${granted_pre}=  Show Cloudlet Pool Access Granted  token=${token}
    ${granted_pre_length}=  Get Length  ${granted_pre}
 
    Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  operator_org_name=${operator_organization}  use_defaults=False
 
-   Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_1}=  Show Cloudlet Pool Access Granted
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  auto_delete=False
+   ${granted_1}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_1}  ${granted_pre_length}
 
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_2}=  Show Cloudlet Pool Access Granted
+   Create Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  auto_delete=False
+   ${granted_2}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_2}  ${granted_pre_length+1}
 
    ${granted_added}=  Show Cloudlet Pool Access Granted  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
@@ -45,15 +45,15 @@ CreateCloudletPoolAccess - shall be able to show the granted invitations/confirm
    Should Be Equal  ${granted_added[0]['Region']}  ${region}
 
    Delete Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_3}=  Show Cloudlet Pool Access Granted
+   ${granted_3}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_3}  ${granted_pre_length}
 
    ${granted_added2}=  Show Cloudlet Pool Access Granted  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
    Length Should Be  ${granted_added2}  0
 
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
+   Create Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  auto_delete=False
 
-   ${granted_21}=  Show Cloudlet Pool Access Granted
+   ${granted_21}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_21}  ${granted_pre_length+1}
 
    ${granted_added1}=  Show Cloudlet Pool Access Granted  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
@@ -64,11 +64,11 @@ CreateCloudletPoolAccess - shall be able to show the granted invitations/confirm
    Should Be Equal  ${granted_added1[0]['Region']}  ${region}
 
    Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_31}=  Show Cloudlet Pool Access Granted
+   ${granted_31}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_31}  ${granted_pre_length}
 
    Delete Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}  use_defaults=False
-   ${granted_32}=  Show Cloudlet Pool Access Granted
+   ${granted_32}=  Show Cloudlet Pool Access Granted  token=${token}
    Length Should Be  ${granted_32}  ${granted_pre_length}
  
 *** Keywords ***
