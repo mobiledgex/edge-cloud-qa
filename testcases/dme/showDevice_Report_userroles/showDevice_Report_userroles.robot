@@ -246,11 +246,11 @@ showDevice - operator viewer does not have permission to use command to return d
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
@@ -273,11 +273,11 @@ showDeviceReport - operator viewer does not have permission to use command to re
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
@@ -298,11 +298,11 @@ showDevice - operator manager does not have permission to use command to return 
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
@@ -324,11 +324,11 @@ showDeviceReport - operator manager does not have permission to use command to r
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
@@ -351,11 +351,11 @@ showDevice - operator contributor does not have permission to use command to ret
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
@@ -377,11 +377,11 @@ showDeviceReport - operator contributor does not have permission to use command 
       ${timestamp}=  Get Time  epoch
 
       ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+      #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+      #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+      #Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
       Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
@@ -393,54 +393,55 @@ showDeviceReport - operator contributor does not have permission to use command 
 #      ${devicelength}=  Get length  ${pool_return}
 #      Should Be Equal As Integers  ${devicelength}  0
 
+# no longer support CreateApp with operator org
 #ECQ-2155
-showDevice - mexadmin has permission to use command to return device information from orgtype operator
-    [Documentation]
-    ...  showDevice returns uuid information
-    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
-
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
-
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
-
-
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
-
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
-
-      ${pool_return}=        Show Device  region=US  token=${supertoken}
-
-      ${value_1}=  Get length  ${pool_return}
-      ${value_2}=  Set Variable  1
-
-      Should Be Larger Than  ${value_1}  ${value_2}
-
-#ECQ-2156
-showDeviceReport - mexadmin has permission to use command to return device information from orgtype operator
-    [Documentation]
-    ...  showDeviceReport returns uuid information
-    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
-
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
-
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
-      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
-      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
-
-
-      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
-
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
-      ${pool_return}=        Show Device Report  region=US  token=${supertoken}
-
-      ${value_1}=  Get length  ${pool_return}
-      ${value_2}=  Set Variable  1
-
-      Should Be Larger Than  ${value_1}  ${value_2}
+#showDevice - mexadmin has permission to use command to return device information from orgtype operator
+#    [Documentation]
+#    ...  showDevice returns uuid information
+#    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
+#
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+#
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+#      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+#
+#
+#      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+#
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
+#
+#      ${pool_return}=        Show Device  region=US  token=${supertoken}
+#
+#      ${value_1}=  Get length  ${pool_return}
+#      ${value_2}=  Set Variable  1
+#
+#      Should Be Larger Than  ${value_1}  ${value_2}
+#
+##ECQ-2156
+#showDeviceReport - mexadmin has permission to use command to return device information from orgtype operator
+#    [Documentation]
+#    ...  showDeviceReport returns uuid information
+#    ...  verify showDeviceReport returns uuid device information for mexadmin on a operator organization
+#
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+#
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
+#      MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
+#
+#
+#      Register Client  developer_org_name=${orgname}  #app_name=${platos_app_name}  unique_id=${timestamp}  unique_id_type=abcd
+#
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${supertoken}
+#      ${pool_return}=        Show Device Report  region=US  token=${supertoken}
+#
+#      ${value_1}=  Get length  ${pool_return}
+#      ${value_2}=  Set Variable  1
+#
+#      Should Be Larger Than  ${value_1}  ${value_2}
 
 *** Keywords ***
 
