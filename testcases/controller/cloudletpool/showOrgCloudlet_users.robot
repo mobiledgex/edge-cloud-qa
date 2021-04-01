@@ -36,7 +36,7 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
 
    @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
 
-   Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${epochusernameop}  role=OperatorManager
+   Run Keyword If  '${cloudlets[1]['operator']}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${op_manager_user_automation}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
    Update Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_list=${cloudlet_list}
@@ -85,7 +85,7 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool      region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
    Add Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
@@ -138,7 +138,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
       Set To Dictionary  ${org_dict}  ${cloudlet['operator']}  found
    END
    FOR  ${c}  IN  @{org_dict.keys()}  
-      Adduser Role  token=${super_token}  orgname=${c}  username=${epochusernameop}  role=OperatorManager
+      Run Keyword If  '${c}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${c}  username=${op_manager_user_automation}  role=OperatorManager
       Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
       Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}     cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
       Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
@@ -172,8 +172,8 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   Adduser Role  token=${super_token}  orgname=azure  username=${op_manager_user_automation}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
@@ -232,7 +232,7 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
@@ -283,7 +283,7 @@ ShowOrgCloudlet - orgs shall be assigned the same pool
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
@@ -330,8 +330,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   Adduser Role  token=${super_token}  orgname=azure  username=${op_manager_user_automation}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${op_manager_user_automation}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
@@ -339,8 +339,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
    Add Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-1
    Add Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  cloudlet_name=tmocloud-2
 
-   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  auto_delete=False
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  auto_delete=False
    Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
    Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=tmus  developer_org_name=${orgnamedev2}  use_defaults=False
 
@@ -461,7 +461,7 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
       Set To Dictionary  ${org_dict}  ${cloudlet['operator']}  found
    END
    FOR  ${c}  IN  @{org_dict.keys()}
-      Adduser Role  token=${super_token}  orgname=${c}  username=${epochusernameop}  role=OperatorManager
+      Run Keyword If  '${c}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${c}  username=${op_manager_user_automation}  role=OperatorManager
       Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
    END
 
@@ -477,7 +477,7 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    FOR  ${c}  IN  @{org_dict.keys()}
    #   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}
       Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
-      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
+      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
    END
 
    #Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}
@@ -543,8 +543,8 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   Adduser Role  token=${super_token}  orgname=azure  username=${op_manager_user_automation}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus
@@ -657,7 +657,7 @@ ShowOrgCloudlet - shall be to show after deleting all pools
       Set To Dictionary  ${org_dict}  ${cloudlet['operator']}  found
    END
    FOR  ${c}  IN  @{org_dict.keys()}
-      Adduser Role  token=${super_token}  orgname=${c}  username=${epochusernameop}  role=OperatorManager
+      Run Keyword If  '${c}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${c}  username=${op_manager_user_automation}  role=OperatorManager
       Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
    END
 
@@ -668,8 +668,8 @@ ShowOrgCloudlet - shall be to show after deleting all pools
 
    # add to org cloudlet pool
    FOR  ${c}  IN  @{org_dict.keys()}
-      Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
-      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
+      Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
+      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
       #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}  auto_delete=${False}
    END
 
@@ -752,8 +752,8 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=azure  username=${epochusernameop}  role=OperatorManager
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   Adduser Role  token=${super_token}  orgname=azure  username=${op_manager_user_automation}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    Create Cloudlet Pool         region=US  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=azure  #auto_delete=${False} 
    Create Cloudlet Pool         region=US  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=tmus  #auto_delete=${False}
@@ -832,7 +832,7 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
 
    [Tags]  CloudletPoolAccess
 
-   Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
+   #Adduser Role  token=${super_token}  orgname=tmus  username=${epochusernameop}  role=OperatorManager
 
    @{cloudlet_list}=  Create List  tmocloud-1  tmocloud-2
    Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=tmus  cloudlet_list=${cloudlet_list}  #auto_delete=${False}
@@ -948,17 +948,20 @@ Setup
       Append To List  ${cloudlets}  ${cloudlet_key}
    END
    
-   Skip Verify Email
-   Create User  username=${epochusernameop}   password=${op_manager_password_automation}   email_address=${emailepoch}
-   Unlock User
-   ${op_token}=  Login  username=${epochusernameop}   password=${op_manager_password_automation}
+#   Skip Verify Email
+#   Create User  username=${epochusernameop}   password=${op_manager_password_automation}   email_address=${emailepoch}
+#   Unlock User
+#   ${op_token}=  Login  username=${epochusernameop}   password=${op_manager_password_automation}
+#
+#   Create User  username=${epochusernamedev}   password=${dev_manager_password_automation}   email_address=${emailepoch2}
+#   Unlock User
+#   ${dev_token}=  Login  username=${epochusernamedev}   password=${dev_manager_password_automation}
+#
+#   Verify Email Via mc  token=${op_token}
+#   Verify Email Via mc  token=${dev_token}
 
-   Create User  username=${epochusernamedev}   password=${dev_manager_password_automation}   email_address=${emailepoch2}
-   Unlock User
-   ${dev_token}=  Login  username=${epochusernamedev}   password=${dev_manager_password_automation}
-
-   Verify Email Via mc  token=${op_token}
-   Verify Email Via mc  token=${dev_token}
+   ${op_token}=  Login  username=${op_manager_user_automation}   password=${op_manager_password_automation}
+   ${dev_token}=  Login  username=${dev_manager_user_automation}   password=${dev_manager_password_automation}
 
 #  dddddd
 #   Create User  username=${epochusernameop}   password=${password}   email_address=${emailepoch}
