@@ -29,7 +29,7 @@ DMEPersistentConnection - Latency edge event shall return statistics
     Should Be Equal As Numbers  ${cloudlet.status}  1  #FIND_FOUND
     Should Be True  len('${cloudlet.edge_events_cookie}') > 100
 
-    @{samples}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${70.45}
+    @{samples}=  Create List  ${10.4}  ${4.20}  ${30}  ${440}  ${0.50}  ${6.00}  ${170.45}
 
     ${average}=  Evaluate  round(statistics.mean(@{samples}))  statistics
     ${stdev}=  Evaluate  round(statistics.stdev(@{samples}))  statistics
@@ -292,7 +292,7 @@ DMEPersistentConnection - client for docker app shall be able to receive Latency
 
     Receive Latency Edge Request
 
-# ECQ-3248
+# ECQ-3323
 DMEPersistentConnection - client for docker autocluster app shall be able to receive Latency request
     [Documentation]
     ...  - create a docker autocluster appinst
