@@ -11,6 +11,7 @@ ${operator_name_fake}   dmuus
 ${cloudlet_name_fake}  tmocloudlet-1
 
 *** Test Cases ***
+# ECQ-1876
 CreateClusterInst - create a clusterinst with org that doesnot exist should fail
     [Documentation]
     ...  create a cluster instance with an org that does not exist
