@@ -87,30 +87,32 @@ CreateCloudletPoolAccessConfirmation - mcctl shall handle create failures
 *** Keywords ***
 Setup
    ${pool_name}=  Get Default Cloudlet Pool Name
+   ${token}=  Get Super Token
 
-   Run mcctl  cloudletpool create region=${region} region=${region} org=${operator_name_crm} name=${pool_name}  version=${version}
+   Run mcctl  cloudletpool create region=${region} region=${region} org=${operator_name_crm} name=${pool_name}  version=${version}  token=${token}
 
    Set Suite Variable  ${pool_name}
+   Set Suite Variable  ${token}
 
 Setup Invitation
    Setup
-   Run mcctl  cloudletpoolinvitation create region=${region} cloudletpool=${pool_name} cloudletpoolorg=${operator_name_crm} org=${developer_org_name_automation}  version=${version}
+   Run mcctl  cloudletpoolinvitation create region=${region} cloudletpool=${pool_name} cloudletpoolorg=${operator_name_crm} org=${developer_org_name_automation}  version=${version}  token=${token}
 
 Teardown Invitation
-   Run mcctl  cloudletpoolinvitation delete region=${region} cloudletpool=${pool_name} cloudletpoolorg=${operator_name_crm} org=${developer_org_name_automation}  version=${version}
+   Run mcctl  cloudletpoolinvitation delete region=${region} cloudletpool=${pool_name} cloudletpoolorg=${operator_name_crm} org=${developer_org_name_automation}  version=${version}  token=${token}
    Teardown
  
 Teardown
-   Run mcctl  cloudletpool delete region=${region} region=${region} org=${operator_name_crm} name=${pool_name}  version=${version}
+   Run mcctl  cloudletpool delete region=${region} region=${region} org=${operator_name_crm} name=${pool_name}  version=${version}  token=${token}
 
 Success Create/Show/Delete Invitation Via mcctl
    [Arguments]  &{parms}
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${create}=  Run mcctl  cloudletpoolinvitation create region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  cloudletpoolinvitation show region=${region} ${parmss}  version=${version}
-   ${delete}=  Run mcctl  cloudletpoolinvitation delete region=${region} ${parmss}  version=${version}
+   ${create}=  Run mcctl  cloudletpoolinvitation create region=${region} ${parmss}  version=${version}  token=${token}
+   ${show}=  Run mcctl  cloudletpoolinvitation show region=${region} ${parmss}  version=${version}  token=${token}
+   ${delete}=  Run mcctl  cloudletpoolinvitation delete region=${region} ${parmss}  version=${version}  token=${token}
 
    Should Be Equal  ${create}  invitation created\n
 
@@ -126,11 +128,11 @@ Success Create/Show/Delete Confirmation Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${create}=  Run mcctl  cloudletpoolconfirmation create region=${region} ${parmss}  version=${version}
-   ${show}=  Run mcctl  cloudletpoolconfirmation show region=${region} ${parmss}  version=${version}
-   ${delete}=  Run mcctl  cloudletpoolconfirmation delete region=${region} ${parmss}  version=${version}
-   ${granted1}=  Run mcctl  cloudletpoolconfirmation showgranted region=${region}  version=${version}
-   ${granted2}=  Run mcctl  cloudletpoolinvitation showgranted region=${region}  version=${version}
+   ${create}=  Run mcctl  cloudletpoolconfirmation create region=${region} ${parmss}  version=${version}  token=${token}
+   ${granted1}=  Run mcctl  cloudletpoolconfirmation showgranted region=${region}  version=${version}  token=${token}
+   ${granted2}=  Run mcctl  cloudletpoolinvitation showgranted region=${region}  version=${version}  token=${token}
+   ${show}=  Run mcctl  cloudletpoolconfirmation show region=${region} ${parmss}  version=${version}  token=${token}
+   ${delete}=  Run mcctl  cloudletpoolconfirmation delete region=${region} ${parmss}  version=${version}  token=${token}
 
    Should Be Equal  ${create}  confirmation created\n
 
@@ -150,7 +152,7 @@ Fail Create Invitation Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudletpoolinvitation create region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudletpoolinvitation create region=${region} ${parmss}    version=${version}  token=${token}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
 Fail Create Confirmation Via mcctl
@@ -158,6 +160,6 @@ Fail Create Confirmation Via mcctl
 
    ${parmss}=  Evaluate  ''.join(f'{key}={str(val)} ' for key, val in &{parms}.items())
 
-   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudletpoolconfirmation create region=${region} ${parmss}    version=${version}
+   ${std_create}=  Run Keyword and Expect Error  *  Run mcctl  cloudletpoolconfirmation create region=${region} ${parmss}    version=${version}  token=${token}
    Should Contain Any  ${std_create}  ${error_msg}  ${error_msg2}
 
