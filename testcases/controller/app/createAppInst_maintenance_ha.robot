@@ -9,6 +9,8 @@ Test Teardown  Teardown
 
 *** Variables ***
 ${region}=  US
+${username}=   mextester06
+${password}=   ${mextester06_gmail_password}
 
 *** Test Cases ***
 # ECQ-2458
@@ -29,10 +31,10 @@ AppInst - appinst shall start for k8s/lb/shared app inst when cloudlet is mainte
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -54,10 +56,10 @@ AppInst - appinst shall start for k8s/lb/dedicated app inst when cloudlet is mai
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -79,10 +81,10 @@ AppInst - appinst shall start for docker/lb/dedicated app inst when cloudlet is 
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -104,10 +106,10 @@ AppInst - appinst shall start for docker/lb/shared app inst when cloudlet is mai
    ...  - verify appinst starts on cloudlet2
    ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet2
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=docker
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=docker
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=docker  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=docker  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -157,10 +159,10 @@ AppInst - appinst shall start for helm/shared/lb app inst when cloudlet is maint
 
    #EDGECLOUD-3540 AutoProv not working for helm
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -184,10 +186,10 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
    #EDGECLOUD-3540 AutoProv not working for helm
 
-   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
-   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=kubernetes  token=${token}
 
-   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeHelm  deployment=helm  app_version=1.0   access_type=loadbalancer  token=${tokendev}
 
    AppInst Should Start When Cloudlet Goes To Maintenance Mode  cloudlet1_fqdn=${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net  cloudlet2_fqdn=${cluster2}.${cloudlet_name2}.${operator_name}.mobiledgex.net
 
@@ -236,6 +238,8 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 
 *** Keywords ***
 Setup
+   ${token}=  Get Super Token
+   Set Suite Variable  ${token}
    Create Flavor  region=${region}
 
    ${cluster_name}=  Get Default Cluster Name
@@ -246,18 +250,34 @@ Setup
    ${cloudlet_name1}=  Catenate  SEPARATOR=  ${cloudlet_name}  1
    ${cloudlet_name2}=  Catenate  SEPARATOR=  ${cloudlet_name}  2
 
-   Create Org
+   Create Org  orgtype=operator
+   RestrictedOrg Update
    Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}
    Create Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}
 
    ${operator_name}=  Get Default Organization Name
    ${flavor_name_default}=  Get Default Flavor Name
    ${app_name_default}=  Get Default App Name
+   ${org_name_dev}=  Set Variable  ${operator_name}_dev
+
+   ${epoch}=  Get Time  epoch
+   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
+   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
+
+   Create Org  orgname=${org_name_dev}  orgtype=developer
+
+   Skip Verify Email
+   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
+   Unlock User
+
+   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperManager
+  
+   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
 
    &{cloudlet1}=  Create Dictionary  name=${cloudlet_name1}  organization=${operator_name}
    &{cloudlet2}=  Create Dictionary  name=${cloudlet_name2}  organization=${operator_name}
    @{cloudlets}=  Create List  ${cloudlet1}  ${cloudlet2}
-   ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=${operator_name}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}
+   ${policy}=  Create Auto Provisioning Policy  region=${region}  developer_org_name=${org_name_dev}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets}  token=${tokendev}
    #Add Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${operator_name}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
    #Add Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${operator_name}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
 
@@ -272,10 +292,12 @@ Setup
    Set Suite Variable  ${cluster2}
    Set Suite Variable  ${policy}
    Set Suite Variable  @{policy_list}
+   Set Suite Variable  ${org_name_dev}
+   Set Suite Variable  ${tokendev}
 
 Teardown
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${token}
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${token}
    Cleanup Provisioning
 
 AppInst Should Start When Cloudlet Goes To Maintenance Mode
@@ -286,12 +308,12 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
    # verify it returns the appinst on the 1st cloudlet
-   Register Client  app_name=${app_name_default}  developer_org_name=${operator_name}
+   Register Client  app_name=${app_name_default}  developer_org_name=${org_name_dev}
    ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
    Should Be Equal              ${cloudlet_1['fqdn']}  ${cloudlet1_fqdn}
 
    # put cloudlet in maintenance mode
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${token}
 
    # appinst should spin up on other cloudlet
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
@@ -302,24 +324,24 @@ AppInst Should Start When Cloudlet Goes To Maintenance Mode
    Should Be Equal              ${cloudlet_2['fqdn']}  ${cloudlet2_fqdn}
 
    # remove 2nd cloudlet to remove the 2nd appinst
-   Remove Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${operator_name}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+   Remove Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
    App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
 
    # put cloudlet back online
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${token}
 
    # verify it returns the 1st cloudlet
    ${cloudlet_3}=  Find Cloudlet      latitude=31  longitude=-91
    Should Be Equal              ${cloudlet_3['fqdn']}  ${cloudlet1_fqdn}
 
    # add 2nd cloudlet back
-   Add Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${operator_name}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+   Add Auto Provisioning Policy Cloudlet  region=${region}  developer_org_name=${org_name_dev}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
    App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
 
    # put cloudlet in maintenance mode no failover
-   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStartNoFailover  token=${token}
 
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
    App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}

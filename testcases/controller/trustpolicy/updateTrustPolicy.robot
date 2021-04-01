@@ -959,7 +959,7 @@ Setup
    ${operator_name}=  Get Default Organization Name
    ${cloudlet_name}=  Get Default Cloudlet Name
 
-   Create Org
+   Create Org  orgtype=operator
 
    Set Suite Variable  ${token}
    Set Suite Variable  ${policy_name}

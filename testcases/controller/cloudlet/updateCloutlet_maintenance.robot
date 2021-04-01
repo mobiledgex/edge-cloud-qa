@@ -104,7 +104,8 @@ UpdateCloudlet - shall be able to put cloudlet in maintenance=MaintenanceStartNo
 Setup
    Create Flavor  region=${region}
 
-   Create Org
+   Create Org  orgtype=operator
+   RestrictedOrg Update
    ${cloudlet}=  Create Cloudlet  region=${region}
 
    Should Be True  ${cloudlet['data']['created_at']['seconds']} > 0
