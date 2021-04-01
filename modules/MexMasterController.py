@@ -1718,13 +1718,17 @@ class MexMasterController(MexRest):
             #temp_prov_stack = self.prov_stack
             temp_prov_stack = list(self.prov_stack)
             temp_prov_stack.reverse()
+            found_failure = False
             for obj in temp_prov_stack:
                 logging.debug('deleting obj' + str(obj))
                 try:
                     obj()
                 except:
                     logging.warn(f'cleanup of object failed. Continuing anyway')
+                    found_failure = True
                 del self.prov_stack[-1]
+            if found_failure:
+               raise Exception('Cleanup failure found') 
         else:
             logging.info('cleanup disable since AUTOMATION_NO_CLEANUP is set')
 
