@@ -45,7 +45,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    [Tags]  CloudletPoolAccess
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"region \\\\"xx\\\\" not found"}')  Create Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"region \\\\"xx\\\\" not found"}')  Delete Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3312
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access invitation without matching cloudletpool 
@@ -56,7 +56,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    [Tags]  CloudletPoolAccess
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified CloudletPool pool1${epoch} org GDDT for region ${region} not found"}')  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization} 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified CloudletPool pool1${epoch} org GDDT for region ${region} not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3313
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access invitation without matching org
@@ -69,7 +69,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    Create Cloudlet Pool  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  operator_org_name=${operator_organization}  use_defaults=False
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified Organization xx does not exist"}')  Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified Organization xx does not exist"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"invitation not found"}')  Delete Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=xx
 
 # ECQ-3314
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access confirmation with missing parms
@@ -104,7 +104,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    Create Cloudlet Pool Access Invitation  region=${region}  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Confirmation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"region \\\\"xx\\\\" not found"}')  Delete Cloudlet Pool Access Confirmation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"confirmation not found"}')  Delete Cloudlet Pool Access Confirmation  region=xx  token=${token}  cloudlet_pool_name=pool${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3316
 CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool access confirmation without matching invitation 
@@ -115,7 +115,7 @@ CreateCloudletPoolAccess - shall not be able to create/delete a cloudlet pool ac
    [Tags]  CloudletPoolAccess
 
    Run Keyword and Expect Error  ('code=400', 'error={"message":"No invitation for specified cloudlet pool access"}')  Create Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Specified CloudletPool pool1${epoch} org GDDT for region ${region} not found"}')  Delete Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"confirmation not found"}')  Delete Cloudlet Pool Access Confirmation  region=${region}  token=${token}  cloudlet_pool_name=pool1${epoch}  cloudlet_pool_org_name=${operator_organization}  developer_org_name=${organization}
 
 # ECQ-3317
 CreateCloudletPoolAccess - shall not be able to create same cloudlet pool access invitation twice

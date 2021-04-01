@@ -87,19 +87,19 @@ DeleteCloudletPool - delete when assinged to an invitation/confirmation shall re
    ${pool_name}=  Get Default Cloudlet Pool Name
    ${org_name}=   Get Default Organization Name
 
-   Create Org
+   Create Org  orgtype=operator
 
-   ${pool_return1}=  Create Cloudlet Pool  region=US
+   ${pool_return1}=  Create Cloudlet Pool  region=US  token=${token}
 
-   Create Cloudlet Pool Access Invitation    region=${region}  
+   Create Cloudlet Pool Access Invitation    region=${region}    token=${token}
 
-   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation"}
 
-   Create Cloudlet Pool Access Confirmation  region=${region} 
+   Create Cloudlet Pool Access Confirmation  region=${region}   token=${token}
 
-   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US
+   ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation, automation_dev_org confirmation"}
 

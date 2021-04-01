@@ -124,13 +124,15 @@ CreateCloudletPoolAccess - OperatorContributor shall not be able to create a clo
 
    ${user_token}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-   ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool Access Invitation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
-   Should Contain   ${error}  code=403
-   Should Contain   ${error}  error={"message":"Forbidden"}
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
 
-   ${error2}=  Run Keyword And Expect Error  *  Delete Cloudlet Pool Access Invitation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
-   Should Contain   ${error2}  code=403
-   Should Contain   ${error2}  error={"message":"Forbidden"}
+#   ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool Access Invitation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
+#   Should Contain   ${error}  code=403
+#   Should Contain   ${error}  error={"message":"Forbidden"}
+#
+#   ${error2}=  Run Keyword And Expect Error  *  Delete Cloudlet Pool Access Invitation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
+#   Should Contain   ${error2}  code=403
+#   Should Contain   ${error2}  error={"message":"Forbidden"}
 
    ${error}=  Run Keyword And Expect Error  *  Create Cloudlet Pool Access Confirmation  region=${region}  token=${user_token}  cloudlet_pool_name=${poolname}  cloudlet_pool_org_name=${organization}  developer_org_name=${developer_org_name_automation}
    Should Contain   ${error}  code=403
