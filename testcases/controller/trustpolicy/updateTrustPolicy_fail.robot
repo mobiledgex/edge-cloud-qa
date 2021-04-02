@@ -17,6 +17,8 @@ ${operator_name_azure}=  azure
 ${cloudlet_name_azure}=  automationAzureCentralCloudlet 
 ${operator_name_gcp}=   gcp 
 ${cloudlet_name_gcp}=  automationGcpCentralCloudlet
+${password}=   ${mextester06_gmail_password}
+${developer_org}=  automation_dev_org
 
 *** Test Cases ***
 # ECQ-3032
@@ -354,15 +356,16 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
    # add appinst on the cloudlet
    &{rule1}=  Create Dictionary  protocol=udp  port=1001  remote_ip=3.1.1.1
    @{tcp1_rulelist}=  Create List  ${rule1}
-   ${app}=  Create App  region=${region}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
-   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}
+   Login  username=dev_manager_automation  password=${password}
+   ${app}=  Create App  region=${region}  developer_org_name=${developer_org}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:2016  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name}  developer_org_name=${developer_org}
 
    # update cloudlet with new trust policy with mismatch port list
-   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${org_name}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
+   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist11}  operator_org_name=${operator_name_fake}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}') 
 
-   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}
-   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${org_name}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+   ${error}=  Run Keyword and Expect Error  *  Update Trust Policy  region=${region}  rule_list=${rulelist2}  operator_org_name=${operator_name_fake}  token=${token}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"AppInst on cloudlet organization:\\\\"${operator_name_fake}\\\\" name:\\\\"${cloudlet_name}\\\\" not compatible with trust policy - No outbound rule in policy to match required connection udp:3.1.1.1:1001 for App {\\\\"organization\\\\":\\\\"${developer_org}\\\\",\\\\"name\\\\":\\\\"${app_name}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
 
 *** Keywords ***
 Setup
