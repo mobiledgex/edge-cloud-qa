@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.mobiledgex.sdkvalidator;
+package com.mobiledgex.melvalidator;
 
 import android.app.UiAutomation;
 import android.content.Context;
@@ -26,6 +26,9 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.mobiledgex.matchingengine.DmeDnsException;
@@ -40,14 +43,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 import distributed_match_engine.AppClient;
 import io.grpc.StatusRuntimeException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /*
    These test that MEL is disabled and the RegisterClient/FindCloudlet give error
@@ -63,7 +63,7 @@ public class NoNetworkWifiOffAirplanOnTest {
     public static final String organizationName = "MobiledgeX";
     public static final String organizationNameSamsung = "Samsung";
     // Other globals:
-    public static final String applicationName = "automation_api_app";
+    public static final String applicationName = "automation-sdk-porttest";
     public static final String applicationNameAuth = "automation_api_auth_app";
     public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
@@ -71,7 +71,7 @@ public class NoNetworkWifiOffAirplanOnTest {
 
     FusedLocationProviderClient fusedLocationClient;
 
-    public static String hostOverride = "us-qa.dme.mobiledgex.net";
+    public static String hostOverride = "eu-qa.dme.mobiledgex.net";
     public static String hostOverrideSamsung = "eu-qa.dme.mobiledgex.net";
 
     public static int portOverride = 50051;
@@ -161,7 +161,7 @@ public class NoNetworkWifiOffAirplanOnTest {
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            Location location = getTestLocation( 33.00,-96.54);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
@@ -202,7 +202,7 @@ public class NoNetworkWifiOffAirplanOnTest {
         //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         try {
-            Location location = getTestLocation( 47.6062,122.3321);
+            Location location = getTestLocation( 33.00,-96.54);
 
             AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
                     .setCarrierName(findCloudletCarrierOverride)

@@ -27,50 +27,43 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
-
-import com.auth0.android.jwt.Claim;
-import com.auth0.android.jwt.DecodeException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.gson.JsonObject;
-import com.google.protobuf.ByteString;
 import com.mobiledgex.matchingengine.DmeDnsException;
 import com.mobiledgex.matchingengine.MatchingEngine;
+import com.mobiledgex.mel.MelMessaging;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.lang.reflect.Method;
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
-import com.auth0.android.jwt.JWT;
-
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import distributed_match_engine.AppClient;
 import io.grpc.StatusRuntimeException;
 
-import static java.lang.System.getProperty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+/*
+   These test that MEL is disabled and the RegisterClient/FindCloudlet give error
+
+   1) Insert SIM card and turn off wifi and turn on airplane mode
+
+ */
 @RunWith(AndroidJUnit4.class)
-public class GetFqdnListTest {
+public class NoNetworkWifiOffAirplanOnTest {
     public static final String TAG = "EngineCallTest";
     public static final long GRPC_TIMEOUT_MS = 21000;
 
     public static final String organizationName = "MobiledgeX";
     public static final String organizationNameSamsung = "Samsung";
     // Other globals:
-    public static final String applicationName = "automation_api_app";
+    public static final String applicationName = "automation-sdk-porttest";
     public static final String applicationNameAuth = "automation_api_auth_app";
     public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
@@ -78,7 +71,7 @@ public class GetFqdnListTest {
 
     FusedLocationProviderClient fusedLocationClient;
 
-    public static String hostOverride = "us-qa.dme.mobiledgex.net";
+    public static String hostOverride = "eu-qa.dme.mobiledgex.net";
     public static String hostOverrideSamsung = "eu-qa.dme.mobiledgex.net";
 
     public static int portOverride = 50051;
@@ -89,6 +82,9 @@ public class GetFqdnListTest {
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
     // Must be set to true if you are running tests without a SIM card.
     public boolean useWifiOnly = true;
+
+    String meluuid = MelMessaging.getUid();
+    String uuidType = "Samsung:SamsungEnablingLayer";
 
     private int getCellId(Context context, MatchingEngine me) {
         int cellId = 0;
@@ -110,7 +106,7 @@ public class GetFqdnListTest {
         try {
             Class sysPropCls = Class.forName("android.os.SystemProperties");
             Method getMethod = sysPropCls.getDeclaredMethod("get", String.class);
-            String value = (String) getMethod.invoke(null, property);
+            String value = (String)getMethod.invoke(null, property);
             if (!TextUtils.isEmpty(value)) {
                 return value;
             }
@@ -124,7 +120,7 @@ public class GetFqdnListTest {
     @Before
     public void LooperEnsure() {
         // SubscriberManager needs a thread. Start one:
-        if (Looper.myLooper() == null)
+        if (Looper.myLooper()==null)
             Looper.prepare();
     }
 
@@ -147,90 +143,34 @@ public class GetFqdnListTest {
     }
 
     @Test
-    public void mexDisabledTest() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
-        me.setMatchingEngineLocationAllowed(false);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
-
-        try {
-            Location location = getTestLocation(47.6062, 122.3321);
-
-            AppClient.RegisterClientRequest.Builder registerClientRequest = me.createDefaultRegisterClientRequest(context, organizationName); //.build();
-            assertTrue(registerClientRequest == null);
-
-        } catch (PackageManager.NameNotFoundException nnfe) {
-            Log.e(TAG, Log.getStackTraceString(nnfe));
-            assertFalse("mexDisabledTest: NameNotFoundException", true);
-        } catch (StatusRuntimeException sre) {
-            Log.e(TAG, Log.getStackTraceString(sre));
-            assertFalse("mexDisabledTest: StatusRuntimeException!", true);
-        } catch (Exception e) {
-            Log.e(TAG, "Creation of request is not supposed to succeed!");
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
+    public void melDisabledTest() {
+        boolean melenabled = MelMessaging.isMelEnabled();
+        assertFalse("mel not disabled", melenabled);
     }
 
+
     @Test
-    public void registerClientTest() {
+    public void registerClientNoNetworkTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         MatchingEngine me = new MatchingEngine(context);
-        me.setUseWifiOnly(useWifiOnly);
+        //me.setUseWifiOnly(useWifiOnly);
         me.setMatchingEngineLocationAllowed(true);
-        me.setAllowSwitchIfNoSubscriberInfo(true);
+        me.setNetworkSwitchingEnabled(false);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         AppClient.RegisterClientReply reply = null;
 
         try {
-            Location location = getTestLocation(47.6062, 122.3321);
+            Location location = getTestLocation( 33.00,-96.54);
 
             AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
                     .setAppName(applicationName)
                     .setAppVers(appVersion)
-                    .setCellId(getCellId(context, me))
+                    //.setCellId(getCellId(context, me))
                     .build();
-            if (useHostOverride) {
-                reply = me.registerClient(request, hostOverride, portOverride, GRPC_TIMEOUT_MS);
-            } else {
-                reply = me.registerClient(request, me.generateDmeHostAddress(), me.getPort(), GRPC_TIMEOUT_MS);
-            }
 
-            JWT jwt = null;
-            try {
-                jwt = new JWT(reply.getSessionCookie());
-            } catch (DecodeException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
-                assertFalse("registerClientTest: DecodeException!", true);
-            }
-
-            // verify expire timer
-            long difftime = (jwt.getExpiresAt().getTime() - jwt.getIssuedAt().getTime());
-            assertEquals("Token expires failed:", 24, TimeUnit.HOURS.convert(difftime, TimeUnit.MILLISECONDS));
-            boolean isExpired = jwt.isExpired(10); // 10 seconds leeway
-            assertTrue(!isExpired);
-
-            // verify claim
-            Claim c = jwt.getClaim("key");
-            JsonObject claimJson = c.asObject(JsonObject.class);
-            assertEquals("orgname doesn't match!", organizationName, claimJson.get("orgname").getAsString());
-            assertEquals("appname doesn't match!", applicationName, claimJson.get("appname").getAsString());
-            assertEquals("appvers doesn't match!", appVersion, claimJson.get("appvers").getAsString());
-            assertEquals("uuid type doesn't match!", "dme-ksuid", claimJson.get("uniqueidtype").getAsString());
-            assertEquals("uuid doesn't match!", 27, claimJson.get("uniqueid").getAsString().length());
-            assertTrue(claimJson.get("peerip").getAsString().matches("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b"));
-
-            // verify success
-            Log.i(TAG, "registerReply.getSessionCookie()=" + reply.getSessionCookie());
-            assertTrue(reply != null);
-            assertTrue(reply.getStatus() == AppClient.ReplyStatus.RS_SUCCESS);
-            assertTrue(reply.getSessionCookie().length() > 0);
-
-            // verify uuid has DME generated values since we didnt send any values in RegisterClient
-            assertEquals("uuid type doesn't match!", "dme-ksuid", reply.getUniqueIdType());
-            assertEquals("uuid doesn't match!", 27, reply.getUniqueId().length());
-            assertEquals("uuid bytes type doesn't match!", "dme-ksuid", reply.getUniqueIdTypeBytes().toStringUtf8());
-            assertEquals("uuid bytes doesn't match!", 27, reply.getUniqueIdBytes().toStringUtf8().length());
+            reply = me.registerClient(request, GRPC_TIMEOUT_MS);
+            assertFalse("registerClient passed", true);
 
         } catch (PackageManager.NameNotFoundException nnfe) {
             Log.e(TAG, Log.getStackTraceString(nnfe));
@@ -240,7 +180,7 @@ public class GetFqdnListTest {
             assertFalse("registerClientTest: DmeDnsException!", true);
         } catch (ExecutionException ee) {
             Log.e(TAG, Log.getStackTraceString(ee));
-            assertFalse("registerClientTest: ExecutionException!", true);
+            assertEquals("com.mobiledgex.matchingengine.NetworkRequestTimeoutException: NetworkRequest timed out with no availability.", ee.getLocalizedMessage());
         } catch (StatusRuntimeException sre) {
             Log.e(TAG, Log.getStackTraceString(sre));
             assertFalse("registerClientTest: StatusRuntimeException!", true);
@@ -249,8 +189,54 @@ public class GetFqdnListTest {
             assertFalse("registerClientTest: InterruptedException!", true);
         }
 
-        Log.i(TAG, "registerClientTest reply: " + reply.toString());
-        assertEquals(0, reply.getVer());
-        assertEquals(AppClient.ReplyStatus.RS_SUCCESS, reply.getStatus());
     }
+
+    @Test
+    public void findCloudletNoNetworkTest() {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        AppClient.FindCloudletReply findCloudletReply1 = null;
+        AppClient.FindCloudletReply findCloudletReply2 = null;
+        MatchingEngine me = new MatchingEngine(context);
+        //me.setUseWifiOnly(useWifiOnly);
+        me.setMatchingEngineLocationAllowed(true);
+        //me.setAllowSwitchIfNoSubscriberInfo(true);
+
+        try {
+            Location location = getTestLocation( 33.00,-96.54);
+
+            AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
+                    .setCarrierName(findCloudletCarrierOverride)
+                    .build();
+
+
+            findCloudletReply1 = me.findCloudlet(findCloudletRequest, GRPC_TIMEOUT_MS);
+            assertFalse("findCloudlet passed", true);
+
+        } catch (DmeDnsException dde) {
+            Log.e(TAG, Log.getStackTraceString(dde));
+            assertFalse("FindCloudlet: DmeDnsException", true);
+        } catch (ExecutionException ee) {
+            Log.e(TAG, Log.getStackTraceString(ee));
+            assertFalse("FindCloudlet: ExecutionException!", true);
+        } catch (StatusRuntimeException sre) {
+            Log.e(TAG, sre.getMessage());
+            Log.e(TAG, Log.getStackTraceString(sre));
+            assertFalse("FindCloudlet: StatusRunTimeException!", true);
+        //} catch (PackageManager.NameNotFoundException ee) {
+        //    Log.e(TAG, Log.getStackTraceString(ee));
+        //    assertFalse("FindCloudlet: ExecutionException!", true);
+
+        } catch (InterruptedException ie) {
+            Log.e(TAG, Log.getStackTraceString(ie));
+            assertFalse("FindCloudlet: InterruptedException!", true);
+        } catch (IllegalArgumentException iae) {
+            Log.e(TAG, Log.getStackTraceString(iae));
+            assertEquals("An unexpired RegisterClient sessionCookie is required.", iae.getLocalizedMessage());
+
+        }
+
+    }
+
+
 }
+
