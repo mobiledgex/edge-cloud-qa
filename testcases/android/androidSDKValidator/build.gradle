@@ -15,7 +15,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
+        classpath 'com.android.tools.build:gradle:4.1.2'
 
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -34,7 +34,7 @@ allprojects {
                 username artifactory_user
                 password artifactory_password
             }
-            url = "https://artifactory.mobiledgex.net/maven-development/"
+            url = "https://artifactory.mobiledgex.net/artifactory/maven-development/"
         }
         flatDir {
             dirs 'src/main/libs'

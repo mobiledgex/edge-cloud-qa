@@ -78,12 +78,11 @@ public class RegisterClientAndroidIDTest {
     public static final String organizationName = "MobiledgeX";
     public static final String organizationNameSamsung = "Samsung";
     // Other globals:
-    //public static final String applicationName = "automation-sdk-app";
-    public static final String applicationName = "automation-sdk-docker-app";
+    public static final String applicationName = "automation-sdk-porttest";
     public static final String applicationNameAuth = "automation_api_auth_app";
     public static final String applicationNameSamsung = "SamsungEnablingLayer";
 
-    public static String foundCloudletFqdn = "autoclustersdkdocker.telusfake.telus.mobiledgex.net";
+    public static String foundCloudletFqdn = "";
 
     public static final String appVersion = "1.0";
 
@@ -96,7 +95,7 @@ public class RegisterClientAndroidIDTest {
 
     FusedLocationProviderClient fusedLocationClient;
 
-    public static String hostOverride = "us-qa.dme.mobiledgex.net";
+    public static String hostOverride = "eu-qa.dme.mobiledgex.net";
     public static String hostOverrideSamsung = "eu-qa.dme.mobiledgex.net";
 
     public static int portOverride = 50051;
@@ -106,10 +105,10 @@ public class RegisterClientAndroidIDTest {
 
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
     // Must be set to true if you are running tests without a SIM card.
-    public boolean useWifiOnly = true;
+    public boolean useWifiOnly = false;
 
     String meluuid = MelMessaging.getUid();
-    String uuidType = "Samsung:ANDROID_ID";
+    String uuidType = "samsung:SM-G988U:HASHED_ID";
 
     private int getCellId(Context context, MatchingEngine me) {
         int cellId = 0;
@@ -231,10 +230,10 @@ public class RegisterClientAndroidIDTest {
         final String androidId = Secure.getString(
                 context.getContentResolver(), Secure.ANDROID_ID);
         try {
-            //Location location = getTestLocation( 47.6062,122.3321);
+            //Location location = getTestLocation( 33.00,-96.54);
 
-            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationNameSamsung)
-                    .setAppName(applicationNameSamsung)
+            AppClient.RegisterClientRequest request = me.createDefaultRegisterClientRequest(context, organizationName)
+                    .setAppName(applicationName)
                     .setAppVers(appVersion)
                     .setCarrierName("TDG")
                     //.setCellId(getCellId(context, me))
