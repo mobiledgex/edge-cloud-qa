@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def grpcVersion = '1.20.0'
+def grpcVersion = '1.32.1'
 
 android {
     compileSdkVersion 29
@@ -39,12 +39,13 @@ dependencies {
 
     // For Google Location Services.
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // For JWT validation
     implementation 'com.auth0.android:jwtdecode:2.0.0'
 
     // Matching Engine SDK
-    implementation 'com.mobiledgex:matchingengine:2.1.2rc5'
+    implementation 'com.mobiledgex:matchingengine:2.5.0'
     implementation "io.grpc:grpc-okhttp:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     implementation "io.grpc:grpc-protobuf-lite:${grpcVersion}"

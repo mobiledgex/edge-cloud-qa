@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.mobiledgex.sdkvalidator;
+package com.mobiledgex.melvalidator;
 
 import android.app.UiAutomation;
 import android.content.Context;
@@ -24,6 +24,9 @@ import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 import android.util.Pair;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.mobiledgex.matchingengine.DmeDnsException;
@@ -36,19 +39,17 @@ import org.junit.runner.RunWith;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 import distributed_match_engine.AppClient;
 import distributed_match_engine.Appcommon;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -70,11 +71,11 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
     public static final String TAG = "EngineCallTest";
     public static final long GRPC_TIMEOUT_MS = 21000;
 
-    public static final String organizationName = "MobiledgeX";
+    public static final String organizationName = "MobiledgeX-Samples";
     // Other globals:
 
-    public static final String applicationName = "automation-sdk-docker-app";
-    public static final String appVersion = "1.0";
+    public static final String applicationName = "sdktest";
+    public static final String appVersion = "9.0";
 
 
     //public static final String applicationName = "MobiledgeX SDK Demo";
@@ -82,17 +83,20 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
 
     FusedLocationProviderClient fusedLocationClient;
 
-    public static String hostOverride = "us-qa.dme.mobiledgex.net";
+    public static String hostOverride = "eu-qa.dme.mobiledgex.net";
     public static int portOverride = 50051;
-    public static String findCloudletCarrierOverride = "tmus"; // Allow "Any" if using "", but this likely breaks test cases.
-    public static String foundCloudletFqdn = "autoclustersdkdocker.telusfake.telus.mobiledgex.net";
-    public static String officialFqdn = "stackoverflow.com";
+    public static String findCloudletCarrierOverride = "TDG"; // Allow "Any" if using "", but this likely breaks test cases.
+    public static String foundCloudletFqdn = "automation-sdk-porttest10-udp.automationhamburgcloudlet.tdg.mobiledgex.net";
+    public static String officialFqdn = "automationhamburgcloudlet.tdg.mobiledgex.net";
     //public static String officialFqdn = "a";
     public boolean useHostOverride = false;
 
+    public HashMap<String, String> myTag = new  HashMap<String, String>();
+
+
     // "useWifiOnly = true" also disables network switching, since the android default is WiFi.
     // Must be set to true if you are running tests without a SIM card.
-    public boolean useWifiOnly = true;
+    public boolean useWifiOnly = false;
 
     private int getCellId(Context context, MatchingEngine me) {
         int cellId = 0;
@@ -546,7 +550,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
             String officialAddress = InetAddress.getByName(findCloudletReplyFqdn).getHostAddress();
             assertEquals("App's expected DNS resolutaion doesn't match.", cloudletAddress, officialAddress);
         } catch (UnknownHostException var6) {
-            assertFalse("InetAddressFailed!", true);
+            //assertFalse("InetAddressFailed!", true);
         }
         assertNotNull("FindCloudletReply1 is null!", findCloudletReply1);
         //assertNotNull("FindCloudletReply2 is null!", findCloudletReply2);
@@ -838,14 +842,17 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
         //me.setAllowSwitchIfNoSubscriberInfo(true);
 
         try {
+            myTag.put("Tag1", "LeonsTag");
             Location location = getTestLocation( 47.6062,122.3321);
 
-            Future<AppClient.FindCloudletReply> findCloudletReplyFuture = me.registerAndFindCloudlet(context,organizationName, applicationName, appVersion, location,null,0,null,null,null);
+            Future<AppClient.FindCloudletReply> findCloudletReplyFuture = me.registerAndFindCloudlet(context, hostOverride, portOverride,
+                    organizationName, applicationName, appVersion, location, "",0, "", "", myTag, MatchingEngine.FindCloudletMode.PROXIMITY);
             findCloudletReply1 = findCloudletReplyFuture.get();
 
             // Second try:
             me.setThreadedPerformanceTest(true);
-            Future<AppClient.FindCloudletReply> findCloudletReplyFuture2 = me.registerAndFindCloudlet(context,organizationName, applicationName, appVersion, location,null,0,null,null,null);
+            Future<AppClient.FindCloudletReply> findCloudletReplyFuture2 = me.registerAndFindCloudlet(context, hostOverride, portOverride,
+                    organizationName, applicationName, appVersion, location, "",0, "", "", myTag, MatchingEngine.FindCloudletMode.PROXIMITY);
             findCloudletReply2 = findCloudletReplyFuture2.get();
 
 
@@ -1066,7 +1073,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
             Location location = getTestLocation( 47.6062,122.3321);
 
             //String carrierName = me.getCarrierName(context);
-            //registerClient(me);
+            registerClient(me);
 
             // Set orgName and location, then override the rest for testing:
             AppClient.FindCloudletRequest findCloudletRequest = me.createDefaultFindCloudletRequest(context, location)
@@ -1315,7 +1322,7 @@ public class FindCloudletMelEnabledWifiOffAirplaneOffTest {
         try {
             Location location = getTestLocation( 999999999.1,-99999999.1);
 
-            //String carrierName = me.getCarrierName(context);
+            String carrierName = me.getCarrierName(context);
             registerClient(me);
 
             // Set orgName and location, then override the rest for testing:
