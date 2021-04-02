@@ -92,7 +92,7 @@ Settings - UpdateSettings should update the settings
    Update Settings  region=${region}  master_node_flavor=x1.medium  load_balancer_max_port_range=1  max_tracked_dme_clients=1  chef_client_interval=1m0s  influx_db_metrics_retention=1h0m0s  influx_db_downsampled_metrics_retention=1h0m0s  influx_db_edge_events_metrics_retention=1h0m0s  cloudlet_maintenance_timeout=1s  update_vm_pool_timeout=1s
 
    @{collection_intervals}=  Create List  1s  1s  1s 
-   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=1s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
+   Update Settings  region=${region}  update_trust_policy_timeout=1s  dme_api_metrics_collection_interval=1s  edge_events_metrics_collection_interval=1s  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}  cleanup_reservable_auto_cluster_idletime=31s  location_tile_side_length_km=1  appinst_client_cleanup_interval=1h
 
    ${settings_post}=   Show Settings  region=${region}
 
@@ -131,7 +131,7 @@ Settings - UpdateSettings should update the settings
    Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}   1s
    Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}   1s
    Should Be Equal             ${settings_post['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}   1s
-   Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   1s
+   Should Be Equal             ${settings_post['cleanup_reservable_auto_cluster_idletime']}   31s
    Should Be Equal As Numbers  ${settings_post['location_tile_side_length_km']}               1
    Should Be Equal             ${settings_post['appinst_client_cleanup_interval']}   1h0m0s
 
@@ -304,8 +304,8 @@ Settings - UpdateSettings with bad parms shall return error
    ('code=400', 'error={"message":"Invalid POST data, time: unknown unit \\\\"x\\\\" in duration \\\\"1x\\\\""}')  cleanup_reservable_auto_cluster_idletime  1x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"x\\\\""}')                       cleanup_reservable_auto_cluster_idletime  x
    ('code=400', 'error={"message":"Invalid POST data, time: invalid duration \\\\"99999999h\\\\""}')               cleanup_reservable_auto_cluster_idletime  99999999h
-   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0s"}')             cleanup_reservable_auto_cluster_idletime  0s
-   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 0s"}')             cleanup_reservable_auto_cluster_idletime  -1s
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 30s"}')             cleanup_reservable_auto_cluster_idletime  0s
+   ('code=400', 'error={"message":"Cleanup Reservable Auto Cluster Idletime must be greater than 30s"}')             cleanup_reservable_auto_cluster_idletime  -1s
 
    ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  0
    ('code=400', 'error={"message":"Location Tile Side Length Km must be greater than 0"}')               location_tile_side_length_km  -1
