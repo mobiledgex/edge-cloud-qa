@@ -58,7 +58,7 @@ CreateTrustPolicy - create without policy name shall return error
 
    [Tags]  TrustPolicy
 
-   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Trust Policy  operator_org_name=${developer}  region=${region}  token=${token}  use_defaults=${False}
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Policy name cannot be empty"}')  Create Trust Policy  operator_org_name=${operator_name_fake}  region=${region}  token=${token}  use_defaults=${False}
 
 # ECQ-3022
 CreateTrustPolicy - create with unknown org name shall return error

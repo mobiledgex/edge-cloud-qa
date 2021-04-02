@@ -330,7 +330,7 @@ Setup Trusted Cloudlet
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
 
    Set Suite Variable  ${app_name}
 
