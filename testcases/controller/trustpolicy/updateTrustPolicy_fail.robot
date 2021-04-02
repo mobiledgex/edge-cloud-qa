@@ -89,7 +89,7 @@ UpdateTrustPolicy - update without protocol shall return error
 
    ${name}=  Get Default Trust Policy Name
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule1}=  Create Dictionary  protocol=icmp  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
@@ -112,7 +112,7 @@ UpdateTrustPolicy - update with invalid CIDR shall return error
 
    [Tags]  TrustPolicy
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
@@ -146,7 +146,7 @@ UpdateTrustPolicy - update with invalid minport shall return error
 
    [Tags]  TrustPolicy
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    &{rule2}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
@@ -184,7 +184,7 @@ UpdateTrustPolicy - update with invalid maxport shall return error
 
    [Tags]  TrustPolicy
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
@@ -212,7 +212,7 @@ UpdateTrustPolicy - update with icmp and port range shall return error
 
    [Tags]  TrustPolicy
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
@@ -242,7 +242,7 @@ UpdateTrustPolicy - update with minport>maxport shall return error
 
    [Tags]  TrustPolicy
 
-   Create Org
+   Create Org  orgtype=operator
 
    &{rule}=  Create Dictionary  protocol=tcp  port_range_minimum=1  port_range_maximum=2  remote_cidr=1.1.1.1/1
    @{rulelist}=  Create List  ${rule}
@@ -318,7 +318,7 @@ UpdateTrustPolicy - shall not be able to update trust policy on cloudlet with mi
 
    Create Flavor  region=${region}
 
-   Create Org
+   Create Org  orgtype=operator
 
    ${policy_name}=  Get Default Trust Policy Name
    ${app_name}=  Get Default App Name
