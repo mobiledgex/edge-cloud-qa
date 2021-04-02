@@ -20,20 +20,20 @@ AddVMPoolMember - shall be able to add member to empty list
 
    ${name}=  Generate Random String  length=100
 
-   ${pool_return}=  Create VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  use_defaults=False
+   ${pool_return}=  Create VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=packet  use_defaults=False
 
    Should Be Equal   ${pool_return['data']['key']['name']}  ${name} 
    Should Be Equal   ${pool_return['data']['vms']}  ${None} 
 
-   Add VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_name=x1  external_ip=80.187.128.12  internal_ip=2.2.2.2
+   Add VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=packet  vm_name=x1  external_ip=80.187.128.12  internal_ip=2.2.2.2
 
-   ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX
+   ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=packet
    Should Be Equal   ${pool[0]['data']['key']['name']}  ${name}
    Length Should Be  ${pool[0]['data']['vms']}  1
 
-   Remove VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX  vm_name=x1
+   Remove VM Pool Member  region=US  token=${token}  vm_pool_name=${name}  org_name=packet  vm_name=x1
 
-   ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=MobiledgeX
+   ${pool}=  Show VM Pool  region=US  token=${token}  vm_pool_name=${name}  org_name=packet
    Should Be Equal   ${pool[0]['data']['key']['name']}  ${name}
    Should Be Equal   ${pool_return['data']['vms']}  ${None}
 
@@ -48,19 +48,19 @@ AddVMPoolMember - shall be able to add 10 members
 
    &{vm1}=  Create Dictionary  name=vm1  external_ip=80.187.128.11  internal_ip=2.2.2.1
    @{vmlist}=  Create List  ${vm1}
-   Create VM Pool  region=US  token=${token}  org_name=MobiledgeX  vm_list=${vmlist}
+   Create VM Pool  region=US  token=${token}  org_name=packet  vm_list=${vmlist}
 
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm2  external_ip=80.187.128.12  internal_ip=2.2.2.2
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm3  external_ip=80.187.128.13  internal_ip=2.2.2.3
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm4  external_ip=80.187.128.14  internal_ip=2.2.2.4
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm5                             internal_ip=2.2.2.5
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm6  external_ip=80.187.128.16  internal_ip=2.2.2.6
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm7  external_ip=80.187.128.17  internal_ip=2.2.2.7
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm8  external_ip=80.187.128.18  internal_ip=2.2.2.8
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm9  external_ip=80.187.128.19  internal_ip=2.2.2.9
-   Add VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm10                            internal_ip=2.2.2.10
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm2  external_ip=80.187.128.12  internal_ip=2.2.2.2
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm3  external_ip=80.187.128.13  internal_ip=2.2.2.3
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm4  external_ip=80.187.128.14  internal_ip=2.2.2.4
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm5                             internal_ip=2.2.2.5
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm6  external_ip=80.187.128.16  internal_ip=2.2.2.6
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm7  external_ip=80.187.128.17  internal_ip=2.2.2.7
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm8  external_ip=80.187.128.18  internal_ip=2.2.2.8
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm9  external_ip=80.187.128.19  internal_ip=2.2.2.9
+   Add VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm10                            internal_ip=2.2.2.10
 
-   ${pool_return}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
+   ${pool_return}=  Show VM Pool  region=US  token=${token}  org_name=packet
 
    Should Be Equal  ${pool_return[0]['data']['vms'][0]['name']}  vm1
    Should Be Equal  ${pool_return[0]['data']['vms'][0]['net_info']['external_ip']}  80.187.128.11
@@ -94,25 +94,25 @@ AddVMPoolMember - shall be able to add 10 members
    Should Be Equal  ${pool_return[0]['data']['vms'][9]['net_info']['internal_ip']}  2.2.2.10
    Length Should Be   ${pool_return[0]['data']['vms']}  10
 
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm6  
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm6  
 
-   ${pool_return2}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
+   ${pool_return2}=  Show VM Pool  region=US  token=${token}  org_name=packet
    Should Be Equal  ${pool_return2[0]['data']['vms'][5]['name']}  vm7
    Should Be Equal  ${pool_return2[0]['data']['vms'][5]['net_info']['external_ip']}  80.187.128.17
    Should Be Equal  ${pool_return2[0]['data']['vms'][5]['net_info']['internal_ip']}  2.2.2.7
    Length Should Be   ${pool_return2[0]['data']['vms']}  9 
    
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm1
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm2
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm3  
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm4 
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm5
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm7
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm8
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm9
-   Remove VM Pool Member  region=US  token=${token}  org_name=MobiledgeX  vm_name=vm10
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm1
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm2
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm3  
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm4 
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm5
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm7
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm8
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm9
+   Remove VM Pool Member  region=US  token=${token}  org_name=packet  vm_name=vm10
 
-   ${pool_return3}=  Show VM Pool  region=US  token=${token}  org_name=MobiledgeX
+   ${pool_return3}=  Show VM Pool  region=US  token=${token}  org_name=packet
    Should Be Equal  ${pool_return3[0]['data']['vms']}  ${None}
 
 *** Keywords ***
