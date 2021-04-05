@@ -384,22 +384,22 @@ Get dme metrics with starttime and endtime and last on openstack
 DeveloperManager shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   #${epoch}=  Get Time  epoch
-   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   ##${epoch}=  Get Time  epoch
+   #${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
    ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer_org_name}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer_org_name}   username=${dev_manager_user_automation}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=5  token=${userToken} 
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6 
@@ -420,23 +420,24 @@ DeveloperManager shall be able to get dme metrics
 DeveloperContributor shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   #${epoch}=  Get Time  epoch
-   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
+   ##${epoch}=  Get Time  epoch
+   #${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
 
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
+   #${userToken}=  Login  username=${epochusername}  password=${password}
+   ${userToken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
    ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer_org_name}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer_org_name}   username=${dev_contributor_user_automation}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6
@@ -457,23 +458,24 @@ DeveloperContributor shall be able to get dme metrics
 DeveloperViewer shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
-   #${epoch}=  Get Time  epoch
-   ${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
+   ##${epoch}=  Get Time  epoch
+   #${epoch}=  Evaluate  str(time.time()).replace('.', '')  modules=time
 
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
    
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
    Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
+   #${userToken}=  Login  username=${epochusername}  password=${password}
+   ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
    ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer_org_name}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer_org_name}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
 
    ${metrics}=  Get DME Metrics  region=${region}  method=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx ${selector} Metrics  app_name=${app_name}  developer_org_name=${developer_org_name}  app_version=${app_version}  condition=ORDER BY DESC LIMIT 6
