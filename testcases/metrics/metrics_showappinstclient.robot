@@ -1,11 +1,12 @@
 *** Settings ***
 Documentation   ShowAppInstClient requests 
 
-Library         MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
-Library         MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  MexDmeRest  dme_address=%{AUTOMATION_DME_REST_ADDRESS}
+Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
+Library  DateTime
 
 Test Setup	Setup
-#Test Teardown	Cleanup provisioning
+Test Teardown	Cleanup provisioning
 
 *** Variables ***
 ${tmus_operator_name}  tmus
@@ -114,6 +115,66 @@ ShowAppInstClient - request with appinst client key parms shall return the FindC
 
    developer_org_name=${developer_org_name_automation}  unique_id_type=automation
 
+# ECQ-3324
+ShowAppInstClient - clients shall timeout via appinstclientcleanupinterval
+   [Documentation]
+   ...  Set appinst_client_cleanup_interval=10s
+   ...  Send RegisterClient/FindCloudlet and send ShowAppInstClient
+   ...  Wait 10s and verify ShowAppInstClient does not show the app
+
+   ${settings_pre}=   Show Settings  region=${region}
+
+   [Teardown]  Teardown Settings  ${settings_pre}
+
+   Update Settings  region=${region}  appinst_client_cleanup_interval=10s
+
+   ${settings_post}=   Show Settings  region=${region}
+
+   ${app_name}=  Get Default App Name
+
+   Create Flavor  region=${region}
+
+   ${epochtime}=  Get Current Date  result_format=epoch
+   ${app}=      Catenate  SEPARATOR=  app  ${epochtime}
+
+   Create App     region=${region}  app_name=${app}
+   Create App Instance  region=${region}  cloudlet_name=${tmus_cloudlet_name}  operator_org_name=${tmus_operator_name}  cluster_instance_name=autocluster
+
+   Register Client      app_name=${app}  app_version=${app_version}  developer_org_name=${developer_org_name_automation}
+
+   ${t}=  Show App Instance Client Metrics  region=US  app_name=${app}  developer_org_name=${developer_org_name_automation}  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=tmus  cluster_instance_name=autoclusterautomation  use_thread=${True}
+   Sleep  1 second
+
+   ${pre}=  Get Show App Instance Client Metrics Output
+   ${len_pre}=  Get Length  ${pre}
+   ${pre_last}=  Run Keyword If  ${len_pre} == 0  Set Variable  0  ELSE  Set Variable  ${pre[-1]['data']['location']['timestamp']['seconds']}
+
+   ${cloudlet}=  Find Cloudlet  carrier_name=${tmus_operator_name}  latitude=35  longitude=-94
+
+   MexMasterController.Wait For Replies  ${t}
+
+   ${metrics}=  Get Show App Instance Client Metrics Output
+   ${len_metrics}=  Get Length  ${metrics}
+   ${metrics_last}=  Set Variable  ${metrics[-1]['data']['location']['timestamp']['seconds']}
+
+   Should Be True  ${len_metrics} == ${len_pre}+1
+   Should Be True  ${metrics_last} > ${pre_last}
+
+   ${t2}=  Show App Instance Client Metrics  region=US  app_name=${app}  developer_org_name=${developer_org_name_automation}  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=tmus  cluster_instance_name=autoclusterautomation  use_thread=${True}
+   Sleep  1 second
+
+   ${post}=  Get Show App Instance Client Metrics Output
+   ${len_post}=  Get Length  ${post}
+   Should Be Equal  ${len_post}  ${len_pre}}
+
+   Sleep  25s
+
+   ${t3}=  Show App Instance Client Metrics  region=US  app_name=${app}  developer_org_name=${developer_org_name_automation}  app_version=1.0  cloudlet_name=tmocloud-1  operator_org_name=tmus  cluster_instance_name=autoclusterautomation  use_thread=${True}
+   Sleep  1 second
+
+   ${post2}=  Get Show App Instance Client Metrics Output
+   ${len_post2}=  Get Length  ${post2}
+   Should Be Equal  ${len_post2}  0
  
 *** Keywords ***
 Setup
@@ -122,6 +183,13 @@ Setup
    ${super_token}=  Get Super Token
 
    Set Suite Variable  ${super_token}
+
+Teardown Settings
+   [Arguments]  ${settings}
+
+   Update Settings  region=${region}  appinst_client_cleanup_interval=${settings['appinst_client_cleanup_interval']}  
+
+   Cleanup Provisioning
 
 RegisterClient Setup
    Setup
