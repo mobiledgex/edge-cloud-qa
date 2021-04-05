@@ -13,6 +13,7 @@ Test Timeout  2m
 *** Variables ***
 ${region}=  US
 ${developer}=  MobiledgeX
+${operator}=   packet
 ${version}=  latest
 
 *** Test Cases ***
@@ -24,23 +25,23 @@ CreateTrustPolicy - mcctl shall be able to create/show/delete policy
 
    [Template]  Success Create/Show/Delete Trust Policy Via mcctl
       # no protocol 
-      name=${recv_name}  cloudlet-org=${developer}
+      name=${recv_name}  cloudlet-org=${operator}
 
       # icmp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
 
       # tcp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=tcp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=tcp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
       # udp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=udp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=udp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
       # icmp/tcp/udp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
 # ECQ-3081
 CreateTrustPolicy - mcctl shall handle create failures
@@ -52,49 +53,49 @@ CreateTrustPolicy - mcctl shall handle create failures
       # missing values
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  #not sending any args with mcctl  
 
-      Error: missing required args: name  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp
+      Error: missing required args: name  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp
       Error: missing required args: cloudlet-org  name=${recv_name}  outboundsecurityrules:0.protocol=icmp
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  outboundsecurityrules:0.protocol=icmp
-      Error: Bad Request (400), Port range must be empty for icmp  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Error: Bad Request (400), Port range must be empty for icmp  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
 
-      Error: missing required args: name  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp
+      Error: missing required args: name  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp
       Error: missing required args: cloudlet-org  name=${recv_name}  outboundsecurityrules:0.protocol=tcp
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  outboundsecurityrules:0.protocol=tcp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
-      Error: missing required args: name  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp
+      Error: missing required args: name  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp
       Error: missing required args: cloudlet-org  name=${recv_name}  outboundsecurityrules:0.protocol=udp
       Error: missing required args: cloudlet-org name  Error: missing required args: name cloudlet-org  outboundsecurityrules:0.protocol=udp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
-      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:1.portrangemin=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=1
+      Bad Request (400), Invalid CIDR address:      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2
 
       # invalid values
-      Error: Bad Request (400), Invalid CIDR address: 1.11.1/1  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Error: Bad Request (400), Invalid CIDR address: 1.11.1/1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
-      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
-      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
-      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
-      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
-      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
-      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
-      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
+      Unable to parse "outboundsecurityrules[0].portrangemin" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=x  outboundsecurityrules:0.portrangemax=2
+      Unable to parse "outboundsecurityrules[0].portrangemax" value "x" as uint  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=x
+      Error: Bad Request (400), Invalid min port range: 999999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=999999  outboundsecurityrules:0.portrangemax=1
+      Error: Bad Request (400), Invalid max port range: 99999  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=99999
+      Bad Request (400), Invalid CIDR address: 1.1.1.1  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1
+      Bad Request (400), Invalid min port range: 0  name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.11.1/1
 
 # ECQ-3082
 UpdateTrustPolicy - mcctl shall handle update policy
@@ -106,18 +107,18 @@ UpdateTrustPolicy - mcctl shall handle update policy
    [Teardown]  Update Teardown
 
    [Template]  Success Update/Show Trust Policy Via mcctl
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=tcp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=tcp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=tcp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
       # udp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=udp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:0.portrangemax=2  outboundsecurityrules:0.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=udp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:0.portrangemin=1  outboundsecurityrules:1.protocol=udp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
       # icmp/tcp/udp
-      name=${recv_name}  cloudlet-org=${developer}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
+      name=${recv_name}  cloudlet-org=${operator}  outboundsecurityrules:0.protocol=icmp  outboundsecurityrules:0.remotecidr=1.1.1.1/1  outboundsecurityrules:1.protocol=tcp  outboundsecurityrules:1.portrangemin=1  outboundsecurityrules:1.remotecidr=1.1.1.1/1  outboundsecurityrules:2.protocol=udp  outboundsecurityrules:2.portrangemin=1  outboundsecurityrules:2.portrangemax=2  outboundsecurityrules:2.remotecidr=1.1.1.1/1
 
 *** Keywords ***
 Setup
@@ -152,10 +153,10 @@ Success Create/Show/Delete Trust Policy Via mcctl
    Run Keyword If  'outboundsecurityrules:2.portrangemax' in ${parms}  Should Be Equal As Integers  ${show[0]['outbound_security_rules'][2]['port_range_max']}  ${parms['outboundsecurityrules:2.portrangemax']}
 
 Update Setup
-   Run mcctl  trustpolicy create region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
+   Run mcctl  trustpolicy create region=${region} name=${recv_name} cloudlet-org=${operator}    version=${version}
 
 Update Teardown
-   Run mcctl  trustpolicy delete region=${region} name=${recv_name} cloudlet-org=${developer}    version=${version}
+   Run mcctl  trustpolicy delete region=${region} name=${recv_name} cloudlet-org=${operator}    version=${version}
 
 Success Update/Show Trust Policy Via mcctl
    [Arguments]  &{parms}
