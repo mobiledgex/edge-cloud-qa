@@ -25,6 +25,7 @@ class Cloudlet(MexOperation):
         self.manifest_url = '/auth/ctrl/GetCloudletManifest'
         self.revoke_url = '/auth/ctrl/RevokeAccessKey'
         self.resource_usage_url = '/auth/ctrl/GetCloudletResourceUsage'
+        self.resourcequotaprops_url= '/auth/ctrl/GetCloudletResourceQuotaProps'
 
     def _build(self, cloudlet_name=None, operator_org_name=None, number_dynamic_ips=None, latitude=None, longitude=None, ip_support=None, access_uri=None, static_ips=None, platform_type=None, physical_name=None, container_version=None, package_version=None, maintenance_state=None, env_vars=None, access_vars=None, vm_pool=None, deployment_local=None, override_policy_container_version=None, crm_override=None, notify_server_address=None, infra_api_access=None, infra_config_flavor_name=None, infra_config_external_network_name=None, trust_policy=None, deployment_type=None, resource_list=None, include_fields=False, use_defaults=True):
 
@@ -328,6 +329,14 @@ class Cloudlet(MexOperation):
         msg_dict = {'cloudletresourceusage': msg}
 
         return self.show(token=token, url=self.resource_usage_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+
+    def get_resourcequota_props(self, token=None, region=None, operator_org_name=None, platform_type=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(platform_type=platform_type, operator_org_name=operator_org_name, use_defaults=use_defaults)
+        msg_show = msg['key']
+        msg_show['platform_type'] = msg['platform_type']
+        msg_dict = {'cloudletresourcequotaprops': msg_show}
+
+        return self.show(token=token, url=self.resourcequotaprops_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def show_cloudlet(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, json_data=None, use_defaults=True, use_thread=False, stream=True, stream_timeout=600):
         msg = self._build(cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, use_defaults=use_defaults)
