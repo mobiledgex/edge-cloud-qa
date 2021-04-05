@@ -7,7 +7,7 @@ Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
 *** Variables ***
-${organization}=  MobiledgeX
+${organization}=  packet
 
 *** Test Cases ***
 # ECQ-2341
