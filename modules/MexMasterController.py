@@ -1347,8 +1347,11 @@ class MexMasterController(MexRest):
     def update_cloudlet(self, token=None, region=None,  operator_org_name=None, cloudlet_name=None, latitude=None, longitude=None, number_dynamic_ips=None, ip_support=None, platform_type=None, physical_name=None, env_vars=None, crm_override=None, notify_server_address=None, container_version=None, package_version=None, maintenance_state=None, static_ips=None, trust_policy=None, resource_list=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.update_cloudlet(token=token, region=region, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, number_dynamic_ips=number_dynamic_ips, latitude=latitude, longitude=longitude, ip_support=ip_support, platform_type=platform_type, physical_name=physical_name, container_version=container_version, package_version=package_version, static_ips=static_ips, env_vars=env_vars, crm_override=crm_override, notify_server_address=notify_server_address, maintenance_state=maintenance_state, trust_policy=trust_policy, resource_list=resource_list, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread)
 
-    def get_resource_usage(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
+    def get_resource_usage(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False):
         return self.cloudlet.get_resource_usage(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
+
+    def get_resourcequota_props(self, token=None, region=None, operator_org_name=None, platform_type=None, json_data=None, use_defaults=False, use_thread=False):
+        return self.cloudlet.get_resourcequota_props(token=token, region=region, operator_org_name=operator_org_name, platform_type=platform_type, use_defaults=use_defaults, use_thread=use_thread)
 
     def get_cloudlet_manifest(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.get_cloudlet_manifest(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
