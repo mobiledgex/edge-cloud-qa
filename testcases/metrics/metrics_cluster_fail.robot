@@ -18,32 +18,32 @@ ClusterMetrics - get with no operator name shall return error
    # cpu	
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=cpu  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Cluster details must be present"}
+   Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # mem
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=mem  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # network 
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=network  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # tcp 
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=tcp  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # udp
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=udp  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # disk 
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  cloudlet_name=${cloudlet_name_openstack_metrics}  selector=disk  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
 ClusterMetrics - get with no cloudlet/operator name shall return error
    [Documentation]
@@ -55,32 +55,32 @@ ClusterMetrics - get with no cloudlet/operator name shall return error
    # cpu
    ${error}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=cpu  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
-   Should Contain  ${error}  {"message":"Cluster details must be present"}
+   Should Contain  ${error}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # mem
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=mem  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # network
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=network  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # tcp
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=tcp  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # udp
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=udp  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
    # disk
    ${error2}=  Run Keyword and Expect Error  *  Get Cluster Metrics  region=US  selector=disk  last=1  token=${token}  use_defaults=${False}
    Should Contain  ${error2}  code=400
-   Should Contain  ${error2}  {"message":"Cluster details must be present"}
+   Should Contain  ${error2}  {"message":"Must provide either App organization or Cloudlet organization"}
 
 ClusterMetrics - get with no token name shall return error
    [Documentation]
