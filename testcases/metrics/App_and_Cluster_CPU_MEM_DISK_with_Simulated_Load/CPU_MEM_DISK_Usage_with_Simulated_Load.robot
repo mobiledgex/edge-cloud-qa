@@ -15,8 +15,8 @@ Suite Teardown  Cleanup
 
 *** Variables ***
 
-${cloudlet_name_openstack_dedicated}  automationSunnydaleCloudlet
-${operator_name_openstack_gddt}  GDDT
+${cloudlet_name_openstack_dedicated}  ${cloudlet_name_openstack_metrics}
+${operator_name_openstack_gddt}  ${operator_name_openstack}
 ${mobiledgex_domain}  mobiledgex.net
 ${region}  EU
 ${flavor}  automation_api_flavor
