@@ -149,7 +149,7 @@ Setup
    TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
-   #Sleep  3 mins
+   Sleep  3 mins
  
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
