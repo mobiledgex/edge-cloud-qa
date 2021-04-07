@@ -45,7 +45,7 @@ Setup
    TCP Port Should Be Alive  ${appinst['data']['uri']}  ${appinst['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
-   Sleep  3 mins
+   Sleep  5 mins
 
 Teardown
    Cleanup Provisioning
