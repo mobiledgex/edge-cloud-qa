@@ -754,7 +754,7 @@ Get app metrics with cloudlet/developer only
    log to console  ${start_date} ${end_date}
 
    # get readings with starttime and endtime
-   ${metrics}=  Get App Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=20
+   ${metrics}=  Get App Metrics  region=${region}  cloudlet_name=${cloudlet}  developer_org_name=${developer}  selector=${selector}  start_time=${start_date}  end_time=${end_date}  last=5
    #@{datesplit_first}=  Split String  ${metrics['data'][0]['Series'][0]['values'][0][0]}  Z
    #@{datesplit_last}=   Split String  ${metrics['data'][0]['Series'][0]['values'][-1][0]}  Z
    #${epoch_first}=  Convert Date  ${datesplit_first[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
@@ -773,7 +773,7 @@ Get app metrics with cloudlet/developer only
    ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
    log to console  ${num_readings}
 
-   Should Be Equal As Integers  ${num_readings}  20
+   Should Be Equal As Integers  ${num_readings}  5
 
    [Return]  ${metrics}
 
