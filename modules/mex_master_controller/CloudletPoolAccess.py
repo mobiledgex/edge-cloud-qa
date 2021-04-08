@@ -91,3 +91,15 @@ class CloudletPoolAccess(MexOperation):
 
         return self.show(token=token, url=self.show_granted_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
+    def show_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.invite_show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+
+    def show_cloudlet_pool_access_confirmation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.confirmation_show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+
