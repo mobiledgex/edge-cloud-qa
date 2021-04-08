@@ -14,7 +14,7 @@ Test Timeout  5m
 ${region}=  US
 ${developer}=  MobiledgeX
 
-${version}=  latest
+${version}=  2021-04-08
 
 *** Test Cases ***
 # ECQ-3133
@@ -31,6 +31,10 @@ CreateFlavor - mcctl shall be able to create/delete flavor
       name=${flavor_name}  vcpus=1  disk=1  ram=1  optresmap=gpu=vgpu:1
       name=${flavor_name}  vcpus=1  disk=1  ram=1  optresmap=gpu=gpu:1
       name=${flavor_name}  vcpus=1  disk=1  ram=1  optresmap=gpu=pci:1
+      name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=pu:nvidia-63:1
+      name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=VGPU:1
+      name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=VGPU:NVIDIA:1
+
 
 # ECQ-3134
 CreateFlavor - mcctl shall handle create failures
@@ -56,7 +60,7 @@ CreateFlavor - mcctl shall handle create failures
       Bad Request (400), Non-numeric resource count encountered, found nvidia-63                                       name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=vgpu:nvidia-63:x
       Error: Bad Request (400), Missing manditory resource count, ex: optresmap\=gpu\=gpu:1                            name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=vgpu
       Error: Bad Request (400), Invalid optresmap syntax encountered: ex: optresmap\=gpu\=gpu:1                          name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=gpu:::1
-      Error: Bad Request (400), GPU resource type selector must be one of [gpu, pci, vgpu] found pu                    name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=pu:nvidia-63:1
+#      Error: Bad Request (400), GPU resource type selector must be one of [gpu, pci, vgpu] found pu                    name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=gpu=pu:nvidia-63:1    now succeeds and moved to test above
       Error: value "x" of arg "optresmap\=x" must be formatted as key\=value                                           name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x
       Error: Bad Request (400), Only GPU resources currently supported, use optresmap\=gpu\=$resource:$count found x   name=${flavor_name}  disk=1  vcpus=1  ram=1  optresmap=x=x
 

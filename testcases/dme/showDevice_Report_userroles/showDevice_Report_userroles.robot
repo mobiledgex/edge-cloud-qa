@@ -23,7 +23,7 @@ ${samsung_end_nanos}  1234
 ${samsung_notify_id}  1234
 ${region}  US
 ${username}=  mextester06
-
+${orgname}=  ${developer_org_name_automation}
 
 *** Test Cases ***
 
@@ -34,18 +34,19 @@ showDevice - developer viewer does not have permission to use command to return 
     ...  showDevice returns uuid for Admin only
     ...  verify showDevice does not return uuid device information for developer viewer
 
+    ${user_token2}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
-
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+#
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
       #${pool_return}=        Show Device  region=US  token=${user_token2}
@@ -61,17 +62,19 @@ showDeviceReport - developer viewer does not have permission to use command to r
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for developer viewer
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperViewer  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -86,17 +89,19 @@ showDevice - developer manager does not have permission to use command to return
     ...  showDevice returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for developer manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -112,17 +117,19 @@ showDeviceReport - developer manager does not have permission to use command to 
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for developer manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -138,17 +145,19 @@ showDevice - developer contributor does not have permission to use command to re
     ...  showDevice returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for developer contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}   region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -164,17 +173,19 @@ showDeviceReport - developer contributor does not have permission to use command
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for developer contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperContributor  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -190,17 +201,17 @@ showDevice - mexadmin has permission to use command to return device information
     ...  showDevice returns uuid information for mexadmin user
     ...  verify showDevice returns uuid device information for mexadmin on a developer organization
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
       ${pool_return}=        Show Device  region=US  token=${supertoken}
 
@@ -215,17 +226,17 @@ showDeviceReport - mexadmin has permission to use command to return device infor
     ...  showDeviceReport returns uuid information for mexadmin user
     ...  verify showDeviceReport returns uuid device information for mexadmin on a developer organization
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=developer
       MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=DeveloperManager  token=${supertoken}
 
       ${pool_return}=        Show Device Report  region=US  token=${supertoken}
 
@@ -241,18 +252,19 @@ showDevice - operator viewer does not have permission to use command to return d
     ...  showDevice returns uuid for Admin only
     ...  verify showDevice does not return uuid device information for operator viewer
 
+    ${user_token2}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -269,17 +281,19 @@ showDeviceReport - operator viewer does not have permission to use command to re
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for operator viewer
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorViewer  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -294,17 +308,19 @@ showDevice - operator manager does not have permission to use command to return 
     ...  showDevice returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for operator manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -320,17 +336,19 @@ showDeviceReport - operator manager does not have permission to use command to r
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for operator manager
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorManager  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -347,17 +365,19 @@ showDevice - operator contributor does not have permission to use command to ret
     ...  showDevice returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for operator contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -373,17 +393,19 @@ showDeviceReport - operator contributor does not have permission to use command 
     ...  showDeviceReport returns uuid for Admin only
     ...  verify showDeviceReport does not return uuid device information for operator contributor
 
-      ${supertoken}=  Get Super Token
-      ${timestamp}=  Get Time  epoch
+    ${user_token2}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
-      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
+#      ${supertoken}=  Get Super Token
+#      ${timestamp}=  Get Time  epoch
+
+#      ${orgname}=  Create Org  token=${user_token}  orgtype=operator
       #MexMasterController.Create Flavor  flavor_name=flavor${timestamp}  region=${region}  token=${supertoken}
       #MexMasterController.Create App  default_flavor_name=flavor${timestamp}  developer_org_name=${orgname}  region=${region}  token=${supertoken}
 
 
       #Register Client  developer_org_name=${orgname}  #app_name=${samsung_app_name}  unique_id=${timestamp}  unique_id_type=abcd
 
-      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
+#      Adduser Role   orgname=${orgname}   username=${epochusername2}  role=OperatorContributor  token=${user_token}
 
       Run Keyword and Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Show Device  region=US  token=${user_token2}
 
@@ -451,29 +473,31 @@ CleanUp
    MexMasterController.Cleanup Provisioning
 
 Setup
-   ${epoch}=  Get Current Date  result_format=epoch
-   #${epoch}=  Get Time  epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
-   ${epochpassword}=  Catenate  SEPARATOR=  ${username}  ${epoch} 
+   ${timestamp}=  Get Current Date  result_format=epoch
+#   #${epoch}=  Get Time  epoch
+#   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+#   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
+#   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+#   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
+#   ${epochpassword}=  Catenate  SEPARATOR=  ${username}  ${epoch} 
    ${supertoken}=  Get Super Token
-
-   Skip Verify Email  token=${supertoken}
-   Create User  username=${epochusername}   password=${epochpassword}   email_address=${emailepoch}
-#   Verify Email  email_address=${emailepoch}
-   Unlock User
-   ${user_token}=  Login  username=${epochusername}  password=${epochpassword}
-
-   Create User  username=${epochusername2}   password=${epochpassword}   email_address=${emailepoch2}
-#   Verify Email  email_address=${emailepoch2}
-   Unlock User
-   ${user_token2}=  Login  username=${epochusername2}  password=${epochpassword}
-
-   Set Suite Variable  ${user_token}
-   Set Suite Variable  ${user_token2}
-   Set Suite Variable  ${epochusername2}
+#
+#   Skip Verify Email  token=${supertoken}
+#   Create User  username=${epochusername}   password=${epochpassword}   email_address=${emailepoch}
+##   Verify Email  email_address=${emailepoch}
+#   Unlock User
+#   ${user_token}=  Login  username=${epochusername}  password=${epochpassword}
+#
+#   Create User  username=${epochusername2}   password=${epochpassword}   email_address=${emailepoch2}
+##   Verify Email  email_address=${emailepoch2}
+#   Unlock User
+#   ${user_token2}=  Login  username=${epochusername2}  password=${epochpassword}
+#
+#   Set Suite Variable  ${user_token}
+#   Set Suite Variable  ${user_token2}
+#   Set Suite Variable  ${epochusername2}
+    Set Suite Variable  ${super_token}
+    Set Suite Variable  ${timestamp}
 
 Find Device
    [Arguments]  ${device}  ${id}  ${type}
