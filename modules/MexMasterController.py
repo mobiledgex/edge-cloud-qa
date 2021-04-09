@@ -1353,6 +1353,12 @@ class MexMasterController(MexRest):
     def get_resourcequota_props(self, token=None, region=None, operator_org_name=None, platform_type=None, json_data=None, use_defaults=False, use_thread=False):
         return self.cloudlet.get_resourcequota_props(token=token, region=region, operator_org_name=operator_org_name, platform_type=platform_type, use_defaults=use_defaults, use_thread=use_thread)
 
+    def show_cloudletrefs(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=False, use_thread=False):
+        if token is None:
+            token=self.super_token
+
+        return self.cloudlet.show_cloudletrefs(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
+
     def get_cloudlet_manifest(self, token=None, region=None, operator_org_name=None, cloudlet_name=None, json_data=None, use_defaults=True, use_thread=False):
         return self.cloudlet.get_cloudlet_manifest(token=token, region=region, operator_org_name=operator_org_name, cloudlet_name=cloudlet_name, use_defaults=use_defaults, use_thread=use_thread)
 
