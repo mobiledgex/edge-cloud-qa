@@ -497,7 +497,7 @@ class MexDme(MexGrpc):
         except StopIteration:
             logger.info('stream closed')
         except Exception as e:
-            raise Exception(f'terminate stream error. expected event_type: {e}')
+            raise Exception(f'terminate stream error. got exception: {e}')
 
         self.edge_event_stream = None
         self.edge_event_queue = queue.SimpleQueue()
@@ -511,21 +511,34 @@ class MexDme(MexGrpc):
         logger.info('stream edge event on {}. \n\t{}'.format(self.address, str(request).replace('\n','\n\t')))
 
         self.edge_event_queue.put(request)
-
+        print('*WARN*', 'prestream')
         response = next(self.edge_event_stream)
-
+        logging.debug(f'response:{response}')
         if kwargs['event_type'] == 3:  # EVENT_LATENCY_REQUEST
             if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_LATENCY_PROCESSED: 
                 raise Exception(f'stream edge event error. expected event_type: EVENT_LATENCY_REQUEST, got {response}')
-        
+        if kwargs['event_type'] == 4:  # EVENT_CLOUDLET_UPDATE
+            if response.event_type != app_client_pb2.ServerEdgeEvent.EVENT_CLOUDLET_UPDATE:
+                raise Exception(f'stream edge event error. expected event_type: EVENT_CLOUDLET_UPDATE, got {response}')
+ 
         return response
  
     def send_latency_edge_event(self, client_edge_event_obj=None, **kwargs):
         resp = None
 
         kwargs['event_type'] = 3
+        kwargs['use_defaults'] = False
         resp = self.create_client_edge_event(**kwargs)
       
+        return resp
+
+    def send_location_update_edge_event(self, client_edge_event_obj=None, **kwargs):
+        resp = None
+
+        kwargs['event_type'] = 4
+        kwargs['use_defaults'] = False
+        resp = self.create_client_edge_event(**kwargs)
+
         return resp
 
     def receive_edge_event(self, timeout=10):
