@@ -11,8 +11,8 @@ Test Timeout    ${test_timeout_crm}
 *** Variables ***
 ${test_timeout_crm}  15 min
 
-${operator_name}  GDDT
-${cloudlet_name}  automationSunnydaleCloudlet
+${operator_name}  ${operator_name_openstack}
+${cloudlet_name}  ${cloudlet_name_openstack}
 
 ${username}=   mextester06
 ${password}=   ${mextester06_gmail_password}
@@ -21,6 +21,8 @@ ${password}=   ${mextester06_gmail_password}
 ${docker_image}=  image
 ${docker_image_developer}=  mobiledgex
 ${mex_password}=  ${mexadmin_password}
+
+${region}=  EU
 
 *** Test Cases ***
 # ECQ-3123
@@ -31,13 +33,13 @@ RunConsole - DeveloperContributor shall be able to do RunConsole with envvar=nov
     ...  verify RunConsole is successful
 
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
+    #Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
 
-    ${usertoken}=  Login
+    ${usertoken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-    ${stdout}=  update cloudlet  region=EU  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet  env_vars=MEX_CONSOLE_TYPE=novnc  token=${token}
-    #${stdout}=  Run Console  region=EU  developer_org_name=${docker_image_developer}  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet
-    ${stdout}=  Run Console  region=EU  developer_org_name=${developer_org_name_automation}  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet
+    ${stdout}=  update cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  env_vars=MEX_CONSOLE_TYPE=novnc  token=${token}
+    #${stdout}=  Run Console  region=EU  developer_org_name=${docker_image_developer}  operator_org_name=${operator_name}  cloudlet_name=automationSunnydaleCloudlet
+    ${stdout}=  Run Console  region=${region}  developer_org_name=${developer_org_name_automation}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}
 
     log to console  ${stdout}
     Should Contain  ${stdout['edge_turn_addr']}  edgeturn-qa-eu.mobiledgex.net:6080
@@ -49,15 +51,15 @@ RunConsole - DeveloperContributor shall not be able to do RunConsole with envvar
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
+    #Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer_org_name_automation}  #orgname=${docker_image_developer}
 
-    ${usertoken}=  Login
+    ${usertoken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
-    update cloudlet  region=EU  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
-    ${error}=  Run Keyword And Expect Error  *  Run Console  region=EU  developer_org_name=${developer_org_name_automation}  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet
+    update cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
+    ${error}=  Run Keyword And Expect Error  *  Run Console  region=${region}  developer_org_name=${developer_org_name_automation}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}
     log to console  ${error}
 
-    update cloudlet  region=EU  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
+    update cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  env_vars=MEX_CONSOLE_TYPE=spice  token=${token}
     log to console  Console Back to novnc
 
 
@@ -66,25 +68,25 @@ RunConsole - DeveloperContributor shall not be able to do RunConsole with envvar
 Setup
     #Create Org  orgtype=developer
 
-    Create Flavor  region=EU  ram=4096  vcpus=2  disk=40
-    Create App  region=EU  image_path=https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/cirros-0.5.1-x86_64-disk.img#md5:1d3062cd89af34e419f7100277f38b2b  access_ports=tcp:8080  deployment=vm  image_type=ImageTypeQCOW  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
-    Create App Instance  region=EU  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet  #app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
+    Create Flavor  region=${region}  ram=4096  vcpus=2  disk=40
+    Create App  region=${region}  image_path=https://artifactory.mobiledgex.net/artifactory/repo-MobiledgeX/cirros-0.5.1-x86_64-disk.img#md5:1d3062cd89af34e419f7100277f38b2b  access_ports=tcp:8080  deployment=vm  image_type=ImageTypeQCOW  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
+    Create App Instance  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  #app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     ${epoch}=  Get Time  epoch
     ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
     ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
 
-    Skip Verify Email
-    Create User  username=${username_epoch}  password=${password}  email_address=${email}
-    Unlock User
+    #Skip Verify Email
+    #Create User  username=${username_epoch}  password=${password}  email_address=${email}
+    #Unlock User
     #Verify Email
     ${token}=  Get Super Token
     Set Suite Variable  ${token}
-    Set Suite Variable  ${username_epoch}
+    #Set Suite Variable  ${username_epoch}
 
 
 Teardown
-    update cloudlet  region=EU  operator_org_name=GDDT  cloudlet_name=automationSunnydaleCloudlet  env_vars=MEX_CONSOLE_TYPE=novnc  token=${token}
+    update cloudlet  region=${region}  operator_org_name=${operator_name}  cloudlet_name=${cloudlet_name}  env_vars=MEX_CONSOLE_TYPE=novnc  token=${token}
     Cleanup Provisioning
     Login  username=mexadmin  password=${mex_password}
 
