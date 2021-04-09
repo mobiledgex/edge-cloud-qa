@@ -177,7 +177,7 @@ Settings - mcctl shall handle update settings failures
       error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: unknown unit "x" in duration "1x"  influxdbmetricsretention=1x
       error decoding \\\'Settings.InfluxDbMetricsRetention\\\': time: invalid duration "x"  influxdbmetricsretention=x
       #Influx Db Metrics Retention must be greater than 0  influxdbmetricsretention=0s  supported
-      Error parsing query: found -, expected duration at line 1, char 61  influxdbmetricsretention=-1s
+      Error parsing query: found -, expected duration at line 1, char 65  influxdbmetricsretention=-1s
       Retention policy duration must be at least 1h0m0s  influxdbmetricsretention=1s
 
       error decoding \\\'Settings.CloudletMaintenanceTimeout\\\': time: missing unit in duration "1"       cloudletmaintenancetimeout=1
