@@ -214,7 +214,7 @@ Docker Dedicated App CPU Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 100 and ${reading[9]} <= 200
+      Should Be True               ${reading[9]} >= 50 
    END
 
 
@@ -225,7 +225,7 @@ Docker Shared App CPU Should Be In Range
   [Arguments]  ${metrics}
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    FOR  ${reading}  IN  @{values}
-      Should Be True               ${reading[9]} > 100 and ${reading[9]} <= 200
+      Should Be True               ${reading[9]} >= 50
    END
 
 
