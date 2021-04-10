@@ -45,12 +45,12 @@ DeleteOrg - delete org in use by cloudlet pool invitation/confirmation shall ret
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPoolxxx"}
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or confirmation"}
 
    Create Cloudlet Pool Access Confirmation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPoolxxx"}
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or confirmation"}
 
 *** Keywords ***
 Setup
