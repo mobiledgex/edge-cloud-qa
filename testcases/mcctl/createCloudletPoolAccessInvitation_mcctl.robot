@@ -114,14 +114,14 @@ Success Create/Show/Delete Invitation Via mcctl
    ${show}=  Run mcctl  cloudletpoolinvitation show region=${region} ${parmss}  version=${version}  token=${token}
    ${delete}=  Run mcctl  cloudletpoolinvitation delete region=${region} ${parmss}  version=${version}  token=${token}
 
-   Should Be Equal  ${create}  invitation created\n
+   Should Be Equal  ${create}  Invitation created\n
 
    Should Be Equal  ${show[0]['CloudletPool']}  ${pool_name} 
    Should Be Equal  ${show[0]['CloudletPoolOrg']}  ${parms['cloudletpoolorg']}
    Should Be Equal  ${show[0]['Region']}  ${region}
    Should Be Equal  ${show[0]['Org']}  ${parms['org']}
 
-   Should Be Equal  ${delete}  invitation deleted\n
+   Should Be Equal  ${delete}  Invitation deleted\n
 
 Success Create/Show/Delete Confirmation Via mcctl
    [Arguments]  &{parms}
@@ -134,7 +134,7 @@ Success Create/Show/Delete Confirmation Via mcctl
    ${show}=  Run mcctl  cloudletpoolconfirmation show region=${region} ${parmss}  version=${version}  token=${token}
    ${delete}=  Run mcctl  cloudletpoolconfirmation delete region=${region} ${parmss}  version=${version}  token=${token}
 
-   Should Be Equal  ${create}  confirmation created\n
+   Should Be Equal  ${create}  Confirmation created\n
 
    Should Be Equal  ${show[0]['CloudletPool']}  ${pool_name}
    Should Be Equal  ${show[0]['CloudletPoolOrg']}  ${parms['cloudletpoolorg']}
@@ -145,7 +145,7 @@ Success Create/Show/Delete Confirmation Via mcctl
    Should Be True  len(${granted1}) > 0
    Should Be True  len(${granted2}) > 0
 
-   Should Be Equal  ${delete}  confirmation deleted\n
+   Should Be Equal  ${delete}  Confirmation deleted\n
 
 Fail Create Invitation Via mcctl
    [Arguments]  ${error_msg}  ${error_msg2}=noerrormsg  &{parms}
