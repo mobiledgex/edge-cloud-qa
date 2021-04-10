@@ -107,7 +107,7 @@ class MexOperation(MexRest):
                     if 'Deleted Cloudlet successfully' not in str(self.resp_text):
                         raise Exception('ERROR: Cloudlet not deleted successfully:' + str(self.resp_text))
                 elif url.endswith('user/delete'):
-                    if str(self.resp.text) != '{"message":"user deleted"}':
+                    if str(self.resp.text) != '{"message":"User deleted"}':
                         raise Exception('ERROR: user not deleted successfully:' + str(self.resp_text))
                 elif url.endswith('usercreate'):
                     if 'user created' not in str(self.resp.text) and 'User created' not in str(self.resp.text):
@@ -122,16 +122,16 @@ class MexOperation(MexRest):
                     if 'successfully sent latency request' not in str(self.resp_text):
                         raise Exception('ERROR: RequestAppInstLatency not sent successfully:' + str(self.resp_text))
                 elif url.endswith('cloudletpoolaccessinvitation/create'):
-                    if str(self.resp.text) != '{"message":"invitation created"}':
+                    if str(self.resp.text) != '{"message":"Invitation created"}':
                         raise Exception('ERROR: cloudletpoolaccessinvitation not created successfully:' + str(self.resp_text))
                 elif url.endswith('cloudletpoolaccessinvitation/delete'):
-                    if str(self.resp.text) != '{"message":"invitation deleted"}':
+                    if str(self.resp.text) != '{"message":"Invitation deleted"}':
                         raise Exception('ERROR: cloudletpoolaccessinvitation not deleted successfully:' + str(self.resp_text))
                 elif url.endswith('cloudletpoolaccessconfirmation/create'):
-                    if str(self.resp.text) != '{"message":"confirmation created"}':
+                    if str(self.resp.text) != '{"message":"Confirmation created"}':
                         raise Exception('ERROR: cloudletpoolaccessconfirmation not created successfully:' + str(self.resp_text))
                 elif url.endswith('cloudletpoolaccessconfirmation/delete'):
-                    if str(self.resp.text) != '{"message":"confirmation deleted"}':
+                    if str(self.resp.text) != '{"message":"Confirmation deleted"}':
                         raise Exception('ERROR: cloudletpoolaccessconfirmation not deleted successfully:' + str(self.resp_text))
                 else:
                     logger.info(f'not checking specific url response for {url}')
