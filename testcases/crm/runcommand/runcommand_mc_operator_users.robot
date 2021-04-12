@@ -31,9 +31,9 @@ RunCommand - OperatorManager shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"
 
-    Adduser Role  username=${username_epoch}  role=OperatorManager  #orgname=${docker_image_developer}
+#    Adduser Role  username=${username_epoch}  role=OperatorManager  #orgname=${docker_image_developer}
 
-    ${token}=  Login
+    ${token}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
@@ -51,9 +51,9 @@ RunCommand - OperatorContributor shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"
 
-    Adduser Role  username=${username_epoch}  role=OperatorContributor  #orgname=${docker_image_developer}
+#    Adduser Role  username=${username_epoch}  role=OperatorContributor  #orgname=${docker_image_developer}
 
-    ${token}=  Login
+    ${token}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
@@ -73,9 +73,9 @@ RunCommand - OperatorViewer shall not be able to do RunCommand
 
     #EDGECLOUD-1446 RunCommand for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=OperatorViewer  #orgname=${docker_image_developer}
+    #Adduser Role  username=${username_epoch}  role=OperatorViewer  #orgname=${docker_image_developer}
 
-    ${token}=  Login
+    ${token}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
     ${error}=  Run Keyword And Expect Error  *  Run Command  region=US  command=whoami  developer_org_name=${docker_image_developer}
 
@@ -96,16 +96,16 @@ Setup
     Create App  region=US  developer_org_name=${docker_image_developer} 
     Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  developer_org_name=${docker_image_developer}  cluster_instance_developer_org_name=${docker_image_developer}
 
-    ${epoch}=  Get Time  epoch
-    ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-    ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+#    ${epoch}=  Get Time  epoch
+#    ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+#    ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
 
-    Skip Verify Email
-    Create User  username=${username_epoch}  password=${password}  email_address=${email}
-    Unlock User
+#    Skip Verify Email
+#    Create User  username=${username_epoch}  password=${password}  email_address=${email}
+#    Unlock User
     #Verify Email
 
-    Set Suite Variable  ${username_epoch}
+#    Set Suite Variable  ${username_epoch}
 
 Teardown
     Cleanup Provisioning

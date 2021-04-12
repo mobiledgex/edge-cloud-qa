@@ -38,7 +38,7 @@ CreateController - mcctl shall handle create failures
 
 	[Template]  Fail Create Controller Via mcctl
 	# missing values
-	Error: missing required args: region address  Error: missing required args: region address  #not sending any args with mcctl  
+	Error: missing required args: region address  Error: missing required args: address region     #not sending any args with mcctl  
 	Bad Request (400), Controller Address not specified  region=${region}  address=  	
 	Bad Request (400), Controller Address not specified  region=${region}  address=""  	
 
