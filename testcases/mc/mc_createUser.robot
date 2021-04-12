@@ -112,7 +112,7 @@ MC - User shall not be able to create a new user with :: in the username
 	...  verify the proper error is received
 	...  ECQ-2722
 
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"name can only contain letters, digits, _ . -"}')  Create User  username=my::name  password=${password}  email_address=x@x.com  use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Name can only contain letters, digits, _ . -"}')  Create User  username=my::name  password=${password}  email_address=x@x.com  use_defaults=${False}
 
 # ECQ-2723
 MC - User shall not be able to create a new user with an invalid email
@@ -130,7 +130,7 @@ MC - User shall not be able to create a new user with an invalid username charac
 	...  verify the proper error is received
 	...  ECQ-2724
 
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"name can only contain letters, digits, _ . -"}')  Create User   username=~^`    password=${password}   email_address=x@x.com   use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Name can only contain letters, digits, _ . -"}')  Create User   username=~^`    password=${password}   email_address=x@x.com   use_defaults=${False}
 
 # ECQ-2725
 MC - User shall not be able to create a new user with spaces before the username   
@@ -139,7 +139,7 @@ MC - User shall not be able to create a new user with spaces before the username
 	...  verify the proper error is received
 	...  ECQ-2725
 
-	Run Keyword and Expect Error  ('code=400', 'error={"message":"name can only contain letters, digits, _ . -"}')  Create User   username=${SPACE}name${SPACE}    password=${password}   email_address=x@x.com   use_defaults=${False}
+	Run Keyword and Expect Error  ('code=400', 'error={"message":"Name can only contain letters, digits, _ . -"}')  Create User   username=${SPACE}name${SPACE}    password=${password}   email_address=x@x.com   use_defaults=${False}
 
 # ECQ-2726
 MC - User shall not be able to create a new user with an invalid password
