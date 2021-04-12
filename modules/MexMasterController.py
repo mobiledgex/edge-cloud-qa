@@ -482,7 +482,7 @@ class MexMasterController(MexRest):
 
         logger.info('response:\n' + str(self.resp.text))
 
-        if str(self.resp.text) != '{"message":"password updated"}':
+        if str(self.resp.text) != '{"message":"Password updated"}':
             raise Exception("error changing password. responseCode = " + str(self.resp.status_code) + ". ResponseBody=" + str(self.resp.text).rstrip())
 
     def show_role(self, token=None, use_defaults=True, use_thread=False):

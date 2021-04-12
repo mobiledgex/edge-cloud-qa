@@ -58,8 +58,8 @@ UpdateConfig - mcctl shall handle update failures
 	Error: unmarshal err on locknewaccounts, 0, bool, yaml: unmarshal errors:  locknewaccounts=0
 	Error: unmarshal err on skipverifyemail, 1, bool, yaml: unmarshal errors:  skipverifyemail=1
 	Error: unmarshal err on skipverifyemail, 0, bool, yaml: unmarshal errors:  skipverifyemail=0
-	Bad Request (400), admin password min crack time must be greater than password min crack time  passwordmincracktimesec=63072001
-	Bad Request (400), admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=2591999
+	Bad Request (400), Admin password min crack time must be greater than password min crack time  passwordmincracktimesec=63072001
+	Bad Request (400), Admin password min crack time must be greater than password min crack time  adminpasswordmincracktimesec=2591999
 
 
 # ECQ-2866
