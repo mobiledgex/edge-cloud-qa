@@ -251,7 +251,7 @@ MC - Verify Admin Password strength can not be set lower than User Password stre
 	${level}=   Convert To Integer  4 
 	${error}=    Run Keyword and Expect Error  *   Set Admin Pass Strength Config   admin_pass=${level}
 	Should Contain  ${error}    400
-	Should Contain  ${error}    {"message":"admin password min crack time must be greater than password min crack time"}
+	Should Contain  ${error}    {"message":"Admin password min crack time must be greater than password min crack time"}
 
 
 # ECQ-2780
@@ -264,7 +264,7 @@ MC - Verify User Password strength can not be set higher than Admin Password str
 	${level}=   Convert To Integer  63072001 
 	${error}=   Run Keyword and Expect Error  *   Set User Pass Strength Config   user_pass=${level}
 	Should Contain  ${error}    code=400
-	Should Contain  ${error}    {"message":"admin password min crack time must be greater than password min crack time"}
+	Should Contain  ${error}    {"message":"Admin password min crack time must be greater than password min crack time"}
 	${config}=   Show Config    token=${adminToken}
 	Should Be Equal As Numbers   ${config['PasswordMinCrackTimeSec']}   ${userdefaultlvl}
 

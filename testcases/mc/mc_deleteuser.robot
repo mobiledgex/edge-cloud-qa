@@ -54,8 +54,9 @@ MC - Delete a user with an expired token
 *** Keywords ***
 Setup
    Login  username=${admin_manager_username}  password=${admin_manager_password}
-   Create User  username=myuser   password=${password}   email_address=xy@xy.com
-   Unlock User  username=myuser
-   ${userToken}=  Login  username=myuser  password=${password}
+   #Create User  username=myuser   password=${password}   email_address=xy@xy.com
+   #Unlock User  username=myuser
+   #${userToken}=  Login  username=myuser  password=${password}
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
    Set Suite Variable  ${userToken}
 	
