@@ -43,7 +43,7 @@ ShowOrgCloudlet - org shall be assigned to 1 cloudlet
    #Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
    
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
 
@@ -92,7 +92,7 @@ ShowOrgCloudlet - org shall be assigned to 2 cloudlets
    Add Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  cloudlet_name=tmocloud-2
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  org_name=${orgname}
 
@@ -141,7 +141,7 @@ ShowOrgCloudlet - org shall be assigned to all cloudlets
       Run Keyword If  '${c}' != 'dmuus'  Adduser Role  token=${super_token}  orgname=${c}  username=${op_manager_user_automation}  role=OperatorManager
       Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  operator_org_name=${c}
       Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}     cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
-      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
+      Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
    END
 
    # add members to the pool
@@ -183,8 +183,8 @@ ShowOrgCloudlet - orgs shall be assigned to different cloudlets
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus   org_name=${orgname2}
@@ -242,8 +242,8 @@ ShowOrgCloudlet - orgs shall be assigned the same cloudlet
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  org_name=${orgname2}
@@ -296,8 +296,8 @@ ShowOrgCloudlet - orgs shall be assigned the same pool
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  org_name=${orgname2}
@@ -341,8 +341,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  auto_delete=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  auto_delete=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  org_name=${orgname2}
@@ -400,8 +400,8 @@ ShowOrgCloudlet - orgs shall be changed to different pools
    Delete Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev2}  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
 
    ${show_return_new}=   Show Org Cloudlet  region=US  token=${dev_token}  org_name=${orgnamedev}
    ${show_return_new2}=  Show Org Cloudlet  region=US  token=${dev_token}  org_name=${orgnamedev2}
@@ -477,7 +477,7 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    FOR  ${c}  IN  @{org_dict.keys()}
    #   Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}
       Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
-      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
+      Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  decision=accept  auto_delete=False
    END
 
    #Create Cloudlet Pool         region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}
@@ -519,7 +519,7 @@ ShowOrgCloudlet - orgs shall be removed from all org pools
    # delete all the org pools
    FOR  ${c}  IN  @{org_dict.keys()}
       #Delete Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}
-      Delete Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
+      Delete Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
    END
    #Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname1}  org_name=${orgname}
    #Delete Org Cloudlet Pool     region=US  token=${super_token}  cloudlet_pool_name=${poolname2}  org_name=${orgname2}
@@ -553,9 +553,9 @@ ShowOrgCloudlet - members shall be removed from cloudlet pools
    Add Cloudlet Pool Member  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  cloudlet_name=tmocloud-2  auto_delete=${False}
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  org_name=${orgname2}
@@ -669,7 +669,7 @@ ShowOrgCloudlet - shall be to show after deleting all pools
    # add to org cloudlet pool
    FOR  ${c}  IN  @{org_dict.keys()}
       Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
-      Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  auto_delete=False
+      Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  decision=accept  auto_delete=False
       #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname}  auto_delete=${False}
    END
 
@@ -713,7 +713,7 @@ ShowOrgCloudlet - shall be to show after deleting all pools
 #   Length Should Be   ${show_return2}  ${len_copy}
 
    FOR  ${c}  IN  @{org_dict.keys()}
-      Delete Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
+      Delete Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
       Delete Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  developer_org_name=${orgnamedev}  use_defaults=False
       #Delete Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname2}${c}  cloudlet_pool_org_name=${c}  org_name=${orgname} 
    END
@@ -759,9 +759,9 @@ ShowOrgCloudlet - shall be to add members after orgpoolcreate
    Create Cloudlet Pool         region=US  token=${op_token}  cloudlet_pool_name=${poolname2}  operator_org_name=dmuus  #auto_delete=${False}
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev2}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=US  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=azure  org_name=${orgname}
    #Create Org Cloudlet Pool     region=US  token=${op_token}  cloudlet_pool_name=${poolname2}  cloudlet_pool_org_name=dmuus  org_name=${orgname2}
@@ -841,7 +841,7 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
    #Create Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[2]['operator']}  cloudlet_name=${cloudlets[2]['cloudlet']}
 
    Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
-   Create Cloudlet Pool Access Confirmation  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
 
    #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=dmuus  org_name=${orgname}
 
@@ -886,6 +886,57 @@ ShowOrgCloudlet - shall be to add user to existing orgpool
 #   @{cloudlets_new2}=  Create List  ${cloudlets[1]}  ${cloudlets[2]}
 #   Cloudlets Should Be In List  ${cloudlets_new2}  ${show_return_new}
 #   Length Should Be   ${show_return_new}  2
+
+# ECQ-3356
+ShowOrgCloudlet - org shall not show if invite rejected
+   [Documentation]
+   ...  - reject invitation for the cloudlet for org1
+   ...  - send ShowOrgCloudlet for org1 and verify it returns the other cloudlet
+   ...  - send ShowOrgCloudlet for org2 and verify it returns the other cloudlets
+
+   [Tags]  CloudletPoolAccess
+
+   @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
+
+   Run Keyword If  '${cloudlets[1]['operator']}' != 'dmuus'  Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${op_manager_user_automation}  role=OperatorManager
+
+   Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
+   Update Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_list=${cloudlet_list}
+   #Add Cloudlet Pool Member  region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}  cloudlet_name=${cloudlets[1]['cloudlet']}
+
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  decision=reject  use_defaults=False
+
+   #Create Org Cloudlet Pool     region=${region}  token=${super_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  org_name=${orgname}     #cloudlet_pool_org_name=${operator}  org_name=${orgname}
+
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${dev_token}  org_name=${orgnamedev}  #org_name=${cloudlets[1]['operator']}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${dev_token}  org_name=${orgnamedev2}  #org_name=${cloudlets[2]['operator']}
+
+   ${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+   ${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${num_public_cloudlets}  # pool cloudlet is already public
+   ...  ELSE  Evaluate  1+${num_public_cloudlets}  # pool cloudlet is not already public so add it to the public list
+   ${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${num_public_cloudlets}-1  # pool cloudlet is already public so remove it from public list
+   ...  ELSE  Set Variable  ${num_public_cloudlets}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${cloudlet_length1-1}
+   Length Should Be   ${show_return2}  ${cloudlet_length2}
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+
+   Pool Cloudlet Should Not Be In Show Org Cloudlet  ${show_return2}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+
+   #Should Be Equal  ${show_return[0]['key']['name']}  ${cloudlets[1]['cloudlet']}
+   #Should Be Equal  ${show_return[0]['key']['organization']}  ${cloudlets[1]['operator']}
+
+   #Cloudlets Should Be In List  ${public_cloudlet_list}  ${show_return}
+
+   #Cloudlets Should Be In List  ${public_cloudlet_list}  ${show_return2}
+
+   #${cloudlets2}=  Remove from List  ${cloudlets}  1
+   #${len}=  Get Length  ${cloudlets}
+   ##@{cloudlets2}=  Create List  ${cloudlet0}  ${cloudlet2}  ${cloudlet3}  ${cloudlet4}
+   #Cloudlets Should Be In List  ${cloudlets}  ${show_return2}
+   #Length Should Be   ${show_return2}  ${len}
 
 *** Keywords ***
 Pool Cloudlet Should Be In Show Org Cloudlet
