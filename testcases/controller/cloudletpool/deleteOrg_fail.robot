@@ -30,10 +30,10 @@ ${region}=  US
 #   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by an OrgCloudletPool"}
 
 # ECQ-3309
-DeleteOrg - delete org in use by cloudlet pool invitation/confirmation shall return error
+DeleteOrg - delete org in use by cloudlet pool invitation/response shall return error
    [Documentation]
    ...  - send CreateOrg
-   ...  - send CreateCloudletPoolInvitation/Confirmation
+   ...  - send CreateCloudletPoolInvitation/Response
    ...  - send DeleteOrg
    ...  - verify proper error is received
 
@@ -45,12 +45,19 @@ DeleteOrg - delete org in use by cloudlet pool invitation/confirmation shall ret
    Create Cloudlet Pool Access Invitation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or confirmation"}
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
 
-   Create Cloudlet Pool Access Confirmation  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}
+   Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}  decision=accept
    ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or confirmation"}
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
+
+   Delete Cloudlet Pool Access Response  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token} 
+
+   Create Cloudlet Pool Access Response  region=${region}  cloudlet_pool_org_name=tmus  developer_org_name=${org_name}  token=${token}  decision=reject
+   ${error}=  Run Keyword And Expect Error  *  Delete Org  token=${token}
+   Should Contain   ${error}  code=400
+   Should Contain   ${error}  error={"message":"Cannot delete organization because it is referenced by some cloudletpool invitation or response"}
 
 *** Keywords ***
 Setup
