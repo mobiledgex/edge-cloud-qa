@@ -68,4 +68,4 @@ Flavor - create shall fail with invalid resource
     ...  verify proper error is returned
 
     ${error}=  Run Keyword and Expect Error  *  Create Flavor  region=${region}  optional_resources=pu=pu:1
-    Should Contain  ${error}  ('code=400', 'error={"message":"Only GPU resources currently supported, use optresmap=gpu=$resource:$count found pu"}')
+    Should Contain  ${error}  ('code=400', 'error={"message":"Only GPU resources currently supported, use optresmap=gpu=$resource:[$specifier:]$count found pu"}')
