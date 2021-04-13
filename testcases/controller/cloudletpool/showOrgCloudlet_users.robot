@@ -938,6 +938,36 @@ ShowOrgCloudlet - org shall not show if invite rejected
    #Cloudlets Should Be In List  ${cloudlets}  ${show_return2}
    #Length Should Be   ${show_return2}  ${len}
 
+# ECQ-3357
+ShowOrgCloudlet - org shall be assigned to an empty pool
+   [Documentation]
+   ...  - create an empty pool
+   ...  - send ShowOrgCloudlet for org1 and verify it returns all public cloudlets
+   ...  - send ShowOrgCloudlet for org2 and verify it returns all public cloudlets
+
+   [Tags]  CloudletPoolAccess
+
+   @{cloudlet_list}  Create List  ${cloudlets[1]['cloudlet']}
+
+   Run Keyword If  '${cloudlets[1]['operator']}' != 'tmus'  Adduser Role  token=${super_token}  orgname=${cloudlets[1]['operator']}  username=${op_manager_user_automation}  role=OperatorManager
+
+   Create Cloudlet Pool         region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  operator_org_name=${cloudlets[1]['operator']}   #operator_org_name=${operator}
+
+   Create Cloudlet Pool Access Invitation  region=${region}  token=${op_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  use_defaults=False
+   Create Cloudlet Pool Access Response  region=${region}  token=${dev_token}  cloudlet_pool_name=${poolname1}  cloudlet_pool_org_name=${cloudlets[1]['operator']}  developer_org_name=${orgnamedev}  decision=accept  use_defaults=False
+
+   ${show_return}=   Show Org Cloudlet  region=${region}  token=${dev_token}  org_name=${orgnamedev}  #org_name=${cloudlets[1]['operator']}
+   ${show_return2}=  Show Org Cloudlet  region=${region}  token=${dev_token}  org_name=${orgnamedev2}  #org_name=${cloudlets[2]['operator']}
+
+   #${inlist}=  Is Cloudlet In List  ${public_cloudlet_list}  ${cloudlets[1]['cloudlet']}  ${cloudlets[1]['operator']}
+   #${cloudlet_length1}=  Run Keyword If  '${inlist}'=='${True}'   Set Variable  ${num_public_cloudlets}  # pool cloudlet is already public
+   #...  ELSE  Evaluate  1+${num_public_cloudlets}  # pool cloudlet is not already public so add it to the public list
+   #${cloudlet_length2}=  Run Keyword If  '${inlist}'=='${True}'   Evaluate  ${num_public_cloudlets}-1  # pool cloudlet is already public so remove it from public list
+   #...  ELSE  Set Variable  ${num_public_cloudlets}  # pool cloudlet is already private
+
+   Length Should Be   ${show_return}  ${num_public_cloudlets}
+   Length Should Be   ${show_return2}  ${num_public_cloudlets}
+
 *** Keywords ***
 Pool Cloudlet Should Be In Show Org Cloudlet
    [Arguments]  ${show_list}  ${cloudlet}  ${org}
