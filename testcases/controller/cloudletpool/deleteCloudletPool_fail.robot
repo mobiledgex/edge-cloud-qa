@@ -75,10 +75,10 @@ DeleteCloudletPool - delete with name not found shall return error
 #   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region US name ${pool_name} because it is in use by OrgCloudletPool org ${org_name}"}
 
 # ECQ-3310
-DeleteCloudletPool - delete when assinged to an invitation/confirmation shall return error
+DeleteCloudletPool - delete when assigned to an invitation/response shall return error
    [Documentation]
    ...  - send CreateCloudletPool
-   ...  - create invitation and confirmation
+   ...  - create invitation and response
    ...  - send DeleteCloudletPool
    ...  - verify proper error is received
 
@@ -97,11 +97,11 @@ DeleteCloudletPool - delete when assinged to an invitation/confirmation shall re
    Should Contain   ${error}  code=400
    Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation"}
 
-   Create Cloudlet Pool Access Confirmation  region=${region}   token=${token}
+   Create Cloudlet Pool Access Response  region=${region}  decision=accept   token=${token}
 
    ${error}=  Run Keyword And Expect Error  *   Delete Cloudlet Pool  region=US  token=${token}
    Should Contain   ${error}  code=400
-   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation, automation_dev_org confirmation"}
+   Should Contain   ${error}  error={"message":"Cannot delete CloudletPool region ${region} name ${pool_name} because it is referenced by automation_dev_org invitation, automation_dev_org response"}
 
 *** Keywords ***
 Setup

@@ -15,14 +15,15 @@ class CloudletPoolAccess(MexOperation):
         self.invite_delete_url = '/auth/cloudletpoolaccessinvitation/delete'
         self.invite_show_url = '/auth/cloudletpoolaccessinvitation/show'
 
-        self.confirmation_create_url = '/auth/cloudletpoolaccessconfirmation/create'
-        self.confirmation_delete_url = '/auth/cloudletpoolaccessconfirmation/delete'
-        self.confirmation_show_url = '/auth/cloudletpoolaccessconfirmation/show'
+        self.response_create_url = '/auth/cloudletpoolaccessresponse/create'
+        self.response_delete_url = '/auth/cloudletpoolaccessresponse/delete'
+        self.response_show_url = '/auth/cloudletpoolaccessresponse/show'
 
         self.show_granted_url = '/auth/cloudletpoolaccessgranted/show'
+        self.show_pending_url = '/auth/cloudletpoolaccesspending/show'
 
         
-    def _build(self, cloudlet_pool_name=None, cloudlet_pool_org_name=None, developer_org_name=None, include_fields=False, use_defaults=True):
+    def _build(self, cloudlet_pool_name=None, cloudlet_pool_org_name=None, developer_org_name=None, decision=None, include_fields=False, use_defaults=True):
         if cloudlet_pool_name == 'default':
             cloudlet_pool_name = shared_variables.cloudletpool_name_default
 
@@ -38,7 +39,9 @@ class CloudletPoolAccess(MexOperation):
             invite_dict['org'] = developer_org_name
         if cloudlet_pool_org_name is not None:
             invite_dict['cloudletpoolorg'] = cloudlet_pool_org_name
-            
+        if decision is not None:
+            invite_dict['decision'] = decision
+ 
         return invite_dict
 
     def create_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
@@ -63,8 +66,8 @@ class CloudletPoolAccess(MexOperation):
 
         return self.delete(token=token, url=self.invite_delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def create_cloudlet_pool_access_confirmation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
-        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
+    def create_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, decision=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, decision=decision, use_defaults=use_defaults)
         msg_dict = msg
 
         msg_dict_delete = None
@@ -77,13 +80,13 @@ class CloudletPoolAccess(MexOperation):
            msg_show = self._build(cloudlet_pool_name=msg['cloudletpool'], cloudlet_pool_org_name=msg['cloudletpoolorg'], developer_org_name=msg['org'], use_defaults=False)
            msg_dict_show = msg_show
 
-        return self.create(token=token, url=self.confirmation_create_url, delete_url=self.confirmation_delete_url, show_url=self.confirmation_show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
+        return self.create(token=token, url=self.response_create_url, delete_url=self.response_delete_url, show_url=self.response_show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, create_msg=msg_dict, delete_msg=msg_dict_delete, show_msg=msg_dict_show)[0]
 
-    def delete_cloudlet_pool_access_confirmation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+    def delete_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
-        return self.delete(token=token, url=self.confirmation_delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
+        return self.delete(token=token, url=self.response_delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
     def show_cloudlet_pool_access_granted(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
@@ -91,15 +94,21 @@ class CloudletPoolAccess(MexOperation):
 
         return self.show(token=token, url=self.show_granted_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
+    def show_cloudlet_pool_access_pending(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
+        msg_dict = msg
+
+        return self.show(token=token, url=self.show_pending_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+
     def show_cloudlet_pool_access_invitation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
         return self.show(token=token, url=self.invite_show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
-    def show_cloudlet_pool_access_confirmation(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
+    def show_cloudlet_pool_access_response(self, token=None, region=None, cloudlet_pool_name=None, developer_org_name=None, cloudlet_pool_org_name=None, json_data=None, use_defaults=True, auto_delete=True, use_thread=False):
         msg = self._build(cloudlet_pool_name=cloudlet_pool_name, developer_org_name=developer_org_name, cloudlet_pool_org_name=cloudlet_pool_org_name, use_defaults=use_defaults)
         msg_dict = msg
 
-        return self.show(token=token, url=self.confirmation_show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
+        return self.show(token=token, url=self.response_show_url, region=region, json_data=json_data, use_defaults=True, use_thread=use_thread, message=msg_dict)
 
