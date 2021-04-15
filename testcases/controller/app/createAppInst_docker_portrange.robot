@@ -60,21 +60,21 @@ AppInst - user shall be able to add with TCP/UDP port range for docker
     ...  create an app instance
     ...  verify ports are correct
 
-    Create App  access_ports=tcp:1-10,udp:1-10  deployment=docker
+    Create App  access_ports=tcp:100-160,udp:100-160  deployment=docker
     ${appInst}=  Create App Instance  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_instance_default}
 
     ${app_default}=  Get Default App Name
 
     Should Be Equal              ${appInst.uri}    ${cluster_instance_default}.${cloudlet_name}.${operator_name}.mobiledgex.net
 
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  1
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    1
-    Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       10
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].internal_port}  100
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].public_port}    100
+    Should Be Equal As Integers  ${appInst.mapped_ports[0].end_port}       160
     Should Be Equal As Integers  ${appInst.mapped_ports[0].proto}          1  #LProtoTCP
 
-    Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  1
-    Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    1
-    Should Be Equal As Integers  ${appInst.mapped_ports[1].end_port}       10
+    Should Be Equal As Integers  ${appInst.mapped_ports[1].internal_port}  100
+    Should Be Equal As Integers  ${appInst.mapped_ports[1].public_port}    100
+    Should Be Equal As Integers  ${appInst.mapped_ports[1].end_port}       160
     Should Be Equal As Integers  ${appInst.mapped_ports[1].proto}          2  #LProtoUDP
 
     Length Should Be   ${appInst.mapped_ports}  2
