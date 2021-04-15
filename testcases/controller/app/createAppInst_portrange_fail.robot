@@ -39,22 +39,23 @@ AppInst - create with tcp port range on k8s shared shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  error={"message":"Shared IP access with port range not allowed"}
 
-AppInst - create with http port range on k8s shared shall return error
-   [Documentation]
-   ...  create an app with http port range
-   ...  create app inst
-   ...  verify proper error is returned
-
-   Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes
-
-   ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=http:1-10
-
-   Should Contain  ${error}  code=400
-   Should Contain  ${error}  error={"message":"Invalid deployment manifest, Port range not allowed for HTTP"}
-
-#   ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
+# no longer supported with http
+#AppInst - create with http port range on k8s shared shall return error
+#   [Documentation]
+#   ...  create an app with http port range
+#   ...  create app inst
+#   ...  verify proper error is returned
+#
+#   Create Cluster Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  ip_access=IpAccessShared  deployment=kubernetes
+#
+#   ${error}=  Run Keyword and Expect Error  *  Create App  region=US  access_ports=http:1-10
+#
 #   Should Contain  ${error}  code=400
-#   Should Contain  ${error}  error={"message":"Shared IP access with port range not allowed"}
+#   Should Contain  ${error}  error={"message":"Invalid deployment manifest, Port range not allowed for HTTP"}
+#
+##   ${error}=  Run Keyword and Expect Error  *  Create App Instance  region=US  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}
+##   Should Contain  ${error}  code=400
+##   Should Contain  ${error}  error={"message":"Shared IP access with port range not allowed"}
 
 AppInst - create with tcp/udp single port and port range on k8s shared shall return error
    [Documentation]
