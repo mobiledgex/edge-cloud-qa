@@ -28,29 +28,29 @@ CreateApp - create with reserved port tcp:20800 shall return error
 
    image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800:tls  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
 
    image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800:tls  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
 
    image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800:tls  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
 
    image_path=${docker_image}  access_ports=tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
-   image_path=${docker_image}  access_ports=tcp:23-20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
+   image_path=${docker_image}  access_ports=tcp:20700-20800:tls  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:20800-20801  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:20800  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
 
