@@ -36,29 +36,27 @@ Setup
 
    Create Flavor  token=${super_token}  region=${region}
 
-   ${epoch}=  Get Time  epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
+#   ${epoch}=  Get Time  epoch
+#   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+#   ${emailepoch2}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  2  @gmail.com
+#   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+#   ${epochusername2}=  Catenate  SEPARATOR=  ${username}  ${epoch}  2
 
-   ${super_token}=  Get Super Token
- 
-   Skip Verify Email  token=${super_token} 
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   #Verify Email  email_address=${emailepoch}
-   Unlock User 
-   ${user_token}=  Login  username=${epochusername}  password=${password}
+#   Skip Verify Email  token=${super_token} 
+#   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+#   #Verify Email  email_address=${emailepoch}
+#   Unlock User 
+#   ${user_token}=  Login  username=${epochusername}  password=${password}
 
-   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
-   #Verify Email  email_address=${emailepoch2}
-   Unlock User 
-   ${user_token2}=  Login  username=${epochusername2}  password=${password}
+#   Create User  username=${epochusername2}   password=${password}   email_address=${emailepoch2}
+#   #Verify Email  email_address=${emailepoch2}
+#   Unlock User 
+#   ${user_token2}=  Login  username=${epochusername2}  password=${password}
 
-   Set Suite Variable  ${user_token}
-   Set Suite Variable  ${user_token2}
+#   Set Suite Variable  ${user_token}
+#   Set Suite Variable  ${user_token2}
    Set Suite Variable  ${super_token}
-   Set Suite Variable  ${epochusername2}
+#   Set Suite Variable  ${epochusername2}
 
 Dev/Op user shall not be able to do DeleteIdleReservableClusterInstances
    [Arguments]  ${orgtype}  ${role}
@@ -66,9 +64,16 @@ Dev/Op user shall not be able to do DeleteIdleReservableClusterInstances
    Setup 
    [Teardown]  Cleanup Provisioning
 
-   ${orgname}=  Create Org  token=${user_token}  orgtype=${orgtype}
+#   ${orgname}=  Create Org  token=${user_token}  orgtype=${orgtype}
 
-   Adduser Role   orgname=${orgname}   username=${epochusername2}  role=${role}   token=${user_token}
+#   Adduser Role   orgname=${orgname}   username=${epochusername2}  role=${role}   token=${user_token}
+
+   ${user_token2}=  Run Keyword If  '${role}' == 'DeveloperManager'  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+   ${user_token2}=  Run Keyword If  '${role}' == 'DeveloperContributor'  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
+   ${user_token2}=  Run Keyword If  '${role}' == 'DeveloperViewer'  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
+   ${user_token2}=  Run Keyword If  '${role}' == 'OperatorManager'  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+   ${user_token2}=  Run Keyword If  '${role}' == 'OperatorContributor'  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
+   ${user_token2}=  Run Keyword If  '${role}' == 'OperatorViewer'  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
 
    Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Idle Reservable Cluster Instances  region=${region}  token=${user_token2}
    Run Keyword And Expect Error  ('code=403', 'error={"message":"Forbidden"}')  Delete Idle Reservable Cluster Instances  region=${region}  token=${user_token2}  idle_time=10s

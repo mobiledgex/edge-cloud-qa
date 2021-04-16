@@ -58,10 +58,10 @@ CreateApp - Create shall fail with docker lb and tcp:22
    ${error3}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-22:tls  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Should Be Equal  ${error3}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-2200  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-200  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Should Be Equal  ${error4}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-2200  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
+   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-200  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Should Be Equal  ${error5}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
    ${error6}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:22  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
@@ -85,10 +85,10 @@ CreateApp - Create shall fail with k8s lb and tcp:22
    ${error3}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-22:tls  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    Should Be Equal  ${error3}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-2200  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
+   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-200  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    Should Be Equal  ${error4}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-2200  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
+   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-200  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
    Should Be Equal  ${error5}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
    ${error6}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:22  image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer
@@ -112,10 +112,10 @@ CreateApp - Create shall fail with helm lb and tcp:22
    ${error3}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-22:tls  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    Should Be Equal  ${error3}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-2200  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
+   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-200  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    Should Be Equal  ${error4}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-2200  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
+   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-200  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
    Should Be Equal  ${error5}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
    ${error6}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:22  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer
@@ -167,10 +167,10 @@ CreateApp - Create shall fail with vm lb and tcp:22
    ${error3}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-22:tls  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    Should Be Equal  ${error3}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-2200  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
+   ${error4}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:1-200  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    Should Be Equal  ${error4}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
-   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-2200  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
+   ${error5}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:22-200  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
    Should Be Equal  ${error5}  ('code=400', 'error={"message":"App cannot use port tcp:22 - reserved for Platform inter-node SSH"}')
 
    ${error6}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:21,tcp:23,udp:1,tcp:22  image_type=ImageTypeQcow  deployment=vm  access_type=loadbalancer
