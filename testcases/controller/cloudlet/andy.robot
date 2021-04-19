@@ -2,7 +2,7 @@
 Library         MexController  controller_address=%{AUTOMATION_CONTROLLER_ADDRESS}
 Library         String
 
-#Test Teardown   Cleanup provisioning
+Test Teardown   Cleanup provisioning
 
 
 *** Variables ***
