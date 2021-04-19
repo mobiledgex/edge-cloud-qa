@@ -3,10 +3,8 @@
 name: Robot Dryrun
 
 # Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
+on: [pull_request]
+  
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,11 +22,12 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Install Robot
+        run: |
+           python -m pip install --upgrade pip
+           pip install robotframework
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Dryrun
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          robotframework --dryrun *.robot
