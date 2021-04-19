@@ -30,4 +30,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Dryrun
         run: |
+          pwd
+          ls
           robot --dryrun *.robot
