@@ -3,7 +3,7 @@
 name: Robot Dryrun
 
 # Controls when the action will run. 
-on: pull_request
+on: [pull_request, workflow_dispatch]
   
 
   # Allows you to run this workflow manually from the Actions tab
@@ -30,4 +30,4 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Dryrun
         run: |
-          robotframework --dryrun *.robot
+          robot --dryrun *.robot
