@@ -9,7 +9,7 @@ Library  Collections
 Test Setup  Setup
 Test Teardown  Cleanup Provisioning
 
-Test Timeout    ${test_timeout_crm1}
+Test Timeout    10 min
 
 *** Variables ***
 ${region}=  EU
@@ -24,72 +24,30 @@ ${password}=   ${mextester06_gmail_password}
 # ECQ-3327
 DeveloperManager shall not be able to fetch cloudlet resource usage/metrics data
    [Documentation]
-   ...  - Create user with role DeveloperManager 
    ...  - Controller returns 403 forbidden when getresourceusage/getresourcequotaprops is executed
    ...  - Controller returns 403 forbidden when metrics cloudletusage is executed
 
-   ${org_name_dev}=  Set Variable  ${org_name}_dev
-
-   ${epoch}=  Get Time  epoch
-   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
-   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
-
-   Create Org  orgname=${org_name_dev}  orgtype=developer
-   
-   Skip Verify Email
-   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
-   Unlock User
-
-   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperManager
-   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
+   ${tokendev}=  Login  username=dev_manager_automation  password=${dev_manager_password_automation}
 
    Verify Resource Usage  ${tokendev}  403 Forbidden
 
 # ECQ-3328
 DeveloperContributor shall not be able to fetch cloudlet resource usage/metrics data
    [Documentation]
-   ...  - Create user with role DeveloperContributor
    ...  - Controller returns 403 forbidden when getresourceusage/getresourcequotaprops is executed
    ...  - Controller returns 403 forbidden when metrics cloudletusage is executed
 
-   ${org_name_dev}=  Set Variable  ${org_name}_dev
-
-   ${epoch}=  Get Time  epoch
-   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
-   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
-
-   Create Org  orgname=${org_name_dev}  orgtype=developer
-
-   Skip Verify Email
-   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
-   Unlock User
-
-   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperContributor
-   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
+   ${tokendev}=  Login  username=dev_contributor_automation  password=${dev_contributor_password_automation}
 
    Verify Resource Usage  ${tokendev}  403 Forbidden
 
 # ECQ-3329
 DeveloperViewer shall not be able to fetch cloudlet resource usage/metrics data
    [Documentation]
-   ...  - Create user with role DeveloperViewer
    ...  - Controller returns 403 forbidden when getresourceusage/getresourcequotaprops is executed
    ...  - Controller returns 403 forbidden when metrics cloudletusage is executed
 
-   ${org_name_dev}=  Set Variable  ${org_name}_dev
-
-   ${epoch}=  Get Time  epoch
-   ${usernamedev_epoch}=  Catenate  SEPARATOR=  ${username}  dev  ${epoch}
-   ${emaildev}=  Catenate  SEPARATOR=  ${username}  dev  +  ${epoch}  @gmail.com
-
-   Create Org  orgname=${org_name_dev}  orgtype=developer
-
-   Skip Verify Email
-   Create User  username=${usernamedev_epoch}  password=${password}  email_address=${emaildev}
-   Unlock User
-
-   Adduser Role  username=${usernamedev_epoch}  orgname=${org_name_dev}  role=DeveloperViewer
-   ${tokendev}=  Login  username=${usernamedev_epoch}  password=${password}
+   ${tokendev}=  Login  username=dev_viewer_automation  password=${dev_viewer_password_automation}
 
    Verify Resource Usage  ${tokendev}  403 Forbidden
 
