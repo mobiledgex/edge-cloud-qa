@@ -396,21 +396,23 @@ Get cluster metrics with starttime and endtime and last on openstack
 DeveloperManager shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Current Date  result_format=epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   #${epoch}=  Get Current Date  result_format=epoch
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
-   Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
+   #Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
-   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+   #${userToken}=  Login  username=${epochusername}  password=${password}
+   #${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperManager   token=${adminToken}  #use_defaults=${False}
+
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
    ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6 
@@ -431,22 +433,24 @@ DeveloperManager shall be able to get cluster metrics
 DeveloperContributor shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Current Date  result_format=epoch
-   #${epoch}=  Get Time  epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   #${epoch}=  Get Current Date  result_format=epoch
+   ##${epoch}=  Get Time  epoch
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
-   Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
+   #Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
-   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+   #${userToken}=  Login  username=${epochusername}  password=${password}
+   #${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperContributor   token=${adminToken}  #use_defaults=${False}
+
+   ${userToken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
    ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6
@@ -467,23 +471,25 @@ DeveloperContributor shall be able to get cluster metrics
 DeveloperViewer shall be able to get cluster metrics
    [Arguments]  ${username}  ${password}  ${cluster}  ${cloudlet}  ${operator}  ${developer}  ${selector}
 
-   ${epoch}=  Get Current Date  result_format=epoch
+   #${epoch}=  Get Current Date  result_format=epoch
 
-   #${epoch}=  Get Time  epoch
-   ${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
-   ${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+   ##${epoch}=  Get Time  epoch
+   #${emailepoch}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+   #${epochusername}=  Catenate  SEPARATOR=  ${username}  ${epoch}
 
-   Skip Verify Email
-   Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
-   Unlock User
-   #Verify Email  email_address=${emailepoch}
+   #Skip Verify Email
+   #Create User  username=${epochusername}   password=${password}   email_address=${emailepoch}
+   #Unlock User
+   ##Verify Email  email_address=${emailepoch}
 
-   Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
+   #Run Keyword and Ignore Error  Create Org  orgname=${developer}  orgtype=developer
 
-   ${userToken}=  Login  username=${epochusername}  password=${password}
-   ${adminToken}=  Login  username=${username_admin}  password=${password_admin}
+   #${userToken}=  Login  username=${epochusername}  password=${password}
+   #${adminToken}=  Login  username=${username_admin}  password=${password_admin}
 
-   Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
+   #Adduser Role   orgname=${developer}   username=${epochusername}  role=DeveloperViewer   token=${adminToken}  #use_defaults=${False}
+
+   ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
    ${metrics}=         Get Cluster Metrics  region=${region}  cluster_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  selector=${selector}  last=5  token=${userToken}
    ${metrics_influx}=  Run Keyword  Get Influx Cluster ${selector} Metrics  cluster_instance_name=${cluster}  cloudlet_name=${cloudlet}  operator_org_name=${operator}  developer_org_name=${developer}  condition=GROUP BY cluster ORDER BY DESC LIMIT 6
