@@ -149,7 +149,7 @@ Setup
    TCP Port Should Be Alive  ${appinst2['data']['uri']}  ${appinst2['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
-   Sleep  3 mins
+   Sleep  10 mins
  
    ${appinst}=  Show App Instances  region=${region}  app_name=${app_name}
    ${pod}=  Set Variable  ${appinst[0]['data']['runtime_info']['container_ids'][0]}
@@ -180,11 +180,12 @@ Metrics Should Match Influxdb
    log to console  ${metrics_influx_t}
 
    ${index}=  Set Variable  0
-   : FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
-   \  Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
+   FOR  ${reading}  IN  @{metrics['data'][0]['Series'][0]['values']}
+      Should Be Equal  ${metrics_influx_t[${index}]['time']}  ${reading[0]}
    #\  Should Be Equal  ${metrics_influx_t[${index}]['cpu']}  ${reading[9]}
 
-   \  ${index}=  Evaluate  ${index}+1
+      ${index}=  Evaluate  ${index}+1
+   END
 
 Appinst Connections Headings
   [Arguments]  ${metrics}
@@ -283,51 +284,56 @@ CPU Should Be In Range
 
   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} > 0 and ${reading[9]} <= 100
+   END
 
 Disk Should Be In Range
   [Arguments]  ${metrics}
 
   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} > 0
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} > 0
+   END
 
 Memory Should Be In Range
   [Arguments]  ${metrics}
 
   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} >= 0 and ${reading[9]} <= 100000000
+   END
 
 Network Should Be In Range
   [Arguments]  ${metrics}
 
    ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} >= 0 and ${reading[10]} >= 0
+   END
 
 Connections Should Be In Range
   [Arguments]  ${metrics}
 
   ${values}=  Set Variable  ${metrics['data'][0]['Series'][0]['values']}
    # verify values
-   : FOR  ${reading}  IN  @{values}
-   \  Should Be True               ${reading[9]} >= 0
-   \  Should Be True               ${reading[10]} >= 0
-   \  Should Be True               ${reading[11]} >= 0
-   \  Should Be True               ${reading[12]} >= 0
-   \  Should Be True               ${reading[13]} >= 0
-   \  Should Be True               ${reading[14]} >= 0
-   \  Should Be True               ${reading[15]} >= 0
-   \  Should Be True               ${reading[16]} >= 0
-   \  Should Be True               ${reading[17]} >= 0
-   \  Should Be True               ${reading[18]} >= 0
-   \  Should Be True               ${reading[19]} >= 0
-   \  Should Be True               ${reading[20]} >= 0
-   \  Should Be True               ${reading[21]} >= 0
-   \  Should Be True               ${reading[22]} >= 0
-   \  Should Be True               ${reading[23]} >= 0
+   FOR  ${reading}  IN  @{values}
+      Should Be True               ${reading[9]} >= 0
+      Should Be True               ${reading[10]} >= 0
+      Should Be True               ${reading[11]} >= 0
+      Should Be True               ${reading[12]} >= 0
+      Should Be True               ${reading[13]} >= 0
+      Should Be True               ${reading[14]} >= 0
+      Should Be True               ${reading[15]} >= 0
+      Should Be True               ${reading[16]} >= 0
+      Should Be True               ${reading[17]} >= 0
+      Should Be True               ${reading[18]} >= 0
+      Should Be True               ${reading[19]} >= 0
+      Should Be True               ${reading[20]} >= 0
+      Should Be True               ${reading[21]} >= 0
+      Should Be True               ${reading[22]} >= 0
+      Should Be True               ${reading[23]} >= 0
+   END
