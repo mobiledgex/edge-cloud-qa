@@ -5,7 +5,7 @@ Library  MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{
 Library  String
      
 Test Setup  Setup
-Test Teardown  Cleanup Provisioning
+Test Teardown  Teardown
 
 *** Variables ***
 ${region}=  US
@@ -29,15 +29,15 @@ ShowCloudletRefs displays details of appinst/clusterinst
    Create App  region=${region}  app_name=${app_name3}  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2015
    Create App  region=${region}  app_name=${app_name4}  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${helm_image}  access_ports=udp:2015
 
-   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  #auto_delete=False
-   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  #auto_delete=False
+   Create Cluster Instance  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  
+   Create Cluster Instance  region=${region}  cluster_name=${cluster_name}1  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=docker  flavor_name=${flavor}  
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}2  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=kubernetes  flavor_name=${flavor}
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}3  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=kubernetes  flavor_name=${flavor}
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}4  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=helm  flavor_name=${flavor}
    Create Cluster Instance  region=${region}  cluster_name=${cluster_name}5  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessShared  deployment=helm  flavor_name=${flavor}
-   Create App Instance  region=${region}  app_name=${app_name3}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=dummycluster  #auto_delete=False
-   Create App Instance  region=${region}  app_name=${app_name1}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name1}  #auto_delete=${False}
-   Create App Instance  region=${region}  app_name=${app_name2}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name2}  #auto_delete=${False}
+   Create App Instance  region=${region}  app_name=${app_name3}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=dummycluster  
+   Create App Instance  region=${region}  app_name=${app_name1}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name1}  
+   Create App Instance  region=${region}  app_name=${app_name2}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster${app_name2}  
 
    ${cloudletrefs}=  Show CloudletRefs  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_name=${cloudlet_name}
    Log To Console  ${cloudletrefs}
@@ -87,3 +87,7 @@ Setup
    Set Suite Variable  ${app_name3}
    Set Suite Variable  ${app_name4}
    Set Suite Variable  ${flavor}
+
+Teardown
+   Cleanup Provisioning
+   Delete Idle Reservable Cluster Instances  region=${region}
