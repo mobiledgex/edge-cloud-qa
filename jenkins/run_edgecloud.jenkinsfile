@@ -60,7 +60,7 @@ node('jenkinsSlave1'){
     //tag = Version + '_automation_' + year + month + date
     //cycle = Version + '_automation_' + dateValue
     cycle = dateValue + '_' + Version
-    folder_list = ['openstack', 'console', 'vsphere', 'vcd', 'dme', 'sdk', 'controller', 'metrics']
+    folder_list = ['openstack', 'console', 'vsphere', 'vcd', 'dme', 'sdk', 'controller', 'metrics', 'performance/security']
 
     tag = dateValue
     project = "${project}"
