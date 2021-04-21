@@ -1,4 +1,4 @@
-*** Set Timetings ***
+*** Settings ***
 Documentation  RunCommand for k8s/docker 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
