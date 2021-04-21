@@ -128,7 +128,7 @@ class AlertReceiver(MexOperation):
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def verify_slack(self, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, wait=30, num_messages_to_check=3):
+    def verify_slack(self, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, wait=30, num_messages_to_check=10):
         now = time.time() - 30
 
         client = WebClient(token=self.slack_token)
@@ -233,75 +233,77 @@ class AlertReceiver(MexOperation):
                         logger.info(f'{text} found in alert email')
                     else:
                         raise Exception(f'{text} not found in alert email')
-
+                num_new_emails = num_emails - num_emails_pre
+                logging.info(f'found {num_new_emails} new emails')
                 for newemail in email_list:
                     mail_id = newemail.split()
                     logger.info(f'checking new email with id={mail_id}')
 
-                    typ, data = mail.fetch(mail_id[-1], '(RFC822)')
-                    for response_part in data:
-                        print('*WARN*', 'response_part', response_part)
-                        if isinstance(response_part, tuple):
-                            msg = email.message_from_string(response_part[1].decode('utf-8'))
-                            email_subject = msg['subject'].replace('\r\n','')
-                            email_from = msg['from']
-                            date_received = msg['date']
-                            logger.debug(f'subject={email_subject} scope={scope}')
+                    for i in range(num_new_emails, 0, -1):
+                        typ, data = mail.fetch(mail_id[-i], '(RFC822)')
+                        for response_part in data:
+                            print('*WARN*', 'response_part', response_part)
+                            if isinstance(response_part, tuple):
+                                msg = email.message_from_string(response_part[1].decode('utf-8'))
+                                email_subject = msg['subject'].replace('\r\n','')
+                                email_from = msg['from']
+                                date_received = msg['date']
+                                logger.debug(f'subject={email_subject} scope={scope}')
  
                             #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
-                            if scope == 'Cloudlet':
-                                if 'PagerDuty' in email_subject:
-                                    logger.debug(f'pagerduty')
-                                    subject_to_check = f'TRIGGERED Incidents'
+                                if scope == 'Cloudlet':
+                                    if 'PagerDuty' in email_subject:
+                                        logger.debug(f'pagerduty')
+                                        subject_to_check = f'TRIGGERED Incidents'
+                                    else:
+                                        subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
                                 else:
-                                    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
-                            else:
-                                print('*WARN*', email_subject)
-                                if 'PagerDuty' in email_subject:
-                                    logger.debug(f'pagerduty')
-                                    subject_to_check = f'TRIGGERED Incidents'
+                                    print('*WARN*', email_subject)
+                                    if 'PagerDuty' in email_subject:
+                                        logger.debug(f'pagerduty')
+                                        subject_to_check = f'TRIGGERED Incidents'
+                                    else:
+                                        logger.debug(f'not pagerduty')
+                                        subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+                                if alert_type in email_subject and subject_to_check in email_subject:
+                                    logger.info(f'subject{email_subject}  verified')
                                 else:
-                                    logger.debug(f'not pagerduty')
-                                    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
-                            if alert_type in email_subject and subject_to_check in email_subject:
-                                logger.info(f'subject{email_subject}  verified')
-                            else:
                                 #raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
-                                logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
-                                continue 
+                                    logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
+                                    continue 
  
-                            if msg.is_multipart():
-                                for part in msg.walk():
-                                    ctype = part.get_content_type()
-                                    logger.debug(f'type={ctype}')
-                                    if ctype == 'text/html':  # found html part of the message
-                                        payload = part.get_payload(decode=True).decode('utf-8')
-                                        logger.debug(f'payload={payload}')
-                            try:    
-                                if alert_name: check_payload(f'alertname = {alert_name}')
-                                if app_name: check_payload(f'app = {app_name}')
-                                if app_version: check_payload(f'appver = {app_version}')
-                                if developer_org_name: check_payload(f'apporg = {developer_org_name}')
-                                if cloudlet_name: check_payload(f'cloudlet = {cloudlet_name}')
-                                if operator_org_name: check_payload(f'cloudletorg = {operator_org_name}')
-                                if cluster_instance_name: check_payload(f'cluster = {cluster_instance_name}')
-                                if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
-                                if region: check_payload(f'region = {region}')
-                                if status: check_payload(f'status = {status}')
-                                if port: check_payload(f'port = {port}')
-                                if scope: check_payload(f'scope = {scope}')
-                                if description: check_payload(f'description = {description}')
-                                if title: check_payload(f'title = {title}')
+                                if msg.is_multipart():
+                                    for part in msg.walk():
+                                        ctype = part.get_content_type()
+                                        logger.debug(f'type={ctype}')
+                                        if ctype == 'text/html':  # found html part of the message
+                                            payload = part.get_payload(decode=True).decode('utf-8')
+                                            logger.debug(f'payload={payload}')
+                                try:    
+                                    if alert_name: check_payload(f'alertname = {alert_name}')
+                                    if app_name: check_payload(f'app = {app_name}')
+                                    if app_version: check_payload(f'appver = {app_version}')
+                                    if developer_org_name: check_payload(f'apporg = {developer_org_name}')
+                                    if cloudlet_name: check_payload(f'cloudlet = {cloudlet_name}')
+                                    if operator_org_name: check_payload(f'cloudletorg = {operator_org_name}')
+                                    if cluster_instance_name: check_payload(f'cluster = {cluster_instance_name}')
+                                    if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
+                                    if region: check_payload(f'region = {region}')
+                                    if status: check_payload(f'status = {status}')
+                                    if port: check_payload(f'port = {port}')
+                                    if scope: check_payload(f'scope = {scope}')
+                                    if description: check_payload(f'description = {description}')
+                                    if title: check_payload(f'title = {title}')
                                 #check_payload('job = MobiledgeX Monitoring')
 
-                                if 'job =' in payload:
-                                    raise Exception(f'job found in alert email')
+                                    if 'job =' in payload:
+                                        raise Exception(f'job found in alert email')
 
-                            except Exception as e:
-                                logger.info(f'check payload failed:{e}')
-                                continue
+                                except Exception as e:
+                                    logger.info(f'check payload failed:{e}')
+                                    continue
 
-                            return True
+                                return True
             time.sleep(1)
 
         raise Exception('email not found')
