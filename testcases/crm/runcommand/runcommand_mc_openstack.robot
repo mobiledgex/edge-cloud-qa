@@ -1,4 +1,4 @@
-*** Settings ***
+*** Set Timetings ***
 Documentation  RunCommand for k8s/docker 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
@@ -6,7 +6,7 @@ Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout    40 min 
+Test Timeout    45 min 
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
@@ -24,7 +24,7 @@ ${test_timeout_crm}  15 min
 
 *** Test Cases ***
 # ECQ-1486
-RunCommand - k8s shared shall return command result on openstack
+RunCommand - k8s shared shall return command result on CRM
     [Documentation]
     ...  deploy k8s shared app 
     ...  verify RunCommand works 
@@ -50,7 +50,7 @@ RunCommand - k8s shared shall return command result on openstack
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 # ECQ-1487
-RunCommand - k8s dedicated shall return command result on openstack
+RunCommand - k8s dedicated shall return command result on CRM
     [Documentation]
     ...  deploy k8s dedicated app
     ...  verify RunCommand works
@@ -78,7 +78,7 @@ RunCommand - k8s dedicated shall return command result on openstack
     Should Contain   ${error}  Error from server (NotFound): pods "notfound" not found
 
 # ECQ-1488
-RunCommand - docker dedicated shall return command result on openstack
+RunCommand - docker dedicated shall return command result on CRM
     [Documentation]
     ...  deploy docker app
     ...  verify RunCommand works
@@ -106,7 +106,7 @@ RunCommand - docker dedicated shall return command result on openstack
     Should Contain   ${error}  Error: No such container: notfound 
 
 # ECQ-2062
-RunCommand - docker shared shall return command result on openstack
+RunCommand - docker shared shall return command result on CRM
     [Documentation]
     ...  deploy docker shared app
     ...  verify RunCommand works
@@ -134,7 +134,7 @@ RunCommand - docker shared shall return command result on openstack
     Should Contain   ${error}  Error: No such container: notfound
 
 # ECQ-2586
-RunCommand - docker dedicated idle timeout shall be 30min on openstack
+RunCommand - docker dedicated idle timeout shall be 30min on CRM
     [Documentation]
     ...  - deploy docker app
     ...  - send RunCommand with cmd=/bin/bash to get a shell to the container

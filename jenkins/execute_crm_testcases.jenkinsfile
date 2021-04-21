@@ -19,10 +19,10 @@ number_parallel_executionsVCD = '1'
 currentBuild.displayName = cycle
 
 //def jobList1Parallel = ["runCrmOpenstackTests", "runCrmAzureTests", "runCrmGcpTests", "runRunCommandTests"]
-def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmOpenstackVmTests", "runCrmShowLogsTests", "runCrmRunConsoleTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
+def jobList1Parallel = ["runCrmOpenstackSharedTests", "runCrmOpenstackDedicatedTests", "runCrmOpenstackGpuTests", "runCrmOpenstackVmTests", "runCrmRunConsoleTests", "runCrmRunDebugTests", "runCrmVMPoolTests", "runCrmAutoProvTests", "runCrmAccessCloudletTests", "runCrmAlertReceiverTests"]
 def jobList1Parallelgcpazure = ["runCrmAzureTests", "runCrmGcpTests"]
 def jobListMaintenance = ["runCloudletMaintenanceCRMTests"]
-def jobList1Platform = ["runCrmRunCommandTests"]
+def jobList1Platform = ["runCrmRunCommandTests", "runCrmShowLogsTests"]
 def platform_list = ["Openstack", "VCD", "Vsphere"] 
 //def jobList2Parallel = ["runGetFqdnListTests","runGetAppInstListTests"]
  
