@@ -6,7 +6,7 @@ Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Test Setup      Setup
 Test Teardown   Cleanup provisioning
 
-Test Timeout    45 min 
+Test Timeout    50 min 
 	
 *** Variables ***
 ${cluster_flavor_name}  x1.medium
