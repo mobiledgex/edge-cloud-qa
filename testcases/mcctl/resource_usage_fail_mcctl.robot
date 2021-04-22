@@ -88,16 +88,16 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures for PlatformTy
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Invalid quota name: Dis, valid names are External IPs,RAM,vCPUs,Disk,GPUs  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Dis  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
+      Error: Bad Request (400), Invalid resource quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 
-      Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
+      #Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for External IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for vCPUs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for GPUs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=GPUs  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource alert threshold 101 specified, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  defaultresourcealertthreshold=101
 
-      Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
+      #Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for External IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for vCPUs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
@@ -114,9 +114,9 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures for PlatformTy
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Invalid quota name: Dis, valid names are Instances,Floating IPs,RAM,vCPUs,Disk,GPUs  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Dis  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
+      Error: Bad Request (400), Invalid resource quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 
-      Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
+      #Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Instances, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Floating IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="Floating IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
@@ -124,7 +124,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures for PlatformTy
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for GPUs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=GPUs  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource alert threshold 101 specified, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  defaultresourcealertthreshold=101
 
-      Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
+      #Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Instances, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Floating IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="Floating IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
@@ -142,7 +142,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Resource quota Disk exceeded max supported value: ${disk_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_quota_value}  resourcequotas:0.alertthreshold=90
+      #Error: Bad Request (400), Resource quota Disk exceeded max supported value: ${disk_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota External IPs exceeded max supported value: ${external_ips_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=${external_ips_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota RAM exceeded max supported value: ${ram_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=${ram_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota vCPUs exceeded max supported value: ${vcpus_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_quota_value}  resourcequotas:0.alertthreshold=90
@@ -157,7 +157,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Resource quota Disk exceeded max supported value: ${disk_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_quota_value}  resourcequotas:0.alertthreshold=90
+      #Error: Bad Request (400), Resource quota Disk exceeded max supported value: ${disk_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota Floating IPs exceeded max supported value: ${floating_ips_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="Floating IPs"  resourcequotas:0.value=${floating_ips_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota RAM exceeded max supported value: ${ram_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=${ram_quota_value}  resourcequotas:0.alertthreshold=90
       Error: Bad Request (400), Resource quota vCPUs exceeded max supported value: ${vcpus_max_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_quota_value}  resourcequotas:0.alertthreshold=90
@@ -173,7 +173,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Resource quota value for Disk is less than currently used value. Should be atleast ${disk_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_updated_value}
+      #Error: Bad Request (400), Resource quota value for Disk is less than currently used value. Should be atleast ${disk_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_updated_value}
       Error: Bad Request (400), Resource quota value for RAM is less than currently used value. Should be atleast ${ram_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=${ram_updated_value}
       Error: Bad Request (400), Resource quota value for vCPUs is less than currently used value. Should be atleast ${vcpus_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_updated_value}
       #Error: Bad Request (400), Resource quota value for External IPs is less than currently used value. Should be atleast ${external_ips_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=${external_ips_updated_value}
@@ -188,7 +188,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures when quotamaxv
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Resource quota value for Disk is less than currently used value. Should be atleast ${disk_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_updated_value}
+      #Error: Bad Request (400), Resource quota value for Disk is less than currently used value. Should be atleast ${disk_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=${disk_updated_value}
       Error: Bad Request (400), Resource quota value for RAM is less than currently used value. Should be atleast ${ram_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=RAM  resourcequotas:0.value=${ram_updated_value}
       Error: Bad Request (400), Resource quota value for vCPUs is less than currently used value. Should be atleast ${vcpus_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=vCPUs  resourcequotas:0.value=${vcpus_updated_value}
       Error: Bad Request (400), Resource quota value for Instances is less than currently used value. Should be atleast ${instances_used_value}  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=${instances_updated_value}
@@ -248,18 +248,18 @@ Update Setup
    ${cloudlet_resource_usage}=  Run mcctl  cloudlet getresourceusage region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}
    Log To Console  ${cloudlet_resource_usage}
    ${disk_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
-   ${disk_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['value']}
+   #${disk_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['value']}
 
-   ${disk_quota_value}=  Evaluate  ${disk_max_value}+1
-   ${disk_updated_value}=  Evaluate  ${disk_used_value}-1
+   #${disk_quota_value}=  Evaluate  ${disk_max_value}+1
+   #${disk_updated_value}=  Evaluate  ${disk_used_value}-1
 
    Run Keyword If  '${platform_type}' == 'PlatformTypeFake'  Setup PlatformTypeFake  ${cloudlet_resource_usage}
    ...  ELSE  Setup PlatformTypeOpenstack  ${cloudlet_resource_usage} 
 
    Set Suite Variable  ${disk_max_value}
-   Set Suite Variable  ${disk_quota_value}
-   Set Suite Variable  ${disk_updated_value}
-   Set Suite Variable  ${disk_used_value}
+   #Set Suite Variable  ${disk_quota_value}
+   #Set Suite Variable  ${disk_updated_value}
+   #Set Suite Variable  ${disk_used_value}
 
 Setup PlatformTypeFake
    [Arguments]   ${cloudlet_resource_usage}
