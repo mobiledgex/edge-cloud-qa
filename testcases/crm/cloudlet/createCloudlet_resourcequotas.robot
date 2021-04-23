@@ -34,8 +34,8 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
 
    &{resource1}=  Create Dictionary  name=RAM  value=14336  alert_threshold=75
    &{resource2}=  Create Dictionary  name=vCPUs  value=8    alert_threshold=80
-   &{resource3}=  Create Dictionary  name=Disk  value=140   alert_threshold=85
-   &{resource4}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
+   &{resource3}=  Create Dictionary  name=Instances  value=4  alert_threshold=85
+   &{resource4}=  Create Dictionary  name=GPUs   value=6  alert_threshold=90
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
 
    #update cloudlet to add resource quotas
@@ -43,8 +43,7 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
 
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  14336
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  8
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  140
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  4
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  4
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['alert_threshold']}  75
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['alert_threshold']}  80
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['alert_threshold']}  85
@@ -52,8 +51,8 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
 
    &{resource1}=  Create Dictionary  name=RAM  value=8192  
    &{resource2}=  Create Dictionary  name=vCPUs  value=4   
-   &{resource3}=  Create Dictionary  name=Disk  value=80   
-   &{resource4}=  Create Dictionary  name=Instances  value=2 
+   &{resource3}=  Create Dictionary  name=Instances  value=2
+   &{resource4}=  Create Dictionary  name=GPUs  value=5
    @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
 
    #update cloudlet to modify resource quotas and default_resource_alert_threshold
@@ -61,8 +60,8 @@ UpdateCloudlet to add/modify resource quotas and default_resource_alert_threshol
    Should Be Equal As Numbers   ${cloudlet1['data']['default_resource_alert_threshold']}  70
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  8192
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  4
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  80
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  2
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  2
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  5
    Dictionary Should Not Contain Key  ${cloudlet1['data']['resource_quotas'][0]}  alert_threshold
 
 # ECQ-3352
@@ -83,8 +82,8 @@ CreateCloudlet with resource quotas and UpdateCloudlet to add/modify them
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['alert_threshold']}  75
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['alert_threshold']}  80
 
-   &{resource3}=  Create Dictionary  name=Disk  value=140   alert_threshold=85
-   &{resource4}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
+   &{resource3}=  Create Dictionary  name=Instances  value=4  alert_threshold=85
+   &{resource4}=  Create Dictionary  name=GPUs  value=8  alert_threshold=90
    Append To List  ${resource_list}  ${resource3}  ${resource4}
 
    #update cloudlet to add 2 other resource quotas
@@ -92,13 +91,11 @@ CreateCloudlet with resource quotas and UpdateCloudlet to add/modify them
 
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['value']}  14336
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['value']}  8
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  140
-   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['value']}  4
+   Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['value']}  4
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][0]['alert_threshold']}  75
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][1]['alert_threshold']}  80
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][2]['alert_threshold']}  85
    Should Be Equal As Numbers   ${cloudlet1['data']['resource_quotas'][3]['alert_threshold']}  90
-
  
 *** Keywords ***
 Setup
