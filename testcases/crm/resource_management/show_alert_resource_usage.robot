@@ -41,9 +41,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
 
    &{resource1}=  Create Dictionary  name=RAM  value=14336  alert_threshold=75
    &{resource2}=  Create Dictionary  name=vCPUs  value=8    alert_threshold=80
-   &{resource3}=  Create Dictionary  name=Disk  value=140   alert_threshold=85
-   &{resource4}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
+   &{resource3}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
+   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
 
    # create cloudlet with resource quotas
@@ -51,8 +50,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
 
    Should Be Equal As Numbers   ${cloudlet1['data']['default_resource_alert_threshold']}  80
 
-   Verify Resource Usage  80  2  8192  4  CurrentUsage
-   Verify Resource Usage  140  4  14336  8  MaxQuota
+   Verify Resource Usage  2  8192  4  CurrentUsage
+   Verify Resource Usage  4  14336  8  MaxQuota
   
    ${cloudlet_info}=   Show Cloudlet Info  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  token=${tokenop}
 
@@ -78,8 +77,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    ${inst_inframaxvalue}=   Set Variable  ${cloudlet_info[0]['data']['resources_snapshot']['info'][3]['infra_max_value']}
 
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor}  token=${tokendev}  auto_delete=False
-   Verify Resource Usage  140  4  14336  8  CurrentUsage
-   Verify Resource Usage   ${disk_inframaxvalue}  ${inst_inframaxvalue}  ${ram_inframaxvalue}  ${cores_inframaxvalue}  MaxInfra 
+   Verify Resource Usage   4  14336  8  CurrentUsage
+   Verify Resource Usage   ${inst_inframaxvalue}  ${ram_inframaxvalue}  ${cores_inframaxvalue}  MaxInfra 
 
    Sleep  60s
 
@@ -90,17 +89,16 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 80% of vCPUs is used  token=${tokenop}
    Should Not Be Empty  ${alert2[0]['data']}
 
-   ${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 85% of Disk is used  token=${tokenop}
-   Should Not Be Empty  ${alert3[0]['data']}
+   #${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 85% of Disk is used  token=${tokenop}
+   #Should Not Be Empty  ${alert3[0]['data']}
 
    ${alert4}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 90% of Instances is used  token=${tokenop}
    Should Not Be Empty  ${alert4[0]['data']}
 
    &{resource1}=  Create Dictionary  name=RAM  value=28672  alert_threshold=75
    &{resource2}=  Create Dictionary  name=vCPUs  value=16    alert_threshold=80
-   &{resource3}=  Create Dictionary  name=Disk  value=280   alert_threshold=85
-   &{resource4}=  Create Dictionary  name=Instances  value=8  alert_threshold=90
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
+   &{resource3}=  Create Dictionary  name=Instances  value=8  alert_threshold=90
+   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
    # update cloudlet with resource quotas
    ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
@@ -112,8 +110,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 80% of vCPUs is used  token=${tokenop}
    Should Be Empty  ${alert2}
 
-   ${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 85% of Disk is used  token=${tokenop}
-   Should Be Empty  ${alert3}
+   #${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 85% of Disk is used  token=${tokenop}
+   #Should Be Empty  ${alert3}
 
    ${alert4}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 90% of Instances is used  token=${tokenop}
    Should Be Empty  ${alert4}
@@ -121,26 +119,26 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    ${openstack_limits}=  Get Limits
    ${ram_infra_usage}=  Evaluate  ${openstack_limits['totalRAMUsed']}/${openstack_limits['maxTotalRAMSize']} * 100
    ${vcpu_infra_usage}=  Evaluate  ${openstack_limits['totalCoresUsed']}/${openstack_limits['maxTotalCores']} * 100
-   ${disk_infra_usage}=  Evaluate  ${openstack_limits['totalGigabytesUsed']}/${openstack_limits['maxTotalVolumeGigabytes']} * 100
+   #${disk_infra_usage}=  Evaluate  ${openstack_limits['totalGigabytesUsed']}/${openstack_limits['maxTotalVolumeGigabytes']} * 100
    ${instances_infra_usage}=  Evaluate  ${openstack_limits['totalInstancesUsed']}/${openstack_limits['maxTotalInstances']} * 100
    ${ram_alert_threshold}=  Evaluate  ${ram_infra_usage} - 1
    ${vcpu_alert_threshold}=  Evaluate  ${vcpu_infra_usage} - 1
-   ${disk_alert_threshold}=  Evaluate  ${disk_infra_usage} - 1
+   #${disk_alert_threshold}=  Evaluate  ${disk_infra_usage} - 1
    ${instances_alert_threshold}=  Evaluate  ${instances_infra_usage} - 1
 
    &{resource1}=  Create Dictionary  name=RAM  value=28672  alert_threshold=${ram_alert_threshold}
    &{resource2}=  Create Dictionary  name=vCPUs  value=16    alert_threshold=${vcpu_alert_threshold}
-   &{resource3}=  Create Dictionary  name=Disk  value=280   alert_threshold=${disk_alert_threshold}
-   &{resource4}=  Create Dictionary  name=Instances  value=8  alert_threshold=${instances_alert_threshold}
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
+   #&{resource3}=  Create Dictionary  name=Disk  value=280   alert_threshold=${disk_alert_threshold}
+   &{resource3}=  Create Dictionary  name=Instances  value=8  alert_threshold=${instances_alert_threshold}
+   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}
 
    # update cloudlet with resource quotas
    ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
 
    ${ram_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][0]['alert_threshold']}
    ${vcpu_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][1]['alert_threshold']}
-   ${disk_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][2]['alert_threshold']}
-   ${instances_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][3]['alert_threshold']}
+   #${disk_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][2]['alert_threshold']}
+   ${instances_alert_threshold}=  Set Variable  ${cloudlet1['data']['resource_quotas'][2]['alert_threshold']}
 
    Sleep  60s
 
@@ -151,8 +149,8 @@ Alerts are triggered when alert threshold for cloudlet/infra resource limits are
    ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=[Infra] More than ${vcpu_alert_threshold}% of vCPUs is used  token=${tokenop}
    Should Not Be Empty  ${alert2[0]['data']}
 
-   ${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=[Infra] More than ${disk_alert_threshold}% of Disk is used  token=${tokenop}
-   Should Not Be Empty  ${alert3[0]['data']}
+   #${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=[Infra] More than ${disk_alert_threshold}% of Disk is used  token=${tokenop}
+   #Should Not Be Empty  ${alert3[0]['data']}
 
    ${alert4}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=[Infra] More than ${instances_alert_threshold}% of Instances is used  token=${tokenop}
    Should Not Be Empty  ${alert4[0]['data']}
@@ -212,9 +210,9 @@ Setup
    Set Suite Variable  ${flavor}
 
 Verify Resource Usage
-   [Arguments]  ${disk}  ${instances}  ${ram}  ${vcpu}  ${type}
+   [Arguments]   ${instances}  ${ram}  ${vcpu}  ${type}
 
-   @{resource_list}=  Create List  ${disk}  ${instances}  ${ram}  ${vcpu}
+   @{resource_list}=  Create List  ${instances}  ${ram}  ${vcpu}
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${tokenop}
    log to console  ${resource_usage}
 
@@ -225,35 +223,24 @@ Verify Resource Usage
 Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[3]}            #vCPUs
+   #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Infra Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['infra_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[1]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[2]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['infra_max_value']}  ${resourcelist[3]}            #vCPUs
+   #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['infra_max_value']}  ${resourcelist[0]}            #Disk
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['infra_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['infra_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['infra_max_value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[3]}            #vCPUs
-
-Cloudlet Update
-   [Arguments]  ${ram}  ${vcpu}  ${disk}  ${instances}
-
-   &{resource1}=  Create Dictionary  name=RAM  value=${ram}
-   &{resource2}=  Create Dictionary  name=vCPUs  value=${vcpu}
-   &{resource3}=  Create Dictionary  name=Disk  value=${disk}
-   &{resource4}=  Create Dictionary  name=Instances  value=${instances}
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
-
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${tokenop}
+   #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 

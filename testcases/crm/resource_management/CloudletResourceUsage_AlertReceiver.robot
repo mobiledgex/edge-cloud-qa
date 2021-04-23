@@ -73,7 +73,7 @@ AlertReceiver - shall be able to create/receive email/slack CloudletResourceUsag
    Log To Console  Creating Cluster Instance
    Create Cluster Instance  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  ip_access=IpAccessDedicated  deployment=docker  flavor_name=${flavor_name}  token=${dev_token}
    Log To Console  Done Creating Cluster Instance
-   Verify Resource Usage  140  4  14336  8  CurrentUsage
+   Verify Resource Usage  4  14336  8  CurrentUsage
 
    Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 75% of RAM is used
    Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 75% of RAM is used
@@ -92,17 +92,6 @@ AlertReceiver - shall be able to create/receive email/slack CloudletResourceUsag
 
    ${alert2}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 80% of vCPUs is used  token=${op_token}
    Should Not Be Empty  ${alert2[0]['data']}
-
-   &{resource1}=  Create Dictionary  name=Disk  value=140   alert_threshold=85
-   Append To List  ${resource_list}  ${resource1}
-
-   Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${op_token}
-
-   Alert Receiver Email For Firing CloudletResourceUsage Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}_1  region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  wait=${email_wait}  description=More than 85% of Disk is used
-   Alert Receiver Slack Message For Firing CloudletResourceUsage Should Be Received  region=${region}  alert_receiver_name=${recv_name}_2  cloudlet_name=${cloudlet_name}   operator_org_name=${operator_name_openstack}  wait=120  description=More than 85% of Disk is used
-
-   ${alert3}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name}  warning=More than 85% of Disk is used  token=${op_token}
-   Should Not Be Empty  ${alert3[0]['data']}
 
    &{resource1}=  Create Dictionary  name=Instances  value=4  alert_threshold=90
    Append To List  ${resource_list}  ${resource1}
@@ -139,9 +128,9 @@ Setup
    Set Suite Variable  ${cloudlet_name}
 
 Verify Resource Usage
-   [Arguments]  ${disk}  ${instances}  ${ram}  ${vcpu}  ${type}
+   [Arguments]  ${instances}  ${ram}  ${vcpu}  ${type}
 
-   @{resource_list}=  Create List  ${disk}  ${instances}  ${ram}  ${vcpu}
+   @{resource_list}=  Create List  ${instances}  ${ram}  ${vcpu}
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  token=${op_token}
    log to console  ${resource_usage}
 
@@ -151,27 +140,16 @@ Verify Resource Usage
 Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[3]}            #vCPUs
+   #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[3]}            #vCPUs
-
-Cloudlet Update
-   [Arguments]  ${ram}  ${vcpu}  ${disk}  ${instances}
-
-   &{resource1}=  Create Dictionary  name=RAM  value=${ram}
-   &{resource2}=  Create Dictionary  name=vCPUs  value=${vcpu}
-   &{resource3}=  Create Dictionary  name=Disk  value=${disk}
-   &{resource4}=  Create Dictionary  name=Instances  value=${instances}
-   @{resource_list}=  Create List  ${resource1}  ${resource2}  ${resource3}  ${resource4}
-
-   ${cloudlet1}=  Update Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  resource_list=${resource_list}  token=${op_token}
+   #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 
