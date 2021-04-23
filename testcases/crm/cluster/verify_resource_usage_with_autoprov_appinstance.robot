@@ -41,11 +41,11 @@ Controller displays resources consumed/freed by creation/deletion of an autoprov
    @{policy_list}=  Create List  ${policy_name}
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${super_token}
-   ${current_disk_usage}=  Set Variable  ${resourceusage[0]['info'][0]['value']}
+   #${current_disk_usage}=  Set Variable  ${resourceusage[0]['info'][0]['value']}
    ${current_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
    ${current_ram_usage}=  Set Variable  ${resourceusage[0]['info'][4]['value']}
    ${current_vcpu_usage}=  Set Variable  ${resourceusage[0]['info'][5]['value']}
-   ${expected_disk_usage}=  Evaluate  ${current_disk_usage} + 60
+   #${expected_disk_usage}=  Evaluate  ${current_disk_usage} + 60
    ${expected_instances}=  Evaluate  ${current_instances} + 2
    ${expected_ram_usage}=  Evaluate  ${current_ram_usage} + 6144
    ${expected_vcpu_usage}=  Evaluate  ${current_vcpu_usage} + 4
@@ -59,13 +59,13 @@ Controller displays resources consumed/freed by creation/deletion of an autoprov
    ${reservable_cluster_name}=  Set Variable  ${appInst[0]['data']['real_cluster_name']}
    Set Suite Variable  ${reservable_cluster_name}
 
-   Verify Resource Usage  ${expected_disk_usage}  ${expected_instances}  ${expected_ram_usage}  ${expected_vcpu_usage}
+   Verify Resource Usage  ${expected_instances}  ${expected_ram_usage}  ${expected_vcpu_usage}
    Update Settings  region=${region}  cleanup_reservable_auto_cluster_idletime=1m  token=${super_token}
    Update App  region=${region}  app_name=${app_name}  developer_org_name=${developer_org_name_automation}  auto_prov_policies=@{EMPTY}  token=${user_token}
    Wait For App Instance To Be Deleted  app_name=${app_name}  region=${region}  developer_org_name=${developer_org_name_automation}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${user_token}
    Sleep  1 min
    Wait For Cluster Instance To Be Deleted  region=${region}  cluster_name=${reservable_cluster_name}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${super_token}
-   Verify Resource Usage  ${current_disk_usage}  ${current_instances}  ${current_ram_usage}  ${current_vcpu_usage}
+   Verify Resource Usage  ${current_instances}  ${current_ram_usage}  ${current_vcpu_usage}
 
 *** Keywords ***
 Setup
@@ -83,12 +83,12 @@ Setup
     Set Suite Variable  ${app_name}
 
 Verify Resource Usage
-   [Arguments]  ${disk}  ${instances}  ${ram}  ${vcpu} 
+   [Arguments]  ${instances}  ${ram}  ${vcpu} 
 
    ${resource_usage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name_openstack_dedicated}  token=${super_token}
    log to console  ${resource_usage}
 
-   Should Be Equal As Numbers  ${resource_usage[0]['info'][0]['value']}  ${disk}            #Disk
+   #Should Be Equal As Numbers  ${resource_usage[0]['info'][0]['value']}  ${disk}            #Disk
    Should Be Equal As Numbers  ${resource_usage[0]['info'][3]['value']}  ${instances}       #Instances
    Should Be Equal As Numbers  ${resource_usage[0]['info'][4]['value']}  ${ram}             #RAM
    Should Be Equal As Numbers  ${resource_usage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
