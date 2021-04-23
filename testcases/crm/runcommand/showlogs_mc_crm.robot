@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  ShowLogs for openstack 
+Documentation  ShowLogs for CRM 
 
 Library	 MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}
 Library  MexApp
