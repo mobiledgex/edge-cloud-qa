@@ -73,10 +73,13 @@ def build_report_blocks():
     wip_string = f'*Total WIP:* <{wip_url}|{total_wip}>   {wip_perc}%'
     blocked_string = f'*Total Blocked:* <{blocked_url}|{total_blocked}>   {blocked_perc}%'
 
+    exec_time_string = None
     if job_duration > 0:
-        blocked_string += f'>*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs\n'
+        exec_time_string = f'*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs'
 
     report_text = f'{total_string}\\n{pass_string}\\n{fail_string}\\n{unexec_string}\\n{wip_string}\\n{blocked_string}'
+    if exec_time_string:
+        report_text += f'\\n{exec_time_string}'
     if report_warning:
         report_text += f'\\n{report_warning}'
     print(report_text)
