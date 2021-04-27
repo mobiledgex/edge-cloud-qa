@@ -29,6 +29,8 @@ MC - User shall be able to curl artifactory image as Developer Manager
     ...  curl artifactory image 
     ...  delete the user
 
+    [Tags]  Upload
+
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
@@ -65,6 +67,8 @@ MC - User shall be able to curl artifactory image as Developer Contributor
     ...  curl artifactory image 
     ...  delete the user
 
+    [Tags]  Upload
+
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
 
@@ -99,6 +103,8 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     ...  add user to org as Developer Viewer
     ...  verify cant curl artifactory image 
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${DEVorgname}=  Catenate  SEPARATOR=  ${DEVorgname}  ${i}
@@ -136,6 +142,8 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     ...  verify cant curl artifactory image 
     ...  delete the user
 
+    [Tags]  Upload
+
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
 
@@ -172,6 +180,8 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     ...  verify cant curl artifactory image
     ...  delete the user
 
+    [Tags]  Upload
+
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
 
@@ -207,6 +217,8 @@ MC - User shall not be able to curl artifactory image as Operator Viewer
     ...  add user to org as Operator Viewer
     ...  verify cant curl artifactory image
     ...  delete the user
+
+    [Tags]  Upload
 
     ${i}=  Get Time  epoch
     ${OPorgname}=  Catenate  SEPARATOR=  ${OPorgname}  ${i}
