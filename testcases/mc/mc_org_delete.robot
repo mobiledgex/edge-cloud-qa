@@ -34,7 +34,7 @@ MC - Delete an org that doesn't exist with admin token
 	Run Keyword and Expect Error  *    Delete Org     orgname=madeuporgnname    token=${adminToken}     use_defaults=${False}
 	${body}=         Response Body
 	
-	Should Be Equal              ${body}         {"message":"org not found"}
+	Should Be Equal              ${body}         {"message":"org madeuporgnname not found"}
 
 
 # ECQ-2783
@@ -335,10 +335,11 @@ Setup
         ${email}=  Catenate  SEPARATOR=   user  +  ${epoch}  @gmail.com
 	${username}=  Catenate  SEPARATOR=   user   ${epoch}
 	${orgname}=   Catenate  SEPARATOR=   org   ${epoch} 
-        Skip Verify Email
-	Create User  username=${username}   password=${password}   email_address=${email}
-	Unlock User
-	${userToken}=  Login  username=${username}  password=${password}
+#        Skip Verify Email
+#	Create User  username=${username}   password=${password}   email_address=${email}
+#	Unlock User
+#	${userToken}=  Login  username=${username}  password=${password}
+        ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 	Create Org    orgname=${orgname}    orgtype=developer    address=222 somewhere dr    phone=111-222-3333     token=${userToken}    use_defaults=${False}
 	Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}

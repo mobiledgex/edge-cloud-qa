@@ -7,7 +7,7 @@ Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
-${password}=   mex1234567
+${password}=   ${dev_manager_password_automation}
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
 
 
@@ -98,7 +98,7 @@ MC - User shall not be able to show role assignments with an expired token
 *** Keywords ***
 Setup
 	${adminToken}=   Login
-	Create User  username=myuser   password=${password}   email=xy@xy.com
+	Create User  username=myuser   password=${password}   email_address=xy@xy.com
 	${userToken}=  Login  username=myuser  password=${password}
         Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}

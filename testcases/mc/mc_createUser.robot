@@ -228,6 +228,8 @@ MC - User shall be able to create a new user with all TLDs
         ...  - login user
         ...  - delete the user
 
+        [Tags]  TLDs
+
         Login Mexadmin  # login again as mexadmin since running the suite logs in as anothe user once it gets here
 
         ${tldsf}=  Find File  ${tld_file}
