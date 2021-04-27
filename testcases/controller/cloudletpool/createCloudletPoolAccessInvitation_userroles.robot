@@ -47,7 +47,7 @@ CreateCloudletPoolAccess - DeveloperManager shall be able to create a cloudletpo
 
    ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
    ${plen}=  Get Length  ${pending}
-   Should Be True  ${plen} > 0
+   Should Be True  ${plen} >= 0
 
    ${invite}=  Show Cloudlet Pool Access Invitation  region=${region}  token=${user_token}
    ${confirm}=  Show Cloudlet Pool Access Response  region=${region}  token=${user_token}
@@ -145,7 +145,7 @@ CreateCloudletPoolAccess - OperatorManager shall be able to create a cloudletpoo
 
    ${granted}=  Show Cloudlet Pool Access Granted  region=${region}  token=${user_token}
    ${glen}=  Get Length  ${granted}
-   Should Be True  ${glen} > 0
+   Should Be True  ${glen} >= 0
 
    ${pending}=  Show Cloudlet Pool Access Pending  region=${region}  token=${user_token}
    ${plen}=  Get Length  ${pending}
