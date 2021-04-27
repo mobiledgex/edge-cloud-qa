@@ -3,12 +3,13 @@ Documentation  User Login multiple times
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library  Collections
+Library  DateTime
 	
-#Test Setup	Setup
+Test Setup	Setup
 Test Teardown	Cleanup provisioning
 
 *** Variables ***
-${password}=   mex1234567
+${password}=   ${mextester06_gmail_password}
 ${number_batches}   10
 ${number_requests}  100
 ${autoLogin}	    1
@@ -24,6 +25,8 @@ MC - Login mc requests admin user Traffic
 	...  Send simultaneous Login request messages to the MC
 	...  Verify all are successful
 
+        [Tags]  Traffic
+
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send Login
 	
@@ -31,7 +34,7 @@ MC - Login mc requests admin user Traffic
 	${success}=  Number of Successful Login Requests
 	${fail}=     Number of Failed Login Requests
 
-	${total_total}=    Evaluate  ${number_requests}*${number_batches}+${autoLogin}
+	${total_total}=    Evaluate  ${number_requests}*${number_batches}+${autoLogin}+1
 	
 	Should Be Equal As Numbers  ${total}  ${total_total}
 	Should Be Equal As Numbers  ${success}  ${total_total}
@@ -41,6 +44,8 @@ MC - Create User requests create different users Traffic
 	[Documentation]
 	...  Send simultaneous Create Users request messages to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 	
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send Createuser
@@ -59,6 +64,8 @@ MC - Login mc requests different users Traffic
 	[Documentation]
 	...  Send simultaneous Login request messages for different users to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
@@ -87,6 +94,8 @@ MC - Current users mc requests different users Traffic
 	[Documentation]
 	...  Send simultaneous Current Users request messages for different users to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
@@ -132,6 +141,8 @@ MC - Show Role mc requests admin user Traffic
 	...  Send simultaneous Show Role request messages to the MC
 	...  Verify all are successful
 
+        [Tags]  Traffic
+
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send ShowRole
 		
@@ -149,6 +160,8 @@ MC - Show Role mc requests different users Traffic
 	[Documentation]
 	...  Send simultaneous Show Role request messages to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
@@ -189,6 +202,8 @@ MC - Create Org mc requests different users Traffic
 	...  Send simultaneous Create Org request messages to the MC
 	...  Verify all are successful
 
+        [Tags]  Traffic
+
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
 
@@ -227,6 +242,8 @@ MC - Show Org mc requests different users Traffic
 	[Documentation]
 	...  Send simultaneous Create Org request messages to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
@@ -277,6 +294,8 @@ MC - Adduser Role mc requests different users Traffic
 	[Documentation]
 	...  Send simultaneous Role Adduser request messages to the MC
 	...  Verify all are successful
+
+        [Tags]  Traffic
 
 	: FOR  ${x}  IN RANGE  0  ${number_batches}
 	\  Send CreateuserSeq
@@ -329,6 +348,9 @@ MC - Adduser Role mc requests different users Traffic
 	Should Be Equal As Numbers  ${adduserfail}  0
 
 *** Keywords ***
+Setup
+   Login Mexadmin
+
 Send Login
 	@{handle_list}=  Create List
 	
@@ -349,9 +371,10 @@ Send LoginUsers
 
 Send Createuser
 	@{handle_list}=   Create List
+        ${epoch}=  Get Current Date  result_format=epoch
 	
 	: FOR  ${INDEX}  IN RANGE  0  ${number_requests}
-	\  ${handle}=    Create User     use_thread=${True}
+	\  ${handle}=    Create User  username=user${epoch}${INDEX}  password=${password}   use_thread=${True}
 	\  Append To List  ${handle_list}  ${handle}
 
 	MexMasterController.Wait For Replies  @{handle_list}

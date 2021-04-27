@@ -3,12 +3,13 @@ Documentation   MasterController New User Login
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         Collections
+Library         DateTime
 
 Test Setup	Setup
 Test Teardown	Cleanup Provisioning
 
 *** Variables ***
-${password}=   mex1234567
+${password}=   ${mextester06_gmail_password}
 ${orgname}=    TheAdminOrg
 ${expToken}=   eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ4NDkwMjcsImlhdCI6MTU1NDc2MjYyNywidXNlcm5hbWUiOiJtZXhhZG1pbiIsImtpZCI6Mn0.7hM7102kjgrAAbWWvpdJwg3PcNWd7td6D6QSxcvB6gswJUOMeoD5EvpzYnHjdHnbm4uJ7BlnHEOVr4yltZb1Rw
 
@@ -32,19 +33,19 @@ MC - Admin user shall be able to assign a user role to an org
 	...  verify the roles returned
 
 	${orgname}=   Create Org        orgname=${orgname}       token=${adminToken}      
-	${adduser}=   Adduser Role   orgname=${orgname}   username=myuser   role=DeveloperManager    token=${adminToken}     use_defaults=${False}
+	${adduser}=   Adduser Role   orgname=${orgname}   username=${dev_manager_user_automation}   role=DeveloperManager    token=${adminToken}     use_defaults=${False}
 	${showadmin}=   Show Role Assignment   token=${adminToken}
 	${showuser}=    Show Role Assignment   token=${userToken}
 	
-	Should Be Empty                ${showadmin[0]['org']}             ${EMPTY}
-	Should Be Equal As Strings     ${showadmin[0]['username']}        mexadmin 
-	Should Be Equal As Strings     ${showadmin[0]['role']}            AdminManager
-	Should Be Equal As Strings     ${showadmin[1]['org']}             ${orgname}
-	Should Be Equal As Strings     ${showadmin[1]['username']}        mexadmin
-	Should Be Equal As Strings     ${showadmin[1]['role']}            DeveloperManager
+#	Should Be Empty                ${showadmin[0]['org']}             ${EMPTY}
+#	Should Be Equal As Strings     ${showadmin[0]['username']}        mexadmin 
+#	Should Be Equal As Strings     ${showadmin[0]['role']}            AdminManager
+#	Should Be Equal As Strings     ${showadmin[1]['org']}             ${orgname}
+#	Should Be Equal As Strings     ${showadmin[1]['username']}        mexadmin
+#	Should Be Equal As Strings     ${showadmin[1]['role']}            DeveloperManager
 
 	Should Be Equal As Strings     ${showuser[0]['org']}              ${orgname}
-	Should Be Equal As Strings     ${showuser[0]['username']}         myuser 
+	Should Be Equal As Strings     ${showuser[0]['username']}         ${dev_manager_user_automation}
 	Should Be Equal As Strings     ${showuser[0]['role']}             DeveloperManager
 	
 MC - Admin user shall be able to assign a manager user role to an org
@@ -323,8 +324,13 @@ MC - Assign a user role to a user with an expired token
 
 *** Keywords ***
 Setup
-	${adminToken}=   Login
-	Create User  username=myuser   password=${password}   email=xy@xy.com
-	${userToken}=  Login  username=myuser  password=${password}
+        ${epoch}=  Get Current Date  result_format=epoch
+	${adminToken}=   Login Mexadmin
+        ${orgname}=  Set Variable  ${orgname}${epoch}
+	#Create User  username=myuser   password=${password}   email_address=xy@xy.com
+        #Unlock User
+	#${userToken}=  Login  username=myuser  password=${password}
+        ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
         Set Suite Variable  ${adminToken}
 	Set Suite Variable  ${userToken}
+        Set Suite Variable  ${orgname}

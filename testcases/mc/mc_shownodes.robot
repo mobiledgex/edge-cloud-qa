@@ -34,7 +34,10 @@ Verify Common Data
    Should Be Equal      ${node['data']['key']['region']}  US
    Should Match Regexp  ${node['data']['build_head']}  v\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b
    Should Be Equal      ${node['data']['build_head']}  ${node['data']['build_master']}
-   Should Be Equal As Numbers      ${node['data']['notify_id']}  1
+   #Should Be Equal As Numbers      ${node['data']['notify_id']}  1
+   ${notifyid}=  Run Keyword  Evaluate  type(${node['data']['notify_id']}) == int
+   log to console  ${notifyid}
+   Should Be True  ${notifyid}
 
 Controller Should Exist
    [Arguments]   ${nodes}
