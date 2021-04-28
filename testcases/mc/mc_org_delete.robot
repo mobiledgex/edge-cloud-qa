@@ -169,7 +169,7 @@ MC - Delete an org created by user1 using user2 token
 	Should Be Equal              ${body}         {"message":"Forbidden"}
 
 
-# https://mobiledgex.atlassian.net/browse/ECQ-2791
+# ECQ-2791
 MC - Verify the last remaining Manager account of an org can not be deleted
 	[Documentation]
 	...  create a user and create an org with that user 
