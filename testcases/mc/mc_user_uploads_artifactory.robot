@@ -19,7 +19,7 @@ ${DEVorgname}        jdevorg
 ${i}                 1
 	
 *** Test Cases ***
-
+# ECQ-1540
 MC - User shall be able to curl artifactory image as Developer Manager
     [Documentation] 
     ...  create a new user 
@@ -58,6 +58,7 @@ MC - User shall be able to curl artifactory image as Developer Manager
 
     Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}  
 
+# ECQ-1541
 MC - User shall be able to curl artifactory image as Developer Contributor
     [Documentation] 
     ...  create a new user 
@@ -96,6 +97,7 @@ MC - User shall be able to curl artifactory image as Developer Contributor
 
     Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name} 
 
+# ECQ-1542
 MC - User shall not be able to curl artifactory image as Developer Viewer
     [Documentation] 
     ...  create a new user 
@@ -134,6 +136,7 @@ MC - User shall not be able to curl artifactory image as Developer Viewer
     ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
+# ECQ-1543
 MC - User shall not be able to curl artifactory image as Operator Manager
     [Documentation] 
     ...  create a new user 
@@ -172,6 +175,7 @@ MC - User shall not be able to curl artifactory image as Operator Manager
     ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
+# ECQ-1544
 MC - User shall not be able to curl artifactory image as Operator Contributor
     [Documentation] 
     ...  create a new user 
@@ -210,6 +214,7 @@ MC - User shall not be able to curl artifactory image as Operator Contributor
     ${error}=   Run Keyword and Expect Error  *  Curl Image To Artifactory  username=${username1}  password=${password}  server=${server}  org_name=${DEVorgname}  image_name=${artifactory_dummy_image_name}
     Should Contain Any  ${pusherror1}  The requested URL returned error: 401  The requested URL returned error: 403 Forbidden
 
+# ECQ-1545
 MC - User shall not be able to curl artifactory image as Operator Viewer
     [Documentation] 
     ...  create a new user 
