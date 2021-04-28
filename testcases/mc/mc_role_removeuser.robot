@@ -114,10 +114,11 @@ MC - Admin remove an DeveloperManager role from a user
 	
 	Should Be Equal As Strings     ${admin}        {"message":"Role removed from user"}
 
+# ECQ-3387
 MC - Remove a user role from a user with a bad token
 	[Documentation]
-	...  remove a user role from a user with a bad token 
-	...  verify the roles returned 
+	...  - remove a user role from a user with a bad token 
+	...  - verify the roles returned 
 
 	${error_msg}=  Run Keyword and Expect Error  *  Adduser Role     username=myuser    role=AdminManager       token=thisisabadtoken    use_defaults=${False}
 
