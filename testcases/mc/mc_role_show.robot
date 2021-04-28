@@ -110,7 +110,7 @@ MC - User shall not be able to show roles with an expired token
 	
 *** Keywords ***
 Setup 
-        ${adminToken}=   Login
+        ${adminToken}=   Get Super Token
         Set Suite Variable  ${adminToken}
 
 Setup User
