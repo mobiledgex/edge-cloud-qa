@@ -30,6 +30,8 @@ MC - User shall not be able to pull docker image from another org
     ...  - add user2 to org1
     ...  - user2 can pull the image
 
+    [Tags]  Pull
+
     ${epoch}=  Get Current Date  result_format=epoch
 
     ${username1}=  Set Variable  user${epoch}_1
@@ -72,6 +74,8 @@ MC - User shall be able to pull docker image from another org with publicimages
     ...  - create user1/org1 with publicimages=true and user2/org2
     ...  - user1 pushes docker image
     ...  - user2 can pull the image since it is public
+
+    [Tags]  Pull
 
     ${epoch}=  Get Current Date  result_format=epoch
 

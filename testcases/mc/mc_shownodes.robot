@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   MasterController user/current superuser
+Documentation   MasterController Show Nodes
 
 Library		MexMasterController  mc_address=%{AUTOMATION_MC_ADDRESS}   root_cert=%{AUTOMATION_MC_CERT}
 Library         DateTime
