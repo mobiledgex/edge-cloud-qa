@@ -11,6 +11,7 @@ ${operator_name}  dmuus
 ${cloudlet_name}  tmocloud-1
 
 *** Test Cases ***
+# ECQ-1171
 AppInst - User shall not be able to create an AppInst without a ClusterInst
     [Documentation]
     ...  create an app instance with no cluster name 
@@ -25,6 +26,7 @@ AppInst - User shall not be able to create an AppInst without a ClusterInst
     #Should Contain  ${error_msg}   details = "Invalid cluster name"
     #details = "No cluster name specified. Create one first or use "autocluster" as the name to automatically create a ClusterInst"
 
+# ECQ-1327
 AppInst - User shall not be able to create an AppInst with a ClusterInst that doesnt exist
     [Documentation]
     ...  create an app instance with a cluster that doesnt exist
@@ -33,8 +35,9 @@ AppInst - User shall not be able to create an AppInst with a ClusterInst that do
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_name_default}  cluster_instance_name=mycluster  cluster_instance_developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False} use_defaults=${False}   #cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Specified ClusterInst not found"
+    Should Contain  ${error_msg}   details = "ClusterInst key {"cluster_key":{"name":"mycluster"},"cloudlet_key":{"organization":"${operator_name}","name":"${cloudlet_name}"},"organization":"MobiledgeX"} not found"
 
+# ECQ-1328
 AppInst - User shall not be able to create an app instance without cluster developer and no matching cluster instance
     [Documentation]
     ...  create a clusterinstance
@@ -51,7 +54,7 @@ AppInst - User shall not be able to create an app instance without cluster devel
     ${error_msg}=  Run Keyword And Expect Error  *  Create App Instance  app_name=${app_name_default}  app_version=${app_version_default}  developer_org_name=${developer_name_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  cluster_instance_name=${cluster_name}  use_defaults=${False}
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
-    Should Contain  ${error_msg}   details = "Specified ClusterInst not found"
+    Should Contain  ${error_msg}   details = "ClusterInst key {"cluster_key":{"name":"${clustername}"},"cloudlet_key":{"organization":"${operator_name}","name":"${cloudlet_name}"},"organization":"MobiledgeX"} not found"
 
 
 *** Keywords ***

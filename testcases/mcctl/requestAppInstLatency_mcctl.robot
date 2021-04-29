@@ -27,6 +27,8 @@ RequestAppInstLatency - mcctl shall be able to request latency
 
    [Template]  Success RequestAppInstLatency Via mcctl
       appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0 cluster=autoclusterautomation cluster-org=${developer}  cloudlet=${cloudlet_name_fake} cloudlet-org=${operator_name_fake}
+      appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0 cluster=autoclusterautomation cluster-org=${developer}  cloudlet=${cloudlet_name_fake} cloudlet-org=${operator_name_fake} message=xxxxx
+      appname=${app_name_automation}  app-org=${developer_org_name_automation}  appvers=1.0 cluster=autoclusterautomation cluster-org=${developer}  cloudlet=${cloudlet_name_fake} cloudlet-org=${operator_name_fake} message=
 
 # ECQ-3239
 RequestAppInstLatency - mcctl shall handle create failures
