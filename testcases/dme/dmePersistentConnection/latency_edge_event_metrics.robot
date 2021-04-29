@@ -24,7 +24,7 @@ DMEMetrics - Shall be able to get the last DME Client App metric
 
 #   [Teardown]  Teardown Settings  ${settings_pre}
 
-   ${metrics}=  Get the last client app metric  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get the last client app usage metric  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -35,7 +35,7 @@ DMEMetrics - Shall be able to get all DME Client App metric
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get all client app metrics  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get all client app usage metrics  app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -46,7 +46,7 @@ DMEMetrics - Shall be able to get DME Client App metrics with starttime
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get client app usage metrics with starttime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -57,7 +57,7 @@ DMEMetrics - Shall be able to get DME Client App metrics with endtime
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get client app usage metrics with endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -68,7 +68,7 @@ DMEMetrics - Shall be able to get DME Client App metrics with starttime and endt
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get client app usage metrics with starttime and endtime   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
@@ -79,11 +79,99 @@ DMEMetrics - Shall be able to get DME Client App metrics with starttime and endt
    ...  request DME RegisterClient metrics with last=1
    ...  verify info is correct
 
-   ${metrics}=  Get client app metrics with starttime and endtime and last   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+   ${metrics}=  Get client app usage metrics with starttime and endtime and last   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
 
    Metrics Headings Should Be Correct  ${metrics}
 
    Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+
+DMEMetrics - Shall be able to get DME Client App metrics with locationtile
+   [Documentation]
+   ...  request DME RegisterClient metrics with last=1
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with locationtile   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+
+DMEMetrics - Shall be able to get DME Client App metrics with rawdata
+   [Documentation]
+   ...  request DME RegisterClient metrics with last=1
+   ...  verify info is correct
+
+   ${metrics}=  Get client app usage metrics with rawdata   app_name=${app_name}1  app_version=1.0  developer_org_name=${developer_org_name_automation}  selector=latency
+
+   Metrics Headings Should Be Correct  ${metrics}  raw=${True}
+
+   Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6  raw=${True}
+
+DMEMetrics - DeveloperManager shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  DeveloperManager shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+
+DMEMetrics - DeveloperContributor shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  DeveloperContributor shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+
+DMEMetrics - DeveloperViewer shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  DeveloperViewer shall be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}1  app_version=1.0
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}1  ${metrics}  ${latency11.statistics.max}  ${latency11.statistics.min}  ${latency11.statistics.avg}  ${latency11.statistics.std_dev}  ${latency11.statistics.variance}  ${num_samples1}  6
+
+DMEMetrics - OperatorManager shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  OperatorManager shall not be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+
+DMEMetrics - OperatorContributor shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  OperatorContributor shall not be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
+
+DMEMetrics - OperatorViewer shall be able to get DME Client App metrics
+   [Documentation]
+   ...  request the DME RegisterClient metrics as DeveloperManager
+   ...  verify metrics are returned
+
+   ${metrics}=  OperatorViewer shall not be able to get client app usage metrics  selector=latency  developer_org_name=${developer_org_name_automation}  app_name=${app_name}3  app_version=1.0  operator_org_name=${operator_name_fake}
+
+   Metrics Headings Should Be Correct  ${metrics}
+
+   Values Should Be Correct  ${app_name}3  ${metrics}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2  cloudlet=tmocloud-2
 
 *** Keywords ***
 Setup
@@ -93,6 +181,9 @@ Setup
 
     Create Flavor  region=${region}
 
+    @{cloudlet_list}=  Create List  tmocloud-2
+    ${pool_return}=  Create Cloudlet Pool  region=${region}  operator_org_name=${operator_name_fake}  cloudlet_list=${cloudlet_list}
+
     Create App  region=${region}  app_name=${app_name}1  access_ports=tcp:1
     Create App Instance  region=${region}  app_name=${app_name}1  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 
@@ -100,7 +191,7 @@ Setup
     Create App Instance  region=${region}  app_name=${app_name}2  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 
     Create App  region=${region}  app_name=${app_name}3  access_ports=tcp:1
-    Create App Instance  region=${region}  app_name=${app_name}3  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
+    Create App Instance  region=${region}  app_name=${app_name}3  cloudlet_name=tmocloud-2  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster
 
     Set Suite Variable  ${app_name}
 
@@ -198,6 +289,7 @@ Setup
 #    Values Should Be Correct  ${app_name}3  ${metrics33['data'][0]['Series'][2]['values']}  ${latency13.statistics.max}  ${latency13.statistics.min}  ${latency13.statistics.avg}  ${latency13.statistics.std_dev}  ${latency13.statistics.variance}  ${num_samples1}  2
 
     Set Suite Variable  ${latency11}
+    Set Suite Variable  ${latency13}
     Set Suite Variable  ${num_samples1}
     Set Suite Variable  ${settings_pre}
 
@@ -223,6 +315,8 @@ Setup
 Teardown Settings
    [Arguments]  ${settings}
 
+   Login
+
    @{collection_intervals}=  Create List  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][0]['interval']}  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][1]['interval']}  ${settings['edge_events_metrics_continuous_queries_collection_intervals'][2]['interval']}
    Update Settings  region=${region}  edge_events_metrics_collection_interval=${settings['appinst_client_cleanup_interval']}  edge_events_metrics_continuous_queries_collection_intervals=@{collection_intervals}
 
@@ -233,13 +327,17 @@ Teardown
    Cleanup Provisioning
 
 Metrics Headings Should Be Correct
-  [Arguments]  ${metrics}
+  [Arguments]  ${metrics}  ${raw}=${False}
 
-   Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
-   Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
-   Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
+   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric-2m10s
+   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][1]['name']}  latency-metric-1m10s
+   Run Keyword If   not ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][2]['name']}  latency-metric-10s
+   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   ...   ELSE  Set Variable  1
 
-   FOR  ${i}  IN RANGE  0  3 
+   Run Keyword If   ${raw}  Should Be Equal  ${metrics['data'][0]['Series'][0]['name']}  latency-metric
+
+   FOR  ${i}  IN RANGE  0  ${count} 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][0]}  time
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][1]}  app
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['columns'][2]}  apporg
@@ -265,15 +363,18 @@ Metrics Headings Should Be Correct
    END
 
 Values Should Be Correct
-   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}
+   [Arguments]  ${app_name}  ${metrics}  ${max}  ${min}  ${avg}  ${variance}  ${stddev}  ${numsamples}  ${numrequests}  ${cloudlet}=${cloudlet_name_fake}  ${raw}=${False}
 
-   FOR  ${i}  IN RANGE  0  3
+   ${count}=  Run Keyword If   not ${raw}  Set Variable  3
+   ...   ELSE  Set Variable  1
+
+   FOR  ${i}  IN RANGE  0  ${count}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][1]}  ${app_name}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][2]}  ${developer_org_name_automation}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][3]}  1.0
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][4]}  autocluster
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][5]}  MobiledgeX
-      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][6]}  ${cloudlet_name_fake}
+      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][6]}  ${cloudlet}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][7]}  ${operator_name_fake}
 #      Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][8]}  75 
 
@@ -293,7 +394,7 @@ Values Should Be Correct
       Should Be Equal As Numbers  ${metrics['data'][0]['Series'][${i}]['values'][0][14]}  ${r14}
 
       ${latency_avg}=  Evaluate  round(${avg})
-      ${metrics_avg}=  Evaluate  round(${metrics['data'][0]['Series'][${1}]['values'][0][17]})
+      ${metrics_avg}=  Evaluate  round(${metrics['data'][0]['Series'][${i}]['values'][0][17]})
 
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][15]}  ${max}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][16]}  ${min}
@@ -303,3 +404,5 @@ Values Should Be Correct
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][20]}  ${r20}
       Should Be Equal  ${metrics['data'][0]['Series'][${i}]['values'][0][21]}  2-1990,5343-2
    END
+
+

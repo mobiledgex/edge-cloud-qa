@@ -38,6 +38,48 @@ Get the last dme metric on openstack
    Should Be Equal As Integers  ${num_readings}  1
 
    [Return]  ${metrics}  ${metrics_influx}
+
+Get the last client app usage metric
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with locationtile
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  location_tile=2-1990,5343-2  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with rawdata
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  raw_data=${True}  last=1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
 	
 Get the last 5 dme metrics on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
@@ -101,6 +143,17 @@ Get all dme metrics on openstack
 
    [Return]  ${metrics}  ${metrics_influx}
 
+Get all client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 Get more dme metrics than exist on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -153,6 +206,27 @@ Get dme metrics with starttime on openstack
 
    [Return]  ${metrics}
 
+Get client app usage metrics with starttime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][0][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 600
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 Get dme metrics with endtime on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
 
@@ -176,6 +250,27 @@ Get dme metrics with endtime on openstack
 	
    Should Be True  ${num_readings} > 10 
    Should Be True  ${epoch_first} <= ${end}
+
+   [Return]  ${metrics}
+
+Get client app usage metrics with endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${end}=  Evaluate  ${epochpre} + 180
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  end_time=${end_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
 
    [Return]  ${metrics}
 
@@ -342,6 +437,29 @@ Get dme metrics with starttime and endtime on openstack
    Should Be True  ${num_readings} < 100 
 
    [Return]  ${metrics}
+
+Get client app usage metrics with starttime and endtime
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
 	
 Get dme metrics with starttime and endtime and last on openstack
    [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
@@ -381,6 +499,29 @@ Get dme metrics with starttime and endtime and last on openstack
 
    [Return]  ${metrics}
 
+Get client app usage metrics with starttime and endtime and last
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   # get last metric and set starttime = 2 mins earlier
+   ${metricspre}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1
+   log to console  ${metricspre['data'][0]}
+   ${datez}=  Get Substring  ${metricspre['data'][0]['Series'][0]['values'][-1][0]}  0  -1
+   @{datesplit}=  Split String  ${datez}  .
+   ${epochpre}=  Convert Date  ${datesplit[0]}  result_format=epoch  date_format=%Y-%m-%dT%H:%M:%S
+   ${start}=  Evaluate  ${epochpre} - 900
+   ${end}=  Evaluate  ${epochpre} + 120
+   ${start_date}=  Convert Date  date=${start}  result_format=%Y-%m-%dT%H:%M:%SZ
+   ${end_date}=  Convert Date  date=${end}  result_format=%Y-%m-%dT%H:%M:%SZ
+
+   # get readings and 1st and last timestamp
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  start_time=${start_date}  end_time=${end_date}  last=1
+   #Should Be True  len(${metrics['data'][0]['Series'][0]['values']}) > 1
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   [Return]  ${metrics}
+
 DeveloperManager shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
 
@@ -416,6 +557,102 @@ DeveloperManager shall be able to get dme metrics
    Should Be Equal As Integers  ${num_readings}  5
 
    [Return]  ${metrics}  ${metrics_influx}
+
+DeveloperManager shall be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+DeveloperContributor shall be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+DeveloperViewer shall be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+OperatorManager shall not be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_manager_user_automation}  password=${op_manager_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+OperatorContributor shall not be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_contributor_user_automation}  password=${op_contributor_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
+
+OperatorViewer shall not be able to get client app usage metrics
+   [Arguments]  ${app_name}  ${app_version}  ${developer_org_name}  ${operator_org_name}  ${selector}
+
+   ${userToken}=  Login  username=${op_viewer_user_automation}  password=${op_viewer_password_automation}
+
+   ${metrics}=  Get Client App Usage Metrics  region=${region}  selector=${selector}  developer_org_name=${developer_org_name}  app_name=${app_name}  app_version=${app_version}  operator_org_name=${operator_org_name}  last=1  token=${userToken}
+
+   Should Be Equal  ${metrics['data'][0]['Messages']}  ${None}
+
+   Dictionary Should Not Contain Key  ${metrics['data'][0]['Series'][0]}  partial
+
+   ${num_readings}=  Get Length  ${metrics['data'][0]['Series'][0]['values']}
+   Should Be Equal As Integers  ${num_readings}  1
+
+   [Return]  ${metrics}
 
 DeveloperContributor shall be able to get dme metrics
    [Arguments]  ${username}  ${password}  ${app_name}  ${app_version}  ${developer_org_name}  ${selector} 
