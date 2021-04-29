@@ -60,9 +60,9 @@ CreateCloudlet with resource quotas - mcctl shall handle failures
       # invalid values
       Unable to parse "resourcequotas[0].value" value "-1" as uint: invalid syntax  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10 numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=-1
 
-      Error: OK (200), Invalid quota name: Dis, valid names are Instances,Floating IPs,RAM,vCPUs,Disk,GPUs  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Dis  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
+      Error: OK (200), Invalid quota name: Dis, valid names are Instances,Floating IPs,RAM,vCPUs,GPUs  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Dis  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 
-      Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
+      #Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Instances, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Instances  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Floating IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name="Floating IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
@@ -70,7 +70,7 @@ CreateCloudlet with resource quotas - mcctl shall handle failures
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for GPUs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=GPUs  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource alert threshold 101 specified, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  defaultresourcealertthreshold=101
       
-      Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
+      #Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Instances, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=Instances  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for Floating IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name="Floating IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
       Error: Bad Request (400), Invalid resource quota alert threshold -1 specified for RAM, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  location.latitude=10  location.longitude=10  numdynamicips=254  platformtype=PlatformTypeOpenstack  physicalname=packet2  resourcequotas:0.name=RAM  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=-1
@@ -88,7 +88,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures for PlatformTy
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Invalid resource quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
+      Error: Bad Request (400), Invalid quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 
       #Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for External IPs, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name="External IPs"  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
@@ -114,7 +114,7 @@ UpdateCloudlet with resource quotas - mcctl shall handle failures for PlatformTy
    [Teardown]  Update Teardown
 
    [Template]  Fail UpdateCloudlet Via mcctl
-      Error: Bad Request (400), Invalid resource quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
+      Error: Bad Request (400), Invalid quota name: Disk, valid names are  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=90
 
       #Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Disk, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Disk  resourcequotas:0.value=160 resourcequotas:0.alertthreshold=101
       Error: Bad Request (400), Invalid resource quota alert threshold 101 specified for Instances, valid threshold is in the range of 0 to 100  cloudlet-org=${operator}  cloudlet=${cloudlet_name}  resourcequotas:0.name=Instances  resourcequotas:0.value=160  resourcequotas:0.alertthreshold=101
@@ -247,30 +247,20 @@ Update Setup
 
    ${cloudlet_resource_usage}=  Run mcctl  cloudlet getresourceusage region=${region} cloudlet=${cloudlet_name} cloudlet-org=${operator}
    Log To Console  ${cloudlet_resource_usage}
-   ${disk_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
-   #${disk_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['value']}
-
-   #${disk_quota_value}=  Evaluate  ${disk_max_value}+1
-   #${disk_updated_value}=  Evaluate  ${disk_used_value}-1
 
    Run Keyword If  '${platform_type}' == 'PlatformTypeFake'  Setup PlatformTypeFake  ${cloudlet_resource_usage}
    ...  ELSE  Setup PlatformTypeOpenstack  ${cloudlet_resource_usage} 
 
-   Set Suite Variable  ${disk_max_value}
-   #Set Suite Variable  ${disk_quota_value}
-   #Set Suite Variable  ${disk_updated_value}
-   #Set Suite Variable  ${disk_used_value}
-
 Setup PlatformTypeFake
    [Arguments]   ${cloudlet_resource_usage}
 
-   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
-   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
-   ${external_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][1]['infra_max_value']}
+   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['infra_max_value']}
+   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
+   ${external_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
 
-   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
-   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
-   ${external_ips_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][1]['value']}
+   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['value']}
+   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
+   ${external_ips_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['value']}
    
    ${ram_quota_value}=  Evaluate  ${ram_max_value}+1
    ${vcpus_quota_value}=  Evaluate  ${vcpus_max_value}+1
@@ -295,14 +285,14 @@ Setup PlatformTypeFake
 Setup PlatformTypeOpenstack
    [Arguments]   ${cloudlet_resource_usage}
 
-   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
-   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][5]['infra_max_value']}
-   ${floating_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][1]['infra_max_value']}
-   ${instances_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
+   ${ram_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['infra_max_value']}
+   ${vcpus_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['infra_max_value']}
+   ${floating_ips_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][0]['infra_max_value']}
+   ${instances_max_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['infra_max_value']}
 
-   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
-   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][5]['value']}
-   ${instances_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
+   ${ram_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][3]['value']}
+   ${vcpus_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][4]['value']}
+   ${instances_used_value}=  Set Variable  ${cloudlet_resource_usage['info'][2]['value']}
 
    ${ram_quota_value}=  Evaluate  ${ram_max_value}+1
    ${vcpus_quota_value}=  Evaluate  ${vcpus_max_value}+1

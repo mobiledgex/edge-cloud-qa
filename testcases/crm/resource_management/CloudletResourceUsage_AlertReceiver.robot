@@ -141,15 +141,15 @@ Verify Current Usage
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${resourcelist[2]}            #vCPUs
 
 Verify Quota Limits
    [Arguments]  ${resourcelist}  ${resourceusage}
 
    #Should Be Equal As Numbers  ${resourceusage[0]['info'][0]['quota_max_value']}  ${resourcelist[0]}            #Disk
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[0]}            #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[1]}            #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['quota_max_value']}  ${resourcelist[0]}            #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['quota_max_value']}  ${resourcelist[1]}            #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['quota_max_value']}  ${resourcelist[2]}            #vCPUs
 

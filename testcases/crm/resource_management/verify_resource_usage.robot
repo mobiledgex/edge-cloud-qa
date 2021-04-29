@@ -292,9 +292,9 @@ Verify Resource Usage
    [Arguments]   ${instances}  ${ram}  ${vcpu}
 
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${instances}       #Instances
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${ram}             #RAM
-   Should Be Equal As Numbers  ${resourceusage[0]['info'][5]['value']}  ${vcpu}            #vCPUs
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][2]['value']}  ${instances}       #Instances
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][3]['value']}  ${ram}             #RAM
+   Should Be Equal As Numbers  ${resourceusage[0]['info'][4]['value']}  ${vcpu}            #vCPUs
 
 Cloudlet Update
    [Arguments]  ${ram}  ${vcpu}  ${instances}
