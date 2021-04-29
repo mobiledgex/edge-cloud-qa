@@ -109,28 +109,30 @@ CreateAppInst - User shall not be able to create an AppInst with reservable clus
     [Tags]  ReservableCluster
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    ${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Specified ClusterInst is already reserved by another AppInst"}')
-    Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    ${appinst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor
+
+    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    #${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, ClusterInst already reserved"}')
+    #Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster prefix, or must match cluster key name"}')
  
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg21}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    ${error_msg22}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    Should Be Equal  ${error_msg21}  ('code=400', 'error={"message":"Specified ClusterInst is already reserved by another AppInst"}')
-    Should Be Equal  ${error_msg22}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    ${error_msg21}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    #${error_msg22}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, ClusterInst already reserved"}')
+    #Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster prefix, or must match cluster key name"}')
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-3  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg31}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    ${error_msg32}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    Should Be Equal  ${error_msg31}  ('code=400', 'error={"message":"Specified ClusterInst is already reserved by another AppInst"}')
-    Should Be Equal  ${error_msg32}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    ${error_msg31}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    #${error_msg32}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, ClusterInst already reserved"}')
+    #Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster prefix, or must match cluster key name"}')
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-4  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg41}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    ${error_msg42}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
-    Should Be Equal  ${error_msg41}  ('code=400', 'error={"message":"Specified ClusterInst is already reserved by another AppInst"}')
-    Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    ${error_msg41}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    #${error_msg42}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=reservable0
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, ClusterInst already reserved"}')
+    #Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Cannot specify real cluster name with autocluster cluster prefix, or must match cluster key name"}')
 
 # ECQ-3202
 CreateAppInst - User shall not be able to create an AppInst with bad real_cluster_name
@@ -142,28 +144,28 @@ CreateAppInst - User shall not be able to create an AppInst with bad real_cluste
     [Tags]  ReservableCluster
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
-    ${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
-    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
-    Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    #${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"ClusterInst key {\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"xxx\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"${operator_name_fake}\\\\",\\\\"name\\\\":\\\\"${cloudlet_name_fake}\\\\"},\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\"} not found"}')
+    #Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg21}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    #${error_msg21}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
     ${error_msg22}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
-    Should Be Equal  ${error_msg21}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
-    Should Be Equal  ${error_msg22}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    #Should Be Equal  ${error_msg21}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    Should Be Equal  ${error_msg22}  ('code=400', 'error={"message":"ClusterInst key {\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"xxx\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"${operator_name_fake}\\\\",\\\\"name\\\\":\\\\"${cloudlet_name_fake}\\\\"},\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\"} not found"}')
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-3  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeHelm  deployment=helm  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg31}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    #${error_msg31}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
     ${error_msg32}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
-    Should Be Equal  ${error_msg31}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
-    Should Be Equal  ${error_msg32}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    #Should Be Equal  ${error_msg31}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    Should Be Equal  ${error_msg32}  ('code=400', 'error={"message":"ClusterInst key {\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"xxx\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"${operator_name_fake}\\\\",\\\\"name\\\\":\\\\"${cloudlet_name_fake}\\\\"},\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\"} not found"}')
 
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-4  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg41}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
+    #${error_msg41}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=xxx
     ${error_msg42}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=xxx  flavor_name=automation_api_flavor  real_cluster_name=xxx
-    Should Be Equal  ${error_msg41}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
-    Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    #Should Be Equal  ${error_msg41}  ('code=400', 'error={"message":"Specified ClusterInst not found"}')
+    Should Be Equal  ${error_msg42}  ('code=400', 'error={"message":"ClusterInst key {\\\\"cluster_key\\\\":{\\\\"name\\\\":\\\\"xxx\\\\"},\\\\"cloudlet_key\\\\":{\\\\"organization\\\\":\\\\"${operator_name_fake}\\\\",\\\\"name\\\\":\\\\"${cloudlet_name_fake}\\\\"},\\\\"organization\\\\":\\\\"${developer_org_name_automation}\\\\"} not found"}')
 
 # ECQ-3203
 CreateAppInst - User shall not be able to create a reservable cluster on a mismatched deployment
@@ -182,8 +184,8 @@ CreateAppInst - User shall not be able to create a reservable cluster on a misma
 
     # attemt deploy of docker inst in the k8s cluster
     Create App  region=${region}  token=${token}  app_name=${app_name_default}docker  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
-    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Cannot deploy docker App into kubernetes ClusterInst"}')
+    ${error_msg11}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    Should Be Equal  ${error_msg11}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, deployment type mismatch between App and reservable ClusterInst"}')
 
     # create docker cluster
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-2  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=docker  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
@@ -192,8 +194,8 @@ CreateAppInst - User shall not be able to create a reservable cluster on a misma
 
     # attempt deploy of k8s in docker cluster
     Create App  region=${region}  token=${token}  app_name=${app_name_default}-2docker  app_version=1.0  developer_org_name=${developer_org_name_automation}  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8008,tcp:8011  access_type=loadbalancer
-    ${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=autocluster  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
-    Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Cannot deploy kubernetes App into docker ClusterInst"}')
+    ${error_msg12}=  Run Keyword And Expect Error  *  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_fake}  operator_org_name=${operator_name_fake}  cluster_instance_name=${appinst['data']['real_cluster_name']}  cluster_instance_developer_org_name=MobiledgeX  flavor_name=automation_api_flavor  real_cluster_name=${appinst['data']['real_cluster_name']}
+    Should Be Equal  ${error_msg12}  ('code=400', 'error={"message":"Failed to reserve specified reservable ClusterInst, deployment type mismatch between App and reservable ClusterInst"}')
 
 *** Keywords ***
 Setup
