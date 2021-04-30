@@ -575,7 +575,7 @@ def exec_testcase(z, t):
         exec_stop = time.time()
         exec_duration = exec_stop - exec_start
         # comment = html.escape('{"start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
-        comment = html.escape('{"region":' + region + ', "cloudlet":' + cloudlet + ', "operator":' + operator + ', "start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
+        comment = html.escape('{"region":"' + region + '", "cloudlet":"' + cloudlet + '", "operator":"' + operator + '", "start_time":' + str(exec_start) + ', "end_time":' + str(exec_stop) + ', "duration":' + str(exec_duration) + '}')
         logger.info('test failed:' + t['issue_key'])
         found_failure = 1
         number_failed += 1
