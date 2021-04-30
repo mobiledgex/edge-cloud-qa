@@ -61,9 +61,9 @@ Controller throws proper error and displays correct resource usage/metrics data 
    Verify Resource Usage  2  8192  4
  
    ${resourceusage}=  Get Resource Usage  region=${region}  operator_org_name=${operator_name_openstack_packet}  cloudlet_name=${cloudlet_name}  token=${tokenop}
-   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][3]['value']}
-   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][4]['value']}
-   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][5]['value']}
+   ${default_instances}=  Set Variable  ${resourceusage[0]['info'][2]['value']}
+   ${default_ram}=        Set Variable  ${resourceusage[0]['info'][3]['value']}
+   ${default_vcpus}=      Set Variable  ${resourceusage[0]['info'][4]['value']}
    Set Suite Variable  ${default_instances}
    Set Suite Variable  ${default_ram}
    Set Suite Variable  ${default_vcpus}
