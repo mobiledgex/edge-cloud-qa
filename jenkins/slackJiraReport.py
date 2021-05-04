@@ -4,6 +4,8 @@ import argparse
 import json
 import logging
 import sys
+import html
+import os
 
 import zapi
 import jiraapi
@@ -38,6 +40,10 @@ folder_name = args.folder
 summary_only = args.summaryonly
 slack = args.slack
 cycle_summary = args.cyclesummary
+
+timings_output_file = f'/tmp/timings_{cycle_name}.html'
+timings_html_file = f'/var/www/html/timings/timings_{cycle_name}.html'
+timings_url = f'http://40.122.108.233/timings/timings_{cycle_name}.html'
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -75,7 +81,7 @@ def build_report_blocks():
 
     exec_time_string = None
     if job_duration > 0:
-        exec_time_string = f'*Execution Time:* {round(job_duration/1000/60/60, 2)} hrs'
+        exec_time_string = f'*Execution Time:* <{timings_url}|{round(job_duration/1000/60/60, 2)}> hrs\n'
 
     report_text = f'{total_string}\\n{pass_string}\\n{fail_string}\\n{unexec_string}\\n{wip_string}\\n{blocked_string}'
     if exec_time_string:
@@ -105,10 +111,29 @@ def build_report_blocks():
 
     return block
 
+def write_exec_time_file(time_dict_string):
+    time_dict = {}
+
+    for comment in time_dict_string:
+        comment_dict = json.loads(html.unescape(time_dict_string[comment]))
+        time_dict[comment] = comment_dict
+
+    time_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['duration'], reverse=True))
+
+    with open(timings_output_file, "w") as file1:
+        file1.write('<table style="width:100%">\n')
+        file1.write('<tr><th>TCID</th><th>Title</th><th>Duration (secs)</th></tr>')
+        for key in time_sorted_dict:
+            file1.write(f'<tr><td align=left>{key}</td><td align=left>{time_sorted_dict[key]["summary"]}</td><td align=left>{time_sorted_dict[key]["duration"]}</td></tr>\n')
+        file1.write('</table>')
+
+    cmd = f'cp {timings_output_file} ${timings_html_file}'
+    os.system(cmd)
 
 def find_missing_tests():
     cycle_list = []
     expected_list = []
+    time_dict = {}
 
     offset = 0
     total_count = 1
@@ -134,13 +159,23 @@ def find_missing_tests():
         while offset < total_count:
             result = z.get_execution_list_by_folderid(folder_id=folder['id'], cycle_id=cycle_id, version_id=version_id, project_id=project_id, offset=offset)
             query_content = json.loads(result)
-            print('length', len(query_content['searchObjectList']))
-
+            print('length of exec list by folderid', len(query_content['searchObjectList']))
+            #if len(query_content['searchObjectList']) > 0: 
+            #    print('length greater than 0')
+            #    sys.exit(1)
             total_count = query_content['totalCount']
             offset = offset + query_content['maxAllowed']
             for tc in query_content['searchObjectList']:
+                print('tccc', tc)
                 print(tc['issueKey'], tc['execution']['status']['name'], tc['execution']['defects'])
                 cycle_list.append(tc['issueKey'])
+                time_dict_key = tc['issueKey']
+                if tc['issueKey'] in time_dict:
+                    time_dict_key = tc['issueKey'] + '_' + tc['execution']['id']
+                if 'comment' in tc['execution']:
+                    time_dict[time_dict_key] = tc['execution']['comment'].replace('}', ', "summary": "' + tc['issueSummary'].rstrip() + '"}')
+                else:
+                    time_dict[time_dict_key] = '{"cloudlet": "nocomment", "duration": 0, "summary": "' + tc['issueSummary'].rstrip() + '"}'
 
     print('expected count', len(expected_list), 'expected set count', len(set(expected_list)), 'cycle count', len(cycle_list), 'cycle set count', len(set(cycle_list)))
     print('expected_list', expected_list)
@@ -157,6 +192,8 @@ def find_missing_tests():
     print('duplicates', duplicate_tests)
     missing_tests = set(expected_list) - set(cycle_list)
     logging.info(f'total jira tests={total_jira_tests} missing len={len(missing_tests)} missing tests {missing_tests}')
+
+    write_exec_time_file(time_dict)
 
     return missing_tests, duplicate_tests
 
