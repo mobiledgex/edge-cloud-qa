@@ -45,9 +45,10 @@ timings_output_file = f'/tmp/timings_{cycle_name}.html'
 timings_html_file = f'/var/www/html/timings/timings_{cycle_name}.html'
 timings_url = f'http://40.122.108.233/timings/timings_{cycle_name}.html'
 
+logger = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.DEBUG,
-    format = "%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
+    format="%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s - - %(message)s")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('zapi').setLevel(logging.DEBUG)
 
@@ -111,6 +112,7 @@ def build_report_blocks():
 
     return block
 
+
 def write_exec_time_file(time_dict_string):
     time_dict = {}
 
@@ -127,8 +129,10 @@ def write_exec_time_file(time_dict_string):
             file1.write(f'<tr><td align=left>{key}</td><td align=left>{time_sorted_dict[key]["summary"]}</td><td align=left>{time_sorted_dict[key]["duration"]}</td></tr>\n')
         file1.write('</table>')
 
-    cmd = f'cp {timings_output_file} ${timings_html_file}'
+    cmd = f'cp {timings_output_file} {timings_html_file}'
+    logger.info(f'copy timings file cmd={cmd}')
     os.system(cmd)
+
 
 def find_missing_tests():
     cycle_list = []
@@ -160,7 +164,7 @@ def find_missing_tests():
             result = z.get_execution_list_by_folderid(folder_id=folder['id'], cycle_id=cycle_id, version_id=version_id, project_id=project_id, offset=offset)
             query_content = json.loads(result)
             print('length of exec list by folderid', len(query_content['searchObjectList']))
-            #if len(query_content['searchObjectList']) > 0: 
+            # if len(query_content['searchObjectList']) > 0:
             #    print('length greater than 0')
             #    sys.exit(1)
             total_count = query_content['totalCount']
