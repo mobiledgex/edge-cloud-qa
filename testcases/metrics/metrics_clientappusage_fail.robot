@@ -232,6 +232,15 @@ ClientAppUsageMetrics - get with latency and data_network_type shall return erro
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DataNetworkType not allowed for appinst latency metric"}
 
+ClientAppUsageMetrics - get with deviceinfo and locationtile shall return error
+   [Documentation]
+   ...  get clientappusage metrics with deviceinfo and locationtile
+   ...  verify error
+
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  data_network_type=x   selector=deviceinfo  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  location_tile=x  token=${token}  use_defaults=${False}
+   Should Contain  ${error}  code=400
+   Should Contain  ${error}  {"message":"LocationTile not allowed for appinst deviceinfo metric"}
+
 *** Keywords ***
 Setup
     ${token}=  Get Super Token
