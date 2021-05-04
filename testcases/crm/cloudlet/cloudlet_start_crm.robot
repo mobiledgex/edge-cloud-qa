@@ -107,6 +107,7 @@ CreateCloudlet - User shall be able to create a fake cloudlet
         Run Keyword and Continue on Failure  Create Cloudlet  region=US  operator_org_name=att  cloudlet_name=attcloud-1  platform_type=PlatformTypeFake  number_dynamic_ips=254  latitude=35  longitude=-96  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
 
         Run Keyword and Continue on Failure  Create App  region=US  app_name=${app_name_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  default_flavor_name=${flavor_name_automation}
+        Run Keyword and Continue on Failure  Create App  region=US  app_name=${app_name_auth_automation}  app_version=1.0  developer_org_name=${developer_org_name_automation}  default_flavor_name=${flavor_name_automation}  auth_public_key=${app_auth_public_key}
         Create App Instance  region=US  app_name=${app_name_automation}       app_version=1.0  developer_org_name=${developer_org_name_automation}  cluster_instance_name=autoclusterAutomation      cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=${flavor_name_automation}
         #Create App Instance  region=US  app_name=automation_api_auth_app  app_version=1.0  cluster_instance_name=autoclusterAutomationAuth  cloudlet_name=tmocloud-1  operator_org_name=tmus  flavor_name=automation_api_flavor
 
