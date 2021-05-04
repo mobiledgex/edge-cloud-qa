@@ -170,7 +170,7 @@ def main():
         maxresults = query_content['maxResults']
         total = query_content['total']
         print(startat, maxresults, total)
-        tc_list += get_testcases(z, result, cycle_id, project_id, version_id, folder_id)
+        tc_list += get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder)
 
     print('tc_list', tc_list)
     print('lentclist', len(tc_list))
@@ -214,7 +214,7 @@ def get_zephyr_failed_testcases(z, url, query):
     return tc_list
 
 
-def get_testcases(z, result, cycle_id, project_id, version_id, folder_id):
+def get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder_name):
     query_content = json.loads(result)
     tc_list = []
 
@@ -228,7 +228,7 @@ def get_testcases(z, result, cycle_id, project_id, version_id, folder_id):
             logger.info("found a teststep")
             # tmp_list = {'id': s['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['issueId']}
             # tmp_list = {'id': s['execution']['id'], 'tc': sresult_content[0]['step'], 'issue_key': s['issueKey'], 'issue_id': s['execution']['issueId'], 'defects': s['execution']['defects'], 'project_id': s['execution']['projectId'], 'version_id':s['execution']['versionId'], 'cycle_id':s['execution']['cycleId']}
-            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id': version_id, 'cycle_id': cycle_id, 'folder_id': folder_id, 'defects': s['fields']['issuelinks']}
+            tmp_list = {'tc': sresult_content[0]['step'], 'issue_key': s['key'], 'issue_id': s['id'], 'project_id': project_id, 'version_id': version_id, 'cycle_id': cycle_id, 'folder_id': folder_id, 'folder_name': folder_name, 'defects': s['fields']['issuelinks']}
             print(s)
             tmp_list['defect_count'] = len(s['fields']['issuelinks'])  # need to check for issueslink section
             # if 'totalDefectCount' in s['execution']: # totalDefectCount only exists if the test has previously been executed
@@ -466,8 +466,8 @@ def exec_testcase(z, t):
     tmpdir = '/tmp/'
     tc_replace = tc.replace('/', '')  # remove slash from filename
     # file_delete = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "*"
-    file_delete = tmpdir + "*" + t['issue_key'] + "*"
-    file_output = tmpdir + os.environ['Cycle'] + "_" + tc_replace + "_" + t['issue_key'] + "_" + str(int(time.time())) + ".out"
+    file_delete = f'{tmpdir}*{t["folder_name"]}_{t["issue_key"]}*'
+    file_output = f'{tmpdir}{os.environ["Cycle"]}_{t["folder_name"]}_{tc_replace}_{t["issue_key"]}_{str(int(time.time()))}.out'
     file_extension = '.txt'
 
     # delete old files since /tmp eventually gets filled up
