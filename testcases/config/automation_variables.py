@@ -28,6 +28,7 @@ region_azure = 'US'
 vmpool_name = 'automationVMPool'
 
 app_name_automation = 'automation_api_app'
+app_name_auth_automation = 'automation_api_auth_app'
 developer_org_name_automation = 'automation_dev_org'
 flavor_name_automation = 'automation_api_flavor'
 
@@ -93,6 +94,8 @@ expired_cookie = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODQ1NzQ5MDIsI
  
 vm_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----'
 
+app_auth_public_key = '-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0Spdynjh+MPcziCH2Gij\nTkK9fspTH4onMtPTgxo+MQC+OZTwetvYFJjGV8jnYebtuvWWUCctYmt0SIPmA0F0\nVU6qzSlrBOKZ9yA7Rj3jSQtNrI5vfBIzK1wPDm7zuy5hytzauFupyfboXf4qS4uC\nGJCm9EOzUSCLRryyh7kTxa4cYHhhTTKNTTy06lc7YyxBsRsN/4jgxjjkxe3J0SfS\nz3eaHmfFn/GNwIAqy1dddTJSPugRkK7ZjFR+9+sscY9u1+F5QPwxa8vTB0U6hh1m\nQnhVd1d9osRwbyALfBY8R+gMgGgEBCPYpL3u5iSjgD6+n4d9RQS5zYRpeMJ1fX0C\n/QIDAQAB\n-----END PUBLIC KEY-----'
+
 gpu_client = 'multi_client.py'
 gpu_client_path = '../edge-cloud-sampleapps/ComputerVisionServer/moedx/client'
 gpu_client_image = '3_bodies.png'
@@ -101,6 +104,7 @@ gpu_client_image = '3_bodies.png'
 slack_channel = '#qa-alertreceiver'
 slack_api_url = 'https://hooks.slack.com/services/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'
 #pagerduty_key = 'R012YDFZXKFQ4OTD0TDE9JNYM1Y2M97I'
-pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'
+#pagerduty_key = '8048c9a8e470430dc0ad9605c7fb00a0'  # free account
+pagerduty_key = 'd1bdad0245364905c0e25090ce357f30'  # paid account
 
 trust_policy_server = '35.199.188.102'
