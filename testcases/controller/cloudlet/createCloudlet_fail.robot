@@ -199,6 +199,17 @@ CreateCloudlet - create with trust policy on non-openstack shall return error
    Create VM Pool  region=${region}  vm_pool_name=${policy_return['data']['key']['name']}_pool  org_name=${oper}  #use_defaults=False
    Run Keyword and Expect Error  ('code=200', 'error={"result":{"message":"Trust Policy not supported on PLATFORM_TYPE_VM_POOL","code":400}}')  Create Cloudlet  region=US  platform_type=PlatformTypeVmPool  operator_org_name=${oper}  latitude=1  longitude=1  number_dynamic_ips=1  trust_policy=${policy_return['data']['key']['name']}  vm_pool=${policy_return['data']['key']['name']}_pool
 
+# ECQ-3358
+CreateCloudlet - create with developer org shall return error
+   [Documentation]
+   ...  - create developer org
+   ...  - send CreateCloudlet with developer org
+   ...  - verify error is returned
+
+   ${org}=  Create Org  orgtype=developer
+
+   Run Keyword and Expect Error  ('code=400', 'error={"message":"Operation only allowed for organizations of type operator"}')    Create Cloudlet  region=US  operator_org_name=${org}  latitude=1  longitude=1  number_dynamic_ips=1 
+
 ** Keywords **
 Setup
    ${token}=  Get Super Token
