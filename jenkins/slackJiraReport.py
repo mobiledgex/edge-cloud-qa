@@ -6,6 +6,7 @@ import logging
 import sys
 import html
 import os
+import datetime
 
 import zapi
 import jiraapi
@@ -124,9 +125,10 @@ def write_exec_time_file(time_dict_string):
 
     with open(timings_output_file, "w") as file1:
         file1.write('<table style="width:100%">\n')
-        file1.write('<tr><th>TCID</th><th>Title</th><th>Duration (secs)</th></tr>')
+        file1.write('<tr><th>TCID</th><th>Title</th><th>Duration (h:m:s)</th></tr>')
         for key in time_sorted_dict:
-            file1.write(f'<tr><td align=left>{key}</td><td align=left>{time_sorted_dict[key]["summary"]}</td><td align=left>{time_sorted_dict[key]["duration"]}</td></tr>\n')
+            duration = str(datetime.timedelta(seconds=time_sorted_dict[key]["duration"]))
+            file1.write(f'<tr><td align=left>{key}</td><td align=left>{time_sorted_dict[key]["summary"]}</td><td align=left>{duration}</td></tr>\n')
         file1.write('</table>')
 
     cmd = f'cp {timings_output_file} {timings_html_file}'
