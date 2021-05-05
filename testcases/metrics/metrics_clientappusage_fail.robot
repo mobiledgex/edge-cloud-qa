@@ -214,12 +214,12 @@ ClientAppUsageMetrics - get with latency and deviceos shall return error
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DeviceOS not allowed for appinst latency metric"}
 
-ClientAppUsageMetrics - get with latency and devicetype shall return error
+ClientAppUsageMetrics - get with latency and devicemodel shall return error
    [Documentation]
    ...  get clientappusage metrics without region
    ...  verify error
 
-   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_type=x   selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
+   ${error}=  Run Keyword and Expect Error  *  Get Client App Usage Metrics  region=US  device_model=x   selector=latency  last=1  app_name=automation_api_app  app_version=1.0  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator}  developer_org_name=mobiledgex  token=${token}  use_defaults=${False}
    Should Contain  ${error}  code=400
    Should Contain  ${error}  {"message":"DeviceType not allowed for appinst latency metric"}
 
