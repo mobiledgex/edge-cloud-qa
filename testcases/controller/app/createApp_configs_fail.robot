@@ -133,6 +133,8 @@ CreateApp - User shall not be able to create a k8s app with invalid yaml config
     ...  - create k8s app with unknown Configs value
     ...  - verify error is received
 
+    Create Flavor  region=${region}
+
     #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
     #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
 
@@ -140,25 +142,26 @@ CreateApp - User shall not be able to create a k8s app with invalid yaml config
     Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
 
 # ECQ-2585
-CreateApp - User shall not be able to create a helm app with invalid yaml config
-    [Documentation]
-    ...  - create helm app with unknown Configs value
-    ...  - verify error is received
-
-    # EDGECLOUD-4216
-
-    # no longer supported
-    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
-    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
-
-    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
-    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
+#CreateApp - User shall not be able to create a helm app with invalid yaml config
+#    [Documentation]
+#    ...  - create helm app with unknown Configs value
+#    ...  - verify error is received
+#
+#    # EDGECLOUD-4216
+#
+#    # no longer supported
+#    #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=myconfig
+#    #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
+#    ${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeHelm  deployment=helm  access_type=loadbalancer  image_path=${docker_image}  configs_kind=helmCustomizationYaml  configs_config=myconfig
+#    Should Contain  ${error}  ('code=400', 'error={"message":"Cannot unmarshal env vars: myconfig - yaml
 
 # ECQ-2587
 CreateApp - User shall not be able to create a k8s app with invalid config url
     [Documentation]
     ...  - create k8s app with invalid Configs url
     ...  - verify error is received
+
+    Create Flavor  region=${region}
 
     #${error}=  Run Keyword and Expect Error  *  Create App  region=${region}  image_type=ImageTypeDocker  deployment=kubernetes  access_type=direct  image_path=${docker_image}  configs_kind=envVarsYaml  configs_config=http://myconfig
     #Should Contain  ${error}  ('code=400', 'error={"message":"Cannot get manifest from http://myconfig
