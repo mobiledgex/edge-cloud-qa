@@ -4,6 +4,7 @@ import sys
 import os
 import glob
 import threading
+import queue
 
 import zapi
 import jiraapi
@@ -48,6 +49,31 @@ logging.basicConfig(
     format="%(asctime)s - %(filename)s %(funcName)s() line %(lineno)d - %(levelname)s -  - %(message)s")
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 logging.getLogger('zapi').setLevel(logging.DEBUG)
+
+
+class TCWorker(threading.Thread):
+    def __init__(self, tc_queue, z, *args, **kwargs):
+        self.tc_queue = tc_queue
+        self.z = z
+        super().__init__(*args, **kwargs)
+
+    def run(self):
+        while True:
+            try:
+                logger.info('TCWorker getting tc')
+                tc = self.tc_queue.get(timeout=1)
+            except queue.Empty:
+                logger.info('TCWorker tc_queue is empty. Exiting thread')
+                return
+
+            logger.info(f'TCWorker executing {tc}, queuesize={self.tc_queue.qsize()}')
+            try:
+                exec_testcase(self.z, tc)
+            except Exception as e:
+                logger.error(f'exec_testcase exception {e}')
+
+            logger.info(f'TCWorker exeution done {tc}')
+            self.tc_queue.task_done()
 
 
 def main():
@@ -161,7 +187,7 @@ def main():
     startat = 0
     maxresults = 0
     total = 1
-    tc_list = []
+    tc_queue = queue.Queue()
     while (startat + maxresults) < total:
         # jiraQueryUrl = jiraQueryUrlPre + ' startAt=' + str(startat + maxresults) + ' ORDER By Issue ASC'
         result = j.search(query=jiraQueryUrl, start_at=startat + maxresults)
@@ -170,13 +196,13 @@ def main():
         maxresults = query_content['maxResults']
         total = query_content['total']
         print(startat, maxresults, total)
-        tc_list += get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder)
+        new_queue = get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder)
+        while not new_queue.empty():
+            tc_queue.put(new_queue.get())
 
-    print('tc_list', tc_list)
-    print('lentclist', len(tc_list))
-
+    logger.info(f'len tc_queue={tc_queue.qsize()}')
     # exec_status = exec_testcases(z, tc_list, rhc, httpTrace, summary)
-    exec_status = exec_testcases_parallel(z, tc_list, num_executors, args.failed_only)
+    exec_status = exec_testcases_parallel(z, tc_queue, num_executors, args.failed_only)
     logger.info("exec_status=" + str(exec_status))
 
     endtime = time.time()
@@ -216,7 +242,7 @@ def get_zephyr_failed_testcases(z, url, query):
 
 def get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder_name):
     query_content = json.loads(result)
-    tc_list = []
+    tc_queue = queue.Queue()
 
     for s in query_content['issues']:
         print('issueKey', s['key'])
@@ -240,10 +266,10 @@ def get_testcases(z, result, cycle_id, project_id, version_id, folder_id, folder
             logger.info("did NOT find a teststep")
             tmp_list = {'id': s['id'], 'tc': 'noTestcaseInStep', 'issue_key': s['key']}
 
-        tc_list.append(tmp_list)
-    print(tc_list)
+        tc_queue.put(tmp_list)
+    print(tc_queue)
 
-    return tc_list
+    return tc_queue
 
 
 def get_testcases_z(z, result, cycle):
@@ -367,7 +393,28 @@ def update_single_defect(z, t):
         logger.info('no defects found')
 
 
-def exec_testcases_parallel(z, tc_list, num_executors, failed_only):
+def exec_testcases_parallel(z, tc_queue, num_executors, failed_only):
+    global found_failure
+    global number_passed
+    global number_failed
+    global crm_pool_round_robin
+
+    num_testcases = tc_queue.qsize()
+
+    for _ in range(num_executors):
+        TCWorker(tc_queue, z).start()
+    tc_queue.join()  # wait till queue is empty
+
+    if failed_only and len(tc_list) == 0:
+        print('running failed only and found no failed testcases to execute. setting found_failure to 0')
+        found_failure = 0
+    print('found_failure', found_failure)
+    print('number_testcases', num_testcases, 'number_passed', number_passed, 'number_failed', number_failed)
+
+    return found_failure
+
+
+def exec_testcases_parallel_orig(z, tc_list, num_executors, failed_only):
     global found_failure
     global number_passed
     global number_failed
@@ -585,6 +632,8 @@ def exec_testcase(z, t):
         status = z.update_status(execution_id=t['execution_id'], issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2, comment=comment)
         # status = z.create_execution(issue_id=t['issue_id'], project_id=t['project_id'], cycle_id=t['cycle_id'], version_id=t['version_id'], status=2)
         last_status = 'fail'
+    except Exception as err:
+        logger.error(f'unknown error found while executing test: {err}')
 
     try:
         file_output_done = file_output + '_' + str(int(time.time())) + file_extension
