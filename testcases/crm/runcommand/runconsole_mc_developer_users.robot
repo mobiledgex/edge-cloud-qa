@@ -29,9 +29,10 @@ RunConsole - DeveloperManager shall be able to do RunConsole
     ...  execute Run Console as DeveloperManager
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${developer}
+    #Adduser Role  username=${username_epoch}  role=DeveloperManager  orgname=${developer}
 
-    ${token}=  Login
+    #${token}=  Login
+    ${token}=  Login  username=${dev_manager_user_automation}  password=${dev_manager_password_automation}
 
 #    ${stdout}=  Run Console  region=US  app_name=app1587252144-180521  app_version=1.0  developer_org_name=MobiledgeX  cluster_instance_name=cluster1587252144-180521  operator_org_name=dmuus  cloudlet_name=tmocloud-1  command=whoami
 
@@ -45,9 +46,10 @@ RunConsole - DeveloperContributor shall be able to do RunConsole
     ...  execute Run Console as DeveloperContributor
     ...  verify RunConsole is successful
 
-    Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer}
+    #Adduser Role  username=${username_epoch}  role=DeveloperContributor  orgname=${developer}
 
-    ${token}=  Login
+    #${token}=  Login
+    ${token}=  Login  username=${dev_contributor_user_automation}  password=${dev_contributor_password_automation}
 
     ${stdout}=  Run Console  region=US  developer_org_name=${developer}  operator_org_name=dmuus  cloudlet_name=tmocloud-1
 
@@ -63,9 +65,10 @@ RunConsole - DeveloperViewer shall not be able to do RunConsole
 
     #EDGECLOUD-1446 RunConsole for unauthorized user returns "Forbidden, Forbidden"	
 
-    Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${developer}
+    #Adduser Role  username=${username_epoch}  role=DeveloperViewer  orgname=${developer}
 
-    ${token}=  Login
+    #${token}=  Login
+    ${token}=  Login  username=${dev_viewer_user_automation}  password=${dev_viewer_password_automation}
 
     ${error}=  Run Keyword And Expect Error  *  Run Console  region=US  command=whoami  developer_org_name=${developer}
 
@@ -79,16 +82,16 @@ Setup
     Create App  region=US  image_path=${qcow_centos_image}  access_ports=tcp:2015  deployment=vm  image_type=ImageTypeQCOW  #default_flavor_name=${cluster_flavor_name}  developer_name=${developer_name}
     Create App Instance  region=US  operator_org_name=dmuus  cloudlet_name=tmocloud-1  #app_name=${app_name_default}  developer_org_name=${developer_name_default}  app_version=${app_version_default}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name}  use_defaults=${False}
  
-    ${epoch}=  Get Time  epoch
-    ${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
-    ${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
+    #${epoch}=  Get Time  epoch
+    #${username_epoch}=  Catenate  SEPARATOR=  ${username}  ${epoch}
+    #${email}=  Catenate  SEPARATOR=  ${username}  +  ${epoch}  @gmail.com
 
-    Skip Verify Email
-    Create User  username=${username_epoch}  password=${password}  email_address=${email}
-    Unlock User
-    #Verify Email
+    #Skip Verify Email
+    #Create User  username=${username_epoch}  password=${password}  email_address=${email}
+    #Unlock User
+    ##Verify Email
 
-    Set Suite Variable  ${username_epoch}
+    #Set Suite Variable  ${username_epoch}
 
 Teardown
     Cleanup Provisioning
