@@ -405,7 +405,7 @@ def exec_testcases_parallel(z, tc_queue, num_executors, failed_only):
         TCWorker(tc_queue, z).start()
     tc_queue.join()  # wait till queue is empty
 
-    if failed_only and len(tc_list) == 0:
+    if failed_only and tc_queue.qsize() == 0:
         print('running failed only and found no failed testcases to execute. setting found_failure to 0')
         found_failure = 0
     print('found_failure', found_failure)
