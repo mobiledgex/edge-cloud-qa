@@ -354,6 +354,51 @@ UpdateCloudlet - error shall be received for update to trusted with nontrusted a
    ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
    Should Be Equal  ${error}  ('code=400', 'error={"message":"Non trusted app: organization:\\\\"automation_dev_org\\\\" name:\\\\"${app['data']['key']['name']}\\\\" version:\\\\"1.0\\\\" not compatible with trust policy: organization:\\\\"${oper}\\\\" name:\\\\"${policy_name}\\\\" "}')
 
+# ECQ-3393
+UpdateCloudlet - error shall be received for update to trusted with trusted app and mismatched policy
+   [Documentation]
+   ...  - create a trust policy
+   ...  - send CreateCloudlet without policy
+   ...  - create a trusted app/appinst on the cloudlet
+   ...  - send UpdateCloudlet with trust policy that doesnt match the app required connections
+   ...  - verify error is received
+
+   [Tags]  TrustPolicy
+
+   Create Flavor  region=${region}
+
+   ${policy_name}=  Get Default Trust Policy Name
+   ${app_name}=  Get Default App Name
+
+   # create a trust policy
+   &{rule1}=  Create Dictionary  protocol=udp  port_range_minimum=1001  port_range_maximum=2001  remote_cidr=3.1.1.1/1
+   @{rulelist}=  Create List  ${rule1}
+   ${policy_return}=  Create Trust Policy  region=${region}  rule_list=${rulelist}  operator_org_name=${oper}
+   Should Be Equal  ${policy_return['data']['key']['name']}          ${policy_name}
+   Should Be Equal  ${policy_return['data']['key']['organization']}  ${oper}
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['protocol']}        udp
+   Should Be Equal             ${policy_return['data']['outbound_security_rules'][0]['remote_cidr']}     3.1.1.1/1
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_min']}  1001
+   Should Be Equal As Numbers  ${policy_return['data']['outbound_security_rules'][0]['port_range_max']}  2001
+   ${numrules}=  Get Length  ${policy_return['data']['outbound_security_rules']}
+   Should Be Equal As Numbers  ${numrules}  1
+
+   # create cloudlet without trust policy
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${oper}
+   Should Not Contain  ${cloudlet['data']}  trust_policy
+   Should Be Equal As Numbers  ${cloudlet['data']['trust_policy_state']}  1
+
+   # create a trusted app/appinst on the cloudlet
+   &{rule1}=  Create Dictionary  protocol=udp  port=1000  remote_ip=3.1.1.1
+   @{tcp1_rulelist}=  Create List  ${rule1}
+   ${app}=  Create App  region=${region}
+   ${appinst}=  Create App Instance  region=${region}  operator_org_name=${oper}  cluster_instance_name=autocluster${policy_name}
+   ${appt}=  Update App  region=${region}  trusted=${True}  required_outbound_connections_list=${tcp1_rulelist}
+
+   # update cloudlet with trust policy
+   ${error}=  Run Keyword and Expect Error  *  Update Cloudlet  region=${region}  operator_org_name=${oper}  trust_policy=${policy_name}
+   Should Be Equal  ${error}  ('code=400', 'error={"message":"No outbound rule in policy to match required connection udp:3.1.1.1:1000 for App {\\\\"organization\\\\":\\\\"automation_dev_org\\\\",\\\\"name\\\\":\\\\"${app['data']['key']['name']}\\\\",\\\\"version\\\\":\\\\"1.0\\\\"}"}')
+
 # ECQ-3098
 UpdateCloudlet - update with trust policy on non-openstack shall return error
    [Documentation]
