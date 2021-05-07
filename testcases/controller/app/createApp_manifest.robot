@@ -17,6 +17,7 @@ ${manifest}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp.yml
 ${manifest_different_ports}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_different_ports.yml
 ${manifest_artifactory_invalid}  https://artifactory-qa.mobiledgex.net/artifactory/epo-org1588686922/postgres_redis_compose.zip
 ${manifest_clusterip}  http://35.199.188.102/apps/server_ping_threaded_udptcphttp_clusterip.yml
+${manifest_iav}  http://35.199.188.102/apps/automation_iav_customer_manifest.yml
 
 *** Test Cases ***
 #ECQ-1355
@@ -287,6 +288,15 @@ CreateApp - error shall be received with deployment=k8s and ClusterIP deployment
 
     Should Contain  ${error_msg}   status = StatusCode.UNKNOWN
     Should Contain  ${error_msg}   details = "Invalid deployment manifest, port tcp:2016 defined in AccessPorts but missing from kubernetes manifest in a LoadBalancer service"
+
+# ECQ-3394
+CreateApp - shall be able to create with deployment=k8s and IAV customer manifest
+    [Documentation]
+    ...  - create k8s app with a customer IAV deployment manifest
+    ...  - verify success
+
+    ${app}=  Create App  image_type=ImageTypeDocker  deployment=kubernetes  image_path=${docker_image}  access_ports=tcp:8989  deployment_manifest=${manifest_iav}
+    Should Contain  ${app.deployment_manifest}  gh-configmap.yml
 
 *** Keywords ***
 Setup
