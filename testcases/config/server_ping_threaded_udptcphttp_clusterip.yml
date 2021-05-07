@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-tcpservice
+  labels:
+    run: server-ping-threaded-udptcphttpapp
+spec:
+  type: ClusterIp
+  ports:
+  - port: 2016
+    targetPort: 2016
+    protocol: TCP
+    name: tcp2016
+  selector:
+    run: server-ping-threaded-udptcphttpapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-udpservice
+  labels:
+    run: server-ping-threaded-udptcphttpapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 2015
+    targetPort: 2015
+    protocol: UDP
+    name: udp2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-ping-threaded-udptcphttp-httpservice
+  labels:
+    run: server-ping-threaded-udptcphttpapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8085
+    targetPort: 8085
+    protocol: TCP
+    name: http2015
+  selector:
+    run: server-ping-threaded-udptcphttpapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-ping-threaded-udptcphttp-deployment
+spec:
+  selector:
+    matchLabels:
+      run: server-ping-threaded-udptcphttpapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: server-ping-threaded-udptcphttpapp
+    spec:
+      imagePullSecrets:
+      - name: docker-qa.mobiledgex.net
+      containers:
+      - name: server-ping-threaded-udptcphttpapp
+        image: docker-qa.mobiledgex.net/mobiledgex/images/server_ping_threaded:6.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2016
+          protocol: TCP
+        - containerPort: 2015
+          protocol: UDP
+        - containerPort: 8085
+          protocol: TCP
+        command:
+         - "./server_ping_threaded.py"
+
