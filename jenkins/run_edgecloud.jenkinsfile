@@ -13,6 +13,7 @@ def jobListOwaspZAP=["OWASP ZAP"]
 def jobListNmapScanning=["nmap scanning"]
 def jobListImageScanning=["Image Scanning"]
 def jobListConsole=["runConsoleTests"]
+def jobListRunFailed = ["runControllerTests", "runDMETests", "runAccountTests", "runUserRoleTests", "runUserTests", "runMCConfigsTests", "runOrganizationTests"]
 
 builds1 = [:]
 builds2 = [:]
@@ -21,6 +22,7 @@ builds4 = [:]
 builds5 = [:]
 builds6 = [:]
 builds7 = [:]
+builds8 = [:]
 
 def add_tests_to_folder(version, project, cycle, folder, components=null, components_omit=null) {
     def status = -1
@@ -496,6 +498,21 @@ node('jenkinsSlave1'){
           }
           try {
             parallel builds7
+          } catch(err) {
+              echo "caugh exec running tests error: ${err}"
+              currentBuild.result = 'FAILURE'
+          }
+
+          // run failed only
+          for(int i=0; i < jobListRunFailed.size(); ++i) {
+             def jobName = jobListRunFailed[i];
+             echo "i1=" + jobName
+             builds8[jobName] = {
+                 build job: jobName, parameters: [string(name: 'Project', value: project), string(name: 'Version', value: version), string(name: 'Cycle', value: cycle), string(name: 'RunFailedOnly', value: true)]
+             }
+          }
+          try {
+            parallel builds8
           } catch(err) {
               echo "caugh exec running tests error: ${err}"
               currentBuild.result = 'FAILURE'
