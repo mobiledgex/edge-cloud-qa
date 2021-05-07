@@ -206,10 +206,28 @@ UpdateApp - Error shall be received for updated to non-trusted on trusted cloudl
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}     
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}    
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}   
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
+
+# ECQ-3392
+UpdateApp - shall be able to update to trusted with appinst
+   [Documentation]
+   ...  - create k8s/docker/helm/vm non-trusted app and appinst on non-trusted cloudlet
+   ...  - update app to trusted while the appinst is still running
+   ...  - verify success
+
+   [Tags]  TrustPolicy
+
+   [Setup]  Setup Trusted Cloudlet
+
+   [Template]  Update Trusted App on non-Trusted Cloudlet
+
+   image_type=ImageTypeDocker  deployment=kubernetes  access_type=loadbalancer  image_path=${docker_image} 
+   image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}
+   image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}
+   image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
 
 # ECQ-3100
 UpdateApp - shall be able to remove RequiredOutboundConnections from k8s/docker/helm/vm lb/direct app
@@ -330,7 +348,7 @@ Setup Trusted Cloudlet
    Should Be Equal As Numbers  ${numrules}  1
 
    # create cloudlet with trust policy
-   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}
+   ${cloudlet}=  Create Cloudlet  region=${region}  operator_org_name=${operator}  trust_policy=${policy_name}  env_vars=FAKE_RAM_MAX=4096000,FAKE_VCPUS_MAX=1000,FAKE_DISK_MAX=100000
 
    Set Suite Variable  ${app_name}
 
@@ -371,6 +389,23 @@ Update Trusted App
 
    Run Keyword If  ${parms['trusted']} == ${True}  Should Be Equal  ${app['data']['trusted']}     ${parms['trusted']}
    ...  ELSE  Should Not Contain  ${app['data']}  trusted
+
+   ${app_counter}=  Evaluate  ${app_counter} + 1
+   Set Suite Variable  ${app_counter}
+
+Update Trusted App on non-Trusted Cloudlet
+   [Arguments]  &{parms}
+
+   Create App  region=${region}  app_name=${appname}_${app_counter}  image_type=${parms['image_type']}  deployment=${parms['deployment']}  access_type=${parms['access_type']}  image_path=${parms['image_path']}  access_ports=tcp:2016  trusted=${False}
+
+   ${appinst}=  Run Keyword If  '${parms['deployment']}' != 'vm'  Create App Instance  region=${region}  cloudlet_name=tmocloud-1  operator_org_name=${operator}  cluster_instance_name=autocluster${app_counter}
+   ...  ELSE  Create App Instance  region=${region}  operator_org_name=${operator}
+
+   ${app}=  Update App  region=${region}  app_name=${appname}_${app_counter}  trusted=${True}
+
+   Should Be Equal  ${app['data']['deployment']}  ${parms['deployment']}
+
+   Should Be Equal  ${app['data']['trusted']}  ${True} 
 
    ${app_counter}=  Evaluate  ${app_counter} + 1
    Set Suite Variable  ${app_counter}
