@@ -206,8 +206,8 @@ UpdateApp - Error shall be received for updated to non-trusted on trusted cloudl
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeDocker  deployment=docker      access_type=loadbalancer  image_path=${docker_image}     
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}    
    ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeHelm    deployment=helm        access_type=loadbalancer  image_path=${docker_image}   
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
-   ('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   ('code\=400', 'error\={"message":"Cannot set app to untrusted which has an instance on a trusted cloudlet"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
+   #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=loadbalancer  image_path=${qcow_centos_image}
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
    #('code\=400', 'error\={"message":"Update App not supported for deployment: vm when AppInsts exist"}')  image_type=ImageTypeQcow    deployment=vm          access_type=direct        image_path=${qcow_centos_image}
 
