@@ -235,6 +235,83 @@ AppInst - appinst shall start for helm/dedicated/lb app inst when cloudlet is ma
 #   # it now returns a random order so it could be either cloudlet
 #   Should Be True              '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net' or '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name2}.${operator_name}.mobiledgex.net'
 
+# ECQ-3396
+AppInst - appinst shall not start for docker/lb/shared app inst when cloudlet is maintenance mode
+   [Documentation]
+   ...  - create privacy policy with 2 cloudlets and minactiveinstances=1
+   ...  - create 2 reservable clusterInst with docker/dedicated
+   ...  - set cloudlet2 to maintenance mode
+   ...  - create docker/direct app with privacy policy
+   ...  - verify appinst starts on cloudlet1
+   ...  - update privacy policy with minactiveinstances=2
+   ...  - verify appinst does not start on cloudlet2
+   ...  - put cloudlet2 in normal operation
+   ...  - verify appinst starts on cloudlet2
+   ...  - verify RegisterClient/FindCloudlet returns appinst on cloudlet1
+
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessDedicated  deployment=docker  token=${token}
+
+   # put cloudlet2 in maint mode
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${token}
+
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=docker  app_version=1.0   access_type=loadbalancer  token=${tokendev}
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+
+   # update policy to include both cloudlet1(not maint mode) and cloudlet2(maint mode). Verify appinst 2 does not start on cloudlet2
+   Update Auto Provisioning Policy  region=${region}  developer_org_name=${org_name_dev}  min_active_instances=2  token=${tokendev}
+   App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+
+   # put cloudlet2 back in operation
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  maintenance_state=NormalOperation  token=${token}
+
+   # verify both appinst exist
+   Sleep  5s
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+
+   # verify it returns the appinst on the 1st cloudlet
+   Register Client  app_name=${app_name_default}  developer_org_name=${org_name_dev}
+   ${cloudlet_1}=  Find Cloudlet      latitude=31  longitude=-91
+   #Should Be Equal              ${cloudlet_1['fqdn']}  ${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net
+   # it now returns a random order so it could be either cloudlet
+   Should Be True              '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name1}.${operator_name}.mobiledgex.net' or '${cloudlet_1['fqdn']}'=='${cluster1}.${cloudlet_name2}.${operator_name}.mobiledgex.net'
+
+# ECQ-3395
+AppInst - appinst shall be deleted when cloudlet is put in maintenance mode
+   [Documentation]
+   ...  - create privacy policy with 2 cloudlets
+   ...  - create 2 reservable clusterInst with k8s/shared
+   ...  - create k8s/lb app with privacy policy
+   ...  - verify appinst starts on cloudlet1 and cloudlet2
+   ...  - put cloudlet2 in maintenance mode
+   ...  - verify appinst exists on cloudlet2
+
+   Create Cluster Instance  region=${region}  cluster_name=${cluster1}  reservable=${True}   cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
+   Create Cluster Instance  region=${region}  cluster_name=${cluster2}  reservable=${True}   cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  developer_org_name=MobiledgeX  ip_access=IpAccessShared  deployment=kubernetes  token=${token}
+
+   Create App  region=${region}  auto_prov_policies=@{policy_list}  access_ports=tcp:2015,tcp:2016,udp:2015,udp:2016  image_type=ImageTypeDocker  deployment=kubernetes  app_version=1.0   access_type=loadbalancer  token=${tokendev}
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+
+   # take cloudlet1 offline
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${token}
+
+   # appinst should spin up on other cloudlet
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+
+   # take cloudlet2 offline
+   Update Cloudlet  region=${region}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}  maintenance_state=MaintenanceStart  token=${token}
+
+   # remove cloudlet2 from the policy
+   &{cloudlet1}=  Create Dictionary  name=${cloudlet_name1}  organization=${operator_name}
+   @{cloudlets_new}=  Create List  ${cloudlet1}
+   ${policy}=  Update Auto Provisioning Policy  region=${region}  developer_org_name=${org_name_dev}  min_active_instances=1  max_instances=0  cloudlet_list=${cloudlets_new}  token=${tokendev}
+
+   # verify appinst on cloudlet2 is gone but still exists on cloudle1
+   Sleep  10s
+   App Instance Should Not Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name2}  operator_org_name=${operator_name}
+   App Instance Should Exist  region=${region}  app_name=${app_name_default}  cloudlet_name=${cloudlet_name1}  operator_org_name=${operator_name}
 
 *** Keywords ***
 Setup
