@@ -29,7 +29,7 @@ class AutoProvisioningPolicy(MexOperation):
         _max_instances_field_number = "7"
         _undeploy_client_count_field_number = "8"
         _undeploy_interval_count_field_number = "9"
-        _cloudlets_field_number = "10"
+        _cloudlets_field_number = "5"
         # _cloudlet_organization_field
         _cloudlet_org_field_number = "5.1.1"  #???
         _cloudlet_name_field_number = "5.1.2" #???
@@ -102,31 +102,29 @@ class AutoProvisioningPolicy(MexOperation):
                 policy_dict['max_instances'] = max_instances
             _fields_list.append(_max_instances_field_number)
 
-        # print('*WARN*', cloudlet_list)
         cloudlet_dict_list = None
         if cloudlet_list is not None:
             cloudlet_dict_list = []
             for cloudlet in cloudlet_list:
                 cloudlet_dict = {}
                 cloudlet_key_dict = {}
-
-
                 cloudlet_dict['key'] = cloudlet
 
              # cloudlet_dict:
                 cloudlet_dict_list.append(cloudlet_dict)
-        # print('*WARN*', cloudlet_dict_list)
+
         if cloudlet_dict_list is not None:
             policy_dict['cloudlets'] = cloudlet_dict_list
-            _fields_list.append(_cloudlets_field_number)
-
+            #_fields_list.append(_cloudlets_field_number)
+            _fields_list.append(_cloudlet_name_field_number)
+            _fields_list.append(_cloudlet_org_field_number)
 
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
-            _fields_list.append(_cloudlet_name_field_number)
+            #_fields_list.append(_cloudlet_name_field_number)
         if operator_org_name is not None:
             cloudlet_key_dict['organization'] = operator_org_name
-            _fields_list.append(_cloudlet_org_field_number)
+            #_fields_list.append(_cloudlet_org_field_number)
 
         if cloudlet_key_dict:
             policy_dict['cloudlet_key'] = cloudlet_key_dict
