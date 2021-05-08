@@ -36,7 +36,7 @@ Controller displays GPU resource usage of cloudlet and triggers alert when thres
    @{resource_list}=  Create List  ${resource1}
 
    # create cloudlet with resource quotas
-   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  token=${tokenop}
+   ${cloudlet1}=  Create Cloudlet  region=${region}  operator_org_name=${operator_name_openstack}  cloudlet_name=${cloudlet_name}  platform_type=PlatformTypeOpenstack  physical_name=${physical_name_openstack}  number_dynamic_ips=254  latitude=53.551085  longitude=9.993682  resource_list=${resource_list}  MEX_EXT_NETWORK=external-network-02  token=${tokenop}  
 
    Add Cloudlet Resource Mapping   region=${region}  cloudlet_name=${cloudlet_name}  operator_org_name=${operator_name_openstack}  mapping=gpu=mygpuresrouce  token=${tokenop}
 
