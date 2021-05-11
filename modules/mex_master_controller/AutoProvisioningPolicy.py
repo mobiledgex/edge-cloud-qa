@@ -1,4 +1,3 @@
-import json
 import logging
 
 import shared_variables
@@ -28,28 +27,28 @@ class AutoProvisioningPolicy(MexOperation):
         _min_active_instances_field_number = "6"
         _max_instances_field_number = "7"
         _undeploy_client_count_field_number = "8"
-        _undeploy_interval_count_field_number = "9"
-        _cloudlets_field_number = "5"
+        # _undeploy_interval_count_field_number = "9"
+        # _cloudlets_field_number = "5"
         # _cloudlet_organization_field
-        _cloudlet_org_field_number = "5.1.1"  #???
-        _cloudlet_name_field_number = "5.1.2" #???
-        _lat_field_number = "6.1.1" #???
-        _long_name_field_number = "6.1.2" #???
+        _cloudlet_org_field_number = "5.1.1"
+        _cloudlet_name_field_number = "5.1.2"
 
         if use_defaults:
-            if policy_name is None: policy_name = shared_variables.autoprov_policy_name_default
-            if developer_org_name is None: developer_org_name = shared_variables.developer_name_default
+            if policy_name is None:
+                policy_name = shared_variables.autoprov_policy_name_default
+            if developer_org_name is None:
+                developer_org_name = shared_variables.developer_name_default
 
-        #{"autoprovpolicy":{"deploy_client_count":1,"deploy_interval_count":1,"key":{"name":"mypolicy","organization":"MobiledgeX"}},"region":"EU"}
-        #{"autoprovpolicycloudlet":{"cloudlet_key":{"name":"automationMunichCloudlet","organization":"TDG"},"key":{"name":"TestAutoPolicy","organization":"ldevorg"}},"region":"EU"}
+        # {"autoprovpolicy":{"deploy_client_count":1,"deploy_interval_count":1,"key":{"name":"mypolicy","organization":"MobiledgeX"}},"region":"EU"}
+        # {"autoprovpolicycloudlet":{"cloudlet_key":{"name":"automationMunichCloudlet","organization":"TDG"},"key":{"name":"TestAutoPolicy","organization":"ldevorg"}},"region":"EU"}
 
         shared_variables.autoprov_policy_name_default = policy_name
-        
+
         policy_dict = {}
         policy_key_dict = {}
         cloudlet_key_dict = {}
         cloudlet_dict = {}
-        
+
         if policy_name is not None:
             policy_key_dict['name'] = policy_name
             _fields_list.append(_policy_name_field_number)
@@ -63,42 +62,42 @@ class AutoProvisioningPolicy(MexOperation):
         if deploy_client_count is not None:
             try:
                 policy_dict['deploy_client_count'] = int(deploy_client_count)
-            except:
+            except Exception:
                 policy_dict['deploy_client_count'] = deploy_client_count
             _fields_list.append(_deploy_client_count_field_number)
 
         if deploy_interval_count is not None:
             try:
                 policy_dict['deploy_interval_count'] = int(deploy_interval_count)
-            except:
+            except Exception:
                 policy_dict['deploy_interval_count'] = deploy_interval_count
             _fields_list.append(_deploy_interval_count_field_number)
 
         if undeploy_client_count is not None:
             try:
                 policy_dict['undeploy_client_count'] = int(undeploy_client_count)
-            except:
+            except Exception:
                 policy_dict['undeploy_client_count'] = undeploy_client_count
             _fields_list.append(_undeploy_client_count_field_number)
 
         if undeploy_interval_count is not None:
             try:
                 policy_dict['undeploy_interval_count'] = int(undeploy_interval_count)
-            except:
+            except Exception:
                 policy_dict['undeploy_interval_count'] = undeploy_interval_count
             _fields_list.append(_deploy_interval_count_field_number)
 
         if min_active_instances is not None:
             try:
                 policy_dict['min_active_instances'] = int(min_active_instances)
-            except:
+            except Exception:
                 policy_dict['min_active_instances'] = min_active_instances
             _fields_list.append(_min_active_instances_field_number)
 
         if max_instances is not None:
             try:
                 policy_dict['max_instances'] = int(max_instances)
-            except:
+            except Exception:
                 policy_dict['max_instances'] = max_instances
             _fields_list.append(_max_instances_field_number)
 
@@ -109,26 +108,21 @@ class AutoProvisioningPolicy(MexOperation):
                 cloudlet_dict = {}
                 cloudlet_key_dict = {}
                 cloudlet_dict['key'] = cloudlet
-
-             # cloudlet_dict:
                 cloudlet_dict_list.append(cloudlet_dict)
 
         if cloudlet_dict_list is not None:
             policy_dict['cloudlets'] = cloudlet_dict_list
-            #_fields_list.append(_cloudlets_field_number)
             _fields_list.append(_cloudlet_name_field_number)
             _fields_list.append(_cloudlet_org_field_number)
 
         if cloudlet_name is not None:
             cloudlet_key_dict['name'] = cloudlet_name
-            #_fields_list.append(_cloudlet_name_field_number)
         if operator_org_name is not None:
             cloudlet_key_dict['organization'] = operator_org_name
-            #_fields_list.append(_cloudlet_org_field_number)
 
         if cloudlet_key_dict:
             policy_dict['cloudlet_key'] = cloudlet_key_dict
-            
+
         if include_fields and _fields_list:
             policy_dict['fields'] = []
             for field in _fields_list:
@@ -146,7 +140,7 @@ class AutoProvisioningPolicy(MexOperation):
             msg_dict_delete = {'autoprovpolicy': msg_delete}
 
         msg_dict_show = None
-        if 'key' in msg  and 'name' in msg['key']:
+        if 'key' in msg and 'name' in msg['key']:
             msg_show = self._build(policy_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'autoprovpolicy': msg_show}
 
@@ -169,7 +163,7 @@ class AutoProvisioningPolicy(MexOperation):
         msg_dict = {'autoprovpolicy': msg}
 
         msg_dict_show = None
-        if 'key' in msg  and 'name' in msg['key']:
+        if 'key' in msg and 'name' in msg['key']:
             msg_show = self._build(policy_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'autoprovpolicy': msg_show}
 
@@ -179,13 +173,13 @@ class AutoProvisioningPolicy(MexOperation):
         msg = self._build(policy_name=policy_name, developer_org_name=developer_org_name, cloudlet_name=cloudlet_name, operator_org_name=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'autoprovpolicycloudlet': msg}
 
-        #msg_dict_delete = None
-        #if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
+        # msg_dict_delete = None
+        # if auto_delete and 'key' in msg and 'name' in msg['key'] and 'organization' in msg['key']:
         #    msg_delete = self._build(policy_name=msg['key']['name'], developer_org_name=msg['key']['organization'], use_defaults=False)
         #    msg_dict_delete = {'autoprovpolicycloudlet': msg_delete}
 
         msg_dict_show = None
-        if 'key' in msg  and 'name' in msg['key']:
+        if 'key' in msg and 'name' in msg['key']:
             msg_show = self._build(policy_name=msg['key']['name'], use_defaults=False)
             msg_dict_show = {'autoprovpolicy': msg_show}
 
