@@ -97,8 +97,8 @@ class CloudletPool(MexOperation):
 
         return self.delete(token=token, url=self.delete_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
 
-    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
-        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, organization=operator_org_name, use_defaults=use_defaults)
+    def show_cloudlet_pool(self, token=None, region=None, cloudlet_pool_name=None, cloudlet_list=None, operator_org_name=None, json_data=None, use_defaults=True, use_thread=False):
+        msg = self._build(cloudlet_pool_name=cloudlet_pool_name, cloudlet_list=cloudlet_list, organization=operator_org_name, use_defaults=use_defaults)
         msg_dict = {'cloudletpool': msg}
 
         return self.show(token=token, url=self.show_url, region=region, json_data=json_data, use_defaults=use_defaults, use_thread=use_thread, message=msg_dict)
