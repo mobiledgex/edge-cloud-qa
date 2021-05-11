@@ -102,11 +102,11 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
    ${app}=  Create App  region=${region}  image_path=${docker_image}  access_ports=tcp:2015-2016,tcp:4015  image_type=ImageTypeDocker  deployment=docker  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}
 
-#   ${recv_name}=  Set Variable  PagerDuty ALERT
-#   ${app_name}=  Set Variable   app1615920286-1402419 
-#   ${cluster_name}=  Set Variable  cluster1615920286-1402419
+#   ${recv_name}=  Set Variable   alertreceiver16206770007859561   #PagerDuty ALERT
+#   ${app_name}=  Set Variable   app1620677000-7859561
+#   ${cluster_name}=  Set Variable  cluster1620677000-7859561
 
-#   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
+   Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
    Register Client  app_name=${app_name}
    ${cloudlet}=  Find Cloudlet  carrier_name=${operator_name_openstack}  latitude=${latitude}  longitude=${longitude}
 
@@ -118,13 +118,13 @@ AlertReceiver - shall be able to create/receive appname/apporg HealthCheckFailSe
 
    Wait For App Instance Health Check Server Fail  region=${region}  app_name=${app_name}
 
-   Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts1}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts1}  1
 
    Start TCP Port  host=${fqdn_0}  port=${cloudlet['ports'][0]['internal_port']}  server_port=${cloudlet['ports'][1]['public_port']}
 
-   Alert Receiver PagerDuty Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
+   Alert Receiver PagerDuty Email For Resolved AppInstDown HealthCheckFailServerFail Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_dedicated}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}  wait=${email_wait}
    ${alerts2}=  Show Alerts  region=${region}  alert_name=AppInstDown  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  port=${cloudlet['ports'][0]['internal_port']}
    Length Should Be  ${alerts2}  0
 
@@ -339,6 +339,10 @@ AlertReceiver - shall be able to create/receive pagerduty/slack region HealthChe
    ${app}=  Create App  region=${region}  image_path=${qcow_centos_image}  access_ports=tcp:2015,tcp:2016  image_type=ImageTypeQCOW  deployment=vm  access_type=loadbalancer
    Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}
 
+#   ${recv_name}=  Set Variable   alertreceiver1620685567343602
+#   ${app_name}=  Set Variable   app1620685567-343602
+#   ${cluster_name}=  Set Variable  cluster1620685567-343602
+
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 
    Register Client  app_name=${app_name}
@@ -352,20 +356,21 @@ AlertReceiver - shall be able to create/receive pagerduty/slack region HealthChe
 
    ${developer_dash}=  Replace String  ${developer}  _  -
    ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app['data']['key']['name']}10.${cloudlet_name_openstack_vm}.${operator_name_openstack}.mobiledgex.net
+#   ${clusterlb}=  Convert To Lowercase  ${developer_dash}${app_name}10.${cloudlet_name_openstack_vm}.${operator_name_openstack}.mobiledgex.net
    Stop Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check Rootlb Offline  region=${region}  app_name=${app_name}
 
    # verify alerts received for EU region app
-   Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
-   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+   Alert Receiver PagerDuty Email For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+   Alert Receiver Slack Message For Firing AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  alert_receiver_name=${recv_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
 
    Start Docker Container Rootlb   root_loadbalancer=${clusterlb}
 
    Wait For App Instance Health Check OK  region=${region}  app_name=${app_name}
 
    # verify alerts received for EU region app
-   Alert Receiver PagerDuty Email For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
+   Alert Receiver PagerDuty Email For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    Alert Receiver Slack Message For Resolved AppInstDown HealthCheckFailRootlbOffline Should Be Received  alert_receiver_name=${recv_name}  app_name=${app_name}  app_version=${app_version}  developer_org_name=${developer}  region=${region}  cloudlet_name=${cloudlet_name_openstack_vm}  operator_org_name=${operator_name_openstack}  cluster_instance_name=${cluster_name}  cluster_instance_developer_org_name=${developer}  wait=${email_wait}
    ${alerts2}=  Show Alerts  region=${region}  app_name=${app_name}
    Length Should Be  ${alerts2}  0
@@ -748,7 +753,7 @@ AlertReceiver - shall be able to create/receive cloudletname/cloudletorg Cloudle
    ${alerts1}=  Show Alerts  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}
    Length Should Be  ${alerts1}  1
 
-   Alert Receiver PagerDuty Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
+   Alert Receiver PagerDuty Email For Firing CloudletDown Should Be Received  email_password=${password}  email_address=${email}  alert_receiver_name=${recv_name}  region=${region}  cloudlet_name=${cloudlet_name_offline}  operator_org_name=${operator_name_openstack}  wait=${email_wait}
 
    Start CRM Docker Container  ${crm_split[1]}
 

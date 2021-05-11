@@ -207,21 +207,29 @@ class AlertReceiver(MexOperation):
 
         raise Exception('slack message not found')
 
-    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, server='imap.gmail.com', wait=30):
+    def verify_email(self, email_address, email_password, alert_type, alert_receiver_name, alert_name, status=None, region=None, app_name=None, app_version=None, developer_org_name=None, cloudlet_name=None, operator_org_name=None, cluster_instance_name=None, cluster_instance_developer_org_name=None, port=None, scope=None, description=None, title=None, server='imap.gmail.com', receiver_type='email', pagerduty_status=None, wait=30):
         mail = imaplib.IMAP4_SSL(server)
         mail.login(email_address, email_password)
         mail.select('inbox')
         logger.debug(f'successfully logged into {email_address}')
 
-        emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
+        email_heading_search = f'(SUBJECT "{alert_receiver_name}")'
+        if receiver_type == 'pagerduty':
+            email_heading_search = '(SUBJECT "PagerDuty")'
+
+        emailstatus, email_list = mail.search(None, email_heading_search)
         mail_ids_pre = email_list[0].split()
         num_emails_pre = len(mail_ids_pre)
-        logger.debug(f'originally found {num_emails_pre} with {alert_receiver_name}')
-        #num_emails_pre=0
-        
+        logger.debug(f'originally found {num_emails_pre} with {email_heading_search}')
+        num_emails_pre=0
+       
         for attempt in range(wait):
             mail.recent()
-            emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
+            emailstatus, email_list = mail.search(None, email_heading_search)
+            #if receiver_type == 'pagerduty':
+            #    emailstatus, email_list = mail.search(None, f'(SUBJECT "PagerDuty")')
+            #else:
+            #    emailstatus, email_list = mail.search(None, f'(SUBJECT "{alert_receiver_name}")')
             #print('*WARN*', 'email_list', email_list)
             mail_ids = email_list[0].split()
             #print('*WARN*', 'mail_ids', mail_ids)
@@ -240,35 +248,44 @@ class AlertReceiver(MexOperation):
 
                     typ, data = mail.fetch(mail_id[-1], '(RFC822)')
                     for response_part in data:
-                        print('*WARN*', 'response_part', response_part)
+                        #print('*WARN*', 'response_part', response_part)
                         if isinstance(response_part, tuple):
                             msg = email.message_from_string(response_part[1].decode('utf-8'))
                             email_subject = msg['subject'].replace('\r\n','')
                             email_from = msg['from']
                             date_received = msg['date']
-                            logger.debug(f'subject={email_subject} scope={scope}')
+                            logger.debug(f'subject={email_subject} receiver_type={receiver_type} scope={scope} alert_type={alert_type}')
  
                             #if email_subject == f'[{alert_type}:1] {alert_name} Application: {app_name} Version: {app_version}':
-                            if scope == 'Cloudlet':
-                                if 'PagerDuty' in email_subject:
-                                    logger.debug(f'pagerduty')
-                                    subject_to_check = f'TRIGGERED Incidents'
+                            if receiver_type == 'pagerduty':
+                                #if scope == 'Cloudlet':
+                                #    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} CloudletDown Cloudlet: {cloudlet_name}'
+                                #else:
+                                #    subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
+
+                                #if alert_type == 'FIRING':
+                                #    subject_to_check = f'TRIGGERED Incident'
+                                #else:
+                                #    subject_to_check = 'You are no longer assigned triggered incidents'
+  
+                                subject_to_check = f'TRIGGERED Incident'
+                                if subject_to_check in email_subject:
+                                    logger.info(f'pagerduty subject{email_subject} verified')
                                 else:
+                                    logger.info(f'pagerduty subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
+                                    continue
+                            else:
+                                if scope == 'Cloudlet':
                                     subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Cloudlet: {cloudlet_name}'
-                            else:
-                                print('*WARN*', email_subject)
-                                if 'PagerDuty' in email_subject:
-                                    logger.debug(f'pagerduty')
-                                    subject_to_check = f'TRIGGERED Incidents'
                                 else:
-                                    logger.debug(f'not pagerduty')
                                     subject_to_check = f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}'
-                            if alert_type in email_subject and subject_to_check in email_subject:
-                                logger.info(f'subject{email_subject}  verified')
-                            else:
-                                #raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
-                                logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
-                                continue 
+
+                                if alert_type in email_subject and subject_to_check in email_subject:
+                                    logger.info(f'subject{email_subject}  verified')
+                                else:
+                                    #raise Exception(f'subject not found. Expected:alert_type={alert_type} subject={subject_to_check}. Got {email_subject}')
+                                    logger.info(f'subject not found. Expected: subject={subject_to_check}. Got {email_subject}')
+                                    continue 
  
                             if msg.is_multipart():
                                 for part in msg.walk():
@@ -288,10 +305,17 @@ class AlertReceiver(MexOperation):
                                 if cluster_instance_developer_org_name: check_payload(f'clusterorg = {cluster_instance_developer_org_name}')
                                 if region: check_payload(f'region = {region}')
                                 if status: check_payload(f'status = {status}')
+                                if pagerduty_status: check_payload(f'>{pagerduty_status}<')
                                 if port: check_payload(f'port = {port}')
                                 if scope: check_payload(f'scope = {scope}')
-                                if description: check_payload(f'description = {description}')
-                                if title: check_payload(f'title = {title}')
+                                #if description: check_payload(f'description = {description}')
+                                #if title: check_payload(f'title = {title}')
+                                if receiver_type == 'pagerduty': 
+                                    if scope == 'Cloudlet':
+                                        check_payload(f'Alert for {alert_receiver_name}: CloudletDown Cloudlet: {cloudlet_name}')
+                                    else:
+                                        check_payload(f'Alert for {alert_receiver_name}: {alert_name} Application: {app_name} Version: {app_version}')
+                                    check_payload('Triggered')
                                 #check_payload('job = MobiledgeX Monitoring')
 
                                 if 'job =' in payload:
