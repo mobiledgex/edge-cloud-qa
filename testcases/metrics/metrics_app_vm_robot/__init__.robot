@@ -24,7 +24,7 @@ Setup
    ${flavorname}=  Get Default Flavor Name
    ${appname}=     Get Default App Name
  
-   ${appname}=     Catenate  SEPARATOR=  ${appname}  k8s
+   ${appname}=     Catenate  SEPARATOR=  ${appname}  vm
 
    ${t}=  Get Default Time Stamp
    ${clustername_k8sshared}=  Catenate  SEPARATOR=-  cluster  ${t}  k8sshared
@@ -34,8 +34,8 @@ Setup
 
    Create Flavor  region=${region}  flavor_name=${flavorname}  disk=80
 
-   Create App  region=${region}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=mobiledgex
-   ${app_inst}=  Create App Instance  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
+   Create App  region=${region}  app_name=${app_name}  image_type=ImageTypeQCOW  deployment=vm  image_path=${qcow_centos_image}  access_ports=tcp:2016,udp:2015  developer_org_name=${developer_org_name_automation}
+   ${app_inst}=  Create App Instance  region=${region}  app_name=${app_name}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
  
    #${appname_k8s}=  Set Variable  app1576004798-848067k8s 
    #${appinst}=  Show App Instances  region=${region}  cloudlet_name=${cloudlet_name_openstack_metrics}  operator_org_name=${operator_name_openstack}
@@ -46,7 +46,7 @@ Setup
    TCP Port Should Be Alive  ${app_inst['data']['uri']}  ${app_inst['data']['mapped_ports'][0]['public_port']}  wait_time=20
 
    Log to Console  Waiting for metrics to be collected
-   Sleep  10 mins
+   Sleep  5 mins
 
 Teardown
    Cleanup Provisioning
