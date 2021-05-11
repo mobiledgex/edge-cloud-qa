@@ -70,6 +70,7 @@ node('jenkinsSlave1'){
                         [$class:'SparseCheckoutPath', path:'modules/*'],
                         [$class:'SparseCheckoutPath', path:'protos/*'],
                         [$class:'SparseCheckoutPath', path:'tools/build_protos.py'],
+                        [$class:'SparseCheckoutPath', path:'tools/generate_signed_key.sh'],
                         [$class:'SparseCheckoutPath', path:'certs/*']
                     ]]
                 ],
