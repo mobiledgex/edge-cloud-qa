@@ -7,6 +7,8 @@ import sys
 import html
 import os
 import datetime
+import time
+import matplotlib.pyplot as plt
 
 import zapi
 import jiraapi
@@ -114,12 +116,65 @@ def build_report_blocks():
     return block
 
 
+def create_graph(time_dict):
+    start_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['start_time'], reverse=False))
+    end_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['end_time'], reverse=True))
+
+    start_dict_list = list(start_sorted_dict.values())
+    end_dict_list = list(end_sorted_dict.values())
+    reg_start = start_dict_list[0]['start_time']
+    reg_end = end_dict_list[0]['end_time']
+    reg_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(reg_start))
+    reg_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(reg_end))
+    num_tests = len(start_dict_list)
+
+    logger.info(f'graph starttime={reg_start_date} {reg_start} endtime={reg_end_date} {reg_end} num_tests={num_tests}')
+
+#    fig, gnt = plt.subplots()
+#    gnt.set_ylim(0, num_tests)
+#    gnt.set_xlim(reg_start, reg_end)
+#    gnt.set_xlabel('Regression time')
+#    gnt.set_ylabel('Test')
+#
+#    gnt.set_xticks([reg_start, reg_end])
+#    gnt.set_xticklabels([reg_start_date, reg_end_date])
+#
+#    gnt.set_yticks([1, num_tests])
+#    gnt.set_yticklabels(['1', str(num_tests)])
+#
+#    counter = 0
+#    for key in start_sorted_dict:
+#        if start_sorted_dict[key]["duration"] > 0:
+#            print(f'broken_barh {start_sorted_dict[key]["start_time"]} {start_sorted_dict[key]["duration"]} {counter}')
+#            gnt.broken_barh([(start_sorted_dict[key]["start_time"], start_sorted_dict[key]["duration"])], (counter, 1), facecolors =('tab:orange'))
+#        counter += 1
+
+    x = []
+    y = []
+    sizes = []
+    counter = 0
+    for key in start_sorted_dict:
+        if start_sorted_dict[key]["duration"] > 0:
+            x.append(start_sorted_dict[key]["start_time"] + start_sorted_dict[key]["duration"] / 2)
+            sizes.append(start_sorted_dict[key]["duration"])
+            y.append(counter)
+            counter += 1
+    plt.scatter(x, y, s=sizes)
+
+    plt.savefig("gantt1.png")
+
+
 def write_exec_time_file(time_dict_string):
     time_dict = {}
 
-    for comment in time_dict_string:
-        comment_dict = json.loads(html.unescape(time_dict_string[comment]))
-        time_dict[comment] = comment_dict
+    with open('time_dict.txt', "w") as file1:
+        for comment in time_dict_string:
+            # print(f'fffffff "{comment}": "{time_dict_string}", ')
+            # print(f'fffffff "{comment}" "{time_dict_string[comment]}"')
+            file1.write(f'"{comment}": "{time_dict_string[comment]}", ')
+
+            comment_dict = json.loads(html.unescape(time_dict_string[comment]))
+            time_dict[comment] = comment_dict
 
     time_sorted_dict = dict(sorted(time_dict.items(), key=lambda item: item[1]['duration'], reverse=True))
 
@@ -134,6 +189,8 @@ def write_exec_time_file(time_dict_string):
     cmd = f'cp {timings_output_file} {timings_html_file}'
     logger.info(f'copy timings file cmd={cmd}')
     os.system(cmd)
+
+    # create_graph(time_dict)
 
 
 def find_missing_tests():
@@ -178,10 +235,10 @@ def find_missing_tests():
                 time_dict_key = tc['issueKey']
                 if tc['issueKey'] in time_dict:
                     time_dict_key = tc['issueKey'] + '_' + tc['execution']['id']
-                if 'comment' in tc['execution']:
+                if 'comment' in tc['execution'] and tc['execution']['comment'] != 'None':
                     time_dict[time_dict_key] = tc['execution']['comment'].replace('}', ', "summary": "' + tc['issueSummary'].rstrip() + '"}')
                 else:
-                    time_dict[time_dict_key] = '{"cloudlet": "nocomment", "duration": 0, "summary": "' + tc['issueSummary'].rstrip() + '"}'
+                    time_dict[time_dict_key] = '{"cloudlet": "nocomment", "start_time": 0, "end_time": 0, "duration": 0, "summary": "' + tc['issueSummary'].rstrip() + '"}'
 
     print('expected count', len(expected_list), 'expected set count', len(set(expected_list)), 'cycle count', len(cycle_list), 'cycle set count', len(set(cycle_list)))
     print('expected_list', expected_list)
